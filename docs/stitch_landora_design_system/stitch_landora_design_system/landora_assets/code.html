@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assets Management - Landora</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f2f3ff",
+                      "primary-container": "#0066ff",
+                      "secondary-fixed": "#d3e4fe",
+                      "primary-fixed": "#dae1ff",
+                      "background": "#faf8ff",
+                      "inverse-on-surface": "#eff0fd",
+                      "outline-variant": "#c2c6d8",
+                      "on-primary-container": "#f8f7ff",
+                      "on-secondary-fixed": "#0b1c30",
+                      "surface-bright": "#faf8ff",
+                      "tertiary-fixed-dim": "#ffb59d",
+                      "surface": "#faf8ff",
+                      "outline": "#727687",
+                      "on-primary-fixed-variant": "#003fa4",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "surface-dim": "#d8d9e6",
+                      "surface-container-high": "#e6e7f4",
+                      "secondary-container": "#d0e1fb",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-container": "#fff6f4",
+                      "on-surface": "#191b24",
+                      "surface-variant": "#e1e2ee",
+                      "on-secondary-container": "#54647a",
+                      "success": "#10B981",
+                      "warning": "#F59E0B",
+                      "on-tertiary-fixed": "#390c00",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-primary-fixed": "#001849",
+                      "tertiary-fixed": "#ffdbd0",
+                      "on-secondary": "#ffffff",
+                      "surface-bg": "#F8FAFC",
+                      "inverse-primary": "#b3c5ff",
+                      "surface-container-highest": "#e1e2ee",
+                      "on-primary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "primary": "#0050cb",
+                      "tertiary": "#a33200",
+                      "on-surface-variant": "#424656",
+                      "inverse-surface": "#2e303a",
+                      "secondary": "#505f76",
+                      "on-background": "#191b24",
+                      "on-error": "#ffffff",
+                      "surface-container": "#ecedfa",
+                      "tertiary-container": "#cc4204",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#832600",
+                      "danger": "#EF4444",
+                      "surface-tint": "#0054d6",
+                      "secondary-fixed-dim": "#b7c8e1"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit-xs": "0.25rem",
+                      "margin-desktop": "2rem",
+                      "unit-xl": "2rem",
+                      "unit-sm": "0.5rem",
+                      "unit-lg": "1.5rem",
+                      "gutter": "1.5rem",
+                      "unit-md": "1rem",
+                      "margin-mobile": "1rem"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["IBM Plex Sans"],
+                      "headline-lg": ["IBM Plex Sans"],
+                      "headline-md": ["IBM Plex Sans"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["JetBrains Mono"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-xl": ["IBM Plex Sans"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Hide scrollbar for cleaner UI in dense lists */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-surface-bg text-on-surface font-body-md min-h-screen flex overflow-hidden">
+<!-- Shared Component: SideNavBar -->
+<nav class="bg-inverse-surface border-r border-outline-variant w-[200px] h-full fixed left-0 top-0 flex flex-col py-unit-lg px-unit-md z-40">
+<!-- Brand / Header -->
+<div class="mb-unit-xl px-unit-sm">
+<h1 class="text-headline-md font-headline-md font-bold text-inverse-on-surface truncate">Landora</h1>
+<p class="text-label-md font-label-md text-surface-dim mt-1 truncate">CMS Dashboard</p>
+</div>
+<!-- Main Navigation Tabs -->
+<ul class="flex-1 space-y-unit-xs">
+<!-- Landings (Inactive) -->
+<li>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">web</span>
+<span class="text-label-md font-label-md">Landings</span>
+</a>
+</li>
+<!-- Assets (Active) -->
+<li>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded-lg text-primary font-bold bg-surface-container/10 opacity-80 transition-opacity duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+<span class="text-label-md font-label-md">Assets</span>
+</a>
+</li>
+<!-- Settings (Inactive) -->
+<li>
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</li>
+</ul>
+<!-- Footer Tab -->
+<div class="mt-auto border-t border-outline-variant/30 pt-unit-md">
+<a class="flex items-center gap-unit-md px-unit-md py-unit-sm rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+<span class="text-label-md font-label-md">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas (Columns 2 & 3 wrapper) -->
+<div class="ml-[200px] w-[calc(100%-200px)] flex flex-col h-screen">
+<!-- Shared Component: TopAppBar -->
+<header class="bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-unit-lg py-unit-sm shrink-0 h-[64px]">
+<!-- Navigation Links -->
+<nav class="flex items-center gap-unit-xl h-full">
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors h-full flex items-center border-b-2 border-transparent" href="#">Structure</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors h-full flex items-center border-b-2 border-transparent" href="#">Presentation</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors h-full flex items-center border-b-2 border-transparent" href="#">Vision</a>
+<!-- Active Link -->
+<a class="text-label-md font-label-md text-primary border-b-2 border-primary hover:text-primary transition-colors h-full flex items-center scale-95 duration-100 font-bold" href="#">Media</a>
+</nav>
+<!-- Trailing Actions & Search -->
+<div class="flex items-center gap-unit-md">
+<!-- Search Bar Placeholder -->
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container border border-outline-variant rounded-full text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 text-on-surface placeholder:text-on-surface-variant/70" placeholder="Search assets..." type="text"/>
+</div>
+<div class="flex items-center gap-unit-sm border-r border-outline-variant pr-unit-md">
+<span class="px-2 py-1 rounded bg-success/10 text-success text-label-md font-label-md">Published</span>
+<span class="px-2 py-1 rounded bg-surface-variant text-on-surface-variant text-label-md font-label-md cursor-pointer hover:bg-outline-variant transition-colors">Drafts</span>
+</div>
+<div class="flex items-center gap-unit-xs">
+<button class="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">help</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-variant text-primary transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- 2-Column Workspace Layout -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Column 2: Middle Data List (Folders & Files) -->
+<section class="flex-1 bg-surface border-r border-outline-variant flex flex-col min-w-[400px]">
+<!-- Middle Column Header / Toolbar -->
+<div class="px-unit-lg py-unit-md border-b border-outline-variant bg-surface-container-lowest shrink-0 flex justify-between items-center">
+<div>
+<h2 class="text-headline-md font-headline-md text-on-surface">Asset Library</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Manage and organize your media.</p>
+</div>
+<button class="bg-primary text-on-primary px-unit-md py-unit-sm rounded-lg text-label-md font-label-md flex items-center gap-unit-xs hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined text-[18px]">upload</span>
+                        Upload
+                    </button>
+</div>
+<!-- Breadcrumb / Path -->
+<div class="px-unit-lg py-unit-sm border-b border-outline-variant/50 bg-surface flex items-center gap-unit-xs text-label-md font-label-md text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-primary">home</span>
+<span>/</span>
+<span class="cursor-pointer hover:text-primary">Projects</span>
+<span>/</span>
+<span class="text-primary font-bold">Q4 Marketing Campaign</span>
+</div>
+<!-- List Content -->
+<div class="flex-1 overflow-y-auto no-scrollbar p-unit-md">
+<!-- Folders Section -->
+<div class="mb-unit-xl">
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-unit-sm uppercase tracking-wider px-unit-sm">Folders</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-unit-sm">
+<!-- Folder Item -->
+<div class="border border-outline-variant bg-surface-container-lowest rounded-lg p-unit-md flex items-center gap-unit-md cursor-pointer hover:border-primary hover:shadow-sm transition-all group">
+<div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">folder</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-body-md font-body-md text-on-surface truncate group-hover:text-primary transition-colors">Images</h4>
+<p class="text-label-md font-label-md text-on-surface-variant">142 items</p>
+</div>
+</div>
+<!-- Folder Item -->
+<div class="border border-outline-variant bg-surface-container-lowest rounded-lg p-unit-md flex items-center gap-unit-md cursor-pointer hover:border-primary hover:shadow-sm transition-all group">
+<div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">folder</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-body-md font-body-md text-on-surface truncate group-hover:text-primary transition-colors">Documents</h4>
+<p class="text-label-md font-label-md text-on-surface-variant">38 items</p>
+</div>
+</div>
+<!-- Folder Item -->
+<div class="border border-outline-variant bg-surface-container-lowest rounded-lg p-unit-md flex items-center gap-unit-md cursor-pointer hover:border-primary hover:shadow-sm transition-all group">
+<div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">folder</span>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-body-md font-body-md text-on-surface truncate group-hover:text-primary transition-colors">Icons &amp; Vectors</h4>
+<p class="text-label-md font-label-md text-on-surface-variant">89 items</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Files Section (Dense List) -->
+<div>
+<div class="flex justify-between items-center mb-unit-sm px-unit-sm">
+<h3 class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Recent Files</h3>
+<button class="text-primary text-label-md font-label-md hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+                            </button>
+</div>
+<div class="border border-outline-variant rounded-lg overflow-hidden bg-surface-container-lowest">
+<!-- List Header -->
+<div class="grid grid-cols-12 gap-4 p-unit-sm border-b border-outline-variant bg-surface-container-low text-label-md font-label-md text-on-surface-variant">
+<div class="col-span-6 md:col-span-5 pl-2">Name</div>
+<div class="col-span-3 hidden md:block">Type</div>
+<div class="col-span-3 text-right">Size</div>
+<div class="col-span-1 text-center"></div>
+</div>
+<!-- Active File Row -->
+<div class="grid grid-cols-12 gap-4 p-unit-sm items-center border-b border-outline-variant/50 bg-primary-fixed/20 cursor-pointer transition-colors relative group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="col-span-6 md:col-span-5 flex items-center gap-3 pl-2 truncate">
+<span class="material-symbols-outlined text-primary text-[20px]">image</span>
+<span class="text-body-sm font-body-sm text-on-surface font-medium truncate">hero_banner_v2_final.png</span>
+</div>
+<div class="col-span-3 hidden md:block text-body-sm font-body-sm text-on-surface-variant truncate">PNG Image</div>
+<div class="col-span-3 text-right text-body-sm font-body-sm text-on-surface-variant">2.4 MB</div>
+<div class="col-span-1 text-center">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary text-[20px] opacity-0 group-hover:opacity-100 transition-opacity">more_vert</span>
+</div>
+</div>
+<!-- File Row -->
+<div class="grid grid-cols-12 gap-4 p-unit-sm items-center border-b border-outline-variant/50 hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="col-span-6 md:col-span-5 flex items-center gap-3 pl-2 truncate">
+<span class="material-symbols-outlined text-secondary text-[20px]">description</span>
+<span class="text-body-sm font-body-sm text-on-surface truncate">Q4_Marketing_Strategy.pdf</span>
+</div>
+<div class="col-span-3 hidden md:block text-body-sm font-body-sm text-on-surface-variant truncate">PDF Document</div>
+<div class="col-span-3 text-right text-body-sm font-body-sm text-on-surface-variant">1.1 MB</div>
+<div class="col-span-1 text-center">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary text-[20px] opacity-0 group-hover:opacity-100 transition-opacity">more_vert</span>
+</div>
+</div>
+<!-- File Row -->
+<div class="grid grid-cols-12 gap-4 p-unit-sm items-center border-b border-outline-variant/50 hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="col-span-6 md:col-span-5 flex items-center gap-3 pl-2 truncate">
+<span class="material-symbols-outlined text-primary text-[20px]">image</span>
+<span class="text-body-sm font-body-sm text-on-surface truncate">product_shot_01.jpg</span>
+</div>
+<div class="col-span-3 hidden md:block text-body-sm font-body-sm text-on-surface-variant truncate">JPEG Image</div>
+<div class="col-span-3 text-right text-body-sm font-body-sm text-on-surface-variant">850 KB</div>
+<div class="col-span-1 text-center">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary text-[20px] opacity-0 group-hover:opacity-100 transition-opacity">more_vert</span>
+</div>
+</div>
+<!-- File Row -->
+<div class="grid grid-cols-12 gap-4 p-unit-sm items-center hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="col-span-6 md:col-span-5 flex items-center gap-3 pl-2 truncate">
+<span class="material-symbols-outlined text-secondary text-[20px]">smart_display</span>
+<span class="text-body-sm font-body-sm text-on-surface truncate">promo_video_draft.mp4</span>
+</div>
+<div class="col-span-3 hidden md:block text-body-sm font-body-sm text-on-surface-variant truncate">MP4 Video</div>
+<div class="col-span-3 text-right text-body-sm font-body-sm text-on-surface-variant">45.2 MB</div>
+<div class="col-span-1 text-center">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary text-[20px] opacity-0 group-hover:opacity-100 transition-opacity">more_vert</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Column 3: Right Details Panel -->
+<aside class="w-[320px] xl:w-[380px] bg-surface-container-lowest shrink-0 flex flex-col border-l border-outline-variant shadow-[-4px_0_15px_-3px_rgba(0,102,255,0.02)]">
+<!-- Panel Header -->
+<div class="px-unit-md py-unit-md border-b border-outline-variant flex justify-between items-center shrink-0">
+<h3 class="text-body-lg font-body-lg text-on-surface font-semibold">Asset Details</h3>
+<button class="p-1 rounded hover:bg-surface-variant text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Scrollable Details Content -->
+<div class="flex-1 overflow-y-auto no-scrollbar">
+<!-- Thumbnail Preview -->
+<div class="p-unit-md border-b border-outline-variant/50 bg-surface-bg/50">
+<div class="aspect-video w-full rounded-lg border border-outline-variant overflow-hidden relative group bg-surface-container flex items-center justify-center">
+<!-- Image generation prompt embedded here -->
+<div class="absolute inset-0 bg-gradient-to-tr from-surface-variant to-surface-container-lowest" data-alt="A high-quality, professional hero banner image for a corporate dashboard landing page. The image features a bright, clean, light-mode aesthetic with abstract geometric shapes in shades of deep blue and crisp white. Soft, diffuse lighting creates subtle shadows, emphasizing a modern, reliable, and enterprise-grade technological atmosphere."></div>
+<!-- Mock image icon for context since we use css background for gradient placeholder -->
+<span class="material-symbols-outlined text-[48px] text-primary/30 relative z-10">image</span>
+<!-- Hover Action Overlay -->
+<div class="absolute inset-0 bg-on-surface/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px] z-20">
+<button class="bg-surface-container-lowest text-on-surface px-4 py-2 rounded shadow-sm text-label-md font-label-md flex items-center gap-2 hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+                                    Preview Full
+                                </button>
+</div>
+</div>
+</div>
+<!-- Metadata Grid -->
+<div class="p-unit-md space-y-unit-lg">
+<!-- File Name & Primary Info -->
+<div>
+<h4 class="text-body-md font-body-md text-on-surface font-semibold break-words leading-tight mb-2">hero_banner_v2_final.png</h4>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded bg-surface-variant text-on-surface-variant text-[11px] font-label-md tracking-wide uppercase">Published</span>
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary text-[11px] font-label-md tracking-wide uppercase">Image</span>
+</div>
+</div>
+<!-- Data Points -->
+<div class="grid grid-cols-[100px_1fr] gap-y-unit-sm text-body-sm font-body-sm">
+<div class="text-on-surface-variant">Size</div>
+<div class="text-on-surface font-medium">2.4 MB</div>
+<div class="text-on-surface-variant">Dimensions</div>
+<div class="text-on-surface font-medium">1920 x 1080 px</div>
+<div class="text-on-surface-variant">Uploaded By</div>
+<div class="text-on-surface font-medium flex items-center gap-2">
+<div class="w-5 h-5 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-[10px] font-bold">RA</div>
+                                Riley Adams
+                            </div>
+<div class="text-on-surface-variant">Date Added</div>
+<div class="text-on-surface font-medium">Oct 24, 2023 at 14:30</div>
+</div>
+<!-- Color Palette Extraction (High-end UI pattern detail) -->
+<div>
+<div class="text-label-md font-label-md text-on-surface-variant mb-unit-sm">Extracted Colors</div>
+<div class="flex gap-2">
+<div class="w-6 h-6 rounded-full bg-[#0066ff] border border-outline-variant/30 shadow-sm cursor-pointer" title="#0066ff"></div>
+<div class="w-6 h-6 rounded-full bg-[#faf8ff] border border-outline-variant/30 shadow-sm cursor-pointer" title="#faf8ff"></div>
+<div class="w-6 h-6 rounded-full bg-[#191b24] border border-outline-variant/30 shadow-sm cursor-pointer" title="#191b24"></div>
+<div class="w-6 h-6 rounded-full bg-[#e1e2ee] border border-outline-variant/30 shadow-sm cursor-pointer" title="#e1e2ee"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Action Sticky Area -->
+<div class="p-unit-md border-t border-outline-variant bg-surface-container-lowest shrink-0 space-y-unit-sm">
+<button class="w-full bg-primary text-on-primary py-2 rounded text-body-sm font-body-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+                        Copy URL
+                    </button>
+<div class="flex gap-unit-sm">
+<button class="flex-1 bg-surface-container-lowest border border-outline-variant text-on-surface py-2 rounded text-body-sm font-body-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                            Download
+                        </button>
+<button class="p-2 border border-outline-variant rounded text-danger hover:bg-error-container hover:border-error-container transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</body></html>

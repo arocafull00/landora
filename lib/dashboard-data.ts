@@ -1,0 +1,406 @@
+export type DashboardView = "landings" | "editor" | "assets" | "settings";
+export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
+export type LandingStatus = "Published" | "Draft" | "Changes";
+
+export type Landing = {
+  id: string;
+  name: string;
+  slug: string;
+  status: LandingStatus;
+  edited: string;
+  seoTitle: string;
+  owner: string;
+  template: "toll-story";
+  content: LandingContent;
+};
+
+export type LandingContent = {
+  hero: HeroContent;
+  story: StoryContent;
+  stats: StatContent[];
+  spaces: SpaceContent[];
+  services: ServiceContent[];
+  workflow: WorkflowStep[];
+  testimonials: TestimonialContent[];
+  contact: ContactContent;
+};
+
+export type HeroContent = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  image: string;
+};
+
+export type StoryContent = {
+  statement: string;
+};
+
+export type StatContent = {
+  id: string;
+  value: string;
+  label: string;
+};
+
+export type SpaceContent = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+};
+
+export type ServiceContent = {
+  id: string;
+  title: string;
+  subtitle: string;
+  label: string;
+  image: string;
+};
+
+export type WorkflowStep = {
+  id: string;
+  number: string;
+  title: string;
+  description: string;
+};
+
+export type TestimonialContent = {
+  id: string;
+  author: string;
+  date: string;
+  rating: number;
+  comment: string;
+  verified: boolean;
+};
+
+export type ContactContent = {
+  phone: string;
+  email: string;
+  address: string;
+};
+
+export type Post = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  status: LandingStatus;
+  edited: string;
+};
+
+export type Presentation = {
+  id: string;
+  title: string;
+  audience: string;
+  status: LandingStatus;
+  slides: PresentationSlide[];
+};
+
+export type PresentationSlide = {
+  id: string;
+  title: string;
+  body: string;
+};
+
+export type Asset = {
+  id: string;
+  name: string;
+  type: string;
+  size: string;
+  status: "Published" | "Draft";
+  dimensions?: string;
+  uploadedBy: string;
+  date: string;
+  colors: string[];
+  url: string;
+};
+
+export type IconName =
+  | "web"
+  | "folder"
+  | "settings"
+  | "profile"
+  | "bell"
+  | "help"
+  | "search"
+  | "add"
+  | "more"
+  | "document"
+  | "drag"
+  | "link"
+  | "image"
+  | "grid"
+  | "upload"
+  | "copy"
+  | "download"
+  | "trash"
+  | "chevron"
+  | "palette"
+  | "save"
+  | "publish";
+
+export const dashboardViews: Array<{
+  id: DashboardView;
+  label: string;
+  icon: IconName;
+}> = [
+  { id: "landings", label: "Landings", icon: "web" },
+  { id: "editor", label: "Editor", icon: "document" },
+  { id: "assets", label: "Assets", icon: "folder" },
+  { id: "settings", label: "Settings", icon: "settings" },
+];
+
+export const workspaceTabs = ["Structure", "Presentation", "Vision", "Media"];
+export const contentGroups: ContentGroup[] = ["Pages", "Posts", "Presentations", "Assets"];
+export const editorTabs = ["Hero", "Story", "Spaces", "Services", "Posts", "Presentations"];
+
+export const initialLandings: Landing[] = [
+  {
+    id: "toll-story",
+    name: "Toll Story",
+    slug: "/toll-story",
+    status: "Draft",
+    edited: "Just now",
+    seoTitle: "Toll Story | Espacios para eventos en Valencia",
+    owner: "Riley",
+    template: "toll-story",
+    content: {
+      hero: {
+        eyebrow: "CELEBRA EN",
+        title: "TOLL STORY",
+        subtitle: "Bodas, comuniones y fiestas de todo tipo en un entorno exclusivo.",
+        description:
+          "Espacio diseñado para la celebración de eventos privados y de empresa en Valencia y área metropolitana.",
+        image: "/toll-story/hero.png",
+      },
+      story: {
+        statement:
+          "Cada espacio de Toll Story está pensado para convertir tus celebraciones en momentos inolvidables. Bodas, comuniones, eventos de empresa o fiestas familiares: un entorno privado, versátil y con todo lo necesario.",
+      },
+      stats: [
+        { id: "experience", value: "15", label: "Años de experiencia" },
+        { id: "bookings", value: "200", label: "Reservas realizadas" },
+        { id: "clients", value: "2500", label: "Clientes satisfechos" },
+      ],
+      spaces: [
+        {
+          id: "space-1",
+          name: "Toll Story 1",
+          description:
+            "Un rincón rústico y acogedor ideal para comuniones y celebraciones íntimas.",
+          image: "/toll-story/toll7.jpeg",
+        },
+        {
+          id: "space-2",
+          name: "Toll Story 2",
+          description:
+            "Un espacio tropical perfecto para fiestas familiares y eventos al aire libre.",
+          image: "/toll-story/toll6.jpeg",
+        },
+        {
+          id: "space-3",
+          name: "Toll Story 3",
+          description:
+            "Elegancia y amplitud para bodas, eventos de empresa y grandes celebraciones.",
+          image: "/toll-story/toll5.jpeg",
+        },
+      ],
+      services: [
+        {
+          id: "service-1",
+          title: "Jardín con Piscina",
+          subtitle: "para todos los invitados",
+          label: "ENTORNO PRIVADO",
+          image: "/toll-story/toll7.jpeg",
+        },
+        {
+          id: "service-2",
+          title: "Parking Privado",
+          subtitle: "dentro de la finca",
+          label: "PARA TODOS LOS INVITADOS",
+          image: "/toll-story/toll6.jpeg",
+        },
+        {
+          id: "service-3",
+          title: "Zonas de descanso",
+          subtitle: "con mobiliario básico",
+          label: "CON MOBILIARIO BÁSICO",
+          image: "/toll-story/toll5.jpeg",
+        },
+      ],
+      workflow: [
+        {
+          id: "step-1",
+          number: "1",
+          title: "Consulta disponibilidad",
+          description: "Comprueba las fechas disponibles en nuestro calendario",
+        },
+        {
+          id: "step-2",
+          number: "2",
+          title: "Visita los espacios",
+          description: "Ven y conoce los jardines antes de decidir",
+        },
+        {
+          id: "step-3",
+          number: "3",
+          title: "Reserva tu lugar",
+          description: "Confirma tu fecha y asegura tu celebración",
+        },
+      ],
+      testimonials: [
+        {
+          id: "review-1",
+          author: "Michelle Jimenez Jimenez",
+          date: "2025-01-11",
+          rating: 5,
+          comment:
+            "Alquilé este espacio para celebrar mi cumpleaños y quedé encantada. El lugar es espectacular, con una decoración cuidada y un parking dentro de la villa.",
+          verified: true,
+        },
+        {
+          id: "review-2",
+          author: "Artak Blkyan",
+          date: "2024-12-26",
+          rating: 5,
+          comment: "Un sitio espectacular para pasar eventos y reuniones familiares.",
+          verified: true,
+        },
+      ],
+      contact: {
+        phone: "+34 670 36 93 68",
+        email: "tollstory-reservas@gmail.com",
+        address: "Valencia y área metropolitana",
+      },
+    },
+  },
+  {
+    id: "black-friday",
+    name: "Black Friday",
+    slug: "/bfcm-24",
+    status: "Published",
+    edited: "2 hours ago",
+    seoTitle: "Black Friday 2024 Huge Deals",
+    owner: "Sarah",
+    template: "toll-story",
+    content: {
+      hero: {
+        eyebrow: "PROMO",
+        title: "BLACK FRIDAY",
+        subtitle: "Campaña limitada para clientes premium.",
+        description: "Landing promocional con CTA directo y bloques de producto.",
+        image: "/toll-story/toll4.jpeg",
+      },
+      story: {
+        statement:
+          "Una campaña compacta para validar ofertas, medir conversiones y publicar cambios sin depender de despliegues.",
+      },
+      stats: [
+        { id: "conversion", value: "12", label: "Variantes activas" },
+        { id: "leads", value: "430", label: "Leads captados" },
+        { id: "sales", value: "88", label: "Ventas atribuidas" },
+      ],
+      spaces: [],
+      services: [],
+      workflow: [],
+      testimonials: [],
+      contact: {
+        phone: "+34 600 00 00 00",
+        email: "marketing@landora.test",
+        address: "Campaña ecommerce",
+      },
+    },
+  },
+];
+
+export const initialPosts: Post[] = [
+  {
+    id: "post-eventos-valencia",
+    title: "Cómo elegir un espacio para eventos en Valencia",
+    slug: "/blog/espacios-eventos-valencia",
+    excerpt: "Criterios prácticos para seleccionar una finca privada para bodas, comuniones o empresa.",
+    body: "Evalúa capacidad, accesos, zonas de descanso, aparcamiento, sombra y soporte del equipo antes de reservar.",
+    status: "Draft",
+    edited: "Just now",
+  },
+  {
+    id: "post-celebraciones",
+    title: "Ideas para celebraciones familiares al aire libre",
+    slug: "/blog/celebraciones-aire-libre",
+    excerpt: "Una guía para convertir un jardín privado en una experiencia cómoda para todos.",
+    body: "Planifica recorridos, zonas de comida, música, descanso, sombra y puntos de agua para que el evento fluya.",
+    status: "Published",
+    edited: "Yesterday",
+  },
+];
+
+export const initialPresentations: Presentation[] = [
+  {
+    id: "deck-sales",
+    title: "Toll Story Sales Deck",
+    audience: "Clientes de eventos privados",
+    status: "Draft",
+    slides: [
+      {
+        id: "slide-1",
+        title: "Espacios privados para celebrar",
+        body: "Tres jardines versátiles en Valencia para eventos familiares, bodas y empresas.",
+      },
+      {
+        id: "slide-2",
+        title: "Todo lo necesario incluido",
+        body: "Piscina, parking privado, pérgola, descanso, baños y soporte durante la reserva.",
+      },
+    ],
+  },
+];
+
+export const initialAssets: Asset[] = [
+  {
+    id: "hero-banner",
+    name: "hero.png",
+    type: "PNG Image",
+    size: "1.8 MB",
+    status: "Published",
+    dimensions: "1920 x 1080 px",
+    uploadedBy: "Riley Adams",
+    date: "Jun 6, 2026 at 14:30",
+    colors: ["#213138", "#f5f0ea", "#171717", "#e8e4df"],
+    url: "/toll-story/hero.png",
+  },
+  {
+    id: "garden-1",
+    name: "toll7.jpeg",
+    type: "JPEG Image",
+    size: "820 KB",
+    status: "Published",
+    dimensions: "1600 x 1200 px",
+    uploadedBy: "Marta Rivera",
+    date: "Jun 5, 2026 at 09:12",
+    colors: ["#213138", "#10b981", "#f59e0b"],
+    url: "/toll-story/toll7.jpeg",
+  },
+  {
+    id: "garden-2",
+    name: "toll6.jpeg",
+    type: "JPEG Image",
+    size: "760 KB",
+    status: "Published",
+    dimensions: "1600 x 1200 px",
+    uploadedBy: "Sarah Khan",
+    date: "Jun 5, 2026 at 10:44",
+    colors: ["#0050cb", "#d0e1fb", "#191b24"],
+    url: "/toll-story/toll6.jpeg",
+  },
+];
+
+export const folders = [
+  { name: "Images", items: "9 items" },
+  { name: "Documents", items: "2 items" },
+  { name: "Presentations", items: "1 item" },
+];
+
+export const settingCategories = ["General", "Team", "API", "Billing"];
+export const settingPages = ["Project Info", "Domains", "Environment", "Danger Zone"];

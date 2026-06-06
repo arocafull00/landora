@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Landora - Editor Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f3ff",
+                        "primary-container": "#0066ff",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-fixed": "#dae1ff",
+                        "background": "#faf8ff",
+                        "inverse-on-surface": "#eff0fd",
+                        "outline-variant": "#c2c6d8",
+                        "on-primary-container": "#f8f7ff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-bright": "#faf8ff",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "surface": "#faf8ff",
+                        "outline": "#727687",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "surface-dim": "#d8d9e6",
+                        "surface-container-high": "#e6e7f4",
+                        "secondary-container": "#d0e1fb",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#fff6f4",
+                        "on-surface": "#191b24",
+                        "surface-variant": "#e1e2ee",
+                        "on-secondary-container": "#54647a",
+                        "success": "#10B981",
+                        "warning": "#F59E0B",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-fixed": "#001849",
+                        "tertiary-fixed": "#ffdbd0",
+                        "on-secondary": "#ffffff",
+                        "surface-bg": "#F8FAFC",
+                        "inverse-primary": "#b3c5ff",
+                        "surface-container-highest": "#e1e2ee",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary": "#0050cb",
+                        "tertiary": "#a33200",
+                        "on-surface-variant": "#424656",
+                        "inverse-surface": "#2e303a",
+                        "secondary": "#505f76",
+                        "on-background": "#191b24",
+                        "on-error": "#ffffff",
+                        "surface-container": "#ecedfa",
+                        "tertiary-container": "#cc4204",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "danger": "#EF4444",
+                        "surface-tint": "#0054d6",
+                        "secondary-fixed-dim": "#b7c8e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit-xs": "0.25rem",
+                        "margin-desktop": "2rem",
+                        "unit-xl": "2rem",
+                        "unit-sm": "0.5rem",
+                        "unit-lg": "1.5rem",
+                        "gutter": "1.5rem",
+                        "unit-md": "1rem",
+                        "margin-mobile": "1rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["IBM Plex Sans"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-xl": ["IBM Plex Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Base styles to ensure consistency */
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Custom scrollbar for inner areas */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline');
+        }
+    </style>
+</head>
+<body class="flex">
+<!-- 1. SideNavBar (Shared Component) -->
+<nav class="w-[200px] h-full fixed left-0 top-0 flex flex-col bg-inverse-surface border-r border-outline-variant py-unit-lg px-unit-md z-20">
+<!-- Header -->
+<div class="mb-unit-xl px-unit-xs">
+<h1 class="text-headline-md font-headline-md font-bold text-inverse-on-surface">Landora</h1>
+<p class="text-label-md font-label-md text-on-surface-variant mt-1">CMS Dashboard</p>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-unit-xs">
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-variant text-primary font-bold opacity-80 transition-opacity duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">web</span>
+<span class="text-label-md font-label-md">Landings</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-label-md font-label-md">Assets</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+<!-- Footer -->
+<div class="mt-auto pt-unit-md border-t border-outline-variant/30">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-label-md font-label-md">Profile</span>
+</a>
+</div>
+</nav>
+<!-- Main Workspace Area -->
+<div class="ml-[200px] flex-1 flex flex-col h-screen overflow-hidden">
+<!-- 2. TopAppBar (Shared Component) -->
+<header class="flex justify-between items-center w-full px-unit-lg py-unit-sm bg-surface-container-lowest border-b border-outline-variant z-10 flex-shrink-0 min-h-[56px]">
+<!-- Navigation Links -->
+<div class="flex items-center gap-unit-md">
+<!-- Active Link -->
+<a class="px-2 py-1 text-label-md font-label-md text-primary border-b-2 border-primary scale-95 duration-100" href="#">Structure</a>
+<!-- Inactive Links -->
+<a class="px-2 py-1 text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Presentation</a>
+<a class="px-2 py-1 text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Vision</a>
+<a class="px-2 py-1 text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Media</a>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-unit-md">
+<!-- Document Status / Context Actions -->
+<div class="flex items-center bg-surface-container-high rounded-full p-1 gap-1">
+<button class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-lowest text-label-md font-label-md text-on-surface shadow-sm border border-outline-variant/50">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                        Drafts
+                        <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+<div class="w-px h-6 bg-outline-variant mx-1"></div>
+<!-- Icon Actions -->
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1.5 rounded-full hover:bg-surface-container-highest">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1.5 rounded-full hover:bg-surface-container-highest">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1.5 rounded-full hover:bg-surface-container-highest">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+<button class="ml-2 w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-label-md font-label-md font-bold">
+                    RA
+                </button>
+</div>
+</header>
+<!-- Columns Container (Content & Editor) -->
+<main class="flex-1 flex overflow-hidden">
+<!-- 3. Middle Column (List of Landings) -->
+<aside class="w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col flex-shrink-0">
+<!-- Column Header -->
+<div class="px-unit-md py-3 flex justify-between items-center border-b border-surface-variant">
+<h2 class="text-label-md font-label-md text-on-surface font-bold uppercase tracking-wider">Page</h2>
+<div class="flex items-center text-on-surface-variant">
+<button class="p-1 hover:bg-surface-variant rounded"><span class="material-symbols-outlined text-[18px]">add</span></button>
+<button class="p-1 hover:bg-surface-variant rounded"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+</div>
+<!-- List Items -->
+<div class="flex-1 overflow-y-auto py-2">
+<div class="group flex items-center px-3 py-2 cursor-pointer hover:bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-50 mr-2 cursor-grab">drag_indicator</span>
+<span class="material-symbols-outlined text-[18px] mr-3">description</span>
+<span class="text-body-sm font-body-sm truncate">previews</span>
+</div>
+<div class="group flex items-center px-3 py-2 cursor-pointer hover:bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-50 mr-2 cursor-grab">drag_indicator</span>
+<span class="material-symbols-outlined text-[18px] mr-3">description</span>
+<span class="text-body-sm font-body-sm truncate">Home Welcome</span>
+</div>
+<!-- Active Item -->
+<div class="group flex items-center px-3 py-2 cursor-pointer bg-primary-container text-on-primary-container">
+<span class="material-symbols-outlined text-[16px] opacity-50 mr-2 cursor-grab">drag_indicator</span>
+<span class="material-symbols-outlined text-[18px] mr-3">description</span>
+<span class="text-body-sm font-body-sm font-medium truncate">Home 1</span>
+</div>
+<div class="group flex items-center px-3 py-2 cursor-pointer hover:bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-50 mr-2 cursor-grab">drag_indicator</span>
+<span class="material-symbols-outlined text-[18px] mr-3">description</span>
+<span class="text-body-sm font-body-sm truncate">Home 2</span>
+</div>
+<div class="group flex items-center px-3 py-2 cursor-pointer hover:bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-50 mr-2 cursor-grab">drag_indicator</span>
+<span class="material-symbols-outlined text-[18px] mr-3">description</span>
+<span class="text-body-sm font-body-sm truncate">Home 3</span>
+</div>
+<div class="group flex items-center px-3 py-2 cursor-pointer hover:bg-surface-container-low text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-50 mr-2 cursor-grab">drag_indicator</span>
+<span class="material-symbols-outlined text-[18px] mr-3">description</span>
+<span class="text-body-sm font-body-sm truncate">Blog</span>
+</div>
+<div class="group flex items-center px-3 py-2 cursor-pointer hover:bg-surface-container-low text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-50 mr-2 cursor-grab">drag_indicator</span>
+<span class="material-symbols-outlined text-[18px] mr-3">description</span>
+<span class="text-body-sm font-body-sm truncate italic">Untitled</span>
+</div>
+</div>
+</aside>
+<!-- 4. Right Column (Editor Panel) -->
+<section class="flex-1 bg-surface flex flex-col relative overflow-hidden">
+<!-- Editor Header -->
+<div class="px-unit-lg py-4 border-b border-outline-variant flex justify-between items-end bg-surface-container-lowest">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded-full">
+<div class="w-1.5 h-1.5 rounded-full bg-success"></div>
+<span class="text-label-md font-label-md text-on-surface-variant">Published</span>
+</div>
+<span class="text-outline-variant">•</span>
+<span class="text-label-md font-label-md text-on-surface-variant">Last edited 2m ago</span>
+</div>
+<h1 class="text-headline-md font-headline-md text-on-surface">Home 1</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[20px]">link</span></button>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded hover:bg-surface-variant transition-colors"><span class="material-symbols-outlined text-[20px]">chat_bubble_outline</span></button>
+<div class="w-px h-5 bg-outline-variant mx-1"></div>
+<button class="text-label-md font-label-md text-on-surface bg-surface-container-high hover:bg-surface-variant px-4 py-1.5 rounded-lg border border-outline-variant transition-colors">Save Draft</button>
+<button class="text-label-md font-label-md text-on-primary bg-primary hover:bg-primary-fixed-variant px-4 py-1.5 rounded-lg transition-colors">Publish</button>
+</div>
+</div>
+<!-- Editor Tabs -->
+<div class="px-unit-lg border-b border-outline-variant bg-surface-container-lowest flex gap-unit-lg">
+<button class="py-3 text-label-md font-label-md text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors">SEO</button>
+<button class="py-3 text-label-md font-label-md text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors">Branding</button>
+<button class="py-3 text-label-md font-label-md text-primary border-b-2 border-primary font-bold">Hero</button>
+<button class="py-3 text-label-md font-label-md text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors">FAQ</button>
+</div>
+<!-- Editor Form Content -->
+<div class="flex-1 overflow-y-auto p-unit-lg max-w-4xl mx-auto w-full">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-unit-lg shadow-sm">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-body-lg font-body-lg font-semibold text-on-surface">Hero Section</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">Configure the main headline and visual for this landing page.</p>
+</div>
+<button class="text-on-surface-variant p-1 rounded hover:bg-surface-variant"><span class="material-symbols-outlined">more_horiz</span></button>
+</div>
+<div class="space-y-6">
+<!-- Input: Title -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2">Primary Title</label>
+<input class="w-full bg-surface text-body-md font-body-md text-on-surface border border-outline-variant rounded-lg px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" type="text" value="Built with open-source technologies"/>
+</div>
+<!-- Input: Subtitle -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2">Subtitle / Lead Paragraph</label>
+<textarea class="w-full bg-surface text-body-md font-body-md text-on-surface border border-outline-variant rounded-lg px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow" rows="3">Empower your team with a flexible, headless CMS architecture that scales with your ambition.</textarea>
+</div>
+<!-- Input: Image Uploader -->
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2">Background Image</label>
+<div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-outline-variant border-dashed rounded-lg bg-surface hover:bg-surface-container-low transition-colors group cursor-pointer relative overflow-hidden">
+<!-- Placeholder background suggesting an image might be there or can be uploaded -->
+<div class="absolute inset-0 bg-gradient-to-tr from-surface-container-high to-surface-container-low opacity-20"></div>
+<div class="space-y-1 text-center relative z-10">
+<span class="material-symbols-outlined text-4xl text-outline group-hover:text-primary transition-colors">image</span>
+<div class="flex text-body-sm font-body-sm text-on-surface-variant justify-center">
+<span class="relative cursor-pointer bg-transparent rounded-md font-medium text-primary hover:text-primary-fixed-variant focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+<span>Upload a file</span>
+</span>
+<p class="pl-1">or drag and drop</p>
+</div>
+<p class="text-label-md font-label-md text-outline">PNG, JPG, WebP up to 10MB</p>
+</div>
+</div>
+</div>
+<!-- Actions Row inside form -->
+<div class="pt-4 flex justify-end gap-3 border-t border-surface-variant mt-8">
+<button class="text-body-sm font-body-sm text-danger hover:bg-error-container px-3 py-1.5 rounded transition-colors mr-auto">Reset Changes</button>
+<button class="text-body-sm font-body-sm text-on-surface bg-surface-container-high hover:bg-surface-variant border border-outline-variant px-4 py-1.5 rounded shadow-sm transition-colors">Preview</button>
+<button class="text-body-sm font-body-sm text-on-primary bg-primary hover:bg-primary-fixed-variant px-4 py-1.5 rounded shadow-sm transition-colors">Apply to Block</button>
+</div>
+</div>
+</div>
+<!-- Additional Block Example (minimized state) to show context -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-unit-md shadow-sm mt-4 flex items-center justify-between opacity-70 hover:opacity-100 transition-opacity cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline">view_carousel</span>
+<div>
+<h4 class="text-body-sm font-body-sm font-medium text-on-surface">Logos 1</h4>
+<p class="text-label-md font-label-md text-on-surface-variant mt-0.5">Used by the world's leading companies</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

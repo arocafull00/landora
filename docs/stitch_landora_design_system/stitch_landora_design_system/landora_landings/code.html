@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CMS Dashboard - Landings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f2f3ff",
+                        "primary-container": "#0066ff",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-fixed": "#dae1ff",
+                        "background": "#faf8ff",
+                        "inverse-on-surface": "#eff0fd",
+                        "outline-variant": "#c2c6d8",
+                        "on-primary-container": "#f8f7ff",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-bright": "#faf8ff",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "surface": "#faf8ff",
+                        "outline": "#727687",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "surface-dim": "#d8d9e6",
+                        "surface-container-high": "#e6e7f4",
+                        "secondary-container": "#d0e1fb",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#fff6f4",
+                        "on-surface": "#191b24",
+                        "surface-variant": "#e1e2ee",
+                        "on-secondary-container": "#54647a",
+                        "success": "#10B981",
+                        "warning": "#F59E0B",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-primary-fixed": "#001849",
+                        "tertiary-fixed": "#ffdbd0",
+                        "on-secondary": "#ffffff",
+                        "surface-bg": "#F8FAFC",
+                        "inverse-primary": "#b3c5ff",
+                        "surface-container-highest": "#e1e2ee",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary": "#0050cb",
+                        "tertiary": "#a33200",
+                        "on-surface-variant": "#424656",
+                        "inverse-surface": "#2e303a",
+                        "secondary": "#505f76",
+                        "on-background": "#191b24",
+                        "on-error": "#ffffff",
+                        "surface-container": "#ecedfa",
+                        "tertiary-container": "#cc4204",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "danger": "#EF4444",
+                        "surface-tint": "#0054d6",
+                        "secondary-fixed-dim": "#b7c8e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit-xs": "0.25rem",
+                        "margin-desktop": "2rem",
+                        "unit-xl": "2rem",
+                        "unit-sm": "0.5rem",
+                        "unit-lg": "1.5rem",
+                        "gutter": "1.5rem",
+                        "unit-md": "1rem",
+                        "margin-mobile": "1rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["IBM Plex Sans"],
+                        "headline-lg": ["IBM Plex Sans"],
+                        "headline-md": ["IBM Plex Sans"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-xl": ["IBM Plex Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        body {
+            background-color: #faf8ff;
+        }
+    </style>
+</head>
+<body class="text-on-background font-body-md h-screen overflow-hidden flex bg-surface-bg">
+<!-- SideNavBar -->
+<nav class="w-[200px] h-full fixed left-0 top-0 flex flex-col bg-inverse-surface border-r border-outline-variant z-20">
+<div class="flex flex-col h-full py-unit-lg px-unit-md">
+<div class="mb-unit-xl">
+<h1 class="text-headline-md font-headline-md font-bold text-inverse-on-surface">Landora</h1>
+<p class="text-label-md font-label-md text-on-surface-variant">CMS Dashboard</p>
+</div>
+<div class="flex-1 space-y-unit-xs">
+<a class="flex items-center gap-unit-sm px-unit-sm py-2 rounded-lg bg-surface-variant text-primary font-bold opacity-80 transition-opacity duration-150" href="#">
+<span class="material-symbols-outlined icon-fill">web</span>
+<span class="text-label-md font-label-md">Landings</span>
+</a>
+<a class="flex items-center gap-unit-sm px-unit-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="text-label-md font-label-md">Assets</span>
+</a>
+<a class="flex items-center gap-unit-sm px-unit-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto">
+<a class="flex items-center gap-unit-sm px-unit-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="text-label-md font-label-md">Profile</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 ml-[200px] flex flex-col h-full">
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest border-b border-outline-variant flex justify-between items-center px-unit-lg py-unit-sm h-[64px] shrink-0">
+<div class="flex items-center gap-unit-lg">
+<nav class="hidden md:flex gap-unit-md">
+<a class="text-label-md font-label-md text-primary border-b-2 border-primary py-4 scale-95 duration-100" href="#">Structure</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors py-4" href="#">Presentation</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors py-4" href="#">Vision</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors py-4" href="#">Media</a>
+</nav>
+</div>
+<div class="flex items-center gap-unit-md">
+<div class="flex items-center bg-surface-container-low rounded-lg p-1 border border-outline-variant">
+<button class="px-3 py-1 text-label-md font-label-md bg-white rounded shadow-sm text-primary">Published</button>
+<button class="px-3 py-1 text-label-md font-label-md text-on-surface-variant">Drafts</button>
+</div>
+<div class="flex items-center gap-unit-sm text-on-surface-variant">
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined">help</span></button>
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</div>
+</header>
+<!-- 3-Column Layout -->
+<main class="flex-1 overflow-hidden flex bg-surface-bg">
+<!-- Column 1: Context/Groups -->
+<div class="w-[240px] border-r border-outline-variant bg-surface-container-lowest flex flex-col h-full overflow-y-auto">
+<div class="p-unit-md border-b border-outline-variant flex justify-between items-center">
+<span class="text-label-md font-label-md text-on-surface-variant">Content</span>
+</div>
+<div class="p-unit-sm space-y-1">
+<button class="w-full flex items-center justify-between px-unit-sm py-2 bg-surface-container-low text-on-surface rounded-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">description</span>
+<span class="text-body-sm font-body-sm">Pages</span>
+</div>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between px-unit-sm py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">article</span>
+<span class="text-body-sm font-body-sm">Posts</span>
+</div>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between px-unit-sm py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">history</span>
+<span class="text-body-sm font-body-sm">Changelogs</span>
+</div>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between px-unit-sm py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">category</span>
+<span class="text-body-sm font-body-sm">Categories</span>
+</div>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between px-unit-sm py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">group</span>
+<span class="text-body-sm font-body-sm">Authors</span>
+</div>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Column 2: Items List -->
+<div class="w-[320px] border-r border-outline-variant bg-surface-container-lowest flex flex-col h-full overflow-hidden">
+<div class="p-unit-md border-b border-outline-variant flex justify-between items-center shrink-0">
+<span class="text-label-md font-label-md text-on-surface-variant">Page</span>
+<div class="flex gap-1 text-on-surface-variant">
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">add</span></button>
+<button class="p-1 hover:text-primary transition-colors"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-unit-sm space-y-1">
+<div class="w-full flex items-start gap-2 px-unit-sm py-3 hover:bg-surface-variant rounded-lg cursor-pointer transition-colors border border-transparent">
+<span class="material-symbols-outlined text-[16px] text-outline mt-0.5">drag_indicator</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">description</span>
+<span class="text-body-sm font-body-sm font-medium text-on-surface truncate">Home Welcome</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-md bg-success/10 text-success">Published</span>
+<span class="text-[11px] text-outline truncate">/welcome</span>
+</div>
+</div>
+</div>
+<div class="w-full flex items-start gap-2 px-unit-sm py-3 bg-primary-container text-on-primary-container rounded-lg cursor-pointer border border-primary/20 shadow-sm relative">
+<div class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r"></div>
+<span class="material-symbols-outlined text-[16px] opacity-70 mt-0.5">drag_indicator</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px]">description</span>
+<span class="text-body-sm font-body-sm font-medium truncate">Black Friday</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-md bg-white/20 text-white">Draft</span>
+<span class="text-[11px] opacity-70 truncate">/bfcm-24</span>
+</div>
+</div>
+</div>
+<div class="w-full flex items-start gap-2 px-unit-sm py-3 hover:bg-surface-variant rounded-lg cursor-pointer transition-colors border border-transparent">
+<span class="material-symbols-outlined text-[16px] text-outline mt-0.5">drag_indicator</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">description</span>
+<span class="text-body-sm font-body-sm font-medium text-on-surface truncate">Summer Promo</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-md bg-success/10 text-success">Published</span>
+<span class="text-[11px] text-outline truncate">/summer-sale</span>
+</div>
+</div>
+</div>
+<div class="w-full flex items-start gap-2 px-unit-sm py-3 hover:bg-surface-variant rounded-lg cursor-pointer transition-colors border border-transparent">
+<span class="material-symbols-outlined text-[16px] text-outline mt-0.5">drag_indicator</span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">description</span>
+<span class="text-body-sm font-body-sm font-medium text-on-surface truncate">Waitlist</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-md bg-warning/10 text-warning">Changes</span>
+<span class="text-[11px] text-outline truncate">/early-access</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column 3: Detail View -->
+<div class="flex-1 flex flex-col h-full overflow-hidden bg-surface-bg">
+<div class="p-unit-md border-b border-outline-variant flex justify-between items-center shrink-0 bg-surface-container-lowest">
+<div class="flex items-center gap-4">
+<span class="text-headline-md font-headline-md text-on-surface">Black Friday</span>
+<span class="px-2 py-1 rounded text-[12px] font-label-md bg-surface-variant text-on-surface-variant border border-outline-variant">Draft</span>
+</div>
+<div class="flex gap-2 text-on-surface-variant">
+<button class="p-1.5 hover:text-primary transition-colors rounded hover:bg-surface-variant"><span class="material-symbols-outlined text-[20px]">link</span></button>
+<button class="p-1.5 hover:text-primary transition-colors rounded hover:bg-surface-variant"><span class="material-symbols-outlined text-[20px]">more_vert</span></button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-unit-lg">
+<div class="max-w-3xl mx-auto space-y-unit-lg">
+<!-- Details Panel -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-unit-md shadow-sm">
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-4 uppercase">Metadata</h3>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-[11px] text-outline mb-1">Slug</label>
+<div class="text-body-sm font-body-sm text-on-surface">/bfcm-24</div>
+</div>
+<div>
+<label class="block text-[11px] text-outline mb-1">Last Edited</label>
+<div class="text-body-sm font-body-sm text-on-surface">2 hours ago by Sarah</div>
+</div>
+<div>
+<label class="block text-[11px] text-outline mb-1">SEO Title</label>
+<div class="text-body-sm font-body-sm text-on-surface">Black Friday 2024 Huge Deals</div>
+</div>
+</div>
+</div>
+<!-- Block Builder Area -->
+<div>
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-4 uppercase">Content Blocks</h3>
+<div class="space-y-3">
+<!-- Block Item -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-lowest border border-outline-variant rounded-lg hover:border-primary/50 transition-colors cursor-move shadow-sm">
+<span class="material-symbols-outlined text-outline">drag_indicator</span>
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">image</span>
+</div>
+<div class="flex-1">
+<div class="text-body-sm font-body-sm font-medium text-on-surface">Hero Section</div>
+<div class="text-[12px] text-outline">Promotional header with countdown</div>
+</div>
+<button class="p-1 text-outline hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</div>
+<!-- Block Item -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-lowest border border-outline-variant rounded-lg hover:border-primary/50 transition-colors cursor-move shadow-sm">
+<span class="material-symbols-outlined text-outline">drag_indicator</span>
+<div class="p-2 bg-surface-container-low rounded border border-outline-variant">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">grid_view</span>
+</div>
+<div class="flex-1">
+<div class="text-body-sm font-body-sm font-medium text-on-surface">Product Grid</div>
+<div class="text-[12px] text-outline">Top 4 discounted items</div>
+</div>
+<button class="p-1 text-outline hover:text-primary"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</div>
+<!-- Add Block Action -->
+<button class="w-full py-4 border-2 border-dashed border-outline-variant rounded-lg text-primary hover:bg-primary/5 hover:border-primary transition-colors flex flex-col items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-body-sm font-body-sm font-medium">Add Block</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
