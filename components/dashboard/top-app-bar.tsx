@@ -1,36 +1,13 @@
 "use client";
 
-import { workspaceTabs } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Icon } from "@/components/ui/icon";
 
 export function TopAppBar() {
-  const activeTab = useDashboardStore((state) => state.activeWorkspaceTab);
   const activeView = useDashboardStore((state) => state.activeView);
-  const setActiveTab = useDashboardStore((state) => state.setActiveWorkspaceTab);
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-outline-variant bg-surface-container-lowest px-unit-lg">
-      <nav className="flex h-full items-center gap-unit-lg">
-        {workspaceTabs.map((tab) => {
-          const active = activeTab === tab;
-
-          return (
-            <button
-              className={`flex h-full items-center border-b-2 font-label text-label-md transition-colors ${
-                active
-                  ? "border-primary text-primary"
-                  : "border-transparent text-on-surface-variant hover:text-primary"
-              }`}
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              type="button"
-            >
-              {tab}
-            </button>
-          );
-        })}
-      </nav>
       <div className="flex items-center gap-unit-md pr-24">
         {activeView === "assets" || activeView === "settings" ? (
           <label className="relative hidden lg:block">
