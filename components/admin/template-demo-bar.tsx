@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+export const TEMPLATE_DEMO_BAR_HEIGHT = 52;
+
 export function TemplateDemoBar({ label }: { label: string }) {
   return (
     <div className="fixed left-0 right-0 top-0 z-50 flex items-center justify-between bg-inverse-surface px-6 py-3 shadow-md">

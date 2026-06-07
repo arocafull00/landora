@@ -19,6 +19,7 @@ export async function PATCH(
     await replaceLandingGallery(
       id,
       items.map((item: Record<string, unknown>) => ({
+        image: typeof item.image === "string" ? item.image : "",
         video: typeof item.video === "string" ? item.video : "",
       }))
     );

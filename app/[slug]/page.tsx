@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { toLandingContent } from "@/lib/landing-mapper";
-import { TollStoryTemplate } from "@/components/templates/toll-story/toll-story-template";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 
 export async function generateMetadata({
@@ -33,9 +32,5 @@ export default async function PublicLandingPage({
 
   const content = toLandingContent(landing);
 
-  if (landing.template === "velar") {
-    return <VelarTemplate content={content} />;
-  }
-
-  return <TollStoryTemplate content={content} />;
+  return <VelarTemplate content={content} />;
 }

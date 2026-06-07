@@ -486,7 +486,7 @@ export function EditorSection() {
                 </div>
                 <StatusBadge status={activeLanding.status} />
               </div>
-              <LandingPreview content={activeLanding.content} template={activeLanding.template} />
+              <LandingPreview content={activeLanding.content} />
             </div>
           </div>
         </div>

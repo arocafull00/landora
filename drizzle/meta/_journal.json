@@ -43,6 +43,20 @@
       "when": 1780845211818,
       "tag": "0005_workable_blink",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1780852286782,
+      "tag": "0006_fearless_kitty_pryde",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1780856000000,
+      "tag": "0007_velar_asset_urls",
+      "breakpoints": true
     }
   ]
 }

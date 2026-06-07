@@ -2,13 +2,12 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { eq } from "drizzle-orm";
 import * as schema from "../db/schema";
-import { VELAR_DEFAULT_CONTENT, TOLL_STORY_DEFAULT_CONTENT } from "../lib/default-content";
-import type { TemplateId } from "../lib/template-registry";
+import { VELAR_DEFAULT_CONTENT } from "../lib/default-content";
 
 type Db = ReturnType<typeof drizzle<typeof schema>>;
 
-async function seedSections(db: Db, landingId: string, template: TemplateId) {
-  const c = template === "velar" ? VELAR_DEFAULT_CONTENT : TOLL_STORY_DEFAULT_CONTENT;
+async function seedSections(db: Db, landingId: string) {
+  const c = VELAR_DEFAULT_CONTENT;
 
   await db.insert(schema.landingSeo).values({ landingId, title: c.hero.title, description: c.hero.subtitle });
   await db.insert(schema.landingBranding).values({ landingId, brand: c.brand });
@@ -44,7 +43,12 @@ async function seedSections(db: Db, landingId: string, template: TemplateId) {
 
   if (c.gallery.length > 0) {
     await db.insert(schema.landingGallery).values(
-      c.gallery.map((g, i) => ({ landingId, sortOrder: i, video: g.video }))
+      c.gallery.map((g, i) => ({
+        landingId,
+        sortOrder: i,
+        image: g.image ?? "",
+        video: g.video ?? "",
+      }))
     );
   }
 
@@ -164,16 +168,14 @@ async function main() {
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 
-  const template: TemplateId = "toll-story";
-
   const [landing] = await db
     .insert(schema.landingPages)
-    .values({ userId: user.id, name: landingName!, slug, template, published: false })
+    .values({ userId: user.id, name: landingName!, slug, template: "velar", published: false })
     .returning();
 
   console.log(`Landing created: ${landing.id} (${landing.name}) → slug: ${landing.slug}`);
 
-  await seedSections(db, landing.id, template);
+  await seedSections(db, landing.id);
 
   console.log(`Sections seeded for landing ${landing.id}`);
 }

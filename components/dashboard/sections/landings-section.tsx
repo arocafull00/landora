@@ -194,17 +194,7 @@ export function LandingsSection() {
           <div className="mx-auto max-w-5xl space-y-unit-lg">
             {activeContentGroup === "Pages" ? (
               <>
-                <LandingPreview content={activeLanding.content} template={activeLanding.template} />
-                <button
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-outline-variant py-4 text-primary transition-colors hover:border-primary hover:bg-primary/5"
-                  onClick={() => setActiveView("editor")}
-                  type="button"
-                >
-                  <Icon name="settings" className="h-5 w-5" />
-                  <span className="text-body-sm font-medium">
-                    Edit landing content
-                  </span>
-                </button>
+                <LandingPreview content={activeLanding.content} />
               </>
             ) : null}
             {activeContentGroup === "Posts" ? (

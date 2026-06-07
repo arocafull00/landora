@@ -24,7 +24,7 @@ export const landingPages = pgTable("landing_pages", {
     .references(() => users.id),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
-  template: text("template").$type<"toll-story" | "velar">().notNull().default("velar"),
+  template: text("template").$type<"velar">().notNull().default("velar"),
   published: boolean("published").notNull().default(false),
   updatedAt: timestamp("updated_at").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
@@ -170,6 +170,7 @@ export const landingGallery = pgTable("landing_gallery", {
     .notNull()
     .references(() => landingPages.id, { onDelete: "cascade" }),
   sortOrder: integer("sort_order").notNull(),
+  image: text("image").notNull().default(""),
   video: text("video").notNull().default(""),
 });
 

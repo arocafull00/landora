@@ -1,6 +1,9 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
+
+const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function VelarHero({
   content,
@@ -11,87 +14,96 @@ export function VelarHero({
   heroRef: React.RefObject<HTMLElement | null>;
   heroVisible: boolean;
 }) {
+  const reduce = useReducedMotion();
+
+  if (!heroVisible) {
+    return (
+      <section
+        ref={heroRef}
+        className="relative overflow-visible"
+        style={{ minHeight: "100vh" }}
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${content.hero.image})` }}
+        />
+      </section>
+    );
+  }
+
   return (
     <section
       ref={heroRef}
-      className="relative overflow-visible"
-      style={{ minHeight: "100vh" }}
+      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-visible lg:block"
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+      <motion.div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat max-lg:bg-[center_75%]"
         style={{ backgroundImage: `url(${content.hero.image})` }}
+        initial={reduce ? false : { scale: 1.06, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1.2, ease: easeOut }}
       />
 
-      <div
-        className="relative z-10"
-        style={{
-          opacity: heroVisible ? 1 : 0,
-          transform: heroVisible ? "translateY(0)" : "translateY(-28px)",
-          transition: heroVisible
-            ? "opacity 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s, transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s"
-            : "none",
-          paddingTop: "calc(28vh - 50px)",
-        }}
-      >
-        <div
-          className="flex items-end justify-between px-6 md:px-10 lg:px-16"
+      <div className="relative z-10 flex w-full flex-col items-start justify-center lg:block lg:pt-[calc(28vh-50px)]">
+        <motion.div
+          className="flex w-full justify-start px-6 md:px-10 lg:justify-between lg:px-16"
           style={{ marginBottom: "-0.04em" }}
+          initial={reduce ? false : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: 0.25, ease: easeOut }}
         >
           <h1
-            className="uppercase text-black"
+            className="text-[7.5vw] font-extrabold uppercase text-black sm:text-[5.5vw] lg:text-left lg:text-[3vw]"
             style={{
               fontFamily: "var(--font-syne)",
-              fontWeight: 800,
               letterSpacing: "-0.03em",
               lineHeight: 1,
-              fontSize: "clamp(22px, 3vw, 3vw)",
             }}
           >
             {content.hero.eyebrow}
           </h1>
-
-          <p
-            className="hidden lg:block max-w-[300px] text-right text-black/70"
+          <motion.p
+            className="hidden max-w-[300px] text-right font-bold opacity-70 lg:block"
             style={{
               fontFamily: "var(--font-syne)",
-              fontWeight: 700,
               fontSize: "clamp(10px, 0.95vw, 14px)",
               lineHeight: 1.6,
               marginBottom: "0.2em",
               letterSpacing: "0.02em",
             }}
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 0.7, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.95, ease: easeOut }}
           >
             {content.hero.subtitle}
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="overflow-hidden">
-          <h2
-            className="uppercase text-black px-6 md:px-10 lg:px-16"
-            style={{
-              fontFamily: "var(--font-syne)",
-              fontWeight: 800,
-              letterSpacing: "-0.03em",
-              lineHeight: 0.88,
-              fontSize: "clamp(38px, 6.5vw, 9vw)",
-              whiteSpace: "nowrap",
-            }}
+        <div className="w-full overflow-visible lg:overflow-hidden">
+          <motion.h2
+            className="max-w-full break-words px-6 text-[12.5vw] font-extrabold uppercase leading-[0.9] text-black sm:text-[10.5vw] md:px-10 lg:px-16 lg:text-left lg:text-[clamp(52px,6.5vw,9vw)] lg:leading-[0.88] lg:whitespace-nowrap"
+            style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
+            initial={reduce ? false : { y: "108%" }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.85, delay: 0.42, ease: easeOut }}
           >
             {content.hero.title}
-          </h2>
+          </motion.h2>
         </div>
 
-        <p
-          className="lg:hidden px-6 text-black/65"
+        <motion.p
+          className="px-6 font-semibold text-[#171717]/85 max-lg:[text-shadow:0_1px_12px_rgba(255,255,255,0.6)] lg:hidden"
           style={{
             fontFamily: "var(--font-syne)",
-            fontWeight: 600,
             fontSize: "clamp(12px, 3vw, 15px)",
             marginTop: "0.9em",
           }}
+          initial={reduce ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 0.85, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.85, ease: easeOut }}
         >
           {content.hero.subtitle}
-        </p>
+        </motion.p>
       </div>
     </section>
   );

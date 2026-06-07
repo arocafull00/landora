@@ -4,17 +4,22 @@ import { useState } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarGalleryItem } from "@/components/templates/velar/velar-gallery-item";
 
-const TICKER_TEXT =
-  "Velar.   Velar.   Velar.   Velar.   Velar.   Velar.   Velar.   Velar.  ";
+function buildTickerText(brand: string) {
+  const text = brand || "Velar.";
+  return `${text}   `.repeat(8);
+}
 
 export function VelarGallerySection({ content }: { content: LandingContent }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
+  if (content.gallery.length === 0) return null;
+
+  const tickerText = buildTickerText(content.brand);
+
   return (
     <section
       id="listings"
-      className="relative z-[25] overflow-hidden bg-[#1a1a1a]"
-      style={{ marginTop: "-100vh", height: "100vh" }}
+      className="relative z-[25] mt-0 h-screen overflow-hidden bg-[#1a1a1a] lg:-mt-[100vh]"
     >
       <div className="absolute inset-0 z-0 flex items-center overflow-hidden pointer-events-none select-none">
         <div className="flex">
@@ -31,7 +36,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
                 userSelect: "none",
               }}
             >
-              {TICKER_TEXT}
+              {tickerText}
             </span>
           ))}
         </div>
@@ -41,9 +46,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
         className="relative z-[1] flex h-full items-center justify-center"
         style={{ padding: "clamp(24px, 4vw, 60px)" }}
       >
-        <div
-          className="flex h-[70%] w-full max-w-[1200px] gap-[6px]"
-        >
+        <div className="flex h-[70%] w-full max-w-[1200px] gap-[6px]">
           {content.gallery.map((item, index) => (
             <VelarGalleryItem
               key={item.id}

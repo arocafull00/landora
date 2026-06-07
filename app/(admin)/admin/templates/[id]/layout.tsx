@@ -1,0 +1,7 @@
+export default function TemplateDemoLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <div className="h-screen overflow-y-auto">{children}</div>;
+}

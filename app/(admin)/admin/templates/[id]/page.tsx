@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTemplate, isValidTemplateId } from "@/lib/template-registry";
-import { TollStoryTemplate } from "@/components/templates/toll-story/toll-story-template";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
-import { TemplateDemoBar } from "@/components/admin/template-demo-bar";
+import {
+  TemplateDemoBar,
+  TEMPLATE_DEMO_BAR_HEIGHT,
+} from "@/components/admin/template-demo-bar";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -26,19 +28,13 @@ export default async function TemplateDemoPage({
 
   const isEmbed = embed === "1";
 
-  const TemplateComponent =
-    id === "toll-story"
-      ? TollStoryTemplate
-      : id === "velar"
-        ? VelarTemplate
-        : null;
-
-  if (!TemplateComponent) notFound();
-
   return (
-    <div className={isEmbed ? "" : "pt-[52px]"}>
+    <div style={isEmbed ? undefined : { paddingTop: TEMPLATE_DEMO_BAR_HEIGHT }}>
       {!isEmbed && <TemplateDemoBar label={template.label} />}
-      <TemplateComponent content={template.demoContent} />
+      <VelarTemplate
+        content={template.demoContent}
+        topOffset={isEmbed ? 0 : TEMPLATE_DEMO_BAR_HEIGHT}
+      />
     </div>
   );
 }

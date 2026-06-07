@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 export function VelarGalleryItem({
@@ -25,14 +25,24 @@ export function VelarGalleryItem({
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="h-full w-full object-cover"
-        src={item.video}
-      />
+      {item.image ? (
+        <Image
+          src={item.image}
+          alt=""
+          fill
+          className="object-cover"
+          sizes="(max-width: 700px) 50vw, (max-width: 1200px) 70vw, 800px"
+        />
+      ) : item.video ? (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-full w-full object-cover"
+          src={item.video}
+        />
+      ) : null}
     </div>
   );
 }

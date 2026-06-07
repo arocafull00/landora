@@ -7,21 +7,29 @@ function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
 
+function parseCountValue(value: string): { end: number; suffix: string } | null {
+  const match = value.match(/^(\d+)(.*)$/);
+  if (!match) return null;
+  return { end: parseInt(match[1], 10), suffix: match[2] };
+}
+
 export function VelarStatItem({ stat }: { stat: StatContent }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const triggered = useRef(false);
 
+  const countTo = stat.countTo ?? parseCountValue(stat.value)?.end;
+  const suffix = stat.suffix ?? parseCountValue(stat.value)?.suffix ?? "";
+
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || countTo === undefined) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting || triggered.current) return;
-        if (stat.countTo === undefined) return;
         triggered.current = true;
-        const end = stat.countTo;
+        const end = countTo;
         const duration = 2000;
         const start = performance.now();
         const tick = (now: number) => {
@@ -37,12 +45,10 @@ export function VelarStatItem({ stat }: { stat: StatContent }) {
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [stat.countTo]);
+  }, [countTo]);
 
   const displayValue =
-    stat.countTo !== undefined
-      ? `${count}${stat.suffix ?? ""}`
-      : stat.value;
+    countTo !== undefined ? `${count}${suffix}` : stat.value;
 
   return (
     <div ref={ref}>

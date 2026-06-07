@@ -9,8 +9,6 @@ import { getLandingBySlug } from "@/data/admin";
 import { updateLandingPage } from "@/data/landing-pages";
 import { seedLandingSections, ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
 import { isAdmin } from "@/lib/is-admin";
-import type { TemplateId } from "@/lib/template-registry";
-
 const createUserSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   email: z.string().email("Email inválido"),
@@ -82,7 +80,7 @@ const createLandingSchema = z.object({
     .string()
     .min(1, "El slug es requerido")
     .regex(/^[a-z0-9-]+$/, "El slug solo puede contener letras, números y guiones"),
-  template: z.enum(["toll-story", "velar"]).default("toll-story"),
+  template: z.literal("velar").default("velar"),
 });
 
 export async function createLandingForUser(formData: FormData): Promise<ActionResult> {
@@ -90,7 +88,7 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
     userId: formData.get("userId"),
     name: formData.get("name"),
     slug: formData.get("slug"),
-    template: formData.get("template") ?? "toll-story",
+    template: formData.get("template") ?? "velar",
   });
 
   if (!parsed.success) {
@@ -116,7 +114,7 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
   }
 
   try {
-    await seedLandingSections(landingId, template as TemplateId);
+    await seedLandingSections(landingId);
   } catch {
     return { error: "Error al inicializar el contenido de la landing" };
   }

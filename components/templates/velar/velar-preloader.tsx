@@ -4,27 +4,28 @@ import { useEffect, useRef } from "react";
 
 const CHAR_INTERVAL = 140;
 const TYPE_START = 600;
-const FULL_TEXT = "Velar.";
-const LIFT_AT = TYPE_START + 6 * CHAR_INTERVAL + 700;
 
 export function VelarPreloader({
+  brand,
   onLift,
   onHeroReveal,
   onDone,
 }: {
+  brand: string;
   onLift: () => void;
   onHeroReveal: () => void;
   onDone: () => void;
 }) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
   const charsRef = useRef<HTMLSpanElement[]>([]);
+  const fullText = brand || "Velar.";
 
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
+    const liftAt = TYPE_START + fullText.length * CHAR_INTERVAL + 700;
 
-    FULL_TEXT.split("").forEach((_, i) => {
+    fullText.split("").forEach((_, i) => {
       timers.push(
         setTimeout(() => {
           const el = charsRef.current[i];
@@ -36,7 +37,7 @@ export function VelarPreloader({
     timers.push(
       setTimeout(() => {
         if (cursorRef.current) cursorRef.current.style.opacity = "0";
-      }, LIFT_AT - 150)
+      }, liftAt - 150)
     );
 
     timers.push(
@@ -45,13 +46,13 @@ export function VelarPreloader({
           overlayRef.current.style.transform = "translateY(-100%)";
         }
         onLift();
-      }, LIFT_AT)
+      }, liftAt)
     );
 
     timers.push(
       setTimeout(() => {
         onHeroReveal();
-      }, LIFT_AT + 1300)
+      }, liftAt + 1300)
     );
 
     timers.push(
@@ -60,11 +61,11 @@ export function VelarPreloader({
           overlayRef.current.style.transition = "none";
         }
         onDone();
-      }, LIFT_AT + 2100)
+      }, liftAt + 2100)
     );
 
     return () => timers.forEach(clearTimeout);
-  }, [onLift, onHeroReveal, onDone]);
+  }, [fullText, onLift, onHeroReveal, onDone]);
 
   return (
     <div
@@ -76,7 +77,6 @@ export function VelarPreloader({
       }}
     >
       <span
-        ref={textRef}
         className="flex items-baseline"
         style={{
           fontFamily: "var(--font-syne)",
@@ -85,7 +85,7 @@ export function VelarPreloader({
           color: "white",
         }}
       >
-        {FULL_TEXT.split("").map((char, i) => (
+        {fullText.split("").map((char, i) => (
           <span
             key={i}
             ref={(el) => {

@@ -14,10 +14,8 @@ import {
   replaceLandingNav,
 } from "@/data/landing-sections";
 import { getDefaultContent } from "@/lib/default-content";
-import type { TemplateId } from "@/lib/template-registry";
-
-export async function seedLandingSections(landingId: string, template: TemplateId) {
-  const c = getDefaultContent(template);
+export async function seedLandingSections(landingId: string) {
+  const c = getDefaultContent();
 
   await Promise.all([
     upsertLandingSeo(landingId, { title: c.hero.title, description: c.hero.subtitle }),
@@ -45,7 +43,10 @@ export async function seedLandingSections(landingId: string, template: TemplateI
         suffix: s.suffix ?? "",
       }))
     ),
-    replaceLandingGallery(landingId, c.gallery.map((g) => ({ video: g.video }))),
+    replaceLandingGallery(
+      landingId,
+      c.gallery.map((g) => ({ image: g.image ?? "", video: g.video ?? "" }))
+    ),
     replaceLandingNav(landingId, c.nav.map((n) => ({ label: n.label, href: n.href }))),
     replaceLandingSpaces(
       landingId,
@@ -89,5 +90,5 @@ export async function ensureLandingHasDefaultContent(landingId: string) {
 
   if (!isEmpty) return;
 
-  await seedLandingSections(landingId, landing.template as TemplateId);
+  await seedLandingSections(landingId);
 }

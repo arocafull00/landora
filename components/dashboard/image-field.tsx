@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TOLL_STORY_IMAGE_OPTIONS } from "@/lib/toll-story-assets";
+import { VELAR_IMAGE_OPTIONS } from "@/lib/velar-assets";
 
 export function ImageField({
   label,
@@ -58,7 +58,7 @@ export function ImageField({
 
   const allOptions = [
     ...assets.map((a) => ({ value: a.url, label: a.name || a.url })),
-    ...TOLL_STORY_IMAGE_OPTIONS.map((s) => ({ value: s.value, label: s.label })),
+    ...VELAR_IMAGE_OPTIONS.map((s) => ({ value: s.value, label: s.label })),
   ];
 
   return (

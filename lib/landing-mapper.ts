@@ -1,6 +1,12 @@
 import type { LandingWithSections } from "@/data/landing-pages";
 import type { Landing, LandingContent } from "@/lib/dashboard-data";
+import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
 import type { User } from "@/db/schema";
+
+function mapImage(url: string | null | undefined) {
+  if (!url) return "";
+  return remapLegacyTemplateAssetUrl(url);
+}
 
 export function toLandingContent(row: LandingWithSections): LandingContent {
   return {
@@ -10,8 +16,8 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       title: row.hero?.title ?? "",
       subtitle: row.hero?.subtitle ?? "",
       description: row.hero?.description ?? "",
-      image: row.hero?.image ?? "",
-      houseImage: row.hero?.houseImage ?? "",
+      image: mapImage(row.hero?.image),
+      houseImage: mapImage(row.hero?.houseImage),
     },
     story: {
       statement: row.story?.statement ?? "",
@@ -23,20 +29,24 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       countTo: s.countTo ?? undefined,
       suffix: s.suffix,
     })),
-    gallery: (row.gallery ?? []).map((g) => ({ id: g.id, video: g.video })),
+    gallery: (row.gallery ?? []).map((g) => ({
+      id: g.id,
+      image: g.image ? mapImage(g.image) : undefined,
+      video: g.video || undefined,
+    })),
     nav: (row.nav ?? []).map((n) => ({ id: n.id, label: n.label, href: n.href })),
     spaces: (row.spaces ?? []).map((s) => ({
       id: s.id,
       name: s.name,
       description: s.description,
-      image: s.image,
+      image: mapImage(s.image),
     })),
     services: (row.services ?? []).map((s) => ({
       id: s.id,
       title: s.title,
       subtitle: s.subtitle,
       label: s.label,
-      image: s.image,
+      image: mapImage(s.image),
     })),
     workflow: (row.workflow ?? []).map((w) => ({
       id: w.id,
