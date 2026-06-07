@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { VELAR_IMAGE_OPTIONS } from "@/lib/velar-assets";
 
 export function ImageField({
   label,
@@ -56,10 +55,7 @@ export function ImageField({
     }
   };
 
-  const allOptions = [
-    ...assets.map((a) => ({ value: a.url, label: a.name || a.url })),
-    ...VELAR_IMAGE_OPTIONS.map((s) => ({ value: s.value, label: s.label })),
-  ];
+  const allOptions = assets.map((a) => ({ value: a.url, label: a.name || a.url }));
 
   return (
     <div className="space-y-2">

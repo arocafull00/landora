@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 import { LandingPreview } from "@/components/dashboard/landing-preview";
 import {
   PreviewToolbar,
   type PreviewDevice,
 } from "@/components/dashboard/preview-toolbar";
-import { getBaseWidth } from "@/components/dashboard/preview-utils";
+import { MOBILE_WIDTH } from "@/components/dashboard/preview-utils";
+import { useScaledPreview } from "@/components/dashboard/use-scaled-preview";
+import { useViewportWidth } from "@/components/dashboard/use-viewport-width";
 import { cn } from "@/lib/utils";
 
 export function ScaledLandingPreview({
@@ -29,39 +30,21 @@ export function ScaledLandingPreview({
   showToolbar?: boolean;
   template?: TemplateId;
 }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  const [contentHeight, setContentHeight] = useState(0);
-
-  const baseWidth = getBaseWidth(device);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const observer = new ResizeObserver(([entry]) => {
-      const width = entry.contentRect.width;
-      setScale(Math.min(width / baseWidth, maxScale));
-    });
-
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [baseWidth, maxScale]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const observer = new ResizeObserver(([entry]) => {
-      setContentHeight(entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height);
-    });
-
-    observer.observe(canvas);
-    return () => observer.disconnect();
-  }, [content, template, device]);
-
-  const scaledHeight = contentHeight * scale;
+  const viewportWidth = useViewportWidth();
+  const baseWidth = device === "mobile" ? MOBILE_WIDTH : viewportWidth;
+  const {
+    canvasRef,
+    containerRef,
+    scale,
+    scaledHeight,
+    scaledWidth,
+  } = useScaledPreview({
+    baseWidth,
+    content,
+    device,
+    maxScale,
+    template,
+  });
 
   return (
     <div className={cn("flex min-h-0 min-w-0 flex-col", className)}>
@@ -77,7 +60,10 @@ export function ScaledLandingPreview({
         className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto bg-surface-bg"
         ref={containerRef}
       >
-        <div style={{ height: scaledHeight }}>
+        <div
+          className="mx-auto overflow-hidden"
+          style={{ height: scaledHeight, width: scaledWidth }}
+        >
           <div
             className="pointer-events-none"
             ref={canvasRef}
@@ -87,7 +73,7 @@ export function ScaledLandingPreview({
               width: baseWidth,
             }}
           >
-            <LandingPreview content={content} template={template} />
+            <LandingPreview clip={false} content={content} template={template} />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { X } from "lucide-react";
 import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 import { LandingPreview } from "@/components/dashboard/landing-preview";
@@ -8,7 +8,9 @@ import {
   PreviewToolbar,
   type PreviewDevice,
 } from "@/components/dashboard/preview-toolbar";
-import { getBaseWidth } from "@/components/dashboard/preview-utils";
+import { MOBILE_WIDTH } from "@/components/dashboard/preview-utils";
+import { useScaledPreview } from "@/components/dashboard/use-scaled-preview";
+import { useViewportWidth } from "@/components/dashboard/use-viewport-width";
 
 export function PreviewFullscreenOverlay({
   content,
@@ -23,12 +25,21 @@ export function PreviewFullscreenOverlay({
   onDeviceChange: (device: PreviewDevice) => void;
   template?: TemplateId;
 }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  const [contentHeight, setContentHeight] = useState(0);
-
-  const baseWidth = getBaseWidth(device);
+  const viewportWidth = useViewportWidth();
+  const baseWidth = device === "mobile" ? MOBILE_WIDTH : viewportWidth;
+  const {
+    canvasRef,
+    containerRef,
+    scale,
+    scaledHeight,
+    scaledWidth,
+  } = useScaledPreview({
+    baseWidth,
+    content,
+    device,
+    maxScale: 1,
+    template,
+  });
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -39,33 +50,6 @@ export function PreviewFullscreenOverlay({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const observer = new ResizeObserver(([entry]) => {
-      const width = entry.contentRect.width;
-      setScale(Math.min(width / baseWidth, 1));
-    });
-
-    observer.observe(container);
-    return () => observer.disconnect();
-  }, [baseWidth]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const observer = new ResizeObserver(([entry]) => {
-      setContentHeight(entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height);
-    });
-
-    observer.observe(canvas);
-    return () => observer.disconnect();
-  }, [content, template, device]);
-
-  const scaledHeight = contentHeight * scale;
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-surface-bg">
@@ -91,7 +75,10 @@ export function PreviewFullscreenOverlay({
         className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto p-unit-lg"
         ref={containerRef}
       >
-        <div className="mx-auto" style={{ height: scaledHeight, width: baseWidth * scale }}>
+        <div
+          className="mx-auto overflow-hidden"
+          style={{ height: scaledHeight, width: scaledWidth }}
+        >
           <div
             className="pointer-events-none"
             ref={canvasRef}
@@ -101,7 +88,7 @@ export function PreviewFullscreenOverlay({
               width: baseWidth,
             }}
           >
-            <LandingPreview content={content} template={template} />
+            <LandingPreview clip={false} content={content} template={template} />
           </div>
         </div>
       </div>
