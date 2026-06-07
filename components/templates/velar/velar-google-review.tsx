@@ -66,6 +66,13 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
         >
           {testimonial.comment}
         </p>
+        <a
+          href="#"
+          className="mt-auto text-sm font-medium text-[#213138] hover:underline"
+          style={{ fontFamily: "var(--font-body)" }}
+        >
+          Leer más
+        </a>
       </div>
     </div>
   );

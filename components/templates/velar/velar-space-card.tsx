@@ -37,6 +37,26 @@ export function VelarSpaceCard({
         >
           {space.description}
         </p>
+        <a
+          href={`#space-${space.id}`}
+          className="inline-flex w-fit cursor-pointer items-center gap-2 font-semibold uppercase tracking-wide hover:underline"
+          style={{ fontFamily: "var(--font-syne)" }}
+        >
+          Ver detalles
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </a>
       </div>
     </div>
   );

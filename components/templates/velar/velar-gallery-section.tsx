@@ -19,10 +19,10 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
   return (
     <section
       id="listings"
-      className="relative z-[25] mt-0 h-screen overflow-hidden bg-[#1a1a1a] lg:-mt-[100vh]"
+      className="s3-gallery-section relative z-[25] mt-0 h-screen overflow-hidden bg-[#1a1a1a] lg:-mt-[100vh]"
     >
-      <div className="absolute inset-0 z-0 flex items-center overflow-hidden pointer-events-none select-none">
-        <div className="flex">
+      <div className="s3-ticker-wrap absolute inset-0 z-0 flex items-center overflow-hidden pointer-events-none select-none">
+        <div className="ticker-track flex">
           {[0, 1].map((copy) => (
             <span
               key={copy}
@@ -42,11 +42,8 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
         </div>
       </div>
 
-      <div
-        className="relative z-[1] flex h-full items-center justify-center"
-        style={{ padding: "clamp(24px, 4vw, 60px)" }}
-      >
-        <div className="flex h-[70%] w-full max-w-[1200px] gap-[6px]">
+      <div className="s3-gallery-content relative z-[1] flex h-full items-center justify-center lg:p-[clamp(24px,4vw,60px)]">
+        <div className="gallery-expand-row flex h-[70%] w-full max-w-[1200px] gap-[6px]">
           {content.gallery.map((item, index) => (
             <VelarGalleryItem
               key={item.id}
