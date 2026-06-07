@@ -1,6 +1,7 @@
 "use client";
 
-import { dashboardViews } from "@/lib/dashboard-data";
+import { useEffect } from "react";
+import { dashboardViews, Landing } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Icon } from "@/components/ui/icon";
 import { IconButton } from "@/components/ui/primitives";
@@ -10,9 +11,14 @@ import { LandingsSection } from "@/components/dashboard/sections/landings-sectio
 import { SettingsSection } from "@/components/dashboard/sections/settings-section";
 import { TopAppBar } from "@/components/dashboard/top-app-bar";
 
-export function DashboardShell() {
+export function DashboardShell({ initialLanding }: { initialLanding: Landing }) {
   const activeView = useDashboardStore((state) => state.activeView);
   const setActiveView = useDashboardStore((state) => state.setActiveView);
+  const initFromLanding = useDashboardStore((state) => state.initFromLanding);
+
+  useEffect(() => {
+    initFromLanding(initialLanding);
+  }, [initialLanding, initFromLanding]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-surface-bg text-on-background">

@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -31,13 +32,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="es"
-      className={`${ibmPlexSans.variable} ${inter.variable} ${jetBrainsMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full overflow-hidden bg-surface-bg text-on-background">
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang="es"
+        className={`${ibmPlexSans.variable} ${inter.variable} ${jetBrainsMono.variable} h-full antialiased`}
+      >
+        <body className="min-h-full overflow-hidden bg-surface-bg text-on-background">
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

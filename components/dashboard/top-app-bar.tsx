@@ -1,5 +1,6 @@
 "use client";
 
+import { UserButton } from "@clerk/nextjs";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Icon } from "@/components/ui/icon";
 
@@ -30,9 +31,7 @@ export function TopAppBar() {
             Drafts
           </button>
         </div>
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-container font-label text-label-md font-bold text-on-primary-container">
-          RA
-        </div>
+        <UserButton />
       </div>
     </header>
   );

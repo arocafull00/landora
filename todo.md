@@ -1,0 +1,1 @@
+crear politica de privacidad y añadir a clerk
