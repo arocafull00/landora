@@ -164,7 +164,7 @@ async function main() {
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 
-  const template: TemplateId = "velar";
+  const template: TemplateId = "toll-story";
 
   const [landing] = await db
     .insert(schema.landingPages)

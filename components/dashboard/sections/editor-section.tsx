@@ -5,6 +5,7 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import { LandingPreview } from "@/components/dashboard/landing-preview";
 import { ActionButton, IconButton, Panel, StatusBadge } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
+import { ImageField } from "@/components/dashboard/image-field";
 
 export function EditorSection() {
   const {
@@ -212,7 +213,7 @@ export function EditorSection() {
                     }
                     value={activeLanding.content.hero.description}
                   />
-                  <ImageSelector
+                  <ImageField
                     label="Hero image"
                     onChange={(value) => updateHero(activeLanding.id, { image: value })}
                     value={activeLanding.content.hero.image}
@@ -335,7 +336,7 @@ export function EditorSection() {
                         }
                         value={space.description}
                       />
-                      <ImageSelector
+                      <ImageField
                         label="Image"
                         onChange={(value) =>
                           updateSpace(activeLanding.id, space.id, { image: value })
@@ -381,7 +382,7 @@ export function EditorSection() {
                         }
                         value={service.label}
                       />
-                      <ImageSelector
+                      <ImageField
                         label="Image"
                         onChange={(value) =>
                           updateService(activeLanding.id, service.id, {
@@ -561,42 +562,3 @@ function TextArea({
   );
 }
 
-function ImageSelector({
-  label,
-  onChange,
-  value,
-}: {
-  label: string;
-  onChange: (value: string) => void;
-  value: string;
-}) {
-  const options = [
-    "/toll-story/hero.png",
-    "/toll-story/toll7.jpeg",
-    "/toll-story/toll6.jpeg",
-    "/toll-story/toll5.jpeg",
-    "/toll-story/toll4.jpeg",
-    "/toll-story/toll3.jpeg",
-    "/toll-story/toll2.jpeg",
-    "/toll-story/toll1.jpg",
-  ];
-
-  return (
-    <label className="block">
-      <span className="mb-2 block font-label text-label-md text-on-surface-variant">
-        {label}
-      </span>
-      <select
-        className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-        onChange={(event) => onChange(event.target.value)}
-        value={value}
-      >
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option.replace("/toll-story/", "")}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}

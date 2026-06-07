@@ -7,8 +7,9 @@ import { db } from "@/db";
 import { users, landingPages } from "@/db/schema";
 import { getLandingBySlug } from "@/data/admin";
 import { updateLandingPage } from "@/data/landing-pages";
-import { seedLandingSections } from "@/data/seed-landing-sections";
+import { seedLandingSections, ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
 import { isAdmin } from "@/lib/is-admin";
+import type { TemplateId } from "@/lib/template-registry";
 
 const createUserSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
@@ -81,6 +82,7 @@ const createLandingSchema = z.object({
     .string()
     .min(1, "El slug es requerido")
     .regex(/^[a-z0-9-]+$/, "El slug solo puede contener letras, números y guiones"),
+  template: z.enum(["toll-story", "velar"]).default("toll-story"),
 });
 
 export async function createLandingForUser(formData: FormData): Promise<ActionResult> {
@@ -88,13 +90,14 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
     userId: formData.get("userId"),
     name: formData.get("name"),
     slug: formData.get("slug"),
+    template: formData.get("template") ?? "toll-story",
   });
 
   if (!parsed.success) {
     return { error: parsed.error.message };
   }
 
-  const { userId, name, slug } = parsed.data;
+  const { userId, name, slug, template } = parsed.data;
 
   const existing = await getLandingBySlug(slug);
   if (existing) {
@@ -105,7 +108,7 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
   try {
     const [landing] = await db
       .insert(landingPages)
-      .values({ userId, name, slug, template: "velar" })
+      .values({ userId, name, slug, template })
       .returning({ id: landingPages.id });
     landingId = landing.id;
   } catch {
@@ -113,7 +116,7 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
   }
 
   try {
-    await seedLandingSections(landingId, "velar");
+    await seedLandingSections(landingId, template as TemplateId);
   } catch {
     return { error: "Error al inicializar el contenido de la landing" };
   }
@@ -135,6 +138,14 @@ export async function setLandingPublished(
   const parsed = landingIdSchema.safeParse(landingId);
   if (!parsed.success) {
     return { error: parsed.error.message };
+  }
+
+  if (published) {
+    try {
+      await ensureLandingHasDefaultContent(parsed.data);
+    } catch {
+      return { error: "Error al inicializar el contenido de la landing" };
+    }
   }
 
   try {

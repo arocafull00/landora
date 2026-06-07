@@ -4,6 +4,7 @@ import { getUserByInternalId } from "@/data/users";
 import { getLandingPageByUserId } from "@/data/landing-pages";
 import { toLandingView } from "@/lib/landing-mapper";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
 
 export default async function DashboardPage() {
   const clientId = await getEffectiveClientId();
@@ -32,7 +33,10 @@ export default async function DashboardPage() {
     );
   }
 
-  const landing = toLandingView(dbLanding, user ?? undefined);
+  await ensureLandingHasDefaultContent(dbLanding.id);
+
+  const refreshed = await getLandingPageByUserId(clientId);
+  const landing = toLandingView(refreshed ?? dbLanding, user ?? undefined);
 
   return <DashboardShell initialLanding={landing} />;
 }

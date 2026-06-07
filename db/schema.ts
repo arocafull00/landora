@@ -183,6 +183,24 @@ export const landingNav = pgTable("landing_nav", {
   href: text("href").notNull().default(""),
 });
 
+export const assets = pgTable("assets", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  publicId: text("public_id").notNull(),
+  url: text("url").notNull(),
+  name: text("name").notNull().default(""),
+  mimeType: text("mime_type").notNull().default(""),
+  width: integer("width"),
+  height: integer("height"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const assetsRelations = relations(assets, ({ one }) => ({
+  user: one(users, { fields: [assets.userId], references: [users.id] }),
+}));
+
 export const landingPagesRelations = relations(landingPages, ({ one, many }) => ({
   seo: one(landingSeo, { fields: [landingPages.id], references: [landingSeo.landingId] }),
   branding: one(landingBranding, { fields: [landingPages.id], references: [landingBranding.landingId] }),
@@ -274,3 +292,5 @@ export type LandingService = typeof landingServices.$inferSelect;
 export type LandingWorkflowStep = typeof landingWorkflow.$inferSelect;
 export type LandingGalleryItem = typeof landingGallery.$inferSelect;
 export type LandingNavItem = typeof landingNav.$inferSelect;
+export type AssetRow = typeof assets.$inferSelect;
+export type NewAsset = typeof assets.$inferInsert;

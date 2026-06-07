@@ -95,6 +95,15 @@ export function CreateLandingForm({
           </p>
         </label>
       </div>
+      <label className="block">
+        <span className="mb-1.5 block font-label text-label-md text-on-surface-variant">
+          Plantilla
+        </span>
+        <select name="template" defaultValue="toll-story" className={inputClass}>
+          <option value="toll-story">Toll Story — Espacios de eventos</option>
+          <option value="velar">Velar — Real estate de lujo</option>
+        </select>
+      </label>
       {error && (
         <p className="font-body text-body-sm text-error">{error}</p>
       )}
