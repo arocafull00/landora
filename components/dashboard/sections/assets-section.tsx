@@ -5,12 +5,19 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import type { AssetRow } from "@/db/schema";
 import { ActionButton, IconButton } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
+import { PendingFileRow, type PendingFile } from "./pending-file-row";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function AssetsSection() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [assets, setAssets] = useState<AssetRow[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [pendingFiles, setPendingFiles] = useState<PendingFile[]>([]);
   const [copied, setCopied] = useState(false);
 
   const load = useCallback(() => {
@@ -28,25 +35,50 @@ export function AssetsSection() {
   useEffect(() => { load(); }, [load]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files ?? []);
+    if (files.length === 0) return;
 
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
+    const pending: PendingFile[] = files.map((file, i) => ({
+      key: `${Date.now()}-${i}`,
+      name: file.name,
+      status: "uploading",
+    }));
+    setPendingFiles(pending);
 
-    try {
-      const res = await fetch("/api/assets", { method: "POST", body: formData });
-      if (!res.ok) throw new Error("Upload failed");
-      const row: AssetRow = await res.json();
-      setAssets((prev) => [row, ...prev]);
-      setActiveId(row.id);
-    } catch {
-      /* noop */
-    } finally {
-      setUploading(false);
-      if (inputRef.current) inputRef.current.value = "";
+    const results = await Promise.allSettled(
+      files.map(async (file, i) => {
+        const key = pending[i].key;
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("name", file.name);
+        try {
+          const res = await fetch("/api/assets", { method: "POST", body: formData });
+          if (!res.ok) throw new Error("Upload failed");
+          const row: AssetRow = await res.json();
+          setPendingFiles((prev) =>
+            prev.map((p) => (p.key === key ? { ...p, status: "done" } : p))
+          );
+          return row;
+        } catch {
+          setPendingFiles((prev) =>
+            prev.map((p) => (p.key === key ? { ...p, status: "error" } : p))
+          );
+          throw new Error("Upload failed");
+        }
+      })
+    );
+
+    const uploaded = results
+      .filter((r): r is PromiseFulfilledResult<AssetRow> => r.status === "fulfilled")
+      .map((r) => r.value);
+
+    if (uploaded.length > 0) {
+      setAssets((prev) => [...uploaded, ...prev]);
+      setActiveId(uploaded[0].id);
     }
+
+    if (inputRef.current) inputRef.current.value = "";
+    setTimeout(() => setPendingFiles([]), 1500);
   };
 
   const active = assets.find((a) => a.id === activeId) ?? assets[0] ?? null;
@@ -56,6 +88,13 @@ export function AssetsSection() {
     await navigator.clipboard.writeText(active.url);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const deleteAsset = async () => {
+    if (!active) return;
+    await fetch(`/api/assets/${active.id}`, { method: "DELETE" });
+    setAssets((prev) => prev.filter((a) => a.id !== active.id));
+    setActiveId(null);
   };
 
   return (
@@ -69,23 +108,28 @@ export function AssetsSection() {
             </p>
           </div>
           <ActionButton
-            disabled={uploading}
+            disabled={pendingFiles.length > 0}
             onClick={() => inputRef.current?.click()}
             variant="primary"
           >
             <Icon name="upload" className="h-4 w-4" />
-            {uploading ? "Subiendo…" : "Upload"}
+            {pendingFiles.length > 0
+              ? pendingFiles.length === 1
+                ? "Subiendo…"
+                : `Subiendo ${pendingFiles.filter((f) => f.status !== "uploading").length}/${pendingFiles.length}…`
+              : "Upload"}
           </ActionButton>
           <input
             ref={inputRef}
             accept="image/*"
             className="hidden"
+            multiple
             onChange={handleFileChange}
             type="file"
           />
         </div>
         <div className="flex-1 overflow-y-auto p-unit-md">
-          {assets.length === 0 ? (
+          {assets.length === 0 && pendingFiles.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center gap-3 text-center text-on-surface-variant">
               <Icon name="image" className="h-10 w-10 opacity-30" />
               <p className="font-body text-body-md">
@@ -99,6 +143,9 @@ export function AssetsSection() {
                 <div className="col-span-3 hidden md:block">Tipo</div>
                 <div className="col-span-5 text-right md:col-span-3">Dimensiones</div>
               </div>
+              {pendingFiles.map((file) => (
+                <PendingFileRow file={file} key={file.key} />
+              ))}
               {assets.map((asset) => {
                 const isActive = asset.id === active?.id;
                 return (
@@ -134,7 +181,26 @@ export function AssetsSection() {
         <aside className="flex w-[340px] shrink-0 flex-col border-l border-outline-variant bg-surface-container-lowest xl:w-[380px]">
           <div className="flex shrink-0 items-center justify-between border-b border-outline-variant px-unit-md py-unit-md">
             <h3 className="text-body-lg font-semibold text-on-surface">Detalle</h3>
-            <IconButton icon="more" label="Más opciones" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <span>
+                  <IconButton icon="more" label="Más opciones" />
+                </span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[160px]">
+                <DropdownMenuItem onClick={copyUrl}>
+                  <Icon name="copy" className="h-4 w-4" />
+                  {copied ? "¡Copiado!" : "Copiar URL"}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={deleteAsset}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <Icon name="trash" className="h-4 w-4" />
+                  Eliminar
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <div className="flex-1 overflow-y-auto">
             <div className="border-b border-outline-variant/50 bg-surface-bg/50 p-unit-md">
@@ -169,12 +235,6 @@ export function AssetsSection() {
                 </dd>
               </dl>
             </div>
-          </div>
-          <div className="shrink-0 space-y-unit-sm border-t border-outline-variant bg-surface-container-lowest p-unit-md">
-            <ActionButton className="w-full" onClick={copyUrl} variant="primary">
-              <Icon name="copy" className="h-4 w-4" />
-              {copied ? "¡Copiado!" : "Copiar URL"}
-            </ActionButton>
           </div>
         </aside>
       ) : null}

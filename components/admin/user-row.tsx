@@ -7,6 +7,12 @@ import { Icon } from "@/components/ui/icon";
 import { LandingItem } from "@/components/admin/landing-item";
 import { CreateLandingForm } from "@/components/admin/create-landing-form";
 import type { User, LandingPage } from "@/db/schema";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export type UserWithLandings = User & { landings: LandingPage[] };
 
@@ -21,10 +27,6 @@ export function UserRow({ user }: { user: UserWithLandings }) {
       )
     : "—";
   const initial = user.name.charAt(0).toUpperCase();
-
-  const handleFormSuccess = () => {
-    setShowForm(false);
-  };
 
   return (
     <Panel className="overflow-hidden">
@@ -77,37 +79,38 @@ export function UserRow({ user }: { user: UserWithLandings }) {
               ))
             )}
           </div>
-
-          {showForm ? (
-            <div className="mt-4 rounded-lg border border-outline-variant bg-surface-bg p-4">
-              <h4 className="mb-4 font-headline text-headline-sm font-bold text-on-surface">
-                Nueva landing
-              </h4>
-              <CreateLandingForm
-                userId={user.id}
-                onSuccess={handleFormSuccess}
-              />
-            </div>
-          ) : (
-            <div className="mt-3 flex items-center justify-end gap-2">
-              <Link
-                href={`/admin/impersonate/${user.id}`}
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-outline-variant px-3 font-label text-label-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-on-surface"
-              >
-                <Icon name="web" className="h-4 w-4" />
-                Editar dashboard
-              </Link>
-              <ActionButton
-                variant="secondary"
-                onClick={() => setShowForm(true)}
-              >
-                <span className="text-lg leading-none">+</span>
-                Nueva landing
-              </ActionButton>
-            </div>
-          )}
+          <div className="mt-3 flex items-center justify-end gap-2">
+            <Link
+              href={`/admin/impersonate/${user.id}`}
+              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-outline-variant px-3 font-label text-label-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-on-surface"
+            >
+              <Icon name="web" className="h-4 w-4" />
+              Editar dashboard
+            </Link>
+            <ActionButton
+              variant="secondary"
+              onClick={() => setShowForm(true)}
+            >
+              <span className="text-lg leading-none">+</span>
+              Nueva landing
+            </ActionButton>
+          </div>
         </div>
       )}
+
+      <Dialog open={showForm} onOpenChange={setShowForm}>
+        <DialogContent className="max-w-lg bg-surface-container-lowest">
+          <DialogHeader>
+            <DialogTitle className="font-headline text-headline-sm text-on-surface">
+              Nueva landing para {user.name}
+            </DialogTitle>
+          </DialogHeader>
+          <CreateLandingForm
+            userId={user.id}
+            onSuccess={() => setShowForm(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </Panel>
   );
 }

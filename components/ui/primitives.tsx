@@ -2,24 +2,35 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import type { LandingStatus } from "@/lib/dashboard-data";
 import { Icon } from "@/components/ui/icon";
 import type { IconName } from "@/lib/dashboard-data";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function IconButton({
   icon,
   label,
   className = "",
+  onClick,
 }: {
   icon: IconName;
   label: string;
   className?: string;
+  onClick?: () => void;
 }) {
   return (
-    <button
-      aria-label={label}
-      className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-primary ${className}`}
-      type="button"
-    >
-      <Icon name={icon} className="h-5 w-5" />
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          aria-label={label}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-primary ${className}`}
+          onClick={onClick}
+          type="button"
+        >
+          <Icon name={icon} className="h-5 w-5" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{label}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }
 

@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { settingCategories, settingPages } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ActionButton, IconButton, Panel, StatusBadge } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
+import { Switch } from "@/components/ui/switch";
 
 export function SettingsSection() {
+  const [darkMode, setDarkMode] = useState(false);
   const activeCategory = useDashboardStore(
     (state) => state.activeSettingCategory,
   );
@@ -119,13 +122,11 @@ export function SettingsSection() {
                       Force dark mode for all users of this project.
                     </p>
                   </div>
-                  <button
-                    aria-label="Dark mode disabled"
-                    className="relative h-6 w-11 rounded-full bg-primary opacity-70"
-                    type="button"
-                  >
-                    <span className="absolute right-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm" />
-                  </button>
+                  <Switch
+                    checked={darkMode}
+                    onCheckedChange={setDarkMode}
+                    aria-label="Dark mode"
+                  />
                 </div>
                 <div className="flex items-center justify-between border-t border-outline-variant pt-4">
                   <div>

@@ -4,6 +4,13 @@ import { useTransition, useState } from "react";
 import { toast } from "react-toastify";
 import { ActionButton } from "@/components/ui/primitives";
 import { createLandingForUser } from "@/app/actions/admin";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const inputClass =
   "w-full rounded-md border border-outline-variant bg-surface-bg px-3 py-2 text-body-sm text-on-surface outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary";
@@ -28,6 +35,7 @@ export function CreateLandingForm({
   const [error, setError] = useState<string | null>(null);
   const [slug, setSlug] = useState("");
   const [slugTouched, setSlugTouched] = useState(false);
+  const [template, setTemplate] = useState("toll-story");
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!slugTouched) {
@@ -46,6 +54,7 @@ export function CreateLandingForm({
     const formData = new FormData(e.currentTarget);
     formData.set("userId", userId);
     formData.set("slug", slug);
+    formData.set("template", template);
 
     startTransition(async () => {
       const result = await createLandingForUser(formData);
@@ -95,15 +104,20 @@ export function CreateLandingForm({
           </p>
         </label>
       </div>
-      <label className="block">
+      <div className="block">
         <span className="mb-1.5 block font-label text-label-md text-on-surface-variant">
           Plantilla
         </span>
-        <select name="template" defaultValue="toll-story" className={inputClass}>
-          <option value="toll-story">Toll Story — Espacios de eventos</option>
-          <option value="velar">Velar — Real estate de lujo</option>
-        </select>
-      </label>
+        <Select value={template} onValueChange={setTemplate}>
+          <SelectTrigger className="border-outline-variant bg-surface-bg text-body-sm text-on-surface focus:ring-primary">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent className="bg-surface-container-lowest">
+            <SelectItem value="toll-story">Toll Story — Espacios de eventos</SelectItem>
+            <SelectItem value="velar">Velar — Real estate de lujo</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       {error && (
         <p className="font-body text-body-sm text-error">{error}</p>
       )}

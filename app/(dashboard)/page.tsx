@@ -1,42 +1,5 @@
 import { redirect } from "next/navigation";
-import { getEffectiveClientId } from "@/lib/auth";
-import { getUserByInternalId } from "@/data/users";
-import { getLandingPageByUserId } from "@/data/landing-pages";
-import { toLandingView } from "@/lib/landing-mapper";
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
 
-export default async function DashboardPage() {
-  const clientId = await getEffectiveClientId();
-
-  if (!clientId) {
-    redirect("/sign-in");
-  }
-
-  const [user, dbLanding] = await Promise.all([
-    getUserByInternalId(clientId),
-    getLandingPageByUserId(clientId),
-  ]);
-
-  if (!dbLanding) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-surface-bg">
-        <div className="text-center">
-          <h1 className="font-headline text-headline-md font-bold text-on-background">
-            No hay ninguna landing asignada
-          </h1>
-          <p className="mt-2 font-body text-body-md text-on-surface-variant">
-            Contacta con el administrador para que configure tu página.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  await ensureLandingHasDefaultContent(dbLanding.id);
-
-  const refreshed = await getLandingPageByUserId(clientId);
-  const landing = toLandingView(refreshed ?? dbLanding, user ?? undefined);
-
-  return <DashboardShell initialLanding={landing} />;
+export default function DashboardPage() {
+  redirect("/landings");
 }

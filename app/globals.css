@@ -1,6 +1,22 @@
 @import "tailwindcss";
 
 :root {
+  --foreground: var(--on-background);
+  --popover: var(--surface-container-lowest);
+  --popover-foreground: var(--on-surface);
+  --accent: var(--surface-container-low);
+  --accent-foreground: var(--on-surface);
+  --muted: var(--surface-variant);
+  --muted-foreground: var(--on-surface-variant);
+  --border: var(--outline-variant);
+  --input: var(--outline-variant);
+  --ring: var(--primary);
+  --primary-foreground: var(--on-primary);
+  --card: var(--surface-container-lowest);
+  --card-foreground: var(--on-surface);
+  --destructive: var(--error);
+  --destructive-foreground: var(--on-primary);
+  --radius: 0.5rem;
   --surface: #faf8ff;
   --surface-dim: #d8d9e6;
   --surface-bright: #faf8ff;
@@ -76,6 +92,21 @@
   --color-warning: var(--warning);
   --color-danger: var(--danger);
   --color-surface-bg: var(--surface-bg);
+  --color-foreground: var(--foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --font-headline: var(--font-headline);
   --font-body: var(--font-body);
   --font-label: var(--font-label);

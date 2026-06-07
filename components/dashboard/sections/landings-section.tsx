@@ -1,10 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { contentGroups } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Icon } from "@/components/ui/icon";
 import { IconButton, Panel, StatusBadge } from "@/components/ui/primitives";
 import { LandingPreview } from "@/components/dashboard/landing-preview";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export function LandingsSection() {
   const {
@@ -21,6 +28,7 @@ export function LandingsSection() {
     setActivePresentationId,
     setActiveView,
   } = useDashboardStore();
+  const [metaOpen, setMetaOpen] = useState(false);
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
   const activePost = posts.find((post) => post.id === activePostId) ?? posts[0];
@@ -151,6 +159,34 @@ export function LandingsSection() {
           </div>
           <div className="flex gap-2">
             <IconButton icon="link" label="Copy content link" />
+            {activeContentGroup === "Pages" ? (
+              <>
+                <IconButton
+                  icon="info"
+                  label="Page info"
+                  onClick={() => setMetaOpen(true)}
+                />
+                <Dialog open={metaOpen} onOpenChange={setMetaOpen}>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Page Metadata</DialogTitle>
+                    </DialogHeader>
+                    <dl className="grid gap-4 sm:grid-cols-2">
+                      <Metadata label="Slug" value={activeLanding.slug} />
+                      <Metadata
+                        label="Last Edited"
+                        value={`${activeLanding.edited} by ${activeLanding.owner}`}
+                      />
+                      <Metadata label="SEO Title" value={activeLanding.seoTitle} />
+                      <Metadata
+                        label="Template"
+                        value="Toll Story editable landing"
+                      />
+                    </dl>
+                  </DialogContent>
+                </Dialog>
+              </>
+            ) : null}
             <IconButton icon="more" label="More content actions" />
           </div>
         </div>
@@ -158,23 +194,6 @@ export function LandingsSection() {
           <div className="mx-auto max-w-5xl space-y-unit-lg">
             {activeContentGroup === "Pages" ? (
               <>
-                <Panel className="p-unit-md">
-                  <h3 className="mb-4 font-label text-label-md uppercase text-on-surface-variant">
-                    Metadata
-                  </h3>
-                  <dl className="grid gap-4 sm:grid-cols-2">
-                    <Metadata label="Slug" value={activeLanding.slug} />
-                    <Metadata
-                      label="Last Edited"
-                      value={`${activeLanding.edited} by ${activeLanding.owner}`}
-                    />
-                    <Metadata label="SEO Title" value={activeLanding.seoTitle} />
-                    <Metadata
-                      label="Template"
-                      value="Toll Story editable landing"
-                    />
-                  </dl>
-                </Panel>
                 <LandingPreview content={activeLanding.content} template={activeLanding.template} />
                 <button
                   className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-outline-variant py-4 text-primary transition-colors hover:border-primary hover:bg-primary/5"

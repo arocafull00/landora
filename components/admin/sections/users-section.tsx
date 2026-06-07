@@ -2,10 +2,16 @@
 
 import { useState } from "react";
 import { Icon } from "@/components/ui/icon";
-import { ActionButton, Panel } from "@/components/ui/primitives";
+import { ActionButton } from "@/components/ui/primitives";
 import { UserRow } from "@/components/admin/user-row";
 import { CreateUserForm } from "@/components/admin/create-user-form";
 import type { User, LandingPage } from "@/db/schema";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export function UsersSection({
   users,
@@ -33,21 +39,21 @@ export function UsersSection({
             registrados
           </p>
         </div>
-        <ActionButton variant="primary" onClick={() => setShowForm((v) => !v)}>
+        <ActionButton variant="primary" onClick={() => setShowForm(true)}>
           <span className="text-lg leading-none">+</span>
           Nuevo usuario
         </ActionButton>
       </header>
-      {showForm && (
-        <div className="border-b border-outline-variant bg-surface-container-lowest px-6 py-5">
-          <Panel className="p-5">
-            <h3 className="mb-4 font-headline text-headline-sm font-bold text-on-surface">
+      <Dialog open={showForm} onOpenChange={setShowForm}>
+        <DialogContent className="max-w-lg bg-surface-container-lowest">
+          <DialogHeader>
+            <DialogTitle className="font-headline text-headline-sm text-on-surface">
               Crear usuario
-            </h3>
-            <CreateUserForm onSuccess={() => setShowForm(false)} />
-          </Panel>
-        </div>
-      )}
+            </DialogTitle>
+          </DialogHeader>
+          <CreateUserForm onSuccess={() => setShowForm(false)} />
+        </DialogContent>
+      </Dialog>
       <div className="flex-1 p-6">
         {users.length === 0 ? (
           <div className="flex h-64 flex-col items-center justify-center text-on-surface-variant">

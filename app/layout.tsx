@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { IBM_Plex_Sans, Inter, JetBrains_Mono, Syne } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-headline",
@@ -45,8 +46,10 @@ export default function RootLayout({
         className={`${ibmPlexSans.variable} ${inter.variable} ${jetBrainsMono.variable} ${syne.variable} h-full antialiased`}
       >
         <body className="min-h-full overflow-hidden bg-surface-bg text-on-background">
-          {children}
-          <ToastContainer />
+          <TooltipProvider>
+            {children}
+            <ToastContainer />
+          </TooltipProvider>
         </body>
       </html>
     </ClerkProvider>

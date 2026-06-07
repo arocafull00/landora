@@ -156,7 +156,10 @@ export type IconName =
   | "chevron"
   | "palette"
   | "save"
-  | "publish";
+  | "publish"
+  | "check"
+  | "close"
+  | "info";
 
 export const dashboardViews: Array<{
   id: DashboardView;
@@ -168,6 +171,10 @@ export const dashboardViews: Array<{
   { id: "assets", label: "Assets", icon: "folder" },
   { id: "settings", label: "Settings", icon: "settings" },
 ];
+
+export function isDashboardView(value: string): value is DashboardView {
+  return dashboardViews.some((view) => view.id === value);
+}
 
 export const workspaceTabs = ["Structure", "Presentation", "Vision", "Media"];
 export const contentGroups: ContentGroup[] = ["Pages", "Posts", "Presentations", "Assets"];

@@ -6,6 +6,7 @@ import { LandingPreview } from "@/components/dashboard/landing-preview";
 import { ActionButton, IconButton, Panel, StatusBadge } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import { ImageField } from "@/components/dashboard/image-field";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function EditorSection() {
   const {
@@ -140,21 +141,20 @@ export function EditorSection() {
             </ActionButton>
           </div>
         </div>
-        <div className="flex gap-unit-lg border-b border-outline-variant bg-surface-container-lowest px-unit-lg">
-          {editorTabs.map((tab) => (
-            <button
-              className={`border-b-2 py-3 font-label text-label-md transition-colors ${
-                activeEditorTab === tab
-                  ? "border-primary text-primary"
-                  : "border-transparent text-on-surface-variant hover:text-on-surface"
-              }`}
-              key={tab}
-              onClick={() => setActiveEditorTab(tab)}
-              type="button"
-            >
-              {tab}
-            </button>
-          ))}
+        <div className="border-b border-outline-variant bg-surface-container-lowest px-unit-lg">
+          <Tabs value={activeEditorTab} onValueChange={(v) => setActiveEditorTab(v as typeof activeEditorTab)}>
+            <TabsList className="h-auto gap-0 rounded-none bg-transparent p-0">
+              {editorTabs.map((tab) => (
+                <TabsTrigger
+                  className="rounded-none border-b-2 border-transparent px-0 py-3 font-label text-label-md text-on-surface-variant transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none mr-unit-lg"
+                  key={tab}
+                  value={tab}
+                >
+                  {tab}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
         <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden xl:grid-cols-[minmax(420px,0.95fr)_minmax(460px,1.05fr)]">
           <div className="min-h-0 overflow-y-auto border-r border-outline-variant p-unit-lg">

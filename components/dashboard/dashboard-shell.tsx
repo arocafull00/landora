@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useLayoutEffect } from "react";
-import { dashboardViews, Landing } from "@/lib/dashboard-data";
+import { dashboardViews, DashboardView, Landing } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Icon } from "@/components/ui/icon";
 import { IconButton } from "@/components/ui/primitives";
@@ -9,16 +10,22 @@ import { AssetsSection } from "@/components/dashboard/sections/assets-section";
 import { EditorSection } from "@/components/dashboard/sections/editor-section";
 import { LandingsSection } from "@/components/dashboard/sections/landings-section";
 import { SettingsSection } from "@/components/dashboard/sections/settings-section";
-import { TopAppBar } from "@/components/dashboard/top-app-bar";
 
-export function DashboardShell({ initialLanding }: { initialLanding: Landing }) {
+export function DashboardShell({
+  initialLanding,
+  initialView,
+}: {
+  initialLanding: Landing;
+  initialView: DashboardView;
+}) {
   const activeView = useDashboardStore((state) => state.activeView);
   const setActiveView = useDashboardStore((state) => state.setActiveView);
   const initFromLanding = useDashboardStore((state) => state.initFromLanding);
 
   useLayoutEffect(() => {
     initFromLanding(initialLanding);
-  }, [initialLanding, initFromLanding]);
+    setActiveView(initialView);
+  }, [initialLanding, initFromLanding, initialView, setActiveView]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-surface-bg text-on-background">
@@ -36,19 +43,18 @@ export function DashboardShell({ initialLanding }: { initialLanding: Landing }) 
             const isActive = activeView === item.id;
 
             return (
-              <button
+              <Link
                 className={`flex items-center gap-3 rounded-lg px-3 py-2 text-left font-label text-label-md transition-colors ${
                   isActive
                     ? "bg-surface-variant text-primary"
                     : "text-surface-dim hover:bg-surface-variant hover:text-on-surface"
                 }`}
+                href={`/${item.id}`}
                 key={item.id}
-                onClick={() => setActiveView(item.id)}
-                type="button"
               >
                 <Icon name={item.icon} className="h-5 w-5" />
                 {item.label}
-              </button>
+              </Link>
             );
           })}
         </nav>
@@ -61,7 +67,6 @@ export function DashboardShell({ initialLanding }: { initialLanding: Landing }) 
         </button>
       </aside>
       <div className="ml-[200px] flex h-screen min-w-0 flex-1 flex-col">
-        <TopAppBar />
         <main className="flex min-h-0 flex-1 overflow-hidden">
           {activeView === "landings" ? <LandingsSection /> : null}
           {activeView === "editor" ? <EditorSection /> : null}

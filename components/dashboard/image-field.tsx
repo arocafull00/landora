@@ -3,6 +3,13 @@
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import type { AssetRow } from "@/db/schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const STATIC_OPTIONS = [
   "/toll-story/hero.png",
@@ -80,20 +87,21 @@ export function ImageField({
         </div>
       )}
       <div className="flex gap-2">
-        <select
-          className="min-w-0 flex-1 rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-          onChange={(e) => onChange(e.target.value)}
-          value={value}
-        >
-          {!allOptions.find((o) => o.value === value) && value && (
-            <option value={value}>{value}</option>
-          )}
-          {allOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        <Select value={value} onValueChange={onChange}>
+          <SelectTrigger className="min-w-0 flex-1 border-outline-variant bg-surface text-body-md text-on-surface focus:ring-primary">
+            <SelectValue placeholder="Selecciona una imagen…" />
+          </SelectTrigger>
+          <SelectContent className="bg-surface-container-lowest">
+            {!allOptions.find((o) => o.value === value) && value && (
+              <SelectItem value={value}>{value}</SelectItem>
+            )}
+            {allOptions.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <button
           className="shrink-0 rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-sm text-on-surface transition-colors hover:border-primary hover:text-primary disabled:opacity-50"
           disabled={uploading}

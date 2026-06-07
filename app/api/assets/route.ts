@@ -25,10 +25,16 @@ export async function POST(req: Request) {
 
   const formData = await req.formData();
   const file = formData.get("file");
+  const nameField = formData.get("name");
 
   if (!file || !(file instanceof File)) {
     return Response.json({ error: "No file provided" }, { status: 400 });
   }
+
+  const originalName =
+    typeof nameField === "string" && nameField
+      ? nameField.replace(/\.[^/.]+$/, "")
+      : null;
 
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
@@ -56,7 +62,7 @@ export async function POST(req: Request) {
     });
 
     const mimeType = `image/${result.format}`;
-    const name = result.original_filename || file.name || "asset";
+    const name = originalName || result.original_filename || "asset";
 
     const [row] = await db
       .insert(assets)
