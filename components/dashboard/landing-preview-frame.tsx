@@ -1,0 +1,63 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
+import { VelarTemplate } from "@/components/templates/velar/velar-template";
+import { StudioTemplate } from "@/components/templates/studio/studio-template";
+import {
+  isPreviewContentMessage,
+  PREVIEW_CONTENT_UPDATE,
+} from "@/lib/preview-messaging";
+import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
+
+const TEMPLATE_COMPONENTS = {
+  velar: VelarTemplate,
+  studio: StudioTemplate,
+} as const;
+
+export function LandingPreviewFrame({
+  initialContent,
+  template,
+}: {
+  initialContent: LandingContent;
+  template: TemplateId;
+}) {
+  const [content, setContent] = useState(initialContent);
+  const [activeTemplate, setActiveTemplate] = useState(template);
+  const scrollContainer = usePreviewScrollContainer();
+
+  const refreshScrollPosition = useCallback(() => {
+    if (scrollContainer) {
+      scrollContainer.dispatchEvent(new Event("scroll"));
+      return;
+    }
+    window.dispatchEvent(new Event("scroll"));
+  }, [scrollContainer]);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (!isPreviewContentMessage(event.data)) return;
+      setContent(event.data.content);
+      setActiveTemplate(event.data.template);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(refreshScrollPosition);
+      });
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [refreshScrollPosition]);
+
+  useEffect(() => {
+    if (window.parent === window) return;
+    window.parent.postMessage(
+      { type: `${PREVIEW_CONTENT_UPDATE}:ready` },
+      window.location.origin
+    );
+  }, []);
+
+  const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
+
+  return <Component content={content} />;
+}

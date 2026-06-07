@@ -1,6 +1,9 @@
 const LEGACY_TEMPLATE_ASSET_PATH = "/landora/templates/toll-story/";
 const TEMPLATE_ASSET_PATH = "/landora/templates/velar/";
 
+export const VELAR_BG_IMG =
+  "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260603_073200_7082add5-f1f8-4873-8696-d6f78a44089b.png&w=1920&q=85";
+
 export function remapLegacyTemplateAssetUrl(url: string): string {
   if (!url.includes(LEGACY_TEMPLATE_ASSET_PATH)) return url;
   return url.replaceAll(LEGACY_TEMPLATE_ASSET_PATH, TEMPLATE_ASSET_PATH);
@@ -17,6 +20,30 @@ export const VELAR_ASSETS = {
   toll6: "https://res.cloudinary.com/dqwkkrqal/image/upload/v1780849462/landora/templates/velar/toll6.jpg",
   toll7: "https://res.cloudinary.com/dqwkkrqal/image/upload/v1780849463/landora/templates/velar/toll7.jpg",
 } as const;
+
+export function isVelarHouseAsset(url: string) {
+  if (!url) return false;
+  return url.includes("/velar/hero.png") || url.endsWith("/hero.png");
+}
+
+export function resolveVelarHeroImages(hero: {
+  image: string;
+  houseImage?: string;
+}) {
+  let houseImage = hero.houseImage ?? "";
+  let backgroundImage = hero.image;
+
+  if (!houseImage) {
+    if (isVelarHouseAsset(hero.image)) {
+      houseImage = hero.image;
+      backgroundImage = VELAR_BG_IMG;
+    } else {
+      houseImage = VELAR_ASSETS.hero;
+    }
+  }
+
+  return { backgroundImage, houseImage };
+}
 
 export const VELAR_IMAGE_OPTIONS = [
   { value: VELAR_ASSETS.hero, label: "hero.png" },

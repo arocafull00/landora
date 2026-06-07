@@ -3,44 +3,27 @@
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
-import { LandingPreview } from "@/components/dashboard/landing-preview";
+import { IframeLandingPreview } from "@/components/dashboard/iframe-landing-preview";
 import {
   PreviewToolbar,
   type PreviewDevice,
 } from "@/components/dashboard/preview-toolbar";
-import { MOBILE_WIDTH } from "@/components/dashboard/preview-utils";
-import { useScaledPreview } from "@/components/dashboard/use-scaled-preview";
-import { useViewportWidth } from "@/components/dashboard/use-viewport-width";
 
 export function PreviewFullscreenOverlay({
   content,
   device,
+  landingId,
   onClose,
   onDeviceChange,
   template = "velar",
 }: {
   content: LandingContent;
   device: PreviewDevice;
+  landingId: string;
   onClose: () => void;
   onDeviceChange: (device: PreviewDevice) => void;
   template?: TemplateId;
 }) {
-  const viewportWidth = useViewportWidth();
-  const baseWidth = device === "mobile" ? MOBILE_WIDTH : viewportWidth;
-  const {
-    canvasRef,
-    containerRef,
-    scale,
-    scaledHeight,
-    scaledWidth,
-  } = useScaledPreview({
-    baseWidth,
-    content,
-    device,
-    maxScale: 1,
-    template,
-  });
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
@@ -58,7 +41,7 @@ export function PreviewFullscreenOverlay({
           <PreviewToolbar
             device={device}
             onDeviceChange={onDeviceChange}
-            scale={scale}
+            scale={1}
             showFullscreen={false}
           />
         </div>
@@ -71,27 +54,15 @@ export function PreviewFullscreenOverlay({
           <X className="h-4 w-4" />
         </button>
       </div>
-      <div
-        className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto p-unit-lg"
-        ref={containerRef}
-      >
-        <div
-          className="mx-auto overflow-hidden"
-          style={{ height: scaledHeight, width: scaledWidth }}
-        >
-          <div
-            className="pointer-events-none"
-            ref={canvasRef}
-            style={{
-              transform: `scale(${scale})`,
-              transformOrigin: "top left",
-              width: baseWidth,
-            }}
-          >
-            <LandingPreview clip={false} content={content} template={template} />
-          </div>
-        </div>
-      </div>
+      <IframeLandingPreview
+        className="min-h-0 flex-1"
+        content={content}
+        device={device}
+        landingId={landingId}
+        onDeviceChange={onDeviceChange}
+        showToolbar={false}
+        template={template}
+      />
     </div>
   );
 }

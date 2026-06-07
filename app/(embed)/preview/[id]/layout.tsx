@@ -1,6 +1,6 @@
 import { PreviewScrollProvider } from "@/lib/preview-scroll-context";
 
-export default function TemplateDemoLayout({
+export default function PreviewLayout({
   children,
 }: {
   children: React.ReactNode;

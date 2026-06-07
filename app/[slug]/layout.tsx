@@ -1,7 +1,9 @@
+import { PreviewScrollProvider } from "@/lib/preview-scroll-context";
+
 export default function PublicLandingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="h-screen overflow-y-auto">{children}</div>;
+  return <PreviewScrollProvider>{children}</PreviewScrollProvider>;
 }

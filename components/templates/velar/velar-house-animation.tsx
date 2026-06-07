@@ -1,41 +1,118 @@
 "use client";
 
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import {
+  useCallback,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import { motion, useReducedMotion } from "motion/react";
+const easeOut = [0.16, 1, 0.3, 1] as const;
 
-export type VelarHouseAnimationHandle = {
-  wrapperRef: React.RefObject<HTMLDivElement | null>;
-  innerRef: React.RefObject<HTMLDivElement | null>;
-  imgRef: React.RefObject<HTMLImageElement | null>;
-};
+const smoothstep = (t: number) => t * t * (3 - 2 * t);
+
+const clamp = (val: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, val));
 
 type VelarHouseAnimationProps = {
   houseImage: string;
-  isScrolling: boolean;
-  scrollTransform: string;
-  visible: boolean;
-  onImageLoad?: () => void;
+  heroRef: RefObject<HTMLElement | null>;
+  darkRef: RefObject<HTMLDivElement | null>;
 };
 
-const easeOut = [0.16, 1, 0.3, 1] as const;
-
-export const VelarHouseAnimation = forwardRef<
-  VelarHouseAnimationHandle,
-  VelarHouseAnimationProps
->(function VelarHouseAnimation(
-  { houseImage, isScrolling, scrollTransform, visible, onImageLoad },
-  ref
-) {
+export function VelarHouseAnimation({
+  houseImage,
+  heroRef,
+  darkRef,
+}: VelarHouseAnimationProps) {
   const reduce = useReducedMotion();
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [scrollTransform, setScrollTransform] = useState("");
+  const [visible, setVisible] = useState(true);
 
-  useImperativeHandle(ref, () => ({
-    wrapperRef,
-    innerRef,
-    imgRef,
-  }));
+  const updatePosition = useCallback(() => {
+    const heroEl = heroRef.current;
+    const darkEl = darkRef.current;
+    const imgEl = imgRef.current;
+
+    if (!heroEl || !darkEl || !imgEl) return;
+
+    const vh = window.innerHeight;
+    const vw = window.innerWidth;
+    const heroRect = heroEl.getBoundingClientRect();
+    const darkRect = darkEl.getBoundingClientRect();
+    const heroH = heroEl.offsetHeight;
+    const imgH = imgEl.offsetHeight || imgEl.naturalHeight || 1;
+    const baseW = vw < 1024 ? vw : Math.max(vw, 1400);
+
+    const triggerPoint = -(heroH * 0.3);
+    const endPoint = heroRect.top - (darkRect.bottom - vh);
+    const denominator = endPoint - triggerPoint;
+    const progress =
+      denominator === 0
+        ? 0
+        : clamp((heroRect.top - triggerPoint) / denominator, 0, 1);
+    const t = smoothstep(smoothstep(progress));
+
+    setVisible(progress < 1);
+
+    if (progress <= 0) {
+      setIsScrolling(false);
+      return;
+    }
+
+    const startX = (vw - baseW) / 2;
+    const startY = vh - imgH;
+    const finalScale = 1.45;
+    const finalX = (vw - baseW * finalScale) / 2;
+    const mobileOffset = vw < 1024 ? -250 : 4;
+    const finalY = darkRect.bottom - imgH * finalScale + 500 + mobileOffset;
+
+    const currentX = startX + (finalX - startX) * t;
+    const currentY = startY + (finalY - startY) * t;
+    const currentScale = 1 + (finalScale - 1) * t;
+
+    setIsScrolling(true);
+    setScrollTransform(
+      `translate(${currentX}px, ${currentY}px) scale(${currentScale})`
+    );
+  }, [darkRef, heroRef]);
+
+  useLayoutEffect(() => {
+    const handleUpdate = () => {
+      if (rafRef.current !== null) return;
+      rafRef.current = window.requestAnimationFrame(() => {
+        rafRef.current = null;
+        updatePosition();
+      });
+    };
+
+    updatePosition();
+
+    window.addEventListener("scroll", handleUpdate, { passive: true });
+    window.addEventListener("resize", handleUpdate);
+
+    return () => {
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      window.removeEventListener("scroll", handleUpdate);
+      window.removeEventListener("resize", handleUpdate);
+    };
+  }, [houseImage, updatePosition]);
+
+  const handleImgRef = useCallback(
+    (node: HTMLImageElement | null) => {
+      imgRef.current = node;
+      if (!node) return;
+      if (node.complete) updatePosition();
+    },
+    [updatePosition]
+  );
 
   let wrapperStyle: React.CSSProperties = {
     willChange: "transform",
@@ -64,12 +141,10 @@ export const VelarHouseAnimation = forwardRef<
 
   return (
     <div
-      ref={wrapperRef}
       className="pointer-events-none fixed z-[22] w-full min-w-0 max-lg:w-screen lg:min-w-[1400px]"
       style={wrapperStyle}
     >
       <motion.div
-        ref={innerRef}
         initial={reduce ? false : { opacity: 0, y: 140 }}
         animate={{ opacity: visible ? 1 : 0, y: 0 }}
         transition={{
@@ -78,14 +153,14 @@ export const VelarHouseAnimation = forwardRef<
         }}
       >
         <img
-          ref={imgRef}
+          ref={handleImgRef}
           src={houseImage}
           alt=""
           aria-hidden
           className="w-full"
-          onLoad={onImageLoad}
+          onLoad={updatePosition}
         />
       </motion.div>
     </div>
   );
-});
+}

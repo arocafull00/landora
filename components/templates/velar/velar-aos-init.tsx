@@ -3,26 +3,8 @@
 import { useEffect, type RefObject } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
-function getScrollTargets(el: HTMLElement | null) {
-  const targets: (Window | Element)[] = [window];
-  let node = el?.parentElement;
-
-  while (node) {
-    const { overflowY, overflow } = getComputedStyle(node);
-    if (
-      overflowY === "auto" ||
-      overflowY === "scroll" ||
-      overflow === "auto" ||
-      overflow === "scroll"
-    ) {
-      targets.push(node);
-    }
-    node = node.parentElement;
-  }
-
-  return targets;
-}
+import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
+import { getScrollTargets } from "@/lib/scroll-parent";
 
 function setupIntersectionFallback(root: HTMLElement | null) {
   const observer = new IntersectionObserver(
@@ -52,6 +34,8 @@ export function VelarAosInit({
 }: {
   rootRef?: RefObject<HTMLElement | null>;
 }) {
+  const scrollContainer = usePreviewScrollContainer();
+
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -69,7 +53,10 @@ export function VelarAosInit({
 
     const observer = setupIntersectionFallback(rootRef?.current ?? null);
 
-    const scrollTargets = getScrollTargets(rootRef?.current ?? null);
+    const scrollTargets = getScrollTargets(
+      rootRef?.current ?? null,
+      scrollContainer
+    );
     for (const target of scrollTargets) {
       target.addEventListener("scroll", refresh, { passive: true });
     }
@@ -84,7 +71,7 @@ export function VelarAosInit({
       }
       window.removeEventListener("resize", refresh);
     };
-  }, [rootRef]);
+  }, [rootRef, scrollContainer]);
 
   return null;
 }

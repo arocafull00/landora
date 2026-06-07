@@ -18,7 +18,20 @@ import {
   replaceLandingFaq,
 } from "@/data/landing-sections";
 import { getDefaultContent } from "@/lib/default-content";
-import type { TemplateId, LandingContent } from "@/lib/dashboard-data";
+import type { TemplateId, LandingContent, TemplateContentMap } from "@/lib/dashboard-data";
+import type { LandingWithSections } from "@/data/landing-pages";
+import {
+  getMissingLandingSections,
+  isLandingFullyEmpty,
+} from "@/lib/landing-content-gaps";
+
+function getDefaultStoryStatement(templateId: TemplateId, content: LandingContent) {
+  if (templateId === "studio") {
+    return (content as TemplateContentMap["studio"]).about?.statement ?? content.story?.statement ?? "";
+  }
+  return content.story?.statement ?? "";
+}
+
 export async function seedLandingSections(landingId: string, templateId: TemplateId = "velar") {
   const c = getDefaultContent(templateId) as LandingContent;
 
@@ -33,7 +46,7 @@ export async function seedLandingSections(landingId: string, templateId: Templat
       image: c.hero.image,
       houseImage: c.hero.houseImage ?? "",
     }),
-    upsertLandingStory(landingId, { statement: c.story?.statement ?? "" }),
+    upsertLandingStory(landingId, { statement: getDefaultStoryStatement(templateId, c) }),
     upsertLandingCta(landingId, {
       phone: c.contact.phone,
       email: c.contact.email,
@@ -111,17 +124,199 @@ export async function seedLandingSections(landingId: string, templateId: Templat
   ]);
 }
 
+async function seedMissingLandingSections(
+  landingId: string,
+  landing: LandingWithSections
+) {
+  const missing = getMissingLandingSections(landing);
+  if (missing.length === 0) return;
+
+  const c = getDefaultContent(landing.template) as LandingContent;
+  const ops: Promise<unknown>[] = [];
+
+  if (missing.includes("hero")) {
+    ops.push(
+      upsertLandingHero(landingId, {
+        eyebrow: c.hero.eyebrow,
+        title: c.hero.title,
+        subtitle: c.hero.subtitle,
+        description: c.hero.description,
+        image: c.hero.image,
+        houseImage: c.hero.houseImage ?? "",
+      })
+    );
+  }
+
+  if (missing.includes("branding")) {
+    ops.push(upsertLandingBranding(landingId, { brand: c.brand }));
+  }
+
+  if (missing.includes("story")) {
+    ops.push(
+      upsertLandingStory(landingId, {
+        statement: getDefaultStoryStatement(landing.template, c),
+      })
+    );
+  }
+
+  if (missing.includes("cta")) {
+    ops.push(
+      upsertLandingCta(landingId, {
+        phone: c.contact.phone,
+        email: c.contact.email,
+        address: c.contact.address,
+      })
+    );
+  }
+
+  if (missing.includes("stats")) {
+    ops.push(
+      replaceLandingStats(
+        landingId,
+        c.stats.map((s) => ({
+          value: s.value,
+          label: s.label,
+          countTo: s.countTo ?? null,
+          suffix: s.suffix ?? "",
+        }))
+      )
+    );
+  }
+
+  if (missing.includes("gallery")) {
+    ops.push(
+      replaceLandingGallery(
+        landingId,
+        (c.gallery ?? []).map((g) => ({ image: g.image ?? "", video: g.video ?? "" }))
+      )
+    );
+  }
+
+  if (missing.includes("nav")) {
+    ops.push(
+      replaceLandingNav(landingId, c.nav.map((n) => ({ label: n.label, href: n.href })))
+    );
+  }
+
+  if (missing.includes("spaces")) {
+    ops.push(
+      replaceLandingSpaces(
+        landingId,
+        (c.spaces ?? []).map((s) => ({
+          name: s.name,
+          description: s.description,
+          image: s.image,
+        }))
+      )
+    );
+  }
+
+  if (missing.includes("services")) {
+    ops.push(
+      replaceLandingServices(
+        landingId,
+        (c.services ?? []).map((s) => ({
+          title: s.title,
+          subtitle: s.subtitle,
+          label: s.label,
+          image: s.image,
+        }))
+      )
+    );
+  }
+
+  if (missing.includes("workflow")) {
+    ops.push(
+      replaceLandingWorkflow(
+        landingId,
+        (c.workflow ?? []).map((w) => ({
+          number: w.number,
+          title: w.title,
+          description: w.description,
+        }))
+      )
+    );
+  }
+
+  if (missing.includes("testimonials")) {
+    ops.push(
+      replaceLandingTestimonials(
+        landingId,
+        c.testimonials.map((t) => ({
+          author: t.author,
+          date: t.date,
+          rating: t.rating,
+          comment: t.comment,
+          verified: t.verified,
+        }))
+      )
+    );
+  }
+
+  if (missing.includes("team")) {
+    ops.push(
+      replaceLandingTeam(
+        landingId,
+        (c.team ?? []).map((t) => ({
+          name: t.name,
+          role: t.role,
+          bio: t.bio,
+          image: t.image,
+        }))
+      )
+    );
+  }
+
+  if (missing.includes("serviceMenu")) {
+    ops.push(
+      replaceLandingServiceMenu(
+        landingId,
+        (c.serviceMenu ?? []).map((s) => ({
+          category: s.category,
+          name: s.name,
+          description: s.description,
+          price: s.price,
+          duration: s.duration ?? "",
+          image: s.image ?? "",
+        }))
+      )
+    );
+  }
+
+  if (missing.includes("benefits")) {
+    ops.push(
+      replaceLandingBenefits(
+        landingId,
+        (c.benefits ?? []).map((b) => ({
+          title: b.title,
+          description: b.description,
+          icon: b.icon,
+          image: b.image ?? "",
+        }))
+      )
+    );
+  }
+
+  if (missing.includes("faq")) {
+    ops.push(
+      replaceLandingFaq(
+        landingId,
+        (c.faq ?? []).map((f) => ({ question: f.question, answer: f.answer }))
+      )
+    );
+  }
+
+  await Promise.all(ops);
+}
+
 export async function ensureLandingHasDefaultContent(landingId: string) {
   const landing = await getLandingPageById(landingId);
   if (!landing) return;
 
-  const isEmpty =
-    !landing.hero?.title &&
-    !landing.hero?.image &&
-    landing.stats.length === 0 &&
-    landing.spaces.length === 0;
+  if (isLandingFullyEmpty(landing)) {
+    await seedLandingSections(landingId, landing.template);
+    return;
+  }
 
-  if (!isEmpty) return;
-
-  await seedLandingSections(landingId, landing.template);
+  await seedMissingLandingSections(landingId, landing);
 }

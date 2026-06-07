@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import type { Landing } from "@/lib/dashboard-data";
 import { EditorToolbar } from "@/components/dashboard/editor-toolbar";
-import { ScaledLandingPreview } from "@/components/dashboard/scaled-landing-preview";
+import { IframeLandingPreview } from "@/components/dashboard/iframe-landing-preview";
 import { PreviewFullscreenOverlay } from "@/components/dashboard/preview-fullscreen-overlay";
 import type { PreviewDevice } from "@/components/dashboard/preview-toolbar";
 
@@ -44,10 +44,11 @@ export function EditorLayout({
         <div className="min-h-0 overflow-y-auto border-r border-outline-variant p-unit-lg">
           <div className="space-y-unit-md">{form}</div>
         </div>
-        <ScaledLandingPreview
+        <IframeLandingPreview
           className="min-h-0"
           content={activeLanding.content}
           device={device}
+          landingId={activeLanding.id}
           onDeviceChange={setDevice}
           onFullscreen={() => setIsFullscreen(true)}
           template={activeLanding.template}
@@ -57,6 +58,7 @@ export function EditorLayout({
         <PreviewFullscreenOverlay
           content={activeLanding.content}
           device={device}
+          landingId={activeLanding.id}
           onClose={() => setIsFullscreen(false)}
           onDeviceChange={setDevice}
           template={activeLanding.template}
