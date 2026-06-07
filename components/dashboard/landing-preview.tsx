@@ -1,18 +1,20 @@
 import Image from "next/image";
 import type { LandingContent } from "@/lib/dashboard-data";
 
-export function LandingPreview({ content }: { content: LandingContent }) {
+function TollStoryPreview({ content }: { content: LandingContent }) {
   return (
     <div className="overflow-hidden rounded-lg border border-outline-variant bg-[#f5f0ea] text-[#171717] shadow-sm">
       <section className="relative min-h-[420px] overflow-hidden">
-        <Image
-          alt={content.hero.title}
-          className="object-cover"
-          fill
-          priority
-          src={content.hero.image}
-          sizes="(max-width: 1024px) 100vw, 52vw"
-        />
+        {content.hero.image && (
+          <Image
+            alt={content.hero.title}
+            className="object-cover"
+            fill
+            priority
+            src={content.hero.image}
+            sizes="(max-width: 1024px) 100vw, 52vw"
+          />
+        )}
         <div className="absolute inset-0 bg-[#f5f0ea]/20" />
         <div className="relative z-10 flex min-h-[420px] flex-col justify-end p-8">
           <p className="mb-3 font-label text-xs font-bold uppercase tracking-[0.18em]">
@@ -91,4 +93,110 @@ export function LandingPreview({ content }: { content: LandingContent }) {
       </section>
     </div>
   );
+}
+
+function VelarPreviewCard({ content }: { content: LandingContent }) {
+  const lines = content.story.statement.split("\n");
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-outline-variant shadow-sm">
+      <section
+        className="relative min-h-[420px] overflow-hidden"
+        style={{ backgroundColor: "#213138" }}
+      >
+        {content.hero.image && (
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${content.hero.image})` }}
+          />
+        )}
+        <div className="absolute inset-0 bg-[#213138]/40" />
+        <div className="relative z-10 flex min-h-[420px] flex-col justify-end p-8">
+          <p
+            className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-white/60"
+            style={{ fontFamily: "var(--font-syne)" }}
+          >
+            {content.hero.eyebrow}
+          </p>
+          <h2
+            className="text-white"
+            style={{
+              fontFamily: "var(--font-syne)",
+              fontWeight: 800,
+              fontSize: "clamp(36px, 5vw, 64px)",
+              letterSpacing: "-0.03em",
+              lineHeight: 0.9,
+            }}
+          >
+            {content.hero.title}
+          </h2>
+          <p
+            className="mt-4 max-w-sm text-white/70"
+            style={{ fontFamily: "var(--font-body)", fontWeight: 300, fontSize: "14px" }}
+          >
+            {content.hero.subtitle}
+          </p>
+        </div>
+      </section>
+
+      <section className="bg-[#1a1a1a] p-8 text-[#e8e4df]">
+        <p
+          className="max-w-2xl leading-snug text-[#e8e4df]"
+          style={{ fontFamily: "var(--font-body)", fontWeight: 300, fontSize: "18px" }}
+        >
+          {lines[0]}
+        </p>
+        <div className="mt-8 flex gap-6">
+          {content.stats.map((stat, i) => (
+            <div
+              key={stat.id}
+              className="flex-1"
+              style={{
+                borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.15)" : "none",
+                paddingLeft: i > 0 ? "24px" : "0",
+              }}
+            >
+              <div
+                className="text-white"
+                style={{ fontFamily: "var(--font-body)", fontWeight: 300, fontSize: "28px" }}
+              >
+                {stat.value}
+              </div>
+              <div className="mt-1 text-xs uppercase tracking-[0.12em] text-[#e8e4df]/60">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {content.gallery.length > 0 && (
+        <section className="flex h-32 gap-1 bg-[#1a1a1a]">
+          {content.gallery.slice(0, 5).map((item) => (
+            <div key={item.id} className="relative flex-1 overflow-hidden bg-[#2a2a2a]">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="h-full w-full object-cover opacity-70"
+                src={item.video}
+              />
+            </div>
+          ))}
+        </section>
+      )}
+    </div>
+  );
+}
+
+export function LandingPreview({
+  content,
+  template = "toll-story",
+}: {
+  content: LandingContent;
+  template?: "toll-story" | "velar";
+}) {
+  if (template === "velar") return <VelarPreviewCard content={content} />;
+  return <TollStoryPreview content={content} />;
 }

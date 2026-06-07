@@ -10,14 +10,17 @@ export type Landing = {
   edited: string;
   seoTitle: string;
   owner: string;
-  template: "toll-story";
+  template: "toll-story" | "velar";
   content: LandingContent;
 };
 
 export type LandingContent = {
+  brand: string;
   hero: HeroContent;
   story: StoryContent;
   stats: StatContent[];
+  gallery: GalleryItem[];
+  nav: NavLink[];
   spaces: SpaceContent[];
   services: ServiceContent[];
   workflow: WorkflowStep[];
@@ -31,6 +34,7 @@ export type HeroContent = {
   subtitle: string;
   description: string;
   image: string;
+  houseImage: string;
 };
 
 export type StoryContent = {
@@ -41,6 +45,19 @@ export type StatContent = {
   id: string;
   value: string;
   label: string;
+  countTo?: number;
+  suffix?: string;
+};
+
+export type GalleryItem = {
+  id: string;
+  video: string;
+};
+
+export type NavLink = {
+  id: string;
+  label: string;
+  href: string;
 };
 
 export type SpaceContent = {
@@ -167,6 +184,7 @@ export const initialLandings: Landing[] = [
     owner: "Riley",
     template: "toll-story",
     content: {
+      brand: "",
       hero: {
         eyebrow: "CELEBRA EN",
         title: "TOLL STORY",
@@ -174,6 +192,7 @@ export const initialLandings: Landing[] = [
         description:
           "Espacio diseñado para la celebración de eventos privados y de empresa en Valencia y área metropolitana.",
         image: "/toll-story/hero.png",
+        houseImage: "",
       },
       story: {
         statement:
@@ -184,6 +203,8 @@ export const initialLandings: Landing[] = [
         { id: "bookings", value: "200", label: "Reservas realizadas" },
         { id: "clients", value: "2500", label: "Clientes satisfechos" },
       ],
+      gallery: [],
+      nav: [],
       spaces: [
         {
           id: "space-1",
@@ -286,12 +307,14 @@ export const initialLandings: Landing[] = [
     owner: "Sarah",
     template: "toll-story",
     content: {
+      brand: "",
       hero: {
         eyebrow: "PROMO",
         title: "BLACK FRIDAY",
         subtitle: "Campaña limitada para clientes premium.",
         description: "Landing promocional con CTA directo y bloques de producto.",
         image: "/toll-story/toll4.jpeg",
+        houseImage: "",
       },
       story: {
         statement:
@@ -302,6 +325,8 @@ export const initialLandings: Landing[] = [
         { id: "leads", value: "430", label: "Leads captados" },
         { id: "sales", value: "88", label: "Ventas atribuidas" },
       ],
+      gallery: [],
+      nav: [],
       spaces: [],
       services: [],
       workflow: [],

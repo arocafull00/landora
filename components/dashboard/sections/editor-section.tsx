@@ -41,6 +41,9 @@ export function EditorSection() {
   const activePresentation =
     presentations.find((item) => item.id === activePresentationId) ??
     presentations[0];
+
+  if (!activeLanding) return null;
+
   const saveActive = () => {
     if (activeEditorTab === "Posts") {
       savePost(activePost.id);
@@ -482,7 +485,7 @@ export function EditorSection() {
                 </div>
                 <StatusBadge status={activeLanding.status} />
               </div>
-              <LandingPreview content={activeLanding.content} />
+              <LandingPreview content={activeLanding.content} template={activeLanding.template} />
             </div>
           </div>
         </div>

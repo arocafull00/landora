@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { dashboardViews, Landing } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Icon } from "@/components/ui/icon";
@@ -16,7 +16,7 @@ export function DashboardShell({ initialLanding }: { initialLanding: Landing }) 
   const setActiveView = useDashboardStore((state) => state.setActiveView);
   const initFromLanding = useDashboardStore((state) => state.initFromLanding);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     initFromLanding(initialLanding);
   }, [initialLanding, initFromLanding]);
 

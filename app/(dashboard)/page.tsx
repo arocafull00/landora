@@ -1,29 +1,22 @@
-import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { clients, landingPages } from "@/db/schema";
+import { getEffectiveClientId } from "@/lib/auth";
+import { getUserByInternalId } from "@/data/users";
+import { getLandingPageByUserId } from "@/data/landing-pages";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import type { Landing, LandingContent } from "@/lib/dashboard-data";
+import type { Landing } from "@/lib/dashboard-data";
+import { parseLandingContent } from "@/lib/landing-schema";
 
 export default async function DashboardPage() {
-  const { userId } = await auth();
+  const clientId = await getEffectiveClientId();
 
-  if (!userId) {
+  if (!clientId) {
     redirect("/sign-in");
   }
 
-  const client = await db.query.clients.findFirst({
-    where: eq(clients.clerkUserId, userId),
-  });
-
-  if (!client) {
-    redirect("/sign-in");
-  }
-
-  const dbLanding = await db.query.landingPages.findFirst({
-    where: eq(landingPages.clientId, client.id),
-  });
+  const [user, dbLanding] = await Promise.all([
+    getUserByInternalId(clientId),
+    getLandingPageByUserId(clientId),
+  ]);
 
   if (!dbLanding) {
     return (
@@ -49,9 +42,9 @@ export default async function DashboardPage() {
       ? new Intl.DateTimeFormat("es", { dateStyle: "short", timeStyle: "short" }).format(new Date(dbLanding.updatedAt))
       : "—",
     seoTitle: dbLanding.name,
-    owner: client.name,
-    template: "toll-story",
-    content: dbLanding.contentJson as LandingContent,
+    owner: user?.name ?? "—",
+    template: (dbLanding.template as "toll-story" | "velar") ?? "toll-story",
+    content: parseLandingContent(dbLanding.contentJson),
   };
 
   return <DashboardShell initialLanding={landing} />;

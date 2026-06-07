@@ -28,6 +28,8 @@ export function LandingsSection() {
     presentations.find((item) => item.id === activePresentationId) ??
     presentations[0];
 
+  if (activeContentGroup === "Pages" && !activeLanding) return null;
+
   return (
     <>
       <aside className="flex h-full w-[240px] shrink-0 flex-col overflow-y-auto border-r border-outline-variant bg-surface-container-lowest">
@@ -173,7 +175,7 @@ export function LandingsSection() {
                     />
                   </dl>
                 </Panel>
-                <LandingPreview content={activeLanding.content} />
+                <LandingPreview content={activeLanding.content} template={activeLanding.template} />
                 <button
                   className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-outline-variant py-4 text-primary transition-colors hover:border-primary hover:bg-primary/5"
                   onClick={() => setActiveView("editor")}

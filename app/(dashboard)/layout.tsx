@@ -1,26 +1,22 @@
-import { auth } from "@clerk/nextjs/server";
-import { UserButton } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { db } from "@/db";
-import { clients } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { UserButton } from "@clerk/nextjs";
+import { isAdmin } from "@/lib/is-admin";
+import { isImpersonating, getEffectiveClientId } from "@/lib/auth";
+import { getUserByInternalId } from "@/data/users";
+import { ImpersonationBanner } from "@/components/dashboard/impersonation-banner";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = await auth();
+  if (await isAdmin() && !(await isImpersonating())) redirect("/admin");
 
-  if (!userId) {
-    redirect("/sign-in");
-  }
+  const clientId = await getEffectiveClientId();
+  const user = clientId ? await getUserByInternalId(clientId) : null;
+  const impersonating = await isImpersonating();
 
-  const client = await db.query.clients.findFirst({
-    where: eq(clients.clerkUserId, userId),
-  });
-
-  if (!client) {
+  if (!user) {
     return (
       <div className="relative flex min-h-screen items-center justify-center bg-surface-bg">
         <div className="absolute right-4 top-4">
@@ -39,5 +35,10 @@ export default async function DashboardLayout({
     );
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {impersonating && <ImpersonationBanner />}
+      <div className={impersonating ? "pt-10" : undefined}>{children}</div>
+    </>
+  );
 }

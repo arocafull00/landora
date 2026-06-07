@@ -1,7 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, Inter, JetBrains_Mono } from "next/font/google";
+import { IBM_Plex_Sans, Inter, JetBrains_Mono, Syne } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from 'react-toastify';
 
 const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-headline",
@@ -12,13 +13,19 @@ const ibmPlexSans = IBM_Plex_Sans({
 const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-label",
   subsets: ["latin"],
   weight: ["500"],
+});
+
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  weight: ["400", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -35,10 +42,11 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="es"
-        className={`${ibmPlexSans.variable} ${inter.variable} ${jetBrainsMono.variable} h-full antialiased`}
+        className={`${ibmPlexSans.variable} ${inter.variable} ${jetBrainsMono.variable} ${syne.variable} h-full antialiased`}
       >
         <body className="min-h-full overflow-hidden bg-surface-bg text-on-background">
           {children}
+          <ToastContainer />
         </body>
       </html>
     </ClerkProvider>
