@@ -7,8 +7,8 @@ import { db } from "@/db";
 import { users, landingPages } from "@/db/schema";
 import { getLandingBySlug } from "@/data/admin";
 import { updateLandingPage } from "@/data/landing-pages";
+import { seedLandingSections } from "@/data/seed-landing-sections";
 import { isAdmin } from "@/lib/is-admin";
-import { getDefaultContent } from "@/lib/default-content";
 
 const createUserSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
@@ -101,16 +101,21 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
     return { error: "Ya existe una landing con ese slug" };
   }
 
+  let landingId: string;
   try {
-    await db.insert(landingPages).values({
-      userId,
-      name,
-      slug,
-      template: "velar",
-      contentJson: getDefaultContent("velar"),
-    });
+    const [landing] = await db
+      .insert(landingPages)
+      .values({ userId, name, slug, template: "velar" })
+      .returning({ id: landingPages.id });
+    landingId = landing.id;
   } catch {
     return { error: "Error al crear la landing" };
+  }
+
+  try {
+    await seedLandingSections(landingId, "velar");
+  } catch {
+    return { error: "Error al inicializar el contenido de la landing" };
   }
 
   revalidatePath("/admin");

@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getLandingPageBySlug } from "@/data/landing-pages";
+import { toLandingContent } from "@/lib/landing-mapper";
 import { TollStoryTemplate } from "@/components/templates/toll-story/toll-story-template";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
-import { parseLandingContent } from "@/lib/landing-schema";
 
 export async function generateMetadata({
   params,
@@ -15,11 +15,9 @@ export async function generateMetadata({
 
   if (!landing) return {};
 
-  const content = parseLandingContent(landing.contentJson);
-
   return {
-    title: content.hero.title || landing.name,
-    description: content.hero.subtitle || "",
+    title: landing.seo?.title || landing.hero?.title || landing.name,
+    description: landing.seo?.description || landing.hero?.subtitle || "",
   };
 }
 
@@ -33,7 +31,7 @@ export default async function PublicLandingPage({
 
   if (!landing) notFound();
 
-  const content = parseLandingContent(landing.contentJson);
+  const content = toLandingContent(landing);
 
   if (landing.template === "velar") {
     return <VelarTemplate content={content} />;

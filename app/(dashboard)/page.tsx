@@ -2,9 +2,8 @@ import { redirect } from "next/navigation";
 import { getEffectiveClientId } from "@/lib/auth";
 import { getUserByInternalId } from "@/data/users";
 import { getLandingPageByUserId } from "@/data/landing-pages";
+import { toLandingView } from "@/lib/landing-mapper";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import type { Landing } from "@/lib/dashboard-data";
-import { parseLandingContent } from "@/lib/landing-schema";
 
 export default async function DashboardPage() {
   const clientId = await getEffectiveClientId();
@@ -33,19 +32,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const landing: Landing = {
-    id: dbLanding.id,
-    name: dbLanding.name,
-    slug: dbLanding.slug,
-    status: dbLanding.published ? "Published" : "Draft",
-    edited: dbLanding.updatedAt
-      ? new Intl.DateTimeFormat("es", { dateStyle: "short", timeStyle: "short" }).format(new Date(dbLanding.updatedAt))
-      : "—",
-    seoTitle: dbLanding.name,
-    owner: user?.name ?? "—",
-    template: (dbLanding.template as "toll-story" | "velar") ?? "toll-story",
-    content: parseLandingContent(dbLanding.contentJson),
-  };
+  const landing = toLandingView(dbLanding, user ?? undefined);
 
   return <DashboardShell initialLanding={landing} />;
 }

@@ -10,6 +10,7 @@ import {
   initialPosts,
   initialPresentations,
   Landing,
+  LandingContent,
   Post,
   Presentation,
   ServiceContent,
@@ -74,12 +75,31 @@ const markEdited = (landing: Landing): Landing => ({
   edited: "Unsaved changes",
 });
 
-async function persistLanding(id: string, patch: { contentJson?: Landing["content"]; published?: boolean }) {
-  await fetch(`/api/landing/${id}`, {
+async function patchSection(url: string, body: Record<string, unknown>) {
+  const res = await fetch(url, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(patch),
+    body: JSON.stringify(body),
   });
+  if (!res.ok) throw new Error(`PATCH ${url} failed`);
+}
+
+async function persistAllSections(id: string, content: LandingContent) {
+  const base = `/api/landings/${id}`;
+
+  await Promise.all([
+    patchSection(`${base}/hero`, content.hero),
+    patchSection(`${base}/story`, content.story),
+    patchSection(`${base}/cta`, content.contact),
+    patchSection(`${base}/branding`, { brand: content.brand }),
+    patchSection(`${base}/stats`, { items: content.stats }),
+    patchSection(`${base}/spaces`, { items: content.spaces }),
+    patchSection(`${base}/services`, { items: content.services }),
+    patchSection(`${base}/workflow`, { items: content.workflow }),
+    patchSection(`${base}/testimonials`, { items: content.testimonials }),
+    patchSection(`${base}/gallery`, { items: content.gallery }),
+    patchSection(`${base}/nav`, { items: content.nav }),
+  ]);
 }
 
 export const useDashboardStore = create<DashboardState>()((set, get) => ({
@@ -275,7 +295,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     set({ saveStatus: "saving" });
 
     try {
-      await persistLanding(id, { contentJson: landing.content });
+      await persistAllSections(id, landing.content);
       set((state) => ({
         saveStatus: "saved",
         landings: state.landings.map((l) =>
@@ -294,7 +314,8 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     set({ saveStatus: "saving" });
 
     try {
-      await persistLanding(id, { contentJson: landing.content, published: true });
+      await persistAllSections(id, landing.content);
+      await patchSection(`/api/landings/${id}`, { published: true });
       set((state) => ({
         saveStatus: "saved",
         landings: state.landings.map((l) =>

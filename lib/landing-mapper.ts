@@ -1,0 +1,81 @@
+import type { LandingWithSections } from "@/data/landing-pages";
+import type { Landing, LandingContent } from "@/lib/dashboard-data";
+import type { User } from "@/db/schema";
+
+export function toLandingContent(row: LandingWithSections): LandingContent {
+  return {
+    brand: row.branding?.brand ?? "",
+    hero: {
+      eyebrow: row.hero?.eyebrow ?? "",
+      title: row.hero?.title ?? "",
+      subtitle: row.hero?.subtitle ?? "",
+      description: row.hero?.description ?? "",
+      image: row.hero?.image ?? "",
+      houseImage: row.hero?.houseImage ?? "",
+    },
+    story: {
+      statement: row.story?.statement ?? "",
+    },
+    stats: (row.stats ?? []).map((s) => ({
+      id: s.id,
+      value: s.value,
+      label: s.label,
+      countTo: s.countTo ?? undefined,
+      suffix: s.suffix,
+    })),
+    gallery: (row.gallery ?? []).map((g) => ({ id: g.id, video: g.video })),
+    nav: (row.nav ?? []).map((n) => ({ id: n.id, label: n.label, href: n.href })),
+    spaces: (row.spaces ?? []).map((s) => ({
+      id: s.id,
+      name: s.name,
+      description: s.description,
+      image: s.image,
+    })),
+    services: (row.services ?? []).map((s) => ({
+      id: s.id,
+      title: s.title,
+      subtitle: s.subtitle,
+      label: s.label,
+      image: s.image,
+    })),
+    workflow: (row.workflow ?? []).map((w) => ({
+      id: w.id,
+      number: w.number,
+      title: w.title,
+      description: w.description,
+    })),
+    testimonials: (row.testimonials ?? []).map((t) => ({
+      id: t.id,
+      author: t.author,
+      date: t.date,
+      rating: t.rating,
+      comment: t.comment,
+      verified: t.verified,
+    })),
+    contact: {
+      phone: row.cta?.phone ?? "",
+      email: row.cta?.email ?? "",
+      address: row.cta?.address ?? "",
+    },
+  };
+}
+
+export function toLandingView(row: LandingWithSections, user: User | undefined): Landing {
+  const updatedAt = row.updatedAt
+    ? new Intl.DateTimeFormat("es", { dateStyle: "short", timeStyle: "short" }).format(
+        new Date(row.updatedAt)
+      )
+    : "—";
+
+  return {
+    id: row.id,
+    name: row.name,
+    slug: row.slug,
+    status: row.published ? "Published" : "Draft",
+    edited: updatedAt,
+    seoTitle: row.seo?.title || row.name,
+    owner: user?.name ?? "—",
+    template: row.template,
+    content: toLandingContent(row),
+  };
+}
