@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getEffectiveClientId } from "@/lib/auth";
+import { getEffectiveClientId, isImpersonating } from "@/lib/auth";
 import { getUserByInternalId } from "@/data/users";
 import { getLandingPageByUserId } from "@/data/landing-pages";
 import { toLandingView } from "@/lib/landing-mapper";
@@ -14,9 +14,10 @@ export async function DashboardViewPage({ view }: { view: DashboardView }) {
     redirect("/sign-in");
   }
 
-  const [user, dbLanding] = await Promise.all([
+  const [user, dbLanding, impersonating] = await Promise.all([
     getUserByInternalId(clientId),
     getLandingPageByUserId(clientId),
+    isImpersonating(),
   ]);
 
   if (!dbLanding) {
@@ -39,5 +40,11 @@ export async function DashboardViewPage({ view }: { view: DashboardView }) {
   const refreshed = await getLandingPageByUserId(clientId);
   const landing = toLandingView(refreshed ?? dbLanding, user ?? undefined);
 
-  return <DashboardShell initialLanding={landing} initialView={view} />;
+  return (
+    <DashboardShell
+      impersonating={impersonating}
+      initialLanding={landing}
+      initialView={view}
+    />
+  );
 }

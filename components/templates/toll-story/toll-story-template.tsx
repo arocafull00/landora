@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { TOLL_STORY_ASSETS } from "@/lib/toll-story-assets";
 import { SpaceCard } from "@/components/templates/toll-story/space-card";
 import { ServiceCard } from "@/components/templates/toll-story/service-card";
 import { WorkflowStepCard } from "@/components/templates/toll-story/workflow-step";
@@ -37,9 +38,10 @@ function HeroSection({ content }: { content: LandingContent }) {
       <nav className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between px-8 py-6 md:px-16">
         <Image
           alt="Toll Story"
-          className="object-contain brightness-0 invert"
+          className="h-10 object-contain brightness-0 invert"
           height={40}
-          src="/toll-story/logo.png"
+          src={TOLL_STORY_ASSETS.logo}
+          style={{ width: "auto" }}
           width={120}
         />
         <a

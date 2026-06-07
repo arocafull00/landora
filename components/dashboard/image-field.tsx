@@ -10,17 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const STATIC_OPTIONS = [
-  "/toll-story/hero.png",
-  "/toll-story/toll7.jpeg",
-  "/toll-story/toll6.jpeg",
-  "/toll-story/toll5.jpeg",
-  "/toll-story/toll4.jpeg",
-  "/toll-story/toll3.jpeg",
-  "/toll-story/toll2.jpeg",
-  "/toll-story/toll1.jpg",
-];
+import { TOLL_STORY_IMAGE_OPTIONS } from "@/lib/toll-story-assets";
 
 export function ImageField({
   label,
@@ -68,7 +58,7 @@ export function ImageField({
 
   const allOptions = [
     ...assets.map((a) => ({ value: a.url, label: a.name || a.url })),
-    ...STATIC_OPTIONS.map((s) => ({ value: s, label: s.replace("/toll-story/", "") })),
+    ...TOLL_STORY_IMAGE_OPTIONS.map((s) => ({ value: s.value, label: s.label })),
   ];
 
   return (

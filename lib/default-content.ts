@@ -1,5 +1,6 @@
 import type { LandingContent } from "@/lib/dashboard-data";
 import type { TemplateId } from "@/lib/template-registry";
+import { TOLL_STORY_ASSETS } from "@/lib/toll-story-assets";
 
 const HOUSE_IMG =
   "https://res.cloudinary.com/dsdhxhhqh/image/upload/v1780471903/building_bzziky.png";
@@ -77,7 +78,7 @@ export const TOLL_STORY_DEFAULT_CONTENT: LandingContent = {
     subtitle: "Bodas, comuniones y fiestas de todo tipo en un entorno exclusivo.",
     description:
       "Espacio diseñado para la celebración de eventos privados y de empresa en Valencia y área metropolitana.",
-    image: "/toll-story/hero.png",
+    image: TOLL_STORY_ASSETS.hero,
     houseImage: "",
   },
   story: {
@@ -96,19 +97,19 @@ export const TOLL_STORY_DEFAULT_CONTENT: LandingContent = {
       id: "space-1",
       name: "Toll Story 1",
       description: "Un rincón rústico y acogedor ideal para comuniones y celebraciones íntimas.",
-      image: "/toll-story/toll7.jpeg",
+      image: TOLL_STORY_ASSETS.toll7,
     },
     {
       id: "space-2",
       name: "Toll Story 2",
       description: "Un espacio tropical perfecto para fiestas familiares y eventos al aire libre.",
-      image: "/toll-story/toll6.jpeg",
+      image: TOLL_STORY_ASSETS.toll6,
     },
     {
       id: "space-3",
       name: "Toll Story 3",
       description: "Elegancia y amplitud para bodas, eventos de empresa y grandes celebraciones.",
-      image: "/toll-story/toll5.jpeg",
+      image: TOLL_STORY_ASSETS.toll5,
     },
   ],
   services: [
@@ -117,21 +118,21 @@ export const TOLL_STORY_DEFAULT_CONTENT: LandingContent = {
       title: "Jardín con Piscina",
       subtitle: "para todos los invitados",
       label: "ENTORNO PRIVADO",
-      image: "/toll-story/toll7.jpeg",
+      image: TOLL_STORY_ASSETS.toll7,
     },
     {
       id: "service-2",
       title: "Parking Privado",
       subtitle: "dentro de la finca",
       label: "PARA TODOS LOS INVITADOS",
-      image: "/toll-story/toll6.jpeg",
+      image: TOLL_STORY_ASSETS.toll6,
     },
     {
       id: "service-3",
       title: "Zonas de descanso",
       subtitle: "con mobiliario básico",
       label: "CON MOBILIARIO BÁSICO",
-      image: "/toll-story/toll5.jpeg",
+      image: TOLL_STORY_ASSETS.toll5,
     },
   ],
   workflow: [

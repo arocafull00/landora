@@ -110,14 +110,12 @@ export async function replaceLandingStats(
   items: Pick<LandingStat, "value" | "label" | "countTo" | "suffix">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingStats).where(eq(landingStats.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingStats).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingStats).where(eq(landingStats.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingStats).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update stats");
   }
@@ -128,14 +126,12 @@ export async function replaceLandingSpaces(
   items: Pick<LandingSpace, "name" | "description" | "image">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingSpaces).where(eq(landingSpaces.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingSpaces).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingSpaces).where(eq(landingSpaces.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingSpaces).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update spaces");
   }
@@ -146,14 +142,12 @@ export async function replaceLandingServices(
   items: Pick<LandingService, "title" | "subtitle" | "label" | "image">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingServices).where(eq(landingServices.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingServices).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingServices).where(eq(landingServices.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingServices).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update services");
   }
@@ -164,14 +158,12 @@ export async function replaceLandingWorkflow(
   items: Pick<LandingWorkflowStep, "number" | "title" | "description">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingWorkflow).where(eq(landingWorkflow.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingWorkflow).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingWorkflow).where(eq(landingWorkflow.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingWorkflow).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update workflow");
   }
@@ -182,14 +174,12 @@ export async function replaceLandingTestimonials(
   items: Pick<LandingTestimonial, "author" | "date" | "rating" | "comment" | "verified">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingTestimonials).where(eq(landingTestimonials.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingTestimonials).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingTestimonials).where(eq(landingTestimonials.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingTestimonials).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update testimonials");
   }
@@ -200,14 +190,12 @@ export async function replaceLandingGallery(
   items: Pick<LandingGalleryItem, "video">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingGallery).where(eq(landingGallery.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingGallery).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingGallery).where(eq(landingGallery.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingGallery).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update gallery");
   }
@@ -218,14 +206,12 @@ export async function replaceLandingNav(
   items: Pick<LandingNavItem, "label" | "href">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingNav).where(eq(landingNav.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingNav).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingNav).where(eq(landingNav.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingNav).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update nav");
   }
@@ -236,14 +222,12 @@ export async function replaceLandingBenefits(
   items: Pick<LandingBenefit, "title" | "description" | "icon" | "image">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingBenefits).where(eq(landingBenefits.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingBenefits).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingBenefits).where(eq(landingBenefits.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingBenefits).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update benefits");
   }
@@ -254,14 +238,12 @@ export async function replaceLandingFaq(
   items: Pick<LandingFaqItem, "question" | "answer">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingFaq).where(eq(landingFaq.landingId, landingId));
-      if (items.length > 0) {
-        await tx.insert(landingFaq).values(
-          items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
-        );
-      }
-    });
+    await db.delete(landingFaq).where(eq(landingFaq.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingFaq).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
   } catch {
     throw new Error("Failed to update FAQ");
   }

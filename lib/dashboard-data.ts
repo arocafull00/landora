@@ -1,3 +1,5 @@
+import { TOLL_STORY_ASSETS } from "@/lib/toll-story-assets";
+
 export type DashboardView = "landings" | "editor" | "assets" | "settings";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
@@ -198,7 +200,7 @@ export const initialLandings: Landing[] = [
         subtitle: "Bodas, comuniones y fiestas de todo tipo en un entorno exclusivo.",
         description:
           "Espacio diseñado para la celebración de eventos privados y de empresa en Valencia y área metropolitana.",
-        image: "/toll-story/hero.png",
+        image: TOLL_STORY_ASSETS.hero,
         houseImage: "",
       },
       story: {
@@ -218,21 +220,21 @@ export const initialLandings: Landing[] = [
           name: "Toll Story 1",
           description:
             "Un rincón rústico y acogedor ideal para comuniones y celebraciones íntimas.",
-          image: "/toll-story/toll7.jpeg",
+          image: TOLL_STORY_ASSETS.toll7,
         },
         {
           id: "space-2",
           name: "Toll Story 2",
           description:
             "Un espacio tropical perfecto para fiestas familiares y eventos al aire libre.",
-          image: "/toll-story/toll6.jpeg",
+          image: TOLL_STORY_ASSETS.toll6,
         },
         {
           id: "space-3",
           name: "Toll Story 3",
           description:
             "Elegancia y amplitud para bodas, eventos de empresa y grandes celebraciones.",
-          image: "/toll-story/toll5.jpeg",
+          image: TOLL_STORY_ASSETS.toll5,
         },
       ],
       services: [
@@ -241,21 +243,21 @@ export const initialLandings: Landing[] = [
           title: "Jardín con Piscina",
           subtitle: "para todos los invitados",
           label: "ENTORNO PRIVADO",
-          image: "/toll-story/toll7.jpeg",
+          image: TOLL_STORY_ASSETS.toll7,
         },
         {
           id: "service-2",
           title: "Parking Privado",
           subtitle: "dentro de la finca",
           label: "PARA TODOS LOS INVITADOS",
-          image: "/toll-story/toll6.jpeg",
+          image: TOLL_STORY_ASSETS.toll6,
         },
         {
           id: "service-3",
           title: "Zonas de descanso",
           subtitle: "con mobiliario básico",
           label: "CON MOBILIARIO BÁSICO",
-          image: "/toll-story/toll5.jpeg",
+          image: TOLL_STORY_ASSETS.toll5,
         },
       ],
       workflow: [
@@ -320,7 +322,7 @@ export const initialLandings: Landing[] = [
         title: "BLACK FRIDAY",
         subtitle: "Campaña limitada para clientes premium.",
         description: "Landing promocional con CTA directo y bloques de producto.",
-        image: "/toll-story/toll4.jpeg",
+        image: TOLL_STORY_ASSETS.toll4,
         houseImage: "",
       },
       story: {
@@ -400,7 +402,7 @@ export const initialAssets: Asset[] = [
     uploadedBy: "Riley Adams",
     date: "Jun 6, 2026 at 14:30",
     colors: ["#213138", "#f5f0ea", "#171717", "#e8e4df"],
-    url: "/toll-story/hero.png",
+    url: TOLL_STORY_ASSETS.hero,
   },
   {
     id: "garden-1",
@@ -412,7 +414,7 @@ export const initialAssets: Asset[] = [
     uploadedBy: "Marta Rivera",
     date: "Jun 5, 2026 at 09:12",
     colors: ["#213138", "#10b981", "#f59e0b"],
-    url: "/toll-story/toll7.jpeg",
+    url: TOLL_STORY_ASSETS.toll7,
   },
   {
     id: "garden-2",
@@ -424,7 +426,7 @@ export const initialAssets: Asset[] = [
     uploadedBy: "Sarah Khan",
     date: "Jun 5, 2026 at 10:44",
     colors: ["#0050cb", "#d0e1fb", "#191b24"],
-    url: "/toll-story/toll6.jpeg",
+    url: TOLL_STORY_ASSETS.toll6,
   },
 ];
 
