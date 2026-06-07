@@ -67,6 +67,35 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       email: row.cta?.email ?? "",
       address: row.cta?.address ?? "",
     },
+    about: row.story ? { statement: row.story.statement } : undefined,
+    team: (row.team ?? []).map((t) => ({
+      id: t.id,
+      name: t.name,
+      role: t.role,
+      bio: t.bio,
+      image: mapImage(t.image),
+    })),
+    serviceMenu: (row.serviceMenu ?? []).map((s) => ({
+      id: s.id,
+      category: s.category,
+      name: s.name,
+      description: s.description,
+      price: s.price,
+      duration: s.duration || undefined,
+      image: s.image ? mapImage(s.image) : undefined,
+    })),
+    benefits: (row.benefits ?? []).map((b) => ({
+      id: b.id,
+      title: b.title,
+      description: b.description,
+      icon: b.icon,
+      image: b.image ? mapImage(b.image) : undefined,
+    })),
+    faq: (row.faq ?? []).map((f) => ({
+      id: f.id,
+      question: f.question,
+      answer: f.answer,
+    })),
   };
 }
 

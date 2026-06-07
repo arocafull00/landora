@@ -11,7 +11,7 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function VelarServicesSection({ content }: { content: LandingContent }) {
-  if (content.services.length === 0) return null;
+  if (!content.services || content.services.length === 0) return null;
 
   const whatsappLink = getWhatsAppLink(content.contact.phone);
 
@@ -62,7 +62,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
           data-aos="fade-up"
           data-aos-delay="100"
         >
-          {content.services.map((service, index) => (
+          {(content.services ?? []).map((service, index) => (
             <VelarServicePanel
               key={service.id}
               service={service}

@@ -194,7 +194,7 @@ export function LandingsSection() {
           <div className="mx-auto max-w-5xl space-y-unit-lg">
             {activeContentGroup === "Pages" ? (
               <>
-                <LandingPreview content={activeLanding.content} />
+                <LandingPreview content={activeLanding.content} template={activeLanding.template} />
               </>
             ) : null}
             {activeContentGroup === "Posts" ? (

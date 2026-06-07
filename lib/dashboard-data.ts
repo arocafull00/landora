@@ -5,6 +5,43 @@ export type DashboardView = "landings" | "editor" | "assets" | "settings";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
 
+export type BaseContent = {
+  brand: string;
+  hero: HeroContent;
+  nav: NavLink[];
+  contact: ContactContent;
+  stats: StatContent[];
+  testimonials: TestimonialContent[];
+};
+
+export type VelarExtensions = {
+  story: StoryContent;
+  gallery: GalleryItem[];
+  spaces: SpaceContent[];
+  services: ServiceContent[];
+  workflow: WorkflowStep[];
+};
+
+export type StudioExtensions = {
+  about: { statement: string };
+  gallery: GalleryItem[];
+  team: TeamMember[];
+  serviceMenu: ServiceMenuItem[];
+  benefits: BenefitItem[];
+  faq: FaqItem[];
+};
+
+export type TemplateContentMap = {
+  velar: BaseContent & VelarExtensions;
+  studio: BaseContent & StudioExtensions;
+};
+
+export type TemplateId = keyof TemplateContentMap;
+
+export type LandingContent = BaseContent &
+  Partial<VelarExtensions> &
+  Partial<StudioExtensions>;
+
 export type Landing = {
   id: string;
   name: string;
@@ -13,22 +50,8 @@ export type Landing = {
   edited: string;
   seoTitle: string;
   owner: string;
-  template: "velar";
+  template: TemplateId;
   content: LandingContent;
-};
-
-export type LandingContent = {
-  brand: string;
-  hero: HeroContent;
-  story: StoryContent;
-  stats: StatContent[];
-  gallery: GalleryItem[];
-  nav: NavLink[];
-  spaces: SpaceContent[];
-  services: ServiceContent[];
-  workflow: WorkflowStep[];
-  testimonials: TestimonialContent[];
-  contact: ContactContent;
 };
 
 export type HeroContent = {
@@ -37,7 +60,7 @@ export type HeroContent = {
   subtitle: string;
   description: string;
   image: string;
-  houseImage: string;
+  houseImage?: string;
 };
 
 export type StoryContent = {
@@ -99,6 +122,38 @@ export type ContactContent = {
   phone: string;
   email: string;
   address: string;
+};
+
+export type TeamMember = {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+};
+
+export type ServiceMenuItem = {
+  id: string;
+  category: string;
+  name: string;
+  description: string;
+  price: string;
+  duration?: string;
+  image?: string;
+};
+
+export type BenefitItem = {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  image?: string;
+};
+
+export type FaqItem = {
+  id: string;
+  question: string;
+  answer: string;
 };
 
 export type Post = {

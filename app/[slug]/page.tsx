@@ -3,6 +3,12 @@ import type { Metadata } from "next";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
+import { StudioTemplate } from "@/components/templates/studio/studio-template";
+
+const TEMPLATE_COMPONENTS = {
+  velar: VelarTemplate,
+  studio: StudioTemplate,
+} as const;
 
 export async function generateMetadata({
   params,
@@ -31,6 +37,7 @@ export default async function PublicLandingPage({
   if (!landing) notFound();
 
   const content = toLandingContent(landing);
+  const Component = TEMPLATE_COMPONENTS[landing.template] ?? VelarTemplate;
 
-  return <VelarTemplate content={content} />;
+  return <Component content={content} />;
 }

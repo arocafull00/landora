@@ -15,6 +15,8 @@ import {
   landingWorkflow,
   landingGallery,
   landingNav,
+  landingTeam,
+  landingServiceMenu,
 } from "@/db/schema";
 import type {
   LandingStat,
@@ -26,6 +28,8 @@ import type {
   LandingNavItem,
   LandingBenefit,
   LandingFaqItem,
+  LandingTeamMember,
+  LandingServiceMenuItem,
 } from "@/db/schema";
 
 export async function upsertLandingSeo(
@@ -246,5 +250,37 @@ export async function replaceLandingFaq(
     }
   } catch {
     throw new Error("Failed to update FAQ");
+  }
+}
+
+export async function replaceLandingTeam(
+  landingId: string,
+  items: Pick<LandingTeamMember, "name" | "role" | "bio" | "image">[]
+) {
+  try {
+    await db.delete(landingTeam).where(eq(landingTeam.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingTeam).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
+  } catch {
+    throw new Error("Failed to update team");
+  }
+}
+
+export async function replaceLandingServiceMenu(
+  landingId: string,
+  items: Pick<LandingServiceMenuItem, "category" | "name" | "description" | "price" | "duration" | "image">[]
+) {
+  try {
+    await db.delete(landingServiceMenu).where(eq(landingServiceMenu.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingServiceMenu).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
+  } catch {
+    throw new Error("Failed to update service menu");
   }
 }

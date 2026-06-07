@@ -2,11 +2,11 @@
 
 import { editorTabs } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { LandingPreview } from "@/components/dashboard/landing-preview";
-import { ActionButton, IconButton, Panel, StatusBadge } from "@/components/ui/primitives";
-import { Icon } from "@/components/ui/icon";
+import { Panel } from "@/components/ui/primitives";
 import { ImageField } from "@/components/dashboard/image-field";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { StudioEditorSection } from "@/components/dashboard/sections/studio-editor-section";
+import { EditorLayout } from "@/components/dashboard/editor-layout";
 
 export function EditorSection() {
   const {
@@ -46,6 +46,10 @@ export function EditorSection() {
 
   if (!activeLanding) return null;
 
+  if (activeLanding.template === "studio") {
+    return <StudioEditorSection />;
+  }
+
   const saveActive = () => {
     if (activeEditorTab === "Posts") {
       savePost(activePost.id);
@@ -74,79 +78,23 @@ export function EditorSection() {
   };
 
   return (
-    <>
-      <aside className="flex h-full w-[280px] shrink-0 flex-col border-r border-outline-variant bg-surface-container-lowest">
-        <div className="flex items-center justify-between border-b border-surface-variant px-unit-md py-3">
-          <h2 className="font-label text-label-md font-bold uppercase text-on-surface">
-            Pages
-          </h2>
-          <div className="flex">
-            <IconButton icon="add" label="Add page" />
-            <IconButton icon="more" label="More pages" />
-          </div>
-        </div>
-        <div className="flex-1 overflow-y-auto py-2">
-          {landings.map((landing) => {
-            const active = landing.id === activeLanding.id;
-
-            return (
-              <button
-                className={`group flex w-full items-center px-3 py-2 text-left transition-colors ${
-                  active
-                    ? "bg-primary-container text-on-primary-container"
-                    : "text-on-surface-variant hover:bg-surface-container-low"
-                }`}
-                key={landing.id}
-                onClick={() => setActiveLandingId(landing.id)}
-                type="button"
-              >
-                <Icon
-                  name="drag"
-                  className={`mr-2 h-4 w-4 ${
-                    active ? "opacity-60" : "opacity-0 group-hover:opacity-50"
-                  }`}
-                />
-                <Icon name="document" className="mr-3 h-5 w-5" />
-                <span className="truncate text-body-sm">{landing.name}</span>
-              </button>
-            );
-          })}
-        </div>
-      </aside>
-      <section className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-surface">
-        <div className="flex items-end justify-between border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-4">
-          <div>
-            <div className="mb-1 flex items-center gap-2">
-              <StatusBadge status={activeLanding.status} />
-              <span className="text-outline-variant">/</span>
-              <span className="font-label text-label-md text-on-surface-variant">
-                {activeLanding.edited}
-              </span>
-            </div>
-            <h1 className="font-headline text-headline-md text-on-surface">
-              {activeLanding.name}
-            </h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <IconButton icon="link" label="Copy page link" />
-            <IconButton icon="help" label="Comments" />
-            <div className="mx-1 h-5 w-px bg-outline-variant" />
-            <ActionButton onClick={saveActive}>
-              <Icon name="save" className="h-4 w-4" />
-              Save Draft
-            </ActionButton>
-            <ActionButton onClick={publishActive} variant="primary">
-              <Icon name="publish" className="h-4 w-4" />
-              Publish
-            </ActionButton>
-          </div>
-        </div>
+    <EditorLayout
+      activeLanding={activeLanding}
+      landings={landings}
+      onPublish={publishActive}
+      onSave={saveActive}
+      onSelectLanding={setActiveLandingId}
+      showComments
+      tabs={
         <div className="border-b border-outline-variant bg-surface-container-lowest px-unit-lg">
-          <Tabs value={activeEditorTab} onValueChange={(v) => setActiveEditorTab(v as typeof activeEditorTab)}>
+          <Tabs
+            value={activeEditorTab}
+            onValueChange={(v) => setActiveEditorTab(v as typeof activeEditorTab)}
+          >
             <TabsList className="h-auto gap-0 rounded-none bg-transparent p-0">
               {editorTabs.map((tab) => (
                 <TabsTrigger
-                  className="rounded-none border-b-2 border-transparent px-0 py-3 font-label text-label-md text-on-surface-variant transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none mr-unit-lg"
+                  className="mr-unit-lg rounded-none border-b-2 border-transparent px-0 py-3 font-label text-label-md text-on-surface-variant transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
                   key={tab}
                   value={tab}
                 >
@@ -156,342 +104,324 @@ export function EditorSection() {
             </TabsList>
           </Tabs>
         </div>
-        <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden xl:grid-cols-[minmax(420px,0.95fr)_minmax(460px,1.05fr)]">
-          <div className="min-h-0 overflow-y-auto border-r border-outline-variant p-unit-lg">
-            <div className="mx-auto max-w-3xl space-y-unit-md">
-              <Panel className="p-unit-md">
-                <div className="grid gap-4 md:grid-cols-2">
+      }
+      form={
+        <>
+          <Panel className="p-unit-md">
+            <div className="grid gap-4 md:grid-cols-2">
+              <TextField
+                label="Landing name"
+                onChange={(value) =>
+                  updateLandingMeta(activeLanding.id, { name: value })
+                }
+                value={activeLanding.name}
+              />
+              <TextField
+                label="Slug"
+                onChange={(value) =>
+                  updateLandingMeta(activeLanding.id, { slug: value })
+                }
+                value={activeLanding.slug}
+              />
+              <TextField
+                className="md:col-span-2"
+                label="SEO title"
+                onChange={(value) =>
+                  updateLandingMeta(activeLanding.id, { seoTitle: value })
+                }
+                value={activeLanding.seoTitle}
+              />
+            </div>
+          </Panel>
+          {activeEditorTab === "Hero" ? (
+            <Panel className="space-y-5 p-unit-lg">
+              <SectionTitle
+                description="Edita el bloque principal de la landing Toll Story."
+                title="Hero"
+              />
+              <TextField
+                label="Eyebrow"
+                onChange={(value) => updateHero(activeLanding.id, { eyebrow: value })}
+                value={activeLanding.content.hero.eyebrow}
+              />
+              <TextField
+                label="Title"
+                onChange={(value) => updateHero(activeLanding.id, { title: value })}
+                value={activeLanding.content.hero.title}
+              />
+              <TextArea
+                label="Subtitle"
+                onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
+                value={activeLanding.content.hero.subtitle}
+              />
+              <TextArea
+                label="Desktop description"
+                onChange={(value) =>
+                  updateHero(activeLanding.id, { description: value })
+                }
+                value={activeLanding.content.hero.description}
+              />
+              <ImageField
+                label="Hero image"
+                onChange={(value) => updateHero(activeLanding.id, { image: value })}
+                value={activeLanding.content.hero.image}
+              />
+            </Panel>
+          ) : null}
+          {activeEditorTab === "Story" ? (
+            <Panel className="space-y-5 p-unit-lg">
+              <SectionTitle
+                description="Edita la narrativa, métricas, proceso y testimonios."
+                title="Story"
+              />
+              <TextArea
+                label="Statement"
+                onChange={(value) =>
+                  updateStory(activeLanding.id, { statement: value })
+                }
+                rows={5}
+                value={activeLanding.content.story?.statement ?? ""}
+              />
+              <div className="grid gap-3 md:grid-cols-3">
+                {activeLanding.content.stats.map((stat) => (
+                  <Panel className="space-y-3 p-3" key={stat.id}>
+                    <TextField
+                      label="Value"
+                      onChange={(value) =>
+                        updateStat(activeLanding.id, stat.id, { value })
+                      }
+                      value={stat.value}
+                    />
+                    <TextField
+                      label="Label"
+                      onChange={(value) =>
+                        updateStat(activeLanding.id, stat.id, { label: value })
+                      }
+                      value={stat.label}
+                    />
+                  </Panel>
+                ))}
+              </div>
+              {(activeLanding.content.workflow ?? []).map((step) => (
+                <Panel className="grid gap-3 p-3 md:grid-cols-[80px_1fr]" key={step.id}>
                   <TextField
-                    label="Landing name"
+                    label="No."
                     onChange={(value) =>
-                      updateLandingMeta(activeLanding.id, { name: value })
+                      updateWorkflowStep(activeLanding.id, step.id, {
+                        number: value,
+                      })
                     }
-                    value={activeLanding.name}
+                    value={step.number}
                   />
+                  <div className="space-y-3">
+                    <TextField
+                      label="Step title"
+                      onChange={(value) =>
+                        updateWorkflowStep(activeLanding.id, step.id, {
+                          title: value,
+                        })
+                      }
+                      value={step.title}
+                    />
+                    <TextArea
+                      label="Step description"
+                      onChange={(value) =>
+                        updateWorkflowStep(activeLanding.id, step.id, {
+                          description: value,
+                        })
+                      }
+                      value={step.description}
+                    />
+                  </div>
+                </Panel>
+              ))}
+              {activeLanding.content.testimonials.slice(0, 1).map((item) => (
+                <Panel className="space-y-3 p-3" key={item.id}>
                   <TextField
-                    label="Slug"
+                    label="Review author"
                     onChange={(value) =>
-                      updateLandingMeta(activeLanding.id, { slug: value })
+                      updateTestimonial(activeLanding.id, item.id, {
+                        author: value,
+                      })
                     }
-                    value={activeLanding.slug}
-                  />
-                  <TextField
-                    className="md:col-span-2"
-                    label="SEO title"
-                    onChange={(value) =>
-                      updateLandingMeta(activeLanding.id, { seoTitle: value })
-                    }
-                    value={activeLanding.seoTitle}
-                  />
-                </div>
-              </Panel>
-              {activeEditorTab === "Hero" ? (
-                <Panel className="space-y-5 p-unit-lg">
-                  <SectionTitle
-                    description="Edita el bloque principal de la landing Toll Story."
-                    title="Hero"
-                  />
-                  <TextField
-                    label="Eyebrow"
-                    onChange={(value) => updateHero(activeLanding.id, { eyebrow: value })}
-                    value={activeLanding.content.hero.eyebrow}
-                  />
-                  <TextField
-                    label="Title"
-                    onChange={(value) => updateHero(activeLanding.id, { title: value })}
-                    value={activeLanding.content.hero.title}
+                    value={item.author}
                   />
                   <TextArea
-                    label="Subtitle"
-                    onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
-                    value={activeLanding.content.hero.subtitle}
+                    label="Review"
+                    onChange={(value) =>
+                      updateTestimonial(activeLanding.id, item.id, {
+                        comment: value,
+                      })
+                    }
+                    rows={4}
+                    value={item.comment}
+                  />
+                </Panel>
+              ))}
+            </Panel>
+          ) : null}
+          {activeEditorTab === "Spaces" ? (
+            <Panel className="space-y-5 p-unit-lg">
+              <SectionTitle
+                description="Edita los espacios mostrados en la landing."
+                title="Spaces"
+              />
+              {(activeLanding.content.spaces ?? []).map((space) => (
+                <Panel className="space-y-3 p-3" key={space.id}>
+                  <TextField
+                    label="Name"
+                    onChange={(value) =>
+                      updateSpace(activeLanding.id, space.id, { name: value })
+                    }
+                    value={space.name}
                   />
                   <TextArea
-                    label="Desktop description"
+                    label="Description"
                     onChange={(value) =>
-                      updateHero(activeLanding.id, { description: value })
+                      updateSpace(activeLanding.id, space.id, {
+                        description: value,
+                      })
                     }
-                    value={activeLanding.content.hero.description}
+                    value={space.description}
                   />
                   <ImageField
-                    label="Hero image"
-                    onChange={(value) => updateHero(activeLanding.id, { image: value })}
-                    value={activeLanding.content.hero.image}
-                  />
-                </Panel>
-              ) : null}
-              {activeEditorTab === "Story" ? (
-                <Panel className="space-y-5 p-unit-lg">
-                  <SectionTitle
-                    description="Edita la narrativa, métricas, proceso y testimonios."
-                    title="Story"
-                  />
-                  <TextArea
-                    label="Statement"
+                    label="Image"
                     onChange={(value) =>
-                      updateStory(activeLanding.id, { statement: value })
+                      updateSpace(activeLanding.id, space.id, { image: value })
                     }
-                    rows={5}
-                    value={activeLanding.content.story.statement}
+                    value={space.image}
                   />
-                  <div className="grid gap-3 md:grid-cols-3">
-                    {activeLanding.content.stats.map((stat) => (
-                      <Panel className="space-y-3 p-3" key={stat.id}>
-                        <TextField
-                          label="Value"
-                          onChange={(value) =>
-                            updateStat(activeLanding.id, stat.id, { value })
-                          }
-                          value={stat.value}
-                        />
-                        <TextField
-                          label="Label"
-                          onChange={(value) =>
-                            updateStat(activeLanding.id, stat.id, { label: value })
-                          }
-                          value={stat.label}
-                        />
-                      </Panel>
-                    ))}
-                  </div>
-                  {activeLanding.content.workflow.map((step) => (
-                    <Panel className="grid gap-3 p-3 md:grid-cols-[80px_1fr]" key={step.id}>
-                      <TextField
-                        label="No."
-                        onChange={(value) =>
-                          updateWorkflowStep(activeLanding.id, step.id, {
-                            number: value,
-                          })
-                        }
-                        value={step.number}
-                      />
-                      <div className="space-y-3">
-                        <TextField
-                          label="Step title"
-                          onChange={(value) =>
-                            updateWorkflowStep(activeLanding.id, step.id, {
-                              title: value,
-                            })
-                          }
-                          value={step.title}
-                        />
-                        <TextArea
-                          label="Step description"
-                          onChange={(value) =>
-                            updateWorkflowStep(activeLanding.id, step.id, {
-                              description: value,
-                            })
-                          }
-                          value={step.description}
-                        />
-                      </div>
-                    </Panel>
-                  ))}
-                  {activeLanding.content.testimonials.slice(0, 1).map((item) => (
-                    <Panel className="space-y-3 p-3" key={item.id}>
-                      <TextField
-                        label="Review author"
-                        onChange={(value) =>
-                          updateTestimonial(activeLanding.id, item.id, {
-                            author: value,
-                          })
-                        }
-                        value={item.author}
-                      />
-                      <TextArea
-                        label="Review"
-                        onChange={(value) =>
-                          updateTestimonial(activeLanding.id, item.id, {
-                            comment: value,
-                          })
-                        }
-                        rows={4}
-                        value={item.comment}
-                      />
-                    </Panel>
-                  ))}
                 </Panel>
-              ) : null}
-              {activeEditorTab === "Spaces" ? (
-                <Panel className="space-y-5 p-unit-lg">
-                  <SectionTitle
-                    description="Edita los espacios mostrados en la landing."
-                    title="Spaces"
-                  />
-                  {activeLanding.content.spaces.map((space) => (
-                    <Panel className="space-y-3 p-3" key={space.id}>
-                      <TextField
-                        label="Name"
-                        onChange={(value) =>
-                          updateSpace(activeLanding.id, space.id, { name: value })
-                        }
-                        value={space.name}
-                      />
-                      <TextArea
-                        label="Description"
-                        onChange={(value) =>
-                          updateSpace(activeLanding.id, space.id, {
-                            description: value,
-                          })
-                        }
-                        value={space.description}
-                      />
-                      <ImageField
-                        label="Image"
-                        onChange={(value) =>
-                          updateSpace(activeLanding.id, space.id, { image: value })
-                        }
-                        value={space.image}
-                      />
-                    </Panel>
-                  ))}
-                </Panel>
-              ) : null}
-              {activeEditorTab === "Services" ? (
-                <Panel className="space-y-5 p-unit-lg">
-                  <SectionTitle
-                    description="Edita servicios y mensajes operativos."
-                    title="Services"
-                  />
-                  {activeLanding.content.services.map((service) => (
-                    <Panel className="space-y-3 p-3" key={service.id}>
-                      <TextField
-                        label="Title"
-                        onChange={(value) =>
-                          updateService(activeLanding.id, service.id, {
-                            title: value,
-                          })
-                        }
-                        value={service.title}
-                      />
-                      <TextField
-                        label="Subtitle"
-                        onChange={(value) =>
-                          updateService(activeLanding.id, service.id, {
-                            subtitle: value,
-                          })
-                        }
-                        value={service.subtitle}
-                      />
-                      <TextField
-                        label="Label"
-                        onChange={(value) =>
-                          updateService(activeLanding.id, service.id, {
-                            label: value,
-                          })
-                        }
-                        value={service.label}
-                      />
-                      <ImageField
-                        label="Image"
-                        onChange={(value) =>
-                          updateService(activeLanding.id, service.id, {
-                            image: value,
-                          })
-                        }
-                        value={service.image}
-                      />
-                    </Panel>
-                  ))}
-                </Panel>
-              ) : null}
-              {activeEditorTab === "Posts" ? (
-                <Panel className="space-y-5 p-unit-lg">
-                  <SectionTitle
-                    description="Edita contenido editorial asociado a la landing."
-                    title="Posts"
-                  />
+              ))}
+            </Panel>
+          ) : null}
+          {activeEditorTab === "Services" ? (
+            <Panel className="space-y-5 p-unit-lg">
+              <SectionTitle
+                description="Edita servicios y mensajes operativos."
+                title="Services"
+              />
+              {(activeLanding.content.services ?? []).map((service) => (
+                <Panel className="space-y-3 p-3" key={service.id}>
                   <TextField
                     label="Title"
-                    onChange={(value) => updatePost(activePost.id, { title: value })}
-                    value={activePost.title}
+                    onChange={(value) =>
+                      updateService(activeLanding.id, service.id, {
+                        title: value,
+                      })
+                    }
+                    value={service.title}
                   />
                   <TextField
-                    label="Slug"
-                    onChange={(value) => updatePost(activePost.id, { slug: value })}
-                    value={activePost.slug}
+                    label="Subtitle"
+                    onChange={(value) =>
+                      updateService(activeLanding.id, service.id, {
+                        subtitle: value,
+                      })
+                    }
+                    value={service.subtitle}
                   />
-                  <TextArea
-                    label="Excerpt"
-                    onChange={(value) => updatePost(activePost.id, { excerpt: value })}
-                    value={activePost.excerpt}
+                  <TextField
+                    label="Label"
+                    onChange={(value) =>
+                      updateService(activeLanding.id, service.id, {
+                        label: value,
+                      })
+                    }
+                    value={service.label}
                   />
-                  <TextArea
-                    label="Body"
-                    onChange={(value) => updatePost(activePost.id, { body: value })}
-                    rows={8}
-                    value={activePost.body}
+                  <ImageField
+                    label="Image"
+                    onChange={(value) =>
+                      updateService(activeLanding.id, service.id, {
+                        image: value,
+                      })
+                    }
+                    value={service.image}
                   />
                 </Panel>
-              ) : null}
-              {activeEditorTab === "Presentations" ? (
-                <Panel className="space-y-5 p-unit-lg">
-                  <SectionTitle
-                    description="Edita decks comerciales reutilizables."
-                    title="Presentations"
-                  />
-                  <TextField
-                    label="Deck title"
-                    onChange={(value) =>
-                      updatePresentation(activePresentation.id, { title: value })
-                    }
-                    value={activePresentation.title}
-                  />
-                  <TextField
-                    label="Audience"
-                    onChange={(value) =>
-                      updatePresentation(activePresentation.id, { audience: value })
-                    }
-                    value={activePresentation.audience}
-                  />
-                  {activePresentation.slides.map((slide, index) => (
-                    <Panel className="space-y-3 p-3" key={slide.id}>
-                      <p className="font-label text-label-md uppercase text-primary">
-                        Slide {index + 1}
-                      </p>
-                      <TextField
-                        label="Slide title"
-                        onChange={(value) =>
-                          updatePresentationSlide(activePresentation.id, slide.id, {
-                            title: value,
-                          })
-                        }
-                        value={slide.title}
-                      />
-                      <TextArea
-                        label="Slide body"
-                        onChange={(value) =>
-                          updatePresentationSlide(activePresentation.id, slide.id, {
-                            body: value,
-                          })
-                        }
-                        value={slide.body}
-                      />
-                    </Panel>
-                  ))}
-                </Panel>
-              ) : null}
-            </div>
-          </div>
-          <div className="min-h-0 overflow-y-auto bg-surface-bg p-unit-lg">
-            <div className="mx-auto max-w-4xl space-y-unit-md">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-label text-label-md uppercase text-on-surface-variant">
-                    Live preview
+              ))}
+            </Panel>
+          ) : null}
+          {activeEditorTab === "Posts" ? (
+            <Panel className="space-y-5 p-unit-lg">
+              <SectionTitle
+                description="Edita contenido editorial asociado a la landing."
+                title="Posts"
+              />
+              <TextField
+                label="Title"
+                onChange={(value) => updatePost(activePost.id, { title: value })}
+                value={activePost.title}
+              />
+              <TextField
+                label="Slug"
+                onChange={(value) => updatePost(activePost.id, { slug: value })}
+                value={activePost.slug}
+              />
+              <TextArea
+                label="Excerpt"
+                onChange={(value) => updatePost(activePost.id, { excerpt: value })}
+                value={activePost.excerpt}
+              />
+              <TextArea
+                label="Body"
+                onChange={(value) => updatePost(activePost.id, { body: value })}
+                rows={8}
+                value={activePost.body}
+              />
+            </Panel>
+          ) : null}
+          {activeEditorTab === "Presentations" ? (
+            <Panel className="space-y-5 p-unit-lg">
+              <SectionTitle
+                description="Edita decks comerciales reutilizables."
+                title="Presentations"
+              />
+              <TextField
+                label="Deck title"
+                onChange={(value) =>
+                  updatePresentation(activePresentation.id, { title: value })
+                }
+                value={activePresentation.title}
+              />
+              <TextField
+                label="Audience"
+                onChange={(value) =>
+                  updatePresentation(activePresentation.id, { audience: value })
+                }
+                value={activePresentation.audience}
+              />
+              {activePresentation.slides.map((slide, index) => (
+                <Panel className="space-y-3 p-3" key={slide.id}>
+                  <p className="font-label text-label-md uppercase text-primary">
+                    Slide {index + 1}
                   </p>
-                  <h2 className="font-headline text-headline-md text-on-surface">
-                    {activeLanding.name}
-                  </h2>
-                </div>
-                <StatusBadge status={activeLanding.status} />
-              </div>
-              <LandingPreview content={activeLanding.content} />
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
+                  <TextField
+                    label="Slide title"
+                    onChange={(value) =>
+                      updatePresentationSlide(activePresentation.id, slide.id, {
+                        title: value,
+                      })
+                    }
+                    value={slide.title}
+                  />
+                  <TextArea
+                    label="Slide body"
+                    onChange={(value) =>
+                      updatePresentationSlide(activePresentation.id, slide.id, {
+                        body: value,
+                      })
+                    }
+                    value={slide.body}
+                  />
+                </Panel>
+              ))}
+            </Panel>
+          ) : null}
+        </>
+      }
+    />
   );
 }
 
@@ -561,4 +491,3 @@ function TextArea({
     </label>
   );
 }
-

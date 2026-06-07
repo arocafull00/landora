@@ -2,10 +2,16 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTemplate, isValidTemplateId } from "@/lib/template-registry";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
+import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import {
   TemplateDemoBar,
   TEMPLATE_DEMO_BAR_HEIGHT,
 } from "@/components/admin/template-demo-bar";
+
+const TEMPLATE_COMPONENTS = {
+  velar: VelarTemplate,
+  studio: StudioTemplate,
+} as const;
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -27,11 +33,12 @@ export default async function TemplateDemoPage({
   if (!template) notFound();
 
   const isEmbed = embed === "1";
+  const Component = TEMPLATE_COMPONENTS[id] ?? VelarTemplate;
 
   return (
     <div style={isEmbed ? undefined : { paddingTop: TEMPLATE_DEMO_BAR_HEIGHT }}>
       {!isEmbed && <TemplateDemoBar label={template.label} />}
-      <VelarTemplate
+      <Component
         content={template.demoContent}
         topOffset={isEmbed ? 0 : TEMPLATE_DEMO_BAR_HEIGHT}
       />

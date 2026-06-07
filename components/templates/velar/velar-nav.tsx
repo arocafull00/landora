@@ -26,7 +26,7 @@ export function VelarNav({
   return (
     <>
       <motion.nav
-        className={`fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 before:pointer-events-none before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/30 before:to-transparent md:px-10 md:py-6 lg:px-16${topOffset > 0 ? "" : " top-0"}`}
+        className={`fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 before:pointer-events-none before:absolute before:inset-0 before:from-white/30 before:to-transparent md:px-10 md:py-6 lg:px-16${topOffset > 0 ? "" : " top-0"}`}
         style={{
           color: navColor,
           transition: "color 0.35s ease",

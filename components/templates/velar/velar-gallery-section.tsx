@@ -12,7 +12,7 @@ function buildTickerText(brand: string) {
 export function VelarGallerySection({ content }: { content: LandingContent }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  if (content.gallery.length === 0) return null;
+  if (!content.gallery || content.gallery.length === 0) return null;
 
   const tickerText = buildTickerText(content.brand);
 
@@ -44,7 +44,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
 
       <div className="s3-gallery-content relative z-[1] flex h-full items-center justify-center lg:p-[clamp(24px,4vw,60px)]">
         <div className="gallery-expand-row flex h-[70%] w-full max-w-[1200px] gap-[6px]">
-          {content.gallery.map((item, index) => (
+          {(content.gallery ?? []).map((item, index) => (
             <VelarGalleryItem
               key={item.id}
               item={item}

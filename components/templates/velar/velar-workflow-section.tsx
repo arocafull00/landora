@@ -16,7 +16,7 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function VelarWorkflowSection({ content }: { content: LandingContent }) {
-  if (content.workflow.length === 0) return null;
+  if (!content.workflow || content.workflow.length === 0) return null;
 
   const whatsappLink = getWhatsAppLink(content.contact.phone);
 
@@ -70,7 +70,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
         </div>
 
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
-          {content.workflow.map((step, index) => (
+          {(content.workflow ?? []).map((step, index) => (
             <div
               key={step.id}
               className="text-center"

@@ -17,6 +17,8 @@ import {
   landingStory,
   landingTestimonials,
   landingWorkflow,
+  landingTeam,
+  landingServiceMenu,
 } from "@/db/schema";
 import type {
   LandingPage,
@@ -34,6 +36,8 @@ import type {
   LandingWorkflowStep,
   LandingGalleryItem,
   LandingNavItem,
+  LandingTeamMember,
+  LandingServiceMenuItem,
 } from "@/db/schema";
 
 export type LandingWithSections = LandingPage & {
@@ -51,6 +55,8 @@ export type LandingWithSections = LandingPage & {
   workflow: LandingWorkflowStep[];
   gallery: LandingGalleryItem[];
   nav: LandingNavItem[];
+  team: LandingTeamMember[];
+  serviceMenu: LandingServiceMenuItem[];
 };
 
 function buildWith() {
@@ -69,6 +75,8 @@ function buildWith() {
     workflow: { orderBy: [asc(landingWorkflow.sortOrder)] },
     gallery: { orderBy: [asc(landingGallery.sortOrder)] },
     nav: { orderBy: [asc(landingNav.sortOrder)] },
+    team: { orderBy: [asc(landingTeam.sortOrder)] },
+    serviceMenu: { orderBy: [asc(landingServiceMenu.sortOrder)] },
   };
 }
 

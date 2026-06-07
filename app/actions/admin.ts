@@ -80,7 +80,7 @@ const createLandingSchema = z.object({
     .string()
     .min(1, "El slug es requerido")
     .regex(/^[a-z0-9-]+$/, "El slug solo puede contener letras, números y guiones"),
-  template: z.literal("velar").default("velar"),
+  template: z.enum(["velar", "studio"]).default("velar"),
 });
 
 export async function createLandingForUser(formData: FormData): Promise<ActionResult> {

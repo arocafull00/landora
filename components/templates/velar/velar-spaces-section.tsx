@@ -5,7 +5,7 @@ import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarSpaceCard } from "@/components/templates/velar/velar-space-card";
 
 export function VelarSpacesSection({ content }: { content: LandingContent }) {
-  if (content.spaces.length === 0) return null;
+  if (!content.spaces || content.spaces.length === 0) return null;
 
   return (
     <section
@@ -56,7 +56,7 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {content.spaces.map((space, index) => (
+          {(content.spaces ?? []).map((space, index) => (
             <VelarSpaceCard key={space.id} space={space} index={index} />
           ))}
         </div>

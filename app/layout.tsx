@@ -44,8 +44,12 @@ export default function RootLayout({
       <html
         lang="es"
         className={`${ibmPlexSans.variable} ${inter.variable} ${jetBrainsMono.variable} ${syne.variable} h-full antialiased`}
+        suppressHydrationWarning
       >
-        <body className="min-h-full overflow-hidden bg-surface-bg text-on-background">
+        <body
+          className="min-h-full overflow-hidden bg-surface-bg text-on-background"
+          suppressHydrationWarning
+        >
           <TooltipProvider>
             {children}
             <ToastContainer />

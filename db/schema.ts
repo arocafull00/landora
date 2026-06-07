@@ -24,7 +24,7 @@ export const landingPages = pgTable("landing_pages", {
     .references(() => users.id),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
-  template: text("template").$type<"velar">().notNull().default("velar"),
+  template: text("template").$type<"velar" | "studio">().notNull().default("velar"),
   published: boolean("published").notNull().default(false),
   updatedAt: timestamp("updated_at").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
@@ -184,6 +184,32 @@ export const landingNav = pgTable("landing_nav", {
   href: text("href").notNull().default(""),
 });
 
+export const landingTeam = pgTable("landing_team", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id")
+    .notNull()
+    .references(() => landingPages.id, { onDelete: "cascade" }),
+  sortOrder: integer("sort_order").notNull(),
+  name: text("name").notNull().default(""),
+  role: text("role").notNull().default(""),
+  bio: text("bio").notNull().default(""),
+  image: text("image").notNull().default(""),
+});
+
+export const landingServiceMenu = pgTable("landing_service_menu", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id")
+    .notNull()
+    .references(() => landingPages.id, { onDelete: "cascade" }),
+  sortOrder: integer("sort_order").notNull(),
+  category: text("category").notNull().default(""),
+  name: text("name").notNull().default(""),
+  description: text("description").notNull().default(""),
+  price: text("price").notNull().default(""),
+  duration: text("duration").notNull().default(""),
+  image: text("image").notNull().default(""),
+});
+
 export const assets = pgTable("assets", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id")
@@ -217,6 +243,8 @@ export const landingPagesRelations = relations(landingPages, ({ one, many }) => 
   workflow: many(landingWorkflow),
   gallery: many(landingGallery),
   nav: many(landingNav),
+  team: many(landingTeam),
+  serviceMenu: many(landingServiceMenu),
 }));
 
 export const landingSeoRelations = relations(landingSeo, ({ one }) => ({
@@ -275,6 +303,14 @@ export const landingNavRelations = relations(landingNav, ({ one }) => ({
   landing: one(landingPages, { fields: [landingNav.landingId], references: [landingPages.id] }),
 }));
 
+export const landingTeamRelations = relations(landingTeam, ({ one }) => ({
+  landing: one(landingPages, { fields: [landingTeam.landingId], references: [landingPages.id] }),
+}));
+
+export const landingServiceMenuRelations = relations(landingServiceMenu, ({ one }) => ({
+  landing: one(landingPages, { fields: [landingServiceMenu.landingId], references: [landingPages.id] }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type LandingPage = typeof landingPages.$inferSelect;
@@ -293,5 +329,7 @@ export type LandingService = typeof landingServices.$inferSelect;
 export type LandingWorkflowStep = typeof landingWorkflow.$inferSelect;
 export type LandingGalleryItem = typeof landingGallery.$inferSelect;
 export type LandingNavItem = typeof landingNav.$inferSelect;
+export type LandingTeamMember = typeof landingTeam.$inferSelect;
+export type LandingServiceMenuItem = typeof landingServiceMenu.$inferSelect;
 export type AssetRow = typeof assets.$inferSelect;
 export type NewAsset = typeof assets.$inferInsert;

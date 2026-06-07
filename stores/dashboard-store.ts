@@ -58,6 +58,8 @@ type DashboardState = {
   updateService: (landingId: string, serviceId: string, patch: Partial<ServiceContent>) => void;
   updateWorkflowStep: (landingId: string, stepId: string, patch: Partial<WorkflowStep>) => void;
   updateTestimonial: (landingId: string, testimonialId: string, patch: Partial<TestimonialContent>) => void;
+  updateSection: (landingId: string, section: string, data: unknown) => void;
+  updateSectionItem: (landingId: string, section: string, itemId: string, patch: Record<string, unknown>) => void;
   updatePost: (postId: string, patch: Partial<Post>) => void;
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
@@ -87,19 +89,26 @@ async function patchSection(url: string, body: Record<string, unknown>) {
 async function persistAllSections(id: string, content: LandingContent) {
   const base = `/api/landings/${id}`;
 
-  await Promise.all([
+  const calls = [
     patchSection(`${base}/hero`, content.hero),
-    patchSection(`${base}/story`, content.story),
     patchSection(`${base}/cta`, content.contact),
     patchSection(`${base}/branding`, { brand: content.brand }),
     patchSection(`${base}/stats`, { items: content.stats }),
-    patchSection(`${base}/spaces`, { items: content.spaces }),
-    patchSection(`${base}/services`, { items: content.services }),
-    patchSection(`${base}/workflow`, { items: content.workflow }),
     patchSection(`${base}/testimonials`, { items: content.testimonials }),
-    patchSection(`${base}/gallery`, { items: content.gallery }),
     patchSection(`${base}/nav`, { items: content.nav }),
-  ]);
+  ];
+
+  if (content.story) calls.push(patchSection(`${base}/story`, content.story));
+  if (content.spaces) calls.push(patchSection(`${base}/spaces`, { items: content.spaces }));
+  if (content.services) calls.push(patchSection(`${base}/services`, { items: content.services }));
+  if (content.workflow) calls.push(patchSection(`${base}/workflow`, { items: content.workflow }));
+  if (content.gallery) calls.push(patchSection(`${base}/gallery`, { items: content.gallery }));
+  if (content.team) calls.push(patchSection(`${base}/team`, { items: content.team }));
+  if (content.serviceMenu) calls.push(patchSection(`${base}/service-menu`, { items: content.serviceMenu }));
+  if (content.benefits) calls.push(patchSection(`${base}/benefits`, { items: content.benefits }));
+  if (content.faq) calls.push(patchSection(`${base}/faq`, { items: content.faq }));
+
+  await Promise.all(calls);
 }
 
 export const useDashboardStore = create<DashboardState>()((set, get) => ({
@@ -164,7 +173,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
         landing.id === id
           ? markEdited({
               ...landing,
-              content: { ...landing.content, story: { ...landing.content.story, ...patch } },
+              content: { ...landing.content, story: { statement: "", ...landing.content.story, ...patch } },
             })
           : landing,
       ),
@@ -195,7 +204,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
               ...landing,
               content: {
                 ...landing.content,
-                spaces: landing.content.spaces.map((space) =>
+                spaces: (landing.content.spaces ?? []).map((space) =>
                   space.id === spaceId ? { ...space, ...patch } : space,
                 ),
               },
@@ -212,7 +221,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
               ...landing,
               content: {
                 ...landing.content,
-                services: landing.content.services.map((service) =>
+                services: (landing.content.services ?? []).map((service) =>
                   service.id === serviceId ? { ...service, ...patch } : service,
                 ),
               },
@@ -229,7 +238,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
               ...landing,
               content: {
                 ...landing.content,
-                workflow: landing.content.workflow.map((step) =>
+                workflow: (landing.content.workflow ?? []).map((step) =>
                   step.id === stepId ? { ...step, ...patch } : step,
                 ),
               },
@@ -248,6 +257,35 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
                 ...landing.content,
                 testimonials: landing.content.testimonials.map((testimonial) =>
                   testimonial.id === testimonialId ? { ...testimonial, ...patch } : testimonial,
+                ),
+              },
+            })
+          : landing,
+      ),
+    })),
+
+  updateSection: (landingId, section, data) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: { ...landing.content, [section]: data },
+            })
+          : landing,
+      ),
+    })),
+
+  updateSectionItem: (landingId, section, itemId, patch) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                [section]: ((landing.content as Record<string, unknown>)[section] as Array<Record<string, unknown>>)?.map(
+                  (item) => (item.id === itemId ? { ...item, ...patch } : item),
                 ),
               },
             })

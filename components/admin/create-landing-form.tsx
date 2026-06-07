@@ -4,9 +4,12 @@ import { useTransition, useState } from "react";
 import { toast } from "react-toastify";
 import { ActionButton } from "@/components/ui/primitives";
 import { createLandingForUser } from "@/app/actions/admin";
+import { getAllTemplates } from "@/lib/template-registry";
 
 const inputClass =
   "w-full rounded-md border border-outline-variant bg-surface-bg px-3 py-2 text-body-sm text-on-surface outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary";
+
+const templates = getAllTemplates();
 
 function toSlug(value: string): string {
   return value
@@ -46,7 +49,6 @@ export function CreateLandingForm({
     const formData = new FormData(e.currentTarget);
     formData.set("userId", userId);
     formData.set("slug", slug);
-    formData.set("template", "velar");
 
     startTransition(async () => {
       const result = await createLandingForUser(formData);
@@ -61,7 +63,6 @@ export function CreateLandingForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="hidden" name="template" value="velar" />
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
           <span className="mb-1.5 block font-label text-label-md text-on-surface-variant">
@@ -97,6 +98,22 @@ export function CreateLandingForm({
           </p>
         </label>
       </div>
+      <label className="block">
+        <span className="mb-1.5 block font-label text-label-md text-on-surface-variant">
+          Plantilla
+        </span>
+        <select
+          name="template"
+          defaultValue="velar"
+          className={inputClass}
+        >
+          {templates.map((t) => (
+            <option key={t.id} value={t.id}>
+              {t.label} — {t.description}
+            </option>
+          ))}
+        </select>
+      </label>
       {error && (
         <p className="font-body text-body-sm text-error">{error}</p>
       )}
