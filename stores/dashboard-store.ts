@@ -32,9 +32,8 @@ type DashboardState = {
   activePostId: string;
   activePresentationId: string;
   activeAssetId: string;
-  activeSettingCategory: string;
-  activeSettingPage: string;
   saveStatus: SaveStatus;
+  isAdmin: boolean;
   landings: Landing[];
   posts: Post[];
   presentations: Presentation[];
@@ -47,8 +46,7 @@ type DashboardState = {
   setActivePostId: (id: string) => void;
   setActivePresentationId: (id: string) => void;
   setActiveAssetId: (id: string) => void;
-  setActiveSettingCategory: (category: string) => void;
-  setActiveSettingPage: (page: string) => void;
+  setIsAdmin: (isAdmin: boolean) => void;
   initFromLanding: (landing: Landing) => void;
   updateLandingMeta: (id: string, patch: Partial<Landing>) => void;
   updateHero: (id: string, patch: Partial<HeroContent>) => void;
@@ -112,7 +110,7 @@ async function persistAllSections(id: string, content: LandingContent) {
 }
 
 export const useDashboardStore = create<DashboardState>()((set, get) => ({
-  activeView: "landings",
+  activeView: "editor",
   activeWorkspaceTab: "Structure",
   activeContentGroup: "Pages",
   activeEditorTab: "Hero",
@@ -120,9 +118,8 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
   activePostId: initialPosts[0].id,
   activePresentationId: initialPresentations[0].id,
   activeAssetId: initialAssets[0].id,
-  activeSettingCategory: "General",
-  activeSettingPage: "Project Info",
   saveStatus: "idle",
+  isAdmin: false,
   landings: [],
   posts: initialPosts,
   presentations: initialPresentations,
@@ -133,14 +130,13 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
   setActiveContentGroup: (activeContentGroup) => set({ activeContentGroup }),
   setActiveEditorTab: (activeEditorTab) => set({ activeEditorTab }),
   setActiveLandingId: (activeLandingId) =>
-    set({ activeLandingId, activeView: "landings", activeContentGroup: "Pages" }),
+    set({ activeLandingId, activeView: "editor", activeContentGroup: "Pages" }),
   setActivePostId: (activePostId) =>
     set({ activePostId, activeContentGroup: "Posts" }),
   setActivePresentationId: (activePresentationId) =>
     set({ activePresentationId, activeContentGroup: "Presentations" }),
   setActiveAssetId: (activeAssetId) => set({ activeAssetId }),
-  setActiveSettingCategory: (activeSettingCategory) => set({ activeSettingCategory }),
-  setActiveSettingPage: (activeSettingPage) => set({ activeSettingPage }),
+  setIsAdmin: (isAdmin) => set({ isAdmin }),
 
   initFromLanding: (landing) =>
     set({

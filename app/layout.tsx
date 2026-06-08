@@ -1,6 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, Inter, JetBrains_Mono, Syne } from "next/font/google";
+import { IBM_Plex_Sans, Inter, JetBrains_Mono, Syne, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -29,6 +29,12 @@ const syne = Syne({
   weight: ["400", "700", "800"],
 });
 
+const playfairDisplay = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "700", "800"],
+});
+
 export const metadata: Metadata = {
   title: "Landora",
   description: "Dashboard para gestionar landings multi-tenant.",
@@ -43,7 +49,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="es"
-        className={`${ibmPlexSans.variable} ${inter.variable} ${jetBrainsMono.variable} ${syne.variable} h-full antialiased`}
+        className={`${ibmPlexSans.variable} ${inter.variable} ${jetBrainsMono.variable} ${syne.variable} ${playfairDisplay.variable} h-full antialiased`}
         suppressHydrationWarning
       >
         <body

@@ -24,7 +24,7 @@ export const landingPages = pgTable("landing_pages", {
     .references(() => users.id),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
-  template: text("template").$type<"velar" | "studio">().notNull().default("velar"),
+  template: text("template").$type<"velar" | "studio" | "portfolio" | "ristorante" | "floristeria">().notNull().default("velar"),
   published: boolean("published").notNull().default(false),
   updatedAt: timestamp("updated_at").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),

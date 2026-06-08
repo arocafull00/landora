@@ -42,6 +42,7 @@ async function seedSections(db: Db, landingId: string) {
   }
 
   if (c.gallery.length > 0) {
+    await db.delete(schema.landingGallery).where(eq(schema.landingGallery.landingId, landingId));
     await db.insert(schema.landingGallery).values(
       c.gallery.map((g, i) => ({
         landingId,
@@ -53,6 +54,7 @@ async function seedSections(db: Db, landingId: string) {
   }
 
   if (c.nav.length > 0) {
+    await db.delete(schema.landingNav).where(eq(schema.landingNav.landingId, landingId));
     await db.insert(schema.landingNav).values(
       c.nav.map((n, i) => ({ landingId, sortOrder: i, label: n.label, href: n.href }))
     );

@@ -1,7 +1,7 @@
 import { VELAR_DEFAULT_CONTENT } from "@/lib/default-content";
 import { VELAR_ASSETS } from "@/lib/velar-assets";
 
-export type DashboardView = "landings" | "editor" | "assets" | "settings";
+export type DashboardView = "editor" | "assets";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
 
@@ -31,16 +31,48 @@ export type StudioExtensions = {
   faq: FaqItem[];
 };
 
+export type PortfolioExtensions = {
+  about: { statement: string };
+  gallery: GalleryItem[];
+  benefits: BenefitItem[];
+  serviceMenu: ServiceMenuItem[];
+  faq: FaqItem[];
+};
+
+export type RistoranteExtensions = {
+  about: { statement: string };
+  serviceMenu: ServiceMenuItem[];
+  gallery: GalleryItem[];
+  team: TeamMember[];
+  workflow: WorkflowStep[];
+  faq: FaqItem[];
+};
+
+export type FloristeriaExtensions = {
+  about: { statement: string };
+  gallery: GalleryItem[];
+  serviceMenu: ServiceMenuItem[];
+  team: TeamMember[];
+  benefits: BenefitItem[];
+  faq: FaqItem[];
+};
+
 export type TemplateContentMap = {
   velar: BaseContent & VelarExtensions;
   studio: BaseContent & StudioExtensions;
+  portfolio: BaseContent & PortfolioExtensions;
+  ristorante: BaseContent & RistoranteExtensions;
+  floristeria: BaseContent & FloristeriaExtensions;
 };
 
 export type TemplateId = keyof TemplateContentMap;
 
 export type LandingContent = BaseContent &
   Partial<VelarExtensions> &
-  Partial<StudioExtensions>;
+  Partial<StudioExtensions> &
+  Partial<PortfolioExtensions> &
+  Partial<RistoranteExtensions> &
+  Partial<FloristeriaExtensions>;
 
 export type Landing = {
   id: string;
@@ -225,10 +257,8 @@ export const dashboardViews: Array<{
   label: string;
   icon: IconName;
 }> = [
-  { id: "landings", label: "Landings", icon: "web" },
   { id: "editor", label: "Editor", icon: "document" },
   { id: "assets", label: "Assets", icon: "folder" },
-  { id: "settings", label: "Settings", icon: "settings" },
 ];
 
 export function isDashboardView(value: string): value is DashboardView {
@@ -237,7 +267,7 @@ export function isDashboardView(value: string): value is DashboardView {
 
 export const workspaceTabs = ["Structure", "Presentation", "Vision", "Media"];
 export const contentGroups: ContentGroup[] = ["Pages", "Posts", "Presentations", "Assets"];
-export const editorTabs = ["Hero", "Story", "Spaces", "Services", "Posts", "Presentations"];
+export const editorTabs = ["Hero", "Historia", "Espacios", "Servicios", "Posts", "Presentaciones"];
 
 export const initialLandings: Landing[] = [
   {

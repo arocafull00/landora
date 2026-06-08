@@ -8,6 +8,15 @@ function mapImage(url: string | null | undefined) {
   return remapLegacyTemplateAssetUrl(url);
 }
 
+function uniqueBySortOrder<T extends { sortOrder: number }>(items: T[]) {
+  const seen = new Set<number>();
+  return items.filter((item) => {
+    if (seen.has(item.sortOrder)) return false;
+    seen.add(item.sortOrder);
+    return true;
+  });
+}
+
 export function toLandingContent(row: LandingWithSections): LandingContent {
   return {
     brand: row.branding?.brand ?? "",
@@ -29,12 +38,16 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       countTo: s.countTo ?? undefined,
       suffix: s.suffix,
     })),
-    gallery: (row.gallery ?? []).map((g) => ({
+    gallery: uniqueBySortOrder(row.gallery ?? []).map((g) => ({
       id: g.id,
       image: g.image ? mapImage(g.image) : undefined,
       video: g.video || undefined,
     })),
-    nav: (row.nav ?? []).map((n) => ({ id: n.id, label: n.label, href: n.href })),
+    nav: uniqueBySortOrder(row.nav ?? []).map((n) => ({
+      id: n.id,
+      label: n.label,
+      href: n.href,
+    })),
     spaces: (row.spaces ?? []).map((s) => ({
       id: s.id,
       name: s.name,

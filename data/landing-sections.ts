@@ -194,12 +194,13 @@ export async function replaceLandingGallery(
   items: Pick<LandingGalleryItem, "image" | "video">[]
 ) {
   try {
-    await db.delete(landingGallery).where(eq(landingGallery.landingId, landingId));
-    if (items.length > 0) {
-      await db.insert(landingGallery).values(
+    await db.transaction(async (tx) => {
+      await tx.delete(landingGallery).where(eq(landingGallery.landingId, landingId));
+      if (items.length === 0) return;
+      await tx.insert(landingGallery).values(
         items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
       );
-    }
+    });
   } catch {
     throw new Error("Failed to update gallery");
   }
@@ -210,12 +211,13 @@ export async function replaceLandingNav(
   items: Pick<LandingNavItem, "label" | "href">[]
 ) {
   try {
-    await db.delete(landingNav).where(eq(landingNav.landingId, landingId));
-    if (items.length > 0) {
-      await db.insert(landingNav).values(
+    await db.transaction(async (tx) => {
+      await tx.delete(landingNav).where(eq(landingNav.landingId, landingId));
+      if (items.length === 0) return;
+      await tx.insert(landingNav).values(
         items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
       );
-    }
+    });
   } catch {
     throw new Error("Failed to update nav");
   }

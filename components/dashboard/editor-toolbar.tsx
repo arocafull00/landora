@@ -54,7 +54,7 @@ export function EditorToolbar({
             <DropdownMenuSeparator />
             <DropdownMenuItem disabled>
               <Icon name="add" className="h-4 w-4" />
-              Add page
+              Añadir página
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -67,16 +67,16 @@ export function EditorToolbar({
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-3">
-        <IconButton icon="link" label="Copy page link" />
-        {showComments ? <IconButton icon="help" label="Comments" /> : null}
+        <IconButton icon="link" label="Copiar enlace" />
+        {showComments ? <IconButton icon="help" label="Comentarios" /> : null}
         <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
         <ActionButton onClick={onSave}>
           <Icon name="save" className="h-4 w-4" />
-          Save Draft
+          Guardar
         </ActionButton>
         <ActionButton onClick={onPublish} variant="primary">
           <Icon name="publish" className="h-4 w-4" />
-          Publish
+          Publicar
         </ActionButton>
       </div>
     </div>

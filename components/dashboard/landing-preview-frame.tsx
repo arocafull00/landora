@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
+import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
+import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
 import {
   isPreviewContentMessage,
   PREVIEW_CONTENT_UPDATE,
@@ -13,6 +15,8 @@ import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
   studio: StudioTemplate,
+  portfolio: PortfolioTemplate,
+  ristorante: RistoranteTemplate,
 } as const;
 
 export function LandingPreviewFrame({

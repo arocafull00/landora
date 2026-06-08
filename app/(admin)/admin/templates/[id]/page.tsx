@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { getTemplate, isValidTemplateId } from "@/lib/template-registry";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
+import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
+import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
 import {
   TemplateDemoBar,
   TEMPLATE_DEMO_BAR_HEIGHT,
@@ -11,6 +13,8 @@ import {
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
   studio: StudioTemplate,
+  portfolio: PortfolioTemplate,
+  ristorante: RistoranteTemplate,
 } as const;
 
 export const metadata: Metadata = {

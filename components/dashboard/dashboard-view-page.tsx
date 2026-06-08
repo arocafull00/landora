@@ -6,6 +6,7 @@ import { toLandingView } from "@/lib/landing-mapper";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
 import { DashboardView } from "@/lib/dashboard-data";
+import { isAdmin } from "@/lib/is-admin";
 
 export async function DashboardViewPage({ view }: { view: DashboardView }) {
   const clientId = await getEffectiveClientId();
@@ -14,10 +15,11 @@ export async function DashboardViewPage({ view }: { view: DashboardView }) {
     redirect("/sign-in");
   }
 
-  const [user, dbLanding, impersonating] = await Promise.all([
+  const [user, dbLanding, impersonating, admin] = await Promise.all([
     getUserByInternalId(clientId),
     getLandingPageByUserId(clientId),
     isImpersonating(),
+    isAdmin(),
   ]);
 
   if (!dbLanding) {
@@ -42,6 +44,7 @@ export async function DashboardViewPage({ view }: { view: DashboardView }) {
 
   return (
     <DashboardShell
+      isAdmin={admin}
       impersonating={impersonating}
       initialLanding={landing}
       initialView={view}
