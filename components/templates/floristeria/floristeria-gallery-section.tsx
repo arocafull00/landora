@@ -1,0 +1,52 @@
+"use client";
+
+import type { LandingContent } from "@/lib/dashboard-data";
+import { FloristeriaGalleryItem } from "@/components/templates/floristeria/floristeria-gallery-item";
+
+export function FloristeriaGallerySection({ content }: { content: LandingContent }) {
+  const gallery = content.gallery ?? [];
+  if (gallery.length === 0) return null;
+
+  return (
+    <section id="galeria" className="bg-[#FAFAF7] py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
+        <h2
+          className="mb-12 text-center text-balance text-3xl font-extrabold text-[#1a1a1a] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
+          style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "-0.02em" }}
+          data-aos="fade-up"
+        >
+          Nuestras creaciones
+        </h2>
+      </div>
+
+      <div
+        className="flex gap-4 overflow-x-auto px-6 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden"
+        style={{ scrollSnapType: "x mandatory" }}
+        data-aos="fade-up"
+      >
+        {gallery.map((item, index) => (
+          <FloristeriaGalleryItem
+            item={item}
+            index={index}
+            variant="scroll"
+            key={item.id}
+          />
+        ))}
+      </div>
+
+      <div
+        className="mx-auto hidden max-w-7xl grid-cols-3 gap-4 px-10 md:grid md:auto-rows-[200px] lg:px-16"
+        data-aos="fade-up"
+      >
+        {gallery.map((item, index) => (
+          <FloristeriaGalleryItem
+            item={item}
+            index={index}
+            variant="masonry"
+            key={item.id}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}

@@ -5,6 +5,7 @@ import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
 import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
+import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import {
   TemplateDemoBar,
   TEMPLATE_DEMO_BAR_HEIGHT,
@@ -15,6 +16,7 @@ const TEMPLATE_COMPONENTS = {
   studio: StudioTemplate,
   portfolio: PortfolioTemplate,
   ristorante: RistoranteTemplate,
+  floristeria: FloristeriaTemplate,
 } as const;
 
 export const metadata: Metadata = {

@@ -81,6 +81,21 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     ],
     getComponent: () => import("@/components/templates/ristorante/ristorante-template"),
   },
+  floristeria: {
+    id: "floristeria",
+    label: "Floristería",
+    description:
+      "Landing para floristerías: servicios florales, galería, equipo y pedidos.",
+    demoContent: FLORISTERIA_DEFAULT_CONTENT,
+    editorTabs: [
+      { id: "Hero", label: "Hero" },
+      { id: "Servicios", label: "Servicios" },
+      { id: "Galeria", label: "Galería" },
+      { id: "Equipo", label: "Equipo" },
+      { id: "FAQ", label: "FAQ" },
+    ],
+    getComponent: () => import("@/components/templates/floristeria/floristeria-template"),
+  },
 };
 
 export function getAllTemplates() {

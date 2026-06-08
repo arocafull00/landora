@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudioEditorSection } from "@/components/dashboard/sections/studio-editor-section";
 import { PortfolioEditorSection } from "@/components/dashboard/sections/portfolio-editor-section";
 import { RistoranteEditorSection } from "@/components/dashboard/sections/ristorante-editor-section";
+import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { LockIcon } from "lucide-react";
 
@@ -60,6 +61,10 @@ export function EditorSection() {
 
   if (activeLanding.template === "ristorante") {
     return <RistoranteEditorSection />;
+  }
+
+  if (activeLanding.template === "floristeria") {
+    return <FloristeriaEditorSection />;
   }
 
   const saveActive = () => {
