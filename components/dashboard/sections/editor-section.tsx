@@ -56,6 +56,16 @@ export function EditorSection() {
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
 
+  const TAB_SECTION_IDS: Record<string, string> = {
+    Hero: "hero",
+    Historia: "story",
+    Galería: "listings",
+    Espacios: "residences",
+    Servicios: "servicios",
+    Proceso: "proceso",
+    Testimonios: "testimonios",
+  };
+
   return (
     <EditorLayout
       activeLanding={activeLanding}
@@ -63,6 +73,7 @@ export function EditorSection() {
       onPublish={publishActive}
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
+      scrollTarget={TAB_SECTION_IDS[activeEditorTab]}
       showComments
       tabs={
         <div className="border-b border-outline-variant bg-surface-container-lowest">

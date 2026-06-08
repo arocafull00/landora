@@ -14,6 +14,7 @@ export function EditorLayout({
   onPublish,
   onSave,
   onSelectLanding,
+  scrollTarget,
   showComments = false,
   tabs,
 }: {
@@ -23,6 +24,7 @@ export function EditorLayout({
   onPublish: () => void;
   onSave: () => void;
   onSelectLanding: (id: string) => void;
+  scrollTarget?: string;
   showComments?: boolean;
   tabs: ReactNode;
 }) {
@@ -51,6 +53,7 @@ export function EditorLayout({
           landingId={activeLanding.id}
           onDeviceChange={setDevice}
           onFullscreen={() => setIsFullscreen(true)}
+          scrollTarget={scrollTarget}
           template={activeLanding.template}
         />
       </div>

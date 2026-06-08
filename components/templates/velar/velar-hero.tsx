@@ -20,6 +20,7 @@ export function VelarHero({
     return (
       <section
         ref={heroRef}
+        id="hero"
         className="relative overflow-visible"
         style={{ minHeight: "100vh" }}
       >
@@ -34,6 +35,7 @@ export function VelarHero({
   return (
     <section
       ref={heroRef}
+      id="hero"
       className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-visible lg:block"
     >
       <motion.div

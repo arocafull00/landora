@@ -7,7 +7,7 @@ import {
   type PreviewDevice,
 } from "@/components/dashboard/preview-toolbar";
 import { MOBILE_WIDTH } from "@/components/dashboard/preview-utils";
-import { postPreviewContent } from "@/lib/preview-messaging";
+import { postPreviewContent, postPreviewScrollTo } from "@/lib/preview-messaging";
 import { cn } from "@/lib/utils";
 
 export function IframeLandingPreview({
@@ -17,6 +17,7 @@ export function IframeLandingPreview({
   landingId,
   onDeviceChange,
   onFullscreen,
+  scrollTarget,
   showToolbar = true,
   template = "velar",
 }: {
@@ -26,6 +27,7 @@ export function IframeLandingPreview({
   landingId: string;
   onDeviceChange: (device: PreviewDevice) => void;
   onFullscreen?: () => void;
+  scrollTarget?: string;
   showToolbar?: boolean;
   template?: TemplateId;
 }) {
@@ -38,6 +40,11 @@ export function IframeLandingPreview({
   useEffect(() => {
     sendContent();
   }, [sendContent]);
+
+  useEffect(() => {
+    if (!scrollTarget) return;
+    postPreviewScrollTo(iframeRef.current?.contentWindow, scrollTarget);
+  }, [scrollTarget]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {

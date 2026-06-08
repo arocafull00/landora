@@ -1,11 +1,17 @@
 import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 
 export const PREVIEW_CONTENT_UPDATE = "landora:preview-content-update";
+export const PREVIEW_SCROLL_TO = "landora:preview-scroll-to";
 
 export type PreviewContentMessage = {
   type: typeof PREVIEW_CONTENT_UPDATE;
   content: LandingContent;
   template: TemplateId;
+};
+
+export type PreviewScrollToMessage = {
+  type: typeof PREVIEW_SCROLL_TO;
+  sectionId: string;
 };
 
 export function isPreviewContentMessage(data: unknown): data is PreviewContentMessage {
@@ -17,6 +23,14 @@ export function isPreviewContentMessage(data: unknown): data is PreviewContentMe
   return true;
 }
 
+export function isPreviewScrollToMessage(data: unknown): data is PreviewScrollToMessage {
+  if (!data || typeof data !== "object") return false;
+  const message = data as PreviewScrollToMessage;
+  if (message.type !== PREVIEW_SCROLL_TO) return false;
+  if (typeof message.sectionId !== "string") return false;
+  return true;
+}
+
 export function postPreviewContent(
   target: Window | null | undefined,
   payload: Omit<PreviewContentMessage, "type">
@@ -24,6 +38,17 @@ export function postPreviewContent(
   if (!target) return;
   target.postMessage(
     { type: PREVIEW_CONTENT_UPDATE, ...payload },
+    window.location.origin
+  );
+}
+
+export function postPreviewScrollTo(
+  target: Window | null | undefined,
+  sectionId: string
+) {
+  if (!target) return;
+  target.postMessage(
+    { type: PREVIEW_SCROLL_TO, sectionId },
     window.location.origin
   );
 }

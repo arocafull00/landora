@@ -9,6 +9,7 @@ import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import {
   isPreviewContentMessage,
+  isPreviewScrollToMessage,
   PREVIEW_CONTENT_UPDATE,
 } from "@/lib/preview-messaging";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
@@ -43,6 +44,13 @@ export function LandingPreviewFrame({
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return;
+
+      if (isPreviewScrollToMessage(event.data)) {
+        const el = document.getElementById(event.data.sectionId);
+        el?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
       if (!isPreviewContentMessage(event.data)) return;
       setContent(event.data.content);
       setActiveTemplate(event.data.template);

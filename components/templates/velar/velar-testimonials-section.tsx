@@ -13,7 +13,7 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
   if (content.testimonials.length === 0) return null;
 
   return (
-    <section className="relative z-[25] bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16">
+    <section id="testimonios" className="relative z-[25] bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
           <p
