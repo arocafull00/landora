@@ -4,10 +4,13 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function FloristeriaFaqSection({ content }: { content: LandingContent }) {
   const faq = content.faq ?? [];
   if (faq.length === 0) return null;
+
+  const heading = getSectionHeading(content, "faq", SECTION_HEADING_DEFAULTS.floristeria.faq);
 
   return (
     <section id="faq" className="bg-[#FAFAF7] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -17,14 +20,16 @@ export function FloristeriaFaqSection({ content }: { content: LandingContent }) 
             className="mb-6 text-balance text-3xl font-extrabold text-[#1a1a1a] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
             style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "-0.02em" }}
           >
-            Preguntas frecuentes
+            {heading.title}
           </h2>
-          <p
-            className="max-w-sm text-pretty text-base leading-relaxed text-[#1a1a1a]/60"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Todo lo que necesitas saber sobre nuestros servicios florales.
-          </p>
+          {heading.subtitle ? (
+            <p
+              className="max-w-sm text-pretty text-base leading-relaxed text-[#1a1a1a]/60"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heading.subtitle}
+            </p>
+          ) : null}
         </div>
 
         <div className="space-y-0" data-aos="fade-left" data-aos-delay="100">

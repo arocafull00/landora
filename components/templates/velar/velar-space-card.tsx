@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { AssetImage } from "@/components/ui/asset-image";
 import type { SpaceContent } from "@/lib/dashboard-data";
 
 export function VelarSpaceCard({
@@ -16,12 +16,12 @@ export function VelarSpaceCard({
       data-aos="fade-up"
       data-aos-delay={index * 100}
     >
-      <Image
-        src={space.image}
+      <AssetImage
         alt={space.name}
-        fill
         className="object-cover transition-transform duration-500 group-hover:scale-105"
+        fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 400px"
+        src={space.image}
       />
       <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/50" />
       <div className="absolute inset-0 flex flex-col justify-end p-8 text-white opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">

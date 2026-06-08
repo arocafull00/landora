@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { HeroBackground } from "@/components/ui/hero-background";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -17,10 +18,7 @@ export function PortfolioHero({
       ref={heroRef}
       className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-[#0a0a0a]"
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-30"
-        style={{ backgroundImage: `url(${content.hero.image})` }}
-      />
+      <HeroBackground className="opacity-30" src={content.hero.image} template="portfolio" />
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-transparent to-[#0a0a0a]" />
 
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 text-center">

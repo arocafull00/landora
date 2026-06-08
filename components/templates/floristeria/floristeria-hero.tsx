@@ -2,6 +2,8 @@
 
 import { motion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { HeroBackground } from "@/components/ui/hero-background";
+import { isBackgroundPreset } from "@/lib/background-assets";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -17,16 +19,20 @@ export function FloristeriaHero({
       ref={heroRef}
       className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden"
     >
-      <video
-        autoPlay
-        className="absolute inset-0 h-full w-full object-cover"
-        loop
-        muted
-        playsInline
-        poster={content.hero.image}
-      >
-        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260422_191657_800d4e1f-7ab3-41af-90b6-9bd3039eb294.mp4" type="video/mp4" />
-      </video>
+      {isBackgroundPreset(content.hero.image) ? (
+        <HeroBackground src={content.hero.image} template="floristeria" />
+      ) : (
+        <video
+          autoPlay
+          className="absolute inset-0 h-full w-full object-cover"
+          loop
+          muted
+          playsInline
+          poster={content.hero.image}
+        >
+          <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260422_191657_800d4e1f-7ab3-41af-90b6-9bd3039eb294.mp4" type="video/mp4" />
+        </video>
+      )}
       <div className="absolute inset-0 bg-black/45" />
 
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 text-center">

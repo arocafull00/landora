@@ -15,8 +15,14 @@ export async function PATCH(
 
     const body = await req.json();
 
+    const sectionHeadings =
+      body.sectionHeadings && typeof body.sectionHeadings === "object" && !Array.isArray(body.sectionHeadings)
+        ? (body.sectionHeadings as Record<string, { title: string; subtitle: string }>)
+        : undefined;
+
     await upsertLandingBranding(id, {
       brand: typeof body.brand === "string" ? body.brand : "",
+      sectionHeadings,
     });
 
     return Response.json({ ok: true });

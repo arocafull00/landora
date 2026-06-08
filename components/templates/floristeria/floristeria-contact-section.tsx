@@ -3,6 +3,7 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { FloristeriaButton } from "@/components/templates/floristeria/floristeria-button";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -11,6 +12,11 @@ function getWhatsAppLink(phone: string) {
 
 export function FloristeriaContactSection({ content }: { content: LandingContent }) {
   const whatsappLink = getWhatsAppLink(content.contact.phone);
+  const heading = getSectionHeading(
+    content,
+    "contacto",
+    SECTION_HEADING_DEFAULTS.floristeria.contacto,
+  );
 
   return (
     <footer id="contacto" className="bg-[#1a1a1a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -20,14 +26,16 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
             className="mb-6 text-balance text-4xl font-extrabold text-white sm:text-5xl md:text-[clamp(40px,6vw,72px)]"
             style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "-0.03em" }}
           >
-            Haz tu pedido
+            {heading.title}
           </h2>
-          <p
-            className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-white/60"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Cuéntanos qué necesitas y crearemos el arreglo floral perfecto para ti.
-          </p>
+          {heading.subtitle ? (
+            <p
+              className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-white/60"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heading.subtitle}
+            </p>
+          ) : null}
           <FloristeriaButton
             href={whatsappLink}
             variant="primary"

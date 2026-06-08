@@ -42,9 +42,9 @@ export function PortfolioTemplate({
 
       <PortfolioAbout content={content} />
 
-      <PortfolioProjectsSection content={content} />
-
       <PortfolioWorkHistorySection content={content} />
+
+      <PortfolioProjectsSection content={content} />
 
       <PortfolioSkillsSection content={content} />
 

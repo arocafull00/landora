@@ -3,6 +3,7 @@
 import { CalendarCheck, Tent, Sofa } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 const WORKFLOW_ICONS = [
   <CalendarCheck key="calendario" className="h-16 w-16" stroke="#e8e4df" />,
@@ -18,6 +19,7 @@ function getWhatsAppLink(phone: string) {
 export function VelarWorkflowSection({ content }: { content: LandingContent }) {
   if (!content.workflow || content.workflow.length === 0) return null;
 
+  const heading = getSectionHeading(content, "proceso", SECTION_HEADING_DEFAULTS.velar.proceso);
   const whatsappLink = getWhatsAppLink(content.contact.phone);
 
   return (
@@ -40,21 +42,18 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Nuestra forma de ayudarte a celebrar
+                {heading.title}
               </h2>
             </div>
             <div className="text-center lg:text-left">
-              <p
-                className="mb-6 text-lg leading-relaxed text-[#e8e4df]/80"
-                style={{ fontFamily: "var(--font-body)" }}
-              >
-                Hacemos que la organización de tu evento sea sencilla y
-                elegante.{" "}
-                <strong className="font-semibold text-[#e8e4df]">
-                  Nuestro equipo estará contigo en cada paso para asegurarse de
-                  que todo salga perfecto.
-                </strong>
-              </p>
+              {heading.subtitle ? (
+                <p
+                  className="mb-6 text-lg leading-relaxed text-[#e8e4df]/80"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  {heading.subtitle}
+                </p>
+              ) : null}
               <div className="flex justify-center lg:justify-start">
                 <VelarButton
                   href={whatsappLink}

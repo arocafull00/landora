@@ -3,9 +3,13 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Panel } from "@/components/ui/primitives";
 import { ImageField } from "@/components/dashboard/image-field";
+import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getTemplate } from "@/lib/template-registry";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
+import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
+import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
+import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function FloristeriaEditorSection() {
   const {
@@ -93,6 +97,7 @@ export function FloristeriaEditorSection() {
 
           {activeEditorTab === "Hero" ? (
             <Panel className="space-y-5 p-unit-lg">
+              <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle title="Hero" description="Edita el bloque principal de la floristería." />
               <TextField
                 label="Eyebrow"
@@ -112,6 +117,8 @@ export function FloristeriaEditorSection() {
               <ImageField
                 label="Hero image"
                 onChange={(value) => updateHero(activeLanding.id, { image: value })}
+                presets={BACKGROUND_IMAGE_OPTIONS}
+                templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
               />
               <TextArea
@@ -126,6 +133,11 @@ export function FloristeriaEditorSection() {
           {activeEditorTab === "Servicios" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Servicios" description="Edita el catálogo de arreglos y servicios." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="servicios"
+                fallback={SECTION_HEADING_DEFAULTS.floristeria.servicios}
+              />
               {serviceMenu.map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <TextField
@@ -164,6 +176,11 @@ export function FloristeriaEditorSection() {
           {activeEditorTab === "Galeria" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Galería" description="Edita las imágenes de la galería." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="galeria"
+                fallback={SECTION_HEADING_DEFAULTS.floristeria.galeria}
+              />
               {gallery.map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <ImageField
@@ -181,6 +198,11 @@ export function FloristeriaEditorSection() {
           {activeEditorTab === "Equipo" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Equipo" description="Edita las floristas del equipo." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="equipo"
+                fallback={SECTION_HEADING_DEFAULTS.floristeria.equipo}
+              />
               {team.map((member) => (
                 <Panel className="space-y-3 p-3" key={member.id}>
                   <TextField
@@ -219,6 +241,11 @@ export function FloristeriaEditorSection() {
           {activeEditorTab === "FAQ" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="FAQ" description="Edita las preguntas frecuentes." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="faq"
+                fallback={SECTION_HEADING_DEFAULTS.floristeria.faq}
+              />
               {faq.map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <TextField

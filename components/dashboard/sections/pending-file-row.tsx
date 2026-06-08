@@ -4,6 +4,7 @@ export type PendingFile = {
   key: string;
   name: string;
   status: "uploading" | "done" | "error";
+  error?: string;
 };
 
 export function PendingFileRow({ file }: { file: PendingFile }) {
@@ -24,7 +25,11 @@ export function PendingFileRow({ file }: { file: PendingFile }) {
         </span>
       </div>
       <div className="col-span-3 hidden truncate text-body-sm text-on-surface-variant md:block">
-        {file.status === "uploading" ? "Subiendo…" : file.status === "done" ? "Listo" : "Error"}
+        {file.status === "uploading"
+          ? "Subiendo…"
+          : file.status === "done"
+            ? "Listo"
+            : file.error ?? "Error"}
       </div>
       <div className="col-span-5 text-right text-body-sm text-on-surface-variant md:col-span-3">
         —

@@ -2,11 +2,17 @@
 
 import { Clock } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function StudioServicesSection({ content }: { content: LandingContent }) {
   const items = content.serviceMenu ?? [];
   if (items.length === 0) return null;
 
+  const heading = getSectionHeading(
+    content,
+    "servicios",
+    SECTION_HEADING_DEFAULTS.studio.servicios,
+  );
   const categories = [...new Set(items.map((s) => s.category).filter(Boolean))];
 
   return (
@@ -17,7 +23,7 @@ export function StudioServicesSection({ content }: { content: LandingContent }) 
             className="text-balance text-3xl font-extrabold text-[#1a1a1a] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
-            Carta de servicios
+            {heading.title}
           </h2>
         </div>
 

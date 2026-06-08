@@ -3,9 +3,13 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Panel } from "@/components/ui/primitives";
 import { ImageField } from "@/components/dashboard/image-field";
+import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getTemplate } from "@/lib/template-registry";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
+import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
+import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
+import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function PortfolioEditorSection() {
   const {
@@ -91,6 +95,7 @@ export function PortfolioEditorSection() {
 
           {activeEditorTab === "Hero" ? (
             <Panel className="space-y-5 p-unit-lg">
+              <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle title="Hero" description="Edita el bloque principal del portfolio." />
               <TextField
                 label="Eyebrow"
@@ -110,6 +115,8 @@ export function PortfolioEditorSection() {
               <ImageField
                 label="Hero image"
                 onChange={(value) => updateHero(activeLanding.id, { image: value })}
+                presets={BACKGROUND_IMAGE_OPTIONS}
+                templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
               />
             </Panel>
@@ -118,6 +125,11 @@ export function PortfolioEditorSection() {
           {activeEditorTab === "Proyectos" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Proyectos" description="Edita las imágenes de la galería de proyectos." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="proyectos"
+                fallback={SECTION_HEADING_DEFAULTS.portfolio.proyectos}
+              />
               {(activeLanding.content.gallery ?? []).map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <ImageField
@@ -137,6 +149,11 @@ export function PortfolioEditorSection() {
               <SectionTitle
                 title="Experiencia laboral"
                 description="Edita tu historial profesional."
+              />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="experiencia"
+                fallback={SECTION_HEADING_DEFAULTS.portfolio.experiencia}
               />
               {workHistory.map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
@@ -218,6 +235,11 @@ export function PortfolioEditorSection() {
           {activeEditorTab === "Servicios" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Servicios" description="Edita los servicios ofrecidos." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="servicios"
+                fallback={SECTION_HEADING_DEFAULTS.portfolio.servicios}
+              />
               {serviceMenu.map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <TextField
@@ -256,6 +278,11 @@ export function PortfolioEditorSection() {
           {activeEditorTab === "FAQ" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="FAQ" description="Edita las preguntas frecuentes." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="faq"
+                fallback={SECTION_HEADING_DEFAULTS.portfolio.faq}
+              />
               {faq.map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <TextField

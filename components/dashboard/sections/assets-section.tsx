@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState, useEffect, useCallback } from "react";
+import { AssetImage } from "@/components/ui/asset-image";
 import type { AssetRow } from "@/db/schema";
+import { uploadAsset } from "@/lib/upload-asset";
 import { ActionButton, IconButton } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import { PendingFileRow, type PendingFile } from "./pending-file-row";
@@ -48,22 +49,18 @@ export function AssetsSection() {
     const results = await Promise.allSettled(
       files.map(async (file, i) => {
         const key = pending[i].key;
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("name", file.name);
         try {
-          const res = await fetch("/api/assets", { method: "POST", body: formData });
-          if (!res.ok) throw new Error("Upload failed");
-          const row: AssetRow = await res.json();
+          const row = await uploadAsset(file, file.name.replace(/\.[^/.]+$/, ""));
           setPendingFiles((prev) =>
             prev.map((p) => (p.key === key ? { ...p, status: "done" } : p))
           );
           return row;
-        } catch {
+        } catch (err) {
+          const message = err instanceof Error ? err.message : "Upload failed";
           setPendingFiles((prev) =>
-            prev.map((p) => (p.key === key ? { ...p, status: "error" } : p))
+            prev.map((p) => (p.key === key ? { ...p, status: "error", error: message } : p))
           );
-          throw new Error("Upload failed");
+          throw new Error(message);
         }
       })
     );
@@ -205,12 +202,13 @@ export function AssetsSection() {
           <div className="flex-1 overflow-y-auto">
             <div className="border-b border-outline-variant/50 bg-surface-bg/50 p-unit-md">
               <div className="relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg border border-outline-variant bg-surface-container">
-                <Image
+                <AssetImage
                   alt={active.name}
                   className="object-contain"
                   fill
-                  src={active.url}
+                  mimeType={active.mimeType}
                   sizes="380px"
+                  src={active.url}
                 />
               </div>
             </div>

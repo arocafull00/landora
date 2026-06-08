@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { AssetImage } from "@/components/ui/asset-image";
 import type { ServiceContent } from "@/lib/dashboard-data";
 
 export function VelarServicePanel({
@@ -12,14 +12,14 @@ export function VelarServicePanel({
 }) {
   return (
     <div className="group relative h-[400px] overflow-hidden md:h-[500px]">
-      <Image
-        src={service.image}
+      <AssetImage
         alt={service.title}
-        fill
-        quality={95}
-        priority={priority}
         className="object-cover transition-transform duration-700 group-hover:scale-105"
+        fill
+        priority={priority}
+        quality={95}
         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 20vw"
+        src={service.image}
       />
       <div className="absolute inset-0 bg-black/35 transition-colors group-hover:bg-black/45" />
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 text-center text-white">

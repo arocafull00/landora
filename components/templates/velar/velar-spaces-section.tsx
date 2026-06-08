@@ -3,9 +3,16 @@
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarSpaceCard } from "@/components/templates/velar/velar-space-card";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function VelarSpacesSection({ content }: { content: LandingContent }) {
   if (!content.spaces || content.spaces.length === 0) return null;
+
+  const heading = getSectionHeading(
+    content,
+    "residences",
+    SECTION_HEADING_DEFAULTS.velar.residences,
+  );
 
   return (
     <section
@@ -30,22 +37,18 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Nuestros Jardines, el escenario perfecto para tus eventos
+                {heading.title}
               </h2>
             </div>
             <div className="text-center lg:text-left">
-              <p
-                className="mb-6 text-lg leading-relaxed text-[#171717]/80"
-                style={{ fontFamily: "var(--font-body)" }}
-              >
-                En {content.brand.replace(".", "")} ofrecemos tres espacios exclusivos en Valencia
-                y área metropolitana, cada uno con un estilo único para bodas,
-                comuniones, celebraciones familiares y eventos de empresa.{" "}
-                <strong className="font-semibold text-[#171717]">
-                  Disfruta de espacios especiales para hacer de tus
-                  celebraciones algo inolvidable.
-                </strong>
-              </p>
+              {heading.subtitle ? (
+                <p
+                  className="mb-6 text-lg leading-relaxed text-[#171717]/80"
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  {heading.subtitle}
+                </p>
+              ) : null}
               <div className="flex justify-center lg:justify-start">
                 <VelarButton href="#residences" variant="secondary" size="sm" className="uppercase">
                   DESCUBRE NUESTROS ESPACIOS

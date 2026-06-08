@@ -8,9 +8,16 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarGoogleReview } from "@/components/templates/velar/velar-google-review";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function VelarTestimonialsSection({ content }: { content: LandingContent }) {
   if (content.testimonials.length === 0) return null;
+
+  const heading = getSectionHeading(
+    content,
+    "testimonios",
+    SECTION_HEADING_DEFAULTS.velar.testimonios,
+  );
 
   return (
     <section id="testimonios" className="relative z-[25] bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16">
@@ -30,7 +37,7 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
               letterSpacing: "-0.02em",
             }}
           >
-            Lo que nuestros clientes dicen de nosotros
+            {heading.title}
           </h2>
           <div className="mb-4 flex items-center justify-center gap-4">
             <span

@@ -2,10 +2,17 @@
 
 import type { LandingContent } from "@/lib/dashboard-data";
 import { FloristeriaGalleryItem } from "@/components/templates/floristeria/floristeria-gallery-item";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function FloristeriaGallerySection({ content }: { content: LandingContent }) {
   const gallery = content.gallery ?? [];
   if (gallery.length === 0) return null;
+
+  const heading = getSectionHeading(
+    content,
+    "galeria",
+    SECTION_HEADING_DEFAULTS.floristeria.galeria,
+  );
 
   return (
     <section id="galeria" className="bg-[#FAFAF7] py-16 md:py-24">
@@ -15,7 +22,7 @@ export function FloristeriaGallerySection({ content }: { content: LandingContent
           style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
         >
-          Nuestras creaciones
+          {heading.title}
         </h2>
       </div>
 

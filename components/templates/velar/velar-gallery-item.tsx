@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { AssetImage } from "@/components/ui/asset-image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 export function VelarGalleryItem({
@@ -26,12 +26,12 @@ export function VelarGalleryItem({
       onMouseLeave={onLeave}
     >
       {item.image ? (
-        <Image
-          src={item.image}
+        <AssetImage
           alt=""
-          fill
           className="object-cover"
+          fill
           sizes="(max-width: 700px) 50vw, (max-width: 1200px) 70vw, 800px"
+          src={item.image}
         />
       ) : item.video ? (
         <video

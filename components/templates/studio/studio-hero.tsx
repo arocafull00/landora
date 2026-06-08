@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { HeroBackground } from "@/components/ui/hero-background";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -17,10 +18,7 @@ export function StudioHero({
       ref={heroRef}
       className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden"
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${content.hero.image})` }}
-      />
+      <HeroBackground src={content.hero.image} template="studio" />
       <div className="absolute inset-0 bg-black/40" />
 
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 text-center">

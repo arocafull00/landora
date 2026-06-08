@@ -6,6 +6,7 @@ import {
   uuid,
   integer,
   real,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -47,6 +48,10 @@ export const landingBranding = pgTable("landing_branding", {
     .unique()
     .references(() => landingPages.id, { onDelete: "cascade" }),
   brand: text("brand").notNull().default(""),
+  sectionHeadings: jsonb("section_headings")
+    .$type<Record<string, { title: string; subtitle: string }>>()
+    .notNull()
+    .default({}),
 });
 
 export const landingHero = pgTable("landing_hero", {

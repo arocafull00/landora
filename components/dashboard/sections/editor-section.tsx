@@ -3,12 +3,16 @@
 import { editorTabs } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
+import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudioEditorSection } from "@/components/dashboard/sections/studio-editor-section";
 import { PortfolioEditorSection } from "@/components/dashboard/sections/portfolio-editor-section";
 import { RistoranteEditorSection } from "@/components/dashboard/sections/ristorante-editor-section";
 import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
+import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
+import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
+import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { LockIcon } from "lucide-react";
 
 export function EditorSection() {
@@ -134,6 +138,7 @@ export function EditorSection() {
 
           {activeEditorTab === "Hero" ? (
             <section className="space-y-5 py-unit-lg">
+              <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle
                 description="El bloque principal de la landing."
                 title="Portada"
@@ -163,6 +168,8 @@ export function EditorSection() {
               <ImageField
                 label="Imagen de portada"
                 onChange={(value) => updateHero(activeLanding.id, { image: value })}
+                presets={BACKGROUND_IMAGE_OPTIONS}
+                templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
               />
             </section>
@@ -249,6 +256,11 @@ export function EditorSection() {
                 description="Los espacios mostrados en la landing."
                 title="Espacios"
               />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="residences"
+                fallback={SECTION_HEADING_DEFAULTS.velar.residences}
+              />
               <div className="space-y-6">
                 {(activeLanding.content.spaces ?? []).map((space) => (
                   <div
@@ -289,6 +301,11 @@ export function EditorSection() {
               <SectionTitle
                 description="Servicios y mensajes operativos."
                 title="Servicios"
+              />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="servicios"
+                fallback={SECTION_HEADING_DEFAULTS.velar.servicios}
               />
               <div className="space-y-6">
                 {(activeLanding.content.services ?? []).map((service) => (
@@ -344,6 +361,11 @@ export function EditorSection() {
                 description="Los pasos del proceso mostrados en la landing."
                 title="Proceso"
               />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="proceso"
+                fallback={SECTION_HEADING_DEFAULTS.velar.proceso}
+              />
               <div className="space-y-4">
                 {(activeLanding.content.workflow ?? []).map((step) => (
                   <div
@@ -390,6 +412,11 @@ export function EditorSection() {
               <SectionTitle
                 description="Las reseñas mostradas en la landing."
                 title="Testimonios"
+              />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="testimonios"
+                fallback={SECTION_HEADING_DEFAULTS.velar.testimonios}
               />
               <div className="space-y-6">
                 {activeLanding.content.testimonials.map((item) => (

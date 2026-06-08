@@ -2,10 +2,13 @@
 
 import type { LandingContent } from "@/lib/dashboard-data";
 import { RistoranteChefCard } from "@/components/templates/ristorante/ristorante-chef-card";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function RistoranteChefSection({ content }: { content: LandingContent }) {
   const team = content.team ?? [];
   if (team.length === 0) return null;
+
+  const heading = getSectionHeading(content, "equipo", SECTION_HEADING_DEFAULTS.ristorante.equipo);
 
   return (
     <section id="equipo" className="bg-white px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -15,7 +18,7 @@ export function RistoranteChefSection({ content }: { content: LandingContent }) 
           style={{ fontFamily: "var(--font-playfair)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
         >
-          Nuestro equipo
+          {heading.title}
         </h2>
 
         <div

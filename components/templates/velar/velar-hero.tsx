@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { HeroBackground } from "@/components/ui/hero-background";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -24,10 +25,7 @@ export function VelarHero({
         className="relative overflow-visible"
         style={{ minHeight: "100vh" }}
       >
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${content.hero.image})` }}
-        />
+        <HeroBackground src={content.hero.image} template="velar" />
       </section>
     );
   }
@@ -39,12 +37,13 @@ export function VelarHero({
       className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-visible lg:block"
     >
       <motion.div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat max-lg:bg-[center_75%]"
-        style={{ backgroundImage: `url(${content.hero.image})` }}
+        className="absolute inset-0"
         initial={reduce ? false : { scale: 1.06, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.2, ease: easeOut }}
-      />
+      >
+        <HeroBackground src={content.hero.image} template="velar" />
+      </motion.div>
 
       <div className="relative z-10 flex w-full flex-col items-start justify-center lg:block lg:pt-[calc(28vh-50px)]">
         <motion.div

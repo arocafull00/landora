@@ -1,11 +1,13 @@
 "use client";
 
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function RistoranteMenuSection({ content }: { content: LandingContent }) {
   const items = content.serviceMenu ?? [];
   if (items.length === 0) return null;
 
+  const heading = getSectionHeading(content, "carta", SECTION_HEADING_DEFAULTS.ristorante.carta);
   const categories = [...new Set(items.map((s) => s.category).filter(Boolean))];
 
   return (
@@ -16,14 +18,16 @@ export function RistoranteMenuSection({ content }: { content: LandingContent }) 
             className="text-balance text-3xl font-extrabold text-[#1C1917] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
             style={{ fontFamily: "var(--font-playfair)", letterSpacing: "-0.02em" }}
           >
-            Nuestra carta
+            {heading.title}
           </h2>
-          <p
-            className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[#1C1917]/60"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Platos elaborados con ingredientes frescos importados de Italia
-          </p>
+          {heading.subtitle ? (
+            <p
+              className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[#1C1917]/60"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heading.subtitle}
+            </p>
+          ) : null}
         </div>
 
         {categories.length > 0 ? (

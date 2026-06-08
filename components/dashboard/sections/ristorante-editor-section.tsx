@@ -3,9 +3,13 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { Panel } from "@/components/ui/primitives";
 import { ImageField } from "@/components/dashboard/image-field";
+import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getTemplate } from "@/lib/template-registry";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
+import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
+import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
+import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function RistoranteEditorSection() {
   const {
@@ -92,6 +96,7 @@ export function RistoranteEditorSection() {
 
           {activeEditorTab === "Hero" ? (
             <Panel className="space-y-5 p-unit-lg">
+              <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle title="Hero" description="Edita el bloque principal del restaurante." />
               <TextField
                 label="Eyebrow"
@@ -111,6 +116,8 @@ export function RistoranteEditorSection() {
               <ImageField
                 label="Hero image"
                 onChange={(value) => updateHero(activeLanding.id, { image: value })}
+                presets={BACKGROUND_IMAGE_OPTIONS}
+                templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
               />
             </Panel>
@@ -119,6 +126,11 @@ export function RistoranteEditorSection() {
           {activeEditorTab === "Carta" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Carta" description="Edita la carta con categorías y precios." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="carta"
+                fallback={SECTION_HEADING_DEFAULTS.ristorante.carta}
+              />
               {serviceMenu.map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <TextField
@@ -157,6 +169,11 @@ export function RistoranteEditorSection() {
           {activeEditorTab === "Galeria" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Galería" description="Edita las imágenes de la galería." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="galeria"
+                fallback={SECTION_HEADING_DEFAULTS.ristorante.galeria}
+              />
               {(activeLanding.content.gallery ?? []).map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <ImageField
@@ -174,6 +191,11 @@ export function RistoranteEditorSection() {
           {activeEditorTab === "Equipo" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Equipo" description="Edita los miembros del equipo." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="equipo"
+                fallback={SECTION_HEADING_DEFAULTS.ristorante.equipo}
+              />
               {team.map((member) => (
                 <Panel className="space-y-3 p-3" key={member.id}>
                   <TextField
@@ -212,6 +234,11 @@ export function RistoranteEditorSection() {
           {activeEditorTab === "Horarios" ? (
             <Panel className="space-y-5 p-unit-lg">
               <SectionTitle title="Horarios" description="Edita los horarios de apertura." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="horarios"
+                fallback={SECTION_HEADING_DEFAULTS.ristorante.horarios}
+              />
               {workflow.map((item) => (
                 <Panel className="space-y-3 p-3" key={item.id}>
                   <TextField

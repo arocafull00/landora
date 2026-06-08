@@ -4,6 +4,7 @@ import { CalendarCheck, ArrowRight } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarServicePanel } from "@/components/templates/velar/velar-service-panel";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -13,6 +14,11 @@ function getWhatsAppLink(phone: string) {
 export function VelarServicesSection({ content }: { content: LandingContent }) {
   if (!content.services || content.services.length === 0) return null;
 
+  const heading = getSectionHeading(
+    content,
+    "servicios",
+    SECTION_HEADING_DEFAULTS.velar.servicios,
+  );
   const whatsappLink = getWhatsAppLink(content.contact.phone);
 
   return (
@@ -36,14 +42,16 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
               letterSpacing: "-0.02em",
             }}
           >
-            Todo lo que necesitas para tu evento, en un solo lugar
+            {heading.title}
           </h2>
-          <p
-            className="mb-6 text-lg text-[#171717]/80"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Al elegir {content.brand.replace(".", "")} para tu evento en Valencia, contarás con:
-          </p>
+          {heading.subtitle ? (
+            <p
+              className="mb-6 text-lg text-[#171717]/80"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heading.subtitle}
+            </p>
+          ) : null}
           <a
             href={whatsappLink}
             className="mx-auto inline-flex max-w-[280px] cursor-pointer flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-xs font-semibold uppercase tracking-wide text-[#213138] hover:underline sm:max-w-sm sm:text-sm"

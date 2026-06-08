@@ -2,9 +2,13 @@
 
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
+import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getTemplate } from "@/lib/template-registry";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
+import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
+import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
+import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { LockIcon } from "lucide-react";
 
 export function StudioEditorSection() {
@@ -100,6 +104,7 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Hero" ? (
             <section className="space-y-5 py-unit-lg">
+              <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle title="Portada" description="El bloque principal de la landing." />
               <TextField
                 label="Subtítulo superior"
@@ -119,6 +124,8 @@ export function StudioEditorSection() {
               <ImageField
                 label="Imagen de portada"
                 onChange={(value) => updateHero(activeLanding.id, { image: value })}
+                presets={BACKGROUND_IMAGE_OPTIONS}
+                templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
               />
             </section>
@@ -127,6 +134,11 @@ export function StudioEditorSection() {
           {activeEditorTab === "Servicios" ? (
             <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Servicios" description="Carta de servicios con precios y duraciones." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="servicios"
+                fallback={SECTION_HEADING_DEFAULTS.studio.servicios}
+              />
               <div className="space-y-6">
                 {serviceMenu.map((item) => (
                   <div
@@ -179,6 +191,11 @@ export function StudioEditorSection() {
           {activeEditorTab === "Equipo" ? (
             <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Equipo" description="Miembros del equipo." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="equipo"
+                fallback={SECTION_HEADING_DEFAULTS.studio.equipo}
+              />
               <div className="space-y-6">
                 {team.map((member) => (
                   <div
@@ -247,6 +264,11 @@ export function StudioEditorSection() {
           {activeEditorTab === "FAQ" ? (
             <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Preguntas frecuentes" description="Dudas habituales de los clientes." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="faq"
+                fallback={SECTION_HEADING_DEFAULTS.studio.faq}
+              />
               <div className="space-y-6">
                 {faq.map((item) => (
                   <div

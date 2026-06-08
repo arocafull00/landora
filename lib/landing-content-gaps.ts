@@ -52,7 +52,6 @@ const PORTFOLIO_SECTIONS: LandingSectionKey[] = [
   "hero",
   "branding",
   "story",
-  "stats",
   "gallery",
   "nav",
   "testimonials",

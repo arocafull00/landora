@@ -38,7 +38,10 @@ export async function seedLandingSections(landingId: string, templateId: Templat
 
   await Promise.all([
     upsertLandingSeo(landingId, { title: c.hero.title, description: c.hero.subtitle }),
-    upsertLandingBranding(landingId, { brand: c.brand }),
+    upsertLandingBranding(landingId, {
+      brand: c.brand,
+      sectionHeadings: (c.sectionHeadings ?? {}) as Record<string, { title: string; subtitle: string }>,
+    }),
     upsertLandingHero(landingId, {
       eyebrow: c.hero.eyebrow,
       title: c.hero.title,
@@ -161,7 +164,12 @@ async function seedMissingLandingSections(
   }
 
   if (missing.includes("branding")) {
-    ops.push(upsertLandingBranding(landingId, { brand: c.brand }));
+    ops.push(
+      upsertLandingBranding(landingId, {
+        brand: c.brand,
+        sectionHeadings: (c.sectionHeadings ?? {}) as Record<string, { title: string; subtitle: string }>,
+      }),
+    );
   }
 
   if (missing.includes("story")) {

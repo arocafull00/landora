@@ -2,12 +2,19 @@
 
 import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioWorkHistoryCard } from "@/components/templates/portfolio/portfolio-work-history-card";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 const ACCENT = "#2dd4bf";
 
 export function PortfolioWorkHistorySection({ content }: { content: LandingContent }) {
   const items = content.workHistory ?? [];
   if (items.length === 0) return null;
+
+  const heading = getSectionHeading(
+    content,
+    "experiencia",
+    SECTION_HEADING_DEFAULTS.portfolio.experiencia,
+  );
 
   return (
     <section id="experiencia" className="bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -18,13 +25,12 @@ export function PortfolioWorkHistorySection({ content }: { content: LandingConte
           data-aos="fade-up"
         >
           <span className="relative inline-block">
-            Experiencia
+            {heading.title}
             <span
               className="absolute -bottom-2 left-0 h-1 w-full rounded-full"
               style={{ backgroundColor: ACCENT }}
             />
-          </span>{" "}
-          laboral
+          </span>
         </h2>
 
         <div className="space-y-5 md:space-y-6">

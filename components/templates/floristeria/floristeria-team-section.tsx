@@ -2,10 +2,13 @@
 
 import type { LandingContent } from "@/lib/dashboard-data";
 import { FloristeriaTeamMember } from "@/components/templates/floristeria/floristeria-team-member";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function FloristeriaTeamSection({ content }: { content: LandingContent }) {
   const team = content.team ?? [];
   if (team.length === 0) return null;
+
+  const heading = getSectionHeading(content, "equipo", SECTION_HEADING_DEFAULTS.floristeria.equipo);
 
   return (
     <section id="equipo" className="bg-white px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -15,7 +18,7 @@ export function FloristeriaTeamSection({ content }: { content: LandingContent })
           style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
         >
-          Nuestro equipo
+          {heading.title}
         </h2>
 
         <div

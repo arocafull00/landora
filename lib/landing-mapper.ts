@@ -32,8 +32,11 @@ function uniqueBySortOrder<T extends { sortOrder: number }>(items: T[]) {
 }
 
 export function toLandingContent(row: LandingWithSections): LandingContent {
+  const sectionHeadings = (row.branding?.sectionHeadings ?? {}) as LandingContent["sectionHeadings"];
+
   return {
     brand: row.branding?.brand ?? "",
+    sectionHeadings,
     hero: {
       eyebrow: row.hero?.eyebrow ?? "",
       title: row.hero?.title ?? "",

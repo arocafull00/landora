@@ -5,10 +5,16 @@ export type DashboardView = "editor" | "assets";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
 
+export type SectionHeading = {
+  title: string;
+  subtitle: string;
+};
+
 export type BaseContent = {
   brand: string;
   hero: HeroContent;
   nav: NavLink[];
+  sectionHeadings: Partial<Record<string, SectionHeading>>;
   contact: ContactContent;
   stats: StatContent[];
   testimonials: TestimonialContent[];
@@ -323,6 +329,7 @@ export const initialLandings: Landing[] = [
       ],
       gallery: [],
       nav: [],
+      sectionHeadings: {},
       spaces: [],
       services: [],
       workflow: [],

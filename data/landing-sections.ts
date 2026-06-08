@@ -50,13 +50,22 @@ export async function upsertLandingSeo(
 
 export async function upsertLandingBranding(
   landingId: string,
-  data: { brand: string }
+  data: {
+    brand: string;
+    sectionHeadings?: Record<string, { title: string; subtitle: string }>;
+  }
 ) {
   try {
+    const set: { brand: string; sectionHeadings?: Record<string, { title: string; subtitle: string }> } = {
+      brand: data.brand,
+    };
+    if (data.sectionHeadings !== undefined) {
+      set.sectionHeadings = data.sectionHeadings;
+    }
     await db
       .insert(landingBranding)
-      .values({ landingId, ...data })
-      .onConflictDoUpdate({ target: landingBranding.landingId, set: data });
+      .values({ landingId, brand: data.brand, sectionHeadings: data.sectionHeadings ?? {} })
+      .onConflictDoUpdate({ target: landingBranding.landingId, set });
   } catch {
     throw new Error("Failed to update branding");
   }

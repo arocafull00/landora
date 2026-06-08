@@ -2,10 +2,17 @@
 
 import { Clock } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function RistoranteHoursSection({ content }: { content: LandingContent }) {
   const hours = content.workflow ?? [];
   if (hours.length === 0) return null;
+
+  const heading = getSectionHeading(
+    content,
+    "horarios",
+    SECTION_HEADING_DEFAULTS.ristorante.horarios,
+  );
 
   return (
     <section id="horarios" className="bg-[#1C1917] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -16,7 +23,7 @@ export function RistoranteHoursSection({ content }: { content: LandingContent })
             className="text-balance text-3xl font-extrabold text-white sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
             style={{ fontFamily: "var(--font-playfair)", letterSpacing: "-0.02em" }}
           >
-            Horarios
+            {heading.title}
           </h2>
         </div>
 

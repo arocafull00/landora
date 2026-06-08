@@ -2,10 +2,13 @@
 
 import type { LandingContent } from "@/lib/dashboard-data";
 import { StudioTeamMember } from "@/components/templates/studio/studio-team-member";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function StudioTeamSection({ content }: { content: LandingContent }) {
   const team = content.team ?? [];
   if (team.length === 0) return null;
+
+  const heading = getSectionHeading(content, "equipo", SECTION_HEADING_DEFAULTS.studio.equipo);
 
   return (
     <section id="equipo" className="bg-[#faf9f7] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -15,7 +18,7 @@ export function StudioTeamSection({ content }: { content: LandingContent }) {
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
         >
-          Profesionales a tu servicio
+          {heading.title}
         </h2>
 
         <div

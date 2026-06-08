@@ -58,8 +58,8 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     demoContent: PORTFOLIO_DEFAULT_CONTENT,
     editorTabs: [
       { id: "Hero", label: "Hero" },
-      { id: "Proyectos", label: "Proyectos" },
       { id: "Experiencia", label: "Experiencia" },
+      { id: "Proyectos", label: "Proyectos" },
       { id: "Servicios", label: "Servicios" },
       { id: "FAQ", label: "FAQ" },
       { id: "Posts", label: "Posts" },

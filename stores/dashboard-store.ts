@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
 import {
   Asset,
   ContentGroup,
@@ -13,6 +14,7 @@ import {
   LandingContent,
   Post,
   Presentation,
+  SectionHeading,
   ServiceContent,
   SpaceContent,
   StatContent,
@@ -58,6 +60,8 @@ type DashboardState = {
   updateTestimonial: (landingId: string, testimonialId: string, patch: Partial<TestimonialContent>) => void;
   updateSection: (landingId: string, section: string, data: unknown) => void;
   updateSectionItem: (landingId: string, section: string, itemId: string, patch: Record<string, unknown>) => void;
+  updateNavItem: (landingId: string, navId: string, patch: { label: string }) => void;
+  updateSectionHeading: (landingId: string, anchor: string, patch: Partial<SectionHeading>) => void;
   updatePost: (postId: string, patch: Partial<Post>) => void;
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
@@ -90,7 +94,10 @@ async function persistAllSections(id: string, content: LandingContent) {
   const calls = [
     patchSection(`${base}/hero`, content.hero),
     patchSection(`${base}/cta`, content.contact),
-    patchSection(`${base}/branding`, { brand: content.brand }),
+    patchSection(`${base}/branding`, {
+      brand: content.brand,
+      sectionHeadings: content.sectionHeadings ?? {},
+    }),
     patchSection(`${base}/stats`, { items: content.stats }),
     patchSection(`${base}/testimonials`, { items: content.testimonials }),
     patchSection(`${base}/nav`, { items: content.nav }),
@@ -110,7 +117,9 @@ async function persistAllSections(id: string, content: LandingContent) {
   await Promise.all(calls);
 }
 
-export const useDashboardStore = create<DashboardState>()((set, get) => ({
+export const useDashboardStore = create<DashboardState>()(
+  persist(
+    (set, get) => ({
   activeView: "editor",
   activeWorkspaceTab: "Structure",
   activeContentGroup: "Pages",
@@ -290,6 +299,50 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
       ),
     })),
 
+  updateNavItem: (landingId, navId, patch) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                nav: landing.content.nav.map((item) =>
+                  item.id === navId ? { ...item, ...patch } : item,
+                ),
+              },
+            })
+          : landing,
+      ),
+    })),
+
+  updateSectionHeading: (landingId, anchor, patch) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                sectionHeadings: {
+                  ...landing.content.sectionHeadings,
+                  [anchor]: {
+                    title:
+                      patch.title !== undefined
+                        ? patch.title
+                        : (landing.content.sectionHeadings?.[anchor]?.title ?? ""),
+                    subtitle:
+                      patch.subtitle !== undefined
+                        ? patch.subtitle
+                        : (landing.content.sectionHeadings?.[anchor]?.subtitle ?? ""),
+                  },
+                },
+              },
+            })
+          : landing,
+      ),
+    })),
+
   updatePost: (postId, patch) =>
     set((state) => ({
       posts: state.posts.map((post) =>
@@ -389,4 +442,12 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
         presentation.id === id ? { ...presentation, status: "Published" } : presentation,
       ),
     })),
-}));
+    }),
+    {
+      name: "landora-editor-landings",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ landings: state.landings }),
+      skipHydration: true,
+    },
+  ),
+);

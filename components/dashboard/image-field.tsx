@@ -1,12 +1,19 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import Image from "next/image";
 import type { AssetRow } from "@/db/schema";
+import type { TemplateId } from "@/lib/dashboard-data";
+import { getTemplatePalette } from "@/lib/template-palettes";
+import { isBackgroundPreset } from "@/lib/background-assets";
+import { AssetImage } from "@/components/ui/asset-image";
+import { ThemedLottieBackground } from "@/components/ui/themed-lottie-background";
+import { uploadAsset } from "@/lib/upload-asset";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -14,10 +21,14 @@ import {
 export function ImageField({
   label,
   onChange,
+  presets,
+  templateId,
   value,
 }: {
   label: string;
   onChange: (value: string) => void;
+  presets?: readonly { value: string; label: string }[];
+  templateId?: TemplateId;
   value: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -38,13 +49,9 @@ export function ImageField({
     if (!file) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
 
     try {
-      const res = await fetch("/api/assets", { method: "POST", body: formData });
-      if (!res.ok) throw new Error("Upload failed");
-      const row: AssetRow = await res.json();
+      const row = await uploadAsset(file);
       setAssets((prev) => [row, ...prev]);
       onChange(row.url);
     } catch {
@@ -55,21 +62,29 @@ export function ImageField({
     }
   };
 
-  const allOptions = assets.map((a) => ({ value: a.url, label: a.name || a.url }));
+  const assetOptions = assets.map((a) => ({ value: a.url, label: a.name || a.url }));
+  const allOptions = [...(presets ?? []), ...assetOptions];
+  const activeAsset = assets.find((a) => a.url === value);
+  const palette = templateId ? getTemplatePalette(templateId) : null;
+  const showThemedPreview = Boolean(value && palette && isBackgroundPreset(value));
 
   return (
     <div className="space-y-2">
       <span className="block font-label text-label-md text-on-surface-variant">{label}</span>
       {value && (
         <div className="relative h-28 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface-variant">
-          <Image
-            alt={label}
-            className="object-cover"
-            fill
-            sizes="400px"
-            src={value}
-            unoptimized={value.startsWith("/")}
-          />
+          {showThemedPreview && palette ? (
+            <ThemedLottieBackground palette={palette} src={value} />
+          ) : (
+            <AssetImage
+              alt={label}
+              className="object-cover"
+              fill
+              mimeType={activeAsset?.mimeType}
+              sizes="400px"
+              src={value}
+            />
+          )}
         </div>
       )}
       <div className="flex gap-2">
@@ -81,11 +96,26 @@ export function ImageField({
             {!allOptions.find((o) => o.value === value) && value && (
               <SelectItem value={value}>{value}</SelectItem>
             )}
-            {allOptions.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
+            {presets && presets.length > 0 ? (
+              <SelectGroup>
+                <SelectLabel>Fondos</SelectLabel>
+                {presets.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            ) : null}
+            {assetOptions.length > 0 ? (
+              <SelectGroup>
+                <SelectLabel>Tus imágenes</SelectLabel>
+                {assetOptions.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            ) : null}
           </SelectContent>
         </Select>
         <button

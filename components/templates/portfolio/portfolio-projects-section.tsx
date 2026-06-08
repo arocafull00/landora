@@ -2,10 +2,17 @@
 
 import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioProjectCard } from "@/components/templates/portfolio/portfolio-project-card";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function PortfolioProjectsSection({ content }: { content: LandingContent }) {
   const gallery = content.gallery ?? [];
   if (gallery.length === 0) return null;
+
+  const heading = getSectionHeading(
+    content,
+    "proyectos",
+    SECTION_HEADING_DEFAULTS.portfolio.proyectos,
+  );
 
   return (
     <section id="proyectos" className="bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -15,7 +22,7 @@ export function PortfolioProjectsSection({ content }: { content: LandingContent 
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
         >
-          Proyectos seleccionados
+          {heading.title}
         </h2>
 
         <div

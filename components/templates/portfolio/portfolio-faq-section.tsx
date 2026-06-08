@@ -4,10 +4,13 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function PortfolioFaqSection({ content }: { content: LandingContent }) {
   const faq = content.faq ?? [];
   if (faq.length === 0) return null;
+
+  const heading = getSectionHeading(content, "faq", SECTION_HEADING_DEFAULTS.portfolio.faq);
 
   return (
     <section className="bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -17,14 +20,16 @@ export function PortfolioFaqSection({ content }: { content: LandingContent }) {
             className="mb-6 text-balance text-3xl font-extrabold text-white sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
-            Preguntas frecuentes
+            {heading.title}
           </h2>
-          <p
-            className="max-w-sm text-pretty text-base leading-relaxed text-white/50"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Todo lo que necesitas saber antes de empezar un proyecto juntos.
-          </p>
+          {heading.subtitle ? (
+            <p
+              className="max-w-sm text-pretty text-base leading-relaxed text-white/50"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heading.subtitle}
+            </p>
+          ) : null}
         </div>
 
         <div className="space-y-0" data-aos="fade-left" data-aos-delay="100">

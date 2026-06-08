@@ -3,6 +3,7 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { StudioButton } from "@/components/templates/studio/studio-button";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -11,6 +12,7 @@ function getWhatsAppLink(phone: string) {
 
 export function StudioContactSection({ content }: { content: LandingContent }) {
   const whatsappLink = getWhatsAppLink(content.contact.phone);
+  const heading = getSectionHeading(content, "contacto", SECTION_HEADING_DEFAULTS.studio.contacto);
 
   return (
     <footer id="contacto" className="bg-[#1a1a1a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -20,15 +22,16 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
             className="mb-6 text-balance text-4xl font-extrabold text-white sm:text-5xl md:text-[clamp(40px,6vw,72px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           >
-            Reserva tu cita
+            {heading.title}
           </h2>
-          <p
-            className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-white/70"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Reserva tu próxima cita y déjate cuidar por nuestro equipo de
-            profesionales.
-          </p>
+          {heading.subtitle ? (
+            <p
+              className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-white/70"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heading.subtitle}
+            </p>
+          ) : null}
           <StudioButton
             href={whatsappLink}
             variant="primary"

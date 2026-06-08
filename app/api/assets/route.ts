@@ -2,7 +2,6 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { assets } from "@/db/schema";
 import { getEffectiveClientId } from "@/lib/auth";
-import { cloudinary } from "@/lib/cloudinary";
 
 export async function GET() {
   const userId = await getEffectiveClientId();
@@ -23,62 +22,48 @@ export async function POST(req: Request) {
   const userId = await getEffectiveClientId();
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  const formData = await req.formData();
-  const file = formData.get("file");
-  const nameField = formData.get("name");
-
-  if (!file || !(file instanceof File)) {
-    return Response.json({ error: "No file provided" }, { status: 400 });
-  }
-
-  const originalName =
-    typeof nameField === "string" && nameField
-      ? nameField.replace(/\.[^/.]+$/, "")
-      : null;
-
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  let body: {
+    publicId?: string;
+    url?: string;
+    name?: string;
+    mimeType?: string;
+    width?: number;
+    height?: number;
+  };
 
   try {
-    const result = await new Promise<{
-      secure_url: string;
-      public_id: string;
-      width: number;
-      height: number;
-      original_filename: string;
-      format: string;
-    }>((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder: `landora/tenants/${userId}`,
-          resource_type: "auto",
-        },
-        (error, result) => {
-          if (error || !result) return reject(error ?? new Error("Upload failed"));
-          resolve(result as typeof result & { original_filename: string; format: string });
-        }
-      );
-      stream.end(buffer);
-    });
+    body = await req.json();
+  } catch {
+    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
-    const mimeType = `image/${result.format}`;
-    const name = originalName || result.original_filename || "asset";
+  const { publicId, url, name, mimeType, width, height } = body;
 
+  if (!publicId || !url) {
+    return Response.json({ error: "Invalid asset data" }, { status: 400 });
+  }
+
+  const folderPrefix = `landora/tenants/${userId}`;
+  if (!publicId.startsWith(folderPrefix)) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  try {
     const [row] = await db
       .insert(assets)
       .values({
         userId,
-        publicId: result.public_id,
-        url: result.secure_url,
-        name,
-        mimeType,
-        width: result.width,
-        height: result.height,
+        publicId,
+        url,
+        name: name || "asset",
+        mimeType: mimeType || "",
+        width: width ?? null,
+        height: height ?? null,
       })
       .returning();
 
     return Response.json(row);
   } catch {
-    return Response.json({ error: "Upload failed" }, { status: 500 });
+    return Response.json({ error: "Failed to save asset" }, { status: 500 });
   }
 }

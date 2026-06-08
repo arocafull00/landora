@@ -2,10 +2,17 @@
 
 import type { LandingContent } from "@/lib/dashboard-data";
 import { RistoranteGalleryItem } from "@/components/templates/ristorante/ristorante-gallery-item";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function RistoranteGallerySection({ content }: { content: LandingContent }) {
   const gallery = content.gallery ?? [];
   if (gallery.length === 0) return null;
+
+  const heading = getSectionHeading(
+    content,
+    "galeria",
+    SECTION_HEADING_DEFAULTS.ristorante.galeria,
+  );
 
   return (
     <section id="galeria" className="bg-[#FAF7F2] py-16 md:py-24">
@@ -15,7 +22,7 @@ export function RistoranteGallerySection({ content }: { content: LandingContent 
           style={{ fontFamily: "var(--font-playfair)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
         >
-          Nuestro espacio
+          {heading.title}
         </h2>
       </div>
 

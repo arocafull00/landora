@@ -3,6 +3,7 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioButton } from "@/components/templates/portfolio/portfolio-button";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -11,6 +12,7 @@ function getWhatsAppLink(phone: string) {
 
 export function PortfolioContactSection({ content }: { content: LandingContent }) {
   const whatsappLink = getWhatsAppLink(content.contact.phone);
+  const heading = getSectionHeading(content, "contacto", SECTION_HEADING_DEFAULTS.portfolio.contacto);
 
   return (
     <footer id="contacto" className="bg-[#111] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -20,14 +22,16 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
             className="mb-6 text-balance text-4xl font-extrabold text-white sm:text-5xl md:text-[clamp(40px,6vw,72px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           >
-            Hablemos de tu proyecto
+            {heading.title}
           </h2>
-          <p
-            className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-white/60"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Cuéntame tu idea y diseñemos juntos algo memorable.
-          </p>
+          {heading.subtitle ? (
+            <p
+              className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-white/60"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heading.subtitle}
+            </p>
+          ) : null}
           <PortfolioButton
             href={whatsappLink}
             variant="primary"

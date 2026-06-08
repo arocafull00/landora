@@ -1,4 +1,5 @@
 import type { TemplateContentMap, TemplateId } from "@/lib/dashboard-data";
+import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { VELAR_ASSETS } from "@/lib/velar-assets";
 import { STUDIO_ASSETS } from "@/lib/studio-assets";
 import { PORTFOLIO_ASSETS } from "@/lib/portfolio-assets";
@@ -40,6 +41,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
     { id: "nav-listings", label: "Galería", href: "#listings" },
     { id: "nav-inquire", label: "Contacto", href: "#inquire" },
   ],
+  sectionHeadings: SECTION_HEADING_DEFAULTS.velar,
   spaces: [
     {
       id: "space-1",
@@ -222,6 +224,7 @@ export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
     { id: "nav-faq", label: "FAQ", href: "#faq" },
     { id: "nav-contacto", label: "Contacto", href: "#contacto" },
   ],
+  sectionHeadings: SECTION_HEADING_DEFAULTS.studio,
   contact: {
     phone: "+34 612 34 56 78",
     email: "hola@lumiere-studio.es",
@@ -328,22 +331,19 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
     image: PORTFOLIO_ASSETS.hero,
   },
   nav: [
-    { id: "nav-proyectos", label: "Proyectos", href: "#proyectos" },
     { id: "nav-experiencia", label: "Experiencia", href: "#experiencia" },
+    { id: "nav-proyectos", label: "Proyectos", href: "#proyectos" },
     { id: "nav-servicios", label: "Servicios", href: "#servicios" },
     { id: "nav-testimonios", label: "Testimonios", href: "#testimonios" },
     { id: "nav-contacto", label: "Contacto", href: "#contacto" },
   ],
+  sectionHeadings: SECTION_HEADING_DEFAULTS.portfolio,
   contact: {
     phone: "+34 612 34 56 78",
     email: "hola@elenamora.design",
     address: "Barcelona, España",
   },
-  stats: [
-    { id: "years", value: "8", label: "Años de experiencia" },
-    { id: "projects", value: "120", label: "Proyectos completados" },
-    { id: "clients", value: "45", label: "Clientes satisfechos" },
-  ],
+  stats: [],
   testimonials: [
     {
       id: "review-1",
@@ -465,6 +465,7 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
     { id: "nav-horarios", label: "Horarios", href: "#horarios" },
     { id: "nav-contacto", label: "Reservar", href: "#contacto" },
   ],
+  sectionHeadings: SECTION_HEADING_DEFAULTS.ristorante,
   contact: {
     phone: "+34 912 34 56 78",
     email: "reservas@osteriadaluca.es",
@@ -576,6 +577,7 @@ export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
     { id: "nav-equipo", label: "Equipo", href: "#equipo" },
     { id: "nav-contacto", label: "Contacto", href: "#contacto" },
   ],
+  sectionHeadings: SECTION_HEADING_DEFAULTS.floristeria,
   contact: {
     phone: "+34 954 12 34 56",
     email: "hola@jardinsecreto.es",
