@@ -210,6 +210,21 @@ export const landingServiceMenu = pgTable("landing_service_menu", {
   image: text("image").notNull().default(""),
 });
 
+export const landingWorkHistory = pgTable("landing_work_history", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id")
+    .notNull()
+    .references(() => landingPages.id, { onDelete: "cascade" }),
+  sortOrder: integer("sort_order").notNull(),
+  dateRange: text("date_range").notNull().default(""),
+  location: text("location").notNull().default(""),
+  company: text("company").notNull().default(""),
+  title: text("title").notNull().default(""),
+  summary: text("summary").notNull().default(""),
+  highlights: text("highlights").notNull().default(""),
+  technologies: text("technologies").notNull().default(""),
+});
+
 export const assets = pgTable("assets", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id")
@@ -245,6 +260,7 @@ export const landingPagesRelations = relations(landingPages, ({ one, many }) => 
   nav: many(landingNav),
   team: many(landingTeam),
   serviceMenu: many(landingServiceMenu),
+  workHistory: many(landingWorkHistory),
 }));
 
 export const landingSeoRelations = relations(landingSeo, ({ one }) => ({
@@ -311,6 +327,10 @@ export const landingServiceMenuRelations = relations(landingServiceMenu, ({ one 
   landing: one(landingPages, { fields: [landingServiceMenu.landingId], references: [landingPages.id] }),
 }));
 
+export const landingWorkHistoryRelations = relations(landingWorkHistory, ({ one }) => ({
+  landing: one(landingPages, { fields: [landingWorkHistory.landingId], references: [landingPages.id] }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type LandingPage = typeof landingPages.$inferSelect;
@@ -331,5 +351,6 @@ export type LandingGalleryItem = typeof landingGallery.$inferSelect;
 export type LandingNavItem = typeof landingNav.$inferSelect;
 export type LandingTeamMember = typeof landingTeam.$inferSelect;
 export type LandingServiceMenuItem = typeof landingServiceMenu.$inferSelect;
+export type LandingWorkHistoryItem = typeof landingWorkHistory.$inferSelect;
 export type AssetRow = typeof assets.$inferSelect;
 export type NewAsset = typeof assets.$inferInsert;

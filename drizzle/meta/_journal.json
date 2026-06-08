@@ -64,6 +64,13 @@
       "when": 1780856377962,
       "tag": "0008_smooth_sugar_man",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1780941809208,
+      "tag": "0009_gray_northstar",
+      "breakpoints": true
     }
   ]
 }

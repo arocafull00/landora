@@ -7,6 +7,7 @@ import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
 import { PortfolioHero } from "@/components/templates/portfolio/portfolio-hero";
 import { PortfolioAbout } from "@/components/templates/portfolio/portfolio-about";
 import { PortfolioProjectsSection } from "@/components/templates/portfolio/portfolio-projects-section";
+import { PortfolioWorkHistorySection } from "@/components/templates/portfolio/portfolio-work-history-section";
 import { PortfolioSkillsSection } from "@/components/templates/portfolio/portfolio-skills-section";
 import { PortfolioServicesSection } from "@/components/templates/portfolio/portfolio-services-section";
 import { PortfolioTestimonialsSection } from "@/components/templates/portfolio/portfolio-testimonials-section";
@@ -42,6 +43,8 @@ export function PortfolioTemplate({
       <PortfolioAbout content={content} />
 
       <PortfolioProjectsSection content={content} />
+
+      <PortfolioWorkHistorySection content={content} />
 
       <PortfolioSkillsSection content={content} />
 

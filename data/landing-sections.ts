@@ -17,6 +17,7 @@ import {
   landingNav,
   landingTeam,
   landingServiceMenu,
+  landingWorkHistory,
 } from "@/db/schema";
 import type {
   LandingStat,
@@ -30,6 +31,7 @@ import type {
   LandingFaqItem,
   LandingTeamMember,
   LandingServiceMenuItem,
+  LandingWorkHistoryItem,
 } from "@/db/schema";
 
 export async function upsertLandingSeo(
@@ -194,13 +196,12 @@ export async function replaceLandingGallery(
   items: Pick<LandingGalleryItem, "image" | "video">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingGallery).where(eq(landingGallery.landingId, landingId));
-      if (items.length === 0) return;
-      await tx.insert(landingGallery).values(
+    await db.delete(landingGallery).where(eq(landingGallery.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingGallery).values(
         items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
       );
-    });
+    }
   } catch {
     throw new Error("Failed to update gallery");
   }
@@ -211,13 +212,12 @@ export async function replaceLandingNav(
   items: Pick<LandingNavItem, "label" | "href">[]
 ) {
   try {
-    await db.transaction(async (tx) => {
-      await tx.delete(landingNav).where(eq(landingNav.landingId, landingId));
-      if (items.length === 0) return;
-      await tx.insert(landingNav).values(
+    await db.delete(landingNav).where(eq(landingNav.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingNav).values(
         items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
       );
-    });
+    }
   } catch {
     throw new Error("Failed to update nav");
   }
@@ -284,5 +284,24 @@ export async function replaceLandingServiceMenu(
     }
   } catch {
     throw new Error("Failed to update service menu");
+  }
+}
+
+export async function replaceLandingWorkHistory(
+  landingId: string,
+  items: Pick<
+    LandingWorkHistoryItem,
+    "dateRange" | "location" | "company" | "title" | "summary" | "highlights" | "technologies"
+  >[]
+) {
+  try {
+    await db.delete(landingWorkHistory).where(eq(landingWorkHistory.landingId, landingId));
+    if (items.length > 0) {
+      await db.insert(landingWorkHistory).values(
+        items.map((item, i) => ({ landingId, sortOrder: i, ...item }))
+      );
+    }
+  } catch {
+    throw new Error("Failed to update work history");
   }
 }

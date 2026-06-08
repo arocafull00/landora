@@ -105,6 +105,7 @@ async function persistAllSections(id: string, content: LandingContent) {
   if (content.serviceMenu) calls.push(patchSection(`${base}/service-menu`, { items: content.serviceMenu }));
   if (content.benefits) calls.push(patchSection(`${base}/benefits`, { items: content.benefits }));
   if (content.faq) calls.push(patchSection(`${base}/faq`, { items: content.faq }));
+  if (content.workHistory) calls.push(patchSection(`${base}/work-history`, { items: content.workHistory }));
 
   await Promise.all(calls);
 }

@@ -33,6 +33,7 @@ export function PortfolioEditorSection() {
   const publishActive = () => publishLanding(activeLanding.id);
 
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
+  const workHistory = activeLanding.content.workHistory ?? [];
   const faq = activeLanding.content.faq ?? [];
 
   return (
@@ -125,6 +126,89 @@ export function PortfolioEditorSection() {
                       updateSectionItem(activeLanding.id, "gallery", item.id, { image: value })
                     }
                     value={item.image ?? ""}
+                  />
+                </Panel>
+              ))}
+            </Panel>
+          ) : null}
+
+          {activeEditorTab === "Experiencia" ? (
+            <Panel className="space-y-5 p-unit-lg">
+              <SectionTitle
+                title="Experiencia laboral"
+                description="Edita tu historial profesional."
+              />
+              {workHistory.map((item) => (
+                <Panel className="space-y-3 p-3" key={item.id}>
+                  <TextField
+                    label="Fechas"
+                    onChange={(value) =>
+                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
+                        dateRange: value,
+                      })
+                    }
+                    value={item.dateRange}
+                  />
+                  <TextField
+                    label="Ubicación"
+                    onChange={(value) =>
+                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
+                        location: value,
+                      })
+                    }
+                    value={item.location}
+                  />
+                  <TextField
+                    label="Empresa"
+                    onChange={(value) =>
+                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
+                        company: value,
+                      })
+                    }
+                    value={item.company}
+                  />
+                  <TextField
+                    label="Puesto"
+                    onChange={(value) =>
+                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
+                        title: value,
+                      })
+                    }
+                    value={item.title}
+                  />
+                  <TextArea
+                    label="Resumen de la empresa"
+                    onChange={(value) =>
+                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
+                        summary: value,
+                      })
+                    }
+                    value={item.summary}
+                  />
+                  <TextArea
+                    label="Logros (uno por línea)"
+                    onChange={(value) =>
+                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
+                        highlights: value
+                          .split("\n")
+                          .map((line) => line.trim())
+                          .filter(Boolean),
+                      })
+                    }
+                    rows={5}
+                    value={item.highlights.join("\n")}
+                  />
+                  <TextField
+                    label="Tecnologías (separadas por coma)"
+                    onChange={(value) =>
+                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
+                        technologies: value
+                          .split(",")
+                          .map((tech) => tech.trim())
+                          .filter(Boolean),
+                      })
+                    }
+                    value={item.technologies.join(", ")}
                   />
                 </Panel>
               ))}

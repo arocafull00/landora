@@ -16,6 +16,7 @@ import {
   replaceLandingServiceMenu,
   replaceLandingBenefits,
   replaceLandingFaq,
+  replaceLandingWorkHistory,
 } from "@/data/landing-sections";
 import { getDefaultContent } from "@/lib/default-content";
 import type { TemplateId, LandingContent, TemplateContentMap } from "@/lib/dashboard-data";
@@ -120,6 +121,18 @@ export async function seedLandingSections(landingId: string, templateId: Templat
     replaceLandingFaq(
       landingId,
       (c.faq ?? []).map((f) => ({ question: f.question, answer: f.answer }))
+    ),
+    replaceLandingWorkHistory(
+      landingId,
+      (c.workHistory ?? []).map((item) => ({
+        dateRange: item.dateRange,
+        location: item.location,
+        company: item.company,
+        title: item.title,
+        summary: item.summary,
+        highlights: item.highlights.join("\n"),
+        technologies: item.technologies.join(","),
+      }))
     ),
   ]);
 }
@@ -302,6 +315,23 @@ async function seedMissingLandingSections(
       replaceLandingFaq(
         landingId,
         (c.faq ?? []).map((f) => ({ question: f.question, answer: f.answer }))
+      )
+    );
+  }
+
+  if (missing.includes("workHistory")) {
+    ops.push(
+      replaceLandingWorkHistory(
+        landingId,
+        (c.workHistory ?? []).map((item) => ({
+          dateRange: item.dateRange,
+          location: item.location,
+          company: item.company,
+          title: item.title,
+          summary: item.summary,
+          highlights: item.highlights.join("\n"),
+          technologies: item.technologies.join(","),
+        }))
       )
     );
   }

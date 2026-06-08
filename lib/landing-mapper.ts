@@ -8,6 +8,20 @@ function mapImage(url: string | null | undefined) {
   return remapLegacyTemplateAssetUrl(url);
 }
 
+function parseMultilineList(value: string) {
+  return value
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function parseCommaList(value: string) {
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function uniqueBySortOrder<T extends { sortOrder: number }>(items: T[]) {
   const seen = new Set<number>();
   return items.filter((item) => {
@@ -108,6 +122,16 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       id: f.id,
       question: f.question,
       answer: f.answer,
+    })),
+    workHistory: (row.workHistory ?? []).map((item) => ({
+      id: item.id,
+      dateRange: item.dateRange,
+      location: item.location,
+      company: item.company,
+      title: item.title,
+      summary: item.summary,
+      highlights: parseMultilineList(item.highlights),
+      technologies: parseCommaList(item.technologies),
     })),
   };
 }

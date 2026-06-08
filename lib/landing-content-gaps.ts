@@ -16,6 +16,7 @@ export type LandingSectionKey =
   | "team"
   | "serviceMenu"
   | "benefits"
+  | "workHistory"
   | "faq";
 
 const VELAR_SECTIONS: LandingSectionKey[] = [
@@ -33,6 +34,51 @@ const VELAR_SECTIONS: LandingSectionKey[] = [
 ];
 
 const STUDIO_SECTIONS: LandingSectionKey[] = [
+  "hero",
+  "branding",
+  "story",
+  "stats",
+  "gallery",
+  "nav",
+  "testimonials",
+  "cta",
+  "team",
+  "serviceMenu",
+  "benefits",
+  "faq",
+];
+
+const PORTFOLIO_SECTIONS: LandingSectionKey[] = [
+  "hero",
+  "branding",
+  "story",
+  "stats",
+  "gallery",
+  "nav",
+  "testimonials",
+  "cta",
+  "serviceMenu",
+  "benefits",
+  "workHistory",
+  "faq",
+];
+
+const RISTORANTE_SECTIONS: LandingSectionKey[] = [
+  "hero",
+  "branding",
+  "story",
+  "stats",
+  "gallery",
+  "nav",
+  "workflow",
+  "testimonials",
+  "cta",
+  "team",
+  "serviceMenu",
+  "faq",
+];
+
+const FLORISTERIA_SECTIONS: LandingSectionKey[] = [
   "hero",
   "branding",
   "story",
@@ -81,11 +127,15 @@ function isSectionEmpty(landing: LandingWithSections, section: LandingSectionKey
   if (section === "serviceMenu") return landing.serviceMenu.length === 0;
   if (section === "benefits") return landing.benefits.length === 0;
   if (section === "faq") return landing.faq.length === 0;
+  if (section === "workHistory") return landing.workHistory.length === 0;
   return false;
 }
 
 export function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
   if (template === "studio") return STUDIO_SECTIONS;
+  if (template === "portfolio") return PORTFOLIO_SECTIONS;
+  if (template === "ristorante") return RISTORANTE_SECTIONS;
+  if (template === "floristeria") return FLORISTERIA_SECTIONS;
   return VELAR_SECTIONS;
 }
 

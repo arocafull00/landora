@@ -19,6 +19,7 @@ import {
   landingWorkflow,
   landingTeam,
   landingServiceMenu,
+  landingWorkHistory,
 } from "@/db/schema";
 import type {
   LandingPage,
@@ -38,6 +39,7 @@ import type {
   LandingNavItem,
   LandingTeamMember,
   LandingServiceMenuItem,
+  LandingWorkHistoryItem,
 } from "@/db/schema";
 
 export type LandingWithSections = LandingPage & {
@@ -57,6 +59,7 @@ export type LandingWithSections = LandingPage & {
   nav: LandingNavItem[];
   team: LandingTeamMember[];
   serviceMenu: LandingServiceMenuItem[];
+  workHistory: LandingWorkHistoryItem[];
 };
 
 function buildWith() {
@@ -77,6 +80,7 @@ function buildWith() {
     nav: { orderBy: [asc(landingNav.sortOrder)] },
     team: { orderBy: [asc(landingTeam.sortOrder)] },
     serviceMenu: { orderBy: [asc(landingServiceMenu.sortOrder)] },
+    workHistory: { orderBy: [asc(landingWorkHistory.sortOrder)] },
   };
 }
 
@@ -86,8 +90,8 @@ export const getLandingPageByUserId = cache(async (userId: string) => {
       where: eq(landingPages.userId, userId),
       with: buildWith(),
     })) as LandingWithSections | undefined;
-  } catch {
-    throw new Error("Failed to fetch landing page");
+  } catch (error) {
+    throw new Error("Failed to fetch landing page", { cause: error });
   }
 });
 
@@ -98,8 +102,8 @@ export const getLandingPageByIdAndUserId = cache(
         where: and(eq(landingPages.id, id), eq(landingPages.userId, userId)),
         with: buildWith(),
       })) as LandingWithSections | undefined;
-    } catch {
-      throw new Error("Failed to fetch landing page");
+    } catch (error) {
+      throw new Error("Failed to fetch landing page", { cause: error });
     }
   }
 );
@@ -113,8 +117,8 @@ export const getLandingPageBySlug = cache(async (slug: string) => {
       ),
       with: buildWith(),
     })) as LandingWithSections | undefined;
-  } catch {
-    throw new Error("Failed to fetch landing page");
+  } catch (error) {
+    throw new Error("Failed to fetch landing page", { cause: error });
   }
 });
 
@@ -124,8 +128,8 @@ export const getLandingPageById = cache(async (id: string) => {
       where: eq(landingPages.id, id),
       with: buildWith(),
     })) as LandingWithSections | undefined;
-  } catch {
-    throw new Error("Failed to fetch landing page");
+  } catch (error) {
+    throw new Error("Failed to fetch landing page", { cause: error });
   }
 });
 

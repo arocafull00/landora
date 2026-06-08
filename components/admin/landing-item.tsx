@@ -1,14 +1,16 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "react-toastify";
-import { ActionButton, StatusBadge } from "@/components/ui/primitives";
+import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
-import { setLandingPublished } from "@/app/actions/admin";
+import { deleteLanding, setLandingPublished } from "@/app/actions/admin";
 import type { LandingPage } from "@/db/schema";
 
 export function LandingItem({ landing }: { landing: LandingPage }) {
   const [isPending, startTransition] = useTransition();
+  const [isDeletePending, startDeleteTransition] = useTransition();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const updatedAt = landing.updatedAt
     ? new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(
@@ -31,6 +33,19 @@ export function LandingItem({ landing }: { landing: LandingPage }) {
       }
 
       toast.success("Landing publicada");
+    });
+  };
+
+  const handleDelete = () => {
+    startDeleteTransition(async () => {
+      const result = await deleteLanding(landing.id);
+
+      if ("error" in result) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success("Landing eliminada");
     });
   };
 
@@ -61,7 +76,7 @@ export function LandingItem({ landing }: { landing: LandingPage }) {
           </a>
         ) : null}
         <ActionButton
-          disabled={isPending}
+          disabled={isPending || isDeletePending}
           onClick={handlePublishToggle}
           variant={landing.published ? "secondary" : "primary"}
         >
@@ -71,6 +86,28 @@ export function LandingItem({ landing }: { landing: LandingPage }) {
               ? "Despublicar"
               : "Publicar"}
         </ActionButton>
+        {confirmDelete ? (
+          <>
+            <ActionButton
+              disabled={isDeletePending}
+              onClick={handleDelete}
+              variant="danger"
+            >
+              {isDeletePending ? "…" : "Eliminar"}
+            </ActionButton>
+            <IconButton
+              icon="close"
+              label="Cancelar"
+              onClick={() => setConfirmDelete(false)}
+            />
+          </>
+        ) : (
+          <IconButton
+            icon="trash"
+            label="Eliminar landing"
+            onClick={() => setConfirmDelete(true)}
+          />
+        )}
       </div>
     </div>
   );

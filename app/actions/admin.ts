@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users, landingPages } from "@/db/schema";
 import { getLandingBySlug } from "@/data/admin";
@@ -80,10 +81,14 @@ const createLandingSchema = z.object({
     .string()
     .min(1, "El slug es requerido")
     .regex(/^[a-z0-9-]+$/, "El slug solo puede contener letras, números y guiones"),
-  template: z.enum(["velar", "studio"]).default("velar"),
+  template: z.enum(["velar", "studio", "portfolio", "ristorante", "floristeria"]).default("velar"),
 });
 
 export async function createLandingForUser(formData: FormData): Promise<ActionResult> {
+  if (!(await isAdmin())) {
+    return { error: "No autorizado" };
+  }
+
   const parsed = createLandingSchema.safeParse({
     userId: formData.get("userId"),
     name: formData.get("name"),
@@ -109,13 +114,16 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
       .values({ userId, name, slug, template })
       .returning({ id: landingPages.id });
     landingId = landing.id;
-  } catch {
+  } catch (err) {
+    console.error("[createLandingForUser] DB insert error:", err);
     return { error: "Error al crear la landing" };
   }
 
   try {
-    await seedLandingSections(landingId);
-  } catch {
+    await seedLandingSections(landingId, template);
+  } catch (err) {
+    console.error("[createLandingForUser] Seed error:", err);
+    await db.delete(landingPages).where(eq(landingPages.id, landingId));
     return { error: "Error al inicializar el contenido de la landing" };
   }
 
@@ -153,6 +161,26 @@ export async function setLandingPublished(
     });
   } catch {
     return { error: "Error al actualizar la landing" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+export async function deleteLanding(landingId: string): Promise<ActionResult> {
+  if (!(await isAdmin())) {
+    return { error: "No autorizado" };
+  }
+
+  const parsed = landingIdSchema.safeParse(landingId);
+  if (!parsed.success) {
+    return { error: parsed.error.message };
+  }
+
+  try {
+    await db.delete(landingPages).where(eq(landingPages.id, parsed.data));
+  } catch {
+    return { error: "Error al eliminar la landing" };
   }
 
   revalidatePath("/admin");

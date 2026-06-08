@@ -31,11 +31,23 @@ export type StudioExtensions = {
   faq: FaqItem[];
 };
 
+export type WorkExperienceItem = {
+  id: string;
+  dateRange: string;
+  location: string;
+  company: string;
+  title: string;
+  summary: string;
+  highlights: string[];
+  technologies: string[];
+};
+
 export type PortfolioExtensions = {
   about: { statement: string };
   gallery: GalleryItem[];
   benefits: BenefitItem[];
   serviceMenu: ServiceMenuItem[];
+  workHistory: WorkExperienceItem[];
   faq: FaqItem[];
 };
 
