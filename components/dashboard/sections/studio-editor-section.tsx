@@ -45,7 +45,7 @@ export function StudioEditorSection() {
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
       tabs={
-        <div className="border-b border-outline-variant bg-surface-container-lowest px-unit-lg">
+        <div className="border-b border-outline-variant bg-surface-container-lowest">
           <Tabs value={activeEditorTab} onValueChange={(v) => setActiveEditorTab(v)}>
             <TabsList className="h-auto gap-0 rounded-none bg-transparent p-0">
               {tabs.map((tab) => (
@@ -99,7 +99,7 @@ export function StudioEditorSection() {
           ) : null}
 
           {activeEditorTab === "Hero" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Portada" description="El bloque principal de la landing." />
               <TextField
                 label="Subtítulo superior"
@@ -125,7 +125,7 @@ export function StudioEditorSection() {
           ) : null}
 
           {activeEditorTab === "Servicios" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Servicios" description="Carta de servicios con precios y duraciones." />
               <div className="space-y-6">
                 {serviceMenu.map((item) => (
@@ -177,7 +177,7 @@ export function StudioEditorSection() {
           ) : null}
 
           {activeEditorTab === "Equipo" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Equipo" description="Miembros del equipo." />
               <div className="space-y-6">
                 {team.map((member) => (
@@ -220,7 +220,7 @@ export function StudioEditorSection() {
           ) : null}
 
           {activeEditorTab === "Galeria" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Galería" description="Imágenes de la galería." />
               <div className="space-y-6">
                 {(activeLanding.content.gallery ?? []).map((item, index) => (
@@ -245,7 +245,7 @@ export function StudioEditorSection() {
           ) : null}
 
           {activeEditorTab === "FAQ" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Preguntas frecuentes" description="Dudas habituales de los clientes." />
               <div className="space-y-6">
                 {faq.map((item) => (
@@ -275,7 +275,7 @@ export function StudioEditorSection() {
           ) : null}
 
           {activeEditorTab === "Posts" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Posts" description="Contenido editorial asociado." />
               <p className="text-body-sm text-on-surface-variant">
                 Editor de posts disponible próximamente.

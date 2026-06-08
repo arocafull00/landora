@@ -15,25 +15,15 @@ export function EditorSection() {
   const {
     activeEditorTab,
     activeLandingId,
-    activePostId,
-    activePresentationId,
     isAdmin,
     landings,
-    posts,
-    presentations,
     publishLanding,
-    publishPost,
-    publishPresentation,
     saveLanding,
-    savePost,
-    savePresentation,
     setActiveEditorTab,
     setActiveLandingId,
     updateHero,
     updateLandingMeta,
-    updatePost,
-    updatePresentation,
-    updatePresentationSlide,
+    updateSectionItem,
     updateService,
     updateSpace,
     updateStat,
@@ -44,10 +34,6 @@ export function EditorSection() {
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
-  const activePost = posts.find((post) => post.id === activePostId) ?? posts[0];
-  const activePresentation =
-    presentations.find((item) => item.id === activePresentationId) ??
-    presentations[0];
 
   if (!activeLanding) return null;
 
@@ -67,33 +53,8 @@ export function EditorSection() {
     return <FloristeriaEditorSection />;
   }
 
-  const saveActive = () => {
-    if (activeEditorTab === "Posts") {
-      savePost(activePost.id);
-      return;
-    }
-
-    if (activeEditorTab === "Presentaciones") {
-      savePresentation(activePresentation.id);
-      return;
-    }
-
-    saveLanding(activeLanding.id);
-  };
-
-  const publishActive = () => {
-    if (activeEditorTab === "Posts") {
-      publishPost(activePost.id);
-      return;
-    }
-
-    if (activeEditorTab === "Presentaciones") {
-      publishPresentation(activePresentation.id);
-      return;
-    }
-
-    publishLanding(activeLanding.id);
-  };
+  const saveActive = () => saveLanding(activeLanding.id);
+  const publishActive = () => publishLanding(activeLanding.id);
 
   return (
     <EditorLayout
@@ -104,7 +65,7 @@ export function EditorSection() {
       onSelectLanding={setActiveLandingId}
       showComments
       tabs={
-        <div className="border-b border-outline-variant bg-surface-container-lowest px-unit-lg">
+        <div className="border-b border-outline-variant bg-surface-container-lowest">
           <Tabs
             value={activeEditorTab}
             onValueChange={(v) => setActiveEditorTab(v as typeof activeEditorTab)}
@@ -161,7 +122,7 @@ export function EditorSection() {
           ) : null}
 
           {activeEditorTab === "Hero" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle
                 description="El bloque principal de la landing."
                 title="Portada"
@@ -197,9 +158,9 @@ export function EditorSection() {
           ) : null}
 
           {activeEditorTab === "Historia" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle
-                description="Narrativa, métricas, proceso y testimonios."
+                description="Narrativa y métricas de la sección Nosotros."
                 title="Historia"
               />
               <TextArea
@@ -238,84 +199,41 @@ export function EditorSection() {
                   </div>
                 </div>
               ) : null}
+            </section>
+          ) : null}
 
-              {(activeLanding.content.workflow ?? []).length > 0 ? (
-                <div>
-                  <p className="mb-3 font-label text-label-md text-on-surface-variant">
-                    Proceso
-                  </p>
-                  <div className="space-y-4">
-                    {(activeLanding.content.workflow ?? []).map((step) => (
-                      <div
-                        className="grid gap-3 border-b border-outline-variant pb-4 last:border-0 last:pb-0 md:grid-cols-[60px_1fr]"
-                        key={step.id}
-                      >
-                        <TextField
-                          label="Nº"
-                          onChange={(value) =>
-                            updateWorkflowStep(activeLanding.id, step.id, {
-                              number: value,
-                            })
-                          }
-                          value={step.number}
-                        />
-                        <div className="space-y-3">
-                          <TextField
-                            label="Título del paso"
-                            onChange={(value) =>
-                              updateWorkflowStep(activeLanding.id, step.id, {
-                                title: value,
-                              })
-                            }
-                            value={step.title}
-                          />
-                          <TextArea
-                            label="Descripción del paso"
-                            onChange={(value) =>
-                              updateWorkflowStep(activeLanding.id, step.id, {
-                                description: value,
-                              })
-                            }
-                            value={step.description}
-                          />
-                        </div>
-                      </div>
-                    ))}
+          {activeEditorTab === "Galería" ? (
+            <section className="space-y-5 py-unit-lg">
+              <SectionTitle
+                description="Las imágenes de la galería."
+                title="Galería"
+              />
+              <div className="space-y-6">
+                {(activeLanding.content.gallery ?? []).map((item, index) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
+                    <p className="font-label text-label-md text-on-surface-variant">
+                      Imagen {index + 1}
+                    </p>
+                    <ImageField
+                      label="Imagen"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, {
+                          image: value,
+                        })
+                      }
+                      value={item.image ?? ""}
+                    />
                   </div>
-                </div>
-              ) : null}
-
-              {activeLanding.content.testimonials.slice(0, 1).map((item) => (
-                <div className="space-y-3" key={item.id}>
-                  <p className="font-label text-label-md text-on-surface-variant">
-                    Testimonio destacado
-                  </p>
-                  <TextField
-                    label="Autor de la reseña"
-                    onChange={(value) =>
-                      updateTestimonial(activeLanding.id, item.id, {
-                        author: value,
-                      })
-                    }
-                    value={item.author}
-                  />
-                  <TextArea
-                    label="Reseña"
-                    onChange={(value) =>
-                      updateTestimonial(activeLanding.id, item.id, {
-                        comment: value,
-                      })
-                    }
-                    rows={4}
-                    value={item.comment}
-                  />
-                </div>
-              ))}
+                ))}
+              </div>
             </section>
           ) : null}
 
           {activeEditorTab === "Espacios" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle
                 description="Los espacios mostrados en la landing."
                 title="Espacios"
@@ -356,7 +274,7 @@ export function EditorSection() {
           ) : null}
 
           {activeEditorTab === "Servicios" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle
                 description="Servicios y mensajes operativos."
                 title="Servicios"
@@ -409,84 +327,83 @@ export function EditorSection() {
             </section>
           ) : null}
 
-          {activeEditorTab === "Posts" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+          {activeEditorTab === "Proceso" ? (
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle
-                description="Contenido editorial asociado a la landing."
-                title="Posts"
+                description="Los pasos del proceso mostrados en la landing."
+                title="Proceso"
               />
-              <TextField
-                label="Título"
-                onChange={(value) => updatePost(activePost.id, { title: value })}
-                value={activePost.title}
-              />
-              {isAdmin ? (
-                <TextField
-                  label="Slug"
-                  onChange={(value) => updatePost(activePost.id, { slug: value })}
-                  value={activePost.slug}
-                />
-              ) : null}
-              <TextArea
-                label="Extracto"
-                onChange={(value) => updatePost(activePost.id, { excerpt: value })}
-                value={activePost.excerpt}
-              />
-              <TextArea
-                label="Contenido"
-                onChange={(value) => updatePost(activePost.id, { body: value })}
-                rows={8}
-                value={activePost.body}
-              />
+              <div className="space-y-4">
+                {(activeLanding.content.workflow ?? []).map((step) => (
+                  <div
+                    className="grid gap-3 border-b border-outline-variant pb-4 last:border-0 last:pb-0 md:grid-cols-[60px_1fr]"
+                    key={step.id}
+                  >
+                    <TextField
+                      label="Nº"
+                      onChange={(value) =>
+                        updateWorkflowStep(activeLanding.id, step.id, {
+                          number: value,
+                        })
+                      }
+                      value={step.number}
+                    />
+                    <div className="space-y-3">
+                      <TextField
+                        label="Título del paso"
+                        onChange={(value) =>
+                          updateWorkflowStep(activeLanding.id, step.id, {
+                            title: value,
+                          })
+                        }
+                        value={step.title}
+                      />
+                      <TextArea
+                        label="Descripción del paso"
+                        onChange={(value) =>
+                          updateWorkflowStep(activeLanding.id, step.id, {
+                            description: value,
+                          })
+                        }
+                        value={step.description}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </section>
           ) : null}
 
-          {activeEditorTab === "Presentaciones" ? (
-            <section className="space-y-5 px-unit-lg py-unit-lg">
+          {activeEditorTab === "Testimonios" ? (
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle
-                description="Decks comerciales reutilizables."
-                title="Presentaciones"
-              />
-              <TextField
-                label="Título del deck"
-                onChange={(value) =>
-                  updatePresentation(activePresentation.id, { title: value })
-                }
-                value={activePresentation.title}
-              />
-              <TextField
-                label="Audiencia"
-                onChange={(value) =>
-                  updatePresentation(activePresentation.id, { audience: value })
-                }
-                value={activePresentation.audience}
+                description="Las reseñas mostradas en la landing."
+                title="Testimonios"
               />
               <div className="space-y-6">
-                {activePresentation.slides.map((slide, index) => (
+                {activeLanding.content.testimonials.map((item) => (
                   <div
                     className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
-                    key={slide.id}
+                    key={item.id}
                   >
-                    <p className="font-label text-label-md text-on-surface-variant">
-                      Diapositiva {index + 1}
-                    </p>
                     <TextField
-                      label="Título"
+                      label="Autor de la reseña"
                       onChange={(value) =>
-                        updatePresentationSlide(activePresentation.id, slide.id, {
-                          title: value,
+                        updateTestimonial(activeLanding.id, item.id, {
+                          author: value,
                         })
                       }
-                      value={slide.title}
+                      value={item.author}
                     />
                     <TextArea
-                      label="Contenido"
+                      label="Reseña"
                       onChange={(value) =>
-                        updatePresentationSlide(activePresentation.id, slide.id, {
-                          body: value,
+                        updateTestimonial(activeLanding.id, item.id, {
+                          comment: value,
                         })
                       }
-                      value={slide.body}
+                      rows={4}
+                      value={item.comment}
                     />
                   </div>
                 ))}

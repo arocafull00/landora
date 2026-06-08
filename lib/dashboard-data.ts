@@ -267,7 +267,7 @@ export function isDashboardView(value: string): value is DashboardView {
 
 export const workspaceTabs = ["Structure", "Presentation", "Vision", "Media"];
 export const contentGroups: ContentGroup[] = ["Pages", "Posts", "Presentations", "Assets"];
-export const editorTabs = ["Hero", "Historia", "Espacios", "Servicios", "Posts", "Presentaciones"];
+export const editorTabs = ["Hero", "Historia", "Galería", "Espacios", "Servicios", "Proceso", "Testimonios"];
 
 export const initialLandings: Landing[] = [
   {
