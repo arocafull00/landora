@@ -3,6 +3,7 @@
 import { useTransition, useState } from "react";
 import { toast } from "react-toastify";
 import { ActionButton } from "@/components/ui/primitives";
+import { PasswordInput } from "@/components/ui/password-input";
 import { createUser } from "@/app/actions/admin";
 
 const inputClass =
@@ -84,9 +85,8 @@ export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
           <span className="mb-1.5 block font-label text-label-md text-on-surface-variant">
             Contraseña
           </span>
-          <input
+          <PasswordInput
             name="password"
-            type="password"
             required
             autoComplete="new-password"
             placeholder="Mínimo 8 caracteres"

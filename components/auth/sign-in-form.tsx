@@ -2,6 +2,7 @@
 
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export function SignInForm() {
   const { signIn, errors, fetchStatus } = useSignIn();
@@ -166,13 +167,14 @@ export function SignInForm() {
         >
           Password
         </label>
-        <input
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           autoComplete="current-password"
           required
           className={inputClass}
+          showLabel="Show password"
+          hideLabel="Hide password"
         />
         {errors?.fields?.password && (
           <p className="text-body-sm text-error">

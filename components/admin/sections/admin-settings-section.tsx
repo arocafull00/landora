@@ -1,6 +1,7 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
+import { SignOutButton, UserButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/primitives";
 
 export function AdminSettingsSection() {
@@ -29,9 +30,27 @@ export function AdminSettingsSection() {
                   Administrador
                 </p>
                 <p className="font-body text-body-sm text-on-surface-variant">
-                  Gestiona tu perfil y sesión desde el menú de usuario
+                  Gestiona tu perfil desde el menú de usuario
                 </p>
               </div>
+            </Panel>
+          </section>
+          <section>
+            <h3 className="mb-4 font-headline text-headline-sm text-on-surface">
+              Sesión
+            </h3>
+            <Panel className="flex items-center justify-between gap-4 p-4">
+              <div>
+                <p className="font-body text-body-md font-medium text-on-surface">
+                  Cerrar sesión
+                </p>
+                <p className="font-body text-body-sm text-on-surface-variant">
+                  Sal del panel de administración en este dispositivo
+                </p>
+              </div>
+              <SignOutButton redirectUrl="/sign-in">
+                <Button variant="outline">Cerrar sesión</Button>
+              </SignOutButton>
             </Panel>
           </section>
         </div>
