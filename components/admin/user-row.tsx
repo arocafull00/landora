@@ -2,10 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useTransition } from "react";
+import { toast } from "react-toastify";
 import { Panel, ActionButton, StatusBadge } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import { LandingItem } from "@/components/admin/landing-item";
 import { CreateLandingForm } from "@/components/admin/create-landing-form";
+import { deleteUser } from "@/app/actions/admin";
 import type { User, LandingPage } from "@/db/schema";
 import {
   Dialog,
@@ -19,6 +22,8 @@ export type UserWithLandings = User & { landings: LandingPage[] };
 export function UserRow({ user }: { user: UserWithLandings }) {
   const [expanded, setExpanded] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isDeletePending, startDeleteTransition] = useTransition();
 
   const publishedCount = user.landings.filter((lp) => lp.published).length;
   const createdAt = user.createdAt
@@ -27,6 +32,18 @@ export function UserRow({ user }: { user: UserWithLandings }) {
       )
     : "—";
   const initial = user.name.charAt(0).toUpperCase();
+
+  const handleDelete = () => {
+    startDeleteTransition(async () => {
+      const result = await deleteUser(user.id);
+      if ("error" in result) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success("Usuario eliminado");
+    });
+  };
 
   return (
     <Panel className="overflow-hidden">
@@ -89,11 +106,38 @@ export function UserRow({ user }: { user: UserWithLandings }) {
             </Link>
             <ActionButton
               variant="secondary"
+              disabled={isDeletePending}
               onClick={() => setShowForm(true)}
             >
               <span className="text-lg leading-none">+</span>
               Nueva landing
             </ActionButton>
+            {confirmDelete ? (
+              <>
+                <ActionButton
+                  variant="danger"
+                  disabled={isDeletePending}
+                  onClick={handleDelete}
+                >
+                  {isDeletePending ? "…" : "Eliminar usuario"}
+                </ActionButton>
+                <ActionButton
+                  variant="secondary"
+                  disabled={isDeletePending}
+                  onClick={() => setConfirmDelete(false)}
+                >
+                  Cancelar
+                </ActionButton>
+              </>
+            ) : (
+              <ActionButton
+                variant="danger"
+                disabled={isDeletePending}
+                onClick={() => setConfirmDelete(true)}
+              >
+                Eliminar usuario
+              </ActionButton>
+            )}
           </div>
         </div>
       )}

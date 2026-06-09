@@ -17,7 +17,10 @@ import {
   replaceLandingServiceMenu,
   replaceLandingBenefits,
 } from "@/data/landing-sections";
-import { seedLandingSections } from "@/data/seed-landing-sections";
+import {
+  ensureLandingHasDefaultContent,
+  seedLandingSections,
+} from "@/data/seed-landing-sections";
 import { isReservedSlug } from "@/lib/app-host";
 import type { TemplateId } from "@/lib/dashboard-data";
 import {
@@ -162,6 +165,7 @@ export async function createProspectLanding(params: {
   try {
     await seedLandingSections(landingId, template);
     await provisionProspectLandingContent(landingId, content);
+    await ensureLandingHasDefaultContent(landingId);
   } catch (err) {
     await db.delete(landingPages).where(eq(landingPages.id, landingId));
     throw err instanceof Error ? err : new Error("Error al inicializar el contenido de la landing");

@@ -137,6 +137,7 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
 }
 
 const landingIdSchema = z.string().uuid("ID de landing inválido");
+const userIdSchema = z.string().uuid("ID de usuario inválido");
 
 export async function setLandingPublished(
   landingId: string,
@@ -196,6 +197,62 @@ export async function deleteLanding(landingId: string): Promise<ActionResult> {
     await db.delete(landingPages).where(eq(landingPages.id, parsed.data));
   } catch {
     return { error: "Error al eliminar la landing" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+export async function deleteUser(userId: string): Promise<ActionResult> {
+  if (!(await isAdmin())) {
+    return { error: "No autorizado" };
+  }
+
+  const parsed = userIdSchema.safeParse(userId);
+  if (!parsed.success) {
+    return { error: parsed.error.message };
+  }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, parsed.data),
+  });
+
+  if (!user) {
+    return { error: "Usuario no encontrado" };
+  }
+
+  if (user.type === "admin") {
+    return { error: "No se puede eliminar un administrador" };
+  }
+
+  const userLandings = await db.query.landingPages.findMany({
+    where: eq(landingPages.userId, parsed.data),
+  });
+
+  for (const landing of userLandings) {
+    if (!landing.customDomain) {
+      continue;
+    }
+
+    try {
+      await removeProjectDomain(landing.customDomain);
+    } catch {
+      return { error: "Error al eliminar un dominio de Vercel" };
+    }
+  }
+
+  try {
+    await db.delete(landingPages).where(eq(landingPages.userId, parsed.data));
+    await db.delete(users).where(eq(users.id, parsed.data));
+  } catch {
+    return { error: "Error al eliminar los datos del usuario" };
+  }
+
+  try {
+    const clerk = await clerkClient();
+    await clerk.users.deleteUser(user.clerkUserId);
+  } catch {
+    return { error: "Datos eliminados, pero no se pudo eliminar el usuario en Clerk" };
   }
 
   revalidatePath("/admin");
