@@ -42,7 +42,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
             size="lg"
             className="!bg-[#2D5016] hover:!bg-[#234012]"
           >
-            Pedir por WhatsApp
+            {content.contact.ctaLabel ?? "Pedir por WhatsApp"}
           </FloristeriaButton>
         </div>
 

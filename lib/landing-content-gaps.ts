@@ -1,5 +1,6 @@
 import type { LandingWithSections } from "@/data/landing-pages";
 import type { TemplateId } from "@/lib/dashboard-data";
+import { getHiddenContentKeys } from "@/lib/template-sections";
 
 export type LandingSectionKey =
   | "hero"
@@ -139,9 +140,14 @@ export function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[
 }
 
 export function getMissingLandingSections(landing: LandingWithSections) {
-  return getTemplateSectionKeys(landing.template).filter((section) =>
-    isSectionEmpty(landing, section)
+  const hiddenKeys = new Set(
+    getHiddenContentKeys(landing.branding?.hiddenSections ?? [], landing.template),
   );
+
+  return getTemplateSectionKeys(landing.template).filter((section) => {
+    if (hiddenKeys.has(section)) return false;
+    return isSectionEmpty(landing, section);
+  });
 }
 
 export function isLandingFullyEmpty(landing: LandingWithSections) {

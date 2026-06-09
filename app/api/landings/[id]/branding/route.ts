@@ -20,9 +20,14 @@ export async function PATCH(
         ? (body.sectionHeadings as Record<string, { title: string; subtitle: string }>)
         : undefined;
 
+    const hiddenSections = Array.isArray(body.hiddenSections)
+      ? (body.hiddenSections as string[])
+      : undefined;
+
     await upsertLandingBranding(id, {
       brand: typeof body.brand === "string" ? body.brand : "",
       sectionHeadings,
+      hiddenSections,
     });
 
     return Response.json({ ok: true });

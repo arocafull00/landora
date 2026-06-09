@@ -37,7 +37,7 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
             variant="primary"
             size="lg"
           >
-            Contactar por WhatsApp
+            {content.contact.ctaLabel ?? "Contactar por WhatsApp"}
           </PortfolioButton>
         </div>
 

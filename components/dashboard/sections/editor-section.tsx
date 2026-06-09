@@ -1,6 +1,5 @@
 "use client";
 
-import { editorTabs } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
@@ -10,10 +9,12 @@ import { PortfolioEditorSection } from "@/components/dashboard/sections/portfoli
 import { RistoranteEditorSection } from "@/components/dashboard/sections/ristorante-editor-section";
 import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
-import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
+import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
+import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
+import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { LockIcon } from "lucide-react";
+import { getEditorScrollTarget, getVisibleEditorTabs } from "@/lib/template-sections";
 
 export function EditorSection() {
   const {
@@ -26,7 +27,6 @@ export function EditorSection() {
     setActiveEditorTab,
     setActiveLandingId,
     updateHero,
-    updateLandingMeta,
     updateSectionItem,
     updateService,
     updateSpace,
@@ -60,15 +60,12 @@ export function EditorSection() {
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
 
-  const TAB_SECTION_IDS: Record<string, string> = {
-    Hero: "hero",
-    Historia: "story",
-    Galería: "listings",
-    Espacios: "residences",
-    Servicios: "servicios",
-    Proceso: "proceso",
-    Testimonios: "testimonios",
-  };
+  const tabs = getVisibleEditorTabs(
+    activeLanding.template,
+    activeLanding.content.hiddenSections,
+    isAdmin,
+  );
+  const scrollTarget = getEditorScrollTarget(activeLanding.template, activeEditorTab);
 
   return (
     <EditorLayout
@@ -77,7 +74,7 @@ export function EditorSection() {
       onPublish={publishActive}
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
-      scrollTarget={TAB_SECTION_IDS[activeEditorTab]}
+      scrollTarget={scrollTarget}
       showComments
       tabs={
         <div className="border-b border-outline-variant bg-surface-container-lowest">
@@ -86,13 +83,13 @@ export function EditorSection() {
             onValueChange={(v) => setActiveEditorTab(v as typeof activeEditorTab)}
           >
             <TabsList className="h-auto gap-0 rounded-none bg-transparent p-0">
-              {editorTabs.map((tab) => (
+              {tabs.map((tab) => (
                 <TabsTrigger
                   className="mr-unit-lg rounded-none border-b-2 border-transparent px-0 py-3 font-label text-label-md text-on-surface-variant transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
-                  key={tab}
-                  value={tab}
+                  key={tab.id}
+                  value={tab.id}
                 >
-                  {tab}
+                  {tab.label}
                 </TabsTrigger>
               ))}
             </TabsList>
@@ -101,44 +98,20 @@ export function EditorSection() {
       }
       form={
         <>
-          {isAdmin ? (
-            <section className="space-y-4 border-b border-outline-variant pb-unit-lg">
-              <div className="flex items-center gap-1.5 text-on-surface-variant">
-                <LockIcon className="h-3.5 w-3.5" />
-                <span className="font-label text-label-sm uppercase tracking-wide">
-                  Solo admin
-                </span>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <TextField
-                  label="Nombre interno"
-                  onChange={(value) =>
-                    updateLandingMeta(activeLanding.id, { name: value })
-                  }
-                  value={activeLanding.name}
-                />
-                <TextField
-                  label="Slug"
-                  onChange={(value) =>
-                    updateLandingMeta(activeLanding.id, { slug: value })
-                  }
-                  value={activeLanding.slug}
-                />
-                <TextField
-                  className="md:col-span-2"
-                  label="Título SEO"
-                  onChange={(value) =>
-                    updateLandingMeta(activeLanding.id, { seoTitle: value })
-                  }
-                  value={activeLanding.seoTitle}
-                />
-              </div>
-            </section>
+          {activeEditorTab === "Admin" && isAdmin ? (
+            <AdminEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Secciones" ? (
+            <SectionsEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Navegación" ? (
+            <NavEditorPanel activeLanding={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Hero" ? (
             <section className="space-y-5 py-unit-lg">
-              <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle
                 description="El bloque principal de la landing."
                 title="Portada"

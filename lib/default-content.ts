@@ -377,12 +377,12 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
     statement: "Diseño con propósito. Cada proyecto es una oportunidad para crear algo que no solo se vea bien, sino que funcione, comunique y genere resultados medibles.",
   },
   gallery: [
-    { id: "p1", image: PORTFOLIO_ASSETS.project1 },
-    { id: "p2", image: PORTFOLIO_ASSETS.project2 },
-    { id: "p3", image: PORTFOLIO_ASSETS.project3 },
-    { id: "p4", image: PORTFOLIO_ASSETS.project4 },
-    { id: "p5", image: PORTFOLIO_ASSETS.project5 },
-    { id: "p6", image: PORTFOLIO_ASSETS.project6 },
+    { id: "p1", image: PORTFOLIO_ASSETS.project1, title: "Identidad de marca – Nómada Studio", description: "Logotipo, sistema tipográfico y guía de estilo para estudio de arquitectura.", tags: ["Branding", "Figma"] },
+    { id: "p2", image: PORTFOLIO_ASSETS.project2, title: "Web corporativa – Arruga Legal", description: "Diseño y desarrollo de landing page orientada a conversión.", tags: ["Web", "Next.js"] },
+    { id: "p3", image: PORTFOLIO_ASSETS.project3, title: "Campaña digital – Vinesa", description: "Dirección creativa y piezas gráficas para lanzamiento de producto.", tags: ["Campaña", "Ilustración"] },
+    { id: "p4", image: PORTFOLIO_ASSETS.project4, title: "App móvil – Refuel", description: "UI/UX para aplicación de hábitos saludables en iOS y Android.", tags: ["UI/UX", "React Native"] },
+    { id: "p5", image: PORTFOLIO_ASSETS.project5, title: "Packaging – Alma Cosmetics", description: "Diseño de envase y material impreso para línea de cosmética natural.", tags: ["Packaging", "Print"] },
+    { id: "p6", image: PORTFOLIO_ASSETS.project6, title: "Dashboard – Kairos Analytics", description: "Sistema de visualización de datos para plataforma B2B SaaS.", tags: ["Dashboard", "Tailwind"] },
   ],
   serviceMenu: [
     { id: "sm-1", category: "Branding", name: "Identidad de marca", description: "Logo, paleta, tipografía y guía de estilo completa", price: "Desde 2.500€" },

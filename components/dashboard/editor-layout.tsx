@@ -9,6 +9,7 @@ import type { PreviewDevice } from "@/components/dashboard/preview-toolbar";
 
 export function EditorLayout({
   activeLanding,
+  disabled = false,
   form,
   landings,
   onPublish,
@@ -19,6 +20,7 @@ export function EditorLayout({
   tabs,
 }: {
   activeLanding: Landing;
+  disabled?: boolean;
   form: ReactNode;
   landings: Landing[];
   onPublish: () => void;
@@ -35,6 +37,7 @@ export function EditorLayout({
     <section className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-surface">
       <EditorToolbar
         activeLanding={activeLanding}
+        disabled={disabled}
         landings={landings}
         onPublish={onPublish}
         onSave={onSave}

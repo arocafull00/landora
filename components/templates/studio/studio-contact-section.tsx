@@ -38,7 +38,7 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
             size="lg"
             className="!bg-[#8b7355] hover:!bg-[#7a6448]"
           >
-            Reservar por WhatsApp
+            {content.contact.ctaLabel ?? "Reservar por WhatsApp"}
           </StudioButton>
         </div>
 

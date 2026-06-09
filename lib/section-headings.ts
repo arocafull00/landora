@@ -114,10 +114,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
 
 export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
   velar: [],
-  studio: ["contacto"],
-  portfolio: ["contacto"],
-  ristorante: ["contacto"],
-  floristeria: ["contacto"],
+  studio: [],
+  portfolio: [],
+  ristorante: [],
+  floristeria: [],
 };
 
 export function getSectionHeading(

@@ -41,7 +41,7 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
             variant="primary"
             size="lg"
           >
-            Reservar por WhatsApp
+            {content.contact.ctaLabel ?? "Reservar por WhatsApp"}
           </RistoranteButton>
         </div>
 

@@ -6,21 +6,30 @@ import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
-import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
+import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
+import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
+import { ContactEditorPanel } from "@/components/dashboard/contact-editor-panel";
+import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import {
+  createEmptyWorkHistoryItem,
+  PortfolioWorkHistoryItemEditor,
+} from "@/components/dashboard/portfolio-work-history-item-editor";
 
 export function PortfolioEditorSection() {
   const {
     activeEditorTab,
     activeLandingId,
+    isAdmin,
     landings,
+    saveStatus,
     saveLanding,
     publishLanding,
     setActiveEditorTab,
     setActiveLandingId,
     updateHero,
-    updateLandingMeta,
+    updateSection,
     updateSectionItem,
   } = useDashboardStore();
 
@@ -32,6 +41,7 @@ export function PortfolioEditorSection() {
   const tabs = getVisibleEditorTabs(
     activeLanding.template,
     activeLanding.content.hiddenSections,
+    isAdmin,
   );
 
   const saveActive = () => saveLanding(activeLanding.id);
@@ -44,6 +54,7 @@ export function PortfolioEditorSection() {
   return (
     <EditorLayout
       activeLanding={activeLanding}
+      disabled={saveStatus === "saving"}
       landings={landings}
       onPublish={publishActive}
       onSave={saveActive}
@@ -67,36 +78,20 @@ export function PortfolioEditorSection() {
       }
       form={
         <>
-          <section className="space-y-4 border-b border-outline-variant pb-unit-lg">
-            <div className="grid gap-4 md:grid-cols-2">
-              <TextField
-                label="Landing name"
-                onChange={(value) =>
-                  updateLandingMeta(activeLanding.id, { name: value })
-                }
-                value={activeLanding.name}
-              />
-              <TextField
-                label="Slug"
-                onChange={(value) =>
-                  updateLandingMeta(activeLanding.id, { slug: value })
-                }
-                value={activeLanding.slug}
-              />
-              <TextField
-                className="md:col-span-2"
-                label="SEO title"
-                onChange={(value) =>
-                  updateLandingMeta(activeLanding.id, { seoTitle: value })
-                }
-                value={activeLanding.seoTitle}
-              />
-            </div>
-          </section>
+          {activeEditorTab === "Admin" && isAdmin ? (
+            <AdminEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Secciones" ? (
+            <SectionsEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Navegación" ? (
+            <NavEditorPanel activeLanding={activeLanding} />
+          ) : null}
 
           {activeEditorTab === "Hero" ? (
             <section className="space-y-5 py-unit-lg">
-              <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle title="Hero" description="Edita el bloque principal del portfolio." />
               <TextField
                 label="Eyebrow"
@@ -143,7 +138,7 @@ export function PortfolioEditorSection() {
                     key={item.id}
                   >
                     <p className="font-label text-label-md text-on-surface-variant">
-                      Imagen {index + 1}
+                      Proyecto {index + 1}
                     </p>
                     <ImageField
                       label="Imagen"
@@ -151,6 +146,28 @@ export function PortfolioEditorSection() {
                         updateSectionItem(activeLanding.id, "gallery", item.id, { image: value })
                       }
                       value={item.image ?? ""}
+                    />
+                    <TextField
+                      label="Título (opcional)"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, { title: value })
+                      }
+                      value={item.title ?? ""}
+                    />
+                    <TextArea
+                      label="Descripción (opcional)"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, { description: value })
+                      }
+                      rows={2}
+                      value={item.description ?? ""}
+                    />
+                    <TagsField
+                      label="Etiquetas (separadas por coma)"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, { tags: value })
+                      }
+                      value={item.tags ?? []}
                     />
                   </div>
                 ))}
@@ -170,84 +187,36 @@ export function PortfolioEditorSection() {
                 fallback={SECTION_HEADING_DEFAULTS.portfolio.experiencia}
               />
               <div className="space-y-6">
-                {workHistory.map((item) => (
-                  <div
-                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                {workHistory.map((item, index) => (
+                  <PortfolioWorkHistoryItemEditor
+                    index={index}
+                    item={item}
                     key={item.id}
-                  >
-                  <TextField
-                    label="Fechas"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
-                        dateRange: value,
-                      })
+                    onChange={(patch) =>
+                      updateSectionItem(activeLanding.id, "workHistory", item.id, patch)
                     }
-                    value={item.dateRange}
-                  />
-                  <TextField
-                    label="Ubicación"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
-                        location: value,
-                      })
+                    onRemove={() =>
+                      updateSection(
+                        activeLanding.id,
+                        "workHistory",
+                        workHistory.filter((entry) => entry.id !== item.id),
+                      )
                     }
-                    value={item.location}
                   />
-                  <TextField
-                    label="Empresa"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
-                        company: value,
-                      })
-                    }
-                    value={item.company}
-                  />
-                  <TextField
-                    label="Puesto"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
-                        title: value,
-                      })
-                    }
-                    value={item.title}
-                  />
-                  <TextArea
-                    label="Resumen de la empresa"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
-                        summary: value,
-                      })
-                    }
-                    value={item.summary}
-                  />
-                  <TextArea
-                    label="Logros (uno por línea)"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
-                        highlights: value
-                          .split("\n")
-                          .map((line) => line.trim())
-                          .filter(Boolean),
-                      })
-                    }
-                    rows={5}
-                    value={item.highlights.join("\n")}
-                  />
-                  <TextField
-                    label="Tecnologías (separadas por coma)"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "workHistory", item.id, {
-                        technologies: value
-                          .split(",")
-                          .map((tech) => tech.trim())
-                          .filter(Boolean),
-                      })
-                    }
-                    value={item.technologies.join(", ")}
-                  />
-                  </div>
                 ))}
               </div>
+              <button
+                className="w-full rounded-lg border border-dashed border-outline-variant px-4 py-3 font-label text-label-md text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+                onClick={() =>
+                  updateSection(activeLanding.id, "workHistory", [
+                    ...workHistory,
+                    createEmptyWorkHistoryItem(),
+                  ])
+                }
+                type="button"
+              >
+                Añadir experiencia
+              </button>
             </section>
           ) : null}
 
@@ -342,6 +311,10 @@ export function PortfolioEditorSection() {
               </p>
             </section>
           ) : null}
+
+          {activeEditorTab === "Contacto" ? (
+            <ContactEditorPanel activeLanding={activeLanding} />
+          ) : null}
         </>
       }
     />
@@ -404,6 +377,38 @@ function TextArea({
         onChange={(event) => onChange(event.target.value)}
         rows={rows}
         value={value}
+      />
+    </label>
+  );
+}
+
+function TagsField({
+  label,
+  onChange,
+  value,
+}: {
+  label: string;
+  onChange: (value: string[]) => void;
+  value: string[];
+}) {
+  return (
+    <label className="block">
+      <span className="mb-2 block font-label text-label-md text-on-surface-variant">
+        {label}
+      </span>
+      <input
+        className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+        onChange={(event) =>
+          onChange(
+            event.target.value
+              .split(",")
+              .map((t) => t.trim())
+              .filter(Boolean),
+          )
+        }
+        placeholder="React, TypeScript, Node.js"
+        type="text"
+        value={value.join(", ")}
       />
     </label>
   );

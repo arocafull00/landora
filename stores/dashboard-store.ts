@@ -5,6 +5,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { toast } from "react-toastify";
 import {
   Asset,
+  ContactContent,
   ContentGroup,
   DashboardView,
   HeroContent,
@@ -20,9 +21,16 @@ import {
   SpaceContent,
   StatContent,
   StoryContent,
+  TemplateId,
   TestimonialContent,
   WorkflowStep,
 } from "@/lib/dashboard-data";
+import { getDefaultContent } from "@/lib/default-content";
+import {
+  getSectionByAnchor,
+  getVisibleEditorTabs,
+  restoreNavItem,
+} from "@/lib/template-sections";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 
@@ -61,8 +69,11 @@ type DashboardState = {
   updateTestimonial: (landingId: string, testimonialId: string, patch: Partial<TestimonialContent>) => void;
   updateSection: (landingId: string, section: string, data: unknown) => void;
   updateSectionItem: (landingId: string, section: string, itemId: string, patch: Record<string, unknown>) => void;
+  updateContact: (id: string, patch: Partial<ContactContent>) => void;
   updateNavItem: (landingId: string, navId: string, patch: { label: string }) => void;
   updateSectionHeading: (landingId: string, anchor: string, patch: Partial<SectionHeading>) => void;
+  hideSection: (landingId: string, anchor: string) => void;
+  restoreSection: (landingId: string, anchor: string) => void;
   updatePost: (postId: string, patch: Partial<Post>) => void;
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
@@ -98,6 +109,7 @@ async function persistAllSections(id: string, content: LandingContent) {
     patchSection(`${base}/branding`, {
       brand: content.brand,
       sectionHeadings: content.sectionHeadings ?? {},
+      hiddenSections: content.hiddenSections ?? [],
     }),
     patchSection(`${base}/stats`, { items: content.stats }),
     patchSection(`${base}/testimonials`, { items: content.testimonials }),
@@ -181,6 +193,18 @@ export const useDashboardStore = create<DashboardState>()(
           ? markEdited({
               ...landing,
               content: { ...landing.content, story: { statement: "", ...landing.content.story, ...patch } },
+            })
+          : landing,
+      ),
+    })),
+
+  updateContact: (id, patch) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === id
+          ? markEdited({
+              ...landing,
+              content: { ...landing.content, contact: { ...landing.content.contact, ...patch } },
             })
           : landing,
       ),
@@ -343,6 +367,74 @@ export const useDashboardStore = create<DashboardState>()(
           : landing,
       ),
     })),
+
+  hideSection: (landingId, anchor) => {
+    const landing = get().landings.find((item) => item.id === landingId);
+    if (!landing) return;
+
+    const section = getSectionByAnchor(landing.template, anchor);
+    if (!section || section.required) return;
+
+    const hiddenSections = [...(landing.content.hiddenSections ?? [])];
+    if (hiddenSections.includes(anchor)) return;
+    hiddenSections.push(anchor);
+
+    let nav = landing.content.nav;
+    if (section.navHref) {
+      nav = nav.filter((item) => item.href !== section.navHref);
+    }
+
+    const visibleTabs = getVisibleEditorTabs(landing.template, hiddenSections);
+    const activeTabVisible = visibleTabs.some((tab) => tab.id === get().activeEditorTab);
+    const nextTab = activeTabVisible ? get().activeEditorTab : "Hero";
+
+    set((state) => ({
+      activeEditorTab: nextTab,
+      landings: state.landings.map((item) =>
+        item.id === landingId
+          ? markEdited({
+              ...item,
+              content: {
+                ...item.content,
+                hiddenSections,
+                nav,
+              },
+            })
+          : item,
+      ),
+    }));
+  },
+
+  restoreSection: (landingId, anchor) => {
+    const landing = get().landings.find((item) => item.id === landingId);
+    if (!landing) return;
+
+    const section = getSectionByAnchor(landing.template, anchor);
+    if (!section || section.required) return;
+
+    const hiddenSections = (landing.content.hiddenSections ?? []).filter((item) => item !== anchor);
+    let nav = landing.content.nav;
+
+    if (section.navHref) {
+      const defaults = getDefaultContent(landing.template as TemplateId);
+      nav = restoreNavItem(nav, defaults.nav, section.navHref);
+    }
+
+    set((state) => ({
+      landings: state.landings.map((item) =>
+        item.id === landingId
+          ? markEdited({
+              ...item,
+              content: {
+                ...item.content,
+                hiddenSections,
+                nav,
+              },
+            })
+          : item,
+      ),
+    }));
+  },
 
   updatePost: (postId, patch) =>
     set((state) => ({

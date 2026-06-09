@@ -14,6 +14,7 @@ import { CheckIcon, ChevronDownIcon } from "lucide-react";
 
 export function EditorToolbar({
   activeLanding,
+  disabled = false,
   landings,
   onPublish,
   onSave,
@@ -21,6 +22,7 @@ export function EditorToolbar({
   showComments = false,
 }: {
   activeLanding: Landing;
+  disabled?: boolean;
   landings: Landing[];
   onPublish: () => void;
   onSave: () => void;
@@ -70,11 +72,11 @@ export function EditorToolbar({
         <IconButton icon="link" label="Copiar enlace" />
         {showComments ? <IconButton icon="help" label="Comentarios" /> : null}
         <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
-        <ActionButton onClick={onSave}>
+        <ActionButton disabled={disabled} onClick={onSave}>
           <Icon name="save" className="h-4 w-4" />
           Guardar
         </ActionButton>
-        <ActionButton onClick={onPublish} variant="primary">
+        <ActionButton disabled={disabled} onClick={onPublish} variant="primary">
           <Icon name="publish" className="h-4 w-4" />
           Publicar
         </ActionButton>

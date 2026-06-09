@@ -132,6 +132,9 @@ export type GalleryItem = {
   id: string;
   image?: string;
   video?: string;
+  title?: string;
+  description?: string;
+  tags?: string[];
 };
 
 export type NavLink = {
@@ -175,6 +178,7 @@ export type ContactContent = {
   phone: string;
   email: string;
   address: string;
+  ctaLabel?: string;
 };
 
 export type TeamMember = {

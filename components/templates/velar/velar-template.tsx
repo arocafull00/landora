@@ -2,6 +2,7 @@
 
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { resolveVelarHeroImages } from "@/lib/velar-assets";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
@@ -97,7 +98,7 @@ export function VelarTemplate({
         navColor={navColor}
         menuOpen={menuOpen}
         onToggleMenu={() => setMenuOpen((v) => !v)}
-        navLinks={content.nav}
+        navLinks={getVisibleNav(content.nav, content.hiddenSections, "velar")}
         topOffset={topOffset}
       />
 
@@ -109,21 +110,29 @@ export function VelarTemplate({
         houseImage={houseImage}
       />
 
-      <VelarStatementSection content={content} sectionRef={darkRef} />
+      {isSectionVisible(content, "story") ? (
+        <VelarStatementSection content={content} sectionRef={darkRef} />
+      ) : null}
 
-      <div ref={galleryRef}>
-        <VelarGallerySection content={content} />
-      </div>
+      {isSectionVisible(content, "listings") ? (
+        <div ref={galleryRef}>
+          <VelarGallerySection content={content} />
+        </div>
+      ) : null}
 
-      <VelarSpacesSection content={content} />
+      {isSectionVisible(content, "residences") ? <VelarSpacesSection content={content} /> : null}
 
-      <VelarServicesSection content={content} />
+      {isSectionVisible(content, "servicios") ? <VelarServicesSection content={content} /> : null}
 
-      <div ref={workflowRef}>
-        <VelarWorkflowSection content={content} />
-      </div>
+      {isSectionVisible(content, "proceso") ? (
+        <div ref={workflowRef}>
+          <VelarWorkflowSection content={content} />
+        </div>
+      ) : null}
 
-      <VelarTestimonialsSection content={content} />
+      {isSectionVisible(content, "testimonios") ? (
+        <VelarTestimonialsSection content={content} />
+      ) : null}
 
       <div ref={footerRef}>
         <VelarContactSection content={content} />

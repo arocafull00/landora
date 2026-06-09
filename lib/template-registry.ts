@@ -6,6 +6,21 @@ export type EditorTab = {
   label: string;
 };
 
+export const SECTIONS_EDITOR_TAB: EditorTab = {
+  id: "Secciones",
+  label: "Secciones",
+};
+
+export const NAV_EDITOR_TAB: EditorTab = {
+  id: "Navegación",
+  label: "Navegación",
+};
+
+export const ADMIN_EDITOR_TAB: EditorTab = {
+  id: "Admin",
+  label: "Admin",
+};
+
 export type TemplateComponent = React.ComponentType<{ content: LandingContent; topOffset?: number }>;
 
 export type TemplateDefinition<T extends TemplateId = TemplateId> = {
@@ -26,11 +41,14 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     demoContent: VELAR_DEFAULT_CONTENT,
     editorTabs: [
       { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
       { id: "Historia", label: "Historia" },
+      { id: "Galería", label: "Galería" },
       { id: "Espacios", label: "Espacios" },
       { id: "Servicios", label: "Servicios" },
-      { id: "Posts", label: "Posts" },
-      { id: "Presentaciones", label: "Presentaciones" },
+      { id: "Proceso", label: "Proceso" },
+      { id: "Testimonios", label: "Testimonios" },
+      SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/velar/velar-template"),
   },
@@ -42,11 +60,14 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     demoContent: STUDIO_DEFAULT_CONTENT,
     editorTabs: [
       { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
       { id: "Servicios", label: "Servicios" },
       { id: "Equipo", label: "Equipo" },
       { id: "Galeria", label: "Galería" },
       { id: "FAQ", label: "FAQ" },
       { id: "Posts", label: "Posts" },
+      { id: "Contacto", label: "Contacto" },
+      SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/studio/studio-template"),
   },
@@ -58,11 +79,14 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     demoContent: PORTFOLIO_DEFAULT_CONTENT,
     editorTabs: [
       { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
       { id: "Experiencia", label: "Experiencia" },
       { id: "Proyectos", label: "Proyectos" },
       { id: "Servicios", label: "Servicios" },
       { id: "FAQ", label: "FAQ" },
       { id: "Posts", label: "Posts" },
+      { id: "Contacto", label: "Contacto" },
+      SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/portfolio/portfolio-template"),
   },
@@ -74,11 +98,14 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     demoContent: RISTORANTE_DEFAULT_CONTENT,
     editorTabs: [
       { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
       { id: "Carta", label: "Carta" },
       { id: "Galeria", label: "Galería" },
       { id: "Equipo", label: "Equipo" },
       { id: "Horarios", label: "Horarios" },
       { id: "FAQ", label: "FAQ" },
+      { id: "Contacto", label: "Contacto" },
+      SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/ristorante/ristorante-template"),
   },
@@ -90,10 +117,13 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     demoContent: FLORISTERIA_DEFAULT_CONTENT,
     editorTabs: [
       { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
       { id: "Servicios", label: "Servicios" },
       { id: "Galeria", label: "Galería" },
       { id: "Equipo", label: "Equipo" },
       { id: "FAQ", label: "FAQ" },
+      { id: "Contacto", label: "Contacto" },
+      SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/floristeria/floristeria-template"),
   },

@@ -7,6 +7,7 @@ import {
   NAV_ONLY_HEADING_ANCHORS,
   SECTION_HEADING_DEFAULTS,
 } from "@/lib/section-headings";
+import { getVisibleNav } from "@/lib/template-sections";
 
 type NavLabelsEditorProps = {
   activeLanding: Landing;
@@ -17,6 +18,11 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
   const templateId = activeLanding.template as TemplateId;
   const navOnlyAnchors = NAV_ONLY_HEADING_ANCHORS[templateId] ?? [];
   const defaults = SECTION_HEADING_DEFAULTS[templateId] ?? {};
+  const visibleNav = getVisibleNav(
+    activeLanding.content.nav,
+    activeLanding.content.hiddenSections,
+    templateId,
+  );
 
   return (
     <div className="space-y-5">
@@ -28,7 +34,7 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
       </div>
 
       <div className="space-y-4">
-        {activeLanding.content.nav.map((item) => (
+        {visibleNav.map((item) => (
           <label className="block" key={item.id}>
             <span className="mb-2 block font-label text-label-md text-on-surface-variant">
               {item.href}

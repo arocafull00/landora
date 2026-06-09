@@ -52,7 +52,7 @@ export function ActionButton({
 
   return (
     <button
-      className={`inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-body-sm font-medium shadow-sm transition-colors ${styles[variant]} ${className}`}
+      className={`inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-body-sm font-medium shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${styles[variant]} ${className}`}
       type="button"
       {...props}
     >

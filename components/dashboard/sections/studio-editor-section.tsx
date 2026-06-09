@@ -6,10 +6,12 @@ import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
-import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
+import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
+import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
+import { ContactEditorPanel } from "@/components/dashboard/contact-editor-panel";
+import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { LockIcon } from "lucide-react";
 
 export function StudioEditorSection() {
   const {
@@ -17,12 +19,12 @@ export function StudioEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
+    saveStatus,
     saveLanding,
     publishLanding,
     setActiveEditorTab,
     setActiveLandingId,
     updateHero,
-    updateLandingMeta,
     updateSectionItem,
   } = useDashboardStore();
 
@@ -34,6 +36,7 @@ export function StudioEditorSection() {
   const tabs = getVisibleEditorTabs(
     activeLanding.template,
     activeLanding.content.hiddenSections,
+    isAdmin,
   );
 
   const saveActive = () => saveLanding(activeLanding.id);
@@ -46,6 +49,7 @@ export function StudioEditorSection() {
   return (
     <EditorLayout
       activeLanding={activeLanding}
+      disabled={saveStatus === "saving"}
       landings={landings}
       onPublish={publishActive}
       onSave={saveActive}
@@ -69,44 +73,20 @@ export function StudioEditorSection() {
       }
       form={
         <>
-          {isAdmin ? (
-            <section className="space-y-4 border-b border-outline-variant pb-unit-lg">
-              <div className="flex items-center gap-1.5 text-on-surface-variant">
-                <LockIcon className="h-3.5 w-3.5" />
-                <span className="font-label text-label-sm uppercase tracking-wide">
-                  Solo admin
-                </span>
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <TextField
-                  label="Nombre interno"
-                  onChange={(value) =>
-                    updateLandingMeta(activeLanding.id, { name: value })
-                  }
-                  value={activeLanding.name}
-                />
-                <TextField
-                  label="Slug"
-                  onChange={(value) =>
-                    updateLandingMeta(activeLanding.id, { slug: value })
-                  }
-                  value={activeLanding.slug}
-                />
-                <TextField
-                  className="md:col-span-2"
-                  label="Título SEO"
-                  onChange={(value) =>
-                    updateLandingMeta(activeLanding.id, { seoTitle: value })
-                  }
-                  value={activeLanding.seoTitle}
-                />
-              </div>
-            </section>
+          {activeEditorTab === "Admin" && isAdmin ? (
+            <AdminEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Secciones" ? (
+            <SectionsEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Navegación" ? (
+            <NavEditorPanel activeLanding={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Hero" ? (
             <section className="space-y-5 py-unit-lg">
-              <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle title="Portada" description="El bloque principal de la landing." />
               <TextField
                 label="Subtítulo superior"
@@ -310,6 +290,10 @@ export function StudioEditorSection() {
                 Editor de posts disponible próximamente.
               </p>
             </section>
+          ) : null}
+
+          {activeEditorTab === "Contacto" ? (
+            <ContactEditorPanel activeLanding={activeLanding} />
           ) : null}
         </>
       }
