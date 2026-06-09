@@ -1,7 +1,7 @@
 import { VELAR_DEFAULT_CONTENT } from "@/lib/default-content";
 import { VELAR_ASSETS } from "@/lib/velar-assets";
 
-export type DashboardView = "editor" | "assets";
+export type DashboardView = "editor" | "assets" | "domain";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
 
@@ -101,6 +101,7 @@ export type Landing = {
   seoTitle: string;
   owner: string;
   template: TemplateId;
+  customDomain: string | null;
   content: LandingContent;
 };
 
@@ -277,6 +278,7 @@ export const dashboardViews: Array<{
 }> = [
   { id: "editor", label: "Editor", icon: "document" },
   { id: "assets", label: "Assets", icon: "folder" },
+  { id: "domain", label: "Dominio", icon: "link" },
 ];
 
 export function isDashboardView(value: string): value is DashboardView {
@@ -297,6 +299,7 @@ export const initialLandings: Landing[] = [
     seoTitle: "Toll Story | Espacios para eventos en Valencia",
     owner: "Riley",
     template: "velar",
+    customDomain: null,
     content: VELAR_DEFAULT_CONTENT,
   },
   {
@@ -308,6 +311,7 @@ export const initialLandings: Landing[] = [
     seoTitle: "Black Friday 2024 Huge Deals",
     owner: "Sarah",
     template: "velar",
+    customDomain: null,
     content: {
       brand: "Black Friday.",
       hero: {

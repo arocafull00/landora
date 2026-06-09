@@ -4,7 +4,7 @@ import { IBM_Plex_Sans, Inter, JetBrains_Mono, Syne, Playfair_Display } from "ne
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import { TooltipProvider } from "@/components/ui/tooltip";
-
+import { Analytics } from "@vercel/analytics/next"
 const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-headline",
   subsets: ["latin"],
@@ -56,6 +56,7 @@ export default function RootLayout({
           className="min-h-full overflow-hidden bg-surface-bg text-on-background"
           suppressHydrationWarning
         >
+          <Analytics />
           <TooltipProvider>
             {children}
             <ToastContainer />

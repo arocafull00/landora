@@ -10,6 +10,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AssetsSection } from "@/components/dashboard/sections/assets-section";
+import { DomainSection } from "@/components/dashboard/sections/domain-section";
 import { EditorSection } from "@/components/dashboard/sections/editor-section";
 
 export function DashboardShell({
@@ -59,6 +60,7 @@ export function DashboardShell({
         <div className="flex min-h-0 flex-1 overflow-hidden">
           {activeView === "editor" ? <EditorSection /> : null}
           {activeView === "assets" ? <AssetsSection /> : null}
+          {activeView === "domain" ? <DomainSection /> : null}
         </div>
       </SidebarInset>
     </SidebarProvider>

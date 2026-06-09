@@ -7,7 +7,9 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users, landingPages } from "@/db/schema";
 import { getLandingBySlug } from "@/data/admin";
-import { updateLandingPage } from "@/data/landing-pages";
+import { getLandingPageById, updateLandingPage } from "@/data/landing-pages";
+import { isReservedSlug } from "@/lib/app-host";
+import { removeProjectDomain } from "@/lib/vercel-domains";
 import { seedLandingSections, ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
 import { isAdmin } from "@/lib/is-admin";
 const createUserSchema = z.object({
@@ -80,7 +82,10 @@ const createLandingSchema = z.object({
   slug: z
     .string()
     .min(1, "El slug es requerido")
-    .regex(/^[a-z0-9-]+$/, "El slug solo puede contener letras, números y guiones"),
+    .regex(/^[a-z0-9-]+$/, "El slug solo puede contener letras, números y guiones")
+    .refine((value) => !isReservedSlug(value), {
+      message: "Ese slug está reservado por el sistema",
+    }),
   template: z.enum(["velar", "studio", "portfolio", "ristorante", "floristeria"]).default("velar"),
 });
 
@@ -175,6 +180,16 @@ export async function deleteLanding(landingId: string): Promise<ActionResult> {
   const parsed = landingIdSchema.safeParse(landingId);
   if (!parsed.success) {
     return { error: parsed.error.message };
+  }
+
+  const landing = await getLandingPageById(parsed.data);
+
+  if (landing?.customDomain) {
+    try {
+      await removeProjectDomain(landing.customDomain);
+    } catch {
+      return { error: "Error al eliminar el dominio de Vercel" };
+    }
   }
 
   try {

@@ -27,6 +27,7 @@ export const landingPages = pgTable("landing_pages", {
   slug: text("slug").notNull().unique(),
   template: text("template").$type<"velar" | "studio" | "portfolio" | "ristorante" | "floristeria">().notNull().default("velar"),
   published: boolean("published").notNull().default(false),
+  customDomain: text("custom_domain").unique(),
   updatedAt: timestamp("updated_at").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
 });

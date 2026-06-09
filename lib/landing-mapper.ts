@@ -155,6 +155,7 @@ export function toLandingView(row: LandingWithSections, user: User | undefined):
     seoTitle: row.seo?.title || row.name,
     owner: user?.name ?? "—",
     template: row.template,
+    customDomain: row.customDomain ?? null,
     content: toLandingContent(row),
   };
 }

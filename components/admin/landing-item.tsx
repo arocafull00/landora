@@ -56,8 +56,13 @@ export function LandingItem({ landing }: { landing: LandingPage }) {
           {landing.name}
         </p>
         <p className="font-mono text-body-sm text-on-surface-variant/60">
-          /{landing.slug}
+          /{landing.slug.replace(/^\//, "")}
         </p>
+        {landing.customDomain ? (
+          <p className="font-mono text-body-sm text-on-surface-variant/60">
+            {landing.customDomain}
+          </p>
+        ) : null}
       </div>
       <div className="flex items-center gap-3">
         <p className="font-body text-body-sm text-on-surface-variant">
@@ -65,15 +70,28 @@ export function LandingItem({ landing }: { landing: LandingPage }) {
         </p>
         <StatusBadge status={landing.published ? "Published" : "Draft"} />
         {landing.published ? (
-          <a
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-primary"
-            href={`/${landing.slug}`}
-            rel="noopener noreferrer"
-            target="_blank"
-            title="Ver landing publicada"
-          >
-            <Icon className="h-4 w-4" name="link" />
-          </a>
+          <>
+            <a
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-primary"
+              href={`/${landing.slug.replace(/^\//, "")}`}
+              rel="noopener noreferrer"
+              target="_blank"
+              title="Ver landing publicada"
+            >
+              <Icon className="h-4 w-4" name="link" />
+            </a>
+            {landing.customDomain ? (
+              <a
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-primary"
+                href={`https://${landing.customDomain}`}
+                rel="noopener noreferrer"
+                target="_blank"
+                title="Ver dominio personalizado"
+              >
+                <Icon className="h-4 w-4" name="web" />
+              </a>
+            ) : null}
+          </>
         ) : null}
         <ActionButton
           disabled={isPending || isDeletePending}

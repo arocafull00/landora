@@ -29,6 +29,9 @@ export async function generateMetadata({
   return {
     title: landing.seo?.title || landing.hero?.title || landing.name,
     description: landing.seo?.description || landing.hero?.subtitle || "",
+    alternates: landing.customDomain
+      ? { canonical: `https://${landing.customDomain}` }
+      : undefined,
   };
 }
 
