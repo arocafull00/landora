@@ -1,0 +1,1 @@
+ALTER TABLE "landing_hero" ADD COLUMN "cta_label" text DEFAULT '' NOT NULL;

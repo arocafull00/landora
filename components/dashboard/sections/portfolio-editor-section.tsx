@@ -1,11 +1,10 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { Panel } from "@/components/ui/primitives";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getTemplate } from "@/lib/template-registry";
+import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
@@ -30,8 +29,10 @@ export function PortfolioEditorSection() {
 
   if (!activeLanding) return null;
 
-  const template = getTemplate(activeLanding.template);
-  const tabs = template?.editorTabs ?? [];
+  const tabs = getVisibleEditorTabs(
+    activeLanding.template,
+    activeLanding.content.hiddenSections,
+  );
 
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
@@ -66,7 +67,7 @@ export function PortfolioEditorSection() {
       }
       form={
         <>
-          <Panel className="p-unit-md">
+          <section className="space-y-4 border-b border-outline-variant pb-unit-lg">
             <div className="grid gap-4 md:grid-cols-2">
               <TextField
                 label="Landing name"
@@ -91,10 +92,10 @@ export function PortfolioEditorSection() {
                 value={activeLanding.seoTitle}
               />
             </div>
-          </Panel>
+          </section>
 
           {activeEditorTab === "Hero" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle title="Hero" description="Edita el bloque principal del portfolio." />
               <TextField
@@ -112,6 +113,11 @@ export function PortfolioEditorSection() {
                 onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
                 value={activeLanding.content.hero.subtitle}
               />
+              <TextField
+                label="Texto del botón"
+                onChange={(value) => updateHero(activeLanding.id, { ctaLabel: value })}
+                value={activeLanding.content.hero.ctaLabel ?? ""}
+              />
               <ImageField
                 label="Hero image"
                 onChange={(value) => updateHero(activeLanding.id, { image: value })}
@@ -119,33 +125,41 @@ export function PortfolioEditorSection() {
                 templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
               />
-            </Panel>
+            </section>
           ) : null}
 
           {activeEditorTab === "Proyectos" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Proyectos" description="Edita las imágenes de la galería de proyectos." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="proyectos"
                 fallback={SECTION_HEADING_DEFAULTS.portfolio.proyectos}
               />
-              {(activeLanding.content.gallery ?? []).map((item) => (
-                <Panel className="space-y-3 p-3" key={item.id}>
-                  <ImageField
-                    label="Imagen"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "gallery", item.id, { image: value })
-                    }
-                    value={item.image ?? ""}
-                  />
-                </Panel>
-              ))}
-            </Panel>
+              <div className="space-y-6">
+                {(activeLanding.content.gallery ?? []).map((item, index) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
+                    <p className="font-label text-label-md text-on-surface-variant">
+                      Imagen {index + 1}
+                    </p>
+                    <ImageField
+                      label="Imagen"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, { image: value })
+                      }
+                      value={item.image ?? ""}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "Experiencia" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle
                 title="Experiencia laboral"
                 description="Edita tu historial profesional."
@@ -155,8 +169,12 @@ export function PortfolioEditorSection() {
                 anchor="experiencia"
                 fallback={SECTION_HEADING_DEFAULTS.portfolio.experiencia}
               />
-              {workHistory.map((item) => (
-                <Panel className="space-y-3 p-3" key={item.id}>
+              <div className="space-y-6">
+                {workHistory.map((item) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
                   <TextField
                     label="Fechas"
                     onChange={(value) =>
@@ -227,21 +245,26 @@ export function PortfolioEditorSection() {
                     }
                     value={item.technologies.join(", ")}
                   />
-                </Panel>
-              ))}
-            </Panel>
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "Servicios" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Servicios" description="Edita los servicios ofrecidos." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="servicios"
                 fallback={SECTION_HEADING_DEFAULTS.portfolio.servicios}
               />
-              {serviceMenu.map((item) => (
-                <Panel className="space-y-3 p-3" key={item.id}>
+              <div className="space-y-6">
+                {serviceMenu.map((item) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
                   <TextField
                     label="Categoría"
                     onChange={(value) =>
@@ -270,21 +293,26 @@ export function PortfolioEditorSection() {
                     }
                     value={item.price}
                   />
-                </Panel>
-              ))}
-            </Panel>
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "FAQ" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="FAQ" description="Edita las preguntas frecuentes." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="faq"
                 fallback={SECTION_HEADING_DEFAULTS.portfolio.faq}
               />
-              {faq.map((item) => (
-                <Panel className="space-y-3 p-3" key={item.id}>
+              <div className="space-y-6">
+                {faq.map((item) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
                   <TextField
                     label="Pregunta"
                     onChange={(value) =>
@@ -300,18 +328,19 @@ export function PortfolioEditorSection() {
                     rows={4}
                     value={item.answer}
                   />
-                </Panel>
-              ))}
-            </Panel>
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "Posts" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Posts" description="Contenido editorial asociado." />
               <p className="text-body-sm text-on-surface-variant">
                 Editor de posts disponible próximamente.
               </p>
-            </Panel>
+            </section>
           ) : null}
         </>
       }

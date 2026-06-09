@@ -8,19 +8,24 @@ type SectionHeadingFieldsProps = {
   activeLanding: Landing;
   anchor: string;
   fallback: SectionHeading;
+  groupLabel?: string;
 };
 
 export function SectionHeadingFields({
   activeLanding,
   anchor,
   fallback,
+  groupLabel,
 }: SectionHeadingFieldsProps) {
   const { updateSectionHeading } = useDashboardStore();
   const heading = getSectionHeading(activeLanding.content, anchor, fallback);
   const showSubtitle = hasSectionSubtitle(fallback);
 
   return (
-    <div className="space-y-4 rounded-lg border border-outline-variant bg-surface-container-low px-unit-md py-unit-sm">
+    <div className="space-y-4">
+      {groupLabel ? (
+        <p className="font-label text-label-md text-on-surface-variant">{groupLabel}</p>
+      ) : null}
       <EditorTextField
         label="Título de sección"
         onChange={(value) => updateSectionHeading(activeLanding.id, anchor, { title: value })}

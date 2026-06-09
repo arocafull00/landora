@@ -3,6 +3,7 @@
 import { useLayoutEffect } from "react";
 import { DashboardView, Landing } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useAssetsStore } from "@/stores/assets-store";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import {
   SidebarInset,
@@ -31,6 +32,7 @@ export function DashboardShell({
 
   useLayoutEffect(() => {
     useDashboardStore.persist.rehydrate();
+    useAssetsStore.getState().ensureLoaded();
 
     const { landings } = useDashboardStore.getState();
     const hasPersistedDraft = landings.some((landing) => landing.id === initialLanding.id);

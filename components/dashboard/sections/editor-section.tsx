@@ -102,8 +102,8 @@ export function EditorSection() {
       form={
         <>
           {isAdmin ? (
-            <section className="rounded-lg border border-outline-variant bg-surface-container px-unit-md py-unit-sm">
-              <div className="mb-3 flex items-center gap-1.5 text-on-surface-variant">
+            <section className="space-y-4 border-b border-outline-variant pb-unit-lg">
+              <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <LockIcon className="h-3.5 w-3.5" />
                 <span className="font-label text-label-sm uppercase tracking-wide">
                   Solo admin

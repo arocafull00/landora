@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { toast } from "react-toastify";
 import {
   Asset,
   ContentGroup,
@@ -390,8 +391,10 @@ export const useDashboardStore = create<DashboardState>()(
           l.id === id ? { ...l, status: "Draft", edited: "Saved just now" } : l,
         ),
       }));
+      toast.success("Cambios guardados");
     } catch {
       set({ saveStatus: "error" });
+      toast.error("No se pudieron guardar los cambios");
     }
   },
 
@@ -410,8 +413,10 @@ export const useDashboardStore = create<DashboardState>()(
           l.id === id ? { ...l, status: "Published", edited: "Published just now" } : l,
         ),
       }));
+      toast.success("Landing publicada");
     } catch {
       set({ saveStatus: "error" });
+      toast.error("No se pudo publicar la landing");
     }
   },
 

@@ -2,11 +2,15 @@
 
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { PasswordInput } from "@/components/ui/password-input";
 
 export function SignInForm() {
   const { signIn, errors, fetchStatus } = useSignIn();
   const router = useRouter();
+  const [submittedIdentifier, setSubmittedIdentifier] = useState<string | null>(
+    null,
+  );
 
   const isLoading = fetchStatus === "fetching";
 
@@ -33,6 +37,7 @@ export function SignInForm() {
     const identifier = formData.get("email") as string;
     const password = formData.get("password") as string;
 
+    setSubmittedIdentifier(identifier);
     await signIn.password({ identifier, password });
 
     if (
@@ -92,8 +97,20 @@ export function SignInForm() {
     signIn.status === "needs_second_factor" ||
     signIn.status === "needs_client_trust"
   ) {
+    const verificationTarget =
+      signIn.identifier ?? submittedIdentifier ?? undefined;
+
     return (
       <form onSubmit={handleMfaSubmit} className="space-y-4">
+        {verificationTarget && (
+          <p className="text-body-sm text-on-surface-variant">
+            We sent a verification code to{" "}
+            <span className="font-medium text-on-surface">
+              {verificationTarget}
+            </span>
+          </p>
+        )}
+
         <div className="space-y-1">
           <label
             htmlFor="code"

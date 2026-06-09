@@ -22,6 +22,7 @@ export async function PATCH(
       description: typeof body.description === "string" ? body.description : "",
       image: typeof body.image === "string" ? body.image : "",
       houseImage: typeof body.houseImage === "string" ? body.houseImage : "",
+      ctaLabel: typeof body.ctaLabel === "string" ? body.ctaLabel : "",
     });
 
     return Response.json({ ok: true });

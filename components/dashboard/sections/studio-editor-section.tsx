@@ -4,7 +4,7 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getTemplate } from "@/lib/template-registry";
+import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
@@ -31,8 +31,10 @@ export function StudioEditorSection() {
 
   if (!activeLanding) return null;
 
-  const template = getTemplate(activeLanding.template);
-  const tabs = template?.editorTabs ?? [];
+  const tabs = getVisibleEditorTabs(
+    activeLanding.template,
+    activeLanding.content.hiddenSections,
+  );
 
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
@@ -68,8 +70,8 @@ export function StudioEditorSection() {
       form={
         <>
           {isAdmin ? (
-            <section className="rounded-lg border border-outline-variant bg-surface-container px-unit-md py-unit-sm">
-              <div className="mb-3 flex items-center gap-1.5 text-on-surface-variant">
+            <section className="space-y-4 border-b border-outline-variant pb-unit-lg">
+              <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <LockIcon className="h-3.5 w-3.5" />
                 <span className="font-label text-label-sm uppercase tracking-wide">
                   Solo admin
@@ -120,6 +122,11 @@ export function StudioEditorSection() {
                 label="Subtítulo"
                 onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
                 value={activeLanding.content.hero.subtitle}
+              />
+              <TextField
+                label="Texto del botón"
+                onChange={(value) => updateHero(activeLanding.id, { ctaLabel: value })}
+                value={activeLanding.content.hero.ctaLabel ?? ""}
               />
               <ImageField
                 label="Imagen de portada"

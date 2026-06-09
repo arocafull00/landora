@@ -33,10 +33,12 @@ function uniqueBySortOrder<T extends { sortOrder: number }>(items: T[]) {
 
 export function toLandingContent(row: LandingWithSections): LandingContent {
   const sectionHeadings = (row.branding?.sectionHeadings ?? {}) as LandingContent["sectionHeadings"];
+  const hiddenSections = (row.branding?.hiddenSections ?? []) as string[];
 
   return {
     brand: row.branding?.brand ?? "",
     sectionHeadings,
+    hiddenSections,
     hero: {
       eyebrow: row.hero?.eyebrow ?? "",
       title: row.hero?.title ?? "",
@@ -44,6 +46,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       description: row.hero?.description ?? "",
       image: mapImage(row.hero?.image),
       houseImage: mapImage(row.hero?.houseImage),
+      ctaLabel: row.hero?.ctaLabel ?? "",
     },
     story: {
       statement: row.story?.statement ?? "",

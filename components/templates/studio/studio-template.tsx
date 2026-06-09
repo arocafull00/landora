@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { StudioAosInit } from "@/components/templates/studio/studio-aos-init";
 import { StudioNav } from "@/components/templates/studio/studio-nav";
 import { StudioHero } from "@/components/templates/studio/studio-hero";
@@ -33,23 +34,28 @@ export function StudioTemplate({
 
       <StudioNav
         brand={content.brand || "Studio"}
-        navLinks={content.nav}
+        navLinks={getVisibleNav(content.nav, content.hiddenSections, "studio")}
+        ctaLabel={content.hero.ctaLabel ?? ""}
         topOffset={topOffset}
       />
 
       <StudioHero content={content} heroRef={heroRef} />
 
-      <StudioAbout content={content} />
+      {isSectionVisible(content, "story") ? <StudioAbout content={content} /> : null}
 
-      <StudioServicesSection content={content} />
+      {isSectionVisible(content, "servicios") ? (
+        <StudioServicesSection content={content} />
+      ) : null}
 
-      <StudioTeamSection content={content} />
+      {isSectionVisible(content, "equipo") ? <StudioTeamSection content={content} /> : null}
 
-      <StudioGallerySection content={content} />
+      {isSectionVisible(content, "galeria") ? <StudioGallerySection content={content} /> : null}
 
-      <StudioTestimonialsSection content={content} />
+      {isSectionVisible(content, "testimonios") ? (
+        <StudioTestimonialsSection content={content} />
+      ) : null}
 
-      <StudioFaqSection content={content} />
+      {isSectionVisible(content, "faq") ? <StudioFaqSection content={content} /> : null}
 
       <StudioContactSection content={content} />
     </div>

@@ -53,18 +53,31 @@ export async function upsertLandingBranding(
   data: {
     brand: string;
     sectionHeadings?: Record<string, { title: string; subtitle: string }>;
+    hiddenSections?: string[];
   }
 ) {
   try {
-    const set: { brand: string; sectionHeadings?: Record<string, { title: string; subtitle: string }> } = {
+    const set: {
+      brand: string;
+      sectionHeadings?: Record<string, { title: string; subtitle: string }>;
+      hiddenSections?: string[];
+    } = {
       brand: data.brand,
     };
     if (data.sectionHeadings !== undefined) {
       set.sectionHeadings = data.sectionHeadings;
     }
+    if (data.hiddenSections !== undefined) {
+      set.hiddenSections = data.hiddenSections;
+    }
     await db
       .insert(landingBranding)
-      .values({ landingId, brand: data.brand, sectionHeadings: data.sectionHeadings ?? {} })
+      .values({
+        landingId,
+        brand: data.brand,
+        sectionHeadings: data.sectionHeadings ?? {},
+        hiddenSections: data.hiddenSections ?? [],
+      })
       .onConflictDoUpdate({ target: landingBranding.landingId, set });
   } catch {
     throw new Error("Failed to update branding");
@@ -80,6 +93,7 @@ export async function upsertLandingHero(
     description: string;
     image: string;
     houseImage: string;
+    ctaLabel: string;
   }
 ) {
   try {

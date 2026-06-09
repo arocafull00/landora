@@ -7,6 +7,7 @@ export const heroFormSchema = z.object({
   description: z.string(),
   image: z.string(),
   houseImage: z.string(),
+  ctaLabel: z.string(),
 });
 
 export type HeroFormValues = z.infer<typeof heroFormSchema>;

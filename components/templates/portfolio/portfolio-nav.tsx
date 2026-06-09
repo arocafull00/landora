@@ -8,10 +8,12 @@ import type { NavLink } from "@/lib/dashboard-data";
 export function PortfolioNav({
   brand,
   navLinks,
+  ctaLabel,
   topOffset = 0,
 }: {
   brand: string;
   navLinks: NavLink[];
+  ctaLabel: string;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,7 +51,7 @@ export function PortfolioNav({
             className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-wide text-[#0a0a0a] transition-colors hover:bg-white/90"
             href="#contacto"
           >
-            Contactar
+            {ctaLabel || "Ver proyectos"}
           </a>
         </div>
 
@@ -97,7 +99,7 @@ export function PortfolioNav({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}
             >
-              Contactar
+              {ctaLabel || "Ver proyectos"}
             </motion.a>
           </motion.div>
         )}

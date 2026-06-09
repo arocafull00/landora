@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect } from "react";
 import { AssetImage } from "@/components/ui/asset-image";
 import type { AssetRow } from "@/db/schema";
 import { uploadAsset } from "@/lib/upload-asset";
+import { useAssetsStore } from "@/stores/assets-store";
 import { ActionButton, IconButton } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import { PendingFileRow, type PendingFile } from "./pending-file-row";
@@ -16,24 +17,23 @@ import {
 
 export function AssetsSection() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [assets, setAssets] = useState<AssetRow[]>([]);
+  const assets = useAssetsStore((state) => state.rows);
+  const ensureLoaded = useAssetsStore((state) => state.ensureLoaded);
+  const prepend = useAssetsStore((state) => state.prepend);
+  const remove = useAssetsStore((state) => state.remove);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [pendingFiles, setPendingFiles] = useState<PendingFile[]>([]);
   const [copied, setCopied] = useState(false);
 
-  const load = useCallback(() => {
-    fetch("/api/assets")
-      .then((r) => r.json())
-      .then((data: AssetRow[]) => {
-        if (Array.isArray(data)) {
-          setAssets(data);
-          setActiveId((prev) => prev ?? data[0]?.id ?? null);
-        }
-      })
-      .catch(() => null);
-  }, []);
+  useEffect(() => {
+    ensureLoaded();
+  }, [ensureLoaded]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    if (activeId) return;
+    if (assets.length === 0) return;
+    setActiveId(assets[0].id);
+  }, [activeId, assets]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
@@ -70,7 +70,7 @@ export function AssetsSection() {
       .map((r) => r.value);
 
     if (uploaded.length > 0) {
-      setAssets((prev) => [...uploaded, ...prev]);
+      uploaded.forEach((row) => prepend(row));
       setActiveId(uploaded[0].id);
     }
 
@@ -90,7 +90,7 @@ export function AssetsSection() {
   const deleteAsset = async () => {
     if (!active) return;
     await fetch(`/api/assets/${active.id}`, { method: "DELETE" });
-    setAssets((prev) => prev.filter((a) => a.id !== active.id));
+    remove(active.id);
     setActiveId(null);
   };
 

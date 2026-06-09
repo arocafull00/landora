@@ -41,6 +41,7 @@ export async function seedLandingSections(landingId: string, templateId: Templat
     upsertLandingBranding(landingId, {
       brand: c.brand,
       sectionHeadings: (c.sectionHeadings ?? {}) as Record<string, { title: string; subtitle: string }>,
+      hiddenSections: [],
     }),
     upsertLandingHero(landingId, {
       eyebrow: c.hero.eyebrow,
@@ -49,6 +50,7 @@ export async function seedLandingSections(landingId: string, templateId: Templat
       description: c.hero.description,
       image: c.hero.image,
       houseImage: c.hero.houseImage ?? "",
+      ctaLabel: c.hero.ctaLabel ?? "",
     }),
     upsertLandingStory(landingId, { statement: getDefaultStoryStatement(templateId, c) }),
     upsertLandingCta(landingId, {
@@ -159,6 +161,7 @@ async function seedMissingLandingSections(
         description: c.hero.description,
         image: c.hero.image,
         houseImage: c.hero.houseImage ?? "",
+        ctaLabel: c.hero.ctaLabel ?? "",
       })
     );
   }
@@ -168,6 +171,7 @@ async function seedMissingLandingSections(
       upsertLandingBranding(landingId, {
         brand: c.brand,
         sectionHeadings: (c.sectionHeadings ?? {}) as Record<string, { title: string; subtitle: string }>,
+        hiddenSections: landing.branding?.hiddenSections ?? [],
       }),
     );
   }

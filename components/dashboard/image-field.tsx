@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import type { AssetRow } from "@/db/schema";
 import type { TemplateId } from "@/lib/dashboard-data";
+import { useAssetsStore } from "@/stores/assets-store";
 import { getTemplatePalette } from "@/lib/template-palettes";
 import { isBackgroundPreset } from "@/lib/background-assets";
 import { AssetImage } from "@/components/ui/asset-image";
@@ -33,16 +33,13 @@ export function ImageField({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
-  const [assets, setAssets] = useState<AssetRow[]>([]);
+  const assets = useAssetsStore((state) => state.rows);
+  const ensureLoaded = useAssetsStore((state) => state.ensureLoaded);
+  const prepend = useAssetsStore((state) => state.prepend);
 
   useEffect(() => {
-    fetch("/api/assets")
-      .then((r) => r.json())
-      .then((data: AssetRow[]) => {
-        if (Array.isArray(data)) setAssets(data);
-      })
-      .catch(() => null);
-  }, []);
+    ensureLoaded();
+  }, [ensureLoaded]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,7 +49,7 @@ export function ImageField({
 
     try {
       const row = await uploadAsset(file);
-      setAssets((prev) => [row, ...prev]);
+      prepend(row);
       onChange(row.url);
     } catch {
       /* noop */

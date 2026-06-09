@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { FloristeriaAosInit } from "@/components/templates/floristeria/floristeria-aos-init";
 import { FloristeriaNav } from "@/components/templates/floristeria/floristeria-nav";
 import { FloristeriaHero } from "@/components/templates/floristeria/floristeria-hero";
@@ -33,23 +34,30 @@ export function FloristeriaTemplate({
 
       <FloristeriaNav
         brand={content.brand || "Jardín Secreto."}
-        navLinks={content.nav}
+        navLinks={getVisibleNav(content.nav, content.hiddenSections, "floristeria")}
+        ctaLabel={content.hero.ctaLabel ?? ""}
         topOffset={topOffset}
       />
 
       <FloristeriaHero content={content} heroRef={heroRef} />
 
-      <FloristeriaAbout content={content} />
+      {isSectionVisible(content, "story") ? <FloristeriaAbout content={content} /> : null}
 
-      <FloristeriaServicesSection content={content} />
+      {isSectionVisible(content, "servicios") ? (
+        <FloristeriaServicesSection content={content} />
+      ) : null}
 
-      <FloristeriaGallerySection content={content} />
+      {isSectionVisible(content, "galeria") ? (
+        <FloristeriaGallerySection content={content} />
+      ) : null}
 
-      <FloristeriaTeamSection content={content} />
+      {isSectionVisible(content, "equipo") ? <FloristeriaTeamSection content={content} /> : null}
 
-      <FloristeriaTestimonialsSection content={content} />
+      {isSectionVisible(content, "testimonios") ? (
+        <FloristeriaTestimonialsSection content={content} />
+      ) : null}
 
-      <FloristeriaFaqSection content={content} />
+      {isSectionVisible(content, "faq") ? <FloristeriaFaqSection content={content} /> : null}
 
       <FloristeriaContactSection content={content} />
     </div>

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos-init";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
 import { PortfolioHero } from "@/components/templates/portfolio/portfolio-hero";
@@ -34,25 +35,34 @@ export function PortfolioTemplate({
 
       <PortfolioNav
         brand={content.brand || "Mora."}
-        navLinks={content.nav}
+        navLinks={getVisibleNav(content.nav, content.hiddenSections, "portfolio")}
+        ctaLabel={content.hero.ctaLabel ?? ""}
         topOffset={topOffset}
       />
 
       <PortfolioHero content={content} heroRef={heroRef} />
 
-      <PortfolioAbout content={content} />
+      {isSectionVisible(content, "story") ? <PortfolioAbout content={content} /> : null}
 
-      <PortfolioWorkHistorySection content={content} />
+      {isSectionVisible(content, "experiencia") ? (
+        <PortfolioWorkHistorySection content={content} />
+      ) : null}
 
-      <PortfolioProjectsSection content={content} />
+      {isSectionVisible(content, "proyectos") ? (
+        <PortfolioProjectsSection content={content} />
+      ) : null}
 
-      <PortfolioSkillsSection content={content} />
+      {isSectionVisible(content, "skills") ? <PortfolioSkillsSection content={content} /> : null}
 
-      <PortfolioServicesSection content={content} />
+      {isSectionVisible(content, "servicios") ? (
+        <PortfolioServicesSection content={content} />
+      ) : null}
 
-      <PortfolioTestimonialsSection content={content} />
+      {isSectionVisible(content, "testimonios") ? (
+        <PortfolioTestimonialsSection content={content} />
+      ) : null}
 
-      <PortfolioFaqSection content={content} />
+      {isSectionVisible(content, "faq") ? <PortfolioFaqSection content={content} /> : null}
 
       <PortfolioContactSection content={content} />
     </div>

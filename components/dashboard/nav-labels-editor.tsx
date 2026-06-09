@@ -19,7 +19,7 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
   const defaults = SECTION_HEADING_DEFAULTS[templateId] ?? {};
 
   return (
-    <div className="space-y-5 rounded-lg border border-outline-variant bg-surface-container px-unit-md py-unit-sm">
+    <div className="space-y-5">
       <div>
         <h3 className="text-body-lg font-semibold text-on-surface">Menú de navegación</h3>
         <p className="mt-1 text-body-sm text-on-surface-variant">
@@ -46,7 +46,7 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
       </div>
 
       {navOnlyAnchors.length > 0 ? (
-        <div className="space-y-4 border-t border-outline-variant pt-4">
+        <div className="space-y-5 border-t border-outline-variant pt-5">
           {navOnlyAnchors.map((anchor) => {
             const fallback = defaults[anchor];
             if (!fallback) return null;
@@ -56,6 +56,7 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
                 activeLanding={activeLanding}
                 anchor={anchor}
                 fallback={fallback}
+                groupLabel={`#${anchor}`}
                 key={anchor}
               />
             );

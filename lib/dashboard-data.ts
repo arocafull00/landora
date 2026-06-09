@@ -15,6 +15,7 @@ export type BaseContent = {
   hero: HeroContent;
   nav: NavLink[];
   sectionHeadings: Partial<Record<string, SectionHeading>>;
+  hiddenSections?: string[];
   contact: ContactContent;
   stats: StatContent[];
   testimonials: TestimonialContent[];
@@ -112,6 +113,7 @@ export type HeroContent = {
   description: string;
   image: string;
   houseImage?: string;
+  ctaLabel: string;
 };
 
 export type StoryContent = {
@@ -287,8 +289,6 @@ export function isDashboardView(value: string): value is DashboardView {
 
 export const workspaceTabs = ["Structure", "Presentation", "Vision", "Media"];
 export const contentGroups: ContentGroup[] = ["Pages", "Posts", "Presentations", "Assets"];
-export const editorTabs = ["Hero", "Historia", "Galería", "Espacios", "Servicios", "Proceso", "Testimonios"];
-
 export const initialLandings: Landing[] = [
   {
     id: "toll-story",
@@ -321,6 +321,7 @@ export const initialLandings: Landing[] = [
         description: "Landing promocional con CTA directo y bloques de producto.",
         image: VELAR_ASSETS.toll4,
         houseImage: VELAR_ASSETS.hero,
+        ctaLabel: "",
       },
       story: {
         statement:

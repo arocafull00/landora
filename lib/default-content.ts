@@ -19,6 +19,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
       "Espacio diseñado para la celebración de eventos privados y de empresa en Valencia y área metropolitana.",
     image: BG_IMG,
     houseImage: VELAR_ASSETS.hero,
+    ctaLabel: "",
   },
   story: {
     statement:
@@ -216,6 +217,7 @@ export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
     subtitle: "Donde cada corte cuenta una historia. Tu estilo, nuestra pasión.",
     description: "Salón de peluquería y estilismo en el corazón de Madrid.",
     image: STUDIO_ASSETS.hero,
+    ctaLabel: "Reservar cita",
   },
   nav: [
     { id: "nav-servicios", label: "Servicios", href: "#servicios" },
@@ -329,6 +331,7 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
     subtitle: "Diseño experiencias digitales que conectan marcas con personas.",
     description: "Portfolio de diseño y dirección creativa en Barcelona.",
     image: PORTFOLIO_ASSETS.hero,
+    ctaLabel: "Ver proyectos",
   },
   nav: [
     { id: "nav-experiencia", label: "Experiencia", href: "#experiencia" },
@@ -457,6 +460,7 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
     subtitle: "Tradición, pasión y los mejores ingredientes del Mediterráneo.",
     description: "Restaurante italiano en el corazón de Madrid desde 2008.",
     image: RISTORANTE_ASSETS.hero,
+    ctaLabel: "Reservar mesa",
   },
   nav: [
     { id: "nav-carta", label: "Carta", href: "#carta" },
@@ -570,6 +574,7 @@ export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
     subtitle: "Creamos arreglos florales únicos para cada momento especial de tu vida.",
     description: "Floristería artesanal en el centro de Sevilla desde 2012.",
     image: FLORISTERIA_ASSETS.hero,
+    ctaLabel: "Hacer pedido",
   },
   nav: [
     { id: "nav-servicios", label: "Servicios", href: "#servicios" },

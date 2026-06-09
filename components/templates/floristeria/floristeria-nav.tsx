@@ -8,10 +8,12 @@ import type { NavLink } from "@/lib/dashboard-data";
 export function FloristeriaNav({
   brand,
   navLinks,
+  ctaLabel,
   topOffset = 0,
 }: {
   brand: string;
   navLinks: NavLink[];
+  ctaLabel: string;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,7 +51,7 @@ export function FloristeriaNav({
             className="rounded-full bg-[#2D5016] px-5 py-2.5 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#234012]"
             href="#contacto"
           >
-            Hacer pedido
+            {ctaLabel || "Hacer pedido"}
           </a>
         </div>
 
@@ -97,7 +99,7 @@ export function FloristeriaNav({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}
             >
-              Hacer pedido
+              {ctaLabel || "Hacer pedido"}
             </motion.a>
           </motion.div>
         )}

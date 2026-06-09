@@ -1,11 +1,10 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { Panel } from "@/components/ui/primitives";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getTemplate } from "@/lib/template-registry";
+import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavLabelsEditor } from "@/components/dashboard/nav-labels-editor";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
@@ -30,8 +29,10 @@ export function RistoranteEditorSection() {
 
   if (!activeLanding) return null;
 
-  const template = getTemplate(activeLanding.template);
-  const tabs = template?.editorTabs ?? [];
+  const tabs = getVisibleEditorTabs(
+    activeLanding.template,
+    activeLanding.content.hiddenSections,
+  );
 
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
@@ -67,7 +68,7 @@ export function RistoranteEditorSection() {
       }
       form={
         <>
-          <Panel className="p-unit-md">
+          <section className="space-y-4 border-b border-outline-variant pb-unit-lg">
             <div className="grid gap-4 md:grid-cols-2">
               <TextField
                 label="Landing name"
@@ -92,10 +93,10 @@ export function RistoranteEditorSection() {
                 value={activeLanding.seoTitle}
               />
             </div>
-          </Panel>
+          </section>
 
           {activeEditorTab === "Hero" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <NavLabelsEditor activeLanding={activeLanding} />
               <SectionTitle title="Hero" description="Edita el bloque principal del restaurante." />
               <TextField
@@ -113,6 +114,11 @@ export function RistoranteEditorSection() {
                 onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
                 value={activeLanding.content.hero.subtitle}
               />
+              <TextField
+                label="Texto del botón"
+                onChange={(value) => updateHero(activeLanding.id, { ctaLabel: value })}
+                value={activeLanding.content.hero.ctaLabel ?? ""}
+              />
               <ImageField
                 label="Hero image"
                 onChange={(value) => updateHero(activeLanding.id, { image: value })}
@@ -120,19 +126,23 @@ export function RistoranteEditorSection() {
                 templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
               />
-            </Panel>
+            </section>
           ) : null}
 
           {activeEditorTab === "Carta" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Carta" description="Edita la carta con categorías y precios." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="carta"
                 fallback={SECTION_HEADING_DEFAULTS.ristorante.carta}
               />
-              {serviceMenu.map((item) => (
-                <Panel className="space-y-3 p-3" key={item.id}>
+              <div className="space-y-6">
+                {serviceMenu.map((item) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
                   <TextField
                     label="Categoría"
                     onChange={(value) =>
@@ -161,43 +171,56 @@ export function RistoranteEditorSection() {
                     }
                     value={item.price}
                   />
-                </Panel>
-              ))}
-            </Panel>
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "Galeria" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Galería" description="Edita las imágenes de la galería." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="galeria"
                 fallback={SECTION_HEADING_DEFAULTS.ristorante.galeria}
               />
-              {(activeLanding.content.gallery ?? []).map((item) => (
-                <Panel className="space-y-3 p-3" key={item.id}>
-                  <ImageField
-                    label="Imagen"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "gallery", item.id, { image: value })
-                    }
-                    value={item.image ?? ""}
-                  />
-                </Panel>
-              ))}
-            </Panel>
+              <div className="space-y-6">
+                {(activeLanding.content.gallery ?? []).map((item, index) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
+                    <p className="font-label text-label-md text-on-surface-variant">
+                      Imagen {index + 1}
+                    </p>
+                    <ImageField
+                      label="Imagen"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, { image: value })
+                      }
+                      value={item.image ?? ""}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "Equipo" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Equipo" description="Edita los miembros del equipo." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="equipo"
                 fallback={SECTION_HEADING_DEFAULTS.ristorante.equipo}
               />
-              {team.map((member) => (
-                <Panel className="space-y-3 p-3" key={member.id}>
+              <div className="space-y-6">
+                {team.map((member) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={member.id}
+                  >
                   <TextField
                     label="Nombre"
                     onChange={(value) =>
@@ -226,21 +249,26 @@ export function RistoranteEditorSection() {
                     }
                     value={member.image}
                   />
-                </Panel>
-              ))}
-            </Panel>
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "Horarios" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Horarios" description="Edita los horarios de apertura." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="horarios"
                 fallback={SECTION_HEADING_DEFAULTS.ristorante.horarios}
               />
-              {workflow.map((item) => (
-                <Panel className="space-y-3 p-3" key={item.id}>
+              <div className="space-y-6">
+                {workflow.map((item) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
                   <TextField
                     label="Día"
                     onChange={(value) =>
@@ -262,16 +290,21 @@ export function RistoranteEditorSection() {
                     }
                     value={item.description}
                   />
-                </Panel>
-              ))}
-            </Panel>
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "FAQ" ? (
-            <Panel className="space-y-5 p-unit-lg">
+            <section className="space-y-5 py-unit-lg">
               <SectionTitle title="FAQ" description="Edita las preguntas frecuentes." />
-              {faq.map((item) => (
-                <Panel className="space-y-3 p-3" key={item.id}>
+              <div className="space-y-6">
+                {faq.map((item) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
                   <TextField
                     label="Pregunta"
                     onChange={(value) =>
@@ -287,9 +320,10 @@ export function RistoranteEditorSection() {
                     rows={4}
                     value={item.answer}
                   />
-                </Panel>
-              ))}
-            </Panel>
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
         </>
       }

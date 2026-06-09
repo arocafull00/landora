@@ -8,10 +8,12 @@ import type { NavLink } from "@/lib/dashboard-data";
 export function StudioNav({
   brand,
   navLinks,
+  ctaLabel,
   topOffset = 0,
 }: {
   brand: string;
   navLinks: NavLink[];
+  ctaLabel: string;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,7 +51,7 @@ export function StudioNav({
             className="rounded-full bg-[#1a1a1a] px-5 py-2.5 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#333]"
             href="#contacto"
           >
-            Reservar
+            {ctaLabel || "Reservar cita"}
           </a>
         </div>
 
@@ -97,7 +99,7 @@ export function StudioNav({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}
             >
-              Reservar cita
+              {ctaLabel || "Reservar cita"}
             </motion.a>
           </motion.div>
         )}

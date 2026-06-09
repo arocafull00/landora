@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { RistoranteAosInit } from "@/components/templates/ristorante/ristorante-aos-init";
 import { RistoranteNav } from "@/components/templates/ristorante/ristorante-nav";
 import { RistoranteHero } from "@/components/templates/ristorante/ristorante-hero";
@@ -33,23 +34,32 @@ export function RistoranteTemplate({
 
       <RistoranteNav
         brand={content.brand || "Osteria da Luca."}
-        navLinks={content.nav}
+        navLinks={getVisibleNav(content.nav, content.hiddenSections, "ristorante")}
+        ctaLabel={content.hero.ctaLabel ?? ""}
         topOffset={topOffset}
       />
 
       <RistoranteHero content={content} heroRef={heroRef} />
 
-      <RistoranteStorySection content={content} />
+      {isSectionVisible(content, "story") ? (
+        <RistoranteStorySection content={content} />
+      ) : null}
 
-      <RistoranteMenuSection content={content} />
+      {isSectionVisible(content, "carta") ? <RistoranteMenuSection content={content} /> : null}
 
-      <RistoranteGallerySection content={content} />
+      {isSectionVisible(content, "galeria") ? (
+        <RistoranteGallerySection content={content} />
+      ) : null}
 
-      <RistoranteChefSection content={content} />
+      {isSectionVisible(content, "equipo") ? <RistoranteChefSection content={content} /> : null}
 
-      <RistoranteHoursSection content={content} />
+      {isSectionVisible(content, "horarios") ? (
+        <RistoranteHoursSection content={content} />
+      ) : null}
 
-      <RistoranteTestimonialsSection content={content} />
+      {isSectionVisible(content, "testimonios") ? (
+        <RistoranteTestimonialsSection content={content} />
+      ) : null}
 
       <RistoranteContactSection content={content} />
     </div>

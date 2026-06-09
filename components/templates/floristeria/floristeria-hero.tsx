@@ -73,7 +73,7 @@ export function FloristeriaHero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7, ease: easeOut }}
         >
-          Hacer pedido
+          {content.hero.ctaLabel || "Hacer pedido"}
         </motion.a>
       </div>
     </section>

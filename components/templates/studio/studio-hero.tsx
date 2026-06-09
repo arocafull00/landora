@@ -59,7 +59,7 @@ export function StudioHero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7, ease: easeOut }}
         >
-          Reservar cita
+          {content.hero.ctaLabel || "Reservar cita"}
         </motion.a>
       </div>
     </section>

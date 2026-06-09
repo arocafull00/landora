@@ -53,6 +53,7 @@ export const landingBranding = pgTable("landing_branding", {
     .$type<Record<string, { title: string; subtitle: string }>>()
     .notNull()
     .default({}),
+  hiddenSections: jsonb("hidden_sections").$type<string[]>().notNull().default([]),
 });
 
 export const landingHero = pgTable("landing_hero", {
@@ -67,6 +68,7 @@ export const landingHero = pgTable("landing_hero", {
   description: text("description").notNull().default(""),
   image: text("image").notNull().default(""),
   houseImage: text("house_image").notNull().default(""),
+  ctaLabel: text("cta_label").notNull().default(""),
 });
 
 export const landingStory = pgTable("landing_story", {

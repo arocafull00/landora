@@ -8,10 +8,12 @@ import type { NavLink } from "@/lib/dashboard-data";
 export function RistoranteNav({
   brand,
   navLinks,
+  ctaLabel,
   topOffset = 0,
 }: {
   brand: string;
   navLinks: NavLink[];
+  ctaLabel: string;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,7 +51,7 @@ export function RistoranteNav({
             className="rounded-full bg-[#8B2500] px-5 py-2.5 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#7a1f00]"
             href="#contacto"
           >
-            Reservar mesa
+            {ctaLabel || "Reservar mesa"}
           </a>
         </div>
 
@@ -97,7 +99,7 @@ export function RistoranteNav({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}
             >
-              Reservar mesa
+              {ctaLabel || "Reservar mesa"}
             </motion.a>
           </motion.div>
         )}
