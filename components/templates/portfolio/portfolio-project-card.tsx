@@ -17,7 +17,7 @@ export function PortfolioProjectCard({
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-lg bg-[#1a1a1a] ${
+      className={`group relative aspect-4/5 overflow-hidden rounded-lg bg-[#1a1a1a] md:aspect-auto md:h-full ${
         isLarge ? "md:col-span-2 md:row-span-2" : ""
       }`}
     >

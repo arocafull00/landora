@@ -5,6 +5,7 @@ import { Icon } from "@/components/ui/icon";
 import { ActionButton } from "@/components/ui/primitives";
 import { UserRow } from "@/components/admin/user-row";
 import { CreateUserForm } from "@/components/admin/create-user-form";
+import { ImportProspectForm } from "@/components/admin/import-prospect-form";
 import type { User, LandingPage } from "@/db/schema";
 import {
   Dialog,
@@ -21,6 +22,7 @@ export function UsersSection({
   landingPages: LandingPage[];
 }) {
   const [showForm, setShowForm] = useState(false);
+  const [showImportForm, setShowImportForm] = useState(false);
 
   const usersWithLandings = users.map((user) => ({
     ...user,
@@ -39,11 +41,26 @@ export function UsersSection({
             registrados
           </p>
         </div>
-        <ActionButton variant="primary" onClick={() => setShowForm(true)}>
-          <span className="text-lg leading-none">+</span>
-          Nuevo usuario
-        </ActionButton>
+        <div className="flex gap-2">
+          <ActionButton variant="secondary" onClick={() => setShowImportForm(true)}>
+            Creación automática
+          </ActionButton>
+          <ActionButton variant="primary" onClick={() => setShowForm(true)}>
+            <span className="text-lg leading-none">+</span>
+            Nuevo usuario
+          </ActionButton>
+        </div>
       </header>
+      <Dialog open={showImportForm} onOpenChange={setShowImportForm}>
+        <DialogContent className="max-w-lg bg-surface-container-lowest">
+          <DialogHeader>
+            <DialogTitle className="font-headline text-headline-sm text-on-surface">
+              Creación automática
+            </DialogTitle>
+          </DialogHeader>
+          <ImportProspectForm onSuccess={() => setShowImportForm(false)} />
+        </DialogContent>
+      </Dialog>
       <Dialog open={showForm} onOpenChange={setShowForm}>
         <DialogContent className="max-w-lg bg-surface-container-lowest">
           <DialogHeader>
