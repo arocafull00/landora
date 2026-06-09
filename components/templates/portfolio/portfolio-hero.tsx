@@ -33,7 +33,7 @@ export function PortfolioHero({
         </motion.p>
 
         <motion.h1
-          className="mb-6 text-5xl font-extrabold leading-[1.05] text-white sm:text-6xl md:text-7xl lg:text-[clamp(56px,7vw,88px)]"
+          className="mb-6 text-5xl font-extrabold leading-[1.05] text-white sm:text-4xl md:text-7xl lg:text-[clamp(56px,7vw,88px)]"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}

@@ -1,4 +1,5 @@
-import { DEFAULT_COPYRIGHT_SUFFIX, type TemplateContentMap, type TemplateId } from "@/lib/dashboard-data";
+import type { TemplateContentMap, TemplateId } from "@/lib/dashboard-data";
+import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { VELAR_ASSETS } from "@/lib/velar-assets";
 import { STUDIO_ASSETS } from "@/lib/studio-assets";

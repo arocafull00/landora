@@ -3,6 +3,7 @@
 import type { Landing } from "@/lib/dashboard-data";
 import { cn } from "@/lib/utils";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { toast } from "react-toastify";
 import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import {
@@ -32,6 +33,17 @@ export function EditorToolbar({
   showComments?: boolean;
 }) {
   const isAdmin = useDashboardStore((state) => state.isAdmin);
+
+  const copyPreviewLink = async () => {
+    const url = `${window.location.origin}/preview/${activeLanding.id}`;
+
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Enlace copiado");
+    } catch {
+      toast.error("No se pudo copiar el enlace");
+    }
+  };
 
   return (
     <div
@@ -78,7 +90,7 @@ export function EditorToolbar({
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-3">
-        <IconButton icon="link" label="Copiar enlace" />
+        <IconButton icon="link" label="Copiar enlace" onClick={copyPreviewLink} />
         {showComments ? <IconButton icon="help" label="Comentarios" /> : null}
         <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
         <ActionButton disabled={disabled} onClick={onSave}>

@@ -1,5 +1,8 @@
 import { VELAR_DEFAULT_CONTENT } from "@/lib/default-content";
+import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 import { VELAR_ASSETS } from "@/lib/velar-assets";
+
+export { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 
 export type DashboardView = "editor" | "assets" | "domain";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
@@ -190,8 +193,6 @@ export type SocialLink = {
   platform: SocialPlatform;
   url: string;
 };
-
-export const DEFAULT_COPYRIGHT_SUFFIX = "| Todos los derechos reservados";
 
 export type ContactContent = {
   phone: string;
