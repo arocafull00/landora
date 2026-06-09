@@ -16,13 +16,30 @@ export async function PATCH(
     const body = await req.json();
 
     await upsertLandingHero(id, {
-      eyebrow: typeof body.eyebrow === "string" ? body.eyebrow : "",
-      title: typeof body.title === "string" ? body.title : "",
-      subtitle: typeof body.subtitle === "string" ? body.subtitle : "",
-      description: typeof body.description === "string" ? body.description : "",
-      image: typeof body.image === "string" ? body.image : "",
-      houseImage: typeof body.houseImage === "string" ? body.houseImage : "",
-      ctaLabel: typeof body.ctaLabel === "string" ? body.ctaLabel : "",
+      eyebrow:
+        typeof body.eyebrow === "string"
+          ? body.eyebrow
+          : (landing.hero?.eyebrow ?? ""),
+      title:
+        typeof body.title === "string" ? body.title : (landing.hero?.title ?? ""),
+      subtitle:
+        typeof body.subtitle === "string"
+          ? body.subtitle
+          : (landing.hero?.subtitle ?? ""),
+      description:
+        typeof body.description === "string"
+          ? body.description
+          : (landing.hero?.description ?? ""),
+      image:
+        typeof body.image === "string" ? body.image : (landing.hero?.image ?? ""),
+      houseImage:
+        typeof body.houseImage === "string"
+          ? body.houseImage
+          : (landing.hero?.houseImage ?? ""),
+      ctaLabel:
+        typeof body.ctaLabel === "string"
+          ? body.ctaLabel
+          : (landing.hero?.ctaLabel ?? ""),
     });
 
     return Response.json({ ok: true });

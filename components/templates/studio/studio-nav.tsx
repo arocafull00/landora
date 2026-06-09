@@ -12,6 +12,7 @@ export function StudioNav({
   brandLogoType,
   navLinks,
   ctaLabel,
+  overHero,
   topOffset = 0,
 }: {
   brand: string;
@@ -19,22 +20,26 @@ export function StudioNav({
   brandLogoType: BrandLogoType;
   navLinks: NavLink[];
   ctaLabel: string;
+  overHero: boolean;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <>
-      <nav
-        className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-10 lg:px-16"
+      <motion.nav
+        className={`fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-10 lg:px-16${topOffset > 0 ? "" : " top-0"}`}
         style={{
-          ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
-          background: "linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.8))",
-          backdropFilter: "blur(12px)",
+          ...(topOffset > 0 ? { top: topOffset } : {}),
+          background: overHero
+            ? "transparent"
+            : "linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.8))",
+          backdropFilter: overHero ? "none" : "blur(12px)",
+          transition: "background 0.35s ease, backdrop-filter 0.35s ease",
         }}
       >
         <a
-          className="text-xl font-bold tracking-tight text-[#1a1a1a]"
+          className={`text-xl font-bold tracking-tight transition-colors duration-300 ease-out ${overHero ? "text-white" : "text-[#1a1a1a]"}`}
           href="#"
           style={{ fontFamily: "var(--font-syne)" }}
         >
@@ -48,7 +53,7 @@ export function StudioNav({
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <a
-              className="text-sm font-medium text-[#1a1a1a]/70 transition-colors hover:text-[#1a1a1a]"
+              className={`text-sm font-medium transition-colors duration-300 ease-out ${overHero ? "text-white/75 hover:text-white" : "text-[#1a1a1a]/70 hover:text-[#1a1a1a]"}`}
               href={link.href}
               key={link.id}
               style={{ fontFamily: "var(--font-body)" }}
@@ -57,7 +62,7 @@ export function StudioNav({
             </a>
           ))}
           <a
-            className="rounded-full bg-[#1a1a1a] px-5 py-2.5 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#333]"
+            className={`rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide transition-colors duration-300 ease-out ${overHero ? "bg-[#c99d43] text-black hover:bg-[#d9ad54]" : "bg-[#1a1a1a] text-white hover:bg-[#333]"}`}
             href="#contacto"
           >
             {ctaLabel || "Reservar cita"}
@@ -65,14 +70,14 @@ export function StudioNav({
         </div>
 
         <button
-          className="relative z-[1] flex items-center justify-center md:hidden"
+          className={`relative z-[1] flex items-center justify-center transition-colors duration-300 ease-out md:hidden ${overHero ? "text-white" : "text-[#1a1a1a]"}`}
           onClick={() => setMenuOpen((v) => !v)}
           type="button"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-      </nav>
+      </motion.nav>
 
       <AnimatePresence>
         {menuOpen && (

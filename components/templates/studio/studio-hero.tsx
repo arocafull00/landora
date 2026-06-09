@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { ArrowRight, Clock3, MapPin, Phone } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
 
@@ -13,18 +14,22 @@ export function StudioHero({
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
 }) {
+  const description = content.hero.description || content.hero.subtitle;
+  const phoneHref = `tel:${content.contact.phone.replace(/\s+/g, "")}`;
+
   return (
     <section
       ref={heroRef}
-      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden"
+      className="relative flex min-h-dvh flex-col justify-center overflow-hidden"
     >
       <HeroBackground src={content.hero.image} template="studio" />
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/30" />
+      <div className="absolute inset-y-0 left-0 w-full bg-linear-to-r from-black/95 via-black/75 to-transparent" />
 
-      <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 text-center">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col px-6 pb-10 pt-24 md:px-10 lg:px-12 lg:pb-14 lg:pt-28">
         <motion.p
-          className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-white/80"
-          style={{ fontFamily: "var(--font-body)" }}
+          className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-[#c99d43] sm:text-sm"
+          style={{ fontFamily: "var(--font-syne)" }}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
@@ -33,8 +38,8 @@ export function StudioHero({
         </motion.p>
 
         <motion.h1
-          className="mb-6 text-5xl font-extrabold leading-[1.05] text-white sm:text-6xl md:text-7xl lg:text-[clamp(56px,7vw,88px)]"
-          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
+          className="max-w-4xl text-[clamp(44px,2vw,110px)] font-black uppercase leading-[0.92] text-white"
+          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.035em" }}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.35, ease: easeOut }}
@@ -43,8 +48,8 @@ export function StudioHero({
         </motion.h1>
 
         <motion.p
-          className="mb-10 max-w-lg text-lg leading-relaxed text-white/85"
-          style={{ fontFamily: "var(--font-body)" }}
+          className="mt-2 max-w-4xl text-[clamp(36px,2vw,92px)] font-black uppercase leading-[0.9] text-[#d4a948]"
+          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.55, ease: easeOut }}
@@ -52,15 +57,58 @@ export function StudioHero({
           {content.hero.subtitle}
         </motion.p>
 
-        <motion.a
-          className="rounded-full bg-white px-8 py-3.5 text-sm font-semibold tracking-wide text-[#1a1a1a] transition-all hover:bg-white/90 hover:shadow-lg"
-          href="#contacto"
+        <motion.p
+          className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:text-xl"
+          style={{ fontFamily: "var(--font-body)" }}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7, ease: easeOut }}
         >
-          {content.hero.ctaLabel || "Reservar cita"}
-        </motion.a>
+          {description}
+        </motion.p>
+
+        <motion.div
+          className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.82, ease: easeOut }}
+        >
+          <a
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-[#c99d43] px-7 py-3.5 text-sm font-bold uppercase tracking-[0.08em] text-black transition hover:bg-[#d9ad54]"
+            href="#contacto"
+            style={{ fontFamily: "var(--font-syne)" }}
+          >
+            {content.hero.ctaLabel || "Reservar cita"}
+            <ArrowRight className="h-4 w-4" />
+          </a>
+
+          <a
+            className="inline-flex items-center justify-center gap-2 rounded-md border border-[#c99d43]/60 bg-black/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-[#f7d389] transition hover:bg-[#c99d43]/10"
+            href={phoneHref}
+            style={{ fontFamily: "var(--font-syne)" }}
+          >
+            <Phone className="h-4 w-4" />
+            {content.contact.phone}
+          </a>
+        </motion.div>
+
+        <motion.div
+          className="mt-10 flex flex-wrap items-center gap-5 border-t border-white/20 pt-5 text-sm text-white/75 sm:text-base"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.95, ease: easeOut }}
+          style={{ fontFamily: "var(--font-body)" }}
+        >
+          <div className="inline-flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-[#c99d43]" />
+            <span>{content.contact.address}</span>
+          </div>
+          <div className="h-4 w-px bg-white/30" />
+          <div className="inline-flex items-center gap-2">
+            <Clock3 className="h-4 w-4 text-[#c99d43]" />
+            <span>Lun - Sáb: 10:00 - 20:00</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

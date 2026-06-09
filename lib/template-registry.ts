@@ -67,6 +67,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      { id: "Historia", label: "Historia" },
       { id: "Servicios", label: "Servicios" },
       { id: "Equipo", label: "Equipo" },
       { id: "Galeria", label: "Galería" },

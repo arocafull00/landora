@@ -25,7 +25,9 @@ export function StudioEditorSection() {
     setActiveEditorTab,
     setActiveLandingId,
     updateHero,
+    updateSection,
     updateSectionItem,
+    updateStat,
   } = useDashboardStore();
 
   const activeLanding =
@@ -83,6 +85,57 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Navegación" ? (
             <NavEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Historia" ? (
+            <section className="space-y-5 py-unit-lg">
+              <SectionTitle
+                title="Historia"
+                description="Narrativa y métricas de la sección Nosotros."
+              />
+              <TextArea
+                label="Texto principal"
+                onChange={(value) =>
+                  updateSection(activeLanding.id, "about", {
+                    ...activeLanding.content.about,
+                    statement: value,
+                  })
+                }
+                rows={5}
+                value={
+                  activeLanding.content.about?.statement ??
+                  activeLanding.content.story?.statement ??
+                  ""
+                }
+              />
+              {activeLanding.content.stats.length > 0 ? (
+                <div>
+                  <p className="mb-3 font-label text-label-md text-on-surface-variant">
+                    Métricas
+                  </p>
+                  <div className="grid gap-4 md:grid-cols-3">
+                    {activeLanding.content.stats.map((stat) => (
+                      <div className="space-y-3" key={stat.id}>
+                        <TextField
+                          label="Valor"
+                          onChange={(value) =>
+                            updateStat(activeLanding.id, stat.id, { value })
+                          }
+                          value={stat.value}
+                        />
+                        <TextField
+                          label="Etiqueta"
+                          onChange={(value) =>
+                            updateStat(activeLanding.id, stat.id, { label: value })
+                          }
+                          value={stat.label}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </section>
           ) : null}
 
           {activeEditorTab === "Hero" ? (

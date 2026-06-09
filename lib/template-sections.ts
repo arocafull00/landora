@@ -25,7 +25,7 @@ const VELAR_SECTIONS: TemplateSectionDef[] = [
 
 const STUDIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", contentKeys: ["story", "stats"] },
+  { anchor: "story", label: "Historia", editorTabId: "Historia", contentKeys: ["story", "stats"] },
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
   { anchor: "equipo", label: "Equipo", editorTabId: "Equipo", navHref: "#equipo", contentKeys: ["team"] },
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
