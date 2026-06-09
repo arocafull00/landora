@@ -24,8 +24,18 @@ export async function PATCH(
       ? (body.hiddenSections as string[])
       : undefined;
 
+    const brandLogoType =
+      body.brandLogoType === "text" || body.brandLogoType === "image"
+        ? body.brandLogoType
+        : undefined;
+
+    const brandLogoImage =
+      typeof body.brandLogoImage === "string" ? body.brandLogoImage : undefined;
+
     await upsertLandingBranding(id, {
       brand: typeof body.brand === "string" ? body.brand : "",
+      brandLogoType,
+      brandLogoImage,
       sectionHeadings,
       hiddenSections,
     });

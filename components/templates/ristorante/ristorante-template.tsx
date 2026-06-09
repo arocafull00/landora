@@ -34,6 +34,8 @@ export function RistoranteTemplate({
 
       <RistoranteNav
         brand={content.brand || "Osteria da Luca."}
+        brandLogoType={content.brandLogoType ?? "text"}
+        brandLogoImage={content.brandLogoImage ?? ""}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "ristorante")}
         ctaLabel={content.hero.ctaLabel ?? ""}
         topOffset={topOffset}

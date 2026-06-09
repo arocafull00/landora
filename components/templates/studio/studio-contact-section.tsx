@@ -3,6 +3,8 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { StudioButton } from "@/components/templates/studio/studio-button";
+import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
+import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 function getWhatsAppLink(phone: string) {
@@ -86,11 +88,16 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
           )}
         </div>
 
-        <div className="mt-16 border-t border-white/10 pt-8 text-center">
-          <p className="text-xs text-white/40">
-            Copyright © {new Date().getFullYear()}{" "}
-            {content.brand.replace(".", "")} | Todos los derechos reservados
-          </p>
+        <div className="mt-16 space-y-6 border-t border-white/10 pt-8 text-center">
+          <FooterSocialLinks
+            contact={content.contact}
+            linkClassName="text-white/40 transition-colors hover:text-white"
+          />
+          <FooterCopyright
+            brand={content.brand}
+            className="text-xs text-white/40"
+            contact={content.contact}
+          />
         </div>
       </div>
     </footer>

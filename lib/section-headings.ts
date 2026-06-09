@@ -5,6 +5,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
   Record<string, SectionHeading>
 > = {
   velar: {
+    inquire: {
+      title: "Contacto:",
+      subtitle: "",
+    },
     residences: {
       title: "Nuestros Jardines, el escenario perfecto para tus eventos",
       subtitle:

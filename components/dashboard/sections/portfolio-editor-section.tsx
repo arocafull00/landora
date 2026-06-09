@@ -8,7 +8,7 @@ import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
-import { ContactEditorPanel } from "@/components/dashboard/contact-editor-panel";
+import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -312,8 +312,8 @@ export function PortfolioEditorSection() {
             </section>
           ) : null}
 
-          {activeEditorTab === "Contacto" ? (
-            <ContactEditorPanel activeLanding={activeLanding} />
+          {activeEditorTab === "Footer" ? (
+            <FooterEditorPanel activeLanding={activeLanding} />
           ) : null}
         </>
       }

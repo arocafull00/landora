@@ -52,6 +52,8 @@ export async function upsertLandingBranding(
   landingId: string,
   data: {
     brand: string;
+    brandLogoType?: "text" | "image";
+    brandLogoImage?: string;
     sectionHeadings?: Record<string, { title: string; subtitle: string }>;
     hiddenSections?: string[];
   }
@@ -59,11 +61,19 @@ export async function upsertLandingBranding(
   try {
     const set: {
       brand: string;
+      brandLogoType?: "text" | "image";
+      brandLogoImage?: string;
       sectionHeadings?: Record<string, { title: string; subtitle: string }>;
       hiddenSections?: string[];
     } = {
       brand: data.brand,
     };
+    if (data.brandLogoType !== undefined) {
+      set.brandLogoType = data.brandLogoType;
+    }
+    if (data.brandLogoImage !== undefined) {
+      set.brandLogoImage = data.brandLogoImage;
+    }
     if (data.sectionHeadings !== undefined) {
       set.sectionHeadings = data.sectionHeadings;
     }
@@ -75,6 +85,8 @@ export async function upsertLandingBranding(
       .values({
         landingId,
         brand: data.brand,
+        brandLogoType: data.brandLogoType ?? "text",
+        brandLogoImage: data.brandLogoImage ?? "",
         sectionHeadings: data.sectionHeadings ?? {},
         hiddenSections: data.hiddenSections ?? [],
       })
@@ -122,7 +134,15 @@ export async function upsertLandingStory(
 
 export async function upsertLandingCta(
   landingId: string,
-  data: { phone: string; email: string; address: string }
+  data: {
+    phone: string;
+    email: string;
+    address: string;
+    ctaLabel: string;
+    copyrightSuffix: string;
+    copyrightExtra: string;
+    socialLinks: { platform: string; url: string }[];
+  }
 ) {
   try {
     await db

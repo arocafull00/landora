@@ -89,7 +89,10 @@ export function AssetsSection() {
 
   const deleteAsset = async () => {
     if (!active) return;
-    await fetch(`/api/assets/${active.id}`, { method: "DELETE" });
+
+    const res = await fetch(`/api/assets/${active.id}`, { method: "DELETE" });
+    if (!res.ok) return;
+
     remove(active.id);
     setActiveId(null);
   };

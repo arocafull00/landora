@@ -35,6 +35,8 @@ export function PortfolioTemplate({
 
       <PortfolioNav
         brand={content.brand || "Mora."}
+        brandLogoType={content.brandLogoType ?? "text"}
+        brandLogoImage={content.brandLogoImage ?? ""}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "portfolio")}
         ctaLabel={content.hero.ctaLabel ?? ""}
         topOffset={topOffset}

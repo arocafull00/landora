@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { assets } from "@/db/schema";
 import { getEffectiveClientId } from "@/lib/auth";
+import { getAssetFolder } from "@/lib/cloudinary";
 
 export async function GET() {
   const userId = await getEffectiveClientId();
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
     return Response.json({ error: "Invalid asset data" }, { status: 400 });
   }
 
-  const folderPrefix = `landora/tenants/${userId}`;
+  const folderPrefix = getAssetFolder(userId);
   if (!publicId.startsWith(folderPrefix)) {
     return Response.json({ error: "Forbidden" }, { status: 403 });
   }

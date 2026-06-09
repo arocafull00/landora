@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { toast } from "react-toastify";
 import {
   Asset,
+  BrandLogoType,
   ContactContent,
   ContentGroup,
   DashboardView,
@@ -69,6 +70,10 @@ type DashboardState = {
   updateSection: (landingId: string, section: string, data: unknown) => void;
   updateSectionItem: (landingId: string, section: string, itemId: string, patch: Record<string, unknown>) => void;
   updateContact: (id: string, patch: Partial<ContactContent>) => void;
+  updateBranding: (
+    id: string,
+    patch: Partial<{ brand: string; brandLogoType: BrandLogoType; brandLogoImage: string }>,
+  ) => void;
   updateNavItem: (landingId: string, navId: string, patch: { label: string }) => void;
   updateSectionHeading: (landingId: string, anchor: string, patch: Partial<SectionHeading>) => void;
   hideSection: (landingId: string, anchor: string) => void;
@@ -107,6 +112,8 @@ async function persistAllSections(id: string, content: LandingContent) {
     patchSection(`${base}/cta`, content.contact),
     patchSection(`${base}/branding`, {
       brand: content.brand,
+      brandLogoType: content.brandLogoType ?? "text",
+      brandLogoImage: content.brandLogoImage ?? "",
       sectionHeadings: content.sectionHeadings ?? {},
       hiddenSections: content.hiddenSections ?? [],
     }),
@@ -213,6 +220,18 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
           ? markEdited({
               ...landing,
               content: { ...landing.content, contact: { ...landing.content.contact, ...patch } },
+            })
+          : landing,
+      ),
+    })),
+
+  updateBranding: (id, patch) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === id
+          ? markEdited({
+              ...landing,
+              content: { ...landing.content, ...patch },
             })
           : landing,
       ),

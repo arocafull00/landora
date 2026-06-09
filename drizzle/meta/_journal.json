@@ -99,6 +99,20 @@
       "when": 1781020010242,
       "tag": "0013_clever_carmella_unuscione",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1781022469488,
+      "tag": "0014_futuristic_starhawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1781025000000,
+      "tag": "0015_footer_cta_fields",
+      "breakpoints": true
     }
   ]
 }

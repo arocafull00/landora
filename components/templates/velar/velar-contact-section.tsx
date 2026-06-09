@@ -1,8 +1,17 @@
 "use client";
 
 import type { LandingContent } from "@/lib/dashboard-data";
+import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
+import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function VelarContactSection({ content }: { content: LandingContent }) {
+  const heading = getSectionHeading(
+    content,
+    "inquire",
+    SECTION_HEADING_DEFAULTS.velar.inquire,
+  );
+
   return (
     <footer
       id="inquire"
@@ -15,7 +24,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
               className="text-sm font-bold uppercase tracking-widest text-[#8a8278]"
               style={{ fontFamily: "var(--font-syne)" }}
             >
-              Contacto:
+              {heading.title}
             </p>
             {content.contact.phone && (
               <a
@@ -36,12 +45,15 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
               </a>
             )}
           </div>
-          <p
+          <FooterSocialLinks
+            contact={content.contact}
+            linkClassName="text-[#8a8278] transition-colors hover:text-[#e8e4df]"
+          />
+          <FooterCopyright
+            brand={content.brand}
             className="text-xs text-[#8a8278]"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            Copyright © {new Date().getFullYear()} {content.brand.replace(".", "")} | Todos los derechos reservados
-          </p>
+            contact={content.contact}
+          />
         </div>
       </div>
     </footer>

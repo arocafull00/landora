@@ -95,6 +95,8 @@ export function VelarTemplate({
 
       <VelarNav
         brand={content.brand || "Velar."}
+        brandLogoType={content.brandLogoType ?? "text"}
+        brandLogoImage={content.brandLogoImage ?? ""}
         navColor={navColor}
         menuOpen={menuOpen}
         onToggleMenu={() => setMenuOpen((v) => !v)}

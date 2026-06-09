@@ -34,6 +34,8 @@ export function StudioTemplate({
 
       <StudioNav
         brand={content.brand || "Studio"}
+        brandLogoType={content.brandLogoType ?? "text"}
+        brandLogoImage={content.brandLogoImage ?? ""}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "studio")}
         ctaLabel={content.hero.ctaLabel ?? ""}
         topOffset={topOffset}

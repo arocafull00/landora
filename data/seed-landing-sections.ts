@@ -40,6 +40,8 @@ export async function seedLandingSections(landingId: string, templateId: Templat
     upsertLandingSeo(landingId, { title: c.hero.title, description: c.hero.subtitle }),
     upsertLandingBranding(landingId, {
       brand: c.brand,
+      brandLogoType: c.brandLogoType,
+      brandLogoImage: c.brandLogoImage,
       sectionHeadings: (c.sectionHeadings ?? {}) as Record<string, { title: string; subtitle: string }>,
       hiddenSections: [],
     }),
@@ -57,6 +59,10 @@ export async function seedLandingSections(landingId: string, templateId: Templat
       phone: c.contact.phone,
       email: c.contact.email,
       address: c.contact.address,
+      ctaLabel: c.contact.ctaLabel ?? "",
+      copyrightSuffix: c.contact.copyrightSuffix ?? "| Todos los derechos reservados",
+      copyrightExtra: c.contact.copyrightExtra ?? "",
+      socialLinks: c.contact.socialLinks ?? [],
     }),
     replaceLandingStats(
       landingId,
@@ -176,6 +182,8 @@ async function seedMissingLandingSections(
     ops.push(
       upsertLandingBranding(landingId, {
         brand: c.brand,
+        brandLogoType: c.brandLogoType,
+        brandLogoImage: c.brandLogoImage,
         sectionHeadings: (c.sectionHeadings ?? {}) as Record<string, { title: string; subtitle: string }>,
         hiddenSections: landing.branding?.hiddenSections ?? [],
       }),
@@ -196,6 +204,10 @@ async function seedMissingLandingSections(
         phone: c.contact.phone,
         email: c.contact.email,
         address: c.contact.address,
+        ctaLabel: c.contact.ctaLabel ?? "",
+        copyrightSuffix: c.contact.copyrightSuffix ?? "| Todos los derechos reservados",
+        copyrightExtra: c.contact.copyrightExtra ?? "",
+        socialLinks: c.contact.socialLinks ?? [],
       })
     );
   }

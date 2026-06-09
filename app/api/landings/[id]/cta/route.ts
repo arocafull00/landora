@@ -1,5 +1,7 @@
 import { getAuthorizedLanding } from "@/lib/api/landing-auth";
 import { upsertLandingCta } from "@/data/landing-sections";
+import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/dashboard-data";
+import { parseSocialLinks } from "@/lib/footer-content";
 
 export async function PATCH(
   req: Request,
@@ -19,6 +21,13 @@ export async function PATCH(
       phone: typeof body.phone === "string" ? body.phone : "",
       email: typeof body.email === "string" ? body.email : "",
       address: typeof body.address === "string" ? body.address : "",
+      ctaLabel: typeof body.ctaLabel === "string" ? body.ctaLabel : "",
+      copyrightSuffix:
+        typeof body.copyrightSuffix === "string" && body.copyrightSuffix.trim()
+          ? body.copyrightSuffix
+          : DEFAULT_COPYRIGHT_SUFFIX,
+      copyrightExtra: typeof body.copyrightExtra === "string" ? body.copyrightExtra : "",
+      socialLinks: parseSocialLinks(body.socialLinks),
     });
 
     return Response.json({ ok: true });

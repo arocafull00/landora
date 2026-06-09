@@ -20,7 +20,7 @@ const VELAR_SECTIONS: TemplateSectionDef[] = [
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", contentKeys: ["services"] },
   { anchor: "proceso", label: "Proceso", editorTabId: "Proceso", contentKeys: ["workflow"] },
   { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", contentKeys: ["testimonials"] },
-  { anchor: "inquire", label: "Contacto", required: true },
+  { anchor: "inquire", label: "Pie de página", editorTabId: "Footer", required: true },
 ];
 
 const STUDIO_SECTIONS: TemplateSectionDef[] = [
@@ -31,7 +31,7 @@ const STUDIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
   { anchor: "testimonios", label: "Testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
-  { anchor: "contacto", label: "Contacto", editorTabId: "Contacto", required: true },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", required: true },
 ];
 
 const PORTFOLIO_SECTIONS: TemplateSectionDef[] = [
@@ -43,7 +43,7 @@ const PORTFOLIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
   { anchor: "testimonios", label: "Testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", contentKeys: ["faq"] },
-  { anchor: "contacto", label: "Contacto", editorTabId: "Contacto", navHref: "#contacto", required: true },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
 const RISTORANTE_SECTIONS: TemplateSectionDef[] = [
@@ -55,7 +55,7 @@ const RISTORANTE_SECTIONS: TemplateSectionDef[] = [
   { anchor: "horarios", label: "Horarios", editorTabId: "Horarios", navHref: "#horarios", contentKeys: ["workflow"] },
   { anchor: "testimonios", label: "Testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", contentKeys: ["faq"] },
-  { anchor: "contacto", label: "Contacto", editorTabId: "Contacto", navHref: "#contacto", required: true },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
 const FLORISTERIA_SECTIONS: TemplateSectionDef[] = [
@@ -66,7 +66,7 @@ const FLORISTERIA_SECTIONS: TemplateSectionDef[] = [
   { anchor: "equipo", label: "Equipo", editorTabId: "Equipo", navHref: "#equipo", contentKeys: ["team"] },
   { anchor: "testimonios", label: "Testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
-  { anchor: "contacto", label: "Contacto", editorTabId: "Contacto", navHref: "#contacto", required: true },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
 const TEMPLATE_SECTIONS: Record<TemplateId, TemplateSectionDef[]> = {

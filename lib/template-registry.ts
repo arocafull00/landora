@@ -21,6 +21,11 @@ export const ADMIN_EDITOR_TAB: EditorTab = {
   label: "Admin",
 };
 
+export const FOOTER_EDITOR_TAB: EditorTab = {
+  id: "Footer",
+  label: "Pie de página",
+};
+
 export type TemplateComponent = React.ComponentType<{ content: LandingContent; topOffset?: number }>;
 
 export type TemplateDefinition<T extends TemplateId = TemplateId> = {
@@ -48,6 +53,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Servicios", label: "Servicios" },
       { id: "Proceso", label: "Proceso" },
       { id: "Testimonios", label: "Testimonios" },
+      FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/velar/velar-template"),
@@ -66,7 +72,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Galeria", label: "Galería" },
       { id: "FAQ", label: "FAQ" },
       { id: "Posts", label: "Posts" },
-      { id: "Contacto", label: "Contacto" },
+      FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/studio/studio-template"),
@@ -85,7 +91,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Servicios", label: "Servicios" },
       { id: "FAQ", label: "FAQ" },
       { id: "Posts", label: "Posts" },
-      { id: "Contacto", label: "Contacto" },
+      FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/portfolio/portfolio-template"),
@@ -104,7 +110,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Equipo", label: "Equipo" },
       { id: "Horarios", label: "Horarios" },
       { id: "FAQ", label: "FAQ" },
-      { id: "Contacto", label: "Contacto" },
+      FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/ristorante/ristorante-template"),
@@ -122,7 +128,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Galeria", label: "Galería" },
       { id: "Equipo", label: "Equipo" },
       { id: "FAQ", label: "FAQ" },
-      { id: "Contacto", label: "Contacto" },
+      FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/floristeria/floristeria-template"),

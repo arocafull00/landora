@@ -3,15 +3,20 @@
 import { useState } from "react";
 import { X, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import type { NavLink } from "@/lib/dashboard-data";
+import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
+import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 
 export function PortfolioNav({
   brand,
+  brandLogoImage,
+  brandLogoType,
   navLinks,
   ctaLabel,
   topOffset = 0,
 }: {
   brand: string;
+  brandLogoImage: string;
+  brandLogoType: BrandLogoType;
   navLinks: NavLink[];
   ctaLabel: string;
   topOffset?: number;
@@ -33,7 +38,11 @@ export function PortfolioNav({
           href="#"
           style={{ fontFamily: "var(--font-syne)" }}
         >
-          {brand}
+          <TemplateNavBrand
+            brand={brand}
+            brandLogoImage={brandLogoImage}
+            brandLogoType={brandLogoType}
+          />
         </a>
 
         <div className="hidden items-center gap-8 md:flex">

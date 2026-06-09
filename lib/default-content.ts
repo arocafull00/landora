@@ -1,4 +1,4 @@
-import type { TemplateContentMap, TemplateId } from "@/lib/dashboard-data";
+import { DEFAULT_COPYRIGHT_SUFFIX, type TemplateContentMap, type TemplateId } from "@/lib/dashboard-data";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { VELAR_ASSETS } from "@/lib/velar-assets";
 import { STUDIO_ASSETS } from "@/lib/studio-assets";
@@ -11,6 +11,8 @@ const BG_IMG =
 
 export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
   brand: "Toll Story.",
+  brandLogoType: "text",
+  brandLogoImage: "",
   hero: {
     eyebrow: "CELEBRA EN",
     title: "TOLL STORY",
@@ -206,11 +208,15 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
     phone: "+34 670 36 93 68",
     email: "tollstory-reservas@gmail.com",
     address: "Valencia y área metropolitana",
+    copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
+    socialLinks: [],
   },
 };
 
 export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
   brand: "Lumière.",
+  brandLogoType: "text",
+  brandLogoImage: "",
   hero: {
     eyebrow: "PELUQUERÍA & ESTILISMO",
     title: "Lumière Studio",
@@ -325,6 +331,8 @@ export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
 
 export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
   brand: "Mora.",
+  brandLogoType: "text",
+  brandLogoImage: "",
   hero: {
     eyebrow: "DISEÑADORA & DIRECTORA CREATIVA",
     title: "Elena Mora",
@@ -345,6 +353,9 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
     phone: "+34 612 34 56 78",
     email: "hola@elenamora.design",
     address: "Barcelona, España",
+    ctaLabel: "Contactar por WhatsApp",
+    copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
+    socialLinks: [],
   },
   stats: [],
   testimonials: [
@@ -454,6 +465,8 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
 
 export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
   brand: "Osteria da Luca.",
+  brandLogoType: "text",
+  brandLogoImage: "",
   hero: {
     eyebrow: "COCINA ITALIANA AUTÉNTICA",
     title: "Osteria da Luca",
@@ -474,6 +487,9 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
     phone: "+34 912 34 56 78",
     email: "reservas@osteriadaluca.es",
     address: "Calle de la Paz 12, Madrid",
+    ctaLabel: "Reservar por WhatsApp",
+    copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
+    socialLinks: [],
   },
   stats: [
     { id: "years", value: "17", label: "Años de tradición" },
@@ -568,6 +584,8 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
 
 export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
   brand: "Jardín Secreto.",
+  brandLogoType: "text",
+  brandLogoImage: "",
   hero: {
     eyebrow: "ARTE FLORAL ARTESANAL",
     title: "Jardín Secreto",
@@ -587,6 +605,9 @@ export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
     phone: "+34 954 12 34 56",
     email: "hola@jardinsecreto.es",
     address: "Calle Sierpes 45, Sevilla",
+    ctaLabel: "Pedir por WhatsApp",
+    copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
+    socialLinks: [],
   },
   stats: [
     { id: "years", value: "13", label: "Años creando belleza" },

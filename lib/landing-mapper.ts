@@ -1,5 +1,6 @@
 import type { LandingWithSections } from "@/data/landing-pages";
 import type { Landing, LandingContent } from "@/lib/dashboard-data";
+import { parseSocialLinks } from "@/lib/footer-content";
 import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
 import type { User } from "@/db/schema";
 
@@ -37,6 +38,8 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
 
   return {
     brand: row.branding?.brand ?? "",
+    brandLogoType: row.branding?.brandLogoType === "image" ? "image" : "text",
+    brandLogoImage: mapImage(row.branding?.brandLogoImage),
     sectionHeadings,
     hiddenSections,
     hero: {
@@ -102,6 +105,10 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       phone: row.cta?.phone ?? "",
       email: row.cta?.email ?? "",
       address: row.cta?.address ?? "",
+      ctaLabel: row.cta?.ctaLabel ?? "",
+      copyrightSuffix: row.cta?.copyrightSuffix ?? "",
+      copyrightExtra: row.cta?.copyrightExtra ?? "",
+      socialLinks: parseSocialLinks(row.cta?.socialLinks),
     },
     about: row.story ? { statement: row.story.statement } : undefined,
     team: (row.team ?? []).map((t) => ({

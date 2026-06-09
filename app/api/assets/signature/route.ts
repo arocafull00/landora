@@ -1,5 +1,5 @@
 import { getEffectiveClientId } from "@/lib/auth";
-import { cloudinary } from "@/lib/cloudinary";
+import { cloudinary, getAssetFolder } from "@/lib/cloudinary";
 
 export async function GET() {
   const userId = await getEffectiveClientId();
@@ -13,7 +13,7 @@ export async function GET() {
     return Response.json({ error: "Cloudinary not configured" }, { status: 500 });
   }
 
-  const folder = `landora/tenants/${userId}`;
+  const folder = getAssetFolder(userId);
   const timestamp = Math.round(Date.now() / 1000);
   const signature = cloudinary.utils.api_sign_request(
     { timestamp, folder },

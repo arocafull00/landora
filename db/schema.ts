@@ -49,6 +49,8 @@ export const landingBranding = pgTable("landing_branding", {
     .unique()
     .references(() => landingPages.id, { onDelete: "cascade" }),
   brand: text("brand").notNull().default(""),
+  brandLogoType: text("brand_logo_type").notNull().default("text"),
+  brandLogoImage: text("brand_logo_image").notNull().default(""),
   sectionHeadings: jsonb("section_headings")
     .$type<Record<string, { title: string; subtitle: string }>>()
     .notNull()
@@ -89,6 +91,13 @@ export const landingCta = pgTable("landing_cta", {
   phone: text("phone").notNull().default(""),
   email: text("email").notNull().default(""),
   address: text("address").notNull().default(""),
+  ctaLabel: text("cta_label").notNull().default(""),
+  copyrightSuffix: text("copyright_suffix").notNull().default("| Todos los derechos reservados"),
+  copyrightExtra: text("copyright_extra").notNull().default(""),
+  socialLinks: jsonb("social_links")
+    .$type<{ platform: string; url: string }[]>()
+    .notNull()
+    .default([]),
 });
 
 export const landingBenefits = pgTable("landing_benefits", {

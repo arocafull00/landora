@@ -10,8 +10,12 @@ export type SectionHeading = {
   subtitle: string;
 };
 
+export type BrandLogoType = "text" | "image";
+
 export type BaseContent = {
   brand: string;
+  brandLogoType: BrandLogoType;
+  brandLogoImage: string;
   hero: HeroContent;
   nav: NavLink[];
   sectionHeadings: Partial<Record<string, SectionHeading>>;
@@ -174,11 +178,29 @@ export type TestimonialContent = {
   verified: boolean;
 };
 
+export type SocialPlatform =
+  | "instagram"
+  | "facebook"
+  | "linkedin"
+  | "tiktok"
+  | "youtube"
+  | "x";
+
+export type SocialLink = {
+  platform: SocialPlatform;
+  url: string;
+};
+
+export const DEFAULT_COPYRIGHT_SUFFIX = "| Todos los derechos reservados";
+
 export type ContactContent = {
   phone: string;
   email: string;
   address: string;
   ctaLabel?: string;
+  copyrightSuffix?: string;
+  copyrightExtra?: string;
+  socialLinks?: SocialLink[];
 };
 
 export type TeamMember = {
@@ -318,6 +340,8 @@ export const initialLandings: Landing[] = [
     customDomain: null,
     content: {
       brand: "Black Friday.",
+      brandLogoType: "text",
+      brandLogoImage: "",
       hero: {
         eyebrow: "PROMO",
         title: "BLACK FRIDAY",
@@ -347,6 +371,8 @@ export const initialLandings: Landing[] = [
         phone: "+34 600 00 00 00",
         email: "marketing@landora.test",
         address: "Campaña ecommerce",
+        copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
+        socialLinks: [],
       },
     },
   },

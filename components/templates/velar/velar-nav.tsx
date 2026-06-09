@@ -2,12 +2,15 @@
 
 import { X } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import type { NavLink } from "@/lib/dashboard-data";
+import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
+import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function VelarNav({
   brand,
+  brandLogoImage,
+  brandLogoType,
   navColor,
   menuOpen,
   onToggleMenu,
@@ -15,6 +18,8 @@ export function VelarNav({
   topOffset = 0,
 }: {
   brand: string;
+  brandLogoImage: string;
+  brandLogoType: BrandLogoType;
   navColor: string;
   menuOpen: boolean;
   onToggleMenu: () => void;
@@ -40,17 +45,12 @@ export function VelarNav({
           className="relative z-[1] text-xl drop-shadow-[0_1px_8px_rgba(255,255,255,0.5)]"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em", color: navColor, transition: "color 0.35s ease" }}
         >
-          {brand.split("").map((char, i) => (
-            <motion.span
-              key={i}
-              style={{ fontWeight: char === "." ? 800 : 700 }}
-              initial={reduce ? false : { opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.12 + i * 0.035, ease: easeOut }}
-            >
-              {char}
-            </motion.span>
-          ))}
+          <TemplateNavBrand
+            animated
+            brand={brand}
+            brandLogoImage={brandLogoImage}
+            brandLogoType={brandLogoType}
+          />
         </div>
 
         <motion.button

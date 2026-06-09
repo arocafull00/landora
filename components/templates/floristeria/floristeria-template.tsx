@@ -34,6 +34,8 @@ export function FloristeriaTemplate({
 
       <FloristeriaNav
         brand={content.brand || "Jardín Secreto."}
+        brandLogoType={content.brandLogoType ?? "text"}
+        brandLogoImage={content.brandLogoImage ?? ""}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "floristeria")}
         ctaLabel={content.hero.ctaLabel ?? ""}
         topOffset={topOffset}

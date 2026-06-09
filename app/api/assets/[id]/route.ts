@@ -2,7 +2,7 @@ import { eq, and } from "drizzle-orm";
 import { db } from "@/db";
 import { assets } from "@/db/schema";
 import { getEffectiveClientId } from "@/lib/auth";
-import { cloudinary } from "@/lib/cloudinary";
+import { deleteCloudinaryAsset, getAssetFolder } from "@/lib/cloudinary";
 
 export async function DELETE(
   _req: Request,
@@ -20,10 +20,21 @@ export async function DELETE(
 
   if (!row) return Response.json({ error: "Not found" }, { status: 404 });
 
+  const folderPrefix = getAssetFolder(userId);
+  if (!row.publicId.startsWith(folderPrefix)) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  let deletedFromCloudinary = false;
+
   try {
-    await cloudinary.uploader.destroy(row.publicId);
+    deletedFromCloudinary = await deleteCloudinaryAsset(row.publicId, row.mimeType);
   } catch {
-    // ignore cloudinary errors, still delete from db
+    return Response.json({ error: "Failed to delete from Cloudinary" }, { status: 502 });
+  }
+
+  if (!deletedFromCloudinary) {
+    return Response.json({ error: "Failed to delete from Cloudinary" }, { status: 502 });
   }
 
   await db.delete(assets).where(eq(assets.id, id));

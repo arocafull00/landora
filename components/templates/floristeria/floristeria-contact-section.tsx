@@ -3,6 +3,8 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { FloristeriaButton } from "@/components/templates/floristeria/floristeria-button";
+import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
+import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 function getWhatsAppLink(phone: string) {
@@ -90,11 +92,12 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
           )}
         </div>
 
-        <div className="mt-16 border-t border-white/10 pt-8 text-center">
-          <p className="text-xs text-white/30">
-            Copyright © {new Date().getFullYear()}{" "}
-            {content.brand.replace(".", "")} | Todos los derechos reservados
-          </p>
+        <div className="mt-16 space-y-6 border-t border-white/10 pt-8 text-center">
+          <FooterSocialLinks
+            contact={content.contact}
+            linkClassName="text-[#2D5016] transition-colors hover:text-white"
+          />
+          <FooterCopyright brand={content.brand} contact={content.contact} />
         </div>
       </div>
     </footer>
