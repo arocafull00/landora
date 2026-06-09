@@ -1,7 +1,6 @@
 "use client";
 
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
 import { toast } from "react-toastify";
 import {
   Asset,
@@ -130,9 +129,18 @@ async function persistAllSections(id: string, content: LandingContent) {
   await Promise.all(calls);
 }
 
-export const useDashboardStore = create<DashboardState>()(
-  persist(
-    (set, get) => ({
+async function persistLandingMeta(id: string, landing: Landing) {
+  await patchSection(`/api/landings/${id}`, {
+    name: landing.name,
+    slug: landing.slug,
+  });
+  await patchSection(`/api/landings/${id}/seo`, {
+    title: landing.seoTitle,
+    description: landing.content.hero.subtitle,
+  });
+}
+
+export const useDashboardStore = create<DashboardState>()((set, get) => ({
   activeView: "editor",
   activeWorkspaceTab: "Structure",
   activeContentGroup: "Pages",
@@ -476,6 +484,7 @@ export const useDashboardStore = create<DashboardState>()(
     set({ saveStatus: "saving" });
 
     try {
+      await persistLandingMeta(id, landing);
       await persistAllSections(id, landing.content);
       set((state) => ({
         saveStatus: "saved",
@@ -497,6 +506,7 @@ export const useDashboardStore = create<DashboardState>()(
     set({ saveStatus: "saving" });
 
     try {
+      await persistLandingMeta(id, landing);
       await persistAllSections(id, landing.content);
       await patchSection(`/api/landings/${id}`, { published: true });
       set((state) => ({
@@ -539,12 +549,4 @@ export const useDashboardStore = create<DashboardState>()(
         presentation.id === id ? { ...presentation, status: "Published" } : presentation,
       ),
     })),
-    }),
-    {
-      name: "landora-editor-landings",
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ landings: state.landings }),
-      skipHydration: true,
-    },
-  ),
-);
+}));

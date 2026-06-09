@@ -21,6 +21,13 @@ export async function PATCH(
       items.map((item: Record<string, unknown>) => ({
         image: typeof item.image === "string" ? item.image : "",
         video: typeof item.video === "string" ? item.video : "",
+        title: typeof item.title === "string" ? item.title : "",
+        description: typeof item.description === "string" ? item.description : "",
+        tags: Array.isArray(item.tags)
+          ? item.tags.filter((tag) => typeof tag === "string").join(", ")
+          : typeof item.tags === "string"
+            ? item.tags
+            : "",
       }))
     );
 

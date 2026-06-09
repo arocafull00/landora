@@ -1,6 +1,8 @@
 "use client";
 
 import type { Landing } from "@/lib/dashboard-data";
+import { cn } from "@/lib/utils";
+import { useDashboardStore } from "@/stores/dashboard-store";
 import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import {
@@ -29,8 +31,15 @@ export function EditorToolbar({
   onSelectLanding: (id: string) => void;
   showComments?: boolean;
 }) {
+  const isAdmin = useDashboardStore((state) => state.isAdmin);
+
   return (
-    <div className="flex items-center justify-between border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-3">
+    <div
+      className={cn(
+        "flex items-center justify-between border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-3",
+        isAdmin && "pt-12",
+      )}
+    >
       <div className="flex min-w-0 items-center gap-3">
         <DropdownMenu>
           <DropdownMenuTrigger className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-surface-variant">

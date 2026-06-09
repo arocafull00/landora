@@ -62,6 +62,9 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       id: g.id,
       image: g.image ? mapImage(g.image) : undefined,
       video: g.video || undefined,
+      title: g.title || undefined,
+      description: g.description || undefined,
+      tags: parseCommaList(g.tags),
     })),
     nav: uniqueBySortOrder(row.nav ?? []).map((n) => ({
       id: n.id,

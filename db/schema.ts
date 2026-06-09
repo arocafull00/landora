@@ -180,6 +180,9 @@ export const landingGallery = pgTable("landing_gallery", {
   sortOrder: integer("sort_order").notNull(),
   image: text("image").notNull().default(""),
   video: text("video").notNull().default(""),
+  title: text("title").notNull().default(""),
+  description: text("description").notNull().default(""),
+  tags: text("tags").notNull().default(""),
 });
 
 export const landingNav = pgTable("landing_nav", {

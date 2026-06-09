@@ -69,7 +69,13 @@ export async function seedLandingSections(landingId: string, templateId: Templat
     ),
     replaceLandingGallery(
       landingId,
-      (c.gallery ?? []).map((g) => ({ image: g.image ?? "", video: g.video ?? "" }))
+      (c.gallery ?? []).map((g) => ({
+        image: g.image ?? "",
+        video: g.video ?? "",
+        title: g.title ?? "",
+        description: g.description ?? "",
+        tags: (g.tags ?? []).join(", "),
+      }))
     ),
     replaceLandingNav(landingId, c.nav.map((n) => ({ label: n.label, href: n.href }))),
     replaceLandingSpaces(
@@ -212,7 +218,13 @@ async function seedMissingLandingSections(
     ops.push(
       replaceLandingGallery(
         landingId,
-        (c.gallery ?? []).map((g) => ({ image: g.image ?? "", video: g.video ?? "" }))
+        (c.gallery ?? []).map((g) => ({
+          image: g.image ?? "",
+          video: g.video ?? "",
+          title: g.title ?? "",
+          description: g.description ?? "",
+          tags: (g.tags ?? []).join(", "),
+        }))
       )
     );
   }

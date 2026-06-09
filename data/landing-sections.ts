@@ -216,7 +216,7 @@ export async function replaceLandingTestimonials(
 
 export async function replaceLandingGallery(
   landingId: string,
-  items: Pick<LandingGalleryItem, "image" | "video">[]
+  items: Pick<LandingGalleryItem, "image" | "video" | "title" | "description" | "tags">[]
 ) {
   try {
     await db.delete(landingGallery).where(eq(landingGallery.landingId, landingId));

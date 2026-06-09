@@ -31,16 +31,8 @@ export function DashboardShell({
   const setIsAdmin = useDashboardStore((state) => state.setIsAdmin);
 
   useLayoutEffect(() => {
-    useDashboardStore.persist.rehydrate();
     useAssetsStore.getState().ensureLoaded();
-
-    const { landings } = useDashboardStore.getState();
-    const hasPersistedDraft = landings.some((landing) => landing.id === initialLanding.id);
-
-    if (!hasPersistedDraft) {
-      initFromLanding(initialLanding);
-    }
-
+    initFromLanding(initialLanding);
     setActiveView(initialView);
     setIsAdmin(isAdmin);
   }, [initialLanding, initFromLanding, initialView, setActiveView, isAdmin, setIsAdmin]);
