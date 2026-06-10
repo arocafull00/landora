@@ -9,7 +9,7 @@ export function RistoranteStorySection({ content }: { content: LandingContent })
   if (!statement && stats.length === 0) return null;
 
   return (
-    <section className="bg-[#FAF7F2] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="story" className="scroll-mt-24 bg-[#FAF7F2] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         {statement && (
           <p

@@ -4,7 +4,9 @@ import { useState } from "react";
 import { X, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
+import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
+import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
 export function PortfolioNav({
   brand,
@@ -47,21 +49,21 @@ export function PortfolioNav({
 
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <a
+            <TemplateNavAnchor
               className="text-sm font-medium text-white/60 transition-colors hover:text-white"
               href={link.href}
               key={link.id}
               style={{ fontFamily: "var(--font-body)" }}
             >
               {link.label}
-            </a>
+            </TemplateNavAnchor>
           ))}
-          <a
+          <TemplateNavAnchor
             className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-wide text-[#0a0a0a] transition-colors hover:bg-white/90"
             href="#contacto"
           >
             {ctaLabel || "Ver proyectos"}
-          </a>
+          </TemplateNavAnchor>
         </div>
 
         <button
@@ -88,7 +90,9 @@ export function PortfolioNav({
                 className="text-2xl font-semibold text-white transition-colors hover:text-white/70"
                 href={link.href}
                 key={link.id}
-                onClick={() => setMenuOpen(false)}
+                onClick={(event) =>
+                  handleSectionNavClick(event, link.href, () => setMenuOpen(false))
+                }
                 style={{
                   fontFamily: "var(--font-syne)",
                   lineHeight: 2.2,
@@ -103,7 +107,9 @@ export function PortfolioNav({
             <motion.a
               className="mt-6 rounded-full bg-white px-8 py-3 text-sm font-semibold text-[#0a0a0a]"
               href="#contacto"
-              onClick={() => setMenuOpen(false)}
+              onClick={(event) =>
+                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false))
+              }
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}

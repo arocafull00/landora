@@ -1,5 +1,6 @@
 import { getAuthorizedLanding } from "@/lib/api/landing-auth";
 import { updateLandingPage } from "@/data/landing-pages";
+import { upsertLandingSeo } from "@/data/landing-sections";
 
 export async function PATCH(
   req: Request,
@@ -20,6 +21,18 @@ export async function PATCH(
     if (typeof body.published === "boolean") patch.published = body.published;
     if (typeof body.name === "string" && body.name.trim()) patch.name = body.name.trim();
     if (typeof body.slug === "string" && body.slug.trim()) patch.slug = body.slug.trim();
+
+    const hasSeoTitle = typeof body.seoTitle === "string";
+    const hasSeoDescription = typeof body.seoDescription === "string";
+
+    if (hasSeoTitle || hasSeoDescription) {
+      await upsertLandingSeo(id, {
+        title: hasSeoTitle ? body.seoTitle : (landing.seo?.title ?? ""),
+        description: hasSeoDescription
+          ? body.seoDescription
+          : (landing.seo?.description ?? ""),
+      });
+    }
 
     await updateLandingPage(id, patch);
 

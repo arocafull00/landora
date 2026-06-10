@@ -16,7 +16,7 @@ export function StudioServicesSection({ content }: { content: LandingContent }) 
   const categories = [...new Set(items.map((s) => s.category).filter(Boolean))];
 
   return (
-    <section id="servicios" className="bg-white px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="servicios" className="scroll-mt-24 bg-white px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 border-b border-[#e5e2dd] pb-8" data-aos="fade-up">
           <h2

@@ -11,7 +11,7 @@ export function RistoranteMenuSection({ content }: { content: LandingContent }) 
   const categories = [...new Set(items.map((s) => s.category).filter(Boolean))];
 
   return (
-    <section id="carta" className="bg-white px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="carta" className="scroll-mt-24 bg-white px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 text-center" data-aos="fade-up">
           <h2

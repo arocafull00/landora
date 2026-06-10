@@ -15,7 +15,7 @@ export function RistoranteHoursSection({ content }: { content: LandingContent })
   );
 
   return (
-    <section id="horarios" className="bg-[#1C1917] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="horarios" className="scroll-mt-24 bg-[#1C1917] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-3xl text-center">
         <div className="mb-12" data-aos="fade-up">
           <Clock className="mx-auto mb-4 h-8 w-8 text-[#8B2500]" />

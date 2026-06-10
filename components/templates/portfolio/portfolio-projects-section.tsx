@@ -15,7 +15,7 @@ export function PortfolioProjectsSection({ content }: { content: LandingContent 
   );
 
   return (
-    <section id="proyectos" className="bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="proyectos" className="scroll-mt-24 bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-7xl">
         <h2
           className="mb-12 max-w-xl text-balance text-3xl font-extrabold text-white sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"

@@ -15,7 +15,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
   return (
     <footer
       id="inquire"
-      className="relative z-[25] bg-[#1a1a1a] px-6 py-12 md:px-10 lg:px-16"
+      className="relative z-[25] scroll-mt-24 bg-[#1a1a1a] px-6 py-12 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-6xl">
         <div className="space-y-4 text-center">

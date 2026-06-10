@@ -21,7 +21,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
   );
 
   return (
-    <footer id="contacto" className="bg-[#1a1a1a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <footer id="contacto" className="scroll-mt-24 bg-[#1a1a1a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 max-w-2xl" data-aos="fade-up">
           <h2

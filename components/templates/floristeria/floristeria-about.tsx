@@ -9,7 +9,7 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
   if (!statement && stats.length === 0) return null;
 
   return (
-    <section className="bg-[#FAFAF7] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="story" className="scroll-mt-24 bg-[#FAFAF7] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-16 lg:grid-cols-[1.4fr_1fr] lg:gap-24">
         {statement && (
           <p

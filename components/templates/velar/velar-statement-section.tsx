@@ -15,7 +15,7 @@ export function VelarStatementSection({
       <div className="h-[4vh] bg-[#1a1a1a]" />
       <div
         id="story"
-        className="s2-section sticky top-0 h-screen overflow-hidden bg-[#1a1a1a]"
+        className="s2-section sticky top-0 h-screen scroll-mt-24 overflow-hidden bg-[#1a1a1a]"
       >
         <div
           className="flex h-full flex-col justify-between px-6 md:px-10 lg:px-16"

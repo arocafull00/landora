@@ -4,7 +4,9 @@ import { useState } from "react";
 import { X, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
+import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
+import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
 export function FloristeriaNav({
   brand,
@@ -47,21 +49,21 @@ export function FloristeriaNav({
 
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <a
+            <TemplateNavAnchor
               className="text-sm font-medium text-[#1a1a1a]/70 transition-colors hover:text-[#2D5016]"
               href={link.href}
               key={link.id}
               style={{ fontFamily: "var(--font-body)" }}
             >
               {link.label}
-            </a>
+            </TemplateNavAnchor>
           ))}
-          <a
+          <TemplateNavAnchor
             className="rounded-full bg-[#2D5016] px-5 py-2.5 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#234012]"
             href="#contacto"
           >
             {ctaLabel || "Hacer pedido"}
-          </a>
+          </TemplateNavAnchor>
         </div>
 
         <button
@@ -88,7 +90,9 @@ export function FloristeriaNav({
                 className="text-2xl font-semibold text-[#1a1a1a] transition-colors hover:text-[#2D5016]"
                 href={link.href}
                 key={link.id}
-                onClick={() => setMenuOpen(false)}
+                onClick={(event) =>
+                  handleSectionNavClick(event, link.href, () => setMenuOpen(false))
+                }
                 style={{
                   fontFamily: "var(--font-cormorant)",
                   lineHeight: 2.2,
@@ -103,7 +107,9 @@ export function FloristeriaNav({
             <motion.a
               className="mt-6 rounded-full bg-[#2D5016] px-8 py-3 text-sm font-semibold text-white"
               href="#contacto"
-              onClick={() => setMenuOpen(false)}
+              onClick={(event) =>
+                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false))
+              }
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}

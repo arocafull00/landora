@@ -28,7 +28,10 @@ export function HeroBackground({
 
   return (
     <div
-      className={["absolute inset-0 bg-cover bg-bottom bg-no-repeat", className]
+      className={[
+        "absolute inset-0 bg-cover bg-no-repeat",
+        className ?? "bg-bottom",
+      ]
         .filter(Boolean)
         .join(" ")}
       style={{ backgroundImage: `url(${src})` }}

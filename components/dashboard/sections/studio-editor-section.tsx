@@ -11,6 +11,10 @@ import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
+import {
+  createEmptyServiceMenuItem,
+  StudioServiceMenuItemEditor,
+} from "@/components/dashboard/studio-service-menu-item-editor";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function StudioEditorSection() {
@@ -156,6 +160,12 @@ export function StudioEditorSection() {
                 onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
                 value={activeLanding.content.hero.subtitle}
               />
+              <TextArea
+                label="Descripción"
+                onChange={(value) => updateHero(activeLanding.id, { description: value })}
+                rows={4}
+                value={activeLanding.content.hero.description}
+              />
               <TextField
                 label="Texto del botón"
                 onChange={(value) => updateHero(activeLanding.id, { ctaLabel: value })}
@@ -180,51 +190,36 @@ export function StudioEditorSection() {
                 fallback={SECTION_HEADING_DEFAULTS.studio.servicios}
               />
               <div className="space-y-6">
-                {serviceMenu.map((item) => (
-                  <div
-                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                {serviceMenu.map((item, index) => (
+                  <StudioServiceMenuItemEditor
+                    index={index}
+                    item={item}
                     key={item.id}
-                  >
-                    <TextField
-                      label="Categoría"
-                      onChange={(value) =>
-                        updateSectionItem(activeLanding.id, "serviceMenu", item.id, { category: value })
-                      }
-                      value={item.category}
-                    />
-                    <TextField
-                      label="Nombre"
-                      onChange={(value) =>
-                        updateSectionItem(activeLanding.id, "serviceMenu", item.id, { name: value })
-                      }
-                      value={item.name}
-                    />
-                    <TextArea
-                      label="Descripción"
-                      onChange={(value) =>
-                        updateSectionItem(activeLanding.id, "serviceMenu", item.id, { description: value })
-                      }
-                      value={item.description}
-                    />
-                    <div className="grid gap-3 md:grid-cols-2">
-                      <TextField
-                        label="Precio"
-                        onChange={(value) =>
-                          updateSectionItem(activeLanding.id, "serviceMenu", item.id, { price: value })
-                        }
-                        value={item.price}
-                      />
-                      <TextField
-                        label="Duración"
-                        onChange={(value) =>
-                          updateSectionItem(activeLanding.id, "serviceMenu", item.id, { duration: value })
-                        }
-                        value={item.duration ?? ""}
-                      />
-                    </div>
-                  </div>
+                    onChange={(patch) =>
+                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, patch)
+                    }
+                    onRemove={() =>
+                      updateSection(
+                        activeLanding.id,
+                        "serviceMenu",
+                        serviceMenu.filter((entry) => entry.id !== item.id),
+                      )
+                    }
+                  />
                 ))}
               </div>
+              <button
+                className="w-full rounded-lg border border-dashed border-outline-variant px-4 py-3 font-label text-label-md text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+                onClick={() =>
+                  updateSection(activeLanding.id, "serviceMenu", [
+                    ...serviceMenu,
+                    createEmptyServiceMenuItem(),
+                  ])
+                }
+                type="button"
+              >
+                Añadir servicio
+              </button>
             </section>
           ) : null}
 

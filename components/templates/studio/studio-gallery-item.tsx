@@ -2,40 +2,41 @@
 
 import type { GalleryItem } from "@/lib/dashboard-data";
 
-const masonrySpans = [
-  "md:row-span-2",
-  "md:row-span-1",
-  "md:row-span-2",
-  "md:row-span-1",
-  "md:row-span-1",
-  "md:row-span-2",
+const bentoSpans = [
+  "col-span-1 row-span-2 md:col-span-auto md:row-span-2",
+  "col-span-1 row-span-1 md:col-span-auto md:row-span-1",
+  "col-span-1 row-span-1 md:col-span-auto md:row-span-2",
+  "col-span-1 row-span-1 md:col-span-auto md:row-span-1",
+  "col-span-1 row-span-1 md:col-span-auto md:row-span-1",
+  "col-span-2 row-span-1 md:col-span-auto md:row-span-2",
 ];
+
+function getSpanClass(index: number, total: number) {
+  if (total === 1) {
+    return "col-span-2 row-span-2 md:col-span-auto md:row-span-2";
+  }
+
+  if (total === 2) {
+    return "col-span-1 row-span-2 md:col-span-auto md:row-span-2";
+  }
+
+  return bentoSpans[index % bentoSpans.length];
+}
 
 export function StudioGalleryItem({
   item,
   index,
-  variant = "masonry",
+  total,
 }: {
   item: GalleryItem;
   index: number;
-  variant?: "masonry" | "scroll";
+  total: number;
 }) {
-  const spanClass = masonrySpans[index % masonrySpans.length];
-
-  if (variant === "scroll") {
-    return (
-      <div
-        className="group relative aspect-[4/5] shrink-0 snap-start overflow-hidden rounded-lg bg-[#e5e2dd]"
-        style={{ width: "min(75vw, 320px)" }}
-      >
-        <GalleryMedia item={item} />
-      </div>
-    );
-  }
+  const spanClass = getSpanClass(index, total);
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-lg bg-[#e5e2dd] ${spanClass}`}
+      className={`group relative h-full min-h-0 overflow-hidden rounded-lg bg-[#e5e2dd] ${spanClass}`}
     >
       <GalleryMedia item={item} />
     </div>
@@ -47,7 +48,7 @@ function GalleryMedia({ item }: { item: GalleryItem }) {
     return (
       <img
         alt=""
-        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         src={item.image}
       />
     );
@@ -57,7 +58,7 @@ function GalleryMedia({ item }: { item: GalleryItem }) {
 
   return (
     <video
-      className="h-full w-full object-cover"
+      className="absolute inset-0 h-full w-full object-cover"
       muted
       playsInline
       src={item.video}

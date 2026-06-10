@@ -11,7 +11,7 @@ export function StudioTeamSection({ content }: { content: LandingContent }) {
   const heading = getSectionHeading(content, "equipo", SECTION_HEADING_DEFAULTS.studio.equipo);
 
   return (
-    <section id="equipo" className="bg-[#faf9f7] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="equipo" className="scroll-mt-24 bg-[#faf9f7] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-6xl">
         <h2
           className="mb-12 max-w-xl text-balance text-3xl font-extrabold text-[#1a1a1a] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"

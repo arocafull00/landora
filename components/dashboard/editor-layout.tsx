@@ -6,6 +6,8 @@ import { EditorToolbar } from "@/components/dashboard/editor-toolbar";
 import { IframeLandingPreview } from "@/components/dashboard/iframe-landing-preview";
 import { PreviewFullscreenOverlay } from "@/components/dashboard/preview-fullscreen-overlay";
 import type { PreviewDevice } from "@/components/dashboard/preview-toolbar";
+import { useDashboardStore } from "@/stores/dashboard-store";
+import { getEditorScrollTarget } from "@/lib/template-sections";
 
 export function EditorLayout({
   activeLanding,
@@ -30,8 +32,11 @@ export function EditorLayout({
   showComments?: boolean;
   tabs: ReactNode;
 }) {
+  const activeEditorTab = useDashboardStore((state) => state.activeEditorTab);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [device, setDevice] = useState<PreviewDevice>("desktop");
+  const resolvedScrollTarget =
+    scrollTarget ?? getEditorScrollTarget(activeLanding.template, activeEditorTab);
 
   return (
     <section className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-surface">
@@ -56,7 +61,7 @@ export function EditorLayout({
           landingId={activeLanding.id}
           onDeviceChange={setDevice}
           onFullscreen={() => setIsFullscreen(true)}
-          scrollTarget={scrollTarget}
+          scrollTarget={resolvedScrollTarget}
           template={activeLanding.template}
         />
       </div>

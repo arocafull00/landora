@@ -12,6 +12,11 @@ import {
   isPreviewScrollToMessage,
   PREVIEW_CONTENT_UPDATE,
 } from "@/lib/preview-messaging";
+import {
+  getHashSectionId,
+  scrollToSectionIdWhenReady,
+} from "@/lib/scroll-to-section";
+import { resolveSectionId } from "@/lib/template-sections";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 
 const TEMPLATE_COMPONENTS = {
@@ -46,8 +51,13 @@ export function LandingPreviewFrame({
       if (event.origin !== window.location.origin) return;
 
       if (isPreviewScrollToMessage(event.data)) {
-        const el = document.getElementById(event.data.sectionId);
-        el?.scrollIntoView({ behavior: "smooth", block: "start" });
+        const { sectionId } = event.data;
+        scrollToSectionIdWhenReady(sectionId);
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}${window.location.search}#${sectionId}`,
+        );
         return;
       }
 
@@ -70,6 +80,22 @@ export function LandingPreviewFrame({
       window.location.origin
     );
   }, []);
+
+  const scrollToResolvedHash = useCallback(() => {
+    const sectionId = getHashSectionId();
+    if (!sectionId) return;
+    scrollToSectionIdWhenReady(resolveSectionId(activeTemplate, sectionId));
+  }, [activeTemplate]);
+
+  useEffect(() => {
+    scrollToResolvedHash();
+    window.addEventListener("hashchange", scrollToResolvedHash);
+    return () => window.removeEventListener("hashchange", scrollToResolvedHash);
+  }, [scrollToResolvedHash]);
+
+  useEffect(() => {
+    scrollToResolvedHash();
+  }, [content, scrollToResolvedHash]);
 
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
 

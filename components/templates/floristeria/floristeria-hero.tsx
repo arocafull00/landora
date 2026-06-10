@@ -17,6 +17,7 @@ export function FloristeriaHero({
   return (
     <section
       ref={heroRef}
+      id="hero"
       className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden"
     >
       {isBackgroundPreset(content.hero.image) ? (

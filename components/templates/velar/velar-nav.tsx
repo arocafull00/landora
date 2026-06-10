@@ -3,6 +3,7 @@
 import { X } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
+import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
@@ -93,7 +94,7 @@ export function VelarNav({
               key={link.id}
               className="uppercase text-black transition-colors hover:text-gray-500"
               href={link.href}
-              onClick={onToggleMenu}
+              onClick={(event) => handleSectionNavClick(event, link.href, onToggleMenu)}
               style={{
                 fontFamily: "var(--font-syne)",
                 fontSize: "clamp(28px, 5vw, 40px)",

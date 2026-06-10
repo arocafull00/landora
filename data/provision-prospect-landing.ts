@@ -28,9 +28,11 @@ import {
   type ProspectLandingContent,
 } from "@/lib/prospect-content";
 import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
+import { normalizeNavHref } from "@/lib/template-sections";
 
 export async function provisionProspectLandingContent(
   landingId: string,
+  template: TemplateId,
   content: ProspectLandingContent
 ) {
   await Promise.all([
@@ -83,7 +85,10 @@ export async function provisionProspectLandingContent(
     ),
     replaceLandingNav(
       landingId,
-      content.nav.map((item) => ({ label: item.label, href: item.href }))
+      content.nav.map((item) => ({
+        label: item.label,
+        href: normalizeNavHref(template, item.href),
+      }))
     ),
     replaceLandingWorkflow(
       landingId,
@@ -164,7 +169,7 @@ export async function createProspectLanding(params: {
 
   try {
     await seedLandingSections(landingId, template);
-    await provisionProspectLandingContent(landingId, content);
+    await provisionProspectLandingContent(landingId, template, content);
     await ensureLandingHasDefaultContent(landingId);
   } catch (err) {
     await db.delete(landingPages).where(eq(landingPages.id, landingId));

@@ -85,15 +85,15 @@ export function StudioTemplate({
 
       <StudioHero content={content} heroRef={heroRef} />
 
-      {isSectionVisible(content, "servicios") ? (
-        <StudioServicesSection content={content} />
-      ) : null}
 
       {isSectionVisible(content, "galeria") ? <StudioGallerySection content={content} /> : null}
 
 
       {isSectionVisible(content, "story") ? <StudioAbout content={content} /> : null}
 
+      {isSectionVisible(content, "servicios") ? (
+        <StudioServicesSection content={content} />
+      ) : null}
       {isSectionVisible(content, "testimonios") ? (
         <StudioTestimonialsSection content={content} />
       ) : null}

@@ -12,59 +12,149 @@ export type TemplateSectionDef = {
   contentKeys?: LandingSectionKey[];
 };
 
+export type NavScrollTarget = {
+  anchor: string;
+  href: string;
+  label: string;
+};
+
+export function getSectionScrollHref(section: TemplateSectionDef): string {
+  return section.navHref ?? `#${section.anchor}`;
+}
+
+export function getNavScrollTargets(templateId: TemplateId): NavScrollTarget[] {
+  return getTemplateSections(templateId)
+    .filter((section) => section.anchor !== "hero")
+    .map((section) => ({
+      anchor: section.anchor,
+      href: getSectionScrollHref(section),
+      label: section.label,
+    }));
+}
+
+const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = {
+  velar: {
+    home: "hero",
+    gallery: "listings",
+    contact: "inquire",
+  },
+  studio: {
+    home: "hero",
+    services: "servicios",
+    gallery: "galeria",
+    team: "equipo",
+    reviews: "testimonios",
+    contact: "contacto",
+  },
+  portfolio: {
+    home: "hero",
+    gallery: "proyectos",
+    projects: "proyectos",
+    experience: "experiencia",
+    services: "servicios",
+    reviews: "testimonios",
+    contact: "contacto",
+  },
+  ristorante: {
+    home: "hero",
+    menu: "carta",
+    gallery: "galeria",
+    team: "equipo",
+    hours: "horarios",
+    reviews: "testimonios",
+    contact: "contacto",
+  },
+  floristeria: {
+    home: "hero",
+    services: "servicios",
+    gallery: "galeria",
+    team: "equipo",
+    reviews: "testimonios",
+    contact: "contacto",
+  },
+};
+
+export function normalizeNavHref(templateId: TemplateId, href: string): string {
+  if (!href.startsWith("#")) return href;
+
+  const sections = getTemplateSections(templateId);
+  const validHrefs = new Set(sections.map(getSectionScrollHref));
+  if (validHrefs.has(href)) return href;
+
+  const slug = decodeURIComponent(href.slice(1));
+  const alias = LEGACY_NAV_ALIASES[templateId]?.[slug];
+  if (alias) {
+    const section = sections.find((item) => item.anchor === alias);
+    if (section) return getSectionScrollHref(section);
+    return `#${alias}`;
+  }
+
+  const byAnchor = sections.find((item) => item.anchor === slug);
+  if (byAnchor) return getSectionScrollHref(byAnchor);
+
+  return href;
+}
+
+export function resolveSectionId(templateId: TemplateId, sectionIdOrHref: string): string {
+  const href = sectionIdOrHref.startsWith("#")
+    ? sectionIdOrHref
+    : `#${sectionIdOrHref}`;
+  return normalizeNavHref(templateId, href).slice(1);
+}
+
 const VELAR_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
   { anchor: "story", label: "Historia", editorTabId: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
   { anchor: "listings", label: "Galería", editorTabId: "Galería", navHref: "#listings", contentKeys: ["gallery"] },
   { anchor: "residences", label: "Espacios", editorTabId: "Espacios", navHref: "#residences", contentKeys: ["spaces"] },
-  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", contentKeys: ["services"] },
-  { anchor: "proceso", label: "Proceso", editorTabId: "Proceso", contentKeys: ["workflow"] },
-  { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", contentKeys: ["testimonials"] },
-  { anchor: "inquire", label: "Pie de página", editorTabId: "Footer", required: true },
+  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["services"] },
+  { anchor: "proceso", label: "Proceso", editorTabId: "Proceso", navHref: "#proceso", contentKeys: ["workflow"] },
+  { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
+  { anchor: "inquire", label: "Pie de página", editorTabId: "Footer", navHref: "#inquire", required: true },
 ];
 
 const STUDIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", editorTabId: "Historia", contentKeys: ["story", "stats"] },
+  { anchor: "story", label: "Historia", editorTabId: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
   { anchor: "equipo", label: "Equipo", editorTabId: "Equipo", navHref: "#equipo", contentKeys: ["team"] },
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
-  { anchor: "testimonios", label: "Testimonios", contentKeys: ["testimonials"] },
+  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", required: true },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
 const PORTFOLIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", contentKeys: ["story"] },
+  { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story"] },
   { anchor: "experiencia", label: "Experiencia", editorTabId: "Experiencia", navHref: "#experiencia", contentKeys: ["workHistory"] },
   { anchor: "proyectos", label: "Proyectos", editorTabId: "Proyectos", navHref: "#proyectos", contentKeys: ["gallery"] },
-  { anchor: "skills", label: "Habilidades", contentKeys: ["benefits"] },
+  { anchor: "skills", label: "Habilidades", navHref: "#skills", contentKeys: ["benefits"] },
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
-  { anchor: "testimonios", label: "Testimonios", contentKeys: ["testimonials"] },
-  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", contentKeys: ["faq"] },
+  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
+  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
 const RISTORANTE_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", contentKeys: ["story", "stats"] },
+  { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
   { anchor: "carta", label: "Carta", editorTabId: "Carta", navHref: "#carta", contentKeys: ["serviceMenu"] },
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
   { anchor: "equipo", label: "Equipo", editorTabId: "Equipo", navHref: "#equipo", contentKeys: ["team"] },
   { anchor: "horarios", label: "Horarios", editorTabId: "Horarios", navHref: "#horarios", contentKeys: ["workflow"] },
-  { anchor: "testimonios", label: "Testimonios", contentKeys: ["testimonials"] },
-  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", contentKeys: ["faq"] },
+  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
+  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
 const FLORISTERIA_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", contentKeys: ["story", "stats"] },
+  { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
   { anchor: "equipo", label: "Equipo", editorTabId: "Equipo", navHref: "#equipo", contentKeys: ["team"] },
-  { anchor: "testimonios", label: "Testimonios", contentKeys: ["testimonials"] },
+  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
@@ -119,11 +209,16 @@ export function getVisibleNav(
   const hidden = new Set(hiddenSections ?? []);
   const hiddenHrefs = new Set(
     getTemplateSections(templateId)
-      .filter((section) => hidden.has(section.anchor) && section.navHref)
-      .map((section) => section.navHref),
+      .filter((section) => hidden.has(section.anchor))
+      .map((section) => getSectionScrollHref(section)),
   );
 
-  return nav.filter((item) => !hiddenHrefs.has(item.href));
+  return nav
+    .map((item) => ({
+      ...item,
+      href: normalizeNavHref(templateId, item.href),
+    }))
+    .filter((item) => !hiddenHrefs.has(item.href));
 }
 
 export function getHiddenContentKeys(
@@ -174,6 +269,5 @@ export function getEditorScrollTarget(
     (item) => item.editorTabId === editorTabId,
   );
   if (!section) return undefined;
-  if (editorTabId === "Hero") return "hero";
-  return section.anchor;
+  return getSectionScrollHref(section).slice(1);
 }

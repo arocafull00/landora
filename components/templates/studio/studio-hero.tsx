@@ -20,9 +20,14 @@ export function StudioHero({
   return (
     <section
       ref={heroRef}
+      id="hero"
       className="relative flex min-h-dvh flex-col justify-center overflow-hidden"
     >
-      <HeroBackground src={content.hero.image} template="studio" />
+      <HeroBackground
+        className="bg-right md:bg-bottom"
+        src={content.hero.image}
+        template="studio"
+      />
       <div className="absolute inset-0 bg-black/30" />
       <div className="absolute inset-y-0 left-0 w-full bg-linear-to-r from-black/95 via-black/75 to-transparent" />
 

@@ -13,7 +13,7 @@ export function PortfolioFaqSection({ content }: { content: LandingContent }) {
   const heading = getSectionHeading(content, "faq", SECTION_HEADING_DEFAULTS.portfolio.faq);
 
   return (
-    <section className="bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="faq" className="scroll-mt-24 bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
         <div data-aos="fade-right">
           <h2

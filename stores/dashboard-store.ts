@@ -28,6 +28,7 @@ import {
 import { getDefaultContent } from "@/lib/default-content";
 import {
   getSectionByAnchor,
+  getSectionScrollHref,
   getVisibleEditorTabs,
   restoreNavItem,
 } from "@/lib/template-sections";
@@ -74,10 +75,16 @@ type DashboardState = {
     id: string,
     patch: Partial<{ brand: string; brandLogoType: BrandLogoType; brandLogoImage: string }>,
   ) => void;
-  updateNavItem: (landingId: string, navId: string, patch: { label: string }) => void;
+  updateNavItem: (
+    landingId: string,
+    navId: string,
+    patch: Partial<Pick<LandingContent["nav"][number], "label" | "href">>,
+  ) => void;
+  addNavItem: (landingId: string, item: LandingContent["nav"][number]) => void;
+  removeNavItem: (landingId: string, navId: string) => void;
   updateSectionHeading: (landingId: string, anchor: string, patch: Partial<SectionHeading>) => void;
-  hideSection: (landingId: string, anchor: string) => void;
-  restoreSection: (landingId: string, anchor: string) => void;
+  hideSection: (landingId: string, anchor: string) => Promise<void>;
+  restoreSection: (landingId: string, anchor: string) => Promise<void>;
   updatePost: (postId: string, patch: Partial<Post>) => void;
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
@@ -136,14 +143,27 @@ async function persistAllSections(id: string, content: LandingContent) {
   await Promise.all(calls);
 }
 
+async function persistSectionVisibility(id: string, content: LandingContent) {
+  const base = `/api/landings/${id}`;
+
+  await Promise.all([
+    patchSection(`${base}/branding`, {
+      brand: content.brand,
+      brandLogoType: content.brandLogoType ?? "text",
+      brandLogoImage: content.brandLogoImage ?? "",
+      sectionHeadings: content.sectionHeadings ?? {},
+      hiddenSections: content.hiddenSections ?? [],
+    }),
+    patchSection(`${base}/nav`, { items: content.nav }),
+  ]);
+}
+
 async function persistLandingMeta(id: string, landing: Landing) {
   await patchSection(`/api/landings/${id}`, {
     name: landing.name,
     slug: landing.slug,
-  });
-  await patchSection(`/api/landings/${id}/seo`, {
-    title: landing.seoTitle,
-    description: landing.content.hero.subtitle,
+    seoTitle: landing.seoTitle,
+    seoDescription: landing.content.hero.subtitle,
   });
 }
 
@@ -368,6 +388,36 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
       ),
     })),
 
+  addNavItem: (landingId, item) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                nav: [...landing.content.nav, item],
+              },
+            })
+          : landing,
+      ),
+    })),
+
+  removeNavItem: (landingId, navId) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                nav: landing.content.nav.filter((item) => item.id !== navId),
+              },
+            })
+          : landing,
+      ),
+    })),
+
   updateSectionHeading: (landingId, anchor, patch) =>
     set((state) => ({
       landings: state.landings.map((landing) =>
@@ -395,7 +445,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
       ),
     })),
 
-  hideSection: (landingId, anchor) => {
+  hideSection: async (landingId, anchor) => {
     const landing = get().landings.find((item) => item.id === landingId);
     if (!landing) return;
 
@@ -407,13 +457,17 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     hiddenSections.push(anchor);
 
     let nav = landing.content.nav;
-    if (section.navHref) {
-      nav = nav.filter((item) => item.href !== section.navHref);
-    }
+    const sectionHref = getSectionScrollHref(section);
+    nav = nav.filter((item) => item.href !== sectionHref);
 
     const visibleTabs = getVisibleEditorTabs(landing.template, hiddenSections);
     const activeTabVisible = visibleTabs.some((tab) => tab.id === get().activeEditorTab);
     const nextTab = activeTabVisible ? get().activeEditorTab : "Hero";
+    const nextContent = {
+      ...landing.content,
+      hiddenSections,
+      nav,
+    };
 
     set((state) => ({
       activeEditorTab: nextTab,
@@ -421,18 +475,20 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
         item.id === landingId
           ? markEdited({
               ...item,
-              content: {
-                ...item.content,
-                hiddenSections,
-                nav,
-              },
+              content: nextContent,
             })
           : item,
       ),
     }));
+
+    try {
+      await persistSectionVisibility(landingId, nextContent);
+    } catch {
+      toast.error("No se pudo ocultar la sección");
+    }
   },
 
-  restoreSection: (landingId, anchor) => {
+  restoreSection: async (landingId, anchor) => {
     const landing = get().landings.find((item) => item.id === landingId);
     if (!landing) return;
 
@@ -441,26 +497,32 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
 
     const hiddenSections = (landing.content.hiddenSections ?? []).filter((item) => item !== anchor);
     let nav = landing.content.nav;
+    const sectionHref = getSectionScrollHref(section);
+    const defaults = getDefaultContent(landing.template as TemplateId);
+    nav = restoreNavItem(nav, defaults.nav, sectionHref);
 
-    if (section.navHref) {
-      const defaults = getDefaultContent(landing.template as TemplateId);
-      nav = restoreNavItem(nav, defaults.nav, section.navHref);
-    }
+    const nextContent = {
+      ...landing.content,
+      hiddenSections,
+      nav,
+    };
 
     set((state) => ({
       landings: state.landings.map((item) =>
         item.id === landingId
           ? markEdited({
               ...item,
-              content: {
-                ...item.content,
-                hiddenSections,
-                nav,
-              },
+              content: nextContent,
             })
           : item,
       ),
     }));
+
+    try {
+      await persistSectionVisibility(landingId, nextContent);
+    } catch {
+      toast.error("No se pudo restaurar la sección");
+    }
   },
 
   updatePost: (postId, patch) =>

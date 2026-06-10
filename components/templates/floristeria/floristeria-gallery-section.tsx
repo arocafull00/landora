@@ -15,7 +15,7 @@ export function FloristeriaGallerySection({ content }: { content: LandingContent
   );
 
   return (
-    <section id="galeria" className="bg-[#FAFAF7] py-16 md:py-24">
+    <section id="galeria" className="scroll-mt-24 bg-[#FAFAF7] py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
         <h2
           className="mb-12 text-center text-balance text-3xl font-extrabold text-[#1a1a1a] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"

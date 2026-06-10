@@ -43,7 +43,15 @@ export function IframeLandingPreview({
 
   useEffect(() => {
     if (!scrollTarget) return;
-    postPreviewScrollTo(iframeRef.current?.contentWindow, scrollTarget);
+
+    const scroll = () => postPreviewScrollTo(iframeRef.current?.contentWindow, scrollTarget);
+    scroll();
+
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    iframe.addEventListener("load", scroll);
+    return () => iframe.removeEventListener("load", scroll);
   }, [scrollTarget]);
 
   useEffect(() => {

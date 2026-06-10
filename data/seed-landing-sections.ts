@@ -19,6 +19,7 @@ import {
   replaceLandingWorkHistory,
 } from "@/data/landing-sections";
 import { getDefaultContent } from "@/lib/default-content";
+import { getVisibleNav } from "@/lib/template-sections";
 import type { TemplateId, LandingContent, TemplateContentMap } from "@/lib/dashboard-data";
 import type { LandingWithSections } from "@/data/landing-pages";
 import {
@@ -242,8 +243,10 @@ async function seedMissingLandingSections(
   }
 
   if (missing.includes("nav")) {
+    const hiddenSections = landing.branding?.hiddenSections ?? [];
+    const nav = getVisibleNav(c.nav, hiddenSections, landing.template);
     ops.push(
-      replaceLandingNav(landingId, c.nav.map((n) => ({ label: n.label, href: n.href })))
+      replaceLandingNav(landingId, nav.map((n) => ({ label: n.label, href: n.href })))
     );
   }
 

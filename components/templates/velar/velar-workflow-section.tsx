@@ -23,7 +23,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
   const whatsappLink = getWhatsAppLink(content.contact.phone);
 
   return (
-    <section id="proceso" className="relative z-[25] bg-[#1a1a1a] px-6 py-20 md:px-10 lg:px-16">
+    <section id="proceso" className="relative z-[25] scroll-mt-24 bg-[#1a1a1a] px-6 py-20 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16" data-aos="fade-up">
           <p

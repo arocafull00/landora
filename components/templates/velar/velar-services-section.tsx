@@ -24,7 +24,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
   return (
     <section
       id="servicios"
-      className="relative z-[25] bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16"
+      className="relative z-[25] scroll-mt-24 bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
