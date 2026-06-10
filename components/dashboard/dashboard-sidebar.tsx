@@ -12,11 +12,14 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { DashboardSidebarNavItem } from "@/components/dashboard/dashboard-sidebar-nav-item";
+import { DashboardSidebarFooter } from "@/components/dashboard/dashboard-sidebar-footer";
 
 export function DashboardSidebar({
   impersonating,
+  showAccountActions,
 }: {
   impersonating: boolean;
+  showAccountActions: boolean;
 }) {
   const activeView = useDashboardStore((state) => state.activeView);
   return (
@@ -44,6 +47,7 @@ export function DashboardSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      {showAccountActions ? <DashboardSidebarFooter /> : null}
       <SidebarRail />
     </Sidebar>
   );

@@ -46,7 +46,10 @@ export function DashboardShell({
         } as React.CSSProperties
       }
     >
-      <DashboardSidebar impersonating={impersonating} />
+      <DashboardSidebar
+        impersonating={impersonating}
+        showAccountActions={!isAdmin}
+      />
       <SidebarInset className="flex h-screen min-w-0 flex-col overflow-hidden bg-surface-bg">
         <div className="flex items-center gap-2 border-b border-outline-variant px-unit-md py-2 md:hidden">
           <SidebarTrigger />
