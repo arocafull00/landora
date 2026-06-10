@@ -1,22 +1,7 @@
 "use client";
 
-import { ThemedLottieBackground } from "@/components/ui/themed-lottie-background";
-import type { TemplatePalette } from "@/lib/template-palettes";
-
-const SIGN_IN_PALETTE: TemplatePalette = {
-  primary: "#0050cb",
-  secondary: "#505f76",
-  accent: "#0050cb",
-  muted: "#0050cb",
-  surface: "#f8fafc",
-  foreground: "#0050cb",
-};
-
 export function SignInBackground() {
   return (
-    <ThemedLottieBackground
-      palette={SIGN_IN_PALETTE}
-      src="/backgrounds/lottie/waves-bottom.json"
-    />
+    <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"><div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#C9EBFF,transparent)]"></div></div>
   );
 }
