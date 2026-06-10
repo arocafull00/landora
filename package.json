@@ -36,6 +36,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4",
     "@types/aos": "^3.0.8",
     "@types/node": "^20",
@@ -44,8 +45,11 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.7",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.6.0",
     "shadcn": "^4.10.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.61.0"
   }
 }

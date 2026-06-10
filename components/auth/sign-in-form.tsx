@@ -77,7 +77,7 @@ export function SignInForm() {
         onResend={sendEmailVerificationCode}
         onReset={() => signIn.reset()}
         codeError={errors?.fields?.code?.message}
-        globalErrors={errors?.global}
+        globalErrors={errors?.global ?? undefined}
         isLoading={isLoading}
       />
     );
