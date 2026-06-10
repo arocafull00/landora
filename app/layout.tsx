@@ -5,6 +5,9 @@ import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
+
 const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-headline",
   subsets: ["latin"],
@@ -57,6 +60,7 @@ export default function RootLayout({
           suppressHydrationWarning
         >
           <Analytics />
+          <SpeedInsights />
           <TooltipProvider>
             {children}
             <ToastContainer />
