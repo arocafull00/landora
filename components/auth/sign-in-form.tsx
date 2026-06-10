@@ -2,6 +2,7 @@
 
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { SignInEmailVerificationForm } from "@/components/auth/sign-in-email-verification-form";
 import { PasswordInput } from "@/components/ui/password-input";
 
 export function SignInForm() {
@@ -15,7 +16,7 @@ export function SignInForm() {
       navigate: ({ session, decorateUrl }) => {
         const destination = session?.currentTask
           ? `/sign-in/tasks/${session.currentTask.key}`
-          : "/";
+          : "/editor";
         const url = decorateUrl(destination);
         if (url.startsWith("http")) {
           window.location.href = url;
@@ -24,6 +25,16 @@ export function SignInForm() {
         }
       },
     });
+
+  const sendEmailVerificationCode = async () => {
+    const emailCodeFactor = signIn.supportedSecondFactors?.find(
+      (factor) => factor.strategy === "email_code",
+    );
+
+    if (!emailCodeFactor) return;
+
+    await signIn.mfa.sendEmailCode();
+  };
 
   const handlePasswordSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
@@ -37,8 +48,40 @@ export function SignInForm() {
 
     if (signIn.status === "complete") {
       await handleFinalize();
+      return;
+    }
+
+    if (
+      signIn.status === "needs_client_trust" ||
+      signIn.status === "needs_second_factor"
+    ) {
+      await sendEmailVerificationCode();
     }
   };
+
+  const handleVerifyCode = async (code: string) => {
+    await signIn.mfa.verifyEmailCode({ code });
+
+    if (signIn.status !== "complete") return;
+
+    await handleFinalize();
+  };
+
+  if (
+    signIn.status === "needs_client_trust" ||
+    signIn.status === "needs_second_factor"
+  ) {
+    return (
+      <SignInEmailVerificationForm
+        onVerify={handleVerifyCode}
+        onResend={sendEmailVerificationCode}
+        onReset={() => signIn.reset()}
+        codeError={errors?.fields?.code?.message}
+        globalErrors={errors?.global}
+        isLoading={isLoading}
+      />
+    );
+  }
 
   const inputClass =
     "w-full rounded-md border border-outline-variant bg-surface px-3 py-2 text-body-sm text-on-surface outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary";
