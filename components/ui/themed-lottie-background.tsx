@@ -23,7 +23,10 @@ export function ThemedLottieBackground({
 }) {
   const lottieRef = useRef<LottieRefCurrentProps>(null);
   const [animationData, setAnimationData] = useState<LottieAnimation | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+
   useEffect(() => {
     let cancelled = false;
 
@@ -40,28 +43,31 @@ export function ThemedLottieBackground({
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(media.matches);
 
-    const syncPlayback = () => {
-      setReducedMotion(media.matches);
-
-      const instance = lottieRef.current;
-      if (!instance) return;
-
+    const instance = lottieRef.current;
+    if (instance) {
       if (media.matches) {
         instance.pause();
-        return;
+      } else {
+        instance.play();
       }
+    }
 
-      instance.play();
+    const handleChange = () => {
+      setReducedMotion(media.matches);
+
+      const current = lottieRef.current;
+      if (!current) return;
+
+      if (media.matches) {
+        current.pause();
+      } else {
+        current.play();
+      }
     };
 
-    syncPlayback();
-    media.addEventListener("change", syncPlayback);
-
-    return () => {
-      media.removeEventListener("change", syncPlayback);
-    };
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
   }, [animationData]);
 
   return (

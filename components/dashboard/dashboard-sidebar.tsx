@@ -2,17 +2,13 @@
 
 import { dashboardViews } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { Icon } from "@/components/ui/icon";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { DashboardSidebarNavItem } from "@/components/dashboard/dashboard-sidebar-nav-item";

@@ -39,7 +39,7 @@ export function DomainSection() {
         setDomainInput(result.domain);
       }
     });
-  }, [activeLanding?.id]);
+  }, [activeLanding, activeLanding?.id]);
 
   if (!activeLanding) return null;
 

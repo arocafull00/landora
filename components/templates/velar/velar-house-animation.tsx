@@ -7,6 +7,7 @@ import {
   useState,
   type RefObject,
 } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -152,13 +153,17 @@ export function VelarHouseAnimation({
           y: { duration: 1.05, delay: 0.5, ease: easeOut },
         }}
       >
-        <img
+        <Image
           ref={handleImgRef}
           src={houseImage}
           alt=""
           aria-hidden
-          className="w-full"
+          className="h-auto w-full"
+          width={1400}
+          height={900}
+          sizes="100vw"
           onLoad={updatePosition}
+          unoptimized={houseImage.startsWith("/")}
         />
       </motion.div>
     </div>

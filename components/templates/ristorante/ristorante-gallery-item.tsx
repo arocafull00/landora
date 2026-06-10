@@ -1,5 +1,6 @@
 "use client";
 
+import { AssetImage } from "@/components/ui/asset-image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 const masonrySpans = [
@@ -45,9 +46,11 @@ export function RistoranteGalleryItem({
 function GalleryMedia({ item }: { item: GalleryItem }) {
   if (item.image) {
     return (
-      <img
+      <AssetImage
         alt=""
-        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        fill
+        sizes="(max-width: 768px) 75vw, 320px"
         src={item.image}
       />
     );

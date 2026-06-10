@@ -1,5 +1,6 @@
 "use client";
 
+import { AssetImage } from "@/components/ui/asset-image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 const bentoSpans = [
@@ -46,9 +47,11 @@ export function StudioGalleryItem({
 function GalleryMedia({ item }: { item: GalleryItem }) {
   if (item.image) {
     return (
-      <img
+      <AssetImage
         alt=""
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        fill
+        sizes="(max-width: 768px) 50vw, 33vw"
         src={item.image}
       />
     );

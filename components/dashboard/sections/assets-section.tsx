@@ -29,12 +29,6 @@ export function AssetsSection() {
     ensureLoaded();
   }, [ensureLoaded]);
 
-  useEffect(() => {
-    if (activeId) return;
-    if (assets.length === 0) return;
-    setActiveId(assets[0].id);
-  }, [activeId, assets]);
-
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
     if (files.length === 0) return;

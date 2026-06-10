@@ -1,5 +1,6 @@
 "use client";
 
+import { AssetImage } from "@/components/ui/asset-image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 const hasText = (item: GalleryItem) =>
@@ -22,9 +23,11 @@ export function PortfolioProjectCard({
       }`}
     >
       {item.image ? (
-        <img
+        <AssetImage
           alt={item.title ?? ""}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           src={item.image}
         />
       ) : item.video ? (

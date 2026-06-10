@@ -1,5 +1,6 @@
 "use client";
 
+import { AssetImage } from "@/components/ui/asset-image";
 import type { TeamMember } from "@/lib/dashboard-data";
 
 export function StudioTeamMember({
@@ -16,9 +17,11 @@ export function StudioTeamMember({
     >
       <div className="relative mb-5 aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#e5e2dd]">
         {member.image ? (
-          <img
+          <AssetImage
             alt={member.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            fill
+            sizes="(max-width: 768px) 72vw, 280px"
             src={member.image}
           />
         ) : (

@@ -1,7 +1,6 @@
 "use client";
 
 import { Maximize2, Monitor, Smartphone } from "lucide-react";
-import { IconButton } from "@/components/ui/primitives";
 
 export type PreviewDevice = "desktop" | "mobile";
 

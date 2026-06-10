@@ -24,18 +24,6 @@ export function AssetImage({
 }) {
   if (!src) return null;
 
-  if (isSvgAsset(src, mimeType)) {
-    const fillClass = fill ? "absolute inset-0 h-full w-full" : "";
-
-    return (
-      <img
-        alt={alt}
-        className={[fillClass, className].filter(Boolean).join(" ")}
-        src={src}
-      />
-    );
-  }
-
   return (
     <Image
       alt={alt}
@@ -45,7 +33,7 @@ export function AssetImage({
       quality={quality}
       sizes={sizes}
       src={src}
-      unoptimized={src.startsWith("/")}
+      unoptimized={isSvgAsset(src, mimeType) || src.startsWith("/")}
     />
   );
 }

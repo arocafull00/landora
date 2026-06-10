@@ -51,10 +51,7 @@ export function SignInForm() {
       return;
     }
 
-    if (
-      signIn.status === "needs_client_trust" ||
-      signIn.status === "needs_second_factor"
-    ) {
+    if (signIn.status === "needs_second_factor") {
       await sendEmailVerificationCode();
     }
   };
@@ -67,10 +64,7 @@ export function SignInForm() {
     await handleFinalize();
   };
 
-  if (
-    signIn.status === "needs_client_trust" ||
-    signIn.status === "needs_second_factor"
-  ) {
+  if (signIn.status === "needs_second_factor") {
     return (
       <SignInEmailVerificationForm
         onVerify={handleVerifyCode}
