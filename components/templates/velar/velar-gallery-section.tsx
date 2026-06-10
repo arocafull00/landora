@@ -19,7 +19,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
   return (
     <section
       id="listings"
-      className="s3-gallery-section relative z-[25] mt-0 h-screen scroll-mt-24 overflow-hidden bg-[#1a1a1a] lg:-mt-[100vh]"
+      className="s3-gallery-section relative z-25 mt-0 md:h-screen scroll-mt-24 overflow-hidden bg-[#1a1a1a] lg:mt-[-100vh]"
     >
       <div className="s3-ticker-wrap absolute inset-0 z-0 flex items-center overflow-hidden pointer-events-none select-none">
         <div className="ticker-track flex">
