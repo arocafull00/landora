@@ -1,0 +1,1397 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>New Capricho | Centro de Estética Premium Valencia</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --gold: #d8bea2;
+        --gold-light: #e7d5c1;
+        --cream: #f8f4ee;
+        --beige: #ece4d8;
+        --dark: #0f0f0f;
+        --text: #666;
+        --white: #fff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--cream);
+        color: #222;
+        overflow-x: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+
+        background-image:
+          radial-gradient(circle at 20% 20%, rgba(216, 190, 162, 0.05), transparent 30%),
+          radial-gradient(circle at 80% 70%, rgba(216, 190, 162, 0.05), transparent 30%);
+
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .container {
+        width: min(1400px, 92%);
+        margin: auto;
+      }
+
+      img {
+        width: 100%;
+        display: block;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      section {
+        padding: 140px 0;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 600;
+      }
+
+      .section-label {
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        font-size: 0.75rem;
+        color: var(--gold);
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: clamp(3rem, 6vw, 5rem);
+        line-height: 0.95;
+        margin-bottom: 30px;
+      }
+
+      .section-text {
+        max-width: 700px;
+        line-height: 1.9;
+        color: var(--text);
+      }
+
+      /* NAV */
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+
+        z-index: 999;
+
+        padding: 30px 0;
+
+        transition: 0.4s;
+
+        background: rgba(15, 15, 15, 0.15);
+        backdrop-filter: blur(20px);
+      }
+
+      .navbar.scrolled {
+        background: rgba(15, 15, 15, 0.92);
+      }
+
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 2rem;
+        color: white;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 40px;
+      }
+
+      .nav-links a {
+        color: white;
+        font-size: 0.95rem;
+        opacity: 0.85;
+      }
+
+      .reserve-btn {
+        padding: 14px 24px;
+        border-radius: 999px;
+
+        background: linear-gradient(135deg, var(--gold), var(--gold-light));
+
+        color: #111;
+        font-weight: 600;
+      }
+
+      /* HERO */
+
+      .hero {
+        min-height: 100vh;
+        position: relative;
+
+        display: flex;
+        align-items: center;
+
+        overflow: hidden;
+      }
+
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+
+        background:
+          linear-gradient(90deg, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.45)),
+          url("https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1800&q=80");
+
+        background-size: cover;
+        background-position: center;
+
+        transform: scale(1.08);
+      }
+
+      .hero::after {
+        content: "";
+
+        position: absolute;
+
+        width: 800px;
+        height: 800px;
+
+        border-radius: 50%;
+
+        background: radial-gradient(circle, rgba(216, 190, 162, 0.25), transparent 70%);
+
+        filter: blur(120px);
+
+        top: -250px;
+        right: -250px;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+
+        max-width: 900px;
+        color: white;
+      }
+
+      .hero-eyebrow {
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        margin-bottom: 25px;
+
+        color: var(--gold);
+      }
+
+      .hero h1 {
+        font-size: clamp(5rem, 11vw, 9rem);
+
+        line-height: 0.85;
+        letter-spacing: -4px;
+
+        margin-bottom: 20px;
+      }
+
+      .hero-sub {
+        font-size: 1.4rem;
+        margin-bottom: 25px;
+
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .hero-text {
+        max-width: 600px;
+
+        line-height: 1.9;
+
+        color: rgba(255, 255, 255, 0.75);
+
+        margin-bottom: 50px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 18px 34px;
+        border-radius: 999px;
+        transition: 0.4s;
+
+        font-weight: 600;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--gold), var(--gold-light));
+
+        color: #111;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-5px);
+      }
+
+      .btn-secondary {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+
+      /* SCROLL */
+
+      .scroll-indicator {
+        position: absolute;
+
+        bottom: 50px;
+        left: 50%;
+
+        transform: translateX(-50%);
+
+        color: white;
+
+        font-size: 0.8rem;
+        letter-spacing: 3px;
+
+        z-index: 3;
+      }
+
+      /* STATS */
+
+      .stats {
+        margin-top: -80px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .stats-grid {
+        background: white;
+
+        border-radius: 30px;
+
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+
+        overflow: hidden;
+
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.08);
+      }
+
+      .stat {
+        padding: 60px;
+        text-align: center;
+      }
+
+      .stat:not(:last-child) {
+        border-right: 1px solid #eee;
+      }
+
+      .stat h3 {
+        font-size: 4rem;
+        color: var(--gold);
+      }
+
+      .stat p {
+        margin-top: 10px;
+        color: var(--text);
+      }
+
+      /* STORY */
+
+      .story-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 100px;
+        align-items: center;
+      }
+
+      .story-image {
+        position: relative;
+      }
+
+      .story-image img {
+        height: 750px;
+        object-fit: cover;
+
+        border-radius: 30px;
+      }
+
+      .story-image::after {
+        content: "";
+
+        position: absolute;
+
+        inset: 30px;
+
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        border-radius: 20px;
+      }
+
+      .signature {
+        margin-top: 40px;
+
+        font-family: "Cormorant Garamond", serif;
+
+        font-size: 1.5rem;
+        color: var(--gold);
+      }
+
+      /* OLGA */
+
+      .olga {
+        background: #111;
+        color: white;
+      }
+
+      .olga-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 100px;
+        align-items: center;
+      }
+
+      .olga-image img {
+        height: 700px;
+        object-fit: cover;
+        border-radius: 30px;
+      }
+
+      .olga-role {
+        color: var(--gold);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+
+        margin-bottom: 20px;
+      }
+
+      .olga h2 {
+        font-size: clamp(3rem, 5vw, 5rem);
+
+        line-height: 0.95;
+
+        margin-bottom: 25px;
+      }
+
+      .olga p {
+        line-height: 1.9;
+        color: rgba(255, 255, 255, 0.75);
+      }
+
+      .olga-stats {
+        display: flex;
+        gap: 50px;
+        margin-top: 50px;
+      }
+
+      .olga-stat strong {
+        display: block;
+
+        font-size: 3rem;
+
+        color: var(--gold);
+
+        font-family: "Cormorant Garamond", serif;
+      }
+
+      .olga-stat span {
+        font-size: 0.9rem;
+        opacity: 0.7;
+      }
+
+      @media (max-width: 1024px) {
+        .story-grid,
+        .olga-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero h1 {
+          font-size: 4.5rem;
+        }
+
+        .nav-links {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="nav-inner container">
+        <a href="#" class="logo"> New Capricho </a>
+
+        <div class="nav-links">
+          <a href="#inicio">Inicio</a>
+          <a href="#servicios">Servicios</a>
+          <a href="#galeria">Galería</a>
+          <a href="#reviews">Reseñas</a>
+
+          <a href="https://wa.me/34637794043" class="reserve-btn"> Reservar cita </a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero" id="inicio">
+      <div class="hero-bg"></div>
+
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-eyebrow">CENTRO DE ESTÉTICA · VALENCIA</div>
+
+          <h1>Transformamos tu belleza en arte.</h1>
+
+          <div class="hero-sub">Microblading · Manicura Premium · Bienestar</div>
+
+          <p class="hero-text">
+            Un espacio exclusivo donde la estética y el bienestar se encuentran. Más de una década ayudando a nuestras clientas a sentirse
+            seguras, radiantes y elegantes.
+          </p>
+
+          <div class="hero-actions">
+            <a href="https://wa.me/34637794043" class="btn btn-primary"> Reservar por WhatsApp </a>
+
+            <a href="tel:+34637794043" class="btn btn-secondary"> Llamar ahora </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">SCROLL</div>
+    </section>
+
+    <section class="stats">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat">
+            <h3 class="counter" data-target="10">0</h3>
+            <p>Años de experiencia</p>
+          </div>
+
+          <div class="stat">
+            <h3 class="counter" data-target="500">0</h3>
+            <p>Clientes satisfechos</p>
+          </div>
+
+          <div class="stat">
+            <h3>4.8★</h3>
+            <p>Valoración media</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="story-grid">
+          <div class="story-image">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1400&q=80" />
+          </div>
+
+          <div>
+            <div class="section-label">Nuestra filosofía</div>
+
+            <h2 class="section-title">La excelencia estética comienza con la confianza.</h2>
+
+            <p class="section-text">
+              En New Capricho nos dedicamos a ofrecer tratamientos personalizados que combinan experiencia, precisión y una atención
+              excepcional. Cada detalle está pensado para que vivas una experiencia premium desde el primer momento.
+            </p>
+
+            <div class="signature">New Capricho · Valencia</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="olga">
+      <div class="container">
+        <div class="olga-grid">
+          <div class="olga-image">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=1200&q=80" />
+          </div>
+
+          <div>
+            <div class="olga-role">Especialista en Microblading</div>
+
+            <h2>Conoce a Olga</h2>
+
+            <p>
+              Reconocida por cientos de clientas por su precisión, naturalidad y profesionalidad. Olga ha convertido el microblading en uno
+              de los tratamientos más demandados del centro gracias a resultados elegantes y completamente personalizados.
+            </p>
+
+            <div class="olga-stats">
+              <div class="olga-stat">
+                <strong>10+</strong>
+                <span>Años</span>
+              </div>
+
+              <div class="olga-stat">
+                <strong>500+</strong>
+                <span>Clientes</span>
+              </div>
+
+              <div class="olga-stat">
+                <strong>4.8★</strong>
+                <span>Valoración</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- SERVICES -->
+    <!-- ========================= -->
+
+    <section id="servicios">
+      <div class="container">
+        <div class="section-label">Servicios Premium</div>
+
+        <h2 class="section-title">Tratamientos diseñados para potenciar tu belleza.</h2>
+
+        <p class="section-text">
+          Seleccionamos técnicas avanzadas y productos de máxima calidad para ofrecer resultados visibles, naturales y duraderos.
+        </p>
+
+        <div class="luxury-services">
+          <div class="luxury-service">
+            <span>01</span>
+
+            <h3>Microblading</h3>
+
+            <div class="service-arrow">→</div>
+          </div>
+
+          <div class="luxury-service">
+            <span>02</span>
+
+            <h3>Manicura Semipermanente</h3>
+
+            <div class="service-arrow">→</div>
+          </div>
+
+          <div class="luxury-service">
+            <span>03</span>
+
+            <h3>Pedicura Premium</h3>
+
+            <div class="service-arrow">→</div>
+          </div>
+
+          <div class="luxury-service">
+            <span>04</span>
+
+            <h3>Tratamientos Faciales</h3>
+
+            <div class="service-arrow">→</div>
+          </div>
+
+          <div class="luxury-service">
+            <span>05</span>
+
+            <h3>Depilación</h3>
+
+            <div class="service-arrow">→</div>
+          </div>
+
+          <div class="luxury-service">
+            <span>06</span>
+
+            <h3>Masajes Relajantes</h3>
+
+            <div class="service-arrow">→</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .luxury-services {
+        margin-top: 80px;
+      }
+
+      .luxury-service {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 40px 0;
+
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+        transition: 0.4s;
+
+        cursor: pointer;
+      }
+
+      .luxury-service:hover {
+        padding-left: 20px;
+        color: var(--gold);
+      }
+
+      .luxury-service span {
+        font-size: 1rem;
+        letter-spacing: 3px;
+        color: var(--gold);
+      }
+
+      .luxury-service h3 {
+        font-size: clamp(2rem, 4vw, 3.5rem);
+      }
+
+      .service-arrow {
+        font-size: 2rem;
+      }
+    </style>
+
+    <!-- ========================= -->
+    <!-- BEFORE / AFTER -->
+    <!-- ========================= -->
+
+    <style>
+      .before-after {
+        background: #111;
+        color: white;
+      }
+
+      .before-after .section-text {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .comparison-wrapper {
+        margin-top: 80px;
+      }
+
+      .comparison-container {
+        position: relative;
+        overflow: hidden;
+
+        height: 650px;
+
+        border-radius: 30px;
+
+        cursor: ew-resize;
+      }
+
+      .comparison-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .comparison-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        width: 50%;
+        height: 100%;
+
+        overflow: hidden;
+      }
+
+      .comparison-overlay img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+      }
+
+      .comparison-slider {
+        position: absolute;
+
+        left: 50%;
+        top: 0;
+
+        width: 3px;
+        height: 100%;
+
+        background: white;
+      }
+
+      .comparison-slider::after {
+        content: "";
+
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+
+        transform: translate(-50%, -50%);
+
+        width: 70px;
+        height: 70px;
+
+        border-radius: 50%;
+
+        background: white;
+
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      }
+    </style>
+
+    <!-- ========================= -->
+    <!-- BENEFICIOS -->
+    <!-- ========================= -->
+
+    <style>
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 30px;
+
+        margin-top: 80px;
+      }
+
+      .benefit-card {
+        background: white;
+
+        padding: 50px;
+
+        border-radius: 30px;
+
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+
+        transition: 0.4s;
+      }
+
+      .benefit-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .benefit-number {
+        font-size: 4rem;
+
+        font-family: "Cormorant Garamond", serif;
+
+        color: var(--gold);
+
+        margin-bottom: 20px;
+      }
+
+      .benefit-card h3 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+      }
+
+      .benefit-card p {
+        line-height: 1.8;
+        color: var(--text);
+      }
+
+      @media (max-width: 1024px) {
+        .benefits-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+
+    <!-- ========================= -->
+    <!-- GALLERY -->
+    <!-- ========================= -->
+
+    <section id="galeria">
+      <div class="container">
+        <div class="section-label">Galería</div>
+
+        <h2 class="section-title">Un espacio diseñado para el bienestar.</h2>
+
+        <p class="section-text">
+          Descubre la experiencia New Capricho a través de una selección de imágenes inspiradas en la belleza, la elegancia y el cuidado
+          personal.
+        </p>
+
+        <div class="gallery-masonry">
+          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=900&q=80" />
+
+          <img src="https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=900&q=80" />
+
+          <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=900&q=80" />
+
+          <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=900&q=80" />
+
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=900&q=80" />
+
+          <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=900&q=80" />
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .gallery-masonry {
+        column-count: 3;
+        column-gap: 20px;
+
+        margin-top: 80px;
+      }
+
+      .gallery-masonry img {
+        width: 100%;
+
+        margin-bottom: 20px;
+
+        border-radius: 24px;
+
+        break-inside: avoid;
+
+        transition: 0.5s;
+      }
+
+      .gallery-masonry img:hover {
+        transform: scale(1.03);
+      }
+
+      @media (max-width: 768px) {
+        .gallery-masonry {
+          column-count: 1;
+        }
+      }
+    </style>
+
+    <!-- ========================= -->
+    <!-- TESTIMONIOS -->
+    <!-- ========================= -->
+
+    <section class="testimonials" id="reviews">
+      <div class="container">
+        <div class="section-label">Opiniones reales</div>
+
+        <h2 class="section-title">La confianza de nuestras clientas es nuestro mayor éxito.</h2>
+
+        <div class="testimonial-slider">
+          <div class="testimonial-track">
+            <div class="testimonial-card active">
+              <div class="quote-mark">"</div>
+
+              <div class="stars">★★★★★</div>
+
+              <p>
+                Son las mejores. Llevo más de 12 años confiando en ellas y siempre salgo encantada. El resultado del microblading fue
+                espectacular.
+              </p>
+
+              <h4>Carmen Pérez Lluch</h4>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="quote-mark">"</div>
+
+              <div class="stars">★★★★★</div>
+
+              <p>Olga transmite una tranquilidad increíble. El resultado fue incluso mejor de lo que imaginaba.</p>
+
+              <h4>Lorena</h4>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="quote-mark">"</div>
+
+              <div class="stars">★★★★★</div>
+
+              <p>He recuperado las cejas que tenía a los 18 años. Una experiencia increíble y totalmente recomendable.</p>
+
+              <h4>Sara Morata</h4>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .testimonials {
+        background: #111;
+        color: white;
+      }
+
+      .testimonial-slider {
+        margin-top: 80px;
+
+        position: relative;
+      }
+
+      .testimonial-track {
+        position: relative;
+
+        min-height: 420px;
+      }
+
+      .testimonial-card {
+        position: absolute;
+
+        inset: 0;
+
+        opacity: 0;
+        visibility: hidden;
+
+        transition: 0.8s;
+
+        padding: 70px;
+
+        border-radius: 30px;
+
+        background: rgba(255, 255, 255, 0.05);
+
+        backdrop-filter: blur(20px);
+      }
+
+      .testimonial-card.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .quote-mark {
+        font-size: 8rem;
+        line-height: 1;
+
+        color: var(--gold);
+
+        opacity: 0.4;
+      }
+
+      .stars {
+        font-size: 1.2rem;
+
+        margin-bottom: 20px;
+
+        color: var(--gold);
+      }
+
+      .testimonial-card p {
+        font-size: 1.15rem;
+
+        line-height: 2;
+
+        max-width: 900px;
+
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .testimonial-card h4 {
+        margin-top: 30px;
+
+        font-size: 1.4rem;
+      }
+
+      .testimonial-dots {
+        display: flex;
+        justify-content: center;
+
+        gap: 10px;
+
+        margin-top: 40px;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+
+        border-radius: 50%;
+
+        background: rgba(255, 255, 255, 0.25);
+
+        cursor: pointer;
+      }
+
+      .dot.active {
+        background: var(--gold);
+      }
+    </style>
+
+    <!-- ========================= -->
+    <!-- CTA FINAL -->
+    <!-- ========================= -->
+
+    <section class="luxury-cta">
+      <div class="container">
+        <div class="section-label">Reserva tu cita</div>
+
+        <h2>Tu próxima versión empieza aquí.</h2>
+
+        <p>
+          Descubre por qué cientos de clientas en Valencia confían en New Capricho para realzar su belleza con resultados elegantes y
+          naturales.
+        </p>
+
+        <div class="cta-buttons">
+          <a href="https://wa.me/34637794043" class="cta-btn-primary"> Reservar por WhatsApp </a>
+
+          <a href="tel:+34637794043" class="cta-btn-secondary"> 637 79 40 43 </a>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      .luxury-cta {
+        background: linear-gradient(135deg, #0d0d0d, #000);
+
+        color: white;
+
+        text-align: center;
+
+        position: relative;
+
+        overflow: hidden;
+      }
+
+      .luxury-cta::before {
+        content: "";
+
+        position: absolute;
+
+        width: 900px;
+        height: 900px;
+
+        background: radial-gradient(circle, rgba(216, 190, 162, 0.18), transparent 70%);
+
+        top: -400px;
+        right: -200px;
+      }
+
+      .luxury-cta h2 {
+        font-size: clamp(4rem, 9vw, 9rem);
+
+        line-height: 0.9;
+
+        margin-bottom: 30px;
+
+        position: relative;
+        z-index: 2;
+      }
+
+      .luxury-cta p {
+        max-width: 700px;
+
+        margin: auto;
+
+        line-height: 2;
+
+        color: rgba(255, 255, 255, 0.75);
+
+        position: relative;
+        z-index: 2;
+      }
+
+      .cta-buttons {
+        display: flex;
+        justify-content: center;
+
+        gap: 20px;
+
+        margin-top: 50px;
+
+        flex-wrap: wrap;
+
+        position: relative;
+        z-index: 2;
+      }
+
+      .cta-btn-primary {
+        padding: 20px 40px;
+
+        border-radius: 999px;
+
+        background: linear-gradient(135deg, var(--gold), var(--gold-light));
+
+        color: #111;
+        font-weight: 600;
+      }
+
+      .cta-btn-secondary {
+        padding: 20px 40px;
+
+        border-radius: 999px;
+
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        color: white;
+      }
+    </style>
+
+    <!-- ========================= -->
+    <!-- FOOTER -->
+    <!-- ========================= -->
+
+    <footer>
+      <div class="container">
+        <h3>New Capricho</h3>
+
+        <p>Centro de Estética Premium</p>
+
+        <p>C/ de les Tres Forques, 115 · Valencia</p>
+      </div>
+    </footer>
+
+    <style>
+      footer {
+        background: #080808;
+
+        color: white;
+
+        text-align: center;
+
+        padding: 80px 0;
+      }
+
+      footer h3 {
+        font-size: 2.5rem;
+
+        margin-bottom: 15px;
+      }
+
+      footer p {
+        opacity: 0.6;
+        margin: 10px 0;
+      }
+    </style>
+
+    <!-- ========================= -->
+    <!-- WHATSAPP FLOAT -->
+    <!-- ========================= -->
+
+    <a href="https://wa.me/34637794043" class="whatsapp-float"> ✦ </a>
+
+    <style>
+      .whatsapp-float {
+        position: fixed;
+
+        right: 30px;
+        bottom: 30px;
+
+        width: 75px;
+        height: 75px;
+
+        border-radius: 50%;
+
+        background: linear-gradient(135deg, var(--gold), var(--gold-light));
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 28px;
+
+        color: #111;
+
+        z-index: 9999;
+
+        box-shadow: 0 15px 50px rgba(216, 190, 162, 0.35);
+
+        transition: 0.4s;
+      }
+
+      .whatsapp-float:hover {
+        transform: translateY(-8px);
+      }
+    </style>
+
+    <!-- ========================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ========================= -->
+
+    <script>
+      /* NAVBAR */
+
+      const navbar = document.querySelector(".navbar");
+
+      window.addEventListener("scroll", () => {
+        navbar.classList.toggle("scrolled", window.scrollY > 50);
+      });
+
+      /* COUNTERS */
+
+      const counters = document.querySelectorAll(".counter");
+
+      const startCounters = () => {
+        counters.forEach((counter) => {
+          const target = +counter.dataset.target;
+
+          let current = 0;
+
+          const increment = target / 80;
+
+          const update = () => {
+            current += increment;
+
+            if (current < target) {
+              counter.innerText = Math.ceil(current);
+
+              requestAnimationFrame(update);
+            } else {
+              counter.innerText = target;
+            }
+          };
+
+          update();
+        });
+      };
+
+      const statsSection = document.querySelector(".stats");
+
+      let statsStarted = false;
+
+      window.addEventListener("scroll", () => {
+        const top = statsSection.getBoundingClientRect().top;
+
+        if (top < window.innerHeight - 150 && !statsStarted) {
+          statsStarted = true;
+
+          startCounters();
+        }
+      });
+
+      /* REVEAL ANIMATION */
+
+      const reveals = document.querySelectorAll("section");
+
+      const revealElements = () => {
+        reveals.forEach((el) => {
+          const top = el.getBoundingClientRect().top;
+
+          if (top < window.innerHeight - 100) {
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0)";
+          }
+        });
+      };
+
+      reveals.forEach((el) => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(50px)";
+        el.style.transition = "1s";
+      });
+
+      window.addEventListener("scroll", revealElements);
+
+      revealElements();
+
+      /* TESTIMONIALS */
+
+      const cards = document.querySelectorAll(".testimonial-card");
+
+      const dots = document.querySelectorAll(".dot");
+
+      let current = 0;
+
+      function showSlide(index) {
+        cards.forEach((card) => card.classList.remove("active"));
+
+        dots.forEach((dot) => dot.classList.remove("active"));
+
+        cards[index].classList.add("active");
+        dots[index].classList.add("active");
+      }
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+          current = index;
+
+          showSlide(current);
+        });
+      });
+
+      setInterval(() => {
+        current++;
+
+        if (current >= cards.length) {
+          current = 0;
+        }
+
+        showSlide(current);
+      }, 5000);
+
+      /* BEFORE AFTER */
+
+      const container = document.querySelector(".comparison-container");
+
+      if (container) {
+        const overlay = container.querySelector(".comparison-overlay");
+
+        const slider = container.querySelector(".comparison-slider");
+
+        container.addEventListener("mousemove", (e) => {
+          const rect = container.getBoundingClientRect();
+
+          let x = e.clientX - rect.left;
+
+          x = Math.max(0, Math.min(x, rect.width));
+
+          overlay.style.width = x + "px";
+
+          slider.style.left = x + "px";
+        });
+      }
+
+      /* PARALLAX HERO */
+
+      const heroBg = document.querySelector(".hero-bg");
+
+      window.addEventListener("scroll", () => {
+        const y = window.scrollY * 0.25;
+
+        heroBg.style.transform = `scale(1.08) translateY(${y}px)`;
+      });
+
+      /* SMOOTH ANCHORS */
+
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const target = document.querySelector(this.getAttribute("href"));
+
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth"
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
