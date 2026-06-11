@@ -5,6 +5,8 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarServicePanel } from "@/components/templates/velar/velar-service-panel";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useEditorHighlight } from "@/lib/use-editor-highlight";
+import { cn } from "@/lib/utils";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -12,6 +14,8 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function VelarServicesSection({ content }: { content: LandingContent }) {
+  const isHighlighted = useEditorHighlight("servicios");
+
   if (!content.services || content.services.length === 0) return null;
 
   const heading = getSectionHeading(
@@ -23,8 +27,13 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
 
   return (
     <section
+      data-section="servicios"
+      data-section-label="Servicios"
       id="servicios"
-      className="relative z-[25] scroll-mt-24 bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16"
+      className={cn(
+        "relative z-[25] scroll-mt-24 bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16",
+        isHighlighted && "template-section--highlighted",
+      )}
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">

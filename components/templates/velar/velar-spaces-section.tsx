@@ -4,8 +4,12 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarSpaceCard } from "@/components/templates/velar/velar-space-card";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useEditorHighlight } from "@/lib/use-editor-highlight";
+import { cn } from "@/lib/utils";
 
 export function VelarSpacesSection({ content }: { content: LandingContent }) {
+  const isHighlighted = useEditorHighlight("residences");
+
   if (!content.spaces || content.spaces.length === 0) return null;
 
   const heading = getSectionHeading(
@@ -16,8 +20,13 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
 
   return (
     <section
+      data-section="residences"
+      data-section-label="Espacios"
       id="residences"
-      className="relative z-[25] scroll-mt-24 bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16"
+      className={cn(
+        "relative z-[25] scroll-mt-24 bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16",
+        isHighlighted && "template-section--highlighted",
+      )}
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16" data-aos="fade-up">
@@ -50,7 +59,12 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
                 </p>
               ) : null}
               <div className="flex justify-center lg:justify-start">
-                <VelarButton href="#residences" variant="secondary" size="sm" className="uppercase">
+                <VelarButton
+                  href={content.mapsUrl || "#residences"}
+                  variant="secondary"
+                  size="sm"
+                  className="uppercase"
+                >
                   DESCUBRE NUESTROS ESPACIOS
                 </VelarButton>
               </div>

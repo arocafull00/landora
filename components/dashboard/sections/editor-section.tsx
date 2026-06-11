@@ -28,6 +28,7 @@ export function EditorSection() {
     setActiveEditorTab,
     setActiveLandingId,
     updateHero,
+    updateSection,
     updateSectionItem,
     updateService,
     updateSpace,
@@ -76,7 +77,6 @@ export function EditorSection() {
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
       scrollTarget={scrollTarget}
-      showComments
       tabs={
         <div className="border-b border-outline-variant bg-surface-container-lowest">
           <Tabs
@@ -131,13 +131,6 @@ export function EditorSection() {
                 label="Subtítulo"
                 onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
                 value={activeLanding.content.hero.subtitle}
-              />
-              <TextArea
-                label="Descripción"
-                onChange={(value) =>
-                  updateHero(activeLanding.id, { description: value })
-                }
-                value={activeLanding.content.hero.description}
               />
               <ImageField
                 label="Imagen de portada"
@@ -229,6 +222,11 @@ export function EditorSection() {
               <SectionTitle
                 description="Los espacios mostrados en la landing."
                 title="Espacios"
+              />
+              <TextField
+                label="Enlace a Google Maps"
+                onChange={(value) => updateSection(activeLanding.id, "mapsUrl", value)}
+                value={activeLanding.content.mapsUrl ?? ""}
               />
               <SectionHeadingFields
                 activeLanding={activeLanding}
@@ -343,18 +341,9 @@ export function EditorSection() {
               <div className="space-y-4">
                 {(activeLanding.content.workflow ?? []).map((step) => (
                   <div
-                    className="grid gap-3 border-b border-outline-variant pb-4 last:border-0 last:pb-0 md:grid-cols-[60px_1fr]"
+                    className="space-y-3 border-b border-outline-variant pb-4 last:border-0 last:pb-0"
                     key={step.id}
                   >
-                    <TextField
-                      label="Nº"
-                      onChange={(value) =>
-                        updateWorkflowStep(activeLanding.id, step.id, {
-                          number: value,
-                        })
-                      }
-                      value={step.number}
-                    />
                     <div className="space-y-3">
                       <TextField
                         label="Título del paso"

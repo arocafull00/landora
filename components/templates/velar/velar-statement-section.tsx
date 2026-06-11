@@ -2,6 +2,8 @@
 
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarStatItem } from "@/components/templates/velar/velar-stat-item";
+import { useEditorHighlight } from "@/lib/use-editor-highlight";
+import { cn } from "@/lib/utils";
 
 export function VelarStatementSection({
   content,
@@ -10,13 +12,21 @@ export function VelarStatementSection({
   content: LandingContent;
   sectionRef: React.RefObject<HTMLDivElement | null>;
 }) {
+  const isHighlighted = useEditorHighlight("story");
+
   return (
-    <div ref={sectionRef} className="relative z-20 h-[80vh] md:h-[200vh]">
+    <div
+      ref={sectionRef}
+      data-section="story"
+      data-section-label="Historia"
+      id="story"
+      className={cn(
+        "relative z-20 h-[80vh] md:h-[200vh]",
+        isHighlighted && "template-section--highlighted",
+      )}
+    >
       <div className="h-[4vh] bg-[#1a1a1a]" />
-      <div
-        id="story"
-        className="s2-section sticky top-0 h-screen scroll-mt-24 overflow-hidden bg-[#1a1a1a]"
-      >
+      <div className="s2-section sticky top-0 h-screen scroll-mt-24 overflow-hidden bg-[#1a1a1a]">
         <div className="flex h-full flex-col justify-center gap-8 px-6 py-10 md:justify-between md:gap-0 md:px-10 md:py-0 md:pb-[clamp(60px,8vw,120px)] md:pt-[clamp(30px,4vw,60px)] lg:px-16">
           <div className="mx-auto w-full max-w-[1200px] md:pl-[15%] lg:pl-[25%]">
             <p

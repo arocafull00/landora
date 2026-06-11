@@ -4,6 +4,8 @@ import { CalendarCheck, Tent, Sofa } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useEditorHighlight } from "@/lib/use-editor-highlight";
+import { cn } from "@/lib/utils";
 
 const WORKFLOW_ICONS = [
   <CalendarCheck key="calendario" className="h-16 w-16" stroke="#e8e4df" />,
@@ -17,13 +19,23 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function VelarWorkflowSection({ content }: { content: LandingContent }) {
+  const isHighlighted = useEditorHighlight("proceso");
+
   if (!content.workflow || content.workflow.length === 0) return null;
 
   const heading = getSectionHeading(content, "proceso", SECTION_HEADING_DEFAULTS.velar.proceso);
   const whatsappLink = getWhatsAppLink(content.contact.phone);
 
   return (
-    <section id="proceso" className="relative z-[25] scroll-mt-24 bg-[#1a1a1a] px-6 py-20 md:px-10 lg:px-16">
+    <section
+      data-section="proceso"
+      data-section-label="Proceso"
+      id="proceso"
+      className={cn(
+        "relative z-[25] scroll-mt-24 bg-[#1a1a1a] px-6 py-20 md:px-10 lg:px-16",
+        isHighlighted && "template-section--highlighted",
+      )}
+    >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16" data-aos="fade-up">
           <p

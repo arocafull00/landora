@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarGalleryItem } from "@/components/templates/velar/velar-gallery-item";
+import { useEditorHighlight } from "@/lib/use-editor-highlight";
+import { cn } from "@/lib/utils";
 
 function buildTickerText(brand: string) {
   const text = brand || "Velar.";
@@ -11,6 +13,7 @@ function buildTickerText(brand: string) {
 
 export function VelarGallerySection({ content }: { content: LandingContent }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const isHighlighted = useEditorHighlight("listings");
 
   if (!content.gallery || content.gallery.length === 0) return null;
 
@@ -18,8 +21,13 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
 
   return (
     <section
+      data-section="listings"
+      data-section-label="Galería"
       id="listings"
-      className="s3-gallery-section relative z-25 mt-0 md:h-screen scroll-mt-24 overflow-hidden bg-[#1a1a1a] lg:mt-[-100vh]"
+      className={cn(
+        "s3-gallery-section relative z-25 mt-0 md:h-screen scroll-mt-24 overflow-hidden bg-[#1a1a1a] lg:mt-[-100vh]",
+        isHighlighted && "template-section--highlighted",
+      )}
     >
       <div className="s3-ticker-wrap absolute inset-0 z-0 flex items-center overflow-hidden pointer-events-none select-none">
         <div className="ticker-track flex">

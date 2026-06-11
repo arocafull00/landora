@@ -93,10 +93,6 @@ export function LandingPreviewFrame({
     return () => window.removeEventListener("hashchange", scrollToResolvedHash);
   }, [scrollToResolvedHash]);
 
-  useEffect(() => {
-    scrollToResolvedHash();
-  }, [content, scrollToResolvedHash]);
-
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
 
   return <Component content={content} />;

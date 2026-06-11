@@ -18,7 +18,6 @@ export function EditorLayout({
   onSave,
   onSelectLanding,
   scrollTarget,
-  showComments = false,
   tabs,
 }: {
   activeLanding: Landing;
@@ -29,7 +28,6 @@ export function EditorLayout({
   onSave: () => void;
   onSelectLanding: (id: string) => void;
   scrollTarget?: string;
-  showComments?: boolean;
   tabs: ReactNode;
 }) {
   const activeEditorTab = useDashboardStore((state) => state.activeEditorTab);
@@ -47,7 +45,6 @@ export function EditorLayout({
         onPublish={onPublish}
         onSave={onSave}
         onSelectLanding={onSelectLanding}
-        showComments={showComments}
       />
       {tabs}
       <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden xl:grid-cols-[minmax(320px,380px)_1fr]">
@@ -72,6 +69,7 @@ export function EditorLayout({
           landingId={activeLanding.id}
           onClose={() => setIsFullscreen(false)}
           onDeviceChange={setDevice}
+          scrollTarget={resolvedScrollTarget}
           template={activeLanding.template}
         />
       ) : null}

@@ -22,7 +22,6 @@ export function EditorToolbar({
   onPublish,
   onSave,
   onSelectLanding,
-  showComments = false,
 }: {
   activeLanding: Landing;
   disabled?: boolean;
@@ -30,7 +29,6 @@ export function EditorToolbar({
   onPublish: () => void;
   onSave: () => void;
   onSelectLanding: (id: string) => void;
-  showComments?: boolean;
 }) {
   const isAdmin = useDashboardStore((state) => state.isAdmin);
 
@@ -91,7 +89,6 @@ export function EditorToolbar({
       </div>
       <div className="flex shrink-0 items-center gap-3">
         <IconButton icon="link" label="Copiar enlace" onClick={copyPreviewLink} />
-        {showComments ? <IconButton icon="help" label="Comentarios" /> : null}
         <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
         <ActionButton disabled={disabled} onClick={onSave}>
           <Icon name="save" className="h-4 w-4" />

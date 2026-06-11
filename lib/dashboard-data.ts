@@ -34,6 +34,7 @@ export type VelarExtensions = {
   spaces: SpaceContent[];
   services: ServiceContent[];
   workflow: WorkflowStep[];
+  mapsUrl: string;
 };
 
 export type StudioExtensions = {
@@ -306,7 +307,7 @@ export const dashboardViews: Array<{
   icon: IconName;
 }> = [
   { id: "editor", label: "Editor", icon: "document" },
-  { id: "assets", label: "Assets", icon: "folder" },
+  { id: "assets", label: "Imágenes", icon: "image" },
   { id: "domain", label: "Dominio", icon: "link" },
 ];
 

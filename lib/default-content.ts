@@ -46,6 +46,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
     { id: "nav-inquire", label: "Contacto", href: "#inquire" },
   ],
   sectionHeadings: SECTION_HEADING_DEFAULTS.velar,
+  mapsUrl: "",
   spaces: [
     {
       id: "space-1",

@@ -15,6 +15,7 @@ export function PreviewFullscreenOverlay({
   landingId,
   onClose,
   onDeviceChange,
+  scrollTarget,
   template = "velar",
 }: {
   content: LandingContent;
@@ -22,6 +23,7 @@ export function PreviewFullscreenOverlay({
   landingId: string;
   onClose: () => void;
   onDeviceChange: (device: PreviewDevice) => void;
+  scrollTarget?: string;
   template?: TemplateId;
 }) {
   useEffect(() => {
@@ -60,6 +62,7 @@ export function PreviewFullscreenOverlay({
         device={device}
         landingId={landingId}
         onDeviceChange={onDeviceChange}
+        scrollTarget={scrollTarget}
         showToolbar={false}
         template={template}
       />

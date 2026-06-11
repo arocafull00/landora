@@ -25,6 +25,8 @@ export function VelarStatItem({ stat }: { stat: StatContent }) {
     const el = ref.current;
     if (!el || countTo === undefined) return;
 
+    triggered.current = false;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting || triggered.current) return;

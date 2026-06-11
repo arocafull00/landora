@@ -4,8 +4,11 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useEditorHighlight } from "@/lib/use-editor-highlight";
+import { cn } from "@/lib/utils";
 
 export function VelarContactSection({ content }: { content: LandingContent }) {
+  const isHighlighted = useEditorHighlight("inquire");
   const heading = getSectionHeading(
     content,
     "inquire",
@@ -14,8 +17,13 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
 
   return (
     <footer
+      data-section="inquire"
+      data-section-label="Pie de página"
       id="inquire"
-      className="relative z-[25] scroll-mt-24 bg-[#1a1a1a] px-6 py-12 md:px-10 lg:px-16"
+      className={cn(
+        "relative z-[25] scroll-mt-24 bg-[#1a1a1a] px-6 py-12 md:px-10 lg:px-16",
+        isHighlighted && "template-section--highlighted",
+      )}
     >
       <div className="mx-auto max-w-6xl">
         <div className="space-y-4 text-center">
@@ -43,6 +51,14 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
               >
                 {content.contact.email}
               </a>
+            )}
+            {content.contact.address && (
+              <p
+                className="text-sm text-[#e8e4df]/70"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                {content.contact.address}
+              </p>
             )}
           </div>
           <FooterSocialLinks

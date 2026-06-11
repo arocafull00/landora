@@ -3,6 +3,8 @@
 import { motion, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
+import { useEditorHighlight } from "@/lib/use-editor-highlight";
+import { cn } from "@/lib/utils";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -16,13 +18,19 @@ export function VelarHero({
   heroVisible: boolean;
 }) {
   const reduce = useReducedMotion();
+  const isHighlighted = useEditorHighlight("hero");
 
   if (!heroVisible) {
     return (
       <section
         ref={heroRef}
+        data-section="hero"
+        data-section-label="Hero"
         id="hero"
-        className="relative overflow-visible"
+        className={cn(
+          "relative overflow-visible",
+          isHighlighted && "template-section--highlighted",
+        )}
         style={{ minHeight: "100vh" }}
       >
         <HeroBackground src={content.hero.image} template="velar" />
@@ -33,8 +41,13 @@ export function VelarHero({
   return (
     <section
       ref={heroRef}
+      data-section="hero"
+      data-section-label="Hero"
       id="hero"
-      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-visible lg:block"
+      className={cn(
+        "relative flex min-h-[100dvh] flex-col items-center justify-center overflow-visible lg:block",
+        isHighlighted && "template-section--highlighted",
+      )}
     >
       <motion.div
         className="absolute inset-0"

@@ -2,6 +2,7 @@ import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 
 export const PREVIEW_CONTENT_UPDATE = "landora:preview-content-update";
 export const PREVIEW_SCROLL_TO = "landora:preview-scroll-to";
+export const PREVIEW_HIGHLIGHT_SECTION = "landora:preview-highlight-section";
 
 export type PreviewContentMessage = {
   type: typeof PREVIEW_CONTENT_UPDATE;
@@ -12,6 +13,12 @@ export type PreviewContentMessage = {
 export type PreviewScrollToMessage = {
   type: typeof PREVIEW_SCROLL_TO;
   sectionId: string;
+};
+
+export type PreviewHighlightSectionMessage = {
+  type: typeof PREVIEW_HIGHLIGHT_SECTION;
+  sectionId: string | null;
+  label?: string;
 };
 
 export function isPreviewContentMessage(data: unknown): data is PreviewContentMessage {
@@ -28,6 +35,16 @@ export function isPreviewScrollToMessage(data: unknown): data is PreviewScrollTo
   const message = data as PreviewScrollToMessage;
   if (message.type !== PREVIEW_SCROLL_TO) return false;
   if (typeof message.sectionId !== "string") return false;
+  return true;
+}
+
+export function isPreviewHighlightSectionMessage(
+  data: unknown,
+): data is PreviewHighlightSectionMessage {
+  if (!data || typeof data !== "object") return false;
+  const message = data as PreviewHighlightSectionMessage;
+  if (message.type !== PREVIEW_HIGHLIGHT_SECTION) return false;
+  if (message.sectionId !== null && typeof message.sectionId !== "string") return false;
   return true;
 }
 
@@ -50,5 +67,17 @@ export function postPreviewScrollTo(
   target.postMessage(
     { type: PREVIEW_SCROLL_TO, sectionId },
     window.location.origin
+  );
+}
+
+export function postPreviewHighlightSection(
+  target: Window | null | undefined,
+  sectionId: string | null,
+  label?: string,
+) {
+  if (!target) return;
+  target.postMessage(
+    { type: PREVIEW_HIGHLIGHT_SECTION, sectionId, label },
+    window.location.origin,
   );
 }

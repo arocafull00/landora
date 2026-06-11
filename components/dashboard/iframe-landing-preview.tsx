@@ -7,7 +7,11 @@ import {
   type PreviewDevice,
 } from "@/components/dashboard/preview-toolbar";
 import { MOBILE_WIDTH } from "@/components/dashboard/preview-utils";
-import { postPreviewContent, postPreviewScrollTo } from "@/lib/preview-messaging";
+import {
+  postPreviewContent,
+  postPreviewHighlightSection,
+} from "@/lib/preview-messaging";
+import { getSectionByAnchor } from "@/lib/template-sections";
 import { cn } from "@/lib/utils";
 
 export function IframeLandingPreview({
@@ -42,17 +46,22 @@ export function IframeLandingPreview({
   }, [sendContent]);
 
   useEffect(() => {
-    if (!scrollTarget) return;
+    const sendHighlight = () => {
+      const target = iframeRef.current?.contentWindow;
+      const label = scrollTarget
+        ? getSectionByAnchor(template, scrollTarget)?.label
+        : undefined;
+      postPreviewHighlightSection(target, scrollTarget ?? null, label);
+    };
 
-    const scroll = () => postPreviewScrollTo(iframeRef.current?.contentWindow, scrollTarget);
-    scroll();
+    sendHighlight();
 
     const iframe = iframeRef.current;
     if (!iframe) return;
 
-    iframe.addEventListener("load", scroll);
-    return () => iframe.removeEventListener("load", scroll);
-  }, [scrollTarget]);
+    iframe.addEventListener("load", sendHighlight);
+    return () => iframe.removeEventListener("load", sendHighlight);
+  }, [scrollTarget, template]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
