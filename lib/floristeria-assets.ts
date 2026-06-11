@@ -18,3 +18,17 @@ export const FLORISTERIA_ASSETS = {
   gallery5: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?w=800&q=85&auto=format",
   gallery6: "https://images.unsplash.com/photo-1469259943454-aa100abba749?w=800&q=85&auto=format",
 } as const;
+
+export const FLORISTERIA_IMAGE_OPTIONS = [
+  { value: FLORISTERIA_ASSETS.hero, label: "Portada" },
+  { value: FLORISTERIA_ASSETS.interior1, label: "Interior 1" },
+  { value: FLORISTERIA_ASSETS.interior2, label: "Interior 2" },
+  { value: FLORISTERIA_ASSETS.bouquet1, label: "Ramo 1" },
+  { value: FLORISTERIA_ASSETS.bouquet3, label: "Ramo 2" },
+  { value: FLORISTERIA_ASSETS.bouquet4, label: "Ramo 3" },
+  { value: FLORISTERIA_ASSETS.bouquet5, label: "Ramo 4" },
+  { value: FLORISTERIA_ASSETS.bouquet6, label: "Ramo 5" },
+  { value: FLORISTERIA_ASSETS.florist1, label: "Florista 1" },
+  { value: FLORISTERIA_ASSETS.florist2, label: "Florista 2" },
+  { value: FLORISTERIA_ASSETS.florist3, label: "Florista 3" },
+] as const;

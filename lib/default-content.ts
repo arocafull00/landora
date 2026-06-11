@@ -40,9 +40,9 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
     { id: "gallery-4", image: VELAR_ASSETS.toll4 },
   ],
   nav: [
-    { id: "nav-residences", label: "Espacios", href: "#residences" },
     { id: "nav-story", label: "Nosotros", href: "#story" },
     { id: "nav-listings", label: "Galería", href: "#listings" },
+    { id: "nav-residences", label: "Espacios", href: "#residences" },
     { id: "nav-inquire", label: "Contacto", href: "#inquire" },
   ],
   sectionHeadings: SECTION_HEADING_DEFAULTS.velar,

@@ -29,7 +29,7 @@ export function FooterEditorPanel({ activeLanding }: FooterEditorPanelProps) {
         </p>
       </div>
 
-      {headingFallback ? (
+      {headingFallback && templateId !== "velar" ? (
         <SectionHeadingFields
           activeLanding={activeLanding}
           anchor={footerAnchor}
@@ -38,29 +38,31 @@ export function FooterEditorPanel({ activeLanding }: FooterEditorPanelProps) {
         />
       ) : null}
 
-      <div className="space-y-5">
-        <p className="font-label text-label-md text-on-surface-variant">Contacto</p>
-        <EditorField
-          editorId={`${footerAnchor}:email`}
-          label="Email"
-          onChange={(value) => updateContact(activeLanding.id, { email: value })}
-          type="email"
-          value={contact.email}
-        />
-        <EditorField
-          editorId={`${footerAnchor}:phone`}
-          label="Teléfono"
-          onChange={(value) => updateContact(activeLanding.id, { phone: value })}
-          type="tel"
-          value={contact.phone}
-        />
-        <EditorField
-          editorId={`${footerAnchor}:address`}
-          label="Ubicación"
-          onChange={(value) => updateContact(activeLanding.id, { address: value })}
-          value={contact.address}
-        />
-      </div>
+      {templateId !== "velar" ? (
+        <div className="space-y-5">
+          <p className="font-label text-label-md text-on-surface-variant">Contacto</p>
+          <EditorField
+            editorId={`${footerAnchor}:email`}
+            label="Email"
+            onChange={(value) => updateContact(activeLanding.id, { email: value })}
+            type="email"
+            value={contact.email}
+          />
+          <EditorField
+            editorId={`${footerAnchor}:phone`}
+            label="Teléfono"
+            onChange={(value) => updateContact(activeLanding.id, { phone: value })}
+            type="tel"
+            value={contact.phone}
+          />
+          <EditorField
+            editorId={`${footerAnchor}:address`}
+            label="Ubicación"
+            onChange={(value) => updateContact(activeLanding.id, { address: value })}
+            value={contact.address}
+          />
+        </div>
+      ) : null}
 
       {showCtaLabel ? (
         <EditorField

@@ -13,3 +13,13 @@ export const STUDIO_ASSETS = {
   gallery5: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=800&q=85&auto=format",
   gallery6: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=800&q=85&auto=format",
 } as const;
+
+export const STUDIO_IMAGE_OPTIONS = [
+  { value: STUDIO_ASSETS.hero, label: "Portada" },
+  { value: STUDIO_ASSETS.salon1, label: "Salón 1" },
+  { value: STUDIO_ASSETS.salon2, label: "Salón 2" },
+  { value: STUDIO_ASSETS.salon3, label: "Salón 3" },
+  { value: STUDIO_ASSETS.stylist1, label: "Estilista 1" },
+  { value: STUDIO_ASSETS.stylist2, label: "Estilista 2" },
+  { value: STUDIO_ASSETS.stylist3, label: "Estilista 3" },
+] as const;

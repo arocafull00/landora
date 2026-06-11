@@ -3,8 +3,8 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StudioEditorSection } from "@/components/dashboard/sections/studio-editor-section";
+import { EditorTabsBar } from "@/components/dashboard/editor-tabs-bar";
 import { PortfolioEditorSection } from "@/components/dashboard/sections/portfolio-editor-section";
 import { RistoranteEditorSection } from "@/components/dashboard/sections/ristorante-editor-section";
 import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
@@ -13,6 +13,7 @@ import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
+import { VelarContactEditorPanel } from "@/components/dashboard/velar-contact-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { dispatchEditorFocusElement } from "@/lib/editor-element-focus";
@@ -79,25 +80,11 @@ export function EditorSection() {
       onSelectLanding={setActiveLandingId}
       scrollTarget={scrollTarget}
       tabs={
-        <div className="border-b border-outline-variant bg-surface-container-lowest">
-          <Tabs
-            value={activeEditorTab}
-            onValueChange={(v) => setActiveEditorTab(v as typeof activeEditorTab)}
-          >
-            <TabsList className="h-auto gap-0 rounded-none bg-transparent p-0">
-              {tabs.map((tab) => (
-                <TabsTrigger
-                  className="mr-unit-lg rounded-none border-b-2 border-transparent px-0 py-3 font-label text-label-md text-on-surface-variant transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
-                  id={tab.id === "Hero" ? "tutorial-hero-tab" : undefined}
-                  key={tab.id}
-                  value={tab.id}
-                >
-                  {tab.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
+        <EditorTabsBar
+          activeTab={activeEditorTab}
+          onTabChange={(v) => setActiveEditorTab(v as typeof activeEditorTab)}
+          tabs={tabs}
+        />
       }
       form={
         <>
@@ -219,6 +206,7 @@ export function EditorSection() {
                           image: value,
                         })
                       }
+                      templateId={activeLanding.template}
                       value={item.image ?? ""}
                     />
                   </div>
@@ -272,6 +260,7 @@ export function EditorSection() {
                       onChange={(value) =>
                         updateSpace(activeLanding.id, space.id, { image: value })
                       }
+                      templateId={activeLanding.template}
                       value={space.image}
                     />
                   </div>
@@ -334,6 +323,7 @@ export function EditorSection() {
                           image: value,
                         })
                       }
+                      templateId={activeLanding.template}
                       value={service.image}
                     />
                   </div>
@@ -429,6 +419,10 @@ export function EditorSection() {
                 ))}
               </div>
             </section>
+          ) : null}
+
+          {activeEditorTab === "Contacto" ? (
+            <VelarContactEditorPanel activeLanding={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Footer" ? (

@@ -5,6 +5,7 @@ import type { TemplateId } from "@/lib/dashboard-data";
 import { useAssetsStore } from "@/stores/assets-store";
 import { getTemplatePalette } from "@/lib/template-palettes";
 import { isBackgroundPreset } from "@/lib/background-assets";
+import { getTemplateImageOptions } from "@/lib/template-image-options";
 import { AssetImage } from "@/components/ui/asset-image";
 import { ThemedLottieBackground } from "@/components/ui/themed-lottie-background";
 import { uploadAsset } from "@/lib/upload-asset";
@@ -60,7 +61,8 @@ export function ImageField({
   };
 
   const assetOptions = assets.map((a) => ({ value: a.url, label: a.name || a.url }));
-  const allOptions = [...(presets ?? []), ...assetOptions];
+  const templateImages = templateId ? getTemplateImageOptions(templateId) : [];
+  const allOptions = [...(presets ?? []), ...templateImages, ...assetOptions];
   const activeAsset = assets.find((a) => a.url === value);
   const palette = templateId ? getTemplatePalette(templateId) : null;
   const showThemedPreview = Boolean(value && palette && isBackgroundPreset(value));
@@ -97,6 +99,16 @@ export function ImageField({
               <SelectGroup>
                 <SelectLabel>Fondos</SelectLabel>
                 {presets.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            ) : null}
+            {templateImages.length > 0 ? (
+              <SelectGroup>
+                <SelectLabel>Plantilla</SelectLabel>
+                {templateImages.map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
                   </SelectItem>

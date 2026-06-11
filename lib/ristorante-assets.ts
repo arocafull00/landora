@@ -18,3 +18,18 @@ export const RISTORANTE_ASSETS = {
   gallery5: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=85&auto=format",
   gallery6: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=85&auto=format",
 } as const;
+
+export const RISTORANTE_IMAGE_OPTIONS = [
+  { value: RISTORANTE_ASSETS.hero, label: "Portada" },
+  { value: RISTORANTE_ASSETS.interior1, label: "Interior 1" },
+  { value: RISTORANTE_ASSETS.interior2, label: "Interior 2" },
+  { value: RISTORANTE_ASSETS.dish1, label: "Plato 1" },
+  { value: RISTORANTE_ASSETS.dish2, label: "Plato 2" },
+  { value: RISTORANTE_ASSETS.dish3, label: "Plato 3" },
+  { value: RISTORANTE_ASSETS.dish4, label: "Plato 4" },
+  { value: RISTORANTE_ASSETS.dish5, label: "Plato 5" },
+  { value: RISTORANTE_ASSETS.dish6, label: "Plato 6" },
+  { value: RISTORANTE_ASSETS.chef1, label: "Chef 1" },
+  { value: RISTORANTE_ASSETS.chef2, label: "Chef 2" },
+  { value: RISTORANTE_ASSETS.chef3, label: "Chef 3" },
+] as const;

@@ -1,29 +1,40 @@
 import type { TemplateId, TemplateContentMap, LandingContent } from "@/lib/dashboard-data";
 import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT } from "@/lib/default-content";
 
+export type EditorTabGroup = "section" | "config";
+
 export type EditorTab = {
   id: string;
   label: string;
+  group?: EditorTabGroup;
 };
 
 export const SECTIONS_EDITOR_TAB: EditorTab = {
   id: "Secciones",
   label: "Secciones",
+  group: "config",
 };
 
 export const NAV_EDITOR_TAB: EditorTab = {
   id: "Navegación",
   label: "Navegación",
+  group: "config",
 };
 
 export const ADMIN_EDITOR_TAB: EditorTab = {
   id: "Admin",
   label: "Admin",
+  group: "config",
 };
 
 export const FOOTER_EDITOR_TAB: EditorTab = {
   id: "Footer",
   label: "Pie de página",
+};
+
+export const CONTACT_EDITOR_TAB: EditorTab = {
+  id: "Contacto",
+  label: "Contacto",
 };
 
 export type TemplateComponent = React.ComponentType<{ content: LandingContent; topOffset?: number }>;
@@ -53,6 +64,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Servicios", label: "Servicios" },
       { id: "Proceso", label: "Proceso" },
       { id: "Testimonios", label: "Testimonios" },
+      CONTACT_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],

@@ -3,7 +3,7 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EditorTabsBar } from "@/components/dashboard/editor-tabs-bar";
 import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
@@ -60,21 +60,11 @@ export function PortfolioEditorSection() {
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
       tabs={
-        <div className="border-b border-outline-variant bg-surface-container-lowest px-unit-lg">
-          <Tabs value={activeEditorTab} onValueChange={(v) => setActiveEditorTab(v)}>
-            <TabsList className="h-auto gap-0 rounded-none bg-transparent p-0">
-              {tabs.map((tab) => (
-                <TabsTrigger
-                  className="mr-unit-lg rounded-none border-b-2 border-transparent px-0 py-3 font-label text-label-md text-on-surface-variant transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
-                  key={tab.id}
-                  value={tab.id}
-                >
-                  {tab.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
+        <EditorTabsBar
+          activeTab={activeEditorTab}
+          onTabChange={(v) => setActiveEditorTab(v)}
+          tabs={tabs}
+        />
       }
       form={
         <>
@@ -145,6 +135,7 @@ export function PortfolioEditorSection() {
                       onChange={(value) =>
                         updateSectionItem(activeLanding.id, "gallery", item.id, { image: value })
                       }
+                      templateId={activeLanding.template}
                       value={item.image ?? ""}
                     />
                     <TextField
