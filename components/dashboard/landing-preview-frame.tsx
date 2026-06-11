@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
@@ -9,6 +9,7 @@ import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import {
   isPreviewContentMessage,
+  isPreviewHighlightElementMessage,
   isPreviewScrollToMessage,
   PREVIEW_CONTENT_UPDATE,
 } from "@/lib/preview-messaging";
@@ -36,7 +37,16 @@ export function LandingPreviewFrame({
 }) {
   const [content, setContent] = useState(initialContent);
   const [activeTemplate, setActiveTemplate] = useState(template);
+  const highlightedEditorIdRef = useRef<string | null>(null);
   const scrollContainer = usePreviewScrollContainer();
+
+  useLayoutEffect(() => {
+    const editorId = highlightedEditorIdRef.current;
+    if (!editorId) return;
+    for (const el of document.querySelectorAll(`[data-editor-id="${editorId}"]`)) {
+      el.classList.add("template-element--highlighted");
+    }
+  }, [content]);
 
   const refreshScrollPosition = useCallback(() => {
     if (scrollContainer) {
@@ -58,6 +68,19 @@ export function LandingPreviewFrame({
           "",
           `${window.location.pathname}${window.location.search}#${sectionId}`,
         );
+        return;
+      }
+
+      if (isPreviewHighlightElementMessage(event.data)) {
+        for (const el of document.querySelectorAll(".template-element--highlighted")) {
+          el.classList.remove("template-element--highlighted");
+        }
+        highlightedEditorIdRef.current = event.data.editorId;
+        if (event.data.editorId) {
+          for (const el of document.querySelectorAll(`[data-editor-id="${event.data.editorId}"]`)) {
+            el.classList.add("template-element--highlighted");
+          }
+        }
         return;
       }
 

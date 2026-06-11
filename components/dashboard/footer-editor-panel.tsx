@@ -1,5 +1,6 @@
 "use client";
 
+import { dispatchEditorFocusElement } from "@/lib/editor-element-focus";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { SocialLinkFields } from "@/components/dashboard/social-link-fields";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
@@ -40,18 +41,21 @@ export function FooterEditorPanel({ activeLanding }: FooterEditorPanelProps) {
       <div className="space-y-5">
         <p className="font-label text-label-md text-on-surface-variant">Contacto</p>
         <EditorField
+          editorId={`${footerAnchor}:email`}
           label="Email"
           onChange={(value) => updateContact(activeLanding.id, { email: value })}
           type="email"
           value={contact.email}
         />
         <EditorField
+          editorId={`${footerAnchor}:phone`}
           label="Teléfono"
           onChange={(value) => updateContact(activeLanding.id, { phone: value })}
           type="tel"
           value={contact.phone}
         />
         <EditorField
+          editorId={`${footerAnchor}:address`}
           label="Ubicación"
           onChange={(value) => updateContact(activeLanding.id, { address: value })}
           value={contact.address}
@@ -97,12 +101,14 @@ export function FooterEditorPanel({ activeLanding }: FooterEditorPanelProps) {
 }
 
 function EditorField({
+  editorId,
   label,
   onChange,
   placeholder,
   type = "text",
   value,
 }: {
+  editorId?: string;
   label: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -116,7 +122,9 @@ function EditorField({
       </span>
       <input
         className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+        onBlur={editorId ? () => dispatchEditorFocusElement(null) : undefined}
         onChange={(event) => onChange(event.target.value)}
+        onFocus={editorId ? () => dispatchEditorFocusElement(editorId) : undefined}
         placeholder={placeholder}
         type={type}
         value={value}

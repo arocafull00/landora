@@ -270,6 +270,11 @@ textarea {
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
+.template-element--highlighted {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 2px;
+}
+
 .template-section--highlighted {
   outline: 2px solid var(--primary);
   outline-offset: -2px;

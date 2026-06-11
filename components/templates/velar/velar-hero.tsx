@@ -67,6 +67,7 @@ export function VelarHero({
           transition={{ duration: 0.65, delay: 0.25, ease: easeOut }}
         >
           <h1
+            data-editor-id="hero:eyebrow"
             className="text-[7.5vw] font-extrabold uppercase text-black sm:text-[5.5vw] lg:text-left lg:text-[3vw]"
             style={{
               fontFamily: "var(--font-syne)",
@@ -77,6 +78,7 @@ export function VelarHero({
             {content.hero.eyebrow}
           </h1>
           <motion.p
+            data-editor-id="hero:subtitle"
             className="hidden max-w-[300px] text-right font-bold opacity-70 lg:block"
             style={{
               fontFamily: "var(--font-syne)",

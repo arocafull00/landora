@@ -15,6 +15,7 @@ import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-pane
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { dispatchEditorFocusElement } from "@/lib/editor-element-focus";
 import { getEditorScrollTarget, getVisibleEditorTabs } from "@/lib/template-sections";
 
 export function EditorSection() {
@@ -118,16 +119,19 @@ export function EditorSection() {
                 title="Portada"
               />
               <TextField
+                editorId="hero:eyebrow"
                 label="Subtítulo superior"
                 onChange={(value) => updateHero(activeLanding.id, { eyebrow: value })}
                 value={activeLanding.content.hero.eyebrow}
               />
               <TextField
+                editorId="hero:title"
                 label="Título"
                 onChange={(value) => updateHero(activeLanding.id, { title: value })}
                 value={activeLanding.content.hero.title}
               />
               <TextArea
+                editorId="hero:subtitle"
                 label="Subtítulo"
                 onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
                 value={activeLanding.content.hero.subtitle}
@@ -149,6 +153,7 @@ export function EditorSection() {
                 title="Historia"
               />
               <TextArea
+                editorId="story:statement"
                 label="Texto principal"
                 onChange={(value) =>
                   updateStory(activeLanding.id, { statement: value })
@@ -166,6 +171,7 @@ export function EditorSection() {
                     {activeLanding.content.stats.map((stat) => (
                       <div className="space-y-3" key={stat.id}>
                         <TextField
+                          editorId={`story:stat:${stat.id}:value`}
                           label="Valor"
                           onChange={(value) =>
                             updateStat(activeLanding.id, stat.id, { value })
@@ -173,6 +179,7 @@ export function EditorSection() {
                           value={stat.value}
                         />
                         <TextField
+                          editorId={`story:stat:${stat.id}:label`}
                           label="Etiqueta"
                           onChange={(value) =>
                             updateStat(activeLanding.id, stat.id, { label: value })
@@ -240,6 +247,7 @@ export function EditorSection() {
                     key={space.id}
                   >
                     <TextField
+                      editorId={`residences:space:${space.id}:name`}
                       label="Nombre"
                       onChange={(value) =>
                         updateSpace(activeLanding.id, space.id, { name: value })
@@ -247,6 +255,7 @@ export function EditorSection() {
                       value={space.name}
                     />
                     <TextArea
+                      editorId={`residences:space:${space.id}:description`}
                       label="Descripción"
                       onChange={(value) =>
                         updateSpace(activeLanding.id, space.id, {
@@ -286,6 +295,7 @@ export function EditorSection() {
                     key={service.id}
                   >
                     <TextField
+                      editorId={`servicios:service:${service.id}:title`}
                       label="Título"
                       onChange={(value) =>
                         updateService(activeLanding.id, service.id, {
@@ -295,6 +305,7 @@ export function EditorSection() {
                       value={service.title}
                     />
                     <TextField
+                      editorId={`servicios:service:${service.id}:subtitle`}
                       label="Subtítulo"
                       onChange={(value) =>
                         updateService(activeLanding.id, service.id, {
@@ -304,6 +315,7 @@ export function EditorSection() {
                       value={service.subtitle}
                     />
                     <TextField
+                      editorId={`servicios:service:${service.id}:label`}
                       label="Etiqueta"
                       onChange={(value) =>
                         updateService(activeLanding.id, service.id, {
@@ -346,6 +358,7 @@ export function EditorSection() {
                   >
                     <div className="space-y-3">
                       <TextField
+                        editorId={`proceso:step:${step.id}:title`}
                         label="Título del paso"
                         onChange={(value) =>
                           updateWorkflowStep(activeLanding.id, step.id, {
@@ -355,6 +368,7 @@ export function EditorSection() {
                         value={step.title}
                       />
                       <TextArea
+                        editorId={`proceso:step:${step.id}:description`}
                         label="Descripción del paso"
                         onChange={(value) =>
                           updateWorkflowStep(activeLanding.id, step.id, {
@@ -388,6 +402,7 @@ export function EditorSection() {
                     key={item.id}
                   >
                     <TextField
+                      editorId={`testimonios:${item.id}:author`}
                       label="Autor de la reseña"
                       onChange={(value) =>
                         updateTestimonial(activeLanding.id, item.id, {
@@ -397,6 +412,7 @@ export function EditorSection() {
                       value={item.author}
                     />
                     <TextArea
+                      editorId={`testimonios:${item.id}:comment`}
                       label="Reseña"
                       onChange={(value) =>
                         updateTestimonial(activeLanding.id, item.id, {
@@ -438,11 +454,13 @@ function SectionTitle({
 
 function TextField({
   className = "",
+  editorId,
   label,
   onChange,
   value,
 }: {
   className?: string;
+  editorId?: string;
   label: string;
   onChange: (value: string) => void;
   value: string;
@@ -454,7 +472,9 @@ function TextField({
       </span>
       <input
         className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+        onBlur={editorId ? () => dispatchEditorFocusElement(null) : undefined}
         onChange={(event) => onChange(event.target.value)}
+        onFocus={editorId ? () => dispatchEditorFocusElement(editorId) : undefined}
         type="text"
         value={value}
       />
@@ -463,11 +483,13 @@ function TextField({
 }
 
 function TextArea({
+  editorId,
   label,
   onChange,
   rows = 3,
   value,
 }: {
+  editorId?: string;
   label: string;
   onChange: (value: string) => void;
   rows?: number;
@@ -480,7 +502,9 @@ function TextArea({
       </span>
       <textarea
         className="w-full resize-none rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+        onBlur={editorId ? () => dispatchEditorFocusElement(null) : undefined}
         onChange={(event) => onChange(event.target.value)}
+        onFocus={editorId ? () => dispatchEditorFocusElement(editorId) : undefined}
         rows={rows}
         value={value}
       />

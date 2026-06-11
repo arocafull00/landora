@@ -7,8 +7,10 @@ import {
   type PreviewDevice,
 } from "@/components/dashboard/preview-toolbar";
 import { MOBILE_WIDTH } from "@/components/dashboard/preview-utils";
+import { addEditorFocusElementListener } from "@/lib/editor-element-focus";
 import {
   postPreviewContent,
+  postPreviewHighlightElement,
   postPreviewHighlightSection,
 } from "@/lib/preview-messaging";
 import { getSectionByAnchor } from "@/lib/template-sections";
@@ -62,6 +64,12 @@ export function IframeLandingPreview({
     iframe.addEventListener("load", sendHighlight);
     return () => iframe.removeEventListener("load", sendHighlight);
   }, [scrollTarget, template]);
+
+  useEffect(() => {
+    return addEditorFocusElementListener((editorId) => {
+      postPreviewHighlightElement(iframeRef.current?.contentWindow, editorId);
+    });
+  }, []);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {

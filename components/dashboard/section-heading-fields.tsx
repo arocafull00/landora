@@ -1,5 +1,6 @@
 "use client";
 
+import { dispatchEditorFocusElement } from "@/lib/editor-element-focus";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import type { Landing, SectionHeading } from "@/lib/dashboard-data";
 import { getSectionHeading, hasSectionSubtitle } from "@/lib/section-headings";
@@ -27,12 +28,14 @@ export function SectionHeadingFields({
         <p className="font-label text-label-md text-on-surface-variant">{groupLabel}</p>
       ) : null}
       <EditorTextField
+        editorId={`${anchor}:heading:title`}
         label="Título de sección"
         onChange={(value) => updateSectionHeading(activeLanding.id, anchor, { title: value })}
         value={heading.title}
       />
       {showSubtitle ? (
         <EditorTextArea
+          editorId={`${anchor}:heading:subtitle`}
           label="Subtítulo"
           onChange={(value) => updateSectionHeading(activeLanding.id, anchor, { subtitle: value })}
           value={heading.subtitle}
@@ -43,10 +46,12 @@ export function SectionHeadingFields({
 }
 
 function EditorTextField({
+  editorId,
   label,
   onChange,
   value,
 }: {
+  editorId?: string;
   label: string;
   onChange: (value: string) => void;
   value: string;
@@ -58,7 +63,9 @@ function EditorTextField({
       </span>
       <input
         className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+        onBlur={editorId ? () => dispatchEditorFocusElement(null) : undefined}
         onChange={(event) => onChange(event.target.value)}
+        onFocus={editorId ? () => dispatchEditorFocusElement(editorId) : undefined}
         type="text"
         value={value}
       />
@@ -67,10 +74,12 @@ function EditorTextField({
 }
 
 function EditorTextArea({
+  editorId,
   label,
   onChange,
   value,
 }: {
+  editorId?: string;
   label: string;
   onChange: (value: string) => void;
   value: string;
@@ -82,7 +91,9 @@ function EditorTextArea({
       </span>
       <textarea
         className="w-full resize-none rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+        onBlur={editorId ? () => dispatchEditorFocusElement(null) : undefined}
         onChange={(event) => onChange(event.target.value)}
+        onFocus={editorId ? () => dispatchEditorFocusElement(editorId) : undefined}
         rows={3}
         value={value}
       />
