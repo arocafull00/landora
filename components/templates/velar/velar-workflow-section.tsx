@@ -47,6 +47,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
           <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2">
             <div className="text-center lg:text-left">
               <h2
+                data-editor-id="proceso:heading:title"
                 className="mb-6 font-extrabold leading-tight text-[#e8e4df]"
                 style={{
                   fontFamily: "var(--font-syne)",
@@ -92,12 +93,14 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
                 {WORKFLOW_ICONS[index % WORKFLOW_ICONS.length]}
               </div>
               <h3
+                data-editor-id={`proceso:step:${step.id}:title`}
                 className="mb-3 text-xl font-bold text-[#e8e4df]"
                 style={{ fontFamily: "var(--font-syne)" }}
               >
                 {step.title}
               </h3>
               <p
+                data-editor-id={`proceso:step:${step.id}:description`}
                 className="leading-relaxed text-[#e8e4df]/70"
                 style={{ fontFamily: "var(--font-body)" }}
               >

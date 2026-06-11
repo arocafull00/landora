@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+button {
+  cursor: pointer;
+}
 
 :root {
   --foreground: var(--on-background);

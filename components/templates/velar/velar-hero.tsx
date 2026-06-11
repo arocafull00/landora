@@ -97,6 +97,7 @@ export function VelarHero({
 
         <div className="w-full overflow-visible lg:overflow-hidden">
           <motion.h2
+            data-editor-id="hero:title"
             className="max-w-full break-words px-6 text-[12.5vw] font-extrabold uppercase leading-[0.9] text-black sm:text-[10.5vw] md:px-10 lg:px-16 lg:text-left lg:text-[clamp(52px,6.5vw,9vw)] lg:leading-[0.88] lg:whitespace-nowrap"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
             initial={reduce ? false : { y: "108%" }}
@@ -108,6 +109,7 @@ export function VelarHero({
         </div>
 
         <motion.p
+          data-editor-id="hero:subtitle"
           className="px-6 font-semibold text-[#171717]/85 max-lg:[text-shadow:0_1px_12px_rgba(255,255,255,0.6)] lg:hidden"
           style={{
             fontFamily: "var(--font-syne)",

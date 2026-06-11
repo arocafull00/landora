@@ -36,6 +36,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
             </p>
             {content.contact.phone && (
               <a
+                data-editor-id="inquire:phone"
                 href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                 className="block text-sm text-[#e8e4df]/70 transition-colors hover:text-[#e8e4df]"
                 style={{ fontFamily: "var(--font-body)" }}
@@ -45,6 +46,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
             )}
             {content.contact.email && (
               <a
+                data-editor-id="inquire:email"
                 href={`mailto:${content.contact.email}`}
                 className="block text-sm text-[#e8e4df]/70 transition-colors hover:text-[#e8e4df]"
                 style={{ fontFamily: "var(--font-body)" }}
@@ -54,6 +56,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
             )}
             {content.contact.address && (
               <p
+                data-editor-id="inquire:address"
                 className="text-sm text-[#e8e4df]/70"
                 style={{ fontFamily: "var(--font-body)" }}
               >

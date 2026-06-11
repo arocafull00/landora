@@ -42,6 +42,7 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
             testimonios
           </p>
           <h2
+            data-editor-id="testimonios:heading:title"
             className="mb-8 font-extrabold leading-tight text-[#171717]"
             style={{
               fontFamily: "var(--font-syne)",

@@ -88,6 +88,7 @@ export function EditorSection() {
               {tabs.map((tab) => (
                 <TabsTrigger
                   className="mr-unit-lg rounded-none border-b-2 border-transparent px-0 py-3 font-label text-label-md text-on-surface-variant transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
+                  id={tab.id === "Hero" ? "tutorial-hero-tab" : undefined}
                   key={tab.id}
                   value={tab.id}
                 >
@@ -124,12 +125,14 @@ export function EditorSection() {
                 onChange={(value) => updateHero(activeLanding.id, { eyebrow: value })}
                 value={activeLanding.content.hero.eyebrow}
               />
-              <TextField
-                editorId="hero:title"
-                label="Título"
-                onChange={(value) => updateHero(activeLanding.id, { title: value })}
-                value={activeLanding.content.hero.title}
-              />
+              <div id="tutorial-hero-title">
+                <TextField
+                  editorId="hero:title"
+                  label="Título"
+                  onChange={(value) => updateHero(activeLanding.id, { title: value })}
+                  value={activeLanding.content.hero.title}
+                />
+              </div>
               <TextArea
                 editorId="hero:subtitle"
                 label="Subtítulo"

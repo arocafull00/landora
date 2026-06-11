@@ -48,7 +48,7 @@ export function EditorLayout({
       />
       {tabs}
       <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden xl:grid-cols-[minmax(320px,380px)_1fr]">
-        <div className="min-h-0 overflow-y-auto border-r border-outline-variant p-unit-lg">
+        <div id="tutorial-editor-form" className="min-h-0 overflow-y-auto border-r border-outline-variant p-unit-lg">
           <div className="space-y-unit-md">{form}</div>
         </div>
         <IframeLandingPreview

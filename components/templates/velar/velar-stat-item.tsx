@@ -55,6 +55,7 @@ export function VelarStatItem({ stat }: { stat: StatContent }) {
   return (
     <div ref={ref}>
       <div
+        data-editor-id={`story:stat:${stat.id}:value`}
         className="text-white leading-[1.1]"
         style={{
           fontFamily: "var(--font-body)",
@@ -65,6 +66,7 @@ export function VelarStatItem({ stat }: { stat: StatContent }) {
         {displayValue}
       </div>
       <div
+        data-editor-id={`story:stat:${stat.id}:label`}
         className="mt-[clamp(4px,0.5vw,8px)] text-white/60"
         style={{
           fontFamily: "var(--font-body)",

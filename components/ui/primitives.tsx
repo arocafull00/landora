@@ -6,11 +6,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 export function IconButton({
   icon,
+  id,
   label,
   className = "",
   onClick,
 }: {
   icon: IconName;
+  id?: string;
   label: string;
   className?: string;
   onClick?: () => void;
@@ -21,6 +23,7 @@ export function IconButton({
         <button
           aria-label={label}
           className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-primary ${className}`}
+          id={id}
           onClick={onClick}
           type="button"
         >

@@ -44,6 +44,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
             SERVICIOS GENERALES INCLUIDOS
           </p>
           <h2
+            data-editor-id="servicios:heading:title"
             className="mx-auto mb-6 max-w-4xl font-extrabold leading-tight text-[#171717]"
             style={{
               fontFamily: "var(--font-syne)",
@@ -55,6 +56,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
           </h2>
           {heading.subtitle ? (
             <p
+              data-editor-id="servicios:heading:subtitle"
               className="mb-6 text-lg text-[#171717]/80"
               style={{ fontFamily: "var(--font-body)" }}
             >

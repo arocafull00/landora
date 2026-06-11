@@ -299,7 +299,8 @@ export type IconName =
   | "publish"
   | "check"
   | "close"
-  | "info";
+  | "info"
+  | "tutorial";
 
 export const dashboardViews: Array<{
   id: DashboardView;

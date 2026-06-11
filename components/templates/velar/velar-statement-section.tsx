@@ -30,6 +30,7 @@ export function VelarStatementSection({
         <div className="flex h-full flex-col justify-center gap-8 px-6 py-10 md:justify-between md:gap-0 md:px-10 md:py-0 md:pb-[clamp(60px,8vw,120px)] md:pt-[clamp(30px,4vw,60px)] lg:px-16">
           <div className="mx-auto w-full max-w-[1200px] md:pl-[15%] lg:pl-[25%]">
             <p
+              data-editor-id="story:statement"
               className="max-w-[36ch] text-[clamp(18px,4.5vw,42px)] font-light leading-[1.35] tracking-[-0.02em] text-[#e8e4df] md:max-w-none md:text-[clamp(22px,2.6vw,42px)] lg:max-w-[28ch]"
               style={{ fontFamily: "var(--font-body)" }}
             >

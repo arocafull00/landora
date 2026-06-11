@@ -12,6 +12,7 @@ import {
   postPreviewContent,
   postPreviewHighlightElement,
   postPreviewHighlightSection,
+  postPreviewScrollTo,
 } from "@/lib/preview-messaging";
 import { getSectionByAnchor } from "@/lib/template-sections";
 import { cn } from "@/lib/utils";
@@ -48,21 +49,24 @@ export function IframeLandingPreview({
   }, [sendContent]);
 
   useEffect(() => {
-    const sendHighlight = () => {
+    const sendSectionFocus = () => {
       const target = iframeRef.current?.contentWindow;
+      if (scrollTarget) {
+        postPreviewScrollTo(target, scrollTarget);
+      }
       const label = scrollTarget
         ? getSectionByAnchor(template, scrollTarget)?.label
         : undefined;
       postPreviewHighlightSection(target, scrollTarget ?? null, label);
     };
 
-    sendHighlight();
+    sendSectionFocus();
 
     const iframe = iframeRef.current;
     if (!iframe) return;
 
-    iframe.addEventListener("load", sendHighlight);
-    return () => iframe.removeEventListener("load", sendHighlight);
+    iframe.addEventListener("load", sendSectionFocus);
+    return () => iframe.removeEventListener("load", sendSectionFocus);
   }, [scrollTarget, template]);
 
   useEffect(() => {
@@ -86,7 +90,7 @@ export function IframeLandingPreview({
   const frameWidth = device === "mobile" ? MOBILE_WIDTH : "100%";
 
   return (
-    <div className={cn("flex min-h-0 min-w-0 flex-col", className)}>
+    <div id="tutorial-preview" className={cn("flex min-h-0 min-w-0 flex-col", className)}>
       {showToolbar ? (
         <PreviewToolbar
           device={device}

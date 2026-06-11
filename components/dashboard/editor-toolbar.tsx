@@ -6,6 +6,7 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import { toast } from "react-toastify";
 import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
+import { DashboardTutorialButton } from "@/components/dashboard/dashboard-tutorial";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -88,13 +89,14 @@ export function EditorToolbar({
         </div>
       </div>
       <div className="flex shrink-0 items-center gap-3">
-        <IconButton icon="link" label="Copiar enlace" onClick={copyPreviewLink} />
+        <DashboardTutorialButton />
+        <IconButton id="tutorial-copy-link" icon="link" label="Copiar enlace" onClick={copyPreviewLink} />
         <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
-        <ActionButton disabled={disabled} onClick={onSave}>
+        <ActionButton disabled={disabled} id="tutorial-save" onClick={onSave}>
           <Icon name="save" className="h-4 w-4" />
           Guardar
         </ActionButton>
-        <ActionButton disabled={disabled} onClick={onPublish} variant="primary">
+        <ActionButton disabled={disabled} id="tutorial-publish" onClick={onPublish} variant="primary">
           <Icon name="publish" className="h-4 w-4" />
           Publicar
         </ActionButton>

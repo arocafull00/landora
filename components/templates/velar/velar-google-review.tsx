@@ -18,6 +18,7 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
         <div className="flex-1">
           <div className="mb-1 flex items-center gap-2">
             <h4
+              data-editor-id={`testimonios:${testimonial.id}:author`}
               className="font-bold text-[#171717]"
               style={{ fontFamily: "var(--font-syne)" }}
             >
@@ -61,6 +62,7 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
       )}
       <div className="flex flex-1 flex-col">
         <p
+          data-editor-id={`testimonios:${testimonial.id}:comment`}
           className="mb-4 line-clamp-4 flex-1 text-sm leading-relaxed text-[#171717]/80"
           style={{ fontFamily: "var(--font-body)" }}
         >

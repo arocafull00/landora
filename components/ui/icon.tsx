@@ -9,6 +9,7 @@ import {
   FileText,
   Folder,
   Globe,
+  GraduationCap,
   GripVertical,
   Image,
   Info,
@@ -54,6 +55,7 @@ const icons: Record<IconName, LucideIcon> = {
   check: Check,
   close: X,
   info: Info,
+  tutorial: GraduationCap,
 };
 
 export function Icon({
