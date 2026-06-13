@@ -31,6 +31,7 @@ const templateIdSchema = z.enum([
   "portfolio",
   "ristorante",
   "floristeria",
+  "oficio-pro",
 ]);
 
 const previewInputSchema = z.object({

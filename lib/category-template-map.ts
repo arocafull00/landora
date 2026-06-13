@@ -44,10 +44,20 @@ const RISTORANTE_CATEGORIES = new Set([
 
 const FLORISTERIA_CATEGORIES = new Set(["Florist"]);
 
-const PORTFOLIO_CATEGORIES = new Set([
+const OFICIO_PRO_CATEGORIES = new Set([
   "Plumber",
   "Electrician",
   "General Contractor",
+  "HVAC Contractor",
+  "Heating Contractor",
+  "Air Conditioning Contractor",
+  "Gasfitter",
+  "Handyman",
+  "Repair Service",
+  "Property Maintenance",
+]);
+
+const PORTFOLIO_CATEGORIES = new Set([
   "Car repair and maintenance service",
 ]);
 
@@ -57,6 +67,7 @@ export function resolveTemplateId(category: string | undefined): TemplateId | nu
   if (STUDIO_CATEGORIES.has(category)) return "studio";
   if (RISTORANTE_CATEGORIES.has(category)) return "ristorante";
   if (FLORISTERIA_CATEGORIES.has(category)) return "floristeria";
+  if (OFICIO_PRO_CATEGORIES.has(category)) return "oficio-pro";
   if (PORTFOLIO_CATEGORIES.has(category)) return "portfolio";
 
   return "ristorante";

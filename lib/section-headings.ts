@@ -114,6 +114,32 @@ export const SECTION_HEADING_DEFAULTS: Record<
       subtitle: "Cuéntanos qué necesitas y crearemos el arreglo floral perfecto para ti.",
     },
   },
+  "oficio-pro": {
+    servicios: {
+      title: "Servicios técnicos para hogares y negocios",
+      subtitle:
+        "Intervenciones rápidas, instalaciones completas y mantenimiento preventivo con un equipo preparado para resolver incidencias reales.",
+    },
+    instalaciones: {
+      title: "Instalaciones eficientes y mantenimiento técnico",
+      subtitle:
+        "Soluciones de climatización, energía, agua caliente y sistemas técnicos para comunidades, locales y viviendas.",
+    },
+    testimonios: {
+      title: "Opiniones de clientes",
+      subtitle:
+        "Experiencias reales de clientes que confían en nuestro equipo para trabajos urgentes, instalaciones y mantenimiento.",
+    },
+    experiencia: {
+      title: "Más de 30 años de experiencia nos avalan",
+      subtitle:
+        "Solucionando problemas técnicos en viviendas, comunidades y negocios con precisión, limpieza y seguimiento profesional.",
+    },
+    contacto: {
+      title: "Contáctanos",
+      subtitle: "Déjanos tu aviso y te responderemos lo antes posible.",
+    },
+  },
 };
 
 export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
@@ -122,6 +148,7 @@ export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
   portfolio: [],
   ristorante: [],
   floristeria: [],
+  "oficio-pro": [],
 };
 
 export function getSectionHeading(

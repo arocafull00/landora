@@ -93,6 +93,18 @@ const FLORISTERIA_SECTIONS: LandingSectionKey[] = [
   "faq",
 ];
 
+const OFICIO_PRO_SECTIONS: LandingSectionKey[] = [
+  "hero",
+  "branding",
+  "story",
+  "stats",
+  "gallery",
+  "nav",
+  "testimonials",
+  "cta",
+  "serviceMenu",
+];
+
 function isHeroEmpty(landing: LandingWithSections) {
   return !landing.hero?.title && !landing.hero?.image;
 }
@@ -136,6 +148,7 @@ export function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[
   if (template === "portfolio") return PORTFOLIO_SECTIONS;
   if (template === "ristorante") return RISTORANTE_SECTIONS;
   if (template === "floristeria") return FLORISTERIA_SECTIONS;
+  if (template === "oficio-pro") return OFICIO_PRO_SECTIONS;
   return VELAR_SECTIONS;
 }
 

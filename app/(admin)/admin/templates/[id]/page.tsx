@@ -6,6 +6,7 @@ import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
 import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
+import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 import {
   TemplateDemoBar,
   TEMPLATE_DEMO_BAR_HEIGHT,
@@ -17,6 +18,7 @@ const TEMPLATE_COMPONENTS = {
   portfolio: PortfolioTemplate,
   ristorante: RistoranteTemplate,
   floristeria: FloristeriaTemplate,
+  "oficio-pro": OficioProTemplate,
 } as const;
 
 export const metadata: Metadata = {

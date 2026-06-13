@@ -28,8 +28,12 @@ import {
 } from "@/lib/landing-content-gaps";
 
 function getDefaultStoryStatement(templateId: TemplateId, content: LandingContent) {
-  if (templateId === "studio") {
-    return (content as TemplateContentMap["studio"]).about?.statement ?? content.story?.statement ?? "";
+  if (templateId === "studio" || templateId === "oficio-pro") {
+    return (
+      (content as TemplateContentMap["studio"] | TemplateContentMap["oficio-pro"]).about?.statement ??
+      content.story?.statement ??
+      ""
+    );
   }
   return content.story?.statement ?? "";
 }

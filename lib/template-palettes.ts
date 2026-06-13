@@ -50,6 +50,14 @@ export const TEMPLATE_PALETTES: Record<TemplateId, TemplatePalette> = {
     surface: "#FAFAF7",
     foreground: "#ffffff",
   },
+  "oficio-pro": {
+    primary: "#1F4E79",
+    secondary: "#17212B",
+    accent: "#F59E0B",
+    muted: "#EEF4F8",
+    surface: "#FEFCFD",
+    foreground: "#ffffff",
+  },
 };
 
 export function getTemplatePalette(template: TemplateId): TemplatePalette {

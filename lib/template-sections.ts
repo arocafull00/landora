@@ -72,6 +72,14 @@ const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = 
     reviews: "testimonios",
     contact: "contacto",
   },
+  "oficio-pro": {
+    home: "hero",
+    services: "servicios",
+    installations: "instalaciones",
+    reviews: "testimonios",
+    experience: "experiencia",
+    contact: "contacto",
+  },
 };
 
 export function normalizeNavHref(templateId: TemplateId, href: string): string {
@@ -159,12 +167,22 @@ const FLORISTERIA_SECTIONS: TemplateSectionDef[] = [
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
+const OFICIO_PRO_SECTIONS: TemplateSectionDef[] = [
+  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
+  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios" },
+  { anchor: "instalaciones", label: "Instalaciones", editorTabId: "Instalaciones", navHref: "#instalaciones" },
+  { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
+  { anchor: "experiencia", label: "Experiencia", editorTabId: "Experiencia", navHref: "#experiencia", contentKeys: ["stats", "story"] },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
+];
+
 const TEMPLATE_SECTIONS: Record<TemplateId, TemplateSectionDef[]> = {
   velar: VELAR_SECTIONS,
   studio: STUDIO_SECTIONS,
   portfolio: PORTFOLIO_SECTIONS,
   ristorante: RISTORANTE_SECTIONS,
   floristeria: FLORISTERIA_SECTIONS,
+  "oficio-pro": OFICIO_PRO_SECTIONS,
 };
 
 export function getTemplateSections(templateId: TemplateId): TemplateSectionDef[] {

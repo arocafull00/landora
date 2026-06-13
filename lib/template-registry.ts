@@ -1,5 +1,5 @@
 import type { TemplateId, TemplateContentMap, LandingContent } from "@/lib/dashboard-data";
-import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT } from "@/lib/default-content";
+import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT } from "@/lib/default-content";
 
 export type EditorTabGroup = "section" | "config";
 
@@ -145,6 +145,24 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/floristeria/floristeria-template"),
+  },
+  "oficio-pro": {
+    id: "oficio-pro",
+    label: "Oficio Pro",
+    description:
+      "Landing para fontaneros, electricistas y servicios técnicos: urgencias, instalaciones, reseñas y contacto.",
+    demoContent: OFICIO_PRO_DEFAULT_CONTENT,
+    editorTabs: [
+      { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
+      { id: "Servicios", label: "Servicios" },
+      { id: "Instalaciones", label: "Instalaciones" },
+      { id: "Testimonios", label: "Testimonios" },
+      { id: "Experiencia", label: "Experiencia" },
+      FOOTER_EDITOR_TAB,
+      SECTIONS_EDITOR_TAB,
+    ],
+    getComponent: () => import("@/components/templates/oficio-pro/oficio-pro-template"),
   },
 };
 

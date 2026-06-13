@@ -4,6 +4,7 @@ import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
 import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
+import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -11,6 +12,7 @@ const TEMPLATE_COMPONENTS = {
   portfolio: PortfolioTemplate,
   ristorante: RistoranteTemplate,
   floristeria: FloristeriaTemplate,
+  "oficio-pro": OficioProTemplate,
 } as const;
 
 export function LandingPreview({

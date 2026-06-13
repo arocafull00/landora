@@ -8,6 +8,7 @@ import { EditorTabsBar } from "@/components/dashboard/editor-tabs-bar";
 import { PortfolioEditorSection } from "@/components/dashboard/sections/portfolio-editor-section";
 import { RistoranteEditorSection } from "@/components/dashboard/sections/ristorante-editor-section";
 import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
+import { OficioProEditorSection } from "@/components/dashboard/sections/oficio-pro-editor-section";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
@@ -59,6 +60,10 @@ export function EditorSection() {
 
   if (activeLanding.template === "floristeria") {
     return <FloristeriaEditorSection />;
+  }
+
+  if (activeLanding.template === "oficio-pro") {
+    return <OficioProEditorSection />;
   }
 
   const saveActive = () => saveLanding(activeLanding.id);

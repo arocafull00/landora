@@ -90,6 +90,7 @@ export type TemplateContentMap = {
   portfolio: BaseContent & PortfolioExtensions;
   ristorante: BaseContent & RistoranteExtensions;
   floristeria: BaseContent & FloristeriaExtensions;
+  "oficio-pro": BaseContent & StudioExtensions;
 };
 
 export type TemplateId = keyof TemplateContentMap;
