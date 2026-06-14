@@ -15,9 +15,10 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 export function DomainSection() {
   const landings = useDashboardStore((state) => state.landings);
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
+  const isAdmin = useDashboardStore((state) => state.isAdmin);
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
-
+  
   const [domainInput, setDomainInput] = useState("");
   const [status, setStatus] = useState<DomainStatus | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -87,7 +88,7 @@ export function DomainSection() {
   const isPublished = activeLanding.status === "Published";
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden">
+    <div className={`flex flex-1 flex-col overflow-hidden ${isAdmin ? "pt-4" : ""}`}>
       <header className="flex items-center justify-between border-b border-outline-variant bg-surface-container-lowest px-6 py-4">
         <div>
           <h2 className="font-headline text-headline-sm font-bold text-on-surface">

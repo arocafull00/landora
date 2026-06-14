@@ -32,21 +32,6 @@ export function BlogConfigEditorPanel({ activeLanding }: BlogConfigEditorPanelPr
 
   return (
     <section className="space-y-5 py-unit-lg">
-      <Panel className="flex flex-col gap-4 p-unit-md sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h3 className="text-body-lg font-semibold text-on-surface">Posts del blog</h3>
-          <p className="mt-1 text-body-sm text-on-surface-variant">
-            Crea, edita y publica los artículos de tu landing.
-          </p>
-        </div>
-        <Link
-          className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md bg-primary px-4 text-body-sm font-medium text-on-primary shadow-sm transition-colors hover:bg-primary-fixed-variant"
-          href="/blog"
-        >
-          <Icon className="h-4 w-4" name="add" />
-          Crear nuevo post
-        </Link>
-      </Panel>
       <div>
         <h3 className="text-body-lg font-semibold text-on-surface">Configuración del blog</h3>
         <p className="mt-1 text-body-sm text-on-surface-variant">
@@ -88,6 +73,13 @@ export function BlogConfigEditorPanel({ activeLanding }: BlogConfigEditorPanelPr
           value={blogConfig.description}
         />
       </label>
+      <Link
+        className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md bg-primary px-4 text-body-sm font-medium text-on-primary shadow-sm transition-colors hover:bg-primary-fixed-variant"
+        href="/blog"
+      >
+        <Icon className="h-4 w-4" name="add" />
+        Crear nuevo post
+      </Link>
     </section>
   );
 }

@@ -18,6 +18,7 @@ export function BlogSection() {
   const savePost = useDashboardStore((state) => state.savePost);
   const publishPost = useDashboardStore((state) => state.publishPost);
   const deletePost = useDashboardStore((state) => state.deletePost);
+  const isAdmin = useDashboardStore((state) => state.isAdmin);
   const [activePostId, setActivePostId] = useState<string>("");
   const [slugTouched, setSlugTouched] = useState(false);
 
@@ -53,7 +54,7 @@ export function BlogSection() {
 
   return (
     <>
-      <section className="flex min-w-[400px] flex-1 flex-col border-r border-outline-variant bg-surface">
+      <section className={`flex min-w-[400px] flex-1 flex-col border-r border-outline-variant bg-surface ${isAdmin ? "pt-10" : ""}`}>
         <div className="flex shrink-0 items-center justify-between border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-unit-md">
           <div>
             <h2 className="font-headline text-headline-md text-on-surface">Blog</h2>
@@ -97,7 +98,7 @@ export function BlogSection() {
         </div>
       </section>
       {activePost ? (
-        <aside className="flex w-[340px] shrink-0 flex-col border-l border-outline-variant bg-surface-container-lowest xl:w-[420px]">
+        <aside className={`flex w-[340px] shrink-0 flex-col border-l border-outline-variant bg-surface-container-lowest xl:w-[420px] ${isAdmin ? "pt-10" : ""}`}>
           <div className="flex shrink-0 items-center justify-between border-b border-outline-variant px-unit-md py-unit-md">
             <h3 className="text-body-lg font-semibold text-on-surface">Editor</h3>
             <div className="flex gap-2">
