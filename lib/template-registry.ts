@@ -1,5 +1,6 @@
 import type { TemplateId, TemplateContentMap, LandingContent } from "@/lib/dashboard-data";
 import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT } from "@/lib/default-content";
+import { getTemplateSections } from "@/lib/template-sections";
 
 export type EditorTabGroup = "section" | "config";
 
@@ -9,7 +10,7 @@ export type EditorTab = {
   group?: EditorTabGroup;
 };
 
-export const SECTIONS_EDITOR_TAB: EditorTab = {
+const SECTIONS_EDITOR_TAB: EditorTab = {
   id: "Secciones",
   label: "Secciones",
   group: "config",
@@ -21,23 +22,23 @@ export const NAV_EDITOR_TAB: EditorTab = {
   group: "config",
 };
 
-export const ADMIN_EDITOR_TAB: EditorTab = {
+const ADMIN_EDITOR_TAB: EditorTab = {
   id: "Admin",
   label: "Admin",
   group: "config",
 };
 
-export const FOOTER_EDITOR_TAB: EditorTab = {
+const FOOTER_EDITOR_TAB: EditorTab = {
   id: "Footer",
   label: "Pie de página",
 };
 
-export const BLOG_EDITOR_TAB: EditorTab = {
+const BLOG_EDITOR_TAB: EditorTab = {
   id: "Blog",
   label: "Blog",
 };
 
-export const CONTACT_EDITOR_TAB: EditorTab = {
+const CONTACT_EDITOR_TAB: EditorTab = {
   id: "Contacto",
   label: "Contacto",
 };
@@ -53,7 +54,7 @@ export type TemplateDefinition<T extends TemplateId = TemplateId> = {
   getComponent: () => Promise<Record<string, TemplateComponent>>;
 };
 
-export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
+const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
   velar: {
     id: "velar",
     label: "Velar",
@@ -182,6 +183,28 @@ export function getAllTemplates() {
 export function getTemplate(id: string): TemplateDefinition | undefined {
   if (!isValidTemplateId(id)) return undefined;
   return TEMPLATE_REGISTRY[id];
+}
+
+export function getVisibleEditorTabs(
+  templateId: TemplateId,
+  hiddenSections: string[] | undefined,
+  isAdmin = false,
+): EditorTab[] {
+  const template = getTemplate(templateId);
+  if (!template) return [];
+
+  const hidden = new Set(hiddenSections ?? []);
+  const hiddenTabIds = new Set<string>();
+
+  for (const section of getTemplateSections(templateId)) {
+    if (!hidden.has(section.anchor) || !section.editorTabId) continue;
+    hiddenTabIds.add(section.editorTabId);
+  }
+
+  const tabs = template.editorTabs.filter((tab) => !hiddenTabIds.has(tab.id));
+  if (!isAdmin) return tabs;
+
+  return [...tabs, ADMIN_EDITOR_TAB];
 }
 
 export function isValidTemplateId(id: string): id is TemplateId {

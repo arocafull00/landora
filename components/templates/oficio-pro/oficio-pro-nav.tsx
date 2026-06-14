@@ -100,18 +100,20 @@ export function OficioProNav({
           </button>
         </nav>
       </header>
-      <div
+      <button
+        aria-label="Cerrar menú"
         className={`fixed inset-0 z-40 bg-slate-900/55 backdrop-blur-sm transition-opacity lg:hidden ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={() => setOpen(false)}
+        type="button"
       />
-      <div
-        className={`fixed inset-x-0 bottom-0 z-40 flex max-h-[calc(100dvh-72px)] flex-col bg-[#FEFCFD] shadow-[0_-12px_48px_rgba(15,23,42,0.18)] transition-transform duration-300 lg:hidden ${
+      <dialog
+        className={`fixed inset-x-0 bottom-0 z-40 m-0 flex max-h-[calc(100dvh-72px)] w-full max-w-none flex-col border-0 bg-[#FEFCFD] p-0 shadow-[0_-12px_48px_rgba(15,23,42,0.18)] transition-transform duration-300 lg:hidden ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
         id="oficio-pro-mobile-nav"
-        role="dialog"
+        open={open}
         style={{ top: topOffset + 72 }}
       >
         <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-4 pb-8 pt-5">
@@ -133,7 +135,7 @@ export function OficioProNav({
             Contacto
           </a>
         </div>
-      </div>
+      </dialog>
     </>
   );
 }

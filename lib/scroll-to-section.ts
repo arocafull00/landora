@@ -1,6 +1,6 @@
 import type { MouseEvent } from "react";
 
-export function scrollToSectionId(sectionId: string) {
+function scrollToSectionId(sectionId: string) {
   const el = document.getElementById(sectionId);
   if (!el) return false;
 

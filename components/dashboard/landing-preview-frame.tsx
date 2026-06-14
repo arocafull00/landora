@@ -37,10 +37,16 @@ export function LandingPreviewFrame({
   initialContent: LandingContent;
   template: TemplateId;
 }) {
-  const [content, setContent] = useState(initialContent);
-  const [activeTemplate, setActiveTemplate] = useState(template);
+  const [livePreview, setLivePreview] = useState<{
+    content: LandingContent;
+    template: TemplateId;
+  } | null>(null);
   const highlightedEditorIdRef = useRef<string | null>(null);
+  const activeTemplateRef = useRef(template);
   const scrollContainer = usePreviewScrollContainer();
+  const content = livePreview?.content ?? initialContent;
+  const activeTemplate = livePreview?.template ?? template;
+  activeTemplateRef.current = activeTemplate;
 
   useLayoutEffect(() => {
     const editorId = highlightedEditorIdRef.current;
@@ -87,8 +93,10 @@ export function LandingPreviewFrame({
       }
 
       if (!isPreviewContentMessage(event.data)) return;
-      setContent(event.data.content);
-      setActiveTemplate(event.data.template);
+      setLivePreview({
+        content: event.data.content,
+        template: event.data.template,
+      });
       requestAnimationFrame(() => {
         requestAnimationFrame(refreshScrollPosition);
       });
@@ -106,17 +114,27 @@ export function LandingPreviewFrame({
     );
   }, []);
 
-  const scrollToResolvedHash = useCallback(() => {
+  const scrollToResolvedHashRef = useRef(() => {
     const sectionId = getHashSectionId();
     if (!sectionId) return;
-    scrollToSectionIdWhenReady(resolveSectionId(activeTemplate, sectionId));
-  }, [activeTemplate]);
+    scrollToSectionIdWhenReady(resolveSectionId(activeTemplateRef.current, sectionId));
+  });
+
+  scrollToResolvedHashRef.current = () => {
+    const sectionId = getHashSectionId();
+    if (!sectionId) return;
+    scrollToSectionIdWhenReady(resolveSectionId(activeTemplateRef.current, sectionId));
+  };
 
   useEffect(() => {
-    scrollToResolvedHash();
-    window.addEventListener("hashchange", scrollToResolvedHash);
-    return () => window.removeEventListener("hashchange", scrollToResolvedHash);
-  }, [scrollToResolvedHash]);
+    const handleHashChange = () => {
+      scrollToResolvedHashRef.current();
+    };
+
+    handleHashChange();
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
 

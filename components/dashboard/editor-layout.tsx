@@ -7,6 +7,8 @@ import { IframeLandingPreview } from "@/components/dashboard/iframe-landing-prev
 import { PreviewFullscreenOverlay } from "@/components/dashboard/preview-fullscreen-overlay";
 import type { PreviewDevice } from "@/components/dashboard/preview-toolbar";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { EditorLayoutTabs } from "@/components/dashboard/editor-layout-tabs";
+
 import { getEditorScrollTarget } from "@/lib/template-sections";
 
 export function EditorLayout({
@@ -18,7 +20,6 @@ export function EditorLayout({
   onSave,
   onSelectLanding,
   scrollTarget,
-  tabs,
 }: {
   activeLanding: Landing;
   disabled?: boolean;
@@ -28,9 +29,10 @@ export function EditorLayout({
   onSave: () => void;
   onSelectLanding: (id: string) => void;
   scrollTarget?: string;
-  tabs: ReactNode;
 }) {
   const activeEditorTab = useDashboardStore((state) => state.activeEditorTab);
+  const isAdmin = useDashboardStore((state) => state.isAdmin);
+  const setActiveEditorTab = useDashboardStore((state) => state.setActiveEditorTab);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [device, setDevice] = useState<PreviewDevice>("desktop");
   const resolvedScrollTarget =
@@ -46,7 +48,13 @@ export function EditorLayout({
         onSave={onSave}
         onSelectLanding={onSelectLanding}
       />
-      {tabs}
+      <EditorLayoutTabs
+        activeEditorTab={activeEditorTab}
+        hiddenSections={activeLanding.content.hiddenSections}
+        isAdmin={isAdmin}
+        onTabChange={setActiveEditorTab}
+        template={activeLanding.template}
+      />
       <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden xl:grid-cols-[minmax(320px,380px)_1fr]">
         <div id="tutorial-editor-form" className="min-h-0 overflow-y-auto border-r border-outline-variant p-unit-lg">
           <div className="space-y-unit-md">{form}</div>

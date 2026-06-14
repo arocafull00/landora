@@ -59,8 +59,12 @@ export function OficioProHero({
         <span className="text-[10px] font-bold uppercase tracking-[0.35em]">
           Descubrir
         </span>
-        <ChevronDown className="size-6 animate-bounce" />
+        <ChevronDown
+          className="size-6"
+          style={{ animation: "oficioProChevron 1s cubic-bezier(0.16, 1, 0.3, 1) infinite" }}
+        />
       </a>
+      <style>{`@keyframes oficioProChevron{0%,100%{transform:translateY(0)}50%{transform:translateY(0.375rem)}}`}</style>
     </main>
   );
 }

@@ -17,10 +17,7 @@ import {
   replaceLandingServiceMenu,
   replaceLandingBenefits,
 } from "@/data/landing-sections";
-import {
-  ensureLandingHasDefaultContent,
-  seedLandingSections,
-} from "@/data/seed-landing-sections";
+import { ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
 import { isReservedSlug } from "@/lib/app-host";
 import type { TemplateId } from "@/lib/dashboard-data";
 import {
@@ -30,7 +27,7 @@ import {
 import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 import { normalizeNavHref } from "@/lib/template-sections";
 
-export async function provisionProspectLandingContent(
+async function provisionProspectLandingContent(
   landingId: string,
   template: TemplateId,
   content: ProspectLandingContent
@@ -168,7 +165,6 @@ export async function createProspectLanding(params: {
   }
 
   try {
-    await seedLandingSections(landingId, template);
     await provisionProspectLandingContent(landingId, template, content);
     await ensureLandingHasDefaultContent(landingId);
   } catch (err) {

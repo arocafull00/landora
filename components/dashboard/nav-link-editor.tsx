@@ -75,13 +75,3 @@ export function NavLinkEditor({
   );
 }
 
-export function createEmptyNavLink(
-  href = "#",
-  label = "Nuevo enlace",
-): NavLink {
-  return {
-    id: crypto.randomUUID(),
-    label,
-    href,
-  };
-}

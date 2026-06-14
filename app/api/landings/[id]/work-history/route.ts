@@ -4,18 +4,22 @@ import { replaceLandingWorkHistory } from "@/data/landing-sections";
 function toMultilineList(value: unknown) {
   if (!Array.isArray(value)) return "";
   return value
-    .filter((item): item is string => typeof item === "string")
-    .map((item) => item.trim())
-    .filter(Boolean)
+    .flatMap((item) => {
+      if (typeof item !== "string") return [];
+      const trimmed = item.trim();
+      return trimmed ? [trimmed] : [];
+    })
     .join("\n");
 }
 
 function toCommaList(value: unknown) {
   if (!Array.isArray(value)) return "";
   return value
-    .filter((item): item is string => typeof item === "string")
-    .map((item) => item.trim())
-    .filter(Boolean)
+    .flatMap((item) => {
+      if (typeof item !== "string") return [];
+      const trimmed = item.trim();
+      return trimmed ? [trimmed] : [];
+    })
     .join(",");
 }
 

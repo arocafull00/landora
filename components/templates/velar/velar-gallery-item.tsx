@@ -16,6 +16,7 @@ export function VelarGalleryItem({
 }) {
   return (
     <div
+      aria-label={item.title || "Gallery item"}
       className="gallery-expand-item relative h-full overflow-hidden rounded-xl cursor-pointer"
       style={{
         flex: isHovered ? "4" : "1",
@@ -35,6 +36,7 @@ export function VelarGalleryItem({
         />
       ) : item.video ? (
         <video
+          aria-label={item.title || "Gallery video"}
           autoPlay
           loop
           muted

@@ -1,9 +1,9 @@
 import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 
 export const PREVIEW_CONTENT_UPDATE = "landora:preview-content-update";
-export const PREVIEW_SCROLL_TO = "landora:preview-scroll-to";
-export const PREVIEW_HIGHLIGHT_SECTION = "landora:preview-highlight-section";
-export const PREVIEW_HIGHLIGHT_ELEMENT = "landora:preview-highlight-element";
+const PREVIEW_SCROLL_TO = "landora:preview-scroll-to";
+const PREVIEW_HIGHLIGHT_SECTION = "landora:preview-highlight-section";
+const PREVIEW_HIGHLIGHT_ELEMENT = "landora:preview-highlight-element";
 
 export type PreviewContentMessage = {
   type: typeof PREVIEW_CONTENT_UPDATE;

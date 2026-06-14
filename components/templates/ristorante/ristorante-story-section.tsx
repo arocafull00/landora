@@ -46,7 +46,7 @@ export function RistoranteStorySection({ content }: { content: LandingContent })
                   {stat.value}
                 </div>
                 <div
-                  className="mt-2 text-[#1C1917]/60"
+                  className="mt-2 text-[#1C1917]/70"
                   style={{
                     fontFamily: "var(--font-body)",
                     fontWeight: 400,

@@ -8,7 +8,8 @@ import {
   type RefObject,
 } from "react";
 import Image from "next/image";
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
+
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
@@ -29,7 +30,6 @@ export function VelarHouseAnimation({
 }: VelarHouseAnimationProps) {
   const reduce = useReducedMotion();
   const imgRef = useRef<HTMLImageElement>(null);
-  const rafRef = useRef<number | null>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [scrollTransform, setScrollTransform] = useState("");
   const [visible, setVisible] = useState(true);
@@ -83,10 +83,12 @@ export function VelarHouseAnimation({
   }, [darkRef, heroRef]);
 
   useLayoutEffect(() => {
+    let rafId: number | null = null;
+
     const handleUpdate = () => {
-      if (rafRef.current !== null) return;
-      rafRef.current = window.requestAnimationFrame(() => {
-        rafRef.current = null;
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
         updatePosition();
       });
     };
@@ -97,14 +99,13 @@ export function VelarHouseAnimation({
     window.addEventListener("resize", handleUpdate);
 
     return () => {
-      if (rafRef.current !== null) {
-        window.cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
       }
       window.removeEventListener("scroll", handleUpdate);
       window.removeEventListener("resize", handleUpdate);
     };
-  }, [houseImage, updatePosition]);
+  }, [updatePosition]);
 
   const handleImgRef = useCallback(
     (node: HTMLImageElement | null) => {
@@ -145,7 +146,7 @@ export function VelarHouseAnimation({
       className="pointer-events-none fixed z-[22] w-full min-w-0 max-lg:w-screen lg:min-w-[1400px]"
       style={wrapperStyle}
     >
-      <motion.div
+      <m.div
         initial={reduce ? false : { opacity: 0, y: 140 }}
         animate={{ opacity: visible ? 1 : 0, y: 0 }}
         transition={{
@@ -165,7 +166,7 @@ export function VelarHouseAnimation({
           onLoad={updatePosition}
           unoptimized={houseImage.startsWith("/")}
         />
-      </motion.div>
+      </m.div>
     </div>
   );
 }

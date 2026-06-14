@@ -32,6 +32,7 @@ export function PortfolioProjectCard({
         />
       ) : item.video ? (
         <video
+          aria-label={item.title || "Project video"}
           className="absolute inset-0 h-full w-full object-cover"
           muted
           playsInline

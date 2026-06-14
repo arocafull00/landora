@@ -14,7 +14,7 @@ import { seedLandingSections, ensureLandingHasDefaultContent } from "@/data/seed
 import { checkAuth } from "@/lib/auth";
 const createUserSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
-  email: z.string().email("Email inválido"),
+  email: z.email("Email inválido"),
   password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
 });
 
@@ -80,7 +80,7 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
 }
 
 const createLandingSchema = z.object({
-  userId: z.string().uuid("ID de usuario inválido"),
+  userId: z.uuid("ID de usuario inválido"),
   name: z.string().min(1, "El nombre es requerido"),
   slug: z
     .string()
@@ -138,8 +138,8 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
   return { success: true };
 }
 
-const landingIdSchema = z.string().uuid("ID de landing inválido");
-const userIdSchema = z.string().uuid("ID de usuario inválido");
+const landingIdSchema = z.uuid("ID de landing inválido");
+const userIdSchema = z.uuid("ID de usuario inválido");
 
 export async function setLandingPublished(
   landingId: string,
@@ -228,16 +228,14 @@ export async function deleteUser(userId: string): Promise<ActionResult> {
     where: eq(landingPages.userId, parsed.data),
   });
 
-  for (const landing of userLandings) {
-    if (!landing.customDomain) {
-      continue;
-    }
+  const customDomains = userLandings.flatMap((landing) =>
+    landing.customDomain ? [landing.customDomain] : [],
+  );
 
-    try {
-      await removeProjectDomain(landing.customDomain);
-    } catch {
-      return { error: "Error al eliminar un dominio de Vercel" };
-    }
+  try {
+    await Promise.all(customDomains.map((domain) => removeProjectDomain(domain)));
+  } catch {
+    return { error: "Error al eliminar un dominio de Vercel" };
   }
 
   try {

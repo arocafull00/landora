@@ -32,8 +32,7 @@ export default async function TemplateDemoPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ embed?: string }>;
 }) {
-  const { id } = await params;
-  const { embed } = await searchParams;
+  const [{ id }, { embed }] = await Promise.all([params, searchParams]);
 
   if (!isValidTemplateId(id)) notFound();
 

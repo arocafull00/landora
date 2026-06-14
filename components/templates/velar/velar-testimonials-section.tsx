@@ -74,6 +74,7 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
                 src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
                 alt="Google"
                 fill
+                sizes="80px"
                 className="object-contain"
                 unoptimized
               />

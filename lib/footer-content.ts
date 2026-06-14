@@ -23,7 +23,7 @@ export const SOCIAL_PLATFORM_LABELS: Record<SocialPlatform, string> = {
   x: "X",
 };
 
-export function isSocialPlatform(value: string): value is SocialPlatform {
+function isSocialPlatform(value: string): value is SocialPlatform {
   return SOCIAL_PLATFORMS.includes(value as SocialPlatform);
 }
 
@@ -39,7 +39,7 @@ export function parseSocialLinks(value: unknown): SocialLink[] {
   });
 }
 
-export function getCopyrightSuffix(contact: ContactContent): string {
+function getCopyrightSuffix(contact: ContactContent): string {
   return contact.copyrightSuffix?.trim() || DEFAULT_COPYRIGHT_SUFFIX;
 }
 

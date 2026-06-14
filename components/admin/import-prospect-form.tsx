@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useReducer, useRef, useTransition } from "react";
 import { toast } from "react-toastify";
 import { ActionButton } from "@/components/ui/primitives";
 import {
@@ -42,110 +42,160 @@ const initialSteps: Step[] = [
   { id: "landing", label: "Creando landing", state: "pending" },
 ];
 
+type FormState = {
+  jsonContent: string | null;
+  preview: PreviewData | null;
+  selectedTemplate: TemplateId;
+  error: string | null;
+  steps: Step[];
+  isImporting: boolean;
+};
+
+type FormAction =
+  | { type: "reset" }
+  | { type: "setJson"; content: string }
+  | { type: "setPreview"; preview: PreviewData }
+  | { type: "setError"; error: string }
+  | { type: "setSelectedTemplate"; template: TemplateId }
+  | { type: "setSteps"; steps: Step[] }
+  | { type: "startImport" }
+  | { type: "finishImport" };
+
+const initialFormState: FormState = {
+  jsonContent: null,
+  preview: null,
+  selectedTemplate: "ristorante",
+  error: null,
+  steps: initialSteps,
+  isImporting: false,
+};
+
 function updateStep(steps: Step[], id: StepId, state: StepState) {
   return steps.map((step) => (step.id === id ? { ...step, state } : step));
+}
+
+function formReducer(state: FormState, action: FormAction): FormState {
+  switch (action.type) {
+    case "reset":
+      return initialFormState;
+    case "setJson":
+      return {
+        ...state,
+        jsonContent: action.content,
+        preview: null,
+        error: null,
+        steps: initialSteps,
+      };
+    case "setPreview":
+      return {
+        ...state,
+        preview: action.preview,
+        selectedTemplate: action.preview.template ?? state.selectedTemplate,
+      };
+    case "setError":
+      return { ...state, error: action.error };
+    case "setSelectedTemplate":
+      return { ...state, selectedTemplate: action.template };
+    case "setSteps":
+      return { ...state, steps: action.steps };
+    case "startImport":
+      return {
+        ...state,
+        error: null,
+        isImporting: true,
+        steps: updateStep(initialSteps, "validate", "done"),
+      };
+    case "finishImport":
+      return { ...state, isImporting: false };
+    default:
+      return state;
+  }
 }
 
 export function ImportProspectForm({ onSuccess }: { onSuccess: () => void }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isPending, startTransition] = useTransition();
-  const [jsonContent, setJsonContent] = useState<string | null>(null);
-  const [preview, setPreview] = useState<PreviewData | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("ristorante");
-  const [error, setError] = useState<string | null>(null);
-  const [steps, setSteps] = useState<Step[]>(initialSteps);
-  const [isImporting, setIsImporting] = useState(false);
+  const [state, dispatch] = useReducer(formReducer, initialFormState);
 
-  const effectiveTemplate = preview?.template ?? selectedTemplate;
+  const effectiveTemplate = state.preview?.template ?? state.selectedTemplate;
   const canImport =
-    preview &&
-    jsonContent &&
+    state.preview &&
+    state.jsonContent &&
     effectiveTemplate &&
-    (!preview.requiresTemplateSelection || selectedTemplate);
+    (!state.preview.requiresTemplateSelection || state.selectedTemplate);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    setError(null);
-    setPreview(null);
-    setJsonContent(null);
-    setSteps(initialSteps);
-
     const text = await file.text();
-    setJsonContent(text);
+    dispatch({ type: "setJson", content: text });
 
     const result = await previewProspectImport(text);
     if ("error" in result) {
-      setError(result.error);
+      dispatch({ type: "setError", error: result.error });
       return;
     }
 
-    setPreview(result);
-    if (result.template) {
-      setSelectedTemplate(result.template);
-    }
+    dispatch({ type: "setPreview", preview: result });
   };
 
   const handleImport = () => {
-    if (!preview || !jsonContent || !effectiveTemplate) return;
+    if (!state.preview || !state.jsonContent || !effectiveTemplate) return;
 
-    setError(null);
-    setIsImporting(true);
-    setSteps(updateStep(initialSteps, "validate", "done"));
+    dispatch({ type: "startImport" });
 
     startTransition(async () => {
-      setSteps((current) => updateStep(updateStep(current, "validate", "done"), "user", "active"));
+      let steps = updateStep(updateStep(initialSteps, "validate", "done"), "user", "active");
+      dispatch({ type: "setSteps", steps });
 
       const userResult = await provisionProspectUser({
-        name: preview.name,
-        email: preview.email,
-        password: preview.password,
+        name: state.preview!.name,
+        email: state.preview!.email,
+        password: state.preview!.password,
       });
 
       if ("error" in userResult) {
-        setSteps((current) => updateStep(current, "user", "error"));
-        setError(userResult.error);
+        steps = updateStep(steps, "user", "error");
+        dispatch({ type: "setSteps", steps });
+        dispatch({ type: "setError", error: userResult.error });
         toast.error(userResult.error);
-        setIsImporting(false);
+        dispatch({ type: "finishImport" });
         return;
       }
 
-      toast.success(`Usuario creado: ${preview.email}`);
-      setSteps((current) =>
-        updateStep(updateStep(current, "user", "done"), "landing", "active")
-      );
+      toast.success(`Usuario creado: ${state.preview!.email}`);
+      steps = updateStep(updateStep(steps, "user", "done"), "landing", "active");
+      dispatch({ type: "setSteps", steps });
 
       const landingResult = await provisionProspectLanding({
         userId: userResult.userId,
         clerkUserId: userResult.clerkUserId,
-        name: preview.name,
-        slug: preview.slug,
+        name: state.preview!.name,
+        slug: state.preview!.slug,
         template: effectiveTemplate,
-        json: jsonContent,
+        json: state.jsonContent!,
       });
 
       if ("error" in landingResult) {
-        setSteps((current) => updateStep(current, "landing", "error"));
-        setError(landingResult.error);
+        steps = updateStep(steps, "landing", "error");
+        dispatch({ type: "setSteps", steps });
+        dispatch({ type: "setError", error: landingResult.error });
         toast.error(landingResult.error);
-        setIsImporting(false);
+        dispatch({ type: "finishImport" });
         return;
       }
 
-      setSteps((current) => updateStep(current, "landing", "done"));
-      toast.success(`Prospecto importado: ${preview.email}`);
-      setIsImporting(false);
+      steps = updateStep(steps, "landing", "done");
+      dispatch({ type: "setSteps", steps });
+      toast.success(`Prospecto importado: ${state.preview!.email}`);
+      dispatch({ type: "finishImport" });
       onSuccess();
     });
   };
 
   const handleReset = () => {
-    setJsonContent(null);
-    setPreview(null);
-    setError(null);
-    setSteps(initialSteps);
-    setIsImporting(false);
+    dispatch({ type: "reset" });
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -162,24 +212,24 @@ export function ImportProspectForm({ onSuccess }: { onSuccess: () => void }) {
           type="file"
           accept=".json,application/json"
           onChange={handleFileChange}
-          disabled={isPending || isImporting}
+          disabled={isPending || state.isImporting}
           className={inputClass}
         />
       </label>
 
-      {preview ? (
+      {state.preview ? (
         <div className="space-y-3 rounded-md border border-outline-variant bg-surface-container-low p-4">
-          <PreviewField label="Nombre" value={preview.name} />
-          <PreviewField label="Email" value={preview.email} />
-          <PreviewField label="Contraseña" value={preview.password} />
-          <PreviewField label="Slug" value={preview.slug} />
-          {preview.category ? (
-            <PreviewField label="Categoría" value={preview.category} />
+          <PreviewField label="Nombre" value={state.preview.name} />
+          <PreviewField label="Email" value={state.preview.email} />
+          <PreviewField label="Contraseña" value={state.preview.password} />
+          <PreviewField label="Slug" value={state.preview.slug} />
+          {state.preview.category ? (
+            <PreviewField label="Categoría" value={state.preview.category} />
           ) : null}
-          {preview.template ? (
+          {state.preview.template ? (
             <PreviewField
               label="Plantilla"
-              value={templates.find((item) => item.id === preview.template)?.label ?? preview.template}
+              value={templates.find((item) => item.id === state.preview!.template)?.label ?? state.preview.template}
             />
           ) : (
             <label className="block">
@@ -187,10 +237,15 @@ export function ImportProspectForm({ onSuccess }: { onSuccess: () => void }) {
                 Plantilla
               </span>
               <select
-                value={selectedTemplate}
-                onChange={(event) => setSelectedTemplate(event.target.value as TemplateId)}
+                value={state.selectedTemplate}
+                onChange={(event) =>
+                  dispatch({
+                    type: "setSelectedTemplate",
+                    template: event.target.value as TemplateId,
+                  })
+                }
                 className={inputClass}
-                disabled={isPending || isImporting}
+                disabled={isPending || state.isImporting}
               >
                 {templates.map((template) => (
                   <option key={template.id} value={template.id}>
@@ -203,32 +258,32 @@ export function ImportProspectForm({ onSuccess }: { onSuccess: () => void }) {
         </div>
       ) : null}
 
-      {isImporting ? (
+      {state.isImporting ? (
         <ul className="space-y-2">
-          {steps.map((step) => (
+          {state.steps.map((step) => (
             <ImportProspectStepItem key={step.id} step={step} />
           ))}
         </ul>
       ) : null}
 
-      {error ? <p className="font-body text-body-sm text-error">{error}</p> : null}
+      {state.error ? <p className="font-body text-body-sm text-error">{state.error}</p> : null}
 
       <div className="flex justify-end gap-2">
         <ActionButton
           variant="secondary"
           type="button"
-          onClick={preview || jsonContent ? handleReset : onSuccess}
-          disabled={isPending || isImporting}
+          onClick={state.preview || state.jsonContent ? handleReset : onSuccess}
+          disabled={isPending || state.isImporting}
         >
-          {preview || jsonContent ? "Limpiar" : "Cancelar"}
+          {state.preview || state.jsonContent ? "Limpiar" : "Cancelar"}
         </ActionButton>
         <ActionButton
           variant="primary"
           type="button"
           onClick={handleImport}
-          disabled={!canImport || isPending || isImporting}
+          disabled={!canImport || isPending || state.isImporting}
         >
-          {isPending || isImporting ? "Importando…" : "Importar prospecto"}
+          {isPending || state.isImporting ? "Importando…" : "Importar prospecto"}
         </ActionButton>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { X, Menu } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
@@ -32,12 +32,12 @@ export function PortfolioNav({
         style={{
           ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
           background: "linear-gradient(to bottom, rgba(10,10,10,0.9), rgba(10,10,10,0.7))",
-          backdropFilter: "blur(12px)",
+          backdropFilter: "blur(9px)",
         }}
       >
-        <a
+        <button
+          type="button"
           className="text-xl font-bold tracking-tight text-white"
-          href="#"
           style={{ fontFamily: "var(--font-syne)" }}
         >
           <TemplateNavBrand
@@ -45,7 +45,7 @@ export function PortfolioNav({
             brandLogoImage={brandLogoImage}
             brandLogoType={brandLogoType}
           />
-        </a>
+        </button>
 
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
@@ -78,7 +78,7 @@ export function PortfolioNav({
 
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#0a0a0a]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -86,7 +86,7 @@ export function PortfolioNav({
             transition={{ duration: 0.25 }}
           >
             {navLinks.map((link, i) => (
-              <motion.a
+              <m.a
                 className="text-2xl font-semibold text-white transition-colors hover:text-white/70"
                 href={link.href}
                 key={link.id}
@@ -102,9 +102,9 @@ export function PortfolioNav({
                 transition={{ duration: 0.3, delay: i * 0.06 }}
               >
                 {link.label}
-              </motion.a>
+              </m.a>
             ))}
-            <motion.a
+            <m.a
               className="mt-6 rounded-full bg-white px-8 py-3 text-sm font-semibold text-[#0a0a0a]"
               href="#contacto"
               onClick={(event) =>
@@ -115,8 +115,8 @@ export function PortfolioNav({
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}
             >
               {ctaLabel || "Ver proyectos"}
-            </motion.a>
-          </motion.div>
+            </m.a>
+          </m.div>
         )}
       </AnimatePresence>
     </>

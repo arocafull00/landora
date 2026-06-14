@@ -6,6 +6,7 @@ import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitive
 import { Icon } from "@/components/ui/icon";
 import { deleteLanding, setLandingPublished } from "@/app/actions/admin";
 import type { LandingPage } from "@/db/schema";
+import { mediumDateFormatter } from "@/lib/intl-formatters";
 
 export function LandingItem({ landing }: { landing: LandingPage }) {
   const [isPending, startTransition] = useTransition();
@@ -13,9 +14,7 @@ export function LandingItem({ landing }: { landing: LandingPage }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const updatedAt = landing.updatedAt
-    ? new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(
-        new Date(landing.updatedAt),
-      )
+    ? mediumDateFormatter.format(new Date(landing.updatedAt))
     : "—";
 
   const handlePublishToggle = () => {

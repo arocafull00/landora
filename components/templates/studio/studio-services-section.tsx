@@ -13,7 +13,17 @@ export function StudioServicesSection({ content }: { content: LandingContent }) 
     "servicios",
     SECTION_HEADING_DEFAULTS.studio.servicios,
   );
-  const categories = [...new Set(items.map((s) => s.category).filter(Boolean))];
+  const servicesByCategory = items.reduce<Map<string, typeof items>>((map, service) => {
+    if (!service.category) return map;
+    const group = map.get(service.category);
+    if (group) {
+      group.push(service);
+      return map;
+    }
+    map.set(service.category, [service]);
+    return map;
+  }, new Map());
+  const categories = [...servicesByCategory.keys()];
 
   return (
     <section id="servicios" className="scroll-mt-24 bg-white px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -42,9 +52,7 @@ export function StudioServicesSection({ content }: { content: LandingContent }) 
                 {category}
               </h3>
               <div className="space-y-0">
-                {items
-                  .filter((s) => s.category === category)
-                  .map((service) => (
+                {(servicesByCategory.get(category) ?? []).map((service) => (
                     <div
                       className="flex items-baseline justify-between border-b border-[#f0ede8] py-4"
                       key={service.id}

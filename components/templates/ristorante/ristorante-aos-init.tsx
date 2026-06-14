@@ -58,7 +58,7 @@ export function RistoranteAosInit({
       easing: "ease-out-quart",
       once: true,
       offset: 80,
-      disable: false,
+      disable: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     });
 
     const refresh = () => AOS.refresh();

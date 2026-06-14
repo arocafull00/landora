@@ -322,13 +322,13 @@ export const dashboardViews: Array<{
   { id: "blog", label: "Blog", icon: "document" },
 ];
 
-export function isDashboardView(value: string): value is DashboardView {
+function isDashboardView(value: string): value is DashboardView {
   return dashboardViews.some((view) => view.id === value);
 }
 
-export const workspaceTabs = ["Structure", "Presentation", "Vision", "Media"];
-export const contentGroups: ContentGroup[] = ["Pages", "Posts", "Presentations", "Assets"];
-export const initialLandings: Landing[] = [
+const workspaceTabs = ["Structure", "Presentation", "Vision", "Media"];
+const contentGroups: ContentGroup[] = ["Pages", "Posts", "Presentations", "Assets"];
+const initialLandings: Landing[] = [
   {
     id: "toll-story",
     name: "Toll Story",
@@ -453,11 +453,11 @@ export const initialAssets: Asset[] = [
   },
 ];
 
-export const folders = [
+const folders = [
   { name: "Images", items: "9 items" },
   { name: "Documents", items: "2 items" },
   { name: "Presentations", items: "1 item" },
 ];
 
-export const settingCategories = ["General", "Team", "API", "Billing"];
-export const settingPages = ["Project Info", "Domains", "Environment", "Danger Zone"];
+const settingCategories = ["General", "Team", "API", "Billing"];
+const settingPages = ["Project Info", "Domains", "Environment", "Danger Zone"];

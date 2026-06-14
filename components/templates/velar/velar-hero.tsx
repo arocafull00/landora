@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
 import { useEditorHighlight } from "@/lib/use-editor-highlight";
@@ -49,17 +49,17 @@ export function VelarHero({
         isHighlighted && "template-section--highlighted",
       )}
     >
-      <motion.div
+      <m.div
         className="absolute inset-0"
         initial={reduce ? false : { scale: 1.06, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.2, ease: easeOut }}
       >
         <HeroBackground src={content.hero.image} template="velar" />
-      </motion.div>
+      </m.div>
 
       <div className="relative z-10 flex w-full flex-col items-start justify-center lg:block lg:pt-[calc(28vh-50px)]">
-        <motion.div
+        <m.div
           className="flex w-full justify-start px-6 md:px-10 lg:justify-between lg:px-16"
           style={{ marginBottom: "-0.04em" }}
           initial={reduce ? false : { opacity: 0, y: 20 }}
@@ -77,7 +77,7 @@ export function VelarHero({
           >
             {content.hero.eyebrow}
           </h1>
-          <motion.p
+          <m.p
             data-editor-id="hero:subtitle"
             className="hidden max-w-[300px] text-right font-bold opacity-70 lg:block"
             style={{
@@ -92,11 +92,11 @@ export function VelarHero({
             transition={{ duration: 0.6, delay: 0.95, ease: easeOut }}
           >
             {content.hero.subtitle}
-          </motion.p>
-        </motion.div>
+          </m.p>
+        </m.div>
 
         <div className="w-full overflow-visible lg:overflow-hidden">
-          <motion.h2
+          <m.h2
             data-editor-id="hero:title"
             className="max-w-full break-words px-6 text-[12.5vw] font-extrabold uppercase leading-[0.9] text-black sm:text-[10.5vw] md:px-10 lg:px-16 lg:text-left lg:text-[clamp(52px,6.5vw,9vw)] lg:leading-[0.88] lg:whitespace-nowrap"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
@@ -105,10 +105,10 @@ export function VelarHero({
             transition={{ duration: 0.85, delay: 0.42, ease: easeOut }}
           >
             {content.hero.title}
-          </motion.h2>
+          </m.h2>
         </div>
 
-        <motion.p
+        <m.p
           data-editor-id="hero:subtitle"
           className="px-6 font-semibold text-[#171717]/85 max-lg:[text-shadow:0_1px_12px_rgba(255,255,255,0.6)] lg:hidden"
           style={{
@@ -121,7 +121,7 @@ export function VelarHero({
           transition={{ duration: 0.6, delay: 0.85, ease: easeOut }}
         >
           {content.hero.subtitle}
-        </motion.p>
+        </m.p>
       </div>
     </section>
   );

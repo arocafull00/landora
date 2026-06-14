@@ -3,6 +3,8 @@
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getTemplatePalette } from "@/lib/template-palettes";
+import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { RistoranteAosInit } from "@/components/templates/ristorante/ristorante-aos-init";
 import { RistoranteNav } from "@/components/templates/ristorante/ristorante-nav";
 import { RistoranteHero } from "@/components/templates/ristorante/ristorante-hero";
@@ -23,47 +25,50 @@ export function RistoranteTemplate({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
+  const palette = getTemplatePalette("ristorante");
 
   return (
-    <div
-      ref={rootRef}
-      className="relative"
-      style={{ backgroundColor: "#FAF7F2", overflowX: "clip" }}
-    >
-      <RistoranteAosInit rootRef={rootRef} />
+    <TemplateLazyMotion>
+      <div
+        ref={rootRef}
+        className="relative"
+        style={{ backgroundColor: palette.surface, overflowX: "clip" }}
+      >
+        <RistoranteAosInit rootRef={rootRef} />
 
-      <RistoranteNav
-        brand={content.brand || "Osteria da Luca."}
-        brandLogoType={content.brandLogoType ?? "text"}
-        brandLogoImage={content.brandLogoImage ?? ""}
-        navLinks={getVisibleNav(content.nav, content.hiddenSections, "ristorante")}
-        ctaLabel={content.hero.ctaLabel ?? ""}
-        topOffset={topOffset}
-      />
+        <RistoranteNav
+          brand={content.brand || "Osteria da Luca."}
+          brandLogoType={content.brandLogoType ?? "text"}
+          brandLogoImage={content.brandLogoImage ?? ""}
+          navLinks={getVisibleNav(content.nav, content.hiddenSections, "ristorante")}
+          ctaLabel={content.hero.ctaLabel ?? ""}
+          topOffset={topOffset}
+        />
 
-      <RistoranteHero content={content} heroRef={heroRef} />
+        <RistoranteHero content={content} heroRef={heroRef} />
 
-      {isSectionVisible(content, "story") ? (
-        <RistoranteStorySection content={content} />
-      ) : null}
+        {isSectionVisible(content, "story") ? (
+          <RistoranteStorySection content={content} />
+        ) : null}
 
-      {isSectionVisible(content, "carta") ? <RistoranteMenuSection content={content} /> : null}
+        {isSectionVisible(content, "carta") ? <RistoranteMenuSection content={content} /> : null}
 
-      {isSectionVisible(content, "galeria") ? (
-        <RistoranteGallerySection content={content} />
-      ) : null}
+        {isSectionVisible(content, "galeria") ? (
+          <RistoranteGallerySection content={content} />
+        ) : null}
 
-      {isSectionVisible(content, "equipo") ? <RistoranteChefSection content={content} /> : null}
+        {isSectionVisible(content, "equipo") ? <RistoranteChefSection content={content} /> : null}
 
-      {isSectionVisible(content, "horarios") ? (
-        <RistoranteHoursSection content={content} />
-      ) : null}
+        {isSectionVisible(content, "horarios") ? (
+          <RistoranteHoursSection content={content} />
+        ) : null}
 
-      {isSectionVisible(content, "testimonios") ? (
-        <RistoranteTestimonialsSection content={content} />
-      ) : null}
+        {isSectionVisible(content, "testimonios") ? (
+          <RistoranteTestimonialsSection content={content} />
+        ) : null}
 
-      <RistoranteContactSection content={content} />
-    </div>
+        <RistoranteContactSection content={content} />
+      </div>
+    </TemplateLazyMotion>
   );
 }

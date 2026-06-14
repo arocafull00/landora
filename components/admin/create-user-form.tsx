@@ -60,7 +60,6 @@ export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
             name="name"
             type="text"
             required
-            autoFocus
             autoComplete="off"
             placeholder="Ana García"
             className={inputClass}
@@ -81,11 +80,12 @@ export function CreateUserForm({ onSuccess }: { onSuccess: () => void }) {
         </label>
       </div>
       <div className="space-y-2">
-        <label className="block">
+        <label className="block" htmlFor="create-user-password">
           <span className="mb-1.5 block font-label text-label-md text-on-surface-variant">
             Contraseña
           </span>
           <PasswordInput
+            id="create-user-password"
             name="password"
             required
             autoComplete="new-password"

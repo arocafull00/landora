@@ -41,12 +41,12 @@ const previewInputSchema = z.object({
 
 const provisionUserSchema = z.object({
   name: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(8),
 });
 
 const provisionLandingSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.uuid(),
   clerkUserId: z.string().min(1),
   name: z.string().min(1),
   slug: z.string().min(1),
@@ -55,7 +55,7 @@ const provisionLandingSchema = z.object({
 });
 
 const rollbackUserSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.uuid(),
   clerkUserId: z.string().min(1),
 });
 
@@ -222,7 +222,7 @@ export async function provisionProspectLanding(payload: {
   }
 }
 
-export async function rollbackProspectUser(payload: {
+async function rollbackProspectUser(payload: {
   userId: string;
   clerkUserId: string;
 }): Promise<{ success: true } | ActionError> {

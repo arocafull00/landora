@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
+import { m, useReducedMotion } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
@@ -31,7 +31,7 @@ export function VelarNav({
 
   return (
     <>
-      <motion.nav
+      <m.nav
         className={`fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 before:pointer-events-none before:absolute before:inset-0 before:from-white/30 before:to-transparent md:px-10 md:py-6 lg:px-16${topOffset > 0 ? "" : " top-0"}`}
         style={{
           color: navColor,
@@ -54,7 +54,7 @@ export function VelarNav({
           />
         </div>
 
-        <motion.button
+        <m.button
           type="button"
           onClick={onToggleMenu}
           className="group relative z-[1] flex items-center justify-center drop-shadow-[0_1px_8px_rgba(255,255,255,0.5)]"
@@ -79,18 +79,18 @@ export function VelarNav({
               />
             </div>
           )}
-        </motion.button>
-      </motion.nav>
+        </m.button>
+      </m.nav>
 
       {menuOpen && (
-        <motion.div
+        <m.div
           className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#f5f0ea]"
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
           {navLinks.map((link, i) => (
-            <motion.a
+            <m.a
               key={link.id}
               className="uppercase text-black transition-colors hover:text-gray-500"
               href={link.href}
@@ -107,9 +107,9 @@ export function VelarNav({
               transition={{ duration: 0.4, delay: 0.1 + i * 0.08, ease: easeOut }}
             >
               {link.label}
-            </motion.a>
+            </m.a>
           ))}
-        </motion.div>
+        </m.div>
       )}
     </>
   );

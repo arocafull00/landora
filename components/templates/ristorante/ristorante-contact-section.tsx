@@ -56,9 +56,9 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
             <div className="flex items-start gap-3">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#8B2500]" />
               <div>
-                <p className="text-xs font-medium text-white/40">Teléfono</p>
+                <p className="text-xs font-medium text-white/55">Teléfono</p>
                 <a
-                  className="text-sm text-white/70 transition-colors hover:text-white"
+                  className="text-sm text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                 >
                   {content.contact.phone}
@@ -70,9 +70,9 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
             <div className="flex items-start gap-3">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#8B2500]" />
               <div>
-                <p className="text-xs font-medium text-white/40">Email</p>
+                <p className="text-xs font-medium text-white/55">Email</p>
                 <a
-                  className="text-sm text-white/70 transition-colors hover:text-white"
+                  className="text-sm text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                   href={`mailto:${content.contact.email}`}
                 >
                   {content.contact.email}
@@ -84,8 +84,8 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
             <div className="flex items-start gap-3">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#8B2500]" />
               <div>
-                <p className="text-xs font-medium text-white/40">Dirección</p>
-                <p className="text-sm text-white/70">{content.contact.address}</p>
+                <p className="text-xs font-medium text-white/55">Dirección</p>
+                <p className="text-sm text-white/80">{content.contact.address}</p>
               </div>
             </div>
           )}

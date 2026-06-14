@@ -163,7 +163,7 @@ export function getSectionHeading(
   };
 }
 
-export function getDefaultSectionHeadings(templateId: TemplateId): Record<string, SectionHeading> {
+function getDefaultSectionHeadings(templateId: TemplateId): Record<string, SectionHeading> {
   return SECTION_HEADING_DEFAULTS[templateId];
 }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { AssetImage } from "@/components/ui/asset-image";
+import { RistoranteGalleryMedia } from "@/components/templates/ristorante/ristorante-gallery-media";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 const masonrySpans = [
@@ -29,7 +29,7 @@ export function RistoranteGalleryItem({
         className="group relative aspect-[4/5] shrink-0 snap-start overflow-hidden rounded-lg bg-[#e5e2dd]"
         style={{ width: "min(75vw, 320px)" }}
       >
-        <GalleryMedia item={item} />
+        <RistoranteGalleryMedia item={item} />
       </div>
     );
   }
@@ -38,32 +38,7 @@ export function RistoranteGalleryItem({
     <div
       className={`group relative overflow-hidden rounded-lg bg-[#e5e2dd] ${spanClass}`}
     >
-      <GalleryMedia item={item} />
+      <RistoranteGalleryMedia item={item} />
     </div>
-  );
-}
-
-function GalleryMedia({ item }: { item: GalleryItem }) {
-  if (item.image) {
-    return (
-      <AssetImage
-        alt=""
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-        fill
-        sizes="(max-width: 768px) 75vw, 320px"
-        src={item.image}
-      />
-    );
-  }
-
-  if (!item.video) return null;
-
-  return (
-    <video
-      className="h-full w-full object-cover"
-      muted
-      playsInline
-      src={item.video}
-    />
   );
 }

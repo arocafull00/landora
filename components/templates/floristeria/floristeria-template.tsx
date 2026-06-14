@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { FloristeriaAosInit } from "@/components/templates/floristeria/floristeria-aos-init";
 import { FloristeriaNav } from "@/components/templates/floristeria/floristeria-nav";
 import { FloristeriaHero } from "@/components/templates/floristeria/floristeria-hero";
@@ -25,11 +26,12 @@ export function FloristeriaTemplate({
   const heroRef = useRef<HTMLElement>(null);
 
   return (
-    <div
-      ref={rootRef}
-      className="relative"
-      style={{ backgroundColor: "#FAFAF7", overflowX: "clip" }}
-    >
+    <TemplateLazyMotion>
+      <div
+        ref={rootRef}
+        className="relative"
+        style={{ backgroundColor: "#FAFAF7", overflowX: "clip" }}
+      >
       <FloristeriaAosInit rootRef={rootRef} />
 
       <FloristeriaNav
@@ -63,5 +65,6 @@ export function FloristeriaTemplate({
 
       <FloristeriaContactSection content={content} />
     </div>
+    </TemplateLazyMotion>
   );
 }

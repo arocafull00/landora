@@ -51,7 +51,7 @@ export function RistoranteHoursSection({ content }: { content: LandingContent })
                   {item.title}
                 </p>
                 {item.description && (
-                  <p className="mt-0.5 text-sm text-white/50">{item.description}</p>
+                  <p className="mt-0.5 text-sm text-white/65">{item.description}</p>
                 )}
               </div>
             </div>

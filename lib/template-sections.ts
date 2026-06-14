@@ -1,7 +1,5 @@
 import type { LandingContent, NavLink, TemplateId } from "@/lib/dashboard-data";
 import type { LandingSectionKey } from "@/lib/landing-content-gaps";
-import { ADMIN_EDITOR_TAB, getTemplate } from "@/lib/template-registry";
-import type { EditorTab } from "@/lib/template-registry";
 
 export type TemplateSectionDef = {
   anchor: string;
@@ -22,14 +20,14 @@ export function getSectionScrollHref(section: TemplateSectionDef): string {
   return section.navHref ?? `#${section.anchor}`;
 }
 
-export const BLOG_NAV_ANCHOR = "__blog__";
+const BLOG_NAV_ANCHOR = "__blog__";
 
-export function getBlogNavHref(landingSlug: string): string {
+function getBlogNavHref(landingSlug: string): string {
   const slug = landingSlug.replace(/^\//, "");
   return `/${slug}/blog`;
 }
 
-export function getBlogNavTarget(landingSlug: string): NavScrollTarget {
+function getBlogNavTarget(landingSlug: string): NavScrollTarget {
   return {
     anchor: BLOG_NAV_ANCHOR,
     href: getBlogNavHref(landingSlug),
@@ -41,13 +39,16 @@ export function getNavScrollTargets(
   templateId: TemplateId,
   landingSlug?: string,
 ): NavScrollTarget[] {
-  const targets = getTemplateSections(templateId)
-    .filter((section) => section.anchor !== "hero")
-    .map((section) => ({
+  const targets: NavScrollTarget[] = [];
+
+  for (const section of getTemplateSections(templateId)) {
+    if (section.anchor === "hero") continue;
+    targets.push({
       anchor: section.anchor,
       href: getSectionScrollHref(section),
       label: section.label,
-    }));
+    });
+  }
 
   if (!landingSlug) return targets;
 
@@ -220,45 +221,28 @@ export function isSectionVisible(content: LandingContent, anchor: string): boole
   return !hidden.includes(anchor);
 }
 
-export function getVisibleEditorTabs(
-  templateId: TemplateId,
-  hiddenSections: string[] | undefined,
-  isAdmin = false,
-): EditorTab[] {
-  const template = getTemplate(templateId);
-  if (!template) return [];
-
-  const hidden = new Set(hiddenSections ?? []);
-  const hiddenTabIds = new Set(
-    getTemplateSections(templateId)
-      .filter((section) => hidden.has(section.anchor) && section.editorTabId)
-      .map((section) => section.editorTabId),
-  );
-
-  const tabs = template.editorTabs.filter((tab) => !hiddenTabIds.has(tab.id));
-  if (!isAdmin) return tabs;
-
-  return [...tabs, ADMIN_EDITOR_TAB];
-}
-
 export function getVisibleNav(
   nav: NavLink[],
   hiddenSections: string[] | undefined,
   templateId: TemplateId,
 ): NavLink[] {
   const hidden = new Set(hiddenSections ?? []);
-  const hiddenHrefs = new Set(
-    getTemplateSections(templateId)
-      .filter((section) => hidden.has(section.anchor))
-      .map((section) => getSectionScrollHref(section)),
-  );
+  const hiddenHrefs = new Set<string>();
 
-  return nav
-    .map((item) => ({
-      ...item,
-      href: normalizeNavHref(templateId, item.href),
-    }))
-    .filter((item) => !hiddenHrefs.has(item.href));
+  for (const section of getTemplateSections(templateId)) {
+    if (!hidden.has(section.anchor)) continue;
+    hiddenHrefs.add(getSectionScrollHref(section));
+  }
+
+  const visibleNav: NavLink[] = [];
+
+  for (const item of nav) {
+    const href = normalizeNavHref(templateId, item.href);
+    if (hiddenHrefs.has(href)) continue;
+    visibleNav.push({ ...item, href });
+  }
+
+  return visibleNav;
 }
 
 export function getHiddenContentKeys(

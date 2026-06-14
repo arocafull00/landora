@@ -138,6 +138,7 @@ export function ImageField({
         </button>
       </div>
       <input
+        aria-label="Subir imagen"
         ref={inputRef}
         accept="image/*"
         className="hidden"

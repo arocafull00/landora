@@ -6,6 +6,7 @@ import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { resolveVelarHeroImages } from "@/lib/velar-assets";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
+import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { VelarAosInit } from "@/components/templates/velar/velar-aos-init";
 import { VelarNav } from "@/components/templates/velar/velar-nav";
 import { VelarHero } from "@/components/templates/velar/velar-hero";
@@ -86,11 +87,12 @@ export function VelarTemplate({
   }, [scrollContainer, updateNavColor]);
 
   return (
-    <div
-      ref={rootRef}
-      className="relative"
-      style={{ backgroundColor: "#f5f0ea", overflowX: "clip" }}
-    >
+    <TemplateLazyMotion>
+      <div
+        ref={rootRef}
+        className="relative"
+        style={{ backgroundColor: "#f5f0ea", overflowX: "clip" }}
+      >
       <VelarAosInit rootRef={rootRef} />
 
       <VelarNav
@@ -140,5 +142,6 @@ export function VelarTemplate({
         <VelarContactSection content={content} />
       </div>
     </div>
+    </TemplateLazyMotion>
   );
 }

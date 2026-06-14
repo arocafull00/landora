@@ -22,16 +22,6 @@ export const getAllLandingPages = cache(async () => {
   }
 });
 
-export const getAllLandingPagesByUserId = cache(async (userId: string) => {
-  try {
-    return await db.query.landingPages.findMany({
-      where: eq(landingPages.userId, userId),
-    });
-  } catch {
-    throw new Error("Failed to fetch landing pages");
-  }
-});
-
 export async function getLandingBySlug(slug: string): Promise<LandingPage | undefined> {
   try {
     return await db.query.landingPages.findFirst({

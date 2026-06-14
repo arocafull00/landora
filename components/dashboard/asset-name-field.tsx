@@ -13,13 +13,14 @@ export function AssetNameField({
   name: string;
 }) {
   const update = useAssetsStore((state) => state.update);
-  const [value, setValue] = useState(name);
+  const [draft, setDraft] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const value = draft ?? name;
 
   const save = async () => {
     const trimmed = value.trim();
     if (!trimmed || trimmed === name) {
-      setValue(name);
+      setDraft(null);
       return;
     }
 
@@ -28,9 +29,10 @@ export function AssetNameField({
     try {
       const row = await renameAsset(assetId, trimmed);
       update(row);
+      setDraft(null);
       toast.success("Nombre actualizado");
     } catch (err) {
-      setValue(name);
+      setDraft(null);
       toast.error(err instanceof Error ? err.message : "No se pudo renombrar la imagen");
     } finally {
       setSaving(false);
@@ -44,7 +46,7 @@ export function AssetNameField({
         className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50"
         disabled={saving}
         onBlur={() => save()}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event) => setDraft(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === "Enter") {
             event.currentTarget.blur();

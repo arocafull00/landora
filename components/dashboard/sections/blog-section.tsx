@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BlogPostListItem } from "@/components/dashboard/blog-post-list-item";
 import { ActionButton } from "@/components/ui/primitives";
@@ -20,7 +20,7 @@ export function BlogSection() {
   const deletePost = useDashboardStore((state) => state.deletePost);
   const isAdmin = useDashboardStore((state) => state.isAdmin);
   const [activePostId, setActivePostId] = useState<string>("");
-  const [slugTouched, setSlugTouched] = useState(false);
+  const slugTouchedRef = useRef(false);
 
   const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
   const resolvedActivePostId = activePostId || posts[0]?.id || "";
@@ -36,14 +36,14 @@ export function BlogSection() {
     const created = await createPost(landing.id);
     if (!created) return;
     setActivePostId(created.id);
-    setSlugTouched(false);
+    slugTouchedRef.current = false;
   };
 
   const handleTitleChange = (title: string) => {
     if (!activePost) return;
 
     const patch: { title: string; slug?: string } = { title };
-    if (!slugTouched) {
+    if (!slugTouchedRef.current) {
       patch.slug = slugifyBlogTitle(title);
     }
 
@@ -88,7 +88,7 @@ export function BlogSection() {
                   key={post.id}
                   onSelect={() => {
                     setActivePostId(post.id);
-                    setSlugTouched(true);
+                    slugTouchedRef.current = true;
                   }}
                   post={post}
                 />
@@ -129,7 +129,7 @@ export function BlogSection() {
               <input
                 className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
                 onChange={(event) => {
-                  setSlugTouched(true);
+                  slugTouchedRef.current = true;
                   updatePost(activePost.id, { slug: slugifyBlogTitle(event.target.value) });
                 }}
                 type="text"

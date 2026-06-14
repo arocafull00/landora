@@ -3,8 +3,6 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
-import { getVisibleEditorTabs } from "@/lib/template-sections";
-import { EditorTabsBar } from "@/components/dashboard/editor-tabs-bar";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
@@ -12,10 +10,8 @@ import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
-import {
-  createEmptyServiceMenuItem,
-  StudioServiceMenuItemEditor,
-} from "@/components/dashboard/studio-service-menu-item-editor";
+import { createEmptyServiceMenuItem } from "@/components/dashboard/create-empty-service-menu-item";
+import { StudioServiceMenuItemEditor } from "@/components/dashboard/studio-service-menu-item-editor";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function StudioEditorSection() {
@@ -40,12 +36,6 @@ export function StudioEditorSection() {
 
   if (!activeLanding) return null;
 
-  const tabs = getVisibleEditorTabs(
-    activeLanding.template,
-    activeLanding.content.hiddenSections,
-    isAdmin,
-  );
-
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
 
@@ -61,13 +51,6 @@ export function StudioEditorSection() {
       onPublish={publishActive}
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
-      tabs={
-        <EditorTabsBar
-          activeTab={activeEditorTab}
-          onTabChange={(v) => setActiveEditorTab(v)}
-          tabs={tabs}
-        />
-      }
       form={
         <>
           {activeEditorTab === "Admin" && isAdmin ? (

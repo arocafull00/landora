@@ -4,6 +4,20 @@ import { Icon } from "@/components/ui/icon";
 import type { IconName } from "@/lib/dashboard-data";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+const ACTION_BUTTON_STYLES = {
+  primary: "bg-primary text-on-primary hover:bg-primary-fixed-variant",
+  secondary:
+    "border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-variant",
+  danger: "text-danger hover:bg-error-container",
+} as const;
+
+const STATUS_BADGE_STYLES = {
+  Published: "bg-success/10 text-success",
+  Draft: "bg-surface-variant text-on-surface-variant",
+  Changes: "bg-warning/10 text-warning",
+  Live: "bg-success/10 text-success",
+} as const;
+
 export function IconButton({
   icon,
   id,
@@ -46,16 +60,9 @@ export function ActionButton({
   children: ReactNode;
   variant?: "primary" | "secondary" | "danger";
 }) {
-  const styles = {
-    primary: "bg-primary text-on-primary hover:bg-primary-fixed-variant",
-    secondary:
-      "border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-variant",
-    danger: "text-danger hover:bg-error-container",
-  };
-
   return (
     <button
-      className={`inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-body-sm font-medium shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${styles[variant]} ${className}`}
+      className={`inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-body-sm font-medium shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${ACTION_BUTTON_STYLES[variant]} ${className}`}
       type="button"
       {...props}
     >
@@ -65,16 +72,9 @@ export function ActionButton({
 }
 
 export function StatusBadge({ status }: { status: LandingStatus | "Live" }) {
-  const styles = {
-    Published: "bg-success/10 text-success",
-    Draft: "bg-surface-variant text-on-surface-variant",
-    Changes: "bg-warning/10 text-warning",
-    Live: "bg-success/10 text-success",
-  };
-
   return (
     <span
-      className={`inline-flex items-center rounded-md px-2 py-1 font-label text-label-md uppercase ${styles[status]}`}
+      className={`inline-flex items-center rounded-md px-2 py-1 font-label text-label-md uppercase ${STATUS_BADGE_STYLES[status]}`}
     >
       {status}
     </span>

@@ -13,7 +13,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "import:rocafull-blog": "tsx scripts/import-rocafull-blog.ts",
-    "doctor": "npx react-doctor@latest"
+    "doctor": "react-doctor --verbose"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.3",
@@ -55,7 +55,6 @@
     "globals": "^17.6.0",
     "husky": "^9.1.7",
     "react-doctor": "^0.5.5",
-    "shadcn": "^4.10.0",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",
     "typescript": "^5",

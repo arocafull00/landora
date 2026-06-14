@@ -29,6 +29,7 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
                 src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
                 alt="Google"
                 fill
+                sizes="64px"
                 className="object-contain"
                 unoptimized
               />
@@ -68,13 +69,13 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
         >
           {testimonial.comment}
         </p>
-        <a
-          href="#"
-          className="mt-auto text-sm font-medium text-[#213138] hover:underline"
+        <button
+          type="button"
+          className="mt-auto text-left text-sm font-medium text-[#213138] hover:underline"
           style={{ fontFamily: "var(--font-body)" }}
         >
           Leer más
-        </a>
+        </button>
       </div>
     </div>
   );

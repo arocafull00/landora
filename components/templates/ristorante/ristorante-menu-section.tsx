@@ -1,6 +1,7 @@
 "use client";
 
 import type { LandingContent } from "@/lib/dashboard-data";
+import { RistoranteMenuItem } from "@/components/templates/ristorante/ristorante-menu-item";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function RistoranteMenuSection({ content }: { content: LandingContent }) {
@@ -8,7 +9,17 @@ export function RistoranteMenuSection({ content }: { content: LandingContent }) 
   if (items.length === 0) return null;
 
   const heading = getSectionHeading(content, "carta", SECTION_HEADING_DEFAULTS.ristorante.carta);
-  const categories = [...new Set(items.map((s) => s.category).filter(Boolean))];
+  const servicesByCategory = items.reduce<Map<string, typeof items>>((map, service) => {
+    if (!service.category) return map;
+    const group = map.get(service.category);
+    if (group) {
+      group.push(service);
+      return map;
+    }
+    map.set(service.category, [service]);
+    return map;
+  }, new Map());
+  const categories = [...servicesByCategory.keys()];
 
   return (
     <section id="carta" className="scroll-mt-24 bg-white px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -22,7 +33,7 @@ export function RistoranteMenuSection({ content }: { content: LandingContent }) 
           </h2>
           {heading.subtitle ? (
             <p
-              className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[#1C1917]/60"
+              className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[#1C1917]/70"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heading.subtitle}
@@ -45,58 +56,16 @@ export function RistoranteMenuSection({ content }: { content: LandingContent }) 
                 {category}
               </h3>
               <div className="space-y-0">
-                {items
-                  .filter((s) => s.category === category)
-                  .map((service) => (
-                    <div
-                      className="flex items-baseline justify-between border-b border-[#1C1917]/[0.06] py-4"
-                      key={service.id}
-                    >
-                      <div className="min-w-0 flex-1 pr-4">
-                        <p
-                          className="text-base font-semibold text-[#1C1917]"
-                          style={{ fontFamily: "var(--font-body)" }}
-                        >
-                          {service.name}
-                        </p>
-                        {service.description && (
-                          <p className="mt-0.5 text-sm text-[#1C1917]/50">
-                            {service.description}
-                          </p>
-                        )}
-                      </div>
-                      <span
-                        className="shrink-0 text-base font-bold text-[#8B2500]"
-                        style={{ fontFamily: "var(--font-body)" }}
-                      >
-                        {service.price}
-                      </span>
-                    </div>
-                  ))}
+                {(servicesByCategory.get(category) ?? []).map((service) => (
+                  <RistoranteMenuItem service={service} key={service.id} />
+                ))}
               </div>
             </div>
           ))
         ) : (
           <div className="space-y-0" data-aos="fade-up">
             {items.map((service) => (
-              <div
-                className="flex items-baseline justify-between border-b border-[#1C1917]/[0.06] py-4"
-                key={service.id}
-              >
-                <div className="min-w-0 flex-1 pr-4">
-                  <p className="text-base font-semibold text-[#1C1917]">
-                    {service.name}
-                  </p>
-                  {service.description && (
-                    <p className="mt-0.5 text-sm text-[#1C1917]/50">
-                      {service.description}
-                    </p>
-                  )}
-                </div>
-                <span className="shrink-0 text-base font-bold text-[#8B2500]">
-                  {service.price}
-                </span>
-              </div>
+              <RistoranteMenuItem service={service} key={service.id} />
             ))}
           </div>
         )}

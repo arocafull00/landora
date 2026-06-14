@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition, useState } from "react";
+import { useRef, useTransition, useState } from "react";
 import { toast } from "react-toastify";
 import { ActionButton } from "@/components/ui/primitives";
 import { createLandingForUser } from "@/app/actions/admin";
@@ -30,16 +30,16 @@ export function CreateLandingForm({
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [slug, setSlug] = useState("");
-  const [slugTouched, setSlugTouched] = useState(false);
+  const slugTouchedRef = useRef(false);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!slugTouched) {
+    if (!slugTouchedRef.current) {
       setSlug(toSlug(e.target.value));
     }
   };
 
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSlugTouched(true);
+    slugTouchedRef.current = true;
     setSlug(toSlug(e.target.value));
   };
 
@@ -72,7 +72,6 @@ export function CreateLandingForm({
             name="name"
             type="text"
             required
-            autoFocus
             autoComplete="off"
             placeholder="Clínica Ana García"
             className={inputClass}

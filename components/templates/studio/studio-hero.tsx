@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { ArrowRight, Clock3, MapPin, Phone } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
@@ -32,7 +32,7 @@ export function StudioHero({
       <div className="absolute inset-y-0 left-0 w-full bg-linear-to-r from-black/95 via-black/75 to-transparent" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col px-6 pb-10 pt-24 md:px-10 lg:px-12 lg:pb-14 lg:pt-28">
-        <motion.p
+        <m.p
           className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-[#c99d43] sm:text-sm"
           style={{ fontFamily: "var(--font-syne)" }}
           initial={{ opacity: 0, y: 16 }}
@@ -40,9 +40,9 @@ export function StudioHero({
           transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
         >
           {content.hero.eyebrow}
-        </motion.p>
+        </m.p>
 
-        <motion.h1
+        <m.h1
           className="max-w-4xl text-[clamp(44px,2vw,110px)] font-black uppercase leading-[0.92] text-white"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.035em" }}
           initial={{ opacity: 0, y: 24 }}
@@ -50,9 +50,9 @@ export function StudioHero({
           transition={{ duration: 0.8, delay: 0.35, ease: easeOut }}
         >
           {content.hero.title}
-        </motion.h1>
+        </m.h1>
 
-        <motion.p
+        <m.p
           className="mt-2 max-w-4xl text-[clamp(36px,2vw,92px)] font-black uppercase leading-[0.9] text-[#d4a948]"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           initial={{ opacity: 0, y: 16 }}
@@ -60,9 +60,9 @@ export function StudioHero({
           transition={{ duration: 0.6, delay: 0.55, ease: easeOut }}
         >
           {content.hero.subtitle}
-        </motion.p>
+        </m.p>
 
-        <motion.p
+        <m.p
           className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:text-xl"
           style={{ fontFamily: "var(--font-body)" }}
           initial={{ opacity: 0, y: 16 }}
@@ -70,9 +70,9 @@ export function StudioHero({
           transition={{ duration: 0.6, delay: 0.7, ease: easeOut }}
         >
           {description}
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -95,9 +95,9 @@ export function StudioHero({
             <Phone className="h-4 w-4" />
             {content.contact.phone}
           </a>
-        </motion.div>
+        </m.div>
 
-        <motion.div
+        <m.div
           className="mt-10 flex flex-wrap items-center gap-5 border-t border-white/20 pt-5 text-sm text-white/75 sm:text-base"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -113,7 +113,7 @@ export function StudioHero({
             <Clock3 className="h-4 w-4 text-[#c99d43]" />
             <span>Lun - Sáb: 10:00 - 20:00</span>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

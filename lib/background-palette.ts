@@ -2,7 +2,7 @@ import type { TemplatePalette } from "@/lib/template-palettes";
 
 const MIN_SURFACE_CONTRAST = 18;
 
-export function normalizeHex(hex: string): string {
+function normalizeHex(hex: string): string {
   const value = hex.toLowerCase();
   if (value.length === 4) {
     return `#${value[1]}${value[1]}${value[2]}${value[2]}${value[3]}${value[3]}`;
@@ -22,7 +22,7 @@ function contrastWithSurface(color: string, surfaceLum: number): number {
   return Math.abs(hexLuminance(color) - surfaceLum);
 }
 
-export function getVisiblePaletteColors(palette: TemplatePalette): string[] {
+function getVisiblePaletteColors(palette: TemplatePalette): string[] {
   const surfaceLum = hexLuminance(palette.surface);
   const candidates = [
     palette.accent,
@@ -40,16 +40,16 @@ export function getVisiblePaletteColors(palette: TemplatePalette): string[] {
     return [palette.accent, palette.foreground];
   }
 
-  return [...new Set(visible)].sort((a, b) => hexLuminance(a) - hexLuminance(b));
+  return [...new Set(visible)].toSorted((a, b) => hexLuminance(a) - hexLuminance(b));
 }
 
-export function getBestContrastColor(palette: TemplatePalette): string {
+function getBestContrastColor(palette: TemplatePalette): string {
   const surfaceLum = hexLuminance(palette.surface);
   const candidates = getVisiblePaletteColors(palette);
 
-  return [...candidates].sort(
-    (a, b) => contrastWithSurface(b, surfaceLum) - contrastWithSurface(a, surfaceLum)
-  )[0];
+  return candidates.reduce((best, color) =>
+    contrastWithSurface(color, surfaceLum) > contrastWithSurface(best, surfaceLum) ? color : best
+  );
 }
 
 export function mapColorsToPalette(
@@ -60,7 +60,7 @@ export function mapColorsToPalette(
   if (colors.length === 0) return mapping;
 
   const visibleColors = getVisiblePaletteColors(palette);
-  const sorted = [...colors].sort((a, b) => hexLuminance(a) - hexLuminance(b));
+  const sorted = colors.toSorted((a, b) => hexLuminance(a) - hexLuminance(b));
 
   if (sorted.length === 1) {
     mapping.set(sorted[0], getBestContrastColor(palette));

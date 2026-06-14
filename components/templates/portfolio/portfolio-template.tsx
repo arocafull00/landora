@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos-init";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
 import { PortfolioHero } from "@/components/templates/portfolio/portfolio-hero";
@@ -26,11 +27,12 @@ export function PortfolioTemplate({
   const heroRef = useRef<HTMLElement>(null);
 
   return (
-    <div
-      ref={rootRef}
-      className="relative"
-      style={{ backgroundColor: "#0a0a0a", overflowX: "clip" }}
-    >
+    <TemplateLazyMotion>
+      <div
+        ref={rootRef}
+        className="relative"
+        style={{ backgroundColor: "#0a0a0a", overflowX: "clip" }}
+      >
       <PortfolioAosInit rootRef={rootRef} />
 
       <PortfolioNav
@@ -68,5 +70,6 @@ export function PortfolioTemplate({
 
       <PortfolioContactSection content={content} />
     </div>
+    </TemplateLazyMotion>
   );
 }

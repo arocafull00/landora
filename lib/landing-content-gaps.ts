@@ -143,7 +143,7 @@ function isSectionEmpty(landing: LandingWithSections, section: LandingSectionKey
   return false;
 }
 
-export function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
+function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
   if (template === "studio") return STUDIO_SECTIONS;
   if (template === "portfolio") return PORTFOLIO_SECTIONS;
   if (template === "ristorante") return RISTORANTE_SECTIONS;

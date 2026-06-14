@@ -32,8 +32,10 @@ export async function PATCH(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
-    const existing = await getBlogConfig(id);
+    const [body, existing] = await Promise.all([
+      req.json(),
+      getBlogConfig(id),
+    ]);
 
     await upsertBlogConfig(id, {
       title: typeof body.title === "string" ? body.title : (existing?.title ?? ""),

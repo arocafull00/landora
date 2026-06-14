@@ -1,6 +1,6 @@
 "use client";
 
-import { AssetImage } from "@/components/ui/asset-image";
+import { StudioGalleryMedia } from "@/components/templates/studio/studio-gallery-media";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 const bentoSpans = [
@@ -39,32 +39,7 @@ export function StudioGalleryItem({
     <div
       className={`group relative h-full min-h-0 overflow-hidden rounded-lg bg-[#e5e2dd] ${spanClass}`}
     >
-      <GalleryMedia item={item} />
+      <StudioGalleryMedia item={item} />
     </div>
-  );
-}
-
-function GalleryMedia({ item }: { item: GalleryItem }) {
-  if (item.image) {
-    return (
-      <AssetImage
-        alt=""
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-        fill
-        sizes="(max-width: 768px) 50vw, 33vw"
-        src={item.image}
-      />
-    );
-  }
-
-  if (!item.video) return null;
-
-  return (
-    <video
-      className="absolute inset-0 h-full w-full object-cover"
-      muted
-      playsInline
-      src={item.video}
-    />
   );
 }

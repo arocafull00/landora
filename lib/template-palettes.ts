@@ -9,7 +9,7 @@ export type TemplatePalette = {
   foreground: string;
 };
 
-export const TEMPLATE_PALETTES: Record<TemplateId, TemplatePalette> = {
+const TEMPLATE_PALETTES: Record<TemplateId, TemplatePalette> = {
   velar: {
     primary: "#213138",
     secondary: "#171717",

@@ -10,6 +10,7 @@ import { CreateLandingForm } from "@/components/admin/create-landing-form";
 import { deleteUser } from "@/app/actions/admin";
 import { startImpersonation } from "@/app/actions/impersonation";
 import type { User, LandingPage } from "@/db/schema";
+import { mediumDateFormatter } from "@/lib/intl-formatters";
 import {
   Dialog,
   DialogContent,
@@ -28,9 +29,7 @@ export function UserRow({ user }: { user: UserWithLandings }) {
 
   const publishedCount = user.landings.filter((lp) => lp.published).length;
   const createdAt = user.createdAt
-    ? new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(
-        new Date(user.createdAt),
-      )
+    ? mediumDateFormatter.format(new Date(user.createdAt))
     : "—";
   const initial = user.name.charAt(0).toUpperCase();
 

@@ -2,7 +2,7 @@
 
 import {
   createContext,
-  useContext,
+  use,
   useLayoutEffect,
   type ReactNode,
 } from "react";
@@ -14,6 +14,10 @@ type PreviewScrollContextValue = {
 const PreviewScrollContext = createContext<PreviewScrollContextValue>({
   container: null,
 });
+
+const PREVIEW_SCROLL_CONTEXT_VALUE: PreviewScrollContextValue = {
+  container: null,
+};
 
 export function PreviewScrollProvider({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
@@ -40,12 +44,12 @@ export function PreviewScrollProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <PreviewScrollContext.Provider value={{ container: null }}>
+    <PreviewScrollContext.Provider value={PREVIEW_SCROLL_CONTEXT_VALUE}>
       {children}
     </PreviewScrollContext.Provider>
   );
 }
 
 export function usePreviewScrollContainer() {
-  return useContext(PreviewScrollContext).container;
+  return use(PreviewScrollContext).container;
 }

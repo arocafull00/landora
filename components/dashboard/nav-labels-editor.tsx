@@ -3,10 +3,8 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import type { Landing, TemplateId } from "@/lib/dashboard-data";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
-import {
-  createEmptyNavLink,
-  NavLinkEditor,
-} from "@/components/dashboard/nav-link-editor";
+import { createEmptyNavLink } from "@/components/dashboard/create-empty-nav-link";
+import { NavLinkEditor } from "@/components/dashboard/nav-link-editor";
 import {
   NAV_ONLY_HEADING_ANCHORS,
   SECTION_HEADING_DEFAULTS,

@@ -70,7 +70,7 @@ function collectColorsFromShapes(shapes: LottieShapeItem[] | undefined, found: S
   }
 }
 
-export function extractLottieColors(data: LottieAnimation): string[] {
+function extractLottieColors(data: LottieAnimation): string[] {
   const found = new Set<string>();
 
   for (const layer of data.layers ?? []) {

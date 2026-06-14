@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 
-export const getUserById = cache(async (userId: string) => {
+const getUserById = cache(async (userId: string) => {
   try {
     return await db.query.users.findFirst({
       where: eq(users.clerkUserId, userId),

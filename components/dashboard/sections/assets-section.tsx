@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { AssetImage } from "@/components/ui/asset-image";
 import type { AssetRow } from "@/db/schema";
+import { shortDateFormatter } from "@/lib/intl-formatters";
 import { uploadAsset } from "@/lib/upload-asset";
 import { useAssetsStore } from "@/stores/assets-store";
 import { ActionButton, IconButton } from "@/components/ui/primitives";
@@ -115,6 +116,8 @@ export function AssetsSection() {
               : "Upload"}
           </ActionButton>
           <input
+            aria-label="Subir imágenes"
+            id="assets-upload-input"
             ref={inputRef}
             accept="image/*"
             className="hidden"
@@ -222,9 +225,7 @@ export function AssetsSection() {
                 <dt className="text-on-surface-variant">Subido</dt>
                 <dd className="font-medium text-on-surface">
                   {active.createdAt
-                    ? new Intl.DateTimeFormat("es", { dateStyle: "short" }).format(
-                        new Date(active.createdAt)
-                      )
+                    ? shortDateFormatter.format(new Date(active.createdAt))
                     : "—"}
                 </dd>
               </dl>

@@ -27,10 +27,10 @@ import {
   WorkflowStep,
 } from "@/lib/dashboard-data";
 import { getDefaultContent } from "@/lib/default-content";
+import { getVisibleEditorTabs } from "@/lib/template-registry";
 import {
   getSectionByAnchor,
   getSectionScrollHref,
-  getVisibleEditorTabs,
   restoreNavItem,
 } from "@/lib/template-sections";
 import { formatBlogDate } from "@/lib/blog-slug";
@@ -632,8 +632,10 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     set({ saveStatus: "saving" });
 
     try {
-      await persistLandingMeta(id, landing);
-      await persistAllSections(id, landing.content);
+      await Promise.all([
+        persistLandingMeta(id, landing),
+        persistAllSections(id, landing.content),
+      ]);
       await patchSection(`/api/landings/${id}`, { published: true });
       set((state) => ({
         saveStatus: "saved",

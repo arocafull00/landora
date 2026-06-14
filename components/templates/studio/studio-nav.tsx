@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { X, Menu } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
@@ -29,20 +29,20 @@ export function StudioNav({
 
   return (
     <>
-      <motion.nav
+      <m.nav
         className={`fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-10 lg:px-16${topOffset > 0 ? "" : " top-0"}`}
         style={{
           ...(topOffset > 0 ? { top: topOffset } : {}),
           background: overHero
             ? "transparent"
             : "linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.8))",
-          backdropFilter: overHero ? "none" : "blur(12px)",
+          backdropFilter: overHero ? "none" : "blur(9px)",
           transition: "background 0.35s ease, backdrop-filter 0.35s ease",
         }}
       >
-        <a
+        <button
+          type="button"
           className={`text-xl font-bold tracking-tight transition-colors duration-300 ease-out ${overHero ? "text-white" : "text-[#1a1a1a]"}`}
-          href="#"
           style={{ fontFamily: "var(--font-syne)" }}
         >
           <TemplateNavBrand
@@ -50,7 +50,7 @@ export function StudioNav({
             brandLogoImage={brandLogoImage}
             brandLogoType={brandLogoType}
           />
-        </a>
+        </button>
 
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
@@ -79,11 +79,11 @@ export function StudioNav({
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-      </motion.nav>
+      </m.nav>
 
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -91,7 +91,7 @@ export function StudioNav({
             transition={{ duration: 0.25 }}
           >
             {navLinks.map((link, i) => (
-              <motion.a
+              <m.a
                 className="text-2xl font-semibold text-[#1a1a1a] transition-colors hover:text-[#8b7355]"
                 href={link.href}
                 key={link.id}
@@ -107,9 +107,9 @@ export function StudioNav({
                 transition={{ duration: 0.3, delay: i * 0.06 }}
               >
                 {link.label}
-              </motion.a>
+              </m.a>
             ))}
-            <motion.a
+            <m.a
               className="mt-6 rounded-full bg-[#1a1a1a] px-8 py-3 text-sm font-semibold text-white"
               href="#contacto"
               onClick={(event) =>
@@ -120,8 +120,8 @@ export function StudioNav({
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}
             >
               {ctaLabel || "Reservar cita"}
-            </motion.a>
-          </motion.div>
+            </m.a>
+          </m.div>
         )}
       </AnimatePresence>
     </>

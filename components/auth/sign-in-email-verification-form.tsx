@@ -45,7 +45,6 @@ export function SignInEmailVerificationForm({
             type="text"
             inputMode="numeric"
             autoComplete="one-time-code"
-            autoFocus
             required
             className={inputClass}
           />
@@ -54,8 +53,8 @@ export function SignInEmailVerificationForm({
           )}
         </div>
 
-        {globalErrors?.map((err, i) => (
-          <p key={i} className="text-body-sm text-error">
+        {globalErrors?.map((err) => (
+          <p key={err.message} className="text-body-sm text-error">
             {err.message}
           </p>
         ))}

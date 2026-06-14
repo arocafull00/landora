@@ -58,10 +58,10 @@ export function PortfolioWorkHistoryItemEditor({
         label="Logros (uno por línea)"
         onChange={(value) =>
           onChange({
-            highlights: value
-              .split("\n")
-              .map((line) => line.trim())
-              .filter(Boolean),
+            highlights: value.split("\n").flatMap((line) => {
+              const trimmed = line.trim();
+              return trimmed ? [trimmed] : [];
+            }),
           })
         }
         rows={5}
@@ -71,10 +71,10 @@ export function PortfolioWorkHistoryItemEditor({
         label="Tecnologías (separadas por coma)"
         onChange={(value) =>
           onChange({
-            technologies: value
-              .split(",")
-              .map((tech) => tech.trim())
-              .filter(Boolean),
+            technologies: value.split(",").flatMap((tech) => {
+              const trimmed = tech.trim();
+              return trimmed ? [trimmed] : [];
+            }),
           })
         }
         value={item.technologies.join(", ")}
@@ -133,17 +133,3 @@ function TextArea({
   );
 }
 
-function createEmptyWorkHistoryItem(): WorkExperienceItem {
-  return {
-    id: crypto.randomUUID(),
-    dateRange: "",
-    location: "",
-    company: "",
-    title: "",
-    summary: "",
-    highlights: [],
-    technologies: [],
-  };
-}
-
-export { createEmptyWorkHistoryItem };

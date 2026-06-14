@@ -4,7 +4,6 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { StudioEditorSection } from "@/components/dashboard/sections/studio-editor-section";
-import { EditorTabsBar } from "@/components/dashboard/editor-tabs-bar";
 import { PortfolioEditorSection } from "@/components/dashboard/sections/portfolio-editor-section";
 import { RistoranteEditorSection } from "@/components/dashboard/sections/ristorante-editor-section";
 import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
@@ -19,7 +18,7 @@ import { VelarContactEditorPanel } from "@/components/dashboard/velar-contact-ed
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { dispatchEditorFocusElement } from "@/lib/editor-element-focus";
-import { getEditorScrollTarget, getVisibleEditorTabs } from "@/lib/template-sections";
+import { getEditorScrollTarget } from "@/lib/template-sections";
 
 export function EditorSection() {
   const {
@@ -70,11 +69,6 @@ export function EditorSection() {
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
 
-  const tabs = getVisibleEditorTabs(
-    activeLanding.template,
-    activeLanding.content.hiddenSections,
-    isAdmin,
-  );
   const scrollTarget = getEditorScrollTarget(activeLanding.template, activeEditorTab);
 
   return (
@@ -85,13 +79,6 @@ export function EditorSection() {
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
       scrollTarget={scrollTarget}
-      tabs={
-        <EditorTabsBar
-          activeTab={activeEditorTab}
-          onTabChange={(v) => setActiveEditorTab(v as typeof activeEditorTab)}
-          tabs={tabs}
-        />
-      }
       form={
         <>
           {activeEditorTab === "Admin" && isAdmin ? (

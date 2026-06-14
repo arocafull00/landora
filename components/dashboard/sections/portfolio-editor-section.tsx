@@ -3,8 +3,6 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
-import { EditorTabsBar } from "@/components/dashboard/editor-tabs-bar";
-import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
@@ -13,10 +11,8 @@ import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import {
-  createEmptyWorkHistoryItem,
-  PortfolioWorkHistoryItemEditor,
-} from "@/components/dashboard/portfolio-work-history-item-editor";
+import { createEmptyWorkHistoryItem } from "@/components/dashboard/create-empty-work-history-item";
+import { PortfolioWorkHistoryItemEditor } from "@/components/dashboard/portfolio-work-history-item-editor";
 
 export function PortfolioEditorSection() {
   const {
@@ -39,12 +35,6 @@ export function PortfolioEditorSection() {
 
   if (!activeLanding) return null;
 
-  const tabs = getVisibleEditorTabs(
-    activeLanding.template,
-    activeLanding.content.hiddenSections,
-    isAdmin,
-  );
-
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
 
@@ -60,13 +50,6 @@ export function PortfolioEditorSection() {
       onPublish={publishActive}
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
-      tabs={
-        <EditorTabsBar
-          activeTab={activeEditorTab}
-          onTabChange={(v) => setActiveEditorTab(v)}
-          tabs={tabs}
-        />
-      }
       form={
         <>
           {activeEditorTab === "Admin" && isAdmin ? (
@@ -387,10 +370,10 @@ function TagsField({
         className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
         onChange={(event) =>
           onChange(
-            event.target.value
-              .split(",")
-              .map((t) => t.trim())
-              .filter(Boolean),
+            event.target.value.split(",").flatMap((item) => {
+              const trimmed = item.trim();
+              return trimmed ? [trimmed] : [];
+            }),
           )
         }
         placeholder="React, TypeScript, Node.js"

@@ -7,7 +7,7 @@ function isScrollableElement(el: Element) {
   return isScrollableOverflow(overflowY) || isScrollableOverflow(overflow);
 }
 
-export function getScrollParents(el: HTMLElement | null) {
+function getScrollParents(el: HTMLElement | null) {
   const targets: (Window | Element)[] = [window];
   let node = el?.parentElement;
 

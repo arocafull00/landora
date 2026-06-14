@@ -108,13 +108,3 @@ function TextArea({
   );
 }
 
-export function createEmptyServiceMenuItem(): ServiceMenuItem {
-  return {
-    id: crypto.randomUUID(),
-    category: "",
-    name: "",
-    description: "",
-    price: "",
-    duration: "",
-  };
-}

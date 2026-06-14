@@ -1,7 +1,7 @@
 const LEGACY_TEMPLATE_ASSET_PATH = "/landora/templates/toll-story/";
 const TEMPLATE_ASSET_PATH = "/landora/templates/velar/";
 
-export const VELAR_BG_IMG =
+const VELAR_BG_IMG =
   "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260603_073200_7082add5-f1f8-4873-8696-d6f78a44089b.png&w=1920&q=85";
 
 export function remapLegacyTemplateAssetUrl(url: string): string {
@@ -21,7 +21,7 @@ export const VELAR_ASSETS = {
   toll7: "https://res.cloudinary.com/dqwkkrqal/image/upload/v1780849463/landora/templates/velar/toll7.jpg",
 } as const;
 
-export function isVelarHouseAsset(url: string) {
+function isVelarHouseAsset(url: string) {
   if (!url) return false;
   return url.includes("/velar/hero.png") || url.endsWith("/hero.png");
 }

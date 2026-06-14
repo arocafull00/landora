@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { X, Menu } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { m, AnimatePresence } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
@@ -32,12 +32,12 @@ export function FloristeriaNav({
         style={{
           ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
           background: "linear-gradient(to bottom, rgba(250,250,247,0.95), rgba(250,250,247,0.85))",
-          backdropFilter: "blur(12px)",
+          backdropFilter: "blur(9px)",
         }}
       >
-        <a
+        <button
+          type="button"
           className="text-xl font-bold tracking-tight text-[#2D5016]"
-          href="#"
           style={{ fontFamily: "var(--font-cormorant)" }}
         >
           <TemplateNavBrand
@@ -45,7 +45,7 @@ export function FloristeriaNav({
             brandLogoImage={brandLogoImage}
             brandLogoType={brandLogoType}
           />
-        </a>
+        </button>
 
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
@@ -78,7 +78,7 @@ export function FloristeriaNav({
 
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#FAFAF7]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -86,7 +86,7 @@ export function FloristeriaNav({
             transition={{ duration: 0.25 }}
           >
             {navLinks.map((link, i) => (
-              <motion.a
+              <m.a
                 className="text-2xl font-semibold text-[#1a1a1a] transition-colors hover:text-[#2D5016]"
                 href={link.href}
                 key={link.id}
@@ -102,9 +102,9 @@ export function FloristeriaNav({
                 transition={{ duration: 0.3, delay: i * 0.06 }}
               >
                 {link.label}
-              </motion.a>
+              </m.a>
             ))}
-            <motion.a
+            <m.a
               className="mt-6 rounded-full bg-[#2D5016] px-8 py-3 text-sm font-semibold text-white"
               href="#contacto"
               onClick={(event) =>
@@ -115,8 +115,8 @@ export function FloristeriaNav({
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}
             >
               {ctaLabel || "Hacer pedido"}
-            </motion.a>
-          </motion.div>
+            </m.a>
+          </m.div>
         )}
       </AnimatePresence>
     </>

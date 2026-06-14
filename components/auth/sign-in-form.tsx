@@ -48,10 +48,7 @@ export function SignInForm() {
 
     if (signIn.status === "complete") {
       await handleFinalize();
-      return;
-    }
-
-    if (signIn.status === "needs_second_factor") {
+    } else if (signIn.status === "needs_second_factor") {
       await sendEmailVerificationCode();
     }
   };
@@ -59,9 +56,9 @@ export function SignInForm() {
   const handleVerifyCode = async (code: string) => {
     await signIn.mfa.verifyEmailCode({ code });
 
-    if (signIn.status !== "complete") return;
-
-    await handleFinalize();
+    if (signIn.status === "complete") {
+      await handleFinalize();
+    }
   };
 
   if (signIn.status === "needs_second_factor") {
@@ -94,7 +91,6 @@ export function SignInForm() {
           name="email"
           type="email"
           autoComplete="email"
-          autoFocus
           required
           className={inputClass}
         />
@@ -128,8 +124,8 @@ export function SignInForm() {
         )}
       </div>
 
-      {errors?.global?.map((err, i) => (
-        <p key={i} className="text-body-sm text-error">
+      {errors?.global?.map((err) => (
+        <p key={err.message} className="text-body-sm text-error">
           {err.message}
         </p>
       ))}

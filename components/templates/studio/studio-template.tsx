@@ -5,6 +5,7 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
+import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { StudioAosInit } from "@/components/templates/studio/studio-aos-init";
 import { StudioNav } from "@/components/templates/studio/studio-nav";
 import { StudioHero } from "@/components/templates/studio/studio-hero";
@@ -66,11 +67,12 @@ export function StudioTemplate({
   }, [scrollContainer, updateNavState]);
 
   return (
-    <div
-      ref={rootRef}
-      className="relative"
-      style={{ backgroundColor: "#faf9f7", overflowX: "clip" }}
-    >
+    <TemplateLazyMotion>
+      <div
+        ref={rootRef}
+        className="relative"
+        style={{ backgroundColor: "#faf9f7", overflowX: "clip" }}
+      >
       <StudioAosInit rootRef={rootRef} />
 
       <StudioNav
@@ -103,5 +105,6 @@ export function StudioTemplate({
 
       <StudioContactSection content={content} />
     </div>
+    </TemplateLazyMotion>
   );
 }

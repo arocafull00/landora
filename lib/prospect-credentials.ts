@@ -6,10 +6,10 @@ function normalizeName(value: string) {
 }
 
 function nameWords(name: string) {
-  return normalizeName(name)
-    .split(/\s+/)
-    .map((word) => word.replace(/[^a-zA-Z0-9]/g, ""))
-    .filter(Boolean);
+  return normalizeName(name).split(/\s+/).flatMap((word) => {
+    const cleaned = word.replace(/[^a-zA-Z0-9]/g, "");
+    return cleaned ? [cleaned] : [];
+  });
 }
 
 export function buildProspectEmail(name: string) {

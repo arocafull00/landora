@@ -40,7 +40,7 @@ export function RistoranteChefCard({
         <p className="mt-1 text-sm font-medium text-[#8B2500]">{member.role}</p>
       )}
       {member.bio && (
-        <p className="mt-3 text-sm leading-relaxed text-[#1C1917]/60">{member.bio}</p>
+        <p className="mt-3 text-sm leading-relaxed text-[#1C1917]/70">{member.bio}</p>
       )}
     </article>
   );

@@ -31,17 +31,18 @@ export async function deleteCloudinaryAsset(
     "raw",
   ];
 
-  const tried = new Set<"image" | "video" | "raw">();
+  const uniqueResourceTypes = [...new Set(resourceTypes)];
 
-  for (const resourceType of resourceTypes) {
-    if (tried.has(resourceType)) continue;
-    tried.add(resourceType);
+  const results = await Promise.all(
+    uniqueResourceTypes.map((resourceType) =>
+      cloudinary.uploader.destroy(publicId, {
+        resource_type: resourceType,
+        invalidate: true,
+      })
+    )
+  );
 
-    const result = await cloudinary.uploader.destroy(publicId, {
-      resource_type: resourceType,
-      invalidate: true,
-    });
-
+  for (const result of results) {
     if (result.result === "ok") return true;
     if (result.result !== "not found") return false;
   }

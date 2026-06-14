@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
 
@@ -23,7 +23,7 @@ export function PortfolioHero({
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-transparent to-[#0a0a0a]" />
 
       <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 text-center">
-        <motion.p
+        <m.p
           className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-white/60"
           style={{ fontFamily: "var(--font-body)" }}
           initial={{ opacity: 0, y: 16 }}
@@ -31,9 +31,9 @@ export function PortfolioHero({
           transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
         >
           {content.hero.eyebrow}
-        </motion.p>
+        </m.p>
 
-        <motion.h1
+        <m.h1
           className="mb-6 text-4xl font-extrabold leading-[1.05] text-white sm:text-4xl md:text-7xl lg:text-[clamp(56px,7vw,88px)]"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           initial={{ opacity: 0, y: 24 }}
@@ -41,9 +41,9 @@ export function PortfolioHero({
           transition={{ duration: 0.8, delay: 0.35, ease: easeOut }}
         >
           {content.hero.title}
-        </motion.h1>
+        </m.h1>
 
-        <motion.p
+        <m.p
           className="mb-10 max-w-lg text-lg leading-relaxed text-white/75"
           style={{ fontFamily: "var(--font-body)" }}
           initial={{ opacity: 0, y: 16 }}
@@ -51,9 +51,9 @@ export function PortfolioHero({
           transition={{ duration: 0.6, delay: 0.55, ease: easeOut }}
         >
           {content.hero.subtitle}
-        </motion.p>
+        </m.p>
 
-        <motion.a
+        <m.a
           className="rounded-full bg-white px-8 py-3.5 text-sm font-semibold tracking-wide text-[#0a0a0a] transition-all hover:bg-white/90 hover:shadow-lg"
           href="#contacto"
           initial={{ opacity: 0, y: 16 }}
@@ -61,7 +61,7 @@ export function PortfolioHero({
           transition={{ duration: 0.6, delay: 0.7, ease: easeOut }}
         >
           {content.hero.ctaLabel || "Ver proyectos"}
-        </motion.a>
+        </m.a>
       </div>
     </section>
   );

@@ -3,8 +3,6 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
 import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
-import { EditorTabsBar } from "@/components/dashboard/editor-tabs-bar";
-import { getVisibleEditorTabs } from "@/lib/template-sections";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
@@ -38,11 +36,6 @@ export function OficioProEditorSection() {
 
   if (!activeLanding) return null;
 
-  const tabs = getVisibleEditorTabs(
-    activeLanding.template,
-    activeLanding.content.hiddenSections,
-    isAdmin,
-  );
   const saveActive = () => saveLanding(activeLanding.id);
   const publishActive = () => publishLanding(activeLanding.id);
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
@@ -63,13 +56,6 @@ export function OficioProEditorSection() {
       onPublish={publishActive}
       onSave={saveActive}
       onSelectLanding={setActiveLandingId}
-      tabs={
-        <EditorTabsBar
-          activeTab={activeEditorTab}
-          onTabChange={(value) => setActiveEditorTab(value)}
-          tabs={tabs}
-        />
-      }
       form={
         <>
           {activeEditorTab === "Admin" && isAdmin ? (

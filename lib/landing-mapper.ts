@@ -1,6 +1,7 @@
 import type { LandingWithSections } from "@/data/landing-pages";
 import type { Landing, LandingContent } from "@/lib/dashboard-data";
 import { parseSocialLinks } from "@/lib/footer-content";
+import { shortDateTimeFormatter } from "@/lib/intl-formatters";
 import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
 import type { User } from "@/db/schema";
 
@@ -10,17 +11,17 @@ function mapImage(url: string | null | undefined) {
 }
 
 function parseMultilineList(value: string) {
-  return value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
+  return value.split("\n").flatMap((line) => {
+    const trimmed = line.trim();
+    return trimmed ? [trimmed] : [];
+  });
 }
 
 function parseCommaList(value: string) {
-  return value
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
+  return value.split(",").flatMap((item) => {
+    const trimmed = item.trim();
+    return trimmed ? [trimmed] : [];
+  });
 }
 
 function uniqueBySortOrder<T extends { sortOrder: number }>(items: T[]) {
@@ -154,9 +155,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
 
 export function toLandingView(row: LandingWithSections, user: User | undefined): Landing {
   const updatedAt = row.updatedAt
-    ? new Intl.DateTimeFormat("es", { dateStyle: "short", timeStyle: "short" }).format(
-        new Date(row.updatedAt)
-      )
+    ? shortDateTimeFormatter.format(new Date(row.updatedAt))
     : "—";
 
   return {

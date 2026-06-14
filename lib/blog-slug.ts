@@ -1,3 +1,5 @@
+import { mediumDateFormatter } from "@/lib/intl-formatters";
+
 export function slugifyBlogTitle(text: string): string {
   return text
     .toLowerCase()
@@ -10,7 +12,7 @@ export function slugifyBlogTitle(text: string): string {
 export function formatBlogDate(value: Date | string | null | undefined): string {
   if (!value) return "";
 
-  return new Intl.DateTimeFormat("es", { dateStyle: "medium" }).format(new Date(value));
+  return mediumDateFormatter.format(new Date(value));
 }
 
 export function normalizeLandingSlug(slug: string): string {

@@ -6,7 +6,8 @@ import {
   PreviewToolbar,
   type PreviewDevice,
 } from "@/components/dashboard/preview-toolbar";
-import { MOBILE_WIDTH } from "@/components/dashboard/preview-utils";
+
+const MOBILE_WIDTH = 390;
 import { addEditorFocusElementListener } from "@/lib/editor-element-focus";
 import {
   postPreviewContent,
@@ -108,6 +109,7 @@ export function IframeLandingPreview({
             className="h-full w-full"
             onLoad={sendContent}
             ref={iframeRef}
+            sandbox="allow-scripts allow-same-origin"
             src={`/preview/${landingId}?embed=1`}
             title="Landing preview"
           />
