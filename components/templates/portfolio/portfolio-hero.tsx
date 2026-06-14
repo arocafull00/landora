@@ -1,10 +1,10 @@
 "use client";
 
-import { m } from "motion/react";
+import { ChevronDown } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
-import { HeroBackground } from "@/components/ui/hero-background";
-
-const easeOut = [0.16, 1, 0.3, 1] as const;
+import { PortfolioHeroAccentLines } from "@/components/templates/portfolio/portfolio-hero-accent-lines";
+import { PortfolioHeroParticles } from "@/components/templates/portfolio/portfolio-hero-particles";
+import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
 export function PortfolioHero({
   content,
@@ -17,52 +17,58 @@ export function PortfolioHero({
     <section
       ref={heroRef}
       id="hero"
-      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-[#0a0a0a]"
+      className="relative min-h-[100dvh] overflow-hidden bg-[#0a0a0a] text-[#fafafa]"
     >
-      <HeroBackground className="opacity-30" src={content.hero.image} template="portfolio" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-transparent to-[#0a0a0a]" />
+      <PortfolioHeroParticles />
+      <PortfolioHeroAccentLines />
 
-      <div className="relative z-10 flex w-full max-w-4xl flex-col items-center px-6 text-center">
-        <m.p
-          className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-white/60"
+      <main className="pointer-events-none absolute inset-0 grid place-items-center px-6 text-center">
+        <div>
+          {content.hero.eyebrow ? (
+            <p
+              className="mb-3.5 text-xs uppercase tracking-[0.14em] text-[#a1a1aa]"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {content.hero.eyebrow}
+            </p>
+          ) : null}
+
+          <h1
+            className="m-0 text-[clamp(32px,8vw,88px)] font-semibold leading-[0.95] text-[#fafafa]"
+            style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
+          >
+            {content.hero.title}
+          </h1>
+
+          {content.hero.subtitle ? (
+            <p
+              className="mt-[18px] text-[clamp(14px,2.2vw,18px)] text-[#a1a1aa]"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {content.hero.subtitle}
+            </p>
+          ) : null}
+
+          <a
+            className="pointer-events-auto mt-10 inline-block rounded-full bg-white px-8 py-3.5 text-sm font-semibold tracking-wide text-[#0a0a0a] transition-all hover:bg-white/90 hover:shadow-lg"
+            href="#contacto"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
+            {content.hero.ctaLabel || "Ver proyectos"}
+          </a>
+        </div>
+      </main>
+
+      <section className="absolute inset-x-0 bottom-0 grid place-items-center gap-3 border-t border-[#27272a] px-6 py-8 text-center">
+        <TemplateNavAnchor
+          className="inline-flex items-center gap-1.5 text-sm text-[#a1a1aa] transition-colors hover:text-[#fafafa]"
+          href="#experiencia"
           style={{ fontFamily: "var(--font-body)" }}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: easeOut }}
         >
-          {content.hero.eyebrow}
-        </m.p>
-
-        <m.h1
-          className="mb-6 text-4xl font-extrabold leading-[1.05] text-white sm:text-4xl md:text-7xl lg:text-[clamp(56px,7vw,88px)]"
-          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.35, ease: easeOut }}
-        >
-          {content.hero.title}
-        </m.h1>
-
-        <m.p
-          className="mb-10 max-w-lg text-lg leading-relaxed text-white/75"
-          style={{ fontFamily: "var(--font-body)" }}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.55, ease: easeOut }}
-        >
-          {content.hero.subtitle}
-        </m.p>
-
-        <m.a
-          className="rounded-full bg-white px-8 py-3.5 text-sm font-semibold tracking-wide text-[#0a0a0a] transition-all hover:bg-white/90 hover:shadow-lg"
-          href="#contacto"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7, ease: easeOut }}
-        >
-          {content.hero.ctaLabel || "Ver proyectos"}
-        </m.a>
-      </div>
+          Show more
+          <ChevronDown size={16} aria-hidden />
+        </TemplateNavAnchor>
+      </section>
     </section>
   );
 }
