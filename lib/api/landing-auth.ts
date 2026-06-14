@@ -1,14 +1,19 @@
 import { getEffectiveClientId } from "@/lib/auth";
-import { getLandingPageByIdAndUserId } from "@/data/landing-pages";
+import {
+  getLandingPageById,
+  getLandingPageByIdAndUserId,
+} from "@/data/landing-pages";
+import { isAdmin } from "@/lib/is-admin";
 
 export async function getAuthorizedLanding(id: string) {
   const clientId = await getEffectiveClientId();
 
-  if (!clientId) return null;
+  if (clientId) {
+    const landing = await getLandingPageByIdAndUserId(id, clientId);
+    if (landing) return landing;
+  }
 
-  const landing = await getLandingPageByIdAndUserId(id, clientId);
+  if (!(await isAdmin())) return null;
 
-  if (!landing) return null;
-
-  return landing;
+  return (await getLandingPageById(id)) ?? null;
 }
