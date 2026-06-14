@@ -1,6 +1,6 @@
-import { getCurrentUser } from "@/data/users";
+import { checkAuth } from "@/lib/auth";
 
 export async function isAdmin(): Promise<boolean> {
-  const user = await getCurrentUser();
-  return user?.type === "admin";
+  const authError = await checkAuth();
+  return authError === null;
 }

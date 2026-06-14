@@ -11,7 +11,7 @@ import { getLandingPageById, updateLandingPage } from "@/data/landing-pages";
 import { isReservedSlug } from "@/lib/app-host";
 import { removeProjectDomain } from "@/lib/vercel-domains";
 import { seedLandingSections, ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
-import { isAdmin } from "@/lib/is-admin";
+import { checkAuth } from "@/lib/auth";
 const createUserSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   email: z.string().email("Email inválido"),
@@ -21,6 +21,9 @@ const createUserSchema = z.object({
 type ActionResult = { success: true } | { error: string };
 
 export async function createUser(formData: FormData): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
+
   const parsed = createUserSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -90,9 +93,8 @@ const createLandingSchema = z.object({
 });
 
 export async function createLandingForUser(formData: FormData): Promise<ActionResult> {
-  if (!(await isAdmin())) {
-    return { error: "No autorizado" };
-  }
+  const authError = await checkAuth();
+  if (authError) return authError;
 
   const parsed = createLandingSchema.safeParse({
     userId: formData.get("userId"),
@@ -143,9 +145,8 @@ export async function setLandingPublished(
   landingId: string,
   published: boolean,
 ): Promise<ActionResult> {
-  if (!(await isAdmin())) {
-    return { error: "No autorizado" };
-  }
+  const authError = await checkAuth();
+  if (authError) return authError;
 
   const parsed = landingIdSchema.safeParse(landingId);
   if (!parsed.success) {
@@ -174,9 +175,8 @@ export async function setLandingPublished(
 }
 
 export async function deleteLanding(landingId: string): Promise<ActionResult> {
-  if (!(await isAdmin())) {
-    return { error: "No autorizado" };
-  }
+  const authError = await checkAuth();
+  if (authError) return authError;
 
   const parsed = landingIdSchema.safeParse(landingId);
   if (!parsed.success) {
@@ -204,9 +204,8 @@ export async function deleteLanding(landingId: string): Promise<ActionResult> {
 }
 
 export async function deleteUser(userId: string): Promise<ActionResult> {
-  if (!(await isAdmin())) {
-    return { error: "No autorizado" };
-  }
+  const authError = await checkAuth();
+  if (authError) return authError;
 
   const parsed = userIdSchema.safeParse(userId);
   if (!parsed.success) {

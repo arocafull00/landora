@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { useTransition } from "react";
 import { toast } from "react-toastify";
@@ -9,6 +8,7 @@ import { Icon } from "@/components/ui/icon";
 import { LandingItem } from "@/components/admin/landing-item";
 import { CreateLandingForm } from "@/components/admin/create-landing-form";
 import { deleteUser } from "@/app/actions/admin";
+import { startImpersonation } from "@/app/actions/impersonation";
 import type { User, LandingPage } from "@/db/schema";
 import {
   Dialog,
@@ -24,6 +24,7 @@ export function UserRow({ user }: { user: UserWithLandings }) {
   const [showForm, setShowForm] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [isDeletePending, startDeleteTransition] = useTransition();
+  const [isImpersonatePending, startImpersonateTransition] = useTransition();
 
   const publishedCount = user.landings.filter((lp) => lp.published).length;
   const createdAt = user.createdAt
@@ -97,13 +98,18 @@ export function UserRow({ user }: { user: UserWithLandings }) {
             )}
           </div>
           <div className="mt-3 flex items-center justify-end gap-2">
-            <Link
-              href={`/admin/impersonate/${user.id}`}
-              className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-outline-variant px-3 font-label text-label-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-on-surface"
+            <ActionButton
+              variant="secondary"
+              disabled={isImpersonatePending}
+              onClick={() =>
+                startImpersonateTransition(async () => {
+                  await startImpersonation(user.id);
+                })
+              }
             >
               <Icon name="web" className="h-4 w-4" />
               Editar dashboard
-            </Link>
+            </ActionButton>
             <ActionButton
               variant="secondary"
               disabled={isDeletePending}

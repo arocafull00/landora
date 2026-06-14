@@ -8,6 +8,23 @@ import { getCurrentUser } from "@/data/users";
 
 export const IMPERSONATION_COOKIE = "impersonating";
 
+export async function checkAuth(): Promise<{ error: string } | null> {
+  const { userId } = await auth();
+  if (!userId) return { error: "No autorizado" };
+
+  const user = await getCurrentUser();
+  if (user?.type !== "admin") return { error: "No autorizado" };
+
+  return null;
+}
+
+export async function requireAuth(): Promise<{ error: string } | { authorized: true }> {
+  const { userId } = await auth();
+  if (!userId) return { error: "No autorizado" };
+
+  return { authorized: true };
+}
+
 async function resolveImpersonatedUser() {
   const { userId } = await auth();
   if (!userId) return null;

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { getImpersonationContext } from "@/lib/auth";
+import { exitImpersonation } from "@/app/actions/impersonation";
 
 export async function ImpersonationBanner() {
   const ctx = await getImpersonationContext();
@@ -11,12 +11,14 @@ export async function ImpersonationBanner() {
         Editando como{" "}
         <span className="font-bold">{ctx.clientName}</span>
       </p>
-      <Link
-        href="/admin/impersonate/exit"
-        className="rounded-md bg-on-primary/10 px-3 py-1 font-label text-label-sm font-medium text-on-primary transition-colors hover:bg-on-primary/20"
-      >
-        Salir
-      </Link>
+      <form action={exitImpersonation}>
+        <button
+          type="submit"
+          className="rounded-md bg-on-primary/10 px-3 py-1 font-label text-label-sm font-medium text-on-primary transition-colors hover:bg-on-primary/20"
+        >
+          Salir
+        </button>
+      </form>
     </div>
   );
 }

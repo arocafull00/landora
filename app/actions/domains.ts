@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { getEffectiveClientId } from "@/lib/auth";
+import { getEffectiveClientId, requireAuth } from "@/lib/auth";
 import { getLandingPageByUserId } from "@/data/landing-pages";
 import {
   isCustomDomainTaken,
@@ -50,6 +50,9 @@ async function getOwnedLanding() {
 }
 
 export async function getDomainStatus(): Promise<DomainStatus | { error: string }> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return authResult;
+
   const landing = await getOwnedLanding();
   if (!landing) {
     return { error: "No tienes ninguna landing asignada" };
@@ -91,6 +94,9 @@ export async function getDomainStatus(): Promise<DomainStatus | { error: string 
 }
 
 export async function assignCustomDomain(domain: string): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return authResult;
+
   const landing = await getOwnedLanding();
   if (!landing) {
     return { error: "No tienes ninguna landing asignada" };
@@ -140,6 +146,9 @@ export async function assignCustomDomain(domain: string): Promise<ActionResult> 
 }
 
 export async function removeCustomDomain(): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return authResult;
+
   const landing = await getOwnedLanding();
   if (!landing) {
     return { error: "No tienes ninguna landing asignada" };

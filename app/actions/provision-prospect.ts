@@ -8,7 +8,7 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { createProspectLanding } from "@/data/provision-prospect-landing";
 import type { TemplateId } from "@/lib/dashboard-data";
-import { isAdmin } from "@/lib/is-admin";
+import { checkAuth } from "@/lib/auth";
 import {
   buildProspectPreview,
   parseProspectJson,
@@ -88,9 +88,8 @@ export async function previewProspectImport(
   json: string,
   templateOverride?: TemplateId
 ): Promise<PreviewSuccess | ActionError> {
-  if (!(await isAdmin())) {
-    return { error: "No autorizado" };
-  }
+  const authError = await checkAuth();
+  if (authError) return authError;
 
   const parsedInput = previewInputSchema.safeParse({ json, template: templateOverride });
   if (!parsedInput.success) {
@@ -141,9 +140,8 @@ export async function provisionProspectUser(payload: {
   email: string;
   password: string;
 }): Promise<{ userId: string; clerkUserId: string } | ActionError> {
-  if (!(await isAdmin())) {
-    return { error: "No autorizado" };
-  }
+  const authError = await checkAuth();
+  if (authError) return authError;
 
   const parsed = provisionUserSchema.safeParse(payload);
   if (!parsed.success) {
@@ -188,9 +186,8 @@ export async function provisionProspectLanding(payload: {
   template: TemplateId;
   json: string;
 }): Promise<{ landingId: string; slug: string } | ActionError> {
-  if (!(await isAdmin())) {
-    return { error: "No autorizado" };
-  }
+  const authError = await checkAuth();
+  if (authError) return authError;
 
   const parsed = provisionLandingSchema.safeParse(payload);
   if (!parsed.success) {
@@ -229,9 +226,8 @@ export async function rollbackProspectUser(payload: {
   userId: string;
   clerkUserId: string;
 }): Promise<{ success: true } | ActionError> {
-  if (!(await isAdmin())) {
-    return { error: "No autorizado" };
-  }
+  const authError = await checkAuth();
+  if (authError) return authError;
 
   const parsed = rollbackUserSchema.safeParse(payload);
   if (!parsed.success) {
