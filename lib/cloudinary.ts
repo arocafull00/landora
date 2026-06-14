@@ -1,10 +1,12 @@
 import { v2 as cloudinary } from "cloudinary";
 
-cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+function ensureCloudinaryConfigured() {
+  cloudinary.config({
+    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+}
 
 export function getAssetFolder(userId: string) {
   return `landora/tenants/${userId}`;
@@ -20,6 +22,8 @@ export async function deleteCloudinaryAsset(
   publicId: string,
   mimeType?: string | null
 ): Promise<boolean> {
+  ensureCloudinaryConfigured();
+
   const resourceTypes: Array<"image" | "video" | "raw"> = [
     getCloudinaryResourceType(mimeType ?? ""),
     "image",
