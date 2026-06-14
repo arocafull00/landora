@@ -245,6 +245,32 @@ export const landingWorkHistory = pgTable("landing_work_history", {
   technologies: text("technologies").notNull().default(""),
 });
 
+export const blogPosts = pgTable("blog_posts", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id")
+    .notNull()
+    .references(() => landingPages.id, { onDelete: "cascade" }),
+  title: text("title").notNull().default(""),
+  slug: text("slug").notNull().default(""),
+  excerpt: text("excerpt").notNull().default(""),
+  body: text("body").notNull().default(""),
+  heroImage: text("hero_image").notNull().default(""),
+  published: boolean("published").notNull().default(false),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const blogConfig = pgTable("blog_config", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id")
+    .notNull()
+    .unique()
+    .references(() => landingPages.id, { onDelete: "cascade" }),
+  title: text("title").notNull().default(""),
+  description: text("description").notNull().default(""),
+});
+
 export const assets = pgTable("assets", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id")
@@ -281,6 +307,8 @@ export const landingPagesRelations = relations(landingPages, ({ one, many }) => 
   team: many(landingTeam),
   serviceMenu: many(landingServiceMenu),
   workHistory: many(landingWorkHistory),
+  blogPosts: many(blogPosts),
+  blogConfig: one(blogConfig, { fields: [landingPages.id], references: [blogConfig.landingId] }),
 }));
 
 export const landingSeoRelations = relations(landingSeo, ({ one }) => ({
@@ -351,6 +379,14 @@ export const landingWorkHistoryRelations = relations(landingWorkHistory, ({ one 
   landing: one(landingPages, { fields: [landingWorkHistory.landingId], references: [landingPages.id] }),
 }));
 
+export const blogPostsRelations = relations(blogPosts, ({ one }) => ({
+  landing: one(landingPages, { fields: [blogPosts.landingId], references: [landingPages.id] }),
+}));
+
+export const blogConfigRelations = relations(blogConfig, ({ one }) => ({
+  landing: one(landingPages, { fields: [blogConfig.landingId], references: [landingPages.id] }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type LandingPage = typeof landingPages.$inferSelect;
@@ -374,3 +410,6 @@ export type LandingServiceMenuItem = typeof landingServiceMenu.$inferSelect;
 export type LandingWorkHistoryItem = typeof landingWorkHistory.$inferSelect;
 export type AssetRow = typeof assets.$inferSelect;
 export type NewAsset = typeof assets.$inferInsert;
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type NewBlogPost = typeof blogPosts.$inferInsert;
+export type BlogConfigRow = typeof blogConfig.$inferSelect;

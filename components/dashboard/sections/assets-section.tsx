@@ -7,6 +7,7 @@ import { uploadAsset } from "@/lib/upload-asset";
 import { useAssetsStore } from "@/stores/assets-store";
 import { ActionButton, IconButton } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
+import { AssetNameField } from "@/components/dashboard/asset-name-field";
 import { PendingFileRow, type PendingFile } from "./pending-file-row";
 import {
   DropdownMenu,
@@ -210,9 +211,7 @@ export function AssetsSection() {
               </div>
             </div>
             <div className="space-y-unit-lg p-unit-md">
-              <h4 className="wrap-break-word text-body-md font-semibold leading-tight text-on-surface">
-                {active.name || active.publicId}
-              </h4>
+              <AssetNameField assetId={active.id} name={active.name} />
               <dl className="grid grid-cols-[100px_1fr] gap-y-unit-sm text-body-sm">
                 <dt className="text-on-surface-variant">Tipo</dt>
                 <dd className="font-medium text-on-surface">{active.mimeType || "—"}</dd>

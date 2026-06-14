@@ -22,7 +22,7 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
   const templateId = activeLanding.template as TemplateId;
   const navOnlyAnchors = NAV_ONLY_HEADING_ANCHORS[templateId] ?? [];
   const defaults = SECTION_HEADING_DEFAULTS[templateId] ?? {};
-  const scrollTargets = getNavScrollTargets(templateId);
+  const scrollTargets = getNavScrollTargets(templateId, activeLanding.slug);
   const nav = activeLanding.content.nav;
 
   return (

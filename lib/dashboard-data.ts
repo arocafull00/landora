@@ -4,7 +4,7 @@ import { VELAR_ASSETS } from "@/lib/velar-assets";
 
 export { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 
-export type DashboardView = "editor" | "assets" | "domain";
+export type DashboardView = "editor" | "assets" | "domain" | "blog";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
 
@@ -238,14 +238,22 @@ export type FaqItem = {
   answer: string;
 };
 
+export type BlogConfig = {
+  title: string;
+  description: string;
+};
+
 export type Post = {
   id: string;
+  landingId: string;
   title: string;
   slug: string;
   excerpt: string;
   body: string;
+  heroImage: string;
   status: LandingStatus;
   edited: string;
+  publishedAt?: string;
 };
 
 export type Presentation = {
@@ -311,6 +319,7 @@ export const dashboardViews: Array<{
   { id: "editor", label: "Editor", icon: "document" },
   { id: "assets", label: "Imágenes", icon: "image" },
   { id: "domain", label: "Dominio", icon: "link" },
+  { id: "blog", label: "Blog", icon: "document" },
 ];
 
 export function isDashboardView(value: string): value is DashboardView {
@@ -382,26 +391,7 @@ export const initialLandings: Landing[] = [
   },
 ];
 
-export const initialPosts: Post[] = [
-  {
-    id: "post-eventos-valencia",
-    title: "Cómo elegir un espacio para eventos en Valencia",
-    slug: "/blog/espacios-eventos-valencia",
-    excerpt: "Criterios prácticos para seleccionar una finca privada para bodas, comuniones o empresa.",
-    body: "Evalúa capacidad, accesos, zonas de descanso, aparcamiento, sombra y soporte del equipo antes de reservar.",
-    status: "Draft",
-    edited: "Just now",
-  },
-  {
-    id: "post-celebraciones",
-    title: "Ideas para celebraciones familiares al aire libre",
-    slug: "/blog/celebraciones-aire-libre",
-    excerpt: "Una guía para convertir un jardín privado en una experiencia cómoda para todos.",
-    body: "Planifica recorridos, zonas de comida, música, descanso, sombra y puntos de agua para que el evento fluya.",
-    status: "Published",
-    edited: "Yesterday",
-  },
-];
+export const initialPosts: Post[] = [];
 
 export const initialPresentations: Presentation[] = [
   {

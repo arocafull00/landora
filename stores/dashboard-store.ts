@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { toast } from "react-toastify";
 import {
   Asset,
+  BlogConfig,
   BrandLogoType,
   ContactContent,
   ContentGroup,
@@ -32,8 +33,37 @@ import {
   getVisibleEditorTabs,
   restoreNavItem,
 } from "@/lib/template-sections";
+import { formatBlogDate } from "@/lib/blog-slug";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
+
+type BlogPostApi = {
+  id: string;
+  landingId: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  heroImage: string;
+  published: boolean;
+  createdAt: string | null;
+  updatedAt: string | null;
+};
+
+function mapPostFromApi(row: BlogPostApi): Post {
+  return {
+    id: row.id,
+    landingId: row.landingId,
+    title: row.title,
+    slug: row.slug,
+    excerpt: row.excerpt,
+    body: row.body,
+    heroImage: row.heroImage,
+    status: row.published ? "Published" : "Draft",
+    edited: formatBlogDate(row.updatedAt) || "—",
+    publishedAt: row.published && row.updatedAt ? row.updatedAt : undefined,
+  };
+}
 
 type DashboardState = {
   activeView: DashboardView;
@@ -48,6 +78,9 @@ type DashboardState = {
   isAdmin: boolean;
   landings: Landing[];
   posts: Post[];
+  blogConfig: BlogConfig;
+  blogPostsLoaded: boolean;
+  blogConfigLoaded: boolean;
   presentations: Presentation[];
   assets: Asset[];
   setActiveView: (view: DashboardView) => void;
@@ -88,10 +121,15 @@ type DashboardState = {
   updatePost: (postId: string, patch: Partial<Post>) => void;
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
+  loadBlogPosts: (landingId: string) => Promise<void>;
+  loadBlogConfig: (landingId: string) => Promise<void>;
+  createPost: (landingId: string, data?: Partial<Pick<Post, "title">>) => Promise<Post | null>;
+  updateBlogConfig: (landingId: string, patch: Partial<BlogConfig>) => Promise<void>;
   saveLanding: (id: string) => Promise<void>;
   publishLanding: (id: string) => Promise<void>;
-  savePost: (id: string) => void;
-  publishPost: (id: string) => void;
+  savePost: (id: string) => Promise<void>;
+  publishPost: (id: string) => Promise<void>;
+  deletePost: (id: string) => Promise<void>;
   savePresentation: (id: string) => void;
   publishPresentation: (id: string) => void;
 };
@@ -173,13 +211,16 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
   activeContentGroup: "Pages",
   activeEditorTab: "Hero",
   activeLandingId: "",
-  activePostId: initialPosts[0].id,
+  activePostId: "",
   activePresentationId: initialPresentations[0].id,
   activeAssetId: initialAssets[0].id,
   saveStatus: "idle",
   isAdmin: false,
   landings: [],
   posts: initialPosts,
+  blogConfig: { title: "", description: "" },
+  blogPostsLoaded: false,
+  blogConfigLoaded: false,
   presentations: initialPresentations,
   assets: initialAssets,
 
@@ -200,6 +241,10 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     set({
       landings: [landing],
       activeLandingId: landing.id,
+      blogPostsLoaded: false,
+      blogConfigLoaded: false,
+      posts: [],
+      blogConfig: { title: "", description: "" },
     }),
 
   updateLandingMeta: (id, patch) =>
@@ -603,19 +648,172 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     }
   },
 
-  savePost: (id) =>
-    set((state) => ({
-      posts: state.posts.map((post) =>
-        post.id === id ? { ...post, status: "Draft", edited: "Saved just now" } : post,
-      ),
-    })),
+  savePost: async (id) => {
+    const post = get().posts.find((item) => item.id === id);
+    if (!post) return;
 
-  publishPost: (id) =>
-    set((state) => ({
-      posts: state.posts.map((post) =>
-        post.id === id ? { ...post, status: "Published", edited: "Published just now" } : post,
-      ),
-    })),
+    try {
+      const res = await fetch(`/api/landings/${post.landingId}/blog/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          body: post.body,
+          heroImage: post.heroImage,
+          published: false,
+        }),
+      });
+
+      if (!res.ok) throw new Error("save failed");
+
+      const row = (await res.json()) as BlogPostApi;
+      const mapped = mapPostFromApi(row);
+
+      set((state) => ({
+        posts: state.posts.map((item) => (item.id === id ? mapped : item)),
+      }));
+      toast.success("Borrador guardado");
+    } catch {
+      toast.error("No se pudo guardar el post");
+    }
+  },
+
+  publishPost: async (id) => {
+    const post = get().posts.find((item) => item.id === id);
+    if (!post) return;
+
+    try {
+      const res = await fetch(`/api/landings/${post.landingId}/blog/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          body: post.body,
+          heroImage: post.heroImage,
+          published: true,
+        }),
+      });
+
+      if (!res.ok) throw new Error("publish failed");
+
+      const row = (await res.json()) as BlogPostApi;
+      const mapped = mapPostFromApi(row);
+
+      set((state) => ({
+        posts: state.posts.map((item) => (item.id === id ? mapped : item)),
+      }));
+      toast.success("Post publicado");
+    } catch {
+      toast.error("No se pudo publicar el post");
+    }
+  },
+
+  deletePost: async (id) => {
+    const post = get().posts.find((item) => item.id === id);
+    if (!post) return;
+
+    try {
+      const res = await fetch(`/api/landings/${post.landingId}/blog/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("delete failed");
+
+      set((state) => ({
+        posts: state.posts.filter((item) => item.id !== id),
+        activePostId: state.activePostId === id ? "" : state.activePostId,
+      }));
+      toast.success("Post eliminado");
+    } catch {
+      toast.error("No se pudo eliminar el post");
+    }
+  },
+
+  loadBlogPosts: async (landingId) => {
+    try {
+      const res = await fetch(`/api/landings/${landingId}/blog`);
+      if (!res.ok) throw new Error("load failed");
+
+      const rows = (await res.json()) as BlogPostApi[];
+
+      set({
+        posts: rows.map(mapPostFromApi),
+        blogPostsLoaded: true,
+      });
+    } catch {
+      toast.error("No se pudieron cargar los posts");
+    }
+  },
+
+  loadBlogConfig: async (landingId) => {
+    try {
+      const res = await fetch(`/api/landings/${landingId}/blog/config`);
+      if (!res.ok) throw new Error("load failed");
+
+      const config = (await res.json()) as BlogConfig;
+
+      set({
+        blogConfig: {
+          title: config.title ?? "",
+          description: config.description ?? "",
+        },
+        blogConfigLoaded: true,
+      });
+    } catch {
+      toast.error("No se pudo cargar la configuración del blog");
+    }
+  },
+
+  createPost: async (landingId, data) => {
+    try {
+      const res = await fetch(`/api/landings/${landingId}/blog`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: data?.title ?? "Nuevo post" }),
+      });
+
+      if (!res.ok) throw new Error("create failed");
+
+      const row = (await res.json()) as BlogPostApi;
+      const mapped = mapPostFromApi(row);
+
+      set((state) => ({
+        posts: [mapped, ...state.posts],
+        activePostId: mapped.id,
+        blogPostsLoaded: true,
+      }));
+
+      return mapped;
+    } catch {
+      toast.error("No se pudo crear el post");
+      return null;
+    }
+  },
+
+  updateBlogConfig: async (landingId, patch) => {
+    const nextConfig = {
+      ...get().blogConfig,
+      ...patch,
+    };
+
+    set({ blogConfig: nextConfig });
+
+    try {
+      const res = await fetch(`/api/landings/${landingId}/blog/config`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nextConfig),
+      });
+
+      if (!res.ok) throw new Error("config failed");
+    } catch {
+      toast.error("No se pudo guardar la configuración del blog");
+    }
+  },
 
   savePresentation: (id) =>
     set((state) => ({

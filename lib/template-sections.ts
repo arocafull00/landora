@@ -22,14 +22,36 @@ export function getSectionScrollHref(section: TemplateSectionDef): string {
   return section.navHref ?? `#${section.anchor}`;
 }
 
-export function getNavScrollTargets(templateId: TemplateId): NavScrollTarget[] {
-  return getTemplateSections(templateId)
+export const BLOG_NAV_ANCHOR = "__blog__";
+
+export function getBlogNavHref(landingSlug: string): string {
+  const slug = landingSlug.replace(/^\//, "");
+  return `/${slug}/blog`;
+}
+
+export function getBlogNavTarget(landingSlug: string): NavScrollTarget {
+  return {
+    anchor: BLOG_NAV_ANCHOR,
+    href: getBlogNavHref(landingSlug),
+    label: "Blog",
+  };
+}
+
+export function getNavScrollTargets(
+  templateId: TemplateId,
+  landingSlug?: string,
+): NavScrollTarget[] {
+  const targets = getTemplateSections(templateId)
     .filter((section) => section.anchor !== "hero")
     .map((section) => ({
       anchor: section.anchor,
       href: getSectionScrollHref(section),
       label: section.label,
     }));
+
+  if (!landingSlug) return targets;
+
+  return [...targets, getBlogNavTarget(landingSlug)];
 }
 
 const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = {

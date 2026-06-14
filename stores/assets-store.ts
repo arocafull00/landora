@@ -12,6 +12,7 @@ type AssetsState = {
   ensureLoaded: () => Promise<void>;
   refresh: () => Promise<void>;
   prepend: (row: AssetRow) => void;
+  update: (row: AssetRow) => void;
   remove: (id: string) => void;
 };
 
@@ -77,6 +78,11 @@ export const useAssetsStore = create<AssetsState>((set, get) => ({
       rows: [row, ...state.rows.filter((existing) => existing.id !== row.id)],
       status: "ready",
       loadedAt: state.loadedAt ?? Date.now(),
+    })),
+
+  update: (row) =>
+    set((state) => ({
+      rows: state.rows.map((existing) => (existing.id === row.id ? row : existing)),
     })),
 
   remove: (id) =>

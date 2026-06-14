@@ -9,6 +9,7 @@ import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
+import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import {
@@ -323,13 +324,8 @@ export function StudioEditorSection() {
             </section>
           ) : null}
 
-          {activeEditorTab === "Posts" ? (
-            <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Posts" description="Contenido editorial asociado." />
-              <p className="text-body-sm text-on-surface-variant">
-                Editor de posts disponible próximamente.
-              </p>
-            </section>
+          {activeEditorTab === "Blog" ? (
+            <BlogConfigEditorPanel activeLanding={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Footer" ? (

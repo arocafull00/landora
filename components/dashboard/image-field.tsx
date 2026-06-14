@@ -6,6 +6,7 @@ import { useAssetsStore } from "@/stores/assets-store";
 import { getTemplatePalette } from "@/lib/template-palettes";
 import { isBackgroundPreset } from "@/lib/background-assets";
 import { getTemplateImageOptions } from "@/lib/template-image-options";
+import { AssetNameField } from "@/components/dashboard/asset-name-field";
 import { AssetImage } from "@/components/ui/asset-image";
 import { ThemedLottieBackground } from "@/components/ui/themed-lottie-background";
 import { uploadAsset } from "@/lib/upload-asset";
@@ -143,6 +144,9 @@ export function ImageField({
         onChange={handleFileChange}
         type="file"
       />
+      {activeAsset ? (
+        <AssetNameField assetId={activeAsset.id} name={activeAsset.name} />
+      ) : null}
     </div>
   );
 }

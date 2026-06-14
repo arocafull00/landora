@@ -1,0 +1,93 @@
+"use client";
+
+import { useEffect } from "react";
+import Link from "next/link";
+import { useDebouncedCallback } from "use-debounce";
+import type { Landing } from "@/lib/dashboard-data";
+import { Icon } from "@/components/ui/icon";
+import { Panel } from "@/components/ui/primitives";
+import { useDashboardStore } from "@/stores/dashboard-store";
+
+type BlogConfigEditorPanelProps = {
+  activeLanding: Landing;
+};
+
+export function BlogConfigEditorPanel({ activeLanding }: BlogConfigEditorPanelProps) {
+  const blogConfig = useDashboardStore((state) => state.blogConfig);
+  const blogConfigLoaded = useDashboardStore((state) => state.blogConfigLoaded);
+  const loadBlogConfig = useDashboardStore((state) => state.loadBlogConfig);
+  const updateBlogConfig = useDashboardStore((state) => state.updateBlogConfig);
+
+  useEffect(() => {
+    if (blogConfigLoaded) return;
+    loadBlogConfig(activeLanding.id);
+  }, [activeLanding.id, blogConfigLoaded, loadBlogConfig]);
+
+  const persistConfig = useDebouncedCallback(
+    (patch: Partial<{ title: string; description: string }>) => {
+      updateBlogConfig(activeLanding.id, patch);
+    },
+    500,
+  );
+
+  return (
+    <section className="space-y-5 py-unit-lg">
+      <Panel className="flex flex-col gap-4 p-unit-md sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="text-body-lg font-semibold text-on-surface">Posts del blog</h3>
+          <p className="mt-1 text-body-sm text-on-surface-variant">
+            Crea, edita y publica los artículos de tu landing.
+          </p>
+        </div>
+        <Link
+          className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md bg-primary px-4 text-body-sm font-medium text-on-primary shadow-sm transition-colors hover:bg-primary-fixed-variant"
+          href="/blog"
+        >
+          <Icon className="h-4 w-4" name="add" />
+          Crear nuevo post
+        </Link>
+      </Panel>
+      <div>
+        <h3 className="text-body-lg font-semibold text-on-surface">Configuración del blog</h3>
+        <p className="mt-1 text-body-sm text-on-surface-variant">
+          Título y descripción que aparecen en la página pública del blog.
+        </p>
+      </div>
+      <label className="block">
+        <span className="mb-2 block font-label text-label-md text-on-surface-variant">
+          Título del blog
+        </span>
+        <input
+          className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+          onChange={(event) => {
+            const nextTitle = event.target.value;
+            useDashboardStore.setState({
+              blogConfig: { ...blogConfig, title: nextTitle },
+            });
+            persistConfig({ title: nextTitle, description: blogConfig.description });
+          }}
+          placeholder={`Blog de ${activeLanding.content.brand || activeLanding.name}`}
+          type="text"
+          value={blogConfig.title}
+        />
+      </label>
+      <label className="block">
+        <span className="mb-2 block font-label text-label-md text-on-surface-variant">
+          Descripción del blog
+        </span>
+        <textarea
+          className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+          onChange={(event) => {
+            const nextDescription = event.target.value;
+            useDashboardStore.setState({
+              blogConfig: { ...blogConfig, description: nextDescription },
+            });
+            persistConfig({ title: blogConfig.title, description: nextDescription });
+          }}
+          rows={4}
+          value={blogConfig.description}
+        />
+      </label>
+    </section>
+  );
+}

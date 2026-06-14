@@ -9,6 +9,7 @@ import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
+import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -330,6 +331,10 @@ export function OficioProEditorSection() {
                 ))}
               </div>
             </section>
+          ) : null}
+
+          {activeEditorTab === "Blog" ? (
+            <BlogConfigEditorPanel activeLanding={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Footer" ? (
