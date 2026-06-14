@@ -16,10 +16,6 @@ export function AssetNameField({
   const [value, setValue] = useState(name);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    setValue(name);
-  }, [name, assetId]);
-
   const save = async () => {
     const trimmed = value.trim();
     if (!trimmed || trimmed === name) {
