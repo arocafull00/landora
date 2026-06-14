@@ -63,8 +63,8 @@ export function EditorToolbar({
     >
       <div className="flex min-w-0 items-center gap-3">
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-surface-variant">
-            <h1 className="truncate font-headline text-headline-md text-on-surface">
+          <DropdownMenuTrigger className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors duration-150 hover:bg-surface-container-high">
+            <h1 className="truncate font-headline text-headline-md font-semibold text-on-surface">
               {activeLanding.name}
             </h1>
             <ChevronDownIcon className="h-4 w-4 shrink-0 text-on-surface-variant" />

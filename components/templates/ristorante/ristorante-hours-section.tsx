@@ -15,44 +15,48 @@ export function RistoranteHoursSection({ content }: { content: LandingContent })
   );
 
   return (
-    <section id="horarios" className="scroll-mt-24 bg-[#1C1917] px-6 py-24 md:px-10 md:py-32 lg:px-16">
-      <div className="mx-auto max-w-3xl text-center">
-        <div className="mb-12" data-aos="fade-up">
-          <Clock className="mx-auto mb-4 h-8 w-8 text-[#8B2500]" />
+    <section
+      id="horarios"
+      className="scroll-mt-24 bg-[var(--ristorante-primary)] px-6 py-[clamp(80px,12vw,140px)] md:px-10 lg:px-16"
+    >
+      <div className="mx-auto max-w-3xl">
+        <div className="mb-12 text-center">
+          <Clock className="mx-auto mb-4 h-8 w-8 text-[var(--ristorante-accent)]" />
           <h2
-            className="text-balance text-3xl font-extrabold text-white sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
-            style={{ fontFamily: "var(--font-playfair)", letterSpacing: "-0.02em" }}
+            className="text-balance text-[clamp(32px,5vw,56px)] font-normal leading-[1.05] text-[var(--ristorante-foreground)]"
+            style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
           >
             {heading.title}
           </h2>
         </div>
 
-        <div
-          className="space-y-0"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
+        <div className="space-y-0">
           {hours.map((item) => (
             <div
-              className="flex items-center justify-between border-b border-white/10 py-5"
+              className="flex items-center justify-between border-b border-[var(--ristorante-foreground)]/15 py-6"
               key={item.id}
             >
               <span
-                className="text-base font-semibold text-white"
-                style={{ fontFamily: "var(--font-body)" }}
+                className="text-base font-semibold text-[var(--ristorante-foreground)]"
+                style={{ fontFamily: "var(--font-ristorante-body)" }}
               >
                 {item.number}
               </span>
               <div className="text-right">
                 <p
-                  className="text-base font-semibold text-white"
-                  style={{ fontFamily: "var(--font-body)" }}
+                  className="text-base font-semibold text-[var(--ristorante-foreground)]"
+                  style={{ fontFamily: "var(--font-ristorante-body)" }}
                 >
                   {item.title}
                 </p>
-                {item.description && (
-                  <p className="mt-0.5 text-sm text-white/65">{item.description}</p>
-                )}
+                {item.description ? (
+                  <p
+                    className="mt-0.5 text-sm text-[var(--ristorante-foreground)]/80"
+                    style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
+                  >
+                    {item.description}
+                  </p>
+                ) : null}
               </div>
             </div>
           ))}

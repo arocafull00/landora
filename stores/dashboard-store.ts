@@ -736,6 +736,8 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
   },
 
   loadBlogPosts: async (landingId) => {
+    set({ blogPostsLoaded: false });
+
     try {
       const res = await fetch(`/api/landings/${landingId}/blog`);
       if (!res.ok) throw new Error("load failed");

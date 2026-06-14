@@ -9,6 +9,9 @@ import { useAssetsStore } from "@/stores/assets-store";
 import { ActionButton, IconButton } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import { AssetNameField } from "@/components/dashboard/asset-name-field";
+import { DashboardEmptyState } from "@/components/dashboard/dashboard-empty-state";
+import { DashboardListShell } from "@/components/dashboard/dashboard-list-shell";
+import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { PendingFileRow, type PendingFile } from "./pending-file-row";
 import {
   DropdownMenu,
@@ -96,51 +99,63 @@ export function AssetsSection() {
   return (
     <>
       <section className="flex min-w-[400px] flex-1 flex-col border-r border-outline-variant bg-surface">
-        <div className="flex shrink-0 items-center justify-between border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-unit-md">
-          <div>
-            <h2 className="font-headline text-headline-md text-on-surface">Asset Library</h2>
-            <p className="text-body-sm text-on-surface-variant">
-              Sube y gestiona imágenes para tus landings.
-            </p>
-          </div>
-          <ActionButton
-            disabled={pendingFiles.length > 0}
-            onClick={() => inputRef.current?.click()}
-            variant="primary"
-          >
-            <Icon name="upload" className="h-4 w-4" />
-            {pendingFiles.length > 0
-              ? pendingFiles.length === 1
-                ? "Subiendo…"
-                : `Subiendo ${pendingFiles.filter((f) => f.status !== "uploading").length}/${pendingFiles.length}…`
-              : "Upload"}
-          </ActionButton>
-          <input
-            aria-label="Subir imágenes"
-            id="assets-upload-input"
-            ref={inputRef}
-            accept="image/*"
-            className="hidden"
-            multiple
-            onChange={handleFileChange}
-            type="file"
-          />
-        </div>
+        <DashboardPageHeader
+          actions={
+            <>
+              <ActionButton
+                disabled={pendingFiles.length > 0}
+                onClick={() => inputRef.current?.click()}
+                variant="primary"
+              >
+                <Icon name="upload" className="h-4 w-4" />
+                {pendingFiles.length > 0
+                  ? pendingFiles.length === 1
+                    ? "Subiendo…"
+                    : `Subiendo ${pendingFiles.filter((f) => f.status !== "uploading").length}/${pendingFiles.length}…`
+                  : "Subir imagen"}
+              </ActionButton>
+              <input
+                aria-label="Subir imágenes"
+                id="assets-upload-input"
+                ref={inputRef}
+                accept="image/*"
+                className="hidden"
+                multiple
+                onChange={handleFileChange}
+                type="file"
+              />
+            </>
+          }
+          description="Sube y gestiona imágenes para tus landings."
+          title="Biblioteca"
+        />
         <div className="flex-1 overflow-y-auto p-unit-md">
           {assets.length === 0 && pendingFiles.length === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center gap-3 text-center text-on-surface-variant">
-              <Icon name="image" className="h-10 w-10 opacity-30" />
-              <p className="font-body text-body-md">
-                No hay imágenes todavía. Usa el botón Upload para subir la primera.
-              </p>
-            </div>
+            <DashboardEmptyState
+              action={
+                <ActionButton
+                  disabled={pendingFiles.length > 0}
+                  onClick={() => inputRef.current?.click()}
+                  variant="primary"
+                >
+                  <Icon name="upload" className="h-4 w-4" />
+                  Subir primera imagen
+                </ActionButton>
+              }
+              description="Las imágenes que subas estarán disponibles en el editor de tu landing."
+              icon="image"
+              title="Sin imágenes todavía"
+            />
           ) : (
-            <div className="overflow-hidden rounded-lg border border-outline-variant bg-surface-container-lowest">
-              <div className="grid grid-cols-12 gap-4 border-b border-outline-variant bg-surface-container-low p-unit-sm font-label text-label-md text-on-surface-variant">
-                <div className="col-span-7 pl-2 md:col-span-6">Nombre</div>
-                <div className="col-span-3 hidden md:block">Tipo</div>
-                <div className="col-span-5 text-right md:col-span-3">Dimensiones</div>
-              </div>
+            <DashboardListShell
+              columns={
+                <div className="grid grid-cols-12 gap-4">
+                  <div className="col-span-7 pl-2 md:col-span-6">Nombre</div>
+                  <div className="col-span-3 hidden md:block">Tipo</div>
+                  <div className="col-span-5 text-right md:col-span-3">Dimensiones</div>
+                </div>
+              }
+            >
               {pendingFiles.map((file) => (
                 <PendingFileRow file={file} key={file.key} />
               ))}
@@ -148,14 +163,15 @@ export function AssetsSection() {
                 const isActive = asset.id === active?.id;
                 return (
                   <button
-                    className={`group relative grid w-full grid-cols-12 items-center gap-4 border-b border-outline-variant/50 p-unit-sm text-left transition-colors last:border-b-0 ${
-                      isActive ? "bg-primary-fixed/30" : "hover:bg-surface-container-low"
+                    className={`grid w-full grid-cols-12 items-center gap-4 border-b border-outline-variant/50 p-unit-sm text-left transition-colors duration-150 last:border-b-0 ${
+                      isActive
+                        ? "bg-primary-fixed/25 ring-1 ring-inset ring-primary/30"
+                        : "hover:bg-surface-container-low"
                     }`}
                     key={asset.id}
                     onClick={() => setActiveId(asset.id)}
                     type="button"
                   >
-                    {isActive && <span className="absolute bottom-0 left-0 top-0 w-1 bg-primary" />}
                     <div className="col-span-7 flex min-w-0 items-center gap-3 pl-2 md:col-span-6">
                       <Icon name="image" className="h-5 w-5 shrink-0 text-primary" />
                       <span className="truncate text-body-sm font-medium text-on-surface">
@@ -171,7 +187,7 @@ export function AssetsSection() {
                   </button>
                 );
               })}
-            </div>
+            </DashboardListShell>
           )}
         </div>
       </section>

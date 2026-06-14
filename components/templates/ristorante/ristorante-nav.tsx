@@ -1,12 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import { X, Menu } from "lucide-react";
 import { m, AnimatePresence, useReducedMotion } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+
+function getScrollTargets(el: HTMLElement | null) {
+  const targets: (Window | Element)[] = [window];
+  let node = el?.parentElement;
+
+  while (node) {
+    const { overflowY, overflow } = getComputedStyle(node);
+    if (
+      overflowY === "auto" ||
+      overflowY === "scroll" ||
+      overflow === "auto" ||
+      overflow === "scroll"
+    ) {
+      targets.push(node);
+    }
+    node = node.parentElement;
+  }
+
+  return targets;
+}
+
+function getScrollTop(targets: (Window | Element)[]) {
+  let max = 0;
+  for (const target of targets) {
+    const top = target === window ? window.scrollY : (target as Element).scrollTop;
+    if (top > max) max = top;
+  }
+  return max;
+}
 
 export function RistoranteNav({
   brand,
@@ -15,6 +44,7 @@ export function RistoranteNav({
   navLinks,
   ctaLabel,
   topOffset = 0,
+  scrollRootRef,
 }: {
   brand: string;
   brandLogoImage: string;
@@ -22,24 +52,48 @@ export function RistoranteNav({
   navLinks: NavLink[];
   ctaLabel: string;
   topOffset?: number;
+  scrollRootRef?: RefObject<HTMLElement | null>;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
+
+  useEffect(() => {
+    const targets = getScrollTargets(scrollRootRef?.current ?? null);
+
+    const handleScroll = () => {
+      setScrolled(getScrollTop(targets) > 80);
+    };
+
+    handleScroll();
+    for (const target of targets) {
+      target.addEventListener("scroll", handleScroll, { passive: true });
+    }
+
+    return () => {
+      for (const target of targets) {
+        target.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [scrollRootRef]);
+
+  const navSolid = scrolled || menuOpen;
 
   return (
     <>
       <nav
-        className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-10 lg:px-16"
+        className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 transition-colors duration-300 md:px-10 lg:px-16"
         style={{
           ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
-          background: "linear-gradient(to bottom, rgba(250,247,242,0.95), rgba(250,247,242,0.85))",
-          backdropFilter: "blur(8px)",
+          backgroundColor: navSolid ? "var(--ristorante-secondary)" : "transparent",
         }}
       >
         <TemplateNavAnchor
-          className="text-xl font-bold tracking-tight text-[#1C1917] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B2500] focus-visible:ring-offset-2"
+          className={`text-2xl font-normal tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 ${
+            navSolid ? "text-[var(--ristorante-foreground)]" : "text-[var(--ristorante-foreground)]"
+          }`}
           href="#hero"
-          style={{ fontFamily: "var(--font-playfair)" }}
+          style={{ fontFamily: "var(--font-ristorante-display)" }}
         >
           <TemplateNavBrand
             brand={brand}
@@ -51,16 +105,20 @@ export function RistoranteNav({
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <TemplateNavAnchor
-              className="text-sm font-medium text-[#1C1917]/75 transition-colors hover:text-[#8B2500] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B2500] focus-visible:ring-offset-2"
+              className={`text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 ${
+                navSolid
+                  ? "text-[var(--ristorante-foreground)]/80 hover:text-[var(--ristorante-accent)]"
+                  : "text-[var(--ristorante-foreground)]/90 hover:text-[var(--ristorante-accent)]"
+              }`}
               href={link.href}
               key={link.id}
-              style={{ fontFamily: "var(--font-body)" }}
+              style={{ fontFamily: "var(--font-ristorante-body)" }}
             >
               {link.label}
             </TemplateNavAnchor>
           ))}
           <TemplateNavAnchor
-            className="rounded-full bg-[#8B2500] px-5 py-2.5 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#7a1f00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B2500] focus-visible:ring-offset-2"
+            className="rounded-md bg-[var(--ristorante-primary)] px-5 py-2.5 text-xs font-semibold tracking-wide text-[var(--ristorante-foreground)] transition-colors hover:bg-[var(--ristorante-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2"
             href="#contacto"
           >
             {ctaLabel || "Reservar mesa"}
@@ -68,7 +126,11 @@ export function RistoranteNav({
         </div>
 
         <button
-          className="relative z-[1] flex h-11 w-11 items-center justify-center rounded-full text-[#1C1917] transition-colors hover:bg-[#1C1917]/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B2500] focus-visible:ring-offset-2 md:hidden"
+          className={`relative z-[1] flex h-11 w-11 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 md:hidden ${
+            navSolid
+              ? "text-[var(--ristorante-foreground)] hover:bg-[var(--ristorante-foreground)]/10"
+              : "text-[var(--ristorante-foreground)] hover:bg-[var(--ristorante-foreground)]/10"
+          }`}
           onClick={() => setMenuOpen((v) => !v)}
           type="button"
           aria-expanded={menuOpen}
@@ -81,7 +143,7 @@ export function RistoranteNav({
       <AnimatePresence>
         {menuOpen && (
           <m.div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#FAF7F2]"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[var(--ristorante-primary)]"
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -89,14 +151,14 @@ export function RistoranteNav({
           >
             {navLinks.map((link, i) => (
               <m.a
-                className="text-2xl font-semibold text-[#1C1917] transition-colors hover:text-[#8B2500] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B2500]"
+                className="text-3xl font-normal text-[var(--ristorante-foreground)] transition-colors hover:text-[var(--ristorante-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)]"
                 href={link.href}
                 key={link.id}
                 onClick={(event) =>
                   handleSectionNavClick(event, link.href, () => setMenuOpen(false))
                 }
                 style={{
-                  fontFamily: "var(--font-playfair)",
+                  fontFamily: "var(--font-ristorante-display)",
                   lineHeight: 2.2,
                 }}
                 initial={reduce ? false : { opacity: 0, y: 16 }}
@@ -107,7 +169,7 @@ export function RistoranteNav({
               </m.a>
             ))}
             <m.a
-              className="mt-6 rounded-full bg-[#8B2500] px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#7a1f00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#FAF7F2]"
+              className="mt-6 rounded-md bg-[var(--ristorante-secondary)] px-8 py-3 text-sm font-semibold text-[var(--ristorante-foreground)] transition-colors hover:bg-[var(--ristorante-secondary)]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ristorante-primary)]"
               href="#contacto"
               onClick={(event) =>
                 handleSectionNavClick(event, "#contacto", () => setMenuOpen(false))

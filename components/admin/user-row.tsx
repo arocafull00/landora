@@ -49,11 +49,11 @@ export function UserRow({ user }: { user: UserWithLandings }) {
     <Panel className="overflow-hidden">
       <button
         type="button"
-        className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-surface-variant/30"
+        className="flex w-full items-center justify-between p-4 text-left transition-colors duration-150 hover:bg-surface-container-low"
         onClick={() => setExpanded((v) => !v)}
       >
         <div className="flex items-center gap-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 font-label text-label-lg font-bold text-primary">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-fixed font-headline text-headline-sm font-semibold text-primary">
             {initial}
           </div>
           <div>
@@ -67,11 +67,11 @@ export function UserRow({ user }: { user: UserWithLandings }) {
         </div>
         <div className="flex items-center gap-6">
           <div className="text-right">
-            <p className="font-label text-label-md text-on-surface">
-              {user.landings.length}{" "}
-              {user.landings.length === 1 ? "landing" : "landings"}
+            <p className="font-headline text-headline-sm font-semibold text-on-surface">
+              {user.landings.length}
             </p>
             <p className="font-body text-body-sm text-on-surface-variant">
+              {user.landings.length === 1 ? "landing" : "landings"} ·{" "}
               {publishedCount} publicada{publishedCount !== 1 ? "s" : ""}
             </p>
           </div>
@@ -84,7 +84,7 @@ export function UserRow({ user }: { user: UserWithLandings }) {
       </button>
 
       {expanded && (
-        <div className="border-t border-outline-variant bg-surface-container-lowest px-4 py-4">
+        <div className="border-t border-outline-variant bg-surface-container-low px-4 py-4">
           <div className="space-y-2">
             {user.landings.length === 0 ? (
               <p className="py-2 text-center font-body text-body-sm text-on-surface-variant/60">

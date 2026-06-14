@@ -20,7 +20,7 @@ export function DashboardSidebarNavItem({
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive} tooltip={item.label}>
-        <Link href={`/${item.id}`}>
+        <Link className="transition-colors duration-150" href={`/${item.id}`}>
           <Icon name={item.icon} className="h-4 w-4" />
           <span>{item.label}</span>
         </Link>

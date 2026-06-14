@@ -35,12 +35,12 @@ const TEMPLATE_PALETTES: Record<TemplateId, TemplatePalette> = {
     foreground: "#ffffff",
   },
   ristorante: {
-    primary: "#8B2500",
-    secondary: "#1C1917",
-    accent: "#7a1f00",
-    muted: "#FAF7F2",
-    surface: "#FAF7F2",
-    foreground: "#ffffff",
+    primary: "#6B1A0A",
+    secondary: "#140C0A",
+    accent: "#C4A574",
+    muted: "#F4F2EF",
+    surface: "#F4F2EF",
+    foreground: "#F4F2EF",
   },
   floristeria: {
     primary: "#2D5016",

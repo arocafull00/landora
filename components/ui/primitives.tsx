@@ -5,10 +5,12 @@ import type { IconName } from "@/lib/dashboard-data";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const ACTION_BUTTON_STYLES = {
-  primary: "bg-primary text-on-primary hover:bg-primary-fixed-variant",
+  primary:
+    "h-10 bg-primary font-semibold text-on-primary transition-colors duration-150 hover:bg-primary-fixed-variant",
   secondary:
-    "border border-outline-variant bg-surface-container-lowest text-on-surface hover:bg-surface-variant",
-  danger: "text-danger hover:bg-error-container",
+    "h-10 border border-outline-variant bg-surface-container-lowest text-on-surface transition-colors duration-150 hover:bg-surface-container-high",
+  danger:
+    "h-10 text-danger transition-colors duration-150 hover:bg-error-container",
 } as const;
 
 const STATUS_BADGE_STYLES = {
@@ -17,6 +19,20 @@ const STATUS_BADGE_STYLES = {
   Changes: "bg-warning/10 text-warning",
   Live: "bg-success/10 text-success",
 } as const;
+
+const STATUS_DOT_STYLES = {
+  Published: "bg-success",
+  Draft: "bg-outline",
+  Changes: "bg-warning",
+  Live: "bg-success",
+} as const;
+
+const STATUS_LABELS: Record<LandingStatus | "Live", string> = {
+  Published: "Publicada",
+  Draft: "Borrador",
+  Changes: "Cambios",
+  Live: "Activo",
+};
 
 export function IconButton({
   icon,
@@ -36,7 +52,7 @@ export function IconButton({
       <TooltipTrigger asChild>
         <button
           aria-label={label}
-          className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-on-surface-variant transition-colors hover:bg-surface-variant hover:text-primary ${className}`}
+          className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-on-surface-variant transition-colors duration-150 hover:bg-surface-container-high hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${className}`}
           id={id}
           onClick={onClick}
           type="button"
@@ -62,7 +78,7 @@ export function ActionButton({
 }) {
   return (
     <button
-      className={`inline-flex h-9 items-center justify-center gap-2 rounded-md px-4 text-body-sm font-medium shadow-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${ACTION_BUTTON_STYLES[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-md px-4 text-body-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 ${ACTION_BUTTON_STYLES[variant]} ${className}`}
       type="button"
       {...props}
     >
@@ -74,9 +90,13 @@ export function ActionButton({
 export function StatusBadge({ status }: { status: LandingStatus | "Live" }) {
   return (
     <span
-      className={`inline-flex items-center rounded-md px-2 py-1 font-label text-label-md uppercase ${STATUS_BADGE_STYLES[status]}`}
+      className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 font-body text-body-sm ${STATUS_BADGE_STYLES[status]}`}
     >
-      {status}
+      <span
+        aria-hidden
+        className={`h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_DOT_STYLES[status]}`}
+      />
+      {STATUS_LABELS[status]}
     </span>
   );
 }
@@ -90,7 +110,7 @@ export function Panel({
 }) {
   return (
     <section
-      className={`rounded-lg border border-outline-variant bg-surface-container-lowest shadow-sm ${className}`}
+      className={`rounded-lg border border-outline-variant bg-surface-container-lowest ${className}`}
     >
       {children}
     </section>

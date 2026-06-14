@@ -29,11 +29,11 @@ export function AdminSidebar({
 }) {
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="px-unit-xs py-unit-lg">
+      <SidebarHeader className="border-b border-sidebar-border px-unit-sm py-unit-lg">
         <h1 className="font-headline text-headline-md font-bold text-sidebar-foreground">
           Landora
         </h1>
-        <p className="mt-1 font-label text-label-md text-sidebar-foreground/60">
+        <p className="mt-1 font-body text-body-sm text-sidebar-accent-foreground">
           Admin
         </p>
       </SidebarHeader>

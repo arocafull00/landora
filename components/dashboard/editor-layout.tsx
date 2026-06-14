@@ -56,11 +56,11 @@ export function EditorLayout({
         template={activeLanding.template}
       />
       <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden xl:grid-cols-[minmax(320px,380px)_1fr]">
-        <div id="tutorial-editor-form" className="min-h-0 overflow-y-auto border-r border-outline-variant p-unit-lg">
+        <div id="tutorial-editor-form" className="min-h-0 overflow-y-auto border-r border-outline-variant bg-surface-container-low p-unit-lg">
           <div className="space-y-unit-md">{form}</div>
         </div>
         <IframeLandingPreview
-          className="min-h-0"
+          className="min-h-0 bg-surface-bg p-unit-md"
           content={activeLanding.content}
           device={device}
           landingId={activeLanding.id}

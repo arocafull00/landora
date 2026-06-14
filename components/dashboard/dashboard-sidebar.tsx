@@ -24,12 +24,12 @@ export function DashboardSidebar({
   const activeView = useDashboardStore((state) => state.activeView);
   return (
     <Sidebar collapsible="icon" className={impersonating ? "pt-10" : undefined}>
-      <SidebarHeader className="px-unit-xs py-unit-lg">
+      <SidebarHeader className="border-b border-sidebar-border px-unit-sm py-unit-lg">
         <h1 className="font-headline text-headline-md font-bold text-sidebar-foreground">
           Landora
         </h1>
-        <p className="mt-1 font-label text-label-md text-sidebar-foreground/60">
-          CMS Dashboard
+        <p className="mt-1 font-body text-body-sm text-sidebar-accent-foreground">
+          Tu web
         </p>
       </SidebarHeader>
       <SidebarContent>

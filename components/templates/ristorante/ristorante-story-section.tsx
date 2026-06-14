@@ -9,56 +9,42 @@ export function RistoranteStorySection({ content }: { content: LandingContent })
   if (!statement && stats.length === 0) return null;
 
   return (
-    <section id="story" className="scroll-mt-24 bg-[#FAF7F2] px-6 py-24 md:px-10 md:py-32 lg:px-16">
-      <div className="mx-auto max-w-5xl">
-        {statement && (
+    <section
+      id="story"
+      className="scroll-mt-24 bg-[var(--ristorante-secondary)] px-6 py-[clamp(80px,12vw,160px)] md:px-10 lg:px-16"
+    >
+      <div className="mx-auto max-w-6xl">
+        {statement ? (
           <p
-            className="mb-16 text-center text-pretty text-2xl font-light leading-relaxed text-[#1C1917] sm:text-3xl md:text-[clamp(26px,3.2vw,40px)]"
+            className="max-w-[22ch] text-pretty text-[clamp(28px,4vw,56px)] font-light leading-[1.2] text-[var(--ristorante-foreground)]"
             style={{
-              fontFamily: "var(--font-playfair)",
-              letterSpacing: "-0.02em",
+              fontFamily: "var(--font-ristorante-display)",
+              letterSpacing: "-0.03em",
               textWrap: "balance",
             }}
-            data-aos="fade-up"
           >
             {statement}
           </p>
-        )}
+        ) : null}
 
-        {stats.length > 0 && (
-          <div
-            className="grid grid-cols-3 gap-8 border-t border-[#1C1917]/10 pt-12"
-            data-aos="fade-up"
-            data-aos-delay="120"
+        {stats.length > 0 ? (
+          <p
+            className={`${statement ? "mt-16" : ""} text-sm font-semibold tracking-wide text-[var(--ristorante-accent)] md:text-base`}
+            style={{ fontFamily: "var(--font-ristorante-body)" }}
           >
-            {stats.map((stat) => (
-              <div className="text-center" key={stat.id}>
-                <div
-                  className="text-[#8B2500]"
-                  style={{
-                    fontFamily: "var(--font-playfair)",
-                    fontWeight: 700,
-                    fontSize: "clamp(36px, 5vw, 56px)",
-                    letterSpacing: "-0.02em",
-                    lineHeight: 1.1,
-                  }}
-                >
-                  {stat.value}
-                </div>
-                <div
-                  className="mt-2 text-[#1C1917]/70"
-                  style={{
-                    fontFamily: "var(--font-body)",
-                    fontWeight: 400,
-                    fontSize: "clamp(13px, 1.1vw, 15px)",
-                  }}
-                >
+            {stats.map((stat, index) => (
+              <span key={stat.id}>
+                {index > 0 ? (
+                  <span className="mx-3 text-[var(--ristorante-foreground)]/40">·</span>
+                ) : null}
+                <span className="text-[var(--ristorante-foreground)]">{stat.value}</span>{" "}
+                <span className="font-normal text-[var(--ristorante-foreground)]/75">
                   {stat.label}
-                </div>
-              </div>
+                </span>
+              </span>
             ))}
-          </div>
-        )}
+          </p>
+        ) : null}
       </div>
     </section>
   );

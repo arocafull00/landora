@@ -22,6 +22,7 @@ export function AdminSidebarNavItem({
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
+        className="transition-colors duration-150"
         isActive={isActive}
         tooltip={item.label}
         onClick={() => onSelect(item.id)}

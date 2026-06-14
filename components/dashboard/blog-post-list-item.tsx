@@ -13,13 +13,15 @@ type BlogPostListItemProps = {
 export function BlogPostListItem({ post, isActive, onSelect }: BlogPostListItemProps) {
   return (
     <button
-      className={`group relative grid w-full grid-cols-12 items-center gap-4 border-b border-outline-variant/50 p-unit-sm text-left transition-colors last:border-b-0 ${
-        isActive ? "bg-primary-fixed/30" : "hover:bg-surface-container-low"
+      aria-current={isActive ? "true" : undefined}
+      className={`grid w-full grid-cols-12 items-center gap-4 border-b border-outline-variant/50 p-unit-sm text-left transition-colors last:border-b-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+        isActive
+          ? "bg-primary-fixed/30 ring-1 ring-inset ring-primary/40"
+          : "hover:bg-surface-container-low"
       }`}
       onClick={onSelect}
       type="button"
     >
-      {isActive ? <span className="absolute bottom-0 left-0 top-0 w-1 bg-primary" /> : null}
       <div className="col-span-2 hidden sm:block">
         <div className="relative h-12 w-12 overflow-hidden rounded-md border border-outline-variant bg-surface-container">
           {post.heroImage ? (

@@ -3,12 +3,15 @@
 import { ArrowRight } from "lucide-react";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-wide transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B2500] focus-visible:ring-offset-2";
+  "inline-flex items-center justify-center gap-2 rounded-md font-semibold tracking-wide transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2";
 
 const variants = {
-  primary: "bg-[#8B2500] text-white hover:bg-[#7a1f00] active:bg-[#6b1b00]",
+  primary:
+    "bg-[var(--ristorante-primary)] text-[var(--ristorante-foreground)] hover:bg-[var(--ristorante-secondary)] active:bg-[var(--ristorante-secondary)]",
   secondary:
-    "border border-[#8B2500] text-[#8B2500] bg-transparent hover:bg-[#8B2500] hover:text-white",
+    "border border-[var(--ristorante-primary)] text-[var(--ristorante-primary)] bg-transparent hover:bg-[var(--ristorante-primary)] hover:text-[var(--ristorante-foreground)]",
+  accent:
+    "bg-[var(--ristorante-accent)] text-[var(--ristorante-secondary)] hover:bg-[var(--ristorante-accent)]/90 active:bg-[var(--ristorante-accent)]/80",
 };
 
 const sizes = {
@@ -27,7 +30,7 @@ export function RistoranteButton({
 }: {
   children: React.ReactNode;
   href?: string;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "accent";
   size?: "sm" | "md" | "lg";
   icon?: React.ReactNode;
   className?: string;
@@ -36,7 +39,13 @@ export function RistoranteButton({
 
   if (href) {
     return (
-      <a className={classes} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined}>
+      <a
+        className={classes}
+        href={href}
+        target={href.startsWith("http") ? "_blank" : undefined}
+        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+        style={{ fontFamily: "var(--font-ristorante-body)" }}
+      >
         {children}
         {icon ?? <ArrowRight className="h-4 w-4" />}
       </a>
@@ -44,7 +53,7 @@ export function RistoranteButton({
   }
 
   return (
-    <button className={classes} type="button">
+    <button className={classes} type="button" style={{ fontFamily: "var(--font-ristorante-body)" }}>
       {children}
       {icon}
     </button>

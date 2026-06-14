@@ -3,42 +3,36 @@
 import { RistoranteGalleryMedia } from "@/components/templates/ristorante/ristorante-gallery-media";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
-const masonrySpans = [
-  "md:row-span-2",
-  "md:row-span-1",
-  "md:row-span-2",
-  "md:row-span-1",
-  "md:row-span-1",
-  "md:row-span-2",
-];
-
 export function RistoranteGalleryItem({
   item,
   index,
-  variant = "masonry",
+  featured = false,
+  heading,
 }: {
   item: GalleryItem;
   index: number;
-  variant?: "masonry" | "scroll";
+  featured?: boolean;
+  heading?: string;
 }) {
-  const spanClass = masonrySpans[index % masonrySpans.length];
-
-  if (variant === "scroll") {
-    return (
-      <div
-        className="group relative aspect-[4/5] shrink-0 snap-start overflow-hidden rounded-lg bg-[#e5e2dd]"
-        style={{ width: "min(75vw, 320px)" }}
-      >
-        <RistoranteGalleryMedia item={item} />
-      </div>
-    );
-  }
+  const width = featured ? "min(85vw, 480px)" : "min(72vw, 340px)";
+  const height = featured ? "clamp(320px, 55vh, 520px)" : index % 2 === 0 ? "clamp(280px, 45vh, 440px)" : "clamp(240px, 38vh, 380px)";
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-lg bg-[#e5e2dd] ${spanClass}`}
+      className="group relative shrink-0 snap-start overflow-hidden rounded-md bg-[var(--ristorante-primary)]/30"
+      style={{ width, height }}
     >
       <RistoranteGalleryMedia item={item} />
+      {heading ? (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--ristorante-secondary)]/90 to-transparent px-6 pb-6 pt-16">
+          <h2
+            className="text-balance text-[clamp(28px,4vw,48px)] font-normal leading-[1.05] text-[var(--ristorante-foreground)]"
+            style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
+          >
+            {heading}
+          </h2>
+        </div>
+      ) : null}
     </div>
   );
 }

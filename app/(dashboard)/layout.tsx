@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { DashboardAccountActions } from "@/components/dashboard/dashboard-account-actions";
+import { DashboardThemeScope } from "@/components/dashboard/dashboard-theme-scope";
 import { isAdmin } from "@/lib/is-admin";
 import { isImpersonating, getEffectiveClientId } from "@/lib/auth";
 import { getUserByInternalId } from "@/data/users";
@@ -34,27 +35,31 @@ export default async function DashboardLayout({
 
   if (!user) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center bg-surface-bg">
-        {!admin ? (
-          <div className="absolute right-4 top-4">
-            <DashboardAccountActions />
+      <>
+        <DashboardThemeScope />
+        <div className="relative flex min-h-screen items-center justify-center bg-surface-bg">
+          {!admin ? (
+            <div className="absolute right-4 top-4">
+              <DashboardAccountActions />
+            </div>
+          ) : null}
+          <div className="text-center">
+            <h1 className="font-headline text-headline-lg font-semibold text-on-background">
+              Cuenta pendiente de configuración
+            </h1>
+            <p className="mt-2 font-body text-body-md text-on-surface-variant">
+              Tu cuenta no tiene ninguna landing asignada todavía. Contacta con el
+              administrador.
+            </p>
           </div>
-        ) : null}
-        <div className="text-center">
-          <h1 className="font-headline text-headline-md font-bold text-on-background">
-            Cuenta pendiente de configuración
-          </h1>
-          <p className="mt-2 font-body text-body-md text-on-surface-variant">
-            Tu cuenta no tiene ninguna landing asignada todavía. Contacta con el
-            administrador.
-          </p>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
     <>
+      <DashboardThemeScope />
       {impersonating && <ImpersonationBanner />}
       <div className={impersonating ? "pt-10" : undefined}>{children}</div>
     </>

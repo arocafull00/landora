@@ -40,10 +40,10 @@ export function DashboardShell({
 
   return (
     <SidebarProvider
-      className="h-screen overflow-hidden bg-surface-bg text-on-background"
+      className="dashboard-app h-screen overflow-hidden bg-surface-bg text-on-background"
       style={
         {
-          "--sidebar-width": "12.5rem",
+          "--sidebar-width": "14rem",
         } as React.CSSProperties
       }
     >

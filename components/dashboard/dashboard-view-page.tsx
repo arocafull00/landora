@@ -32,7 +32,7 @@ export async function DashboardViewPage({ view }: { view: DashboardView }) {
           </div>
         ) : null}
         <div className="text-center">
-          <h1 className="font-headline text-headline-md font-bold text-on-background">
+          <h1 className="font-headline text-headline-lg font-semibold text-on-background">
             No hay ninguna landing asignada
           </h1>
           <p className="mt-2 font-body text-body-md text-on-surface-variant">
