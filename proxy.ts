@@ -17,7 +17,6 @@ const isProtectedRoute = createRouteMatcher([
   "/assets(.*)",
   "/domain(.*)",
   "/admin(.*)",
-  "/preview(.*)",
   "/api(.*)",
 ]);
 

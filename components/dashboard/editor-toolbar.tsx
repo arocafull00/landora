@@ -34,7 +34,17 @@ export function EditorToolbar({
   const isAdmin = useDashboardStore((state) => state.isAdmin);
 
   const copyPreviewLink = async () => {
-    const url = `${window.location.origin}/preview/${activeLanding.id}`;
+    let url: string;
+
+    if (activeLanding.status === "Published") {
+      if (activeLanding.customDomain) {
+        url = `https://${activeLanding.customDomain}`;
+      } else {
+        url = `${window.location.origin}/${activeLanding.slug.replace(/^\//, "")}`;
+      }
+    } else {
+      url = `${window.location.origin}/preview/${activeLanding.id}`;
+    }
 
     try {
       await navigator.clipboard.writeText(url);

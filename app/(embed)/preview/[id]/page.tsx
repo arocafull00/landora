@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getEffectiveClientId } from "@/lib/auth";
-import { getLandingPageByIdAndUserId } from "@/data/landing-pages";
+import { getAuthorizedLanding } from "@/lib/api/landing-auth";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { LandingPreviewFrame } from "@/components/dashboard/landing-preview-frame";
 
@@ -18,7 +18,7 @@ export default async function LandingPreviewPage({
   if (!clientId) redirect("/sign-in");
 
   const { id } = await params;
-  const landing = await getLandingPageByIdAndUserId(id, clientId);
+  const landing = await getAuthorizedLanding(id);
   if (!landing) notFound();
 
   const content = toLandingContent(landing);
