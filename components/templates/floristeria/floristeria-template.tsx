@@ -44,7 +44,7 @@ export function FloristeriaTemplate({
 
         <FloristeriaHero content={content} heroRef={heroRef} />
         {isSectionVisible(content, "galeria") ? (
-          <GallerySection content={content} />
+          <GallerySection content={content} templateId="floristeria" />
         ) : null}
         {isSectionVisible(content, "servicios") ? (
           <FloristeriaCtaSection content={content} />

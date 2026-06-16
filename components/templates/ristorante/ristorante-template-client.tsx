@@ -62,7 +62,7 @@ export function RistoranteTemplateClient({
         {isSectionVisible(content, "carta") ? <RistoranteMenuSection content={content} /> : null}
 
         {isSectionVisible(content, "galeria") ? (
-          <GallerySection content={content} />
+          <GallerySection content={content} templateId="ristorante" />
         ) : null}
 
         {isSectionVisible(content, "equipo") ? <RistoranteChefSection content={content} /> : null}

@@ -61,7 +61,7 @@ export function CoffeeShopTemplateClient({
         {isSectionVisible(content, "carta") ? <CoffeeShopMenuSection content={content} /> : null}
 
         {isSectionVisible(content, "galeria") ? (
-          <GallerySection content={content} />
+          <GallerySection content={content} templateId="coffee-shop" />
         ) : null}
 
         {isSectionVisible(content, "horarios") ? (

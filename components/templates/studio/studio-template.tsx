@@ -88,7 +88,9 @@ export function StudioTemplate({
       <StudioHero content={content} heroRef={heroRef} />
 
 
-      {isSectionVisible(content, "galeria") ? <GallerySection content={content} /> : null}
+      {isSectionVisible(content, "galeria") ? (
+        <GallerySection content={content} templateId="studio" />
+      ) : null}
 
 
       {isSectionVisible(content, "story") ? <StudioAbout content={content} /> : null}

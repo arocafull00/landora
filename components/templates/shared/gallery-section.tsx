@@ -1,15 +1,21 @@
 "use client";
 
-import type { LandingContent } from "@/lib/dashboard-data";
+import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 import { GalleryItem } from "@/components/templates/shared/gallery-item";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
-export function GallerySection({ content }: { content: LandingContent }) {
+export function GallerySection({
+  content,
+  templateId,
+}: {
+  content: LandingContent;
+  templateId: TemplateId;
+}) {
   const gallery = content.gallery ?? [];
   if (gallery.length === 0) return null;
 
   const headingFallback =
-    SECTION_HEADING_DEFAULTS[content.template]?.galeria ??
+    SECTION_HEADING_DEFAULTS[templateId]?.galeria ??
     SECTION_HEADING_DEFAULTS.floristeria.galeria;
 
   const heading = getSectionHeading(content, "galeria", headingFallback);
