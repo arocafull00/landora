@@ -53,12 +53,6 @@ export function FloristeriaHeroFanBackdropImage({
         right,
         top,
         zIndex,
-        "--floristeria-delay": `${animationDelay}s`,
-        "--floristeria-duration": `${animationDuration}s`,
-        "--floristeria-drift-x": `${driftX}px`,
-        "--floristeria-float-y": `${floatY}px`,
-        "--floristeria-rotate": `${rotate}deg`,
-        "--floristeria-sway-deg": `${swayDeg}deg`,
         maskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
       }}

@@ -37,7 +37,9 @@ export async function PATCH(
           ? body.houseImage
           : (landing.hero?.houseImage ?? ""),
       fanImages: Array.isArray(body.fanImages)
-        ? body.fanImages.filter((item): item is string => typeof item === "string")
+        ? body.fanImages.filter(
+            (item: unknown): item is string => typeof item === "string"
+          )
         : (landing.hero?.fanImages ?? []),
       ctaLabel:
         typeof body.ctaLabel === "string"
