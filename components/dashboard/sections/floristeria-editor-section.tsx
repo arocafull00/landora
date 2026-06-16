@@ -21,7 +21,6 @@ export function FloristeriaEditorSection() {
     saveStatus,
     saveLanding,
     publishLanding,
-    setActiveEditorTab,
     setActiveLandingId,
     updateHero,
     updateSectionItem,

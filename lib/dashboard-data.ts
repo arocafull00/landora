@@ -322,74 +322,6 @@ export const dashboardViews: Array<{
   { id: "blog", label: "Blog", icon: "document" },
 ];
 
-function isDashboardView(value: string): value is DashboardView {
-  return dashboardViews.some((view) => view.id === value);
-}
-
-const workspaceTabs = ["Structure", "Presentation", "Vision", "Media"];
-const contentGroups: ContentGroup[] = ["Pages", "Posts", "Presentations", "Assets"];
-const initialLandings: Landing[] = [
-  {
-    id: "toll-story",
-    name: "Toll Story",
-    slug: "/toll-story",
-    status: "Draft",
-    edited: "Just now",
-    seoTitle: "Toll Story | Espacios para eventos en Valencia",
-    owner: "Riley",
-    template: "velar",
-    customDomain: null,
-    content: VELAR_DEFAULT_CONTENT,
-  },
-  {
-    id: "black-friday",
-    name: "Black Friday",
-    slug: "/bfcm-24",
-    status: "Published",
-    edited: "2 hours ago",
-    seoTitle: "Black Friday 2024 Huge Deals",
-    owner: "Sarah",
-    template: "velar",
-    customDomain: null,
-    content: {
-      brand: "Black Friday.",
-      brandLogoType: "text",
-      brandLogoImage: "",
-      hero: {
-        eyebrow: "PROMO",
-        title: "BLACK FRIDAY",
-        subtitle: "Campaña limitada para clientes premium.",
-        description: "Landing promocional con CTA directo y bloques de producto.",
-        image: VELAR_ASSETS.toll4,
-        houseImage: VELAR_ASSETS.hero,
-        ctaLabel: "",
-      },
-      story: {
-        statement:
-          "Una campaña compacta para validar ofertas, medir conversiones y publicar cambios sin depender de despliegues.",
-      },
-      stats: [
-        { id: "conversion", value: "12", label: "Variantes activas" },
-        { id: "leads", value: "430", label: "Leads captados" },
-        { id: "sales", value: "88", label: "Ventas atribuidas" },
-      ],
-      gallery: [],
-      nav: [],
-      sectionHeadings: {},
-      spaces: [],
-      services: [],
-      workflow: [],
-      testimonials: [],
-      contact: {
-        phone: "+34 600 00 00 00",
-        email: "marketing@landora.test",
-        address: "Campaña ecommerce",
-        copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
-        socialLinks: [],
-      },
-    },
-  },
-];
 
 export const initialPosts: Post[] = [];
 
@@ -453,11 +385,5 @@ export const initialAssets: Asset[] = [
   },
 ];
 
-const folders = [
-  { name: "Images", items: "9 items" },
-  { name: "Documents", items: "2 items" },
-  { name: "Presentations", items: "1 item" },
-];
 
-const settingCategories = ["General", "Team", "API", "Billing"];
-const settingPages = ["Project Info", "Domains", "Environment", "Danger Zone"];
+

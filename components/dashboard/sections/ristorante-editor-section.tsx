@@ -21,7 +21,6 @@ export function RistoranteEditorSection() {
     saveStatus,
     saveLanding,
     publishLanding,
-    setActiveEditorTab,
     setActiveLandingId,
     updateHero,
     updateSectionItem,

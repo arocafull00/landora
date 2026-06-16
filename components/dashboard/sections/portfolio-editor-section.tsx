@@ -23,7 +23,6 @@ export function PortfolioEditorSection() {
     saveStatus,
     saveLanding,
     publishLanding,
-    setActiveEditorTab,
     setActiveLandingId,
     updateHero,
     updateSection,

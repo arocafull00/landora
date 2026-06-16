@@ -42,11 +42,9 @@ export function LandingPreviewFrame({
     template: TemplateId;
   } | null>(null);
   const highlightedEditorIdRef = useRef<string | null>(null);
-  const activeTemplateRef = useRef(template);
   const scrollContainer = usePreviewScrollContainer();
   const content = livePreview?.content ?? initialContent;
   const activeTemplate = livePreview?.template ?? template;
-  activeTemplateRef.current = activeTemplate;
 
   useLayoutEffect(() => {
     const editorId = highlightedEditorIdRef.current;
@@ -114,27 +112,17 @@ export function LandingPreviewFrame({
     );
   }, []);
 
-  const scrollToResolvedHashRef = useRef(() => {
+  const scrollToResolvedHash = useCallback(() => {
     const sectionId = getHashSectionId();
     if (!sectionId) return;
-    scrollToSectionIdWhenReady(resolveSectionId(activeTemplateRef.current, sectionId));
-  });
-
-  scrollToResolvedHashRef.current = () => {
-    const sectionId = getHashSectionId();
-    if (!sectionId) return;
-    scrollToSectionIdWhenReady(resolveSectionId(activeTemplateRef.current, sectionId));
-  };
+    scrollToSectionIdWhenReady(resolveSectionId(activeTemplate, sectionId));
+  }, [activeTemplate]);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      scrollToResolvedHashRef.current();
-    };
-
-    handleHashChange();
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+    scrollToResolvedHash();
+    window.addEventListener("hashchange", scrollToResolvedHash);
+    return () => window.removeEventListener("hashchange", scrollToResolvedHash);
+  }, [scrollToResolvedHash]);
 
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
 

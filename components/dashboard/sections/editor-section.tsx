@@ -28,7 +28,6 @@ export function EditorSection() {
     landings,
     publishLanding,
     saveLanding,
-    setActiveEditorTab,
     setActiveLandingId,
     updateHero,
     updateSection,

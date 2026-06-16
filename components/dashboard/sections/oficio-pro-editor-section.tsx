@@ -22,7 +22,6 @@ export function OficioProEditorSection() {
     publishLanding,
     saveLanding,
     saveStatus,
-    setActiveEditorTab,
     setActiveLandingId,
     updateHero,
     updateSectionItem,

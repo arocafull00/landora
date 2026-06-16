@@ -23,7 +23,6 @@ export function StudioEditorSection() {
     saveStatus,
     saveLanding,
     publishLanding,
-    setActiveEditorTab,
     setActiveLandingId,
     updateHero,
     updateSection,
