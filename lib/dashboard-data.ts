@@ -1,5 +1,3 @@
-import { VELAR_DEFAULT_CONTENT } from "@/lib/default-content";
-import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 import { VELAR_ASSETS } from "@/lib/velar-assets";
 
 export { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";

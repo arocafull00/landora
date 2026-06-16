@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { renameAsset } from "@/lib/rename-asset";
 import { useAssetsStore } from "@/stores/assets-store";

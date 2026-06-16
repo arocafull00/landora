@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useDebouncedCallback } from "use-debounce";
 import type { Landing } from "@/lib/dashboard-data";
 import { Icon } from "@/components/ui/icon";
-import { Panel } from "@/components/ui/primitives";
 import { useDashboardStore } from "@/stores/dashboard-store";
 
 type BlogConfigEditorPanelProps = {

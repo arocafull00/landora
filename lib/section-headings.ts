@@ -163,10 +163,6 @@ export function getSectionHeading(
   };
 }
 
-function getDefaultSectionHeadings(templateId: TemplateId): Record<string, SectionHeading> {
-  return SECTION_HEADING_DEFAULTS[templateId];
-}
-
 export function hasSectionSubtitle(fallback: SectionHeading): boolean {
   return fallback.subtitle.length > 0;
 }
