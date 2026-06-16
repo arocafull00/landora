@@ -1,16 +1,22 @@
 "use client";
 
+import { useReducedMotion } from "motion/react";
 import { AssetImage } from "@/components/ui/asset-image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 export function FloristeriaGalleryMedia({ item }: { item: GalleryItem }) {
+  const reduce = useReducedMotion();
+  const motionClass = reduce
+    ? "object-cover"
+    : "object-cover transition-transform duration-500 group-hover:scale-[1.03]";
+
   if (item.image) {
     return (
       <AssetImage
-        alt=""
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        alt={item.title || "Creación floral"}
+        className={motionClass}
         fill
-        sizes="(max-width: 768px) 75vw, 320px"
+        sizes="(max-width: 768px) 50vw, 25vw"
         src={item.image}
       />
     );
@@ -20,8 +26,10 @@ export function FloristeriaGalleryMedia({ item }: { item: GalleryItem }) {
 
   return (
     <video
+      autoPlay
       aria-label={item.title || "Gallery video"}
-      className="h-full w-full object-cover"
+      className={`h-full w-full ${motionClass}`}
+      loop
       muted
       playsInline
       src={item.video}

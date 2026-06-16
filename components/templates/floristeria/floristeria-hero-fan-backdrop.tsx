@@ -76,7 +76,7 @@ const HERO_BACKDROP_LAYOUT: HeroBackdropSlot[] = [
     size: "md" as const,
   },
   {
-    asset: FLORISTERIA_ASSETS.interior2,
+    asset: FLORISTERIA_ASSETS.bouquet1,
     alt: "Taller floral",
     top: "32%",
     right: "2%",
@@ -115,7 +115,7 @@ const HERO_BACKDROP_LAYOUT: HeroBackdropSlot[] = [
     className: "hidden lg:block",
   },
   {
-    asset: FLORISTERIA_ASSETS.bouquet1,
+    asset: FLORISTERIA_ASSETS.bouquet3,
     alt: "Ramo de rosas",
     bottom: "14%",
     right: "8%",
@@ -136,24 +136,43 @@ const HERO_BACKDROP_LAYOUT: HeroBackdropSlot[] = [
   },
 ];
 
+function getBackdropMotion(index: number) {
+  return {
+    animationDelay: index * 0.35,
+    animationDuration: 5.5 + (index % 4) * 0.8,
+    driftX: Math.round(((index * 1.7) % 5) - 2),
+    floatY: -10 - (index % 3) * 2,
+    swayDeg: 3 + (index % 3),
+  };
+}
+
 export function FloristeriaHeroFanBackdrop() {
   return (
     <>
-      {HERO_BACKDROP_LAYOUT.map((slot, index) => (
-        <FloristeriaHeroFanBackdropImage
-          alt={slot.alt}
-          bottom={slot.bottom}
-          className={slot.className ?? ""}
-          key={index}
-          left={slot.left}
-          opacity={slot.opacity}
-          right={slot.right}
-          rotate={slot.rotate}
-          size={slot.size}
-          src={slot.asset}
-          top={slot.top}
-        />
-      ))}
+      {HERO_BACKDROP_LAYOUT.map((slot, index) => {
+        const motion = getBackdropMotion(index);
+
+        return (
+          <FloristeriaHeroFanBackdropImage
+            alt={slot.alt}
+            animationDelay={motion.animationDelay}
+            animationDuration={motion.animationDuration}
+            bottom={slot.bottom}
+            className={slot.className ?? ""}
+            driftX={motion.driftX}
+            floatY={motion.floatY}
+            key={index}
+            left={slot.left}
+            opacity={slot.opacity}
+            right={slot.right}
+            rotate={slot.rotate}
+            size={slot.size}
+            src={slot.asset}
+            swayDeg={motion.swayDeg}
+            top={slot.top}
+          />
+        );
+      })}
     </>
   );
 }

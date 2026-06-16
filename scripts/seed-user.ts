@@ -19,6 +19,7 @@ async function seedSections(db: Db, landingId: string) {
     description: c.hero.description,
     image: c.hero.image,
     houseImage: c.hero.houseImage,
+    fanImages: c.hero.fanImages ?? [],
     ctaLabel: c.hero.ctaLabel ?? "",
   });
   await db.insert(schema.landingStory).values({ landingId, statement: c.story.statement });

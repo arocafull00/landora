@@ -145,9 +145,9 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      { id: "Historia", label: "Historia" },
       { id: "Servicios", label: "Servicios" },
       { id: "Galeria", label: "Galería" },
-      { id: "Equipo", label: "Equipo" },
       { id: "FAQ", label: "FAQ" },
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,

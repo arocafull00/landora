@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+import { m, useReducedMotion } from "motion/react";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
 const base =
@@ -33,40 +34,60 @@ export function FloristeriaButton({
   icon?: React.ReactNode | null;
   className?: string;
 }) {
+  const reduce = useReducedMotion();
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
   const trailingIcon =
     icon === null ? null : icon ?? <ArrowRight className="h-4 w-4" />;
+
+  const spring = reduce
+    ? {}
+    : {
+        whileHover: { scale: 1.03 },
+        whileTap: { scale: 0.97 },
+        transition: { type: "spring" as const, stiffness: 400, damping: 20 },
+      };
+
+  const content = (
+    <>
+      {children}
+      {trailingIcon}
+    </>
+  );
 
   if (href) {
     const isExternal = href.startsWith("http");
 
     if (isExternal) {
       return (
-        <a
+        <m.a
           className={classes}
           href={href}
           rel="noopener noreferrer"
           target="_blank"
+          {...spring}
         >
-          {children}
-          {trailingIcon}
-        </a>
+          {content}
+        </m.a>
       );
     }
 
+    const wrapperClassName = className.includes("w-full")
+      ? "flex w-full sm:inline-flex sm:w-auto"
+      : "inline-flex";
+
     return (
-      <TemplateNavAnchor className={classes} href={href}>
-        {children}
-        {trailingIcon}
-      </TemplateNavAnchor>
+      <m.div className={wrapperClassName} {...spring}>
+        <TemplateNavAnchor className={classes} href={href}>
+          {content}
+        </TemplateNavAnchor>
+      </m.div>
     );
   }
 
   return (
-    <button className={classes} type="button">
-      {children}
-      {trailingIcon}
-    </button>
+    <m.button className={classes} type="button" {...spring}>
+      {content}
+    </m.button>
   );
 }

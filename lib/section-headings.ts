@@ -94,8 +94,9 @@ export const SECTION_HEADING_DEFAULTS: Record<
   },
   floristeria: {
     servicios: {
-      title: "Nuestros servicios",
-      subtitle: "",
+      title: "¿Qué tienes en mente hoy?",
+      subtitle:
+        "Nuestra comunidad de creativos florales está lista para diseñar y entregar en mano arte floral significativo, arreglos hechos a medida para tus momentos especiales.",
     },
     galeria: {
       title: "Nuestras creaciones",

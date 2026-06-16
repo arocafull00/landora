@@ -396,6 +396,48 @@ textarea {
   }
 }
 
+@keyframes floristeria-backdrop-enter {
+  from {
+    transform: rotate(var(--floristeria-rotate)) translate3d(0, 18px, 0) scale(0.9);
+    filter: blur(3px);
+  }
+  to {
+    transform: rotate(var(--floristeria-rotate)) translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes floristeria-backdrop-float {
+  0%,
+  100% {
+    transform: rotate(var(--floristeria-rotate)) translate3d(0, 0, 0);
+  }
+  33% {
+    transform: rotate(calc(var(--floristeria-rotate) + var(--floristeria-sway-deg)))
+      translate3d(var(--floristeria-drift-x), calc(var(--floristeria-float-y) * 0.55), 0);
+  }
+  66% {
+    transform: rotate(calc(var(--floristeria-rotate) - var(--floristeria-sway-deg)))
+      translate3d(calc(var(--floristeria-drift-x) * -0.65), var(--floristeria-float-y), 0);
+  }
+}
+
+.floristeria-backdrop-float {
+  transform: rotate(var(--floristeria-rotate));
+  animation:
+    floristeria-backdrop-enter var(--floristeria-enter-duration, 0.85s)
+      cubic-bezier(0.22, 1, 0.36, 1) var(--floristeria-delay, 0s) both,
+    floristeria-backdrop-float var(--floristeria-duration, 6s) cubic-bezier(0.22, 1, 0.36, 1)
+      calc(var(--floristeria-delay, 0s) + var(--floristeria-enter-duration, 0.85s)) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floristeria-backdrop-float {
+    animation: none !important;
+    filter: none !important;
+  }
+}
+
 .portfolio-hero-line-h,
 .portfolio-hero-line-v {
   will-change: transform, opacity;

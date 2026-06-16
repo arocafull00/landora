@@ -105,6 +105,7 @@ export async function upsertLandingHero(
     description: string;
     image: string;
     houseImage: string;
+    fanImages: string[];
     ctaLabel: string;
   }
 ) {

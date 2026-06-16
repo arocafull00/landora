@@ -2,7 +2,6 @@
 
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
-import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
@@ -11,6 +10,11 @@ import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import type { HeroContent } from "@/lib/dashboard-data";
+import {
+  FLORISTERIA_HERO_FAN_LABELS,
+  resolveFloristeriaFanImages,
+} from "@/lib/floristeria-assets";
 
 export function FloristeriaEditorSection() {
   const {
@@ -23,7 +27,9 @@ export function FloristeriaEditorSection() {
     publishLanding,
     setActiveLandingId,
     updateHero,
+    updateSection,
     updateSectionItem,
+    updateStat,
     updateStory,
   } = useDashboardStore();
 
@@ -38,6 +44,15 @@ export function FloristeriaEditorSection() {
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
   const gallery = activeLanding.content.gallery ?? [];
   const faq = activeLanding.content.faq ?? [];
+  const fanImages = resolveFloristeriaFanImages(activeLanding.content.hero);
+
+  const updateFanImage = (index: number, value: string) => {
+    const nextFanImages = [...fanImages];
+    nextFanImages[index] = value;
+    const patch: Partial<HeroContent> = { fanImages: nextFanImages };
+    if (index === 2) patch.image = value;
+    updateHero(activeLanding.id, patch);
+  };
 
   return (
     <EditorLayout
@@ -84,19 +99,74 @@ export function FloristeriaEditorSection() {
                 onChange={(value) => updateHero(activeLanding.id, { ctaLabel: value })}
                 value={activeLanding.content.hero.ctaLabel ?? ""}
               />
-              <ImageField
-                label="Hero image"
-                onChange={(value) => updateHero(activeLanding.id, { image: value })}
-                presets={BACKGROUND_IMAGE_OPTIONS}
-                templateId={activeLanding.template}
-                value={activeLanding.content.hero.image}
+              <div>
+                <p className="mb-3 font-label text-label-md text-on-surface-variant">
+                  Imágenes del abanico
+                </p>
+                <div className="space-y-6">
+                  {FLORISTERIA_HERO_FAN_LABELS.map((label, index) => (
+                    <ImageField
+                      key={label}
+                      label={label}
+                      onChange={(value) => updateFanImage(index, value)}
+                      templateId={activeLanding.template}
+                      value={fanImages[index]}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
+
+          {activeEditorTab === "Historia" ? (
+            <section className="space-y-5 py-unit-lg">
+              <SectionTitle
+                title="Historia"
+                description="Narrativa y métricas de la sección Nosotros."
               />
               <TextArea
-                label="Sobre nosotras"
-                onChange={(value) => updateStory(activeLanding.id, { statement: value })}
-                rows={4}
-                value={activeLanding.content.story?.statement ?? ""}
+                label="Texto principal"
+                onChange={(value) => {
+                  updateStory(activeLanding.id, { statement: value });
+                  updateSection(activeLanding.id, "about", {
+                    ...activeLanding.content.about,
+                    statement: value,
+                  });
+                }}
+                rows={5}
+                value={
+                  activeLanding.content.about?.statement ??
+                  activeLanding.content.story?.statement ??
+                  ""
+                }
               />
+              {activeLanding.content.stats.length > 0 ? (
+                <div>
+                  <p className="mb-3 font-label text-label-md text-on-surface-variant">
+                    Métricas
+                  </p>
+                  <div className="grid gap-4 md:grid-cols-3">
+                    {activeLanding.content.stats.map((stat) => (
+                      <div className="space-y-3" key={stat.id}>
+                        <TextField
+                          label="Valor"
+                          onChange={(value) =>
+                            updateStat(activeLanding.id, stat.id, { value })
+                          }
+                          value={stat.value}
+                        />
+                        <TextField
+                          label="Etiqueta"
+                          onChange={(value) =>
+                            updateStat(activeLanding.id, stat.id, { label: value })
+                          }
+                          value={stat.label}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </section>
           ) : null}
 

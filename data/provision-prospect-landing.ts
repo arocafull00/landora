@@ -49,6 +49,7 @@ async function provisionProspectLandingContent(
       description: content.hero.description,
       image: content.hero.image,
       houseImage: "",
+      fanImages: [],
       ctaLabel: "",
     }),
     upsertLandingStory(landingId, { statement: content.story.statement }),

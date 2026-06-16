@@ -5,7 +5,7 @@ import { VELAR_ASSETS } from "@/lib/velar-assets";
 import { STUDIO_ASSETS } from "@/lib/studio-assets";
 import { PORTFOLIO_ASSETS } from "@/lib/portfolio-assets";
 import { RISTORANTE_ASSETS } from "@/lib/ristorante-assets";
-import { FLORISTERIA_ASSETS } from "@/lib/floristeria-assets";
+import { FLORISTERIA_ASSETS, FLORISTERIA_HERO_FAN_DEFAULT_IMAGES } from "@/lib/floristeria-assets";
 import { OFICIO_PRO_ASSETS } from "@/lib/oficio-pro-assets";
 import { COFFEE_SHOP_ASSETS } from "@/lib/coffee-shop-assets";
 
@@ -693,6 +693,7 @@ export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
     subtitle: "Creamos arreglos florales únicos para cada momento especial de tu vida.",
     description: "Floristería artesanal en el centro de Sevilla desde 2012.",
     image: FLORISTERIA_ASSETS.hero,
+    fanImages: [...FLORISTERIA_HERO_FAN_DEFAULT_IMAGES],
     ctaLabel: "Hacer pedido",
   },
   nav: [
@@ -750,6 +751,7 @@ export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
     { id: "g4", image: FLORISTERIA_ASSETS.gallery4 },
     { id: "g5", image: FLORISTERIA_ASSETS.gallery5 },
     { id: "g6", image: FLORISTERIA_ASSETS.gallery6 },
+    { id: "g7", image: FLORISTERIA_ASSETS.gallery7 },
   ],
   team: [],
   serviceMenu: [

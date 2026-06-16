@@ -50,6 +50,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       description: row.hero?.description ?? "",
       image: mapImage(row.hero?.image),
       houseImage: mapImage(row.hero?.houseImage),
+      fanImages: (row.hero?.fanImages ?? []).map((image) => mapImage(image)),
       ctaLabel: row.hero?.ctaLabel ?? "",
     },
     story: {

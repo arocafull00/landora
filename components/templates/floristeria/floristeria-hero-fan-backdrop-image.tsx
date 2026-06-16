@@ -10,32 +10,42 @@ const SIZE_CLASSES = {
 
 export function FloristeriaHeroFanBackdropImage({
   alt,
+  animationDelay,
+  animationDuration,
   bottom,
   className = "",
+  driftX,
+  floatY,
   left,
   opacity,
   right,
   rotate,
   size = "md",
   src,
+  swayDeg,
   top,
   zIndex = 0,
 }: {
   alt: string;
+  animationDelay: number;
+  animationDuration: number;
   bottom?: string;
   className?: string;
+  driftX: number;
+  floatY: number;
   left?: string;
   opacity: number;
   right?: string;
   rotate: number;
   size?: "sm" | "md" | "lg";
   src: string;
+  swayDeg: number;
   top?: string;
   zIndex?: number;
 }) {
   return (
     <div
-      className={`pointer-events-none absolute origin-center overflow-hidden rounded-2xl ${SIZE_CLASSES[size]} ${className}`}
+      className={`floristeria-backdrop-float pointer-events-none absolute origin-center overflow-hidden rounded-2xl ${SIZE_CLASSES[size]} ${className}`}
       style={{
         bottom,
         left,
@@ -43,7 +53,12 @@ export function FloristeriaHeroFanBackdropImage({
         right,
         top,
         zIndex,
-        transform: `rotate(${rotate}deg)`,
+        "--floristeria-delay": `${animationDelay}s`,
+        "--floristeria-duration": `${animationDuration}s`,
+        "--floristeria-drift-x": `${driftX}px`,
+        "--floristeria-float-y": `${floatY}px`,
+        "--floristeria-rotate": `${rotate}deg`,
+        "--floristeria-sway-deg": `${swayDeg}deg`,
         maskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
       }}

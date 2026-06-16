@@ -70,6 +70,7 @@ export const landingHero = pgTable("landing_hero", {
   description: text("description").notNull().default(""),
   image: text("image").notNull().default(""),
   houseImage: text("house_image").notNull().default(""),
+  fanImages: jsonb("fan_images").$type<string[]>().notNull().default([]),
   ctaLabel: text("cta_label").notNull().default(""),
 });
 

@@ -121,6 +121,7 @@ export type HeroContent = {
   description: string;
   image: string;
   houseImage?: string;
+  fanImages?: string[];
   ctaLabel: string;
 };
 

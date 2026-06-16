@@ -57,6 +57,7 @@ export async function seedLandingSections(landingId: string, templateId: Templat
       description: c.hero.description,
       image: c.hero.image,
       houseImage: c.hero.houseImage ?? "",
+      fanImages: c.hero.fanImages ?? [],
       ctaLabel: c.hero.ctaLabel ?? "",
     }),
     upsertLandingStory(landingId, { statement: getDefaultStoryStatement(templateId, c) }),
@@ -178,6 +179,7 @@ async function seedMissingLandingSections(
         description: c.hero.description,
         image: c.hero.image,
         houseImage: c.hero.houseImage ?? "",
+        fanImages: c.hero.fanImages ?? [],
         ctaLabel: c.hero.ctaLabel ?? "",
       })
     );

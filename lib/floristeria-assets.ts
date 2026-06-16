@@ -1,3 +1,6 @@
+import type { HeroContent } from "@/lib/dashboard-data";
+import { isBackgroundPreset } from "@/lib/background-assets";
+
 export const FLORISTERIA_HERO_FAN_EDGES = {
   left: { src: "bouquet6", alt: "Detalle floral" },
   right: { src: "bouquet2", alt: "Ramo delicado" },
@@ -22,7 +25,11 @@ export const FLORISTERIA_ASSETS = {
   gallery4: "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=800&q=85&auto=format",
   gallery5: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?w=800&q=85&auto=format",
   gallery6: "https://images.unsplash.com/photo-1469259943454-aa100abba749?w=800&q=85&auto=format",
+  gallery7: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&q=85&auto=format",
   heroGrass: "/templates/floristeria/grass.png",
+  aboutBg: "/templates/floristeria/bg.png",
+  testimonialsBg: "/templates/floristeria/bg-2.png",
+  ctaBgLottie: "/templates/floristeria/Floral%20Frame.json",
 } as const;
 
 export const FLORISTERIA_IMAGE_OPTIONS = [
@@ -38,3 +45,32 @@ export const FLORISTERIA_IMAGE_OPTIONS = [
   { value: FLORISTERIA_ASSETS.florist2, label: "Florista 2" },
   { value: FLORISTERIA_ASSETS.florist3, label: "Florista 3" },
 ] as const;
+
+export const FLORISTERIA_HERO_FAN_DEFAULT_IMAGES = [
+  FLORISTERIA_ASSETS.bouquet1,
+  FLORISTERIA_ASSETS.bouquet3,
+  FLORISTERIA_ASSETS.hero,
+  FLORISTERIA_ASSETS.bouquet4,
+  FLORISTERIA_ASSETS.bouquet5,
+] as const;
+
+export const FLORISTERIA_HERO_FAN_LABELS = [
+  "Ramo izquierdo exterior",
+  "Ramo izquierdo interior",
+  "Imagen central",
+  "Ramo derecho interior",
+  "Ramo derecho exterior",
+] as const;
+
+export function resolveFloristeriaFanImages(hero: HeroContent): string[] {
+  return FLORISTERIA_HERO_FAN_DEFAULT_IMAGES.map((fallback, index) => {
+    const stored = hero.fanImages?.[index];
+    if (stored && !isBackgroundPreset(stored)) return stored;
+
+    if (index === 2 && hero.image && !isBackgroundPreset(hero.image)) {
+      return hero.image;
+    }
+
+    return fallback;
+  });
+}

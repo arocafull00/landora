@@ -8,7 +8,7 @@ import { FloristeriaAosInit } from "@/components/templates/floristeria/florister
 import { FloristeriaNav } from "@/components/templates/floristeria/floristeria-nav";
 import { FloristeriaHero } from "@/components/templates/floristeria/floristeria-hero";
 import { FloristeriaAbout } from "@/components/templates/floristeria/floristeria-about";
-import { FloristeriaServicesSection } from "@/components/templates/floristeria/floristeria-services-section";
+import { FloristeriaCtaSection } from "@/components/templates/floristeria/floristeria-cta-section";
 import { FloristeriaGallerySection } from "@/components/templates/floristeria/floristeria-gallery-section";
 import { FloristeriaTestimonialsSection } from "@/components/templates/floristeria/floristeria-testimonials-section";
 import { FloristeriaFaqSection } from "@/components/templates/floristeria/floristeria-faq-section";
@@ -31,37 +31,36 @@ export function FloristeriaTemplate({
         className="relative"
         style={{ backgroundColor: "#FAFAF7", overflowX: "clip" }}
       >
-      <FloristeriaAosInit rootRef={rootRef} />
+        <FloristeriaAosInit rootRef={rootRef} />
 
-      <FloristeriaNav
-        brand={content.brand || "Jardín Secreto."}
-        brandLogoType={content.brandLogoType ?? "text"}
-        brandLogoImage={content.brandLogoImage ?? ""}
-        navLinks={getVisibleNav(content.nav, content.hiddenSections, "floristeria")}
-        ctaLabel={content.hero.ctaLabel ?? ""}
-        topOffset={topOffset}
-      />
+        <FloristeriaNav
+          brand={content.brand || "Jardín Secreto."}
+          brandLogoType={content.brandLogoType ?? "text"}
+          brandLogoImage={content.brandLogoImage ?? ""}
+          navLinks={getVisibleNav(content.nav, content.hiddenSections, "floristeria")}
+          ctaLabel={content.hero.ctaLabel ?? ""}
+          topOffset={topOffset}
+        />
 
-      <FloristeriaHero content={content} heroRef={heroRef} />
+        <FloristeriaHero content={content} heroRef={heroRef} />
+        {isSectionVisible(content, "galeria") ? (
+          <FloristeriaGallerySection content={content} />
+        ) : null}
+        {isSectionVisible(content, "servicios") ? (
+          <FloristeriaCtaSection content={content} />
+        ) : null}
 
-      {isSectionVisible(content, "story") ? <FloristeriaAbout content={content} /> : null}
+        {isSectionVisible(content, "story") ? <FloristeriaAbout content={content} /> : null}
 
-      {isSectionVisible(content, "servicios") ? (
-        <FloristeriaServicesSection content={content} />
-      ) : null}
 
-      {isSectionVisible(content, "galeria") ? (
-        <FloristeriaGallerySection content={content} />
-      ) : null}
+        {isSectionVisible(content, "testimonios") ? (
+          <FloristeriaTestimonialsSection content={content} />
+        ) : null}
 
-      {isSectionVisible(content, "testimonios") ? (
-        <FloristeriaTestimonialsSection content={content} />
-      ) : null}
+        {isSectionVisible(content, "faq") ? <FloristeriaFaqSection content={content} /> : null}
 
-      {isSectionVisible(content, "faq") ? <FloristeriaFaqSection content={content} /> : null}
-
-      <FloristeriaContactSection content={content} />
-    </div>
+        <FloristeriaContactSection content={content} />
+      </div>
     </TemplateLazyMotion>
   );
 }

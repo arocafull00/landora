@@ -188,7 +188,7 @@ const RISTORANTE_SECTIONS: TemplateSectionDef[] = [
 
 const FLORISTERIA_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
+  { anchor: "story", label: "Historia", editorTabId: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
   { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },

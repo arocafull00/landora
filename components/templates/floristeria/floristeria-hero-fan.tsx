@@ -1,16 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  FLORISTERIA_ASSETS,
-  FLORISTERIA_HERO_FAN_EDGES,
-} from "@/lib/floristeria-assets";
+import { useReducedMotion } from "motion/react";
+import { FLORISTERIA_ASSETS, FLORISTERIA_HERO_FAN_EDGES } from "@/lib/floristeria-assets";
 import { FloristeriaHeroFanEdge } from "@/components/templates/floristeria/floristeria-hero-fan-edge";
 import { FloristeriaHeroFanImage } from "@/components/templates/floristeria/floristeria-hero-fan-image";
 
 const FAN_LAYOUT = [
   {
-    asset: FLORISTERIA_ASSETS.bouquet1,
     alt: "Ramo de rosas",
     x: -280,
     y: 52,
@@ -18,7 +15,6 @@ const FAN_LAYOUT = [
     z: 1,
   },
   {
-    asset: FLORISTERIA_ASSETS.bouquet3,
     alt: "Ramo de primavera",
     x: -140,
     y: 12,
@@ -26,7 +22,6 @@ const FAN_LAYOUT = [
     z: 2,
   },
   {
-    asset: null,
     alt: "Flores frescas",
     x: 0,
     y: -6,
@@ -34,7 +29,6 @@ const FAN_LAYOUT = [
     z: 10,
   },
   {
-    asset: FLORISTERIA_ASSETS.bouquet4,
     alt: "Ramo artesanal",
     x: 140,
     y: 12,
@@ -42,7 +36,6 @@ const FAN_LAYOUT = [
     z: 2,
   },
   {
-    asset: FLORISTERIA_ASSETS.bouquet5,
     alt: "Centro floral",
     x: 280,
     y: 52,
@@ -66,12 +59,13 @@ function useFanScale() {
 }
 
 export function FloristeriaHeroFan({
-  centerImageSrc,
   centerImageAlt,
+  images,
 }: {
-  centerImageSrc: string;
   centerImageAlt: string;
+  images: string[];
 }) {
+  const reduce = useReducedMotion();
   const scale = useFanScale();
 
   return (
@@ -89,17 +83,18 @@ export function FloristeriaHeroFan({
 
       <div className="relative mx-auto h-[140px] w-full sm:h-[165px] md:h-[190px]">
         {FAN_LAYOUT.map((slot, index) => {
-          const src = slot.asset ?? centerImageSrc;
-          const alt = slot.asset ? slot.alt : centerImageAlt;
+          const alt = index === 2 ? centerImageAlt : slot.alt;
 
           return (
             <FloristeriaHeroFanImage
               alt={alt}
+              index={index}
               key={index}
               priority={index === 2}
+              reduceMotion={reduce ?? false}
               rotate={slot.rotate}
               scale={scale}
-              src={src}
+              src={images[index]}
               x={slot.x}
               y={slot.y}
               zIndex={slot.z}

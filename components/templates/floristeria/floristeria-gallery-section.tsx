@@ -15,44 +15,40 @@ export function FloristeriaGallerySection({ content }: { content: LandingContent
   );
 
   return (
-    <section id="galeria" className="scroll-mt-24 bg-[#FAFAF7] py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6 md:px-10 lg:px-16">
-        <h2
-          className="mb-12 text-center text-balance text-3xl font-extrabold text-[#1a1a1a] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
-          style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "-0.02em" }}
-          data-aos="fade-up"
+    <section id="galeria" className="scroll-mt-24 bg-[#FAFAF7] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-16 border-b border-[#2D5016]/10 pb-8" data-aos="fade-up">
+          <h2
+            className="text-balance text-3xl font-extrabold text-[#1a1a1a] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
+            style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "-0.02em" }}
+          >
+            {heading.title}
+          </h2>
+          {heading.subtitle ? (
+            <p
+              className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-[#1a1a1a]/60"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {heading.subtitle}
+            </p>
+          ) : null}
+        </div>
+
+        <div
+          className="grid grid-flow-dense grid-cols-2 gap-3 md:grid-cols-4 md:gap-4"
+          aria-label="Galería de creaciones"
         >
-          {heading.title}
-        </h2>
-      </div>
-
-      <div
-        className="flex gap-4 overflow-x-auto px-6 pb-4 [-ms-overflow-style:none] [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden"
-        style={{ scrollSnapType: "x mandatory" }}
-        data-aos="fade-up"
-      >
-        {gallery.map((item, index) => (
-          <FloristeriaGalleryItem
-            item={item}
-            index={index}
-            variant="scroll"
-            key={item.id}
-          />
-        ))}
-      </div>
-
-      <div
-        className="mx-auto hidden max-w-7xl grid-cols-3 gap-4 px-10 md:grid md:auto-rows-[200px] lg:px-16"
-        data-aos="fade-up"
-      >
-        {gallery.map((item, index) => (
-          <FloristeriaGalleryItem
-            item={item}
-            index={index}
-            variant="masonry"
-            key={item.id}
-          />
-        ))}
+          {gallery.map((item, index) => (
+            <FloristeriaGalleryItem
+              aosDelay={Math.min(index * 60, 300)}
+              featured={index === 0}
+              index={index}
+              item={item}
+              key={item.id}
+              total={gallery.length}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
