@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getLandingPageBySlug } from "@/data/landing-pages";
+import { getLandingPageBySlug, getLandingPageMetaBySlug } from "@/data/landing-pages";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
@@ -26,7 +26,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const landing = await getLandingPageBySlug(slug);
+  const landing = await getLandingPageMetaBySlug(slug);
 
   if (!landing) return {};
 

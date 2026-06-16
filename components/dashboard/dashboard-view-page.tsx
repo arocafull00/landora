@@ -5,7 +5,7 @@ import { getLandingPageByUserId } from "@/data/landing-pages";
 import { toLandingView } from "@/lib/landing-mapper";
 import { DashboardAccountActions } from "@/components/dashboard/dashboard-account-actions";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
-import { ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
+import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { DashboardView } from "@/lib/dashboard-data";
 import { isAdmin } from "@/lib/is-admin";
 

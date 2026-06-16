@@ -12,6 +12,7 @@ export const STUDIO_ASSETS = {
   gallery4: "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800&q=85&auto=format",
   gallery5: "https://images.unsplash.com/photo-1559599101-f09722fb4948?w=800&q=85&auto=format",
   gallery6: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=800&q=85&auto=format",
+  gallery7: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=800&q=85&auto=format",
 } as const;
 
 export const STUDIO_IMAGE_OPTIONS = [

@@ -3,14 +3,19 @@
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { users, landingPages } from "@/db/schema";
 import { getLandingBySlug } from "@/data/admin";
-import { getLandingPageById, updateLandingPage } from "@/data/landing-pages";
+import {
+  deleteLandingPageById,
+  deleteLandingsByUserId,
+  getLandingPageById,
+  getLandingsByUserId,
+  insertLandingPage,
+  updateLandingPage,
+} from "@/data/landing-pages";
+import { deleteUserById, getUserByInternalId, insertUser } from "@/data/users";
 import { isReservedSlug } from "@/lib/app-host";
 import { removeProjectDomain } from "@/lib/vercel-domains";
-import { seedLandingSections, ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
+import { seedLandingSections, ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { checkAuth } from "@/lib/auth";
 const createUserSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
@@ -69,7 +74,7 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
   }
 
   try {
-    await db.insert(users).values({ clerkUserId: clerkUser.id, name, type: "user" });
+    await insertUser({ clerkUserId: clerkUser.id, name, type: "user" });
   } catch {
     await clerk.users.deleteUser(clerkUser.id).catch(() => null);
     return { error: "Error al guardar el usuario en la base de datos" };
@@ -116,10 +121,7 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
 
   let landingId: string;
   try {
-    const [landing] = await db
-      .insert(landingPages)
-      .values({ userId, name, slug, template })
-      .returning({ id: landingPages.id });
+    const landing = await insertLandingPage({ userId, name, slug, template });
     landingId = landing.id;
   } catch (err) {
     console.error("[createLandingForUser] DB insert error:", err);
@@ -130,7 +132,7 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
     await seedLandingSections(landingId, template);
   } catch (err) {
     console.error("[createLandingForUser] Seed error:", err);
-    await db.delete(landingPages).where(eq(landingPages.id, landingId));
+    await deleteLandingPageById(landingId);
     return { error: "Error al inicializar el contenido de la landing" };
   }
 
@@ -194,7 +196,7 @@ export async function deleteLanding(landingId: string): Promise<ActionResult> {
   }
 
   try {
-    await db.delete(landingPages).where(eq(landingPages.id, parsed.data));
+    await deleteLandingPageById(parsed.data);
   } catch {
     return { error: "Error al eliminar la landing" };
   }
@@ -212,9 +214,7 @@ export async function deleteUser(userId: string): Promise<ActionResult> {
     return { error: parsed.error.message };
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, parsed.data),
-  });
+  const user = await getUserByInternalId(parsed.data);
 
   if (!user) {
     return { error: "Usuario no encontrado" };
@@ -224,9 +224,7 @@ export async function deleteUser(userId: string): Promise<ActionResult> {
     return { error: "No se puede eliminar un administrador" };
   }
 
-  const userLandings = await db.query.landingPages.findMany({
-    where: eq(landingPages.userId, parsed.data),
-  });
+  const userLandings = await getLandingsByUserId(parsed.data);
 
   const customDomains = userLandings.flatMap((landing) =>
     landing.customDomain ? [landing.customDomain] : [],
@@ -239,8 +237,8 @@ export async function deleteUser(userId: string): Promise<ActionResult> {
   }
 
   try {
-    await db.delete(landingPages).where(eq(landingPages.userId, parsed.data));
-    await db.delete(users).where(eq(users.id, parsed.data));
+    await deleteLandingsByUserId(parsed.data);
+    await deleteUserById(parsed.data);
   } catch {
     return { error: "Error al eliminar los datos del usuario" };
   }

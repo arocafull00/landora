@@ -1,8 +1,10 @@
-import { eq, and } from "drizzle-orm";
-import { db } from "@/db";
-import { assets } from "@/db/schema";
 import { getEffectiveClientId } from "@/lib/auth";
 import { deleteCloudinaryAsset, getAssetFolder } from "@/lib/cloudinary";
+import {
+  deleteAssetById,
+  getAssetByIdAndUserId,
+  updateAssetName,
+} from "@/data/assets";
 
 export async function PATCH(
   req: Request,
@@ -26,20 +28,12 @@ export async function PATCH(
     return Response.json({ error: "Name is required" }, { status: 400 });
   }
 
-  const [row] = await db
-    .select()
-    .from(assets)
-    .where(and(eq(assets.id, id), eq(assets.userId, userId)));
+  const row = await getAssetByIdAndUserId(id, userId);
 
   if (!row) return Response.json({ error: "Not found" }, { status: 404 });
 
   try {
-    const [updated] = await db
-      .update(assets)
-      .set({ name })
-      .where(eq(assets.id, id))
-      .returning();
-
+    const updated = await updateAssetName(id, name);
     return Response.json(updated);
   } catch {
     return Response.json({ error: "Failed to update asset" }, { status: 500 });
@@ -55,10 +49,7 @@ export async function DELETE(
 
   const { id } = await params;
 
-  const [row] = await db
-    .select()
-    .from(assets)
-    .where(and(eq(assets.id, id), eq(assets.userId, userId)));
+  const row = await getAssetByIdAndUserId(id, userId);
 
   if (!row) return Response.json({ error: "Not found" }, { status: 404 });
 
@@ -79,7 +70,11 @@ export async function DELETE(
     return Response.json({ error: "Failed to delete from Cloudinary" }, { status: 502 });
   }
 
-  await db.delete(assets).where(eq(assets.id, id));
+  try {
+    await deleteAssetById(id);
+  } catch {
+    return Response.json({ error: "Internal server error" }, { status: 500 });
+  }
 
   return new Response(null, { status: 204 });
 }

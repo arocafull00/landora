@@ -57,6 +57,31 @@ export type LandingWithSections = LandingPage & {
   workHistory: LandingWorkHistoryItem[];
 };
 
+export type LandingPageMeta = Pick<
+  LandingPage,
+  "id" | "userId" | "name" | "slug" | "template" | "published" | "customDomain" | "updatedAt"
+> & {
+  seo: Pick<LandingSeo, "title" | "description"> | null;
+  hero: Pick<
+    LandingHero,
+    | "eyebrow"
+    | "title"
+    | "subtitle"
+    | "description"
+    | "image"
+    | "houseImage"
+    | "fanImages"
+    | "ctaLabel"
+  > | null;
+};
+
+function buildMetaWith() {
+  return {
+    seo: true as const,
+    hero: true as const,
+  };
+}
+
 function buildWith() {
   return {
     seo: true as const,
@@ -128,6 +153,44 @@ export const getLandingPageById = cache(async (id: string) => {
   }
 });
 
+export const getLandingPageMetaByIdAndUserId = cache(
+  async (id: string, userId: string) => {
+    try {
+      return (await db.query.landingPages.findFirst({
+        where: and(eq(landingPages.id, id), eq(landingPages.userId, userId)),
+        with: buildMetaWith(),
+      })) as LandingPageMeta | undefined;
+    } catch (error) {
+      throw new Error("Failed to fetch landing page meta", { cause: error });
+    }
+  }
+);
+
+export const getLandingPageMetaById = cache(async (id: string) => {
+  try {
+    return (await db.query.landingPages.findFirst({
+      where: eq(landingPages.id, id),
+      with: buildMetaWith(),
+    })) as LandingPageMeta | undefined;
+  } catch (error) {
+    throw new Error("Failed to fetch landing page meta", { cause: error });
+  }
+});
+
+export const getLandingPageMetaBySlug = cache(async (slug: string) => {
+  try {
+    return (await db.query.landingPages.findFirst({
+      where: and(
+        or(eq(landingPages.slug, slug), eq(landingPages.slug, `/${slug}`)),
+        eq(landingPages.published, true)
+      ),
+      with: buildMetaWith(),
+    })) as LandingPageMeta | undefined;
+  } catch (error) {
+    throw new Error("Failed to fetch landing page meta", { cause: error });
+  }
+});
+
 export async function updateLandingPage(
   id: string,
   data: Partial<Pick<LandingPage, "published" | "name" | "slug" | "updatedAt">>
@@ -136,5 +199,48 @@ export async function updateLandingPage(
     await db.update(landingPages).set(data).where(eq(landingPages.id, id));
   } catch {
     throw new Error("Failed to update landing page");
+  }
+}
+
+export async function insertLandingPage(data: {
+  userId: string;
+  name: string;
+  slug: string;
+  template: LandingPage["template"];
+}) {
+  try {
+    const [landing] = await db
+      .insert(landingPages)
+      .values(data)
+      .returning({ id: landingPages.id });
+    return landing;
+  } catch {
+    throw new Error("Failed to insert landing page");
+  }
+}
+
+export async function deleteLandingPageById(id: string) {
+  try {
+    await db.delete(landingPages).where(eq(landingPages.id, id));
+  } catch {
+    throw new Error("Failed to delete landing page");
+  }
+}
+
+export async function getLandingsByUserId(userId: string) {
+  try {
+    return await db.query.landingPages.findMany({
+      where: eq(landingPages.userId, userId),
+    });
+  } catch {
+    throw new Error("Failed to fetch landings by user");
+  }
+}
+
+export async function deleteLandingsByUserId(userId: string) {
+  try {
+    await db.delete(landingPages).where(eq(landingPages.userId, userId));
+  } catch {
+    throw new Error("Failed to delete landings by user");
   }
 }

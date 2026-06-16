@@ -15,6 +15,7 @@ export const COFFEE_SHOP_ASSETS = {
   gallery4: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&q=85&auto=format",
   gallery5: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=85&auto=format",
   gallery6: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800&q=85&auto=format",
+  gallery7: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=85&auto=format",
 } as const;
 
 export const COFFEE_SHOP_IMAGE_OPTIONS = [

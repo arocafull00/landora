@@ -29,6 +29,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
     },
   },
   studio: {
+    galeria: {
+      title: "Galería",
+      subtitle: "",
+    },
     servicios: {
       title: "Carta de servicios",
       subtitle: "",

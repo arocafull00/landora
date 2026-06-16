@@ -1,4 +1,4 @@
-import { getAuthorizedLanding } from "@/lib/api/landing-auth";
+import { assertLandingAccess } from "@/lib/api/landing-auth";
 import { updateLandingPage } from "@/data/landing-pages";
 import { upsertLandingSeo } from "@/data/landing-sections";
 
@@ -8,7 +8,7 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const landing = await getAuthorizedLanding(id);
+    const landing = await assertLandingAccess(id);
 
     if (!landing) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });

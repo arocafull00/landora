@@ -9,7 +9,7 @@ import { CoffeeShopNav } from "@/components/templates/coffee-shop/coffee-shop-na
 import { CoffeeShopHero } from "@/components/templates/coffee-shop/coffee-shop-hero";
 import { CoffeeShopStorySection } from "@/components/templates/coffee-shop/coffee-shop-story-section";
 import { CoffeeShopMenuSection } from "@/components/templates/coffee-shop/coffee-shop-menu-section";
-import { CoffeeShopGallerySection } from "@/components/templates/coffee-shop/coffee-shop-gallery-section";
+import { GallerySection } from "@/components/templates/shared/gallery-section";
 import { CoffeeShopHoursSection } from "@/components/templates/coffee-shop/coffee-shop-hours-section";
 import { CoffeeShopTestimonialsSection } from "@/components/templates/coffee-shop/coffee-shop-testimonials-section";
 import { CoffeeShopFaqSection } from "@/components/templates/coffee-shop/coffee-shop-faq-section";
@@ -61,7 +61,7 @@ export function CoffeeShopTemplateClient({
         {isSectionVisible(content, "carta") ? <CoffeeShopMenuSection content={content} /> : null}
 
         {isSectionVisible(content, "galeria") ? (
-          <CoffeeShopGallerySection content={content} />
+          <GallerySection content={content} />
         ) : null}
 
         {isSectionVisible(content, "horarios") ? (

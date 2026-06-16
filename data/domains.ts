@@ -2,7 +2,10 @@ import { cache } from "react";
 import { and, eq, ne } from "drizzle-orm";
 import { db } from "@/db";
 import { landingPages } from "@/db/schema";
-import { normalizeHost } from "@/lib/app-host";
+
+function normalizeHost(host: string) {
+  return host.split(":")[0].trim().toLowerCase();
+}
 
 export const getLandingByCustomDomain = cache(async (host: string) => {
   const normalizedHost = normalizeHost(host);

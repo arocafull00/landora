@@ -1,7 +1,3 @@
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { landingPages } from "@/db/schema";
-import { getLandingBySlug } from "@/data/admin";
 import {
   upsertLandingSeo,
   upsertLandingBranding,
@@ -17,17 +13,18 @@ import {
   replaceLandingServiceMenu,
   replaceLandingBenefits,
 } from "@/data/landing-sections";
-import { ensureLandingHasDefaultContent } from "@/data/seed-landing-sections";
-import { isReservedSlug } from "@/lib/app-host";
-import type { TemplateId } from "@/lib/dashboard-data";
+import { getLandingBySlug } from "@/data/admin";
+import { deleteLandingPageById, insertLandingPage } from "@/data/landing-pages";
+import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
+import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 import {
   flattenProspectServiceMenu,
   type ProspectLandingContent,
 } from "@/lib/prospect-content";
-import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 import { normalizeNavHref } from "@/lib/template-sections";
+import type { TemplateId } from "@/lib/dashboard-data";
 
-async function provisionProspectLandingContent(
+export async function provisionProspectLandingContent(
   landingId: string,
   template: TemplateId,
   content: ProspectLandingContent
@@ -137,10 +134,6 @@ export async function createProspectLanding(params: {
 }) {
   const { userId, name, slug, template, content } = params;
 
-  if (isReservedSlug(slug)) {
-    throw new Error("Ese slug está reservado por el sistema");
-  }
-
   const existing = await getLandingBySlug(slug);
   if (existing) {
     throw new Error("Ya existe una landing con ese slug");
@@ -149,17 +142,12 @@ export async function createProspectLanding(params: {
   let landingId: string;
 
   try {
-    const [landing] = await db
-      .insert(landingPages)
-      .values({
-        userId,
-        name,
-        slug,
-        template,
-        published: false,
-      })
-      .returning({ id: landingPages.id });
-
+    const landing = await insertLandingPage({
+      userId,
+      name,
+      slug,
+      template,
+    });
     landingId = landing.id;
   } catch {
     throw new Error("Error al crear la landing");
@@ -169,7 +157,7 @@ export async function createProspectLanding(params: {
     await provisionProspectLandingContent(landingId, template, content);
     await ensureLandingHasDefaultContent(landingId);
   } catch (err) {
-    await db.delete(landingPages).where(eq(landingPages.id, landingId));
+    await deleteLandingPageById(landingId);
     throw err instanceof Error ? err : new Error("Error al inicializar el contenido de la landing");
   }
 

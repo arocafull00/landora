@@ -2,12 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "@/db";
-import { users } from "@/db/schema";
-import { createProspectLanding } from "@/data/provision-prospect-landing";
+import { createProspectLanding } from "@/lib/provision-landing-content";
+import { deleteUserById, insertUser } from "@/data/users";
 import type { TemplateId } from "@/lib/dashboard-data";
+import { isReservedSlug } from "@/lib/app-host";
 import { checkAuth } from "@/lib/auth";
 import {
   buildProspectPreview,
@@ -165,10 +164,7 @@ export async function provisionProspectUser(payload: {
   }
 
   try {
-    const [user] = await db
-      .insert(users)
-      .values({ clerkUserId: clerkUser.id, name, type: "user" })
-      .returning({ id: users.id });
+    const user = await insertUser({ clerkUserId: clerkUser.id, name, type: "user" });
 
     revalidatePath("/admin");
 
@@ -198,6 +194,10 @@ export async function provisionProspectLanding(payload: {
   const parsedJson = parseProspectJson(parsed.data.json);
   if ("error" in parsedJson) {
     return { error: parsedJson.error ?? "Error al validar el JSON" };
+  }
+
+  if (isReservedSlug(parsed.data.slug)) {
+    return { error: "Ese slug está reservado por el sistema" };
   }
 
   try {
@@ -238,7 +238,7 @@ async function rollbackProspectUser(payload: {
   const clerk = await clerkClient();
 
   try {
-    await db.delete(users).where(eq(users.id, parsed.data.userId));
+    await deleteUserById(parsed.data.userId);
   } catch {
     return { error: "Error al eliminar el usuario de la base de datos" };
   }

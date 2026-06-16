@@ -4,7 +4,7 @@ import { useReducedMotion } from "motion/react";
 import { AssetImage } from "@/components/ui/asset-image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
-export function FloristeriaGalleryMedia({ item }: { item: GalleryItem }) {
+export function GalleryMedia({ item }: { item: GalleryItem }) {
   const reduce = useReducedMotion();
   const motionClass = reduce
     ? "object-cover"
@@ -13,7 +13,7 @@ export function FloristeriaGalleryMedia({ item }: { item: GalleryItem }) {
   if (item.image) {
     return (
       <AssetImage
-        alt={item.title || "Creación floral"}
+        alt={item.title || "Gallery image"}
         className={motionClass}
         fill
         sizes="(max-width: 768px) 50vw, 25vw"

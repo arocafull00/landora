@@ -9,7 +9,7 @@ import { FloristeriaNav } from "@/components/templates/floristeria/floristeria-n
 import { FloristeriaHero } from "@/components/templates/floristeria/floristeria-hero";
 import { FloristeriaAbout } from "@/components/templates/floristeria/floristeria-about";
 import { FloristeriaCtaSection } from "@/components/templates/floristeria/floristeria-cta-section";
-import { FloristeriaGallerySection } from "@/components/templates/floristeria/floristeria-gallery-section";
+import { GallerySection } from "@/components/templates/shared/gallery-section";
 import { FloristeriaTestimonialsSection } from "@/components/templates/floristeria/floristeria-testimonials-section";
 import { FloristeriaFaqSection } from "@/components/templates/floristeria/floristeria-faq-section";
 import { FloristeriaContactSection } from "@/components/templates/floristeria/floristeria-contact-section";
@@ -44,7 +44,7 @@ export function FloristeriaTemplate({
 
         <FloristeriaHero content={content} heroRef={heroRef} />
         {isSectionVisible(content, "galeria") ? (
-          <FloristeriaGallerySection content={content} />
+          <GallerySection content={content} />
         ) : null}
         {isSectionVisible(content, "servicios") ? (
           <FloristeriaCtaSection content={content} />

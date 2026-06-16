@@ -1,18 +1,18 @@
 "use client";
 
 import type { LandingContent } from "@/lib/dashboard-data";
-import { FloristeriaGalleryItem } from "@/components/templates/floristeria/floristeria-gallery-item";
+import { GalleryItem } from "@/components/templates/shared/gallery-item";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
-export function FloristeriaGallerySection({ content }: { content: LandingContent }) {
+export function GallerySection({ content }: { content: LandingContent }) {
   const gallery = content.gallery ?? [];
   if (gallery.length === 0) return null;
 
-  const heading = getSectionHeading(
-    content,
-    "galeria",
-    SECTION_HEADING_DEFAULTS.floristeria.galeria,
-  );
+  const headingFallback =
+    SECTION_HEADING_DEFAULTS[content.template]?.galeria ??
+    SECTION_HEADING_DEFAULTS.floristeria.galeria;
+
+  const heading = getSectionHeading(content, "galeria", headingFallback);
 
   return (
     <section id="galeria" className="scroll-mt-24 bg-[#FAFAF7] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -39,7 +39,7 @@ export function FloristeriaGallerySection({ content }: { content: LandingContent
           aria-label="Galería de creaciones"
         >
           {gallery.map((item, index) => (
-            <FloristeriaGalleryItem
+            <GalleryItem
               aosDelay={Math.min(index * 60, 300)}
               featured={index === 0}
               index={index}

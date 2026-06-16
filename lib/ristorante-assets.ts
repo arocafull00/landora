@@ -17,6 +17,7 @@ export const RISTORANTE_ASSETS = {
   gallery4: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=85&auto=format",
   gallery5: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=85&auto=format",
   gallery6: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=85&auto=format",
+  gallery7: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=85&auto=format",
 } as const;
 
 export const RISTORANTE_IMAGE_OPTIONS = [

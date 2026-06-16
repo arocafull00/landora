@@ -12,7 +12,7 @@ import { StudioHero } from "@/components/templates/studio/studio-hero";
 import { StudioAbout } from "@/components/templates/studio/studio-about";
 import { StudioServicesSection } from "@/components/templates/studio/studio-services-section";
 import { StudioTeamSection } from "@/components/templates/studio/studio-team-section";
-import { StudioGallerySection } from "@/components/templates/studio/studio-gallery-section";
+import { GallerySection } from "@/components/templates/shared/gallery-section";
 import { StudioTestimonialsSection } from "@/components/templates/studio/studio-testimonials-section";
 import { StudioFaqSection } from "@/components/templates/studio/studio-faq-section";
 import { StudioContactSection } from "@/components/templates/studio/studio-contact-section";
@@ -88,7 +88,7 @@ export function StudioTemplate({
       <StudioHero content={content} heroRef={heroRef} />
 
 
-      {isSectionVisible(content, "galeria") ? <StudioGallerySection content={content} /> : null}
+      {isSectionVisible(content, "galeria") ? <GallerySection content={content} /> : null}
 
 
       {isSectionVisible(content, "story") ? <StudioAbout content={content} /> : null}

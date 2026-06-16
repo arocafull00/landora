@@ -2,20 +2,16 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { users } from "@/db/schema";
+import { getUserByIdForImpersonation } from "@/data/users";
 import { checkAuth, IMPERSONATION_COOKIE } from "@/lib/auth";
 
 export async function startImpersonation(clientId: string) {
   const authError = await checkAuth();
   if (authError) redirect("/");
 
-  const target = await db.query.users.findFirst({
-    where: eq(users.id, clientId),
-  });
+  const target = await getUserByIdForImpersonation(clientId);
 
-  if (!target || target.type !== "user") redirect("/admin");
+  if (!target) redirect("/admin");
 
   const cookieStore = await cookies();
   cookieStore.set(IMPERSONATION_COOKIE, clientId, {

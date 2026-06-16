@@ -1,6 +1,6 @@
 "use client";
 
-import { FloristeriaGalleryMedia } from "@/components/templates/floristeria/floristeria-gallery-media";
+import { GalleryMedia } from "@/components/templates/shared/gallery-media";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 const oneByOne =
@@ -59,7 +59,7 @@ function getLayoutClass(index: number, total: number) {
   return oneByOne;
 }
 
-export function FloristeriaGalleryItem({
+export function GalleryItem({
   item,
   index,
   total,
@@ -80,7 +80,7 @@ export function FloristeriaGalleryItem({
       data-aos="fade-up"
       data-aos-delay={aosDelay}
     >
-      <FloristeriaGalleryMedia item={item} />
+      <GalleryMedia item={item} />
     </div>
   );
 }

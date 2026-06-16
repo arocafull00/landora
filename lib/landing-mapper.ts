@@ -1,5 +1,6 @@
 import type { LandingWithSections } from "@/data/landing-pages";
 import type { Landing, LandingContent } from "@/lib/dashboard-data";
+import { resolveGalleryItems } from "@/lib/gallery-content";
 import { parseSocialLinks } from "@/lib/footer-content";
 import { shortDateTimeFormatter } from "@/lib/intl-formatters";
 import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
@@ -63,14 +64,17 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       countTo: s.countTo ?? undefined,
       suffix: s.suffix,
     })),
-    gallery: uniqueBySortOrder(row.gallery ?? []).map((g) => ({
-      id: g.id,
-      image: g.image ? mapImage(g.image) : undefined,
-      video: g.video || undefined,
-      title: g.title || undefined,
-      description: g.description || undefined,
-      tags: parseCommaList(g.tags),
-    })),
+    gallery: resolveGalleryItems(
+      row.template,
+      uniqueBySortOrder(row.gallery ?? []).map((g) => ({
+        id: g.id,
+        image: g.image ? mapImage(g.image) : undefined,
+        video: g.video || undefined,
+        title: g.title || undefined,
+        description: g.description || undefined,
+        tags: parseCommaList(g.tags),
+      })),
+    ),
     nav: uniqueBySortOrder(row.nav ?? []).map((n) => ({
       id: n.id,
       label: n.label,

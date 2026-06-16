@@ -1,10 +1,7 @@
 import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { users } from "@/db/schema";
-import { getCurrentUser } from "@/data/users";
+import { getCurrentUser, getUserByIdForImpersonation } from "@/data/users";
 
 export const IMPERSONATION_COOKIE = "impersonating";
 
@@ -36,11 +33,9 @@ async function resolveImpersonatedUser() {
   const currentUser = await getCurrentUser();
   if (currentUser?.type !== "admin") return null;
 
-  const targetUser = await db.query.users.findFirst({
-    where: eq(users.id, impersonatingId),
-  });
+  const targetUser = await getUserByIdForImpersonation(impersonatingId);
 
-  if (!targetUser || targetUser.type !== "user") return null;
+  if (!targetUser) return null;
 
   return targetUser;
 }

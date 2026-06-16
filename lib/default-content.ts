@@ -283,6 +283,7 @@ export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
     { id: "g4", image: STUDIO_ASSETS.gallery4 },
     { id: "g5", image: STUDIO_ASSETS.gallery5 },
     { id: "g6", image: STUDIO_ASSETS.gallery6 },
+    { id: "g7", image: STUDIO_ASSETS.gallery7 },
   ],
   team: [
     {
@@ -536,6 +537,7 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
     { id: "g4", image: RISTORANTE_ASSETS.gallery4 },
     { id: "g5", image: RISTORANTE_ASSETS.gallery5 },
     { id: "g6", image: RISTORANTE_ASSETS.gallery6 },
+    { id: "g7", image: RISTORANTE_ASSETS.gallery7 },
   ],
   team: [
     {
@@ -654,6 +656,7 @@ export const COFFEE_SHOP_DEFAULT_CONTENT: TemplateContentMap["coffee-shop"] = {
     { id: "g4", image: COFFEE_SHOP_ASSETS.gallery4 },
     { id: "g5", image: COFFEE_SHOP_ASSETS.gallery5 },
     { id: "g6", image: COFFEE_SHOP_ASSETS.gallery6 },
+    { id: "g7", image: COFFEE_SHOP_ASSETS.gallery7 },
   ],
   team: [],
   serviceMenu: [

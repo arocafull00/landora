@@ -1,18 +1,13 @@
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { assets } from "@/db/schema";
 import { getEffectiveClientId } from "@/lib/auth";
 import { getAssetFolder } from "@/lib/cloudinary";
+import { getAssetsByUserId, insertAsset } from "@/data/assets";
 
 export async function GET() {
   const userId = await getEffectiveClientId();
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const rows = await db.query.assets.findMany({
-      where: eq(assets.userId, userId),
-      orderBy: (a, { desc }) => [desc(a.createdAt)],
-    });
+    const rows = await getAssetsByUserId(userId);
     return Response.json(rows);
   } catch {
     return Response.json({ error: "Internal server error" }, { status: 500 });
@@ -50,18 +45,15 @@ export async function POST(req: Request) {
   }
 
   try {
-    const [row] = await db
-      .insert(assets)
-      .values({
-        userId,
-        publicId,
-        url,
-        name: name || "asset",
-        mimeType: mimeType || "",
-        width: width ?? null,
-        height: height ?? null,
-      })
-      .returning();
+    const row = await insertAsset({
+      userId,
+      publicId,
+      url,
+      name: name || "asset",
+      mimeType: mimeType || "",
+      width: width ?? null,
+      height: height ?? null,
+    });
 
     return Response.json(row);
   } catch {

@@ -10,7 +10,7 @@ import { RistoranteNav } from "@/components/templates/ristorante/ristorante-nav"
 import { RistoranteHero } from "@/components/templates/ristorante/ristorante-hero";
 import { RistoranteStorySection } from "@/components/templates/ristorante/ristorante-story-section";
 import { RistoranteMenuSection } from "@/components/templates/ristorante/ristorante-menu-section";
-import { RistoranteGallerySection } from "@/components/templates/ristorante/ristorante-gallery-section";
+import { GallerySection } from "@/components/templates/shared/gallery-section";
 import { RistoranteChefSection } from "@/components/templates/ristorante/ristorante-chef-section";
 import { RistoranteHoursSection } from "@/components/templates/ristorante/ristorante-hours-section";
 import { RistoranteTestimonialsSection } from "@/components/templates/ristorante/ristorante-testimonials-section";
@@ -62,7 +62,7 @@ export function RistoranteTemplateClient({
         {isSectionVisible(content, "carta") ? <RistoranteMenuSection content={content} /> : null}
 
         {isSectionVisible(content, "galeria") ? (
-          <RistoranteGallerySection content={content} />
+          <GallerySection content={content} />
         ) : null}
 
         {isSectionVisible(content, "equipo") ? <RistoranteChefSection content={content} /> : null}
