@@ -1,0 +1,31 @@
+export const COFFEE_SHOP_ASSETS = {
+  hero: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=85&auto=format",
+  interior1: "https://images.unsplash.com/photo-1501339847305-ac826a4a7cbb?w=800&q=85&auto=format",
+  interior2: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800&q=85&auto=format",
+  latte1: "https://images.unsplash.com/photo-1461023058943-07fcbe16e735?w=800&q=85&auto=format",
+  latte2: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&q=85&auto=format",
+  pastry1: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=85&auto=format",
+  pastry2: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=85&auto=format",
+  barista1: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=85&auto=format",
+  barista2: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&q=85&auto=format",
+  barista3: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=85&auto=format",
+  gallery1: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=85&auto=format",
+  gallery2: "https://images.unsplash.com/photo-1501339847305-ac826a4a7cbb?w=800&q=85&auto=format",
+  gallery3: "https://images.unsplash.com/photo-1461023058943-07fcbe16e735?w=800&q=85&auto=format",
+  gallery4: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&q=85&auto=format",
+  gallery5: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=85&auto=format",
+  gallery6: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800&q=85&auto=format",
+} as const;
+
+export const COFFEE_SHOP_IMAGE_OPTIONS = [
+  { value: COFFEE_SHOP_ASSETS.hero, label: "Portada" },
+  { value: COFFEE_SHOP_ASSETS.interior1, label: "Interior 1" },
+  { value: COFFEE_SHOP_ASSETS.interior2, label: "Interior 2" },
+  { value: COFFEE_SHOP_ASSETS.latte1, label: "Latte 1" },
+  { value: COFFEE_SHOP_ASSETS.latte2, label: "Latte 2" },
+  { value: COFFEE_SHOP_ASSETS.pastry1, label: "Repostería 1" },
+  { value: COFFEE_SHOP_ASSETS.pastry2, label: "Repostería 2" },
+  { value: COFFEE_SHOP_ASSETS.barista1, label: "Barista 1" },
+  { value: COFFEE_SHOP_ASSETS.barista2, label: "Barista 2" },
+  { value: COFFEE_SHOP_ASSETS.barista3, label: "Barista 3" },
+] as const;

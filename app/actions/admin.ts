@@ -89,7 +89,7 @@ const createLandingSchema = z.object({
     .refine((value) => !isReservedSlug(value), {
       message: "Ese slug está reservado por el sistema",
     }),
-  template: z.enum(["velar", "studio", "portfolio", "ristorante", "floristeria", "oficio-pro"]).default("velar"),
+  template: z.enum(["velar", "studio", "portfolio", "ristorante", "floristeria", "oficio-pro", "coffee-shop"]).default("velar"),
 });
 
 export async function createLandingForUser(formData: FormData): Promise<ActionResult> {

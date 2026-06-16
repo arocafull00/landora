@@ -58,6 +58,14 @@ const TEMPLATE_PALETTES: Record<TemplateId, TemplatePalette> = {
     surface: "#FEFCFD",
     foreground: "#ffffff",
   },
+  "coffee-shop": {
+    primary: "#3B2314",
+    secondary: "#1A1410",
+    accent: "#B87333",
+    muted: "#F7F5F2",
+    surface: "#F7F5F2",
+    foreground: "#F7F5F2",
+  },
 };
 
 export function getTemplatePalette(template: TemplateId): TemplatePalette {

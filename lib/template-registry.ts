@@ -1,5 +1,5 @@
 import type { TemplateId, TemplateContentMap, LandingContent } from "@/lib/dashboard-data";
-import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT } from "@/lib/default-content";
+import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT } from "@/lib/default-content";
 import { getTemplateSections } from "@/lib/template-sections";
 
 export type EditorTabGroup = "section" | "config";
@@ -140,7 +140,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     id: "floristeria",
     label: "Floristería",
     description:
-      "Landing para floristerías: servicios florales, galería, equipo y pedidos.",
+      "Landing para floristerías: servicios florales, galería y pedidos.",
     demoContent: FLORISTERIA_DEFAULT_CONTENT,
     editorTabs: [
       { id: "Hero", label: "Hero" },
@@ -173,6 +173,25 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/oficio-pro/oficio-pro-template"),
+  },
+  "coffee-shop": {
+    id: "coffee-shop",
+    label: "Coffee Shop",
+    description:
+      "Landing para cafeterías y panaderías: carta de café, galería, horarios y reservas.",
+    demoContent: COFFEE_SHOP_DEFAULT_CONTENT,
+    editorTabs: [
+      { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
+      { id: "Carta", label: "Carta" },
+      { id: "Galeria", label: "Galería" },
+      { id: "Horarios", label: "Horarios" },
+      { id: "FAQ", label: "FAQ" },
+      BLOG_EDITOR_TAB,
+      FOOTER_EDITOR_TAB,
+      SECTIONS_EDITOR_TAB,
+    ],
+    getComponent: () => import("@/components/templates/coffee-shop/coffee-shop-template"),
   },
 };
 

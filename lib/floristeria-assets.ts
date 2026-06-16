@@ -1,3 +1,8 @@
+export const FLORISTERIA_HERO_FAN_EDGES = {
+  left: { src: "bouquet6", alt: "Detalle floral" },
+  right: { src: "bouquet2", alt: "Ramo delicado" },
+} as const;
+
 export const FLORISTERIA_ASSETS = {
   hero: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1920&q=85&auto=format",
   interior1: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=800&q=85&auto=format",
@@ -17,6 +22,7 @@ export const FLORISTERIA_ASSETS = {
   gallery4: "https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=800&q=85&auto=format",
   gallery5: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?w=800&q=85&auto=format",
   gallery6: "https://images.unsplash.com/photo-1469259943454-aa100abba749?w=800&q=85&auto=format",
+  heroGrass: "/templates/floristeria/grass.png",
 } as const;
 
 export const FLORISTERIA_IMAGE_OPTIONS = [

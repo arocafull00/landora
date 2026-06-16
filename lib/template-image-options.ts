@@ -5,6 +5,7 @@ import { PORTFOLIO_IMAGE_OPTIONS } from "@/lib/portfolio-assets";
 import { RISTORANTE_IMAGE_OPTIONS } from "@/lib/ristorante-assets";
 import { FLORISTERIA_IMAGE_OPTIONS } from "@/lib/floristeria-assets";
 import { OFICIO_PRO_IMAGE_OPTIONS } from "@/lib/oficio-pro-assets";
+import { COFFEE_SHOP_IMAGE_OPTIONS } from "@/lib/coffee-shop-assets";
 
 const TEMPLATE_IMAGE_OPTIONS: Record<TemplateId, readonly { value: string; label: string }[]> = {
   velar: VELAR_IMAGE_OPTIONS,
@@ -13,6 +14,7 @@ const TEMPLATE_IMAGE_OPTIONS: Record<TemplateId, readonly { value: string; label
   ristorante: RISTORANTE_IMAGE_OPTIONS,
   floristeria: FLORISTERIA_IMAGE_OPTIONS,
   "oficio-pro": OFICIO_PRO_IMAGE_OPTIONS,
+  "coffee-shop": COFFEE_SHOP_IMAGE_OPTIONS,
 };
 
 export function getTemplateImageOptions(

@@ -7,6 +7,7 @@ import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import { FloristeriaNavPillLink } from "@/components/templates/floristeria/floristeria-nav-pill-link";
 
 export function FloristeriaNav({
   brand,
@@ -28,52 +29,53 @@ export function FloristeriaNav({
   return (
     <>
       <nav
-        className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-10 lg:px-16"
-        style={{
-          ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
-          background: "linear-gradient(to bottom, rgba(250,250,247,0.95), rgba(250,250,247,0.85))",
-          backdropFilter: "blur(9px)",
-        }}
+        className="fixed left-0 right-0 z-50 backdrop-blur-md"
+        style={topOffset > 0 ? { top: topOffset } : { top: 0 }}
       >
-        <button
-          type="button"
-          className="text-xl font-bold tracking-tight text-[#2D5016]"
-          style={{ fontFamily: "var(--font-cormorant)" }}
-        >
-          <TemplateNavBrand
-            brand={brand}
-            brandLogoImage={brandLogoImage}
-            brandLogoType={brandLogoType}
-          />
-        </button>
-
-        <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <TemplateNavAnchor
-              className="text-sm font-medium text-[#1a1a1a]/70 transition-colors hover:text-[#2D5016]"
-              href={link.href}
-              key={link.id}
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              {link.label}
-            </TemplateNavAnchor>
-          ))}
-          <TemplateNavAnchor
-            className="rounded-full bg-[#2D5016] px-5 py-2.5 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-[#234012]"
-            href="#contacto"
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:px-8 md:py-5">
+          <button
+            type="button"
+            className="shrink-0 text-left text-xl font-bold tracking-tight text-[#2D5016] md:justify-self-start"
+            style={{ fontFamily: "var(--font-cormorant)" }}
           >
-            {ctaLabel || "Hacer pedido"}
-          </TemplateNavAnchor>
-        </div>
+            <TemplateNavBrand
+              brand={brand}
+              brandLogoImage={brandLogoImage}
+              brandLogoType={brandLogoType}
+            />
+          </button>
 
-        <button
-          className="relative z-[1] flex items-center justify-center md:hidden"
-          onClick={() => setMenuOpen((v) => !v)}
-          type="button"
-          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
-        >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+          <div className="hidden md:flex md:justify-center">
+            <nav
+              className="rounded-full border border-[#2D5016]/10 bg-white px-1 py-1 shadow-sm"
+              aria-label="Principal"
+            >
+              <ul className="flex items-center gap-0.5">
+                {navLinks.map((link) => (
+                  <FloristeriaNavPillLink key={link.id} link={link} />
+                ))}
+              </ul>
+            </nav>
+          </div>
+
+          <div className="hidden md:flex md:justify-end">
+            <TemplateNavAnchor
+              className="inline-flex items-center justify-center rounded-full bg-[#2D5016] px-6 py-2.5 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-[#234012]"
+              href="#contacto"
+            >
+              {ctaLabel || "Hacer pedido"}
+            </TemplateNavAnchor>
+          </div>
+
+          <button
+            className="relative z-[1] flex items-center justify-center text-[#1a1a1a] md:hidden"
+            onClick={() => setMenuOpen((v) => !v)}
+            type="button"
+            aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </nav>
 
       <AnimatePresence>

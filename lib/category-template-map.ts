@@ -13,6 +13,14 @@ const STUDIO_CATEGORIES = new Set([
   "Fitness center",
 ]);
 
+const COFFEE_SHOP_CATEGORIES = new Set([
+  "Cafe",
+  "Cafeteria",
+  "Coffee Shop",
+  "Bakery",
+  "Pastry Shop",
+]);
+
 const RISTORANTE_CATEGORIES = new Set([
   "Restaurant",
   "Tapas Restaurant",
@@ -26,11 +34,6 @@ const RISTORANTE_CATEGORIES = new Set([
   "Bar & Grill",
   "Gastropub",
   "Brunch Restaurant",
-  "Cafe",
-  "Cafeteria",
-  "Coffee Shop",
-  "Bakery",
-  "Pastry Shop",
   "Ice Cream Shop",
   "Fast Food Restaurant",
   "Takeout Restaurant",
@@ -65,6 +68,7 @@ export function resolveTemplateId(category: string | undefined): TemplateId | nu
   if (!category) return null;
 
   if (STUDIO_CATEGORIES.has(category)) return "studio";
+  if (COFFEE_SHOP_CATEGORIES.has(category)) return "coffee-shop";
   if (RISTORANTE_CATEGORIES.has(category)) return "ristorante";
   if (FLORISTERIA_CATEGORIES.has(category)) return "floristeria";
   if (OFICIO_PRO_CATEGORIES.has(category)) return "oficio-pro";

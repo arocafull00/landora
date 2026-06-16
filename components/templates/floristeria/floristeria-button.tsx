@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
 const base =
   "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-all duration-300";
@@ -29,24 +30,43 @@ export function FloristeriaButton({
   href?: string;
   variant?: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
-  icon?: React.ReactNode;
+  icon?: React.ReactNode | null;
   className?: string;
 }) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
+  const trailingIcon =
+    icon === null ? null : icon ?? <ArrowRight className="h-4 w-4" />;
+
   if (href) {
+    const isExternal = href.startsWith("http");
+
+    if (isExternal) {
+      return (
+        <a
+          className={classes}
+          href={href}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {children}
+          {trailingIcon}
+        </a>
+      );
+    }
+
     return (
-      <a className={classes} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined}>
+      <TemplateNavAnchor className={classes} href={href}>
         {children}
-        {icon ?? <ArrowRight className="h-4 w-4" />}
-      </a>
+        {trailingIcon}
+      </TemplateNavAnchor>
     );
   }
 
   return (
     <button className={classes} type="button">
       {children}
-      {icon}
+      {trailingIcon}
     </button>
   );
 }

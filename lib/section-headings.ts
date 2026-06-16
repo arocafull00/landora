@@ -101,10 +101,6 @@ export const SECTION_HEADING_DEFAULTS: Record<
       title: "Nuestras creaciones",
       subtitle: "",
     },
-    equipo: {
-      title: "Nuestro equipo",
-      subtitle: "",
-    },
     faq: {
       title: "Preguntas frecuentes",
       subtitle: "Todo lo que necesitas saber sobre nuestros servicios florales.",
@@ -140,6 +136,28 @@ export const SECTION_HEADING_DEFAULTS: Record<
       subtitle: "Déjanos tu aviso y te responderemos lo antes posible.",
     },
   },
+  "coffee-shop": {
+    carta: {
+      title: "Nuestra carta",
+      subtitle: "Café de origen, repostería artesanal y bebidas de temporada",
+    },
+    galeria: {
+      title: "El espacio",
+      subtitle: "",
+    },
+    horarios: {
+      title: "Horarios",
+      subtitle: "",
+    },
+    faq: {
+      title: "Preguntas frecuentes",
+      subtitle: "Todo lo que necesitas saber antes de tu visita.",
+    },
+    contacto: {
+      title: "Visítanos",
+      subtitle: "Pasa por la cafetería o escríbenos para reservar mesa o pedir para llevar.",
+    },
+  },
 };
 
 export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
@@ -149,6 +167,7 @@ export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
   ristorante: [],
   floristeria: [],
   "oficio-pro": [],
+  "coffee-shop": [],
 };
 
 export function getSectionHeading(

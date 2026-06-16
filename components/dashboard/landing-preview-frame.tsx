@@ -8,6 +8,7 @@ import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-te
 import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
+import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
 import {
   isPreviewContentMessage,
   isPreviewHighlightElementMessage,
@@ -28,6 +29,7 @@ const TEMPLATE_COMPONENTS = {
   ristorante: RistoranteTemplate,
   floristeria: FloristeriaTemplate,
   "oficio-pro": OficioProTemplate,
+  "coffee-shop": CoffeeShopTemplate,
 } as const;
 
 export function LandingPreviewFrame({

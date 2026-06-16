@@ -12,7 +12,7 @@ import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-pane
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
-export function FloristeriaEditorSection() {
+export function CoffeeShopEditorSection() {
   const {
     activeEditorTab,
     activeLandingId,
@@ -24,7 +24,6 @@ export function FloristeriaEditorSection() {
     setActiveLandingId,
     updateHero,
     updateSectionItem,
-    updateStory,
   } = useDashboardStore();
 
   const activeLanding =
@@ -36,7 +35,7 @@ export function FloristeriaEditorSection() {
   const publishActive = () => publishLanding(activeLanding.id);
 
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
-  const gallery = activeLanding.content.gallery ?? [];
+  const workflow = activeLanding.content.workflow ?? [];
   const faq = activeLanding.content.faq ?? [];
 
   return (
@@ -63,7 +62,7 @@ export function FloristeriaEditorSection() {
 
           {activeEditorTab === "Hero" ? (
             <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Hero" description="Edita el bloque principal de la floristería." />
+              <SectionTitle title="Hero" description="Edita el bloque principal de la cafetería." />
               <TextField
                 label="Eyebrow"
                 onChange={(value) => updateHero(activeLanding.id, { eyebrow: value })}
@@ -91,22 +90,16 @@ export function FloristeriaEditorSection() {
                 templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
               />
-              <TextArea
-                label="Sobre nosotras"
-                onChange={(value) => updateStory(activeLanding.id, { statement: value })}
-                rows={4}
-                value={activeLanding.content.story?.statement ?? ""}
-              />
             </section>
           ) : null}
 
-          {activeEditorTab === "Servicios" ? (
+          {activeEditorTab === "Carta" ? (
             <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Servicios" description="Edita el catálogo de arreglos y servicios." />
+              <SectionTitle title="Carta" description="Edita la carta con categorías y precios." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
-                anchor="servicios"
-                fallback={SECTION_HEADING_DEFAULTS.floristeria.servicios}
+                anchor="carta"
+                fallback={SECTION_HEADING_DEFAULTS["coffee-shop"].carta}
               />
               <div className="space-y-6">
                 {serviceMenu.map((item) => (
@@ -114,34 +107,34 @@ export function FloristeriaEditorSection() {
                     className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
                     key={item.id}
                   >
-                  <TextField
-                    label="Categoría"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { category: value })
-                    }
-                    value={item.category}
-                  />
-                  <TextField
-                    label="Nombre"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { name: value })
-                    }
-                    value={item.name}
-                  />
-                  <TextArea
-                    label="Descripción"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { description: value })
-                    }
-                    value={item.description}
-                  />
-                  <TextField
-                    label="Precio"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { price: value })
-                    }
-                    value={item.price}
-                  />
+                    <TextField
+                      label="Categoría"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "serviceMenu", item.id, { category: value })
+                      }
+                      value={item.category}
+                    />
+                    <TextField
+                      label="Nombre"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "serviceMenu", item.id, { name: value })
+                      }
+                      value={item.name}
+                    />
+                    <TextArea
+                      label="Descripción"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "serviceMenu", item.id, { description: value })
+                      }
+                      value={item.description}
+                    />
+                    <TextField
+                      label="Precio"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "serviceMenu", item.id, { price: value })
+                      }
+                      value={item.price}
+                    />
                   </div>
                 ))}
               </div>
@@ -154,10 +147,10 @@ export function FloristeriaEditorSection() {
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="galeria"
-                fallback={SECTION_HEADING_DEFAULTS.floristeria.galeria}
+                fallback={SECTION_HEADING_DEFAULTS["coffee-shop"].galeria}
               />
               <div className="space-y-6">
-                {gallery.map((item, index) => (
+                {(activeLanding.content.gallery ?? []).map((item, index) => (
                   <div
                     className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
                     key={item.id}
@@ -179,12 +172,45 @@ export function FloristeriaEditorSection() {
             </section>
           ) : null}
 
-          {activeEditorTab === "Blog" ? (
-            <BlogConfigEditorPanel activeLanding={activeLanding} />
-          ) : null}
-
-          {activeEditorTab === "Footer" ? (
-            <FooterEditorPanel activeLanding={activeLanding} />
+          {activeEditorTab === "Horarios" ? (
+            <section className="space-y-5 py-unit-lg">
+              <SectionTitle title="Horarios" description="Edita los horarios de apertura." />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="horarios"
+                fallback={SECTION_HEADING_DEFAULTS["coffee-shop"].horarios}
+              />
+              <div className="space-y-6">
+                {workflow.map((item) => (
+                  <div
+                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
+                    key={item.id}
+                  >
+                    <TextField
+                      label="Día"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "workflow", item.id, { number: value })
+                      }
+                      value={item.number}
+                    />
+                    <TextField
+                      label="Horario"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "workflow", item.id, { title: value })
+                      }
+                      value={item.title}
+                    />
+                    <TextField
+                      label="Nota"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "workflow", item.id, { description: value })
+                      }
+                      value={item.description}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
           ) : null}
 
           {activeEditorTab === "FAQ" ? (
@@ -193,7 +219,7 @@ export function FloristeriaEditorSection() {
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="faq"
-                fallback={SECTION_HEADING_DEFAULTS.floristeria.faq}
+                fallback={SECTION_HEADING_DEFAULTS["coffee-shop"].faq}
               />
               <div className="space-y-6">
                 {faq.map((item) => (
@@ -201,25 +227,33 @@ export function FloristeriaEditorSection() {
                     className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
                     key={item.id}
                   >
-                  <TextField
-                    label="Pregunta"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "faq", item.id, { question: value })
-                    }
-                    value={item.question}
-                  />
-                  <TextArea
-                    label="Respuesta"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "faq", item.id, { answer: value })
-                    }
-                    rows={4}
-                    value={item.answer}
-                  />
+                    <TextField
+                      label="Pregunta"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "faq", item.id, { question: value })
+                      }
+                      value={item.question}
+                    />
+                    <TextArea
+                      label="Respuesta"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "faq", item.id, { answer: value })
+                      }
+                      rows={4}
+                      value={item.answer}
+                    />
                   </div>
                 ))}
               </div>
             </section>
+          ) : null}
+
+          {activeEditorTab === "Blog" ? (
+            <BlogConfigEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Footer" ? (
+            <FooterEditorPanel activeLanding={activeLanding} />
           ) : null}
         </>
       }
