@@ -4,6 +4,8 @@ import {
 } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import {
+  getAppCanonicalHost,
+  getAppWwwHost,
   isAppHost,
   isPublicSlugPath,
   isReservedPath,
@@ -38,6 +40,15 @@ async function resolveCustomDomainSlug(host: string) {
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const host = normalizeHost(req.headers.get("host") ?? "");
   const { pathname } = req.nextUrl;
+
+  const wwwHost = getAppWwwHost();
+  const canonicalHost = getAppCanonicalHost();
+  if (wwwHost && canonicalHost && host === wwwHost) {
+    const redirectUrl = req.nextUrl.clone();
+    redirectUrl.protocol = "https:";
+    redirectUrl.host = canonicalHost;
+    return NextResponse.redirect(redirectUrl, 308);
+  }
 
   if (!isAppHost(host)) {
     if (isReservedPath(pathname)) {

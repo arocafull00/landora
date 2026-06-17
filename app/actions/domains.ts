@@ -8,7 +8,7 @@ import {
   isCustomDomainTaken,
   setLandingCustomDomain,
 } from "@/data/domains";
-import { normalizeHost } from "@/lib/app-host";
+import { isReservedAppDomain, normalizeHost } from "@/lib/app-host";
 import {
   addProjectDomain,
   buildDnsRecords,
@@ -28,6 +28,9 @@ const domainSchema = z
   )
   .refine((value) => !value.endsWith(".vercel.app"), {
     message: "No puedes usar un subdominio de vercel.app",
+  })
+  .refine((value) => !isReservedAppDomain(value), {
+    message: "Ese dominio está reservado para la aplicación",
   });
 
 type ActionResult = { success: true } | { error: string };
