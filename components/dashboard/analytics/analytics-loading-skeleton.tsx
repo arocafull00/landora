@@ -4,18 +4,21 @@ import { Panel } from "@/components/ui/primitives";
 export function AnalyticsLoadingSkeleton() {
   return (
     <div className="space-y-unit-lg">
-      <div className="grid gap-unit-md sm:grid-cols-2 xl:grid-cols-3">
-        <div className="col-span-1 sm:col-span-2 xl:col-span-1">
-          <AnalyticsMetricCardSkeleton featured />
+      <Panel className="animate-pulse p-unit-lg">
+        <div className="flex items-center justify-between">
+          <div className="h-5 w-16 rounded bg-surface-container-high" />
+          <div className="h-8 w-32 rounded-md bg-surface-container-high" />
         </div>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <AnalyticsMetricCardSkeleton key={index} />
-        ))}
-      </div>
-      <Panel className="animate-pulse p-unit-md">
-        <div className="h-6 w-36 rounded bg-surface-container-high" />
-        <div className="mt-unit-md h-72 w-full rounded-lg bg-surface-container-high" />
+        <div className="mt-unit-md h-14 w-24 rounded bg-surface-container-high" />
+        <div className="mt-1.5 h-4 w-20 rounded bg-surface-container-high" />
+        <div className="mt-2 h-4 w-56 rounded bg-surface-container-high" />
+        <div className="mt-unit-lg h-72 w-full rounded-lg bg-surface-container-high" />
       </Panel>
+      <div className="grid grid-cols-1 gap-unit-md sm:grid-cols-3">
+        <AnalyticsMetricCardSkeleton />
+        <AnalyticsMetricCardSkeleton />
+        <AnalyticsMetricCardSkeleton />
+      </div>
     </div>
   );
 }

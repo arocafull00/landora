@@ -15,6 +15,7 @@ export type LandingAnalytics = {
   phoneClicks: number;
   leads: number;
   dailyViews: DailyView[];
+  previousPeriodViews: number;
 };
 
 type MetricsRow = [
@@ -170,12 +171,17 @@ export const getLandingAnalytics = cache(
       from30d.setDate(from30d.getDate() - 30);
       const allTimeFrom = new Date("2020-01-01T00:00:00");
 
-      const [allTime, last7d, last30d, rangeMetrics, dailyViews] = await Promise.all([
+      const periodMs = to.getTime() - from.getTime();
+      const prevTo = new Date(from.getTime() - 1);
+      const prevFrom = new Date(from.getTime() - periodMs);
+
+      const [allTime, last7d, last30d, rangeMetrics, dailyViews, prevPeriodMetrics] = await Promise.all([
         fetchMetrics(landingId, allTimeFrom, now),
         fetchMetrics(landingId, from7d, now),
         fetchMetrics(landingId, from30d, now),
         fetchMetrics(landingId, from, to),
         fetchDailyViews(landingId, from, to),
+        fetchMetrics(landingId, prevFrom, prevTo),
       ]);
 
       return {
@@ -187,6 +193,7 @@ export const getLandingAnalytics = cache(
         ctaClicks: rangeMetrics[3],
         leads: rangeMetrics[4],
         dailyViews,
+        previousPeriodViews: prevPeriodMetrics[0],
       };
     } catch (error) {
       throw new Error(

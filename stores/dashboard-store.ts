@@ -79,6 +79,7 @@ type DashboardState = {
   activeAssetId: string;
   saveStatus: SaveStatus;
   isAdmin: boolean;
+  _bootstrapKey: string;
   landings: Landing[];
   posts: Post[];
   blogConfig: BlogConfig;
@@ -229,6 +230,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
   activeAssetId: initialAssets[0].id,
   saveStatus: "idle",
   isAdmin: false,
+  _bootstrapKey: "",
   landings: [],
   posts: initialPosts,
   blogConfig: { title: "", description: "" },
@@ -240,13 +242,14 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
   assets: initialAssets,
 
   bootstrapDashboard: ({ landing, view, isAdmin }) => {
-    const { activeLandingId } = get();
+    const key = `${landing.id}:${view}:${isAdmin}`;
+    if (get()._bootstrapKey === key) return;
 
-    if (activeLandingId !== landing.id) {
+    if (get().activeLandingId !== landing.id) {
       get().initFromLanding(landing);
     }
 
-    set({ isAdmin });
+    set({ isAdmin, _bootstrapKey: key });
     get().setActiveView(view);
     void useAssetsStore.getState().ensureLoaded();
   },

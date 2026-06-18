@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart2 } from "lucide-react";
+import { Info, BarChart2 } from "lucide-react";
 import { AnalyticsChart } from "@/components/dashboard/analytics/analytics-chart";
 import { AnalyticsDateFilter } from "@/components/dashboard/analytics/analytics-date-filter";
 import { AnalyticsLoadingSkeleton } from "@/components/dashboard/analytics/analytics-loading-skeleton";
@@ -12,6 +12,10 @@ import { useAnalyticsStore } from "@/stores/analytics-store";
 export function AnalyticsDashboard() {
   const data = useAnalyticsStore((state) => state.data);
   const loading = useAnalyticsStore((state) => state.loading);
+
+  const periodViews = data
+    ? data.dailyViews.reduce((sum, d) => sum + d.views, 0)
+    : 0;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
@@ -37,8 +41,15 @@ export function AnalyticsDashboard() {
         ) : null}
         {!loading && data ? (
           <div className="space-y-unit-lg">
-            <AnalyticsMetricsGrid analytics={data} />
-            <AnalyticsChart dailyViews={data.dailyViews} />
+            <AnalyticsChart
+              dailyViews={data.dailyViews}
+              previousPeriodViews={data.previousPeriodViews}
+            />
+            <AnalyticsMetricsGrid analytics={data} periodViews={periodViews} />
+            <p className="flex items-center gap-1.5 font-body text-body-sm text-on-surface-variant">
+              <Info className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              Los datos se actualizan diariamente. La información puede tener un pequeño retraso.
+            </p>
           </div>
         ) : null}
       </div>

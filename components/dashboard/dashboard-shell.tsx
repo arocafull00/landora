@@ -2,7 +2,6 @@
 
 import { DashboardView, Landing } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { useBootstrapDashboard } from "@/hooks/use-bootstrap-dashboard";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import {
   SidebarInset,
@@ -26,7 +25,11 @@ export function DashboardShell({
   initialLanding: Landing;
   initialView: DashboardView;
 }) {
-  useBootstrapDashboard({ initialLanding, initialView, isAdmin });
+  useDashboardStore.getState().bootstrapDashboard({
+    landing: initialLanding,
+    view: initialView,
+    isAdmin,
+  });
   const activeView = useDashboardStore((state) => state.activeView);
 
   return (
