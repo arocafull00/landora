@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef } from "react";
 import { DashboardView, Landing } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useBootstrapDashboard } from "@/hooks/use-bootstrap-dashboard";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import {
   SidebarInset,
@@ -26,18 +26,8 @@ export function DashboardShell({
   initialLanding: Landing;
   initialView: DashboardView;
 }) {
+  useBootstrapDashboard({ initialLanding, initialView, isAdmin });
   const activeView = useDashboardStore((state) => state.activeView);
-  const bootstrappedKeyRef = useRef<string | null>(null);
-  const bootstrapKey = `${initialLanding.id}:${initialView}`;
-
-  if (bootstrappedKeyRef.current !== bootstrapKey) {
-    bootstrappedKeyRef.current = bootstrapKey;
-    useDashboardStore.getState().bootstrapDashboard({
-      landing: initialLanding,
-      view: initialView,
-      isAdmin,
-    });
-  }
 
   return (
     <SidebarProvider
