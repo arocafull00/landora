@@ -5,6 +5,7 @@ import { X, Menu } from "lucide-react";
 import { m, AnimatePresence } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
+import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
@@ -26,6 +27,7 @@ export function StudioNav({
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { trackCtaClick } = useAnalytics();
 
   return (
     <>
@@ -66,6 +68,7 @@ export function StudioNav({
           <TemplateNavAnchor
             className={`rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide transition-colors duration-300 ease-out ${overHero ? "bg-[#c99d43] text-black hover:bg-[#d9ad54]" : "bg-[#1a1a1a] text-white hover:bg-[#333]"}`}
             href="#contacto"
+            onClick={() => trackCtaClick()}
           >
             {ctaLabel || "Reservar cita"}
           </TemplateNavAnchor>
@@ -112,9 +115,10 @@ export function StudioNav({
             <m.a
               className="mt-6 rounded-full bg-[#1a1a1a] px-8 py-3 text-sm font-semibold text-white"
               href="#contacto"
-              onClick={(event) =>
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false))
-              }
+              onClick={(event) => {
+                trackCtaClick();
+                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+              }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}

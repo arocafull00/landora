@@ -24,6 +24,7 @@ export function StudioButton({
   size = "md",
   icon,
   className = "",
+  onClick,
 }: {
   children: React.ReactNode;
   href?: string;
@@ -31,12 +32,13 @@ export function StudioButton({
   size?: "sm" | "md" | "lg";
   icon?: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
   if (href) {
     return (
-      <a className={classes} href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined}>
+      <a className={classes} href={href} onClick={onClick} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined}>
         {children}
         {icon ?? <ArrowRight className="h-4 w-4" />}
       </a>

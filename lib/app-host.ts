@@ -2,10 +2,15 @@ const RESERVED_SLUGS = new Set([
   "editor",
   "assets",
   "domain",
+  "blog",
+  "analytics",
   "admin",
   "preview",
   "sign-in",
   "api",
+  "privacy",
+  "legal",
+  "terms",
 ]);
 
 export function normalizeHost(host: string) {

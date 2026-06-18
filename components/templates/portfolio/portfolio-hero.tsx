@@ -5,6 +5,7 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioHeroAccentLines } from "@/components/templates/portfolio/portfolio-hero-accent-lines";
 import { PortfolioHeroParticles } from "@/components/templates/portfolio/portfolio-hero-particles";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export function PortfolioHero({
   content,
@@ -13,6 +14,8 @@ export function PortfolioHero({
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
 }) {
+  const { trackCtaClick } = useAnalytics();
+
   return (
     <section
       ref={heroRef}
@@ -53,6 +56,7 @@ export function PortfolioHero({
             className="pointer-events-auto mt-10 inline-block rounded-full bg-white px-8 py-3.5 text-sm font-semibold tracking-wide text-[#0a0a0a] transition-all hover:bg-white/90 hover:shadow-lg"
             href="#contacto"
             style={{ fontFamily: "var(--font-body)" }}
+            onClick={() => trackCtaClick()}
           >
             {content.hero.ctaLabel || "Ver proyectos"}
           </a>

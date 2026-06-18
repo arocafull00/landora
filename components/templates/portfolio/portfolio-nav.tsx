@@ -5,6 +5,7 @@ import { X, Menu } from "lucide-react";
 import { m, AnimatePresence } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
+import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
@@ -24,6 +25,7 @@ export function PortfolioNav({
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { trackCtaClick } = useAnalytics();
 
   return (
     <>
@@ -61,6 +63,7 @@ export function PortfolioNav({
           <TemplateNavAnchor
             className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-wide text-[#0a0a0a] transition-colors hover:bg-white/90"
             href="#contacto"
+            onClick={() => trackCtaClick()}
           >
             {ctaLabel || "Ver proyectos"}
           </TemplateNavAnchor>
@@ -107,9 +110,10 @@ export function PortfolioNav({
             <m.a
               className="mt-6 rounded-full bg-white px-8 py-3 text-sm font-semibold text-[#0a0a0a]"
               href="#contacto"
-              onClick={(event) =>
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false))
-              }
+              onClick={(event) => {
+                trackCtaClick();
+                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+              }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}

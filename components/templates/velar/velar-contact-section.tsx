@@ -6,8 +6,10 @@ import { FooterSocialLinks } from "@/components/templates/shared/footer-social-l
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { useEditorHighlight } from "@/lib/use-editor-highlight";
 import { cn } from "@/lib/utils";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export function VelarContactSection({ content }: { content: LandingContent }) {
+  const { trackPhoneClick, trackLeadGenerated } = useAnalytics();
   const isHighlighted = useEditorHighlight("inquire");
   const heading = getSectionHeading(
     content,
@@ -40,6 +42,10 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
                 href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                 className="block text-sm text-[#e8e4df]/70 transition-colors hover:text-[#e8e4df]"
                 style={{ fontFamily: "var(--font-body)" }}
+                onClick={() => {
+                  trackPhoneClick();
+                  trackLeadGenerated();
+                }}
               >
                 {content.contact.phone}
               </a>

@@ -6,8 +6,10 @@ import { FLORISTERIA_ASSETS } from "@/lib/floristeria-assets";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { FloristeriaButton } from "@/components/templates/floristeria/floristeria-button";
 import { FloristeriaCtaBgLottie } from "@/components/templates/floristeria/floristeria-cta-bg-lottie";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export function FloristeriaCtaSection({ content }: { content: LandingContent }) {
+  const { trackCtaClick } = useAnalytics();
   const heading = getSectionHeading(
     content,
     "servicios",
@@ -51,6 +53,7 @@ export function FloristeriaCtaSection({ content }: { content: LandingContent }) 
                 size="lg"
                 icon={null}
                 className="rounded-full px-10"
+                onClick={() => trackCtaClick()}
               >
                 {content.hero.ctaLabel || "Celebra momentos"}
               </FloristeriaButton>

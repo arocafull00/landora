@@ -1,8 +1,11 @@
+"use client";
+
 import { ArrowRight, ChevronDown } from "lucide-react";
 import type { RefObject } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { AssetImage } from "@/components/ui/asset-image";
 import { OficioProButton } from "@/components/templates/oficio-pro/oficio-pro-button";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export function OficioProHero({
   content,
@@ -11,6 +14,8 @@ export function OficioProHero({
   content: LandingContent;
   heroRef: RefObject<HTMLElement | null>;
 }) {
+  const { trackCtaClick } = useAnalytics();
+
   return (
     <main
       className="relative isolate flex min-h-screen items-center overflow-hidden pb-28 pt-[72px]"
@@ -41,7 +46,7 @@ export function OficioProHero({
             {content.hero.description}
           </p>
           <div className="flex flex-col gap-5 sm:flex-row sm:flex-wrap">
-            <OficioProButton className="sm:min-w-[17rem]" href="#contacto">
+            <OficioProButton className="sm:min-w-[17rem]" href="#contacto" onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Déjanos ayudarte"}
               <ArrowRight className="size-5" />
             </OficioProButton>

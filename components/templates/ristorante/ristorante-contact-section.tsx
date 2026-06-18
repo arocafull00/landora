@@ -6,6 +6,7 @@ import { RistoranteButton } from "@/components/templates/ristorante/ristorante-b
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -13,6 +14,7 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function RistoranteContactSection({ content }: { content: LandingContent }) {
+  const { trackWhatsAppClick, trackPhoneClick, trackLeadGenerated } = useAnalytics();
   const whatsappLink = getWhatsAppLink(content.contact.phone);
   const heading = getSectionHeading(
     content,
@@ -42,7 +44,15 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
                 {heading.subtitle}
               </p>
             ) : null}
-            <RistoranteButton href={whatsappLink} size="lg" variant="accent">
+            <RistoranteButton
+              href={whatsappLink}
+              size="lg"
+              variant="accent"
+              onClick={() => {
+                trackWhatsAppClick();
+                trackLeadGenerated();
+              }}
+            >
               {content.contact.ctaLabel ?? "Reservar por WhatsApp"}
             </RistoranteButton>
           </div>
@@ -61,6 +71,7 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
                   <a
                     className="text-sm text-[var(--ristorante-foreground)]/90 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)]"
                     href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
+                    onClick={() => trackPhoneClick()}
                   >
                     {content.contact.phone}
                   </a>

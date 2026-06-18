@@ -5,11 +5,13 @@ export function OficioProContactItem({
   icon: Icon,
   label,
   value,
+  onClick,
 }: {
   href?: string;
   icon: LucideIcon;
   label: string;
   value: string;
+  onClick?: () => void;
 }) {
   const content = (
     <div className="flex items-start gap-4 rounded-2xl border border-[#1F4E79]/10 bg-white p-5 shadow-[0_10px_28px_rgba(31,78,121,0.08)] transition-all hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(31,78,121,0.12)]">
@@ -30,7 +32,7 @@ export function OficioProContactItem({
   if (!href) return content;
 
   return (
-    <a href={href} rel="noreferrer" target={href.startsWith("http") ? "_blank" : undefined}>
+    <a href={href} onClick={onClick} rel="noreferrer" target={href.startsWith("http") ? "_blank" : undefined}>
       {content}
     </a>
   );

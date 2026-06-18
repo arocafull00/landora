@@ -4,6 +4,7 @@ import { m } from "motion/react";
 import { ArrowRight, Clock3, MapPin, Phone } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -16,6 +17,7 @@ export function StudioHero({
 }) {
   const description = content.hero.description || content.hero.subtitle;
   const phoneHref = `tel:${content.contact.phone.replace(/\s+/g, "")}`;
+  const { trackCtaClick, trackPhoneClick } = useAnalytics();
 
   return (
     <section
@@ -82,6 +84,7 @@ export function StudioHero({
             className="inline-flex items-center justify-center gap-2 rounded-md bg-[#c99d43] px-7 py-3.5 text-sm font-bold uppercase tracking-[0.08em] text-black transition hover:bg-[#d9ad54]"
             href="#contacto"
             style={{ fontFamily: "var(--font-syne)" }}
+            onClick={() => trackCtaClick()}
           >
             {content.hero.ctaLabel || "Reservar cita"}
             <ArrowRight className="h-4 w-4" />
@@ -91,6 +94,7 @@ export function StudioHero({
             className="inline-flex items-center justify-center gap-2 rounded-md border border-[#c99d43]/60 bg-black/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-[#f7d389] transition hover:bg-[#c99d43]/10"
             href={phoneHref}
             style={{ fontFamily: "var(--font-syne)" }}
+            onClick={() => trackPhoneClick()}
           >
             <Phone className="h-4 w-4" />
             {content.contact.phone}

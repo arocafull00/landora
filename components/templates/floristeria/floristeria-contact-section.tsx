@@ -6,6 +6,7 @@ import { FloristeriaButton } from "@/components/templates/floristeria/floristeri
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -13,6 +14,7 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function FloristeriaContactSection({ content }: { content: LandingContent }) {
+  const { trackWhatsAppClick, trackPhoneClick, trackLeadGenerated } = useAnalytics();
   const whatsappLink = getWhatsAppLink(content.contact.phone);
   const heading = getSectionHeading(
     content,
@@ -43,6 +45,10 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
             variant="primary"
             size="lg"
             className="!bg-[#2D5016] hover:!bg-[#234012]"
+            onClick={() => {
+              trackWhatsAppClick();
+              trackLeadGenerated();
+            }}
           >
             {content.contact.ctaLabel ?? "Pedir por WhatsApp"}
           </FloristeriaButton>
@@ -61,6 +67,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
                 <a
                   className="text-sm text-white/70 transition-colors hover:text-white"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
+                  onClick={() => trackPhoneClick()}
                 >
                   {content.contact.phone}
                 </a>

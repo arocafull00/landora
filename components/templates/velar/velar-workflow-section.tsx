@@ -6,6 +6,7 @@ import { VelarButton } from "@/components/templates/velar/velar-button";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { useEditorHighlight } from "@/lib/use-editor-highlight";
 import { cn } from "@/lib/utils";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const WORKFLOW_ICONS = [
   <CalendarCheck key="calendario" className="h-16 w-16" stroke="#e8e4df" />,
@@ -19,6 +20,7 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function VelarWorkflowSection({ content }: { content: LandingContent }) {
+  const { trackWhatsAppClick } = useAnalytics();
   const isHighlighted = useEditorHighlight("proceso");
 
   if (!content.workflow || content.workflow.length === 0) return null;
@@ -73,6 +75,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
                   variant="secondary"
                   size="sm"
                   className="uppercase !border-[#e8e4df] !text-[#e8e4df] hover:!bg-[#e8e4df] hover:!text-[#1a1a1a]"
+                  onClick={() => trackWhatsAppClick()}
                 >
                   CONTÁCTANOS
                 </VelarButton>

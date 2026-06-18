@@ -27,6 +27,7 @@ export function CoffeeShopButton({
   size = "md",
   icon,
   className = "",
+  onClick,
 }: {
   children: React.ReactNode;
   href?: string;
@@ -34,6 +35,7 @@ export function CoffeeShopButton({
   size?: "sm" | "md" | "lg";
   icon?: React.ReactNode;
   className?: string;
+  onClick?: () => void;
 }) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
@@ -42,6 +44,7 @@ export function CoffeeShopButton({
       <a
         className={classes}
         href={href}
+        onClick={onClick}
         target={href.startsWith("http") ? "_blank" : undefined}
         rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
         style={{ fontFamily: "var(--font-coffee-body)" }}

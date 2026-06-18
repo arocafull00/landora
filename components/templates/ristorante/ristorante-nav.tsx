@@ -5,6 +5,7 @@ import { X, Menu } from "lucide-react";
 import { m, AnimatePresence, useReducedMotion } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
+import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
@@ -57,6 +58,7 @@ export function RistoranteNav({
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
+  const { trackCtaClick } = useAnalytics();
 
   useEffect(() => {
     const targets = getScrollTargets(scrollRootRef?.current ?? null);
@@ -120,6 +122,7 @@ export function RistoranteNav({
           <TemplateNavAnchor
             className="rounded-md bg-[var(--ristorante-primary)] px-5 py-2.5 text-xs font-semibold tracking-wide text-[var(--ristorante-foreground)] transition-colors hover:bg-[var(--ristorante-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2"
             href="#contacto"
+            onClick={() => trackCtaClick()}
           >
             {ctaLabel || "Reservar mesa"}
           </TemplateNavAnchor>
@@ -171,9 +174,10 @@ export function RistoranteNav({
             <m.a
               className="mt-6 rounded-md bg-[var(--ristorante-secondary)] px-8 py-3 text-sm font-semibold text-[var(--ristorante-foreground)] transition-colors hover:bg-[var(--ristorante-secondary)]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ristorante-primary)]"
               href="#contacto"
-              onClick={(event) =>
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false))
-              }
+              onClick={(event) => {
+                trackCtaClick();
+                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+              }}
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}

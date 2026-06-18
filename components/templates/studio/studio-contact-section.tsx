@@ -6,6 +6,7 @@ import { StudioButton } from "@/components/templates/studio/studio-button";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -13,6 +14,7 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function StudioContactSection({ content }: { content: LandingContent }) {
+  const { trackWhatsAppClick, trackPhoneClick, trackLeadGenerated } = useAnalytics();
   const whatsappLink = getWhatsAppLink(content.contact.phone);
   const heading = getSectionHeading(content, "contacto", SECTION_HEADING_DEFAULTS.studio.contacto);
 
@@ -39,6 +41,10 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
             variant="primary"
             size="lg"
             className="!bg-[#8b7355] hover:!bg-[#7a6448]"
+            onClick={() => {
+              trackWhatsAppClick();
+              trackLeadGenerated();
+            }}
           >
             {content.contact.ctaLabel ?? "Reservar por WhatsApp"}
           </StudioButton>
@@ -57,6 +63,7 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
                 <a
                   className="text-sm text-white/70 transition-colors hover:text-white"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
+                  onClick={() => trackPhoneClick()}
                 >
                   {content.contact.phone}
                 </a>

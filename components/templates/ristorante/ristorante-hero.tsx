@@ -4,6 +4,7 @@ import { m, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
 import { RistoranteButton } from "@/components/templates/ristorante/ristorante-button";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -15,6 +16,7 @@ export function RistoranteHero({
   heroRef: React.RefObject<HTMLElement | null>;
 }) {
   const reduce = useReducedMotion();
+  const { trackCtaClick } = useAnalytics();
 
   return (
     <section
@@ -69,7 +71,7 @@ export function RistoranteHero({
                 {content.hero.subtitle}
               </p>
             ) : null}
-            <RistoranteButton href="#contacto" size="lg" variant="accent">
+            <RistoranteButton href="#contacto" size="lg" variant="accent" onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Reservar mesa"}
             </RistoranteButton>
           </div>

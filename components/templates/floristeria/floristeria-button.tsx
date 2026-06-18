@@ -26,6 +26,7 @@ export function FloristeriaButton({
   size = "md",
   icon,
   className = "",
+  onClick,
 }: {
   children: React.ReactNode;
   href?: string;
@@ -33,6 +34,7 @@ export function FloristeriaButton({
   size?: "sm" | "md" | "lg";
   icon?: React.ReactNode | null;
   className?: string;
+  onClick?: () => void;
 }) {
   const reduce = useReducedMotion();
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
@@ -63,6 +65,7 @@ export function FloristeriaButton({
         <m.a
           className={classes}
           href={href}
+          onClick={onClick}
           rel="noopener noreferrer"
           target="_blank"
           {...spring}
@@ -78,7 +81,7 @@ export function FloristeriaButton({
 
     return (
       <m.div className={wrapperClassName} {...spring}>
-        <TemplateNavAnchor className={classes} href={href}>
+        <TemplateNavAnchor className={classes} href={href} onClick={onClick}>
           {content}
         </TemplateNavAnchor>
       </m.div>

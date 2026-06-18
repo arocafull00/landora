@@ -5,6 +5,7 @@ import { X, Menu } from "lucide-react";
 import { m, AnimatePresence } from "motion/react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
+import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 import { FloristeriaNavPillLink } from "@/components/templates/floristeria/floristeria-nav-pill-link";
@@ -25,6 +26,7 @@ export function FloristeriaNav({
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { trackCtaClick } = useAnalytics();
 
   return (
     <>
@@ -62,6 +64,7 @@ export function FloristeriaNav({
             <TemplateNavAnchor
               className="inline-flex items-center justify-center rounded-full bg-[#2D5016] px-6 py-2.5 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-[#234012]"
               href="#contacto"
+              onClick={() => trackCtaClick()}
             >
               {ctaLabel || "Hacer pedido"}
             </TemplateNavAnchor>
@@ -109,9 +112,10 @@ export function FloristeriaNav({
             <m.a
               className="mt-6 rounded-full bg-[#2D5016] px-8 py-3 text-sm font-semibold text-white"
               href="#contacto"
-              onClick={(event) =>
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false))
-              }
+              onClick={(event) => {
+                trackCtaClick();
+                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+              }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}

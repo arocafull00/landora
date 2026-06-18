@@ -6,6 +6,7 @@ import { resolveFloristeriaFanImages } from "@/lib/floristeria-assets";
 import { FloristeriaButton } from "@/components/templates/floristeria/floristeria-button";
 import { FloristeriaHeroFan } from "@/components/templates/floristeria/floristeria-hero-fan";
 import { FloristeriaHeroFanBackdrop } from "@/components/templates/floristeria/floristeria-hero-fan-backdrop";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as const;
 
@@ -64,6 +65,7 @@ export function FloristeriaHero({
   heroRef: React.RefObject<HTMLElement | null>;
 }) {
   const reduce = useReducedMotion();
+  const { trackCtaClick } = useAnalytics();
   const fanImages = resolveFloristeriaFanImages(content.hero);
 
   return (
@@ -121,7 +123,7 @@ export function FloristeriaHero({
             variants={bloomButtonsVariants}
             className="mx-auto mt-6 flex w-full max-w-xs flex-col items-center gap-3 sm:mt-7 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4"
           >
-            <FloristeriaButton href="#contacto" size="lg" className="w-full sm:w-auto">
+            <FloristeriaButton href="#contacto" size="lg" className="w-full sm:w-auto" onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Hacer pedido"}
             </FloristeriaButton>
             <FloristeriaButton

@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { NavLink } from "@/lib/dashboard-data";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 export function OficioProNav({
   brand,
@@ -20,6 +21,7 @@ export function OficioProNav({
 }) {
   const [open, setOpen] = useState(false);
   const [atHero, setAtHero] = useState(true);
+  const { trackCtaClick } = useAnalytics();
 
   useEffect(() => {
     const update = () => {
@@ -80,6 +82,7 @@ export function OficioProNav({
             <a
               className="ml-2 inline-flex items-center justify-center rounded-xl bg-[#1F4E79] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(31,78,121,0.28)] transition-all hover:-translate-y-0.5 hover:bg-[#F59E0B] hover:text-[#17212B]"
               href="#contacto"
+              onClick={() => trackCtaClick()}
             >
               Contacto
             </a>
@@ -130,7 +133,10 @@ export function OficioProNav({
           <a
             className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[#1F4E79] px-3 py-3 text-base font-semibold text-white shadow-[0_8px_20px_rgba(31,78,121,0.22)] transition-all hover:bg-[#F59E0B] hover:text-[#17212B]"
             href="#contacto"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              trackCtaClick();
+              setOpen(false);
+            }}
           >
             Contacto
           </a>

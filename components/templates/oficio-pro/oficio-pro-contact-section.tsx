@@ -1,8 +1,11 @@
+"use client";
+
 import { Calendar, Camera, Mail, MapPin, Phone } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useAnalytics } from "@/hooks/use-analytics";
 import { OficioProContactItem } from "@/components/templates/oficio-pro/oficio-pro-contact-item";
 import { OficioProSectionHeader } from "@/components/templates/oficio-pro/oficio-pro-section-header";
 
@@ -16,6 +19,7 @@ function getInstagram(content: LandingContent) {
 }
 
 export function OficioProContactSection({ content }: { content: LandingContent }) {
+  const { trackWhatsAppClick, trackLeadGenerated } = useAnalytics();
   const heading = getSectionHeading(
     content,
     "contacto",
@@ -39,6 +43,10 @@ export function OficioProContactSection({ content }: { content: LandingContent }
               icon={Phone}
               label="WhatsApp y teléfono"
               value={content.contact.phone}
+              onClick={() => {
+                trackWhatsAppClick();
+                trackLeadGenerated();
+              }}
             />
           ) : null}
           {instagram ? (

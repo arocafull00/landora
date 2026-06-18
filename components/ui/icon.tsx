@@ -10,6 +10,7 @@ import {
   Folder,
   Globe,
   GraduationCap,
+  BarChart2,
   GripVertical,
   Image,
   Info,
@@ -56,6 +57,7 @@ const icons: Record<IconName, LucideIcon> = {
   close: X,
   info: Info,
   tutorial: GraduationCap,
+  chart: BarChart2,
 };
 
 export function Icon({

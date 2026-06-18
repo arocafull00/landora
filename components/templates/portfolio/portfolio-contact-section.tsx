@@ -6,6 +6,7 @@ import { PortfolioButton } from "@/components/templates/portfolio/portfolio-butt
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -13,6 +14,7 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function PortfolioContactSection({ content }: { content: LandingContent }) {
+  const { trackWhatsAppClick, trackPhoneClick, trackLeadGenerated } = useAnalytics();
   const whatsappLink = getWhatsAppLink(content.contact.phone);
   const heading = getSectionHeading(content, "contacto", SECTION_HEADING_DEFAULTS.portfolio.contacto);
 
@@ -38,6 +40,10 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
             href={whatsappLink}
             variant="primary"
             size="lg"
+            onClick={() => {
+              trackWhatsAppClick();
+              trackLeadGenerated();
+            }}
           >
             {content.contact.ctaLabel ?? "Contactar por WhatsApp"}
           </PortfolioButton>
@@ -56,6 +62,7 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
                 <a
                   className="text-sm text-white/70 transition-colors hover:text-white"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
+                  onClick={() => trackPhoneClick()}
                 >
                   {content.contact.phone}
                 </a>

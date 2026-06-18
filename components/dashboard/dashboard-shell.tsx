@@ -14,6 +14,7 @@ import { AssetsSection } from "@/components/dashboard/sections/assets-section";
 import { BlogSection } from "@/components/dashboard/sections/blog-section";
 import { DomainSection } from "@/components/dashboard/sections/domain-section";
 import { EditorSection } from "@/components/dashboard/sections/editor-section";
+import { AnalyticsSection } from "@/components/dashboard/sections/analytics-section";
 
 export function DashboardShell({
   isAdmin,
@@ -60,6 +61,7 @@ export function DashboardShell({
           {activeView === "assets" ? <AssetsSection /> : null}
           {activeView === "domain" ? <DomainSection /> : null}
           {activeView === "blog" ? <BlogSection /> : null}
+          {activeView === "analytics" ? <AnalyticsSection /> : null}
         </div>
       </SidebarInset>
     </SidebarProvider>

@@ -4,6 +4,7 @@ import { m, useReducedMotion } from "motion/react";
 import { AssetImage } from "@/components/ui/asset-image";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { CoffeeShopButton } from "@/components/templates/coffee-shop/coffee-shop-button";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -15,6 +16,7 @@ export function CoffeeShopHero({
   heroRef: React.RefObject<HTMLElement | null>;
 }) {
   const reduce = useReducedMotion();
+  const { trackCtaClick } = useAnalytics();
 
   return (
     <section
@@ -62,7 +64,7 @@ export function CoffeeShopHero({
             </p>
           ) : null}
           <div className="mt-10">
-            <CoffeeShopButton href="#carta" size="lg" variant="accent">
+            <CoffeeShopButton href="#carta" size="lg" variant="accent" onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Ver carta"}
             </CoffeeShopButton>
           </div>

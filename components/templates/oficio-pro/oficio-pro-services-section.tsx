@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -5,6 +7,7 @@ import { OficioProButton } from "@/components/templates/oficio-pro/oficio-pro-bu
 import { OficioProCarousel } from "@/components/templates/oficio-pro/oficio-pro-carousel";
 import { OficioProSectionHeader } from "@/components/templates/oficio-pro/oficio-pro-section-header";
 import { OficioProServiceCard } from "@/components/templates/oficio-pro/oficio-pro-service-card";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 function getTaggedImages(content: LandingContent, tag: string) {
   return (content.gallery ?? []).filter((item) => item.tags?.includes(tag));
@@ -28,6 +31,7 @@ export function OficioProServicesSection({
     SECTION_HEADING_DEFAULTS["oficio-pro"][anchor],
   );
   const images = getTaggedImages(content, anchor);
+  const { trackCtaClick } = useAnalytics();
 
   if (items.length === 0 && images.length === 0) return null;
 
@@ -51,7 +55,7 @@ export function OficioProServicesSection({
           {items.map((item, index) => (
             <OficioProServiceCard index={index} item={item} key={item.id} />
           ))}
-          <OficioProButton className="w-full sm:w-fit" href="#contacto">
+          <OficioProButton className="w-full sm:w-fit" href="#contacto" onClick={() => trackCtaClick()}>
             Más información
             <ArrowRight className="size-5" />
           </OficioProButton>

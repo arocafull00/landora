@@ -2,7 +2,7 @@ import { VELAR_ASSETS } from "@/lib/velar-assets";
 
 export { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 
-export type DashboardView = "editor" | "assets" | "domain" | "blog";
+export type DashboardView = "editor" | "assets" | "domain" | "blog" | "analytics";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
 
@@ -309,7 +309,8 @@ export type IconName =
   | "check"
   | "close"
   | "info"
-  | "tutorial";
+  | "tutorial"
+  | "chart";
 
 export const dashboardViews: Array<{
   id: DashboardView;
@@ -320,6 +321,7 @@ export const dashboardViews: Array<{
   { id: "assets", label: "Imágenes", icon: "image" },
   { id: "domain", label: "Dominio", icon: "link" },
   { id: "blog", label: "Blog", icon: "document" },
+  { id: "analytics", label: "Analíticas", icon: "chart" },
 ];
 
 
