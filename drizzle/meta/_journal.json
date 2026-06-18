@@ -127,6 +127,20 @@
       "when": 1781632524830,
       "tag": "0017_faulty_shinobi_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1781803697013,
+      "tag": "0018_tiresome_karma",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1781804079185,
+      "tag": "0019_rich_marvel_apes",
+      "breakpoints": true
     }
   ]
 }

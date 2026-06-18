@@ -11,13 +11,16 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { DashboardSidebarNavItem } from "@/components/dashboard/dashboard-sidebar-nav-item";
+import { DashboardSidebarSettingsLink } from "@/components/dashboard/dashboard-sidebar-settings-link";
 import { DashboardSidebarFooter } from "@/components/dashboard/dashboard-sidebar-footer";
 
 export function DashboardSidebar({
   impersonating,
+  settingsActive = false,
   showAccountActions,
 }: {
   impersonating: boolean;
+  settingsActive?: boolean;
   showAccountActions: boolean;
 }) {
   return (
@@ -40,6 +43,15 @@ export function DashboardSidebar({
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        {showAccountActions ? (
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <DashboardSidebarSettingsLink isActive={settingsActive} />
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ) : null}
       </SidebarContent>
       {showAccountActions ? <DashboardSidebarFooter /> : null}
       <SidebarRail />

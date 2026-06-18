@@ -11,15 +11,25 @@ import {
   isReservedPath,
   normalizeHost,
 } from "@/lib/app-host";
+import { getSubscriptionStatusForProxy } from "@/data/subscriptions";
+import { hasActiveSubscription } from "@/lib/subscription-access";
+import { getStripePaymentLinkUrl } from "@/lib/stripe";
 
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
 const isTenantResolveRoute = createRouteMatcher(["/api/tenant/resolve"]);
+const isWebhookRoute = createRouteMatcher(["/api/webhooks/stripe"]);
+const isSubscriptionExemptRoute = createRouteMatcher([
+  "/settings(.*)",
+  "/api/webhooks/stripe",
+  "/api/stripe/(.*)",
+]);
 const isProtectedRoute = createRouteMatcher([
   "/editor(.*)",
   "/assets(.*)",
   "/domain(.*)",
   "/blog(.*)",
   "/analytics(.*)",
+  "/settings(.*)",
   "/admin(.*)",
   "/api(.*)",
 ]);
@@ -71,7 +81,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.rewrite(url);
   }
 
-  if (isSignInRoute(req) || isTenantResolveRoute(req)) {
+  if (isSignInRoute(req) || isTenantResolveRoute(req) || isWebhookRoute(req)) {
     return NextResponse.next();
   }
 
@@ -87,7 +97,32 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   }
 
   if (isProtectedRoute(req)) {
-    await auth.protect();
+    const { userId } = await auth.protect();
+
+    if (isSubscriptionExemptRoute(req)) {
+      return NextResponse.next();
+    }
+
+    if (!userId) {
+      return NextResponse.next();
+    }
+
+    const user = await getSubscriptionStatusForProxy(userId);
+
+    if (user?.type === "admin") {
+      return NextResponse.next();
+    }
+
+    if (hasActiveSubscription(user?.subscriptionStatus)) {
+      return NextResponse.next();
+    }
+
+    const paymentLink = getStripePaymentLinkUrl(userId);
+    if (!paymentLink) {
+      return NextResponse.next();
+    }
+
+    return NextResponse.redirect(paymentLink);
   }
 
   return NextResponse.next();

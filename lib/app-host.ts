@@ -4,6 +4,7 @@ const RESERVED_SLUGS = new Set([
   "domain",
   "blog",
   "analytics",
+  "settings",
   "admin",
   "preview",
   "sign-in",

@@ -10,11 +10,32 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
+export type SubscriptionStatus =
+  | "active"
+  | "trialing"
+  | "past_due"
+  | "canceled"
+  | "unpaid";
+
+export type DomainCheckStatus =
+  | "ok"
+  | "timeout"
+  | "dns_error"
+  | "ssl_error"
+  | "http_error";
+
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   clerkUserId: text("clerk_user_id").notNull().unique(),
   name: text("name").notNull(),
   type: text("type").$type<"user" | "admin">().notNull().default("user"),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  subscriptionStatus: text("subscription_status").$type<SubscriptionStatus>(),
+  subscriptionCurrentPeriodEnd: timestamp("subscription_current_period_end"),
+  subscriptionCancelAtPeriodEnd: boolean("subscription_cancel_at_period_end").default(
+    false,
+  ),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -290,6 +311,27 @@ export const assetsRelations = relations(assets, ({ one }) => ({
   user: one(users, { fields: [assets.userId], references: [users.id] }),
 }));
 
+export const domainChecks = pgTable("domain_checks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingPageId: uuid("landing_page_id").references(() => landingPages.id, {
+    onDelete: "cascade",
+  }),
+  domain: text("domain").notNull().unique(),
+  active: boolean("active").default(true),
+  lastCheckedAt: timestamp("last_checked_at"),
+  lastStatus: text("last_status").$type<DomainCheckStatus>(),
+  lastStatusCode: integer("last_status_code"),
+  consecutiveFailures: integer("consecutive_failures").default(0),
+  errorCode: text("error_code"),
+});
+
+export const domainChecksRelations = relations(domainChecks, ({ one }) => ({
+  landingPage: one(landingPages, {
+    fields: [domainChecks.landingPageId],
+    references: [landingPages.id],
+  }),
+}));
+
 export const landingPagesRelations = relations(landingPages, ({ one, many }) => ({
   seo: one(landingSeo, { fields: [landingPages.id], references: [landingSeo.landingId] }),
   branding: one(landingBranding, { fields: [landingPages.id], references: [landingBranding.landingId] }),
@@ -310,6 +352,7 @@ export const landingPagesRelations = relations(landingPages, ({ one, many }) => 
   workHistory: many(landingWorkHistory),
   blogPosts: many(blogPosts),
   blogConfig: one(blogConfig, { fields: [landingPages.id], references: [blogConfig.landingId] }),
+  domainChecks: many(domainChecks),
 }));
 
 export const landingSeoRelations = relations(landingSeo, ({ one }) => ({
@@ -414,3 +457,5 @@ export type NewAsset = typeof assets.$inferInsert;
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type NewBlogPost = typeof blogPosts.$inferInsert;
 export type BlogConfigRow = typeof blogConfig.$inferSelect;
+export type DomainCheck = typeof domainChecks.$inferSelect;
+export type NewDomainCheck = typeof domainChecks.$inferInsert;

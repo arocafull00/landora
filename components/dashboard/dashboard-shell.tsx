@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { DashboardView, Landing } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
@@ -19,11 +20,13 @@ export function DashboardShell({
   impersonating,
   initialLanding,
   initialView,
+  settingsContent,
 }: {
   isAdmin: boolean;
   impersonating: boolean;
   initialLanding: Landing;
   initialView: DashboardView;
+  settingsContent?: ReactNode;
 }) {
   useDashboardStore.getState().bootstrapDashboard({
     landing: initialLanding,
@@ -43,6 +46,7 @@ export function DashboardShell({
     >
       <DashboardSidebar
         impersonating={impersonating}
+        settingsActive={Boolean(settingsContent)}
         showAccountActions={!isAdmin}
       />
       <SidebarInset className="flex h-screen min-w-0 flex-col overflow-hidden bg-surface-bg">
@@ -50,11 +54,17 @@ export function DashboardShell({
           <SidebarTrigger />
         </div>
         <div className="flex min-h-0 flex-1 overflow-hidden">
-          {activeView === "editor" ? <EditorSection /> : null}
-          {activeView === "assets" ? <AssetsSection /> : null}
-          {activeView === "domain" ? <DomainSection /> : null}
-          {activeView === "blog" ? <BlogSection /> : null}
-          {activeView === "analytics" ? <AnalyticsSection /> : null}
+          {settingsContent ? (
+            settingsContent
+          ) : (
+            <>
+              {activeView === "editor" ? <EditorSection /> : null}
+              {activeView === "assets" ? <AssetsSection /> : null}
+              {activeView === "domain" ? <DomainSection /> : null}
+              {activeView === "blog" ? <BlogSection /> : null}
+              {activeView === "analytics" ? <AnalyticsSection /> : null}
+            </>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>
