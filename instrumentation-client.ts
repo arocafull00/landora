@@ -12,6 +12,8 @@ if (projectToken) {
     capture_pageview: false,
     capture_pageleave: true,
     capture_exceptions: true,
+    opt_out_capturing_by_default: true,
+    persistence: "memory",
     debug: process.env.NEXT_PUBLIC_POSTHOG_DEBUG === "1",
   });
 }

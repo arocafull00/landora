@@ -25,7 +25,7 @@ function formatDayLabel(day: string): string {
 }
 
 function computeChange(current: number, previous: number): number | null {
-  if (previous === 0) return null;
+  if (!Number.isFinite(previous) || !Number.isFinite(current) || previous === 0) return null;
   return Math.round(((current - previous) / previous) * 100);
 }
 

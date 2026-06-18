@@ -1,3 +1,4 @@
+import { CookieConsentBanner } from "@/components/analytics/cookie-consent-banner";
 import { PreviewScrollProvider } from "@/lib/preview-scroll-context";
 
 export default function PublicLandingLayout({
@@ -5,5 +6,10 @@ export default function PublicLandingLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <PreviewScrollProvider>{children}</PreviewScrollProvider>;
+  return (
+    <PreviewScrollProvider>
+      {children}
+      <CookieConsentBanner />
+    </PreviewScrollProvider>
+  );
 }
