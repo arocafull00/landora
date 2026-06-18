@@ -18,6 +18,7 @@ import { getStripePaymentLinkUrl } from "@/lib/stripe";
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
 const isTenantResolveRoute = createRouteMatcher(["/api/tenant/resolve"]);
 const isWebhookRoute = createRouteMatcher(["/api/webhooks/stripe"]);
+const isCronRoute = createRouteMatcher(["/api/cron/check-domains"]);
 const isSubscriptionExemptRoute = createRouteMatcher([
   "/settings(.*)",
   "/api/webhooks/stripe",
@@ -81,7 +82,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.rewrite(url);
   }
 
-  if (isSignInRoute(req) || isTenantResolveRoute(req) || isWebhookRoute(req)) {
+  if (isSignInRoute(req) || isTenantResolveRoute(req) || isWebhookRoute(req) || isCronRoute(req)) {
     return NextResponse.next();
   }
 
