@@ -4,30 +4,29 @@ import { useEffect, useRef, useTransition } from "react";
 import { ImageField } from "@/components/dashboard/image-field";
 import { ActionButton, StatusBadge } from "@/components/ui/primitives";
 import { slugifyBlogTitle } from "@/lib/blog-slug";
-import type { Landing, Post } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
 
 const INPUT_CLASS =
   "w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary";
 
-type BlogPostEditorPanelProps = {
-  landing: Landing;
-  post: Post;
-  onDelete: (id: string) => Promise<void>;
-  onPublish: (id: string) => Promise<void>;
-  onSave: (id: string) => Promise<void>;
-  onUpdate: (id: string, patch: Partial<Pick<Post, "title" | "slug" | "excerpt" | "body" | "heroImage">>) => void;
-};
-
-export function BlogPostEditorPanel({
-  landing,
-  post,
-  onDelete,
-  onPublish,
-  onSave,
-  onUpdate,
-}: BlogPostEditorPanelProps) {
+export function BlogPostEditorPanel() {
+  const activeLandingId = useDashboardStore((state) => state.activeLandingId);
+  const landings = useDashboardStore((state) => state.landings);
+  const posts = useDashboardStore((state) => state.posts);
+  const activePostId = useDashboardStore((state) => state.activePostId);
+  const updatePost = useDashboardStore((state) => state.updatePost);
+  const savePost = useDashboardStore((state) => state.savePost);
+  const publishPost = useDashboardStore((state) => state.publishPost);
+  const deletePost = useDashboardStore((state) => state.deletePost);
   const isAdmin = useDashboardStore((state) => state.isAdmin);
+
+  const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
+  const resolvedActivePostId =
+    activePostId && posts.some((item) => item.id === activePostId)
+      ? activePostId
+      : (posts[0]?.id ?? "");
+  const post = posts.find((item) => item.id === resolvedActivePostId) ?? null;
+
   const slugTouchedRef = useRef(false);
   const [isSaving, startSaveTransition] = useTransition();
   const [isPublishing, startPublishTransition] = useTransition();
@@ -36,14 +35,16 @@ export function BlogPostEditorPanel({
 
   useEffect(() => {
     slugTouchedRef.current = false;
-  }, [post.id]);
+  }, [post?.id]);
+
+  if (!landing || !post) return null;
 
   const handleTitleChange = (title: string) => {
     const patch: { title: string; slug?: string } = { title };
     if (!slugTouchedRef.current) {
       patch.slug = slugifyBlogTitle(title);
     }
-    onUpdate(post.id, patch);
+    updatePost(post.id, patch);
   };
 
   const badgeStatus = post.status === "Changes" ? "Draft" : post.status;
@@ -65,14 +66,14 @@ export function BlogPostEditorPanel({
         <div className="flex flex-wrap gap-2">
           <ActionButton
             disabled={isBusy}
-            onClick={() => startSaveTransition(() => onSave(post.id))}
+            onClick={() => startSaveTransition(() => savePost(post.id))}
             variant="secondary"
           >
             {isSaving ? "Guardando…" : "Guardar borrador"}
           </ActionButton>
           <ActionButton
             disabled={isBusy}
-            onClick={() => startPublishTransition(() => onPublish(post.id))}
+            onClick={() => startPublishTransition(() => publishPost(post.id))}
             variant="primary"
           >
             {isPublishing ? "Publicando…" : "Publicar"}
@@ -101,7 +102,7 @@ export function BlogPostEditorPanel({
             disabled={isBusy}
             onChange={(event) => {
               slugTouchedRef.current = true;
-              onUpdate(post.id, { slug: slugifyBlogTitle(event.target.value) });
+              updatePost(post.id, { slug: slugifyBlogTitle(event.target.value) });
             }}
             spellCheck={false}
             type="text"
@@ -115,14 +116,14 @@ export function BlogPostEditorPanel({
           <textarea
             className={`${INPUT_CLASS} resize-none`}
             disabled={isBusy}
-            onChange={(event) => onUpdate(post.id, { excerpt: event.target.value })}
+            onChange={(event) => updatePost(post.id, { excerpt: event.target.value })}
             rows={3}
             value={post.excerpt}
           />
         </label>
         <ImageField
           label="Imagen de cabecera"
-          onChange={(value) => onUpdate(post.id, { heroImage: value })}
+          onChange={(value) => updatePost(post.id, { heroImage: value })}
           templateId={landing.template}
           value={post.heroImage}
         />
@@ -133,7 +134,7 @@ export function BlogPostEditorPanel({
           <textarea
             className={`${INPUT_CLASS} min-h-[240px] font-mono text-body-sm`}
             disabled={isBusy}
-            onChange={(event) => onUpdate(post.id, { body: event.target.value })}
+            onChange={(event) => updatePost(post.id, { body: event.target.value })}
             rows={12}
             value={post.body}
           />
@@ -142,7 +143,7 @@ export function BlogPostEditorPanel({
           <ActionButton
             className="w-full"
             disabled={isBusy}
-            onClick={() => startDeleteTransition(() => onDelete(post.id))}
+            onClick={() => startDeleteTransition(() => deletePost(post.id))}
             variant="danger"
           >
             {isDeleting ? "Eliminando…" : "Eliminar post"}

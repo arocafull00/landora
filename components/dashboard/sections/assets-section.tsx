@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { AssetImage } from "@/components/ui/asset-image";
 import type { AssetRow } from "@/db/schema";
 import { shortDateFormatter } from "@/lib/intl-formatters";
@@ -23,16 +23,11 @@ import {
 export function AssetsSection() {
   const inputRef = useRef<HTMLInputElement>(null);
   const assets = useAssetsStore((state) => state.rows);
-  const ensureLoaded = useAssetsStore((state) => state.ensureLoaded);
   const prepend = useAssetsStore((state) => state.prepend);
   const remove = useAssetsStore((state) => state.remove);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [pendingFiles, setPendingFiles] = useState<PendingFile[]>([]);
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    ensureLoaded();
-  }, [ensureLoaded]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);

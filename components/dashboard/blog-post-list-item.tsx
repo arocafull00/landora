@@ -3,14 +3,19 @@
 import { AssetImage } from "@/components/ui/asset-image";
 import { StatusBadge } from "@/components/ui/primitives";
 import type { Post } from "@/lib/dashboard-data";
+import { useDashboardStore } from "@/stores/dashboard-store";
 
-type BlogPostListItemProps = {
-  post: Post;
-  isActive: boolean;
-  onSelect: () => void;
-};
+export function BlogPostListItem({ post }: { post: Post }) {
+  const activePostId = useDashboardStore((state) => state.activePostId);
+  const posts = useDashboardStore((state) => state.posts);
+  const setActivePostId = useDashboardStore((state) => state.setActivePostId);
 
-export function BlogPostListItem({ post, isActive, onSelect }: BlogPostListItemProps) {
+  const resolvedActivePostId =
+    activePostId && posts.some((item) => item.id === activePostId)
+      ? activePostId
+      : (posts[0]?.id ?? "");
+  const isActive = post.id === resolvedActivePostId;
+
   return (
     <button
       aria-current={isActive ? "true" : undefined}
@@ -19,7 +24,7 @@ export function BlogPostListItem({ post, isActive, onSelect }: BlogPostListItemP
           ? "bg-primary-fixed/30 ring-1 ring-inset ring-primary/40"
           : "hover:bg-surface-container-low"
       }`}
-      onClick={onSelect}
+      onClick={() => setActivePostId(post.id)}
       type="button"
     >
       <div className="col-span-2 hidden sm:block">

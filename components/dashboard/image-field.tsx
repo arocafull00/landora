@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import type { TemplateId } from "@/lib/dashboard-data";
 import { useAssetsStore } from "@/stores/assets-store";
 import { getTemplatePalette } from "@/lib/template-palettes";
@@ -36,12 +36,7 @@ export function ImageField({
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const assets = useAssetsStore((state) => state.rows);
-  const ensureLoaded = useAssetsStore((state) => state.ensureLoaded);
   const prepend = useAssetsStore((state) => state.prepend);
-
-  useEffect(() => {
-    ensureLoaded();
-  }, [ensureLoaded]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

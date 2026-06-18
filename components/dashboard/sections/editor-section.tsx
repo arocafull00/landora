@@ -27,9 +27,6 @@ export function EditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    publishLanding,
-    saveLanding,
-    setActiveLandingId,
     updateHero,
     updateSection,
     updateSectionItem,
@@ -70,18 +67,10 @@ export function EditorSection() {
     return <CoffeeShopEditorSection />;
   }
 
-  const saveActive = () => saveLanding(activeLanding.id);
-  const publishActive = () => publishLanding(activeLanding.id);
-
   const scrollTarget = getEditorScrollTarget(activeLanding.template, activeEditorTab);
 
   return (
     <EditorLayout
-      activeLanding={activeLanding}
-      landings={landings}
-      onPublish={publishActive}
-      onSave={saveActive}
-      onSelectLanding={setActiveLandingId}
       scrollTarget={scrollTarget}
       form={
         <>

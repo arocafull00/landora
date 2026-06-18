@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
-import { posthog } from "@/lib/posthog";
+import posthog from "posthog-js";
 
 export function useAnalytics() {
   const trackCtaClick = useCallback(() => {

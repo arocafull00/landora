@@ -19,10 +19,6 @@ export function OficioProEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    publishLanding,
-    saveLanding,
-    saveStatus,
-    setActiveLandingId,
     updateHero,
     updateSectionItem,
     updateStat,
@@ -35,8 +31,6 @@ export function OficioProEditorSection() {
 
   if (!activeLanding) return null;
 
-  const saveActive = () => saveLanding(activeLanding.id);
-  const publishActive = () => publishLanding(activeLanding.id);
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
   const serviceItems = serviceMenu.filter((item) => item.category === "Servicios");
   const installationItems = serviceMenu.filter((item) => item.category === "Instalaciones");
@@ -49,12 +43,6 @@ export function OficioProEditorSection() {
 
   return (
     <EditorLayout
-      activeLanding={activeLanding}
-      disabled={saveStatus === "saving"}
-      landings={landings}
-      onPublish={publishActive}
-      onSave={saveActive}
-      onSelectLanding={setActiveLandingId}
       form={
         <>
           {activeEditorTab === "Admin" && isAdmin ? (

@@ -9,6 +9,7 @@ import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
+import { LandingAnalyticsInit } from "@/components/analytics/landing-analytics-init";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -52,5 +53,10 @@ export default async function PublicLandingPage({
   const content = toLandingContent(landing);
   const Component = TEMPLATE_COMPONENTS[landing.template] ?? VelarTemplate;
 
-  return <Component content={content} />;
+  return (
+    <>
+      <LandingAnalyticsInit landingId={landing.id} clientId={landing.userId} />
+      <Component content={content} />
+    </>
+  );
 }

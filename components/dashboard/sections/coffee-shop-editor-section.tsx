@@ -18,10 +18,6 @@ export function CoffeeShopEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    saveStatus,
-    saveLanding,
-    publishLanding,
-    setActiveLandingId,
     updateHero,
     updateSectionItem,
   } = useDashboardStore();
@@ -31,21 +27,12 @@ export function CoffeeShopEditorSection() {
 
   if (!activeLanding) return null;
 
-  const saveActive = () => saveLanding(activeLanding.id);
-  const publishActive = () => publishLanding(activeLanding.id);
-
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
   const workflow = activeLanding.content.workflow ?? [];
   const faq = activeLanding.content.faq ?? [];
 
   return (
     <EditorLayout
-      activeLanding={activeLanding}
-      disabled={saveStatus === "saving"}
-      landings={landings}
-      onPublish={publishActive}
-      onSave={saveActive}
-      onSelectLanding={setActiveLandingId}
       form={
         <>
           {activeEditorTab === "Admin" && isAdmin ? (

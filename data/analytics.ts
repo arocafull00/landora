@@ -103,6 +103,59 @@ async function fetchDailyViews(
   }));
 }
 
+export type LandingAnalyticsSummary = {
+  landingId: string;
+  views: number;
+  whatsappClicks: number;
+  phoneClicks: number;
+  ctaClicks: number;
+  leads: number;
+};
+
+export const getAllLandingsAnalytics = cache(
+  async (from: Date, to: Date): Promise<LandingAnalyticsSummary[]> => {
+    if (!isPostHogConfigured()) {
+      throw new Error("PostHog analytics is not configured");
+    }
+
+    const fromValue = formatDateTime(from);
+    const toValue = formatDateTime(to);
+
+    const hogql = `
+      SELECT
+        properties.landingId AS landing_id,
+        countIf(event IN ('page_view', '$pageview')) AS views,
+        countIf(event = 'whatsapp_click') AS whatsapp_clicks,
+        countIf(event = 'phone_click') AS phone_clicks,
+        countIf(event = 'cta_click') AS cta_clicks,
+        countIf(event = 'lead_generated') AS leads
+      FROM events
+      WHERE properties.landingId IS NOT NULL
+        AND timestamp >= toDateTime('${fromValue}')
+        AND timestamp <= toDateTime('${toValue}')
+      GROUP BY landing_id
+      ORDER BY views DESC
+    `;
+
+    try {
+      const result = await queryPostHog(hogql);
+
+      return result.results.map((row) => ({
+        landingId: String(row[0]),
+        views: toNumber(row[1]),
+        whatsappClicks: toNumber(row[2]),
+        phoneClicks: toNumber(row[3]),
+        ctaClicks: toNumber(row[4]),
+        leads: toNumber(row[5]),
+      }));
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch all landings analytics: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
+    }
+  },
+);
+
 export const getLandingAnalytics = cache(
   async (landingId: string, from: Date, to: Date): Promise<LandingAnalytics> => {
     if (!isPostHogConfigured()) {

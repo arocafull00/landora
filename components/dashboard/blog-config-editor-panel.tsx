@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { useDebouncedCallback } from "use-debounce";
 import type { Landing } from "@/lib/dashboard-data";
@@ -13,14 +12,7 @@ type BlogConfigEditorPanelProps = {
 
 export function BlogConfigEditorPanel({ activeLanding }: BlogConfigEditorPanelProps) {
   const blogConfig = useDashboardStore((state) => state.blogConfig);
-  const blogConfigLoaded = useDashboardStore((state) => state.blogConfigLoaded);
-  const loadBlogConfig = useDashboardStore((state) => state.loadBlogConfig);
   const updateBlogConfig = useDashboardStore((state) => state.updateBlogConfig);
-
-  useEffect(() => {
-    if (blogConfigLoaded) return;
-    loadBlogConfig(activeLanding.id);
-  }, [activeLanding.id, blogConfigLoaded, loadBlogConfig]);
 
   const persistConfig = useDebouncedCallback(
     (patch: Partial<{ title: string; description: string }>) => {

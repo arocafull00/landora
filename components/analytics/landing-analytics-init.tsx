@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { initPostHog, posthog } from "@/lib/posthog";
+import posthog from "posthog-js";
 
 export function LandingAnalyticsInit({
   landingId,
@@ -11,8 +11,8 @@ export function LandingAnalyticsInit({
   clientId: string;
 }) {
   useEffect(() => {
-    initPostHog();
     posthog.register({ landingId, clientId });
+    posthog.capture("$pageview");
     posthog.capture("page_view");
   }, [landingId, clientId]);
 

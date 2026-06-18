@@ -1,9 +1,8 @@
 "use client";
 
-import { useLayoutEffect } from "react";
+import { useRef } from "react";
 import { DashboardView, Landing } from "@/lib/dashboard-data";
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { useAssetsStore } from "@/stores/assets-store";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import {
   SidebarInset,
@@ -28,16 +27,17 @@ export function DashboardShell({
   initialView: DashboardView;
 }) {
   const activeView = useDashboardStore((state) => state.activeView);
-  const setActiveView = useDashboardStore((state) => state.setActiveView);
-  const initFromLanding = useDashboardStore((state) => state.initFromLanding);
-  const setIsAdmin = useDashboardStore((state) => state.setIsAdmin);
+  const bootstrappedKeyRef = useRef<string | null>(null);
+  const bootstrapKey = `${initialLanding.id}:${initialView}`;
 
-  useLayoutEffect(() => {
-    useAssetsStore.getState().ensureLoaded();
-    initFromLanding(initialLanding);
-    setActiveView(initialView);
-    setIsAdmin(isAdmin);
-  }, [initialLanding, initFromLanding, initialView, setActiveView, isAdmin, setIsAdmin]);
+  if (bootstrappedKeyRef.current !== bootstrapKey) {
+    bootstrappedKeyRef.current = bootstrapKey;
+    useDashboardStore.getState().bootstrapDashboard({
+      landing: initialLanding,
+      view: initialView,
+      isAdmin,
+    });
+  }
 
   return (
     <SidebarProvider

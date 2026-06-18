@@ -201,7 +201,30 @@ export default function TermsPage() {
         <h2 className="font-headline text-headline-sm font-medium text-on-surface">
           8. Precios y pago
         </h2>
-        <p>[MODELO DE PRECIOS]</p>
+        <p>
+          Landora ofrece suscripciones mensuales gestionadas a través de Stripe.
+          Los precios vigentes son los siguientes:
+        </p>
+        <ul className="list-disc space-y-1 pl-6">
+          <li>
+            <strong>Landora Pro:</strong> 30,00 € al mes (plataforma de
+            creación y gestión de páginas web)
+          </li>
+          <li>
+            <strong>Sistema de Reservas Online:</strong> 25,00 € al mes
+            (complemento opcional de reservas online)
+          </li>
+        </ul>
+        <p>
+          Los importes indicados no incluyen impuestos aplicables (como el IVA),
+          que se añadirán en el momento del cobro cuando corresponda.
+        </p>
+        <p>
+          El pago se realiza de forma recurrente cada mes mediante los métodos
+          habilitados en Stripe (tarjeta, Apple Pay, Klarna, Link y Amazon Pay).
+          La suscripción se renueva automáticamente salvo cancelación previa por
+          parte del cliente.
+        </p>
         <p>
           Landora se reserva el derecho de modificar sus tarifas con
           antelación razonable, notificando al cliente por correo electrónico.

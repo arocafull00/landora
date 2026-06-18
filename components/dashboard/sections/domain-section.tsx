@@ -1,92 +1,31 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import { toast } from "react-toastify";
-import {
-  assignCustomDomain,
-  getDomainStatus,
-  removeCustomDomain,
-  type DomainStatus,
-} from "@/app/actions/domains";
 import { DomainDnsRecord } from "@/components/dashboard/domain-dns-record";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { ActionButton, Panel, StatusBadge } from "@/components/ui/primitives";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useDomainStore } from "@/stores/domain-store";
 
 export function DomainSection() {
   const landings = useDashboardStore((state) => state.landings);
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
   const isAdmin = useDashboardStore((state) => state.isAdmin);
+  const status = useDomainStore((state) => state.status);
+  const domainInput = useDomainStore((state) => state.domainInput);
+  const loading = useDomainStore((state) => state.loading);
+  const assigning = useDomainStore((state) => state.assigning);
+  const removing = useDomainStore((state) => state.removing);
+  const setDomainInput = useDomainStore((state) => state.setDomainInput);
+  const assignDomain = useDomainStore((state) => state.assignDomain);
+  const removeDomain = useDomainStore((state) => state.removeDomain);
+
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
 
-  const [domainInput, setDomainInput] = useState("");
-  const [status, setStatus] = useState<DomainStatus | null>(null);
-  const [isPending, startTransition] = useTransition();
-  const [isRemovePending, startRemoveTransition] = useTransition();
-
-  useEffect(() => {
-    if (!activeLanding) return;
-
-    startTransition(async () => {
-      const result = await getDomainStatus();
-
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
-      }
-
-      setStatus(result);
-      if (result.domain) {
-        setDomainInput(result.domain);
-      }
-    });
-  }, [activeLanding, activeLanding?.id]);
-
   if (!activeLanding) return null;
 
-  const handleAssign = () => {
-    startTransition(async () => {
-      const result = await assignCustomDomain(domainInput);
-
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
-      }
-
-      toast.success("Dominio conectado. Configura los registros DNS en tu proveedor.");
-
-      const refreshed = await getDomainStatus();
-      if (!("error" in refreshed)) {
-        setStatus(refreshed);
-        if (refreshed.domain) {
-          setDomainInput(refreshed.domain);
-        }
-      }
-    });
-  };
-
-  const handleRemove = () => {
-    startRemoveTransition(async () => {
-      const result = await removeCustomDomain();
-
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
-      }
-
-      setDomainInput("");
-      setStatus({
-        domain: null,
-        verified: false,
-        misconfigured: false,
-        records: [],
-      });
-      toast.success("Dominio eliminado");
-    });
-  };
-
   const isPublished = activeLanding.status === "Published";
+  const isBusy = loading || assigning || removing;
 
   return (
     <div className={`flex flex-1 flex-col overflow-hidden ${isAdmin ? "pt-10" : ""}`}>
@@ -116,7 +55,7 @@ export function DomainSection() {
                 </label>
                 <input
                   className="w-full rounded-md border border-outline-variant bg-surface-bg px-3 py-2 font-body text-body-md text-on-surface outline-none transition-colors duration-150 focus:border-primary focus:ring-2 focus:ring-primary/20"
-                  disabled={!isPublished || isPending || isRemovePending}
+                  disabled={!isPublished || isBusy}
                   id="custom-domain"
                   onChange={(event) => setDomainInput(event.target.value)}
                   placeholder="www.tuempresa.com"
@@ -127,19 +66,19 @@ export function DomainSection() {
 
               <div className="flex items-center gap-2">
                 <ActionButton
-                  disabled={!isPublished || isPending || isRemovePending || !domainInput.trim()}
-                  onClick={handleAssign}
+                  disabled={!isPublished || isBusy || !domainInput.trim()}
+                  onClick={() => assignDomain(domainInput)}
                   variant="primary"
                 >
-                  {isPending ? "Guardando…" : "Conectar dominio"}
+                  {assigning ? "Guardando…" : "Conectar dominio"}
                 </ActionButton>
                 {status?.domain ? (
                   <ActionButton
-                    disabled={isPending || isRemovePending}
-                    onClick={handleRemove}
+                    disabled={isBusy}
+                    onClick={() => removeDomain()}
                     variant="danger"
                   >
-                    {isRemovePending ? "Eliminando…" : "Eliminar dominio"}
+                    {removing ? "Eliminando…" : "Eliminar dominio"}
                   </ActionButton>
                 ) : null}
               </div>

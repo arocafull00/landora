@@ -34,6 +34,9 @@ import {
   restoreNavItem,
 } from "@/lib/template-sections";
 import { formatBlogDate } from "@/lib/blog-slug";
+import { useAnalyticsStore } from "@/stores/analytics-store";
+import { useAssetsStore } from "@/stores/assets-store";
+import { useDomainStore } from "@/stores/domain-store";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 
@@ -80,9 +83,17 @@ type DashboardState = {
   posts: Post[];
   blogConfig: BlogConfig;
   blogPostsLoaded: boolean;
+  blogPostsLandingId: string;
   blogConfigLoaded: boolean;
+  blogConfigLandingId: string;
   presentations: Presentation[];
   assets: Asset[];
+  bootstrapDashboard: (params: {
+    landing: Landing;
+    view: DashboardView;
+    isAdmin: boolean;
+  }) => void;
+  hydrateActiveView: (view: DashboardView) => Promise<void>;
   setActiveView: (view: DashboardView) => void;
   setActiveWorkspaceTab: (tab: string) => void;
   setActiveContentGroup: (group: ContentGroup) => void;
@@ -122,7 +133,9 @@ type DashboardState = {
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
   loadBlogPosts: (landingId: string) => Promise<void>;
+  ensureBlogPostsLoaded: () => Promise<void>;
   loadBlogConfig: (landingId: string) => Promise<void>;
+  ensureBlogConfigLoaded: () => Promise<void>;
   createPost: (landingId: string, data?: Partial<Pick<Post, "title">>) => Promise<Post | null>;
   updateBlogConfig: (landingId: string, patch: Partial<BlogConfig>) => Promise<void>;
   saveLanding: (id: string) => Promise<void>;
@@ -220,14 +233,58 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
   posts: initialPosts,
   blogConfig: { title: "", description: "" },
   blogPostsLoaded: false,
+  blogPostsLandingId: "",
   blogConfigLoaded: false,
+  blogConfigLandingId: "",
   presentations: initialPresentations,
   assets: initialAssets,
 
-  setActiveView: (activeView) => set({ activeView }),
+  bootstrapDashboard: ({ landing, view, isAdmin }) => {
+    const { activeLandingId } = get();
+
+    if (activeLandingId !== landing.id) {
+      get().initFromLanding(landing);
+    }
+
+    set({ isAdmin });
+    get().setActiveView(view);
+    void useAssetsStore.getState().ensureLoaded();
+  },
+
+  hydrateActiveView: async (view) => {
+    if (view === "blog") {
+      await get().ensureBlogPostsLoaded();
+      return;
+    }
+
+    if (view === "analytics") {
+      await useAnalyticsStore.getState().ensureLoaded();
+      return;
+    }
+
+    if (view === "assets") {
+      await useAssetsStore.getState().ensureLoaded();
+      return;
+    }
+
+    if (view === "domain") {
+      await useDomainStore.getState().ensureLoaded();
+    }
+  },
+
+  setActiveView: (activeView) => {
+    set({ activeView });
+    void get().hydrateActiveView(activeView);
+  },
   setActiveWorkspaceTab: (activeWorkspaceTab) => set({ activeWorkspaceTab }),
   setActiveContentGroup: (activeContentGroup) => set({ activeContentGroup }),
-  setActiveEditorTab: (activeEditorTab) => set({ activeEditorTab }),
+  setActiveEditorTab: (activeEditorTab) => {
+    set({ activeEditorTab });
+
+    if (activeEditorTab === "Blog") {
+      void get().ensureBlogConfigLoaded();
+    }
+  },
   setActiveLandingId: (activeLandingId) =>
     set({ activeLandingId, activeView: "editor", activeContentGroup: "Pages" }),
   setActivePostId: (activePostId) =>
@@ -242,7 +299,9 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
       landings: [landing],
       activeLandingId: landing.id,
       blogPostsLoaded: false,
+      blogPostsLandingId: "",
       blogConfigLoaded: false,
+      blogConfigLandingId: "",
       posts: [],
       blogConfig: { title: "", description: "" },
     }),
@@ -743,14 +802,42 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
       if (!res.ok) throw new Error("load failed");
 
       const rows = (await res.json()) as BlogPostApi[];
+      const posts = rows.map(mapPostFromApi);
+      const { activePostId } = get();
+      const resolvedActivePostId =
+        activePostId && posts.some((post) => post.id === activePostId)
+          ? activePostId
+          : (posts[0]?.id ?? "");
 
       set({
-        posts: rows.map(mapPostFromApi),
+        posts,
         blogPostsLoaded: true,
+        blogPostsLandingId: landingId,
+        activePostId: resolvedActivePostId,
       });
     } catch {
       toast.error("No se pudieron cargar los posts");
     }
+  },
+
+  ensureBlogPostsLoaded: async () => {
+    const { activeLandingId, landings, blogPostsLoaded, blogPostsLandingId } = get();
+    const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
+    if (!landing) return;
+
+    if (blogPostsLoaded && blogPostsLandingId === landing.id) return;
+
+    await get().loadBlogPosts(landing.id);
+  },
+
+  ensureBlogConfigLoaded: async () => {
+    const { activeLandingId, landings, blogConfigLoaded, blogConfigLandingId } = get();
+    const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
+    if (!landing) return;
+
+    if (blogConfigLoaded && blogConfigLandingId === landing.id) return;
+
+    await get().loadBlogConfig(landing.id);
   },
 
   loadBlogConfig: async (landingId) => {
@@ -766,6 +853,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
           description: config.description ?? "",
         },
         blogConfigLoaded: true,
+        blogConfigLandingId: landingId,
       });
     } catch {
       toast.error("No se pudo cargar la configuración del blog");
@@ -789,6 +877,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
         posts: [mapped, ...state.posts],
         activePostId: mapped.id,
         blogPostsLoaded: true,
+        blogPostsLandingId: landingId,
       }));
 
       return mapped;

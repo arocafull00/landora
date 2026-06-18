@@ -1,7 +1,6 @@
 "use client";
 
 import { dashboardViews } from "@/lib/dashboard-data";
-import { useDashboardStore } from "@/stores/dashboard-store";
 import {
   Sidebar,
   SidebarContent,
@@ -21,7 +20,6 @@ export function DashboardSidebar({
   impersonating: boolean;
   showAccountActions: boolean;
 }) {
-  const activeView = useDashboardStore((state) => state.activeView);
   return (
     <Sidebar collapsible="icon" className={impersonating ? "pt-10" : undefined}>
       <SidebarHeader className="border-b border-sidebar-border px-unit-sm py-unit-lg">
@@ -37,11 +35,7 @@ export function DashboardSidebar({
           <SidebarGroupContent>
             <SidebarMenu>
               {dashboardViews.map((item) => (
-                <DashboardSidebarNavItem
-                  isActive={activeView === item.id}
-                  item={item}
-                  key={item.id}
-                />
+                <DashboardSidebarNavItem item={item} key={item.id} />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>

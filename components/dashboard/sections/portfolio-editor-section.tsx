@@ -20,10 +20,6 @@ export function PortfolioEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    saveStatus,
-    saveLanding,
-    publishLanding,
-    setActiveLandingId,
     updateHero,
     updateSection,
     updateSectionItem,
@@ -34,21 +30,12 @@ export function PortfolioEditorSection() {
 
   if (!activeLanding) return null;
 
-  const saveActive = () => saveLanding(activeLanding.id);
-  const publishActive = () => publishLanding(activeLanding.id);
-
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
   const workHistory = activeLanding.content.workHistory ?? [];
   const faq = activeLanding.content.faq ?? [];
 
   return (
     <EditorLayout
-      activeLanding={activeLanding}
-      disabled={saveStatus === "saving"}
-      landings={landings}
-      onPublish={publishActive}
-      onSave={saveActive}
-      onSelectLanding={setActiveLandingId}
       form={
         <>
           {activeEditorTab === "Admin" && isAdmin ? (

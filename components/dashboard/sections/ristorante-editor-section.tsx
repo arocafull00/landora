@@ -18,10 +18,6 @@ export function RistoranteEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    saveStatus,
-    saveLanding,
-    publishLanding,
-    setActiveLandingId,
     updateHero,
     updateSectionItem,
   } = useDashboardStore();
@@ -31,9 +27,6 @@ export function RistoranteEditorSection() {
 
   if (!activeLanding) return null;
 
-  const saveActive = () => saveLanding(activeLanding.id);
-  const publishActive = () => publishLanding(activeLanding.id);
-
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
   const team = activeLanding.content.team ?? [];
   const workflow = activeLanding.content.workflow ?? [];
@@ -41,12 +34,6 @@ export function RistoranteEditorSection() {
 
   return (
     <EditorLayout
-      activeLanding={activeLanding}
-      disabled={saveStatus === "saving"}
-      landings={landings}
-      onPublish={publishActive}
-      onSave={saveActive}
-      onSelectLanding={setActiveLandingId}
       form={
         <>
           {activeEditorTab === "Admin" && isAdmin ? (

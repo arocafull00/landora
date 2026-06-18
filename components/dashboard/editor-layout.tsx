@@ -1,60 +1,39 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import type { Landing } from "@/lib/dashboard-data";
 import { EditorToolbar } from "@/components/dashboard/editor-toolbar";
 import { IframeLandingPreview } from "@/components/dashboard/iframe-landing-preview";
 import { PreviewFullscreenOverlay } from "@/components/dashboard/preview-fullscreen-overlay";
 import type { PreviewDevice } from "@/components/dashboard/preview-toolbar";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { EditorLayoutTabs } from "@/components/dashboard/editor-layout-tabs";
-
 import { getEditorScrollTarget } from "@/lib/template-sections";
 
 export function EditorLayout({
-  activeLanding,
-  disabled = false,
   form,
-  landings,
-  onPublish,
-  onSave,
-  onSelectLanding,
   scrollTarget,
 }: {
-  activeLanding: Landing;
-  disabled?: boolean;
   form: ReactNode;
-  landings: Landing[];
-  onPublish: () => void;
-  onSave: () => void;
-  onSelectLanding: (id: string) => void;
   scrollTarget?: string;
 }) {
   const activeEditorTab = useDashboardStore((state) => state.activeEditorTab);
-  const isAdmin = useDashboardStore((state) => state.isAdmin);
-  const setActiveEditorTab = useDashboardStore((state) => state.setActiveEditorTab);
+  const activeLandingId = useDashboardStore((state) => state.activeLandingId);
+  const landings = useDashboardStore((state) => state.landings);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [device, setDevice] = useState<PreviewDevice>("desktop");
+
+  const activeLanding =
+    landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
+
+  if (!activeLanding) return null;
+
   const resolvedScrollTarget =
     scrollTarget ?? getEditorScrollTarget(activeLanding.template, activeEditorTab);
 
   return (
     <section className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-surface">
-      <EditorToolbar
-        activeLanding={activeLanding}
-        disabled={disabled}
-        landings={landings}
-        onPublish={onPublish}
-        onSave={onSave}
-        onSelectLanding={onSelectLanding}
-      />
-      <EditorLayoutTabs
-        activeEditorTab={activeEditorTab}
-        hiddenSections={activeLanding.content.hiddenSections}
-        isAdmin={isAdmin}
-        onTabChange={setActiveEditorTab}
-        template={activeLanding.template}
-      />
+      <EditorToolbar />
+      <EditorLayoutTabs />
       <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden xl:grid-cols-[minmax(320px,380px)_1fr]">
         <div id="tutorial-editor-form" className="min-h-0 overflow-y-auto border-r border-outline-variant bg-surface-container-low p-unit-lg">
           <div className="space-y-unit-md">{form}</div>

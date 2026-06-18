@@ -1,6 +1,5 @@
 "use client";
 
-import type { Landing } from "@/lib/dashboard-data";
 import { cn } from "@/lib/utils";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { toast } from "react-toastify";
@@ -16,22 +15,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 
-export function EditorToolbar({
-  activeLanding,
-  disabled = false,
-  landings,
-  onPublish,
-  onSave,
-  onSelectLanding,
-}: {
-  activeLanding: Landing;
-  disabled?: boolean;
-  landings: Landing[];
-  onPublish: () => void;
-  onSave: () => void;
-  onSelectLanding: (id: string) => void;
-}) {
+export function EditorToolbar() {
+  const activeLandingId = useDashboardStore((state) => state.activeLandingId);
+  const landings = useDashboardStore((state) => state.landings);
+  const saveStatus = useDashboardStore((state) => state.saveStatus);
+  const saveLanding = useDashboardStore((state) => state.saveLanding);
+  const publishLanding = useDashboardStore((state) => state.publishLanding);
+  const setActiveLandingId = useDashboardStore((state) => state.setActiveLandingId);
   const isAdmin = useDashboardStore((state) => state.isAdmin);
+
+  const activeLanding =
+    landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
+
+  if (!activeLanding) return null;
+
+  const disabled = saveStatus === "saving";
 
   const copyPreviewLink = async () => {
     let url: string;
@@ -76,7 +74,7 @@ export function EditorToolbar({
               return (
                 <DropdownMenuItem
                   key={landing.id}
-                  onClick={() => onSelectLanding(landing.id)}
+                  onClick={() => setActiveLandingId(landing.id)}
                 >
                   <span className="flex-1 truncate">{landing.name}</span>
                   {active ? <CheckIcon className="h-4 w-4 text-primary" /> : null}
@@ -102,11 +100,20 @@ export function EditorToolbar({
         <DashboardTutorialButton />
         <IconButton id="tutorial-copy-link" icon="link" label="Copiar enlace" onClick={copyPreviewLink} />
         <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
-        <ActionButton disabled={disabled} id="tutorial-save" onClick={onSave}>
+        <ActionButton
+          disabled={disabled}
+          id="tutorial-save"
+          onClick={() => saveLanding(activeLanding.id)}
+        >
           <Icon name="save" className="h-4 w-4" />
           Guardar
         </ActionButton>
-        <ActionButton disabled={disabled} id="tutorial-publish" onClick={onPublish} variant="primary">
+        <ActionButton
+          disabled={disabled}
+          id="tutorial-publish"
+          onClick={() => publishLanding(activeLanding.id)}
+          variant="primary"
+        >
           <Icon name="publish" className="h-4 w-4" />
           Publicar
         </ActionButton>

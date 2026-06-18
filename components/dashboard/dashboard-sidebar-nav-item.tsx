@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { dashboardViews } from "@/lib/dashboard-data";
+import { useDashboardStore } from "@/stores/dashboard-store";
 import { Icon } from "@/components/ui/icon";
 import {
   SidebarMenuButton,
@@ -10,13 +11,10 @@ import {
 
 type DashboardViewItem = (typeof dashboardViews)[number];
 
-export function DashboardSidebarNavItem({
-  item,
-  isActive,
-}: {
-  item: DashboardViewItem;
-  isActive: boolean;
-}) {
+export function DashboardSidebarNavItem({ item }: { item: DashboardViewItem }) {
+  const activeView = useDashboardStore((state) => state.activeView);
+  const isActive = activeView === item.id;
+
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive} tooltip={item.label}>
