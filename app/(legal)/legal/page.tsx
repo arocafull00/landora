@@ -32,10 +32,7 @@ export default function LegalPage() {
             <strong>Titular:</strong> Adrian Rocafull Berbel
           </li>
           <li>
-            <strong>DNI:</strong> [DNI]
-          </li>
-          <li>
-            <strong>Domicilio:</strong> [DOMICILIO]
+            <strong>Domicilio:</strong> Av.Rey Juan Carlos I, 12, Torrent, Valencia.
           </li>
           <li>
             <strong>Correo electrónico:</strong>{" "}
@@ -45,6 +42,9 @@ export default function LegalPage() {
             >
               adrianrocafull1@gmail.com
             </a>
+          </li>
+          <li>
+            <strong>Actividad:</strong> Prestación de servicios de software SaaS y creación de páginas web.
           </li>
         </ul>
       </section>
