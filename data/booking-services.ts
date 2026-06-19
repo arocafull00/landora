@@ -34,7 +34,9 @@ export async function createBookingService(
   data: {
     name: string;
     durationMinutes: number;
+    priceCents: number;
     bufferAfterMinutes: number;
+    isActive?: boolean;
   },
 ) {
   try {
@@ -43,7 +45,15 @@ export async function createBookingService(
     });
     const [row] = await db
       .insert(bookingServices)
-      .values({ tenantId, ...data, sortOrder: existing.length })
+      .values({
+        tenantId,
+        name: data.name,
+        durationMinutes: data.durationMinutes,
+        priceCents: data.priceCents,
+        bufferAfterMinutes: data.bufferAfterMinutes,
+        isActive: data.isActive ?? true,
+        sortOrder: existing.length,
+      })
       .returning();
     return row;
   } catch {
@@ -57,7 +67,9 @@ export async function updateBookingService(
   data: {
     name?: string;
     durationMinutes?: number;
+    priceCents?: number;
     bufferAfterMinutes?: number;
+    isActive?: boolean;
   },
 ) {
   try {
@@ -99,6 +111,16 @@ export async function reorderBookingServices(tenantId: string, orderedIds: strin
     });
   } catch {
     throw new Error("Failed to reorder booking services");
+  }
+}
+
+export async function deleteBookingService(tenantId: string, id: string) {
+  try {
+    await db
+      .delete(bookingServices)
+      .where(and(eq(bookingServices.tenantId, tenantId), eq(bookingServices.id, id)));
+  } catch {
+    throw new Error("Failed to delete booking service");
   }
 }
 

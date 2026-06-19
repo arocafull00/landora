@@ -11,6 +11,7 @@ import {
 } from "@/data/employees";
 import { replaceEmployeeHours } from "@/data/employee-hours";
 import { replaceEmployeeServices } from "@/data/employee-services";
+import { DEFAULT_HOUR_DRAFTS } from "@/lib/employee-schedule";
 
 const nameSchema = z.string().trim().min(1).max(80);
 
@@ -33,7 +34,10 @@ async function getTenantId() {
   return tenantId;
 }
 
-export async function createEmployeeAction(name: string): Promise<ActionResult> {
+export async function createEmployeeAction(
+  name: string,
+  isActive = true,
+): Promise<ActionResult> {
   const tenantId = await getTenantId();
   if (!tenantId) {
     return { error: "No autorizado" };
@@ -45,7 +49,8 @@ export async function createEmployeeAction(name: string): Promise<ActionResult> 
   }
 
   try {
-    await createEmployee(tenantId, parsed.data);
+    const employee = await createEmployee(tenantId, parsed.data, isActive);
+    await replaceEmployeeHours(tenantId, employee.id, DEFAULT_HOUR_DRAFTS);
     revalidatePath("/employees");
     return { success: true };
   } catch {

@@ -358,19 +358,45 @@ export type IconName =
   | "briefcase"
   | "team";
 
-export const dashboardViews: Array<{
+export type DashboardNavItem = {
   id: DashboardView;
   label: string;
   icon: IconName;
-}> = [
-  { id: "editor", label: "Editor", icon: "document" },
-  { id: "bookings", label: "Reservas", icon: "calendar" },
-  { id: "services", label: "Servicios", icon: "briefcase" },
-  { id: "employees", label: "Empleados", icon: "team" },
-  { id: "assets", label: "Imágenes", icon: "image" },
-  { id: "domain", label: "Dominio", icon: "link" },
-  { id: "blog", label: "Blog", icon: "document" },
-  { id: "analytics", label: "Analíticas", icon: "chart" },
+};
+
+export type DashboardNavSection = {
+  id: "general" | "configuracion" | "gestion";
+  label: string;
+  items: DashboardNavItem[];
+};
+
+export const dashboardNavSections: DashboardNavSection[] = [
+  {
+    id: "general",
+    label: "General",
+    items: [
+      { id: "editor", label: "Editor", icon: "document" },
+      { id: "assets", label: "Imágenes", icon: "image" },
+      { id: "blog", label: "Blog", icon: "document" },
+    ],
+  },
+  {
+    id: "configuracion",
+    label: "Configuración",
+    items: [
+      { id: "domain", label: "Dominio", icon: "link" },
+      { id: "analytics", label: "Analíticas", icon: "chart" },
+    ],
+  },
+  {
+    id: "gestion",
+    label: "Gestión",
+    items: [
+      { id: "bookings", label: "Reservas", icon: "calendar" },
+      { id: "services", label: "Servicios", icon: "briefcase" },
+      { id: "employees", label: "Empleados", icon: "team" },
+    ],
+  },
 ];
 
 

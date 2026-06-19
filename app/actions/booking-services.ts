@@ -5,6 +5,8 @@ import { z } from "zod";
 import { getEffectiveClientId } from "@/lib/auth";
 import {
   createBookingService,
+  deleteBookingService,
+  getBookingServiceById,
   reorderBookingServices,
   setBookingServiceActive,
   updateBookingService,
@@ -13,7 +15,9 @@ import {
 const serviceSchema = z.object({
   name: z.string().trim().min(1).max(80),
   durationMinutes: z.number().int().min(5).max(480),
+  priceCents: z.number().int().min(0).max(999_999_99),
   bufferAfterMinutes: z.number().int().min(0).max(120),
+  isActive: z.boolean().optional(),
 });
 
 type ActionResult = { success: true } | { error: string };
@@ -107,5 +111,46 @@ export async function reorderBookingServicesAction(orderedIds: string[]): Promis
     return { success: true };
   } catch {
     return { error: "No se pudo reordenar los servicios" };
+  }
+}
+
+export async function deleteBookingServiceAction(id: string): Promise<ActionResult> {
+  const tenantId = await getTenantId();
+  if (!tenantId) {
+    return { error: "No autorizado" };
+  }
+
+  try {
+    await deleteBookingService(tenantId, id);
+    revalidatePath("/services");
+    return { success: true };
+  } catch {
+    return { error: "No se pudo eliminar el servicio. Puede tener reservas asociadas." };
+  }
+}
+
+export async function duplicateBookingServiceAction(id: string): Promise<ActionResult> {
+  const tenantId = await getTenantId();
+  if (!tenantId) {
+    return { error: "No autorizado" };
+  }
+
+  try {
+    const source = await getBookingServiceById(tenantId, id);
+    if (!source) {
+      return { error: "Servicio no encontrado" };
+    }
+
+    await createBookingService(tenantId, {
+      name: `${source.name} (copia)`,
+      durationMinutes: source.durationMinutes,
+      priceCents: source.priceCents,
+      bufferAfterMinutes: source.bufferAfterMinutes,
+      isActive: false,
+    });
+    revalidatePath("/services");
+    return { success: true };
+  } catch {
+    return { error: "No se pudo duplicar el servicio" };
   }
 }

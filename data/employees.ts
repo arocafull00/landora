@@ -44,11 +44,11 @@ export const getEmployeeById = cache(async (tenantId: string, id: string) => {
   }
 });
 
-export async function createEmployee(tenantId: string, name: string) {
+export async function createEmployee(tenantId: string, name: string, isActive = true) {
   try {
     const [row] = await db
       .insert(employees)
-      .values({ tenantId, name })
+      .values({ tenantId, name, isActive })
       .returning();
     return row;
   } catch {

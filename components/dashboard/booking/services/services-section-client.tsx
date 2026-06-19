@@ -5,12 +5,11 @@ import { toast } from "react-toastify";
 import type { BookingService } from "@/db/schema";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Button } from "@/components/ui/button";
-import { ServiceRow } from "@/components/dashboard/booking/services/service-row";
+import { ServiceCard } from "@/components/dashboard/booking/services/service-card";
 import { ServiceCreateDialog } from "@/components/dashboard/booking/services/service-create-dialog";
-import { ServiceEditDialog } from "@/components/dashboard/booking/services/service-edit-dialog";
+import { ServiceEditPanel } from "@/components/dashboard/booking/services/service-edit-panel";
 import {
   reorderBookingServicesAction,
-  toggleBookingServiceActiveAction,
 } from "@/app/actions/booking-services";
 import { useBookingServicesStore } from "@/stores/booking-services-store";
 
@@ -18,7 +17,7 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
   const items = useBookingServicesStore((s) => s.services);
   const setServices = useBookingServicesStore((s) => s.setServices);
   const reorderServices = useBookingServicesStore((s) => s.reorderServices);
-  const setServiceActive = useBookingServicesStore((s) => s.setServiceActive);
+  const openEdit = useBookingServicesStore((s) => s.openEdit);
   const [createOpen, setCreateOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -49,23 +48,11 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
     });
   };
 
-  const toggleActive = (id: string, isActive: boolean) => {
-    startTransition(async () => {
-      const result = await toggleBookingServiceActiveAction(id, isActive);
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
-      }
-      setServiceActive(id, isActive);
-      toast.success(isActive ? "Servicio activado" : "Servicio desactivado");
-    });
-  };
-
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       <DashboardPageHeader
         title="Servicios"
-        description="Gestiona los servicios disponibles para reservas."
+        description="Carta de servicios con precios, duraciones y disponibilidad."
         actions={
           <Button onClick={() => setCreateOpen(true)} disabled={pending}>
             Nuevo servicio
@@ -73,35 +60,29 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
         }
       />
       <div className="flex-1 overflow-auto p-unit-lg">
-        <div className="mx-auto max-w-3xl space-y-3">
+        <div className="mx-auto max-w-3xl space-y-4">
           {items.length === 0 ? (
             <p className="font-body text-body-md text-on-surface-variant">
               No hay servicios todavía. Crea el primero para empezar.
             </p>
           ) : (
             items.map((service, index) => (
-              <ServiceRow
+              <ServiceCard
                 key={service.id}
                 service={service}
                 index={index}
                 total={items.length}
                 disabled={pending}
+                onEdit={() => openEdit(service)}
                 onMoveUp={() => move(index, -1)}
                 onMoveDown={() => move(index, 1)}
-                onToggleActive={(active) => toggleActive(service.id, active)}
               />
             ))
           )}
         </div>
       </div>
-      <ServiceCreateDialog
-        open={createOpen}
-        onOpenChange={setCreateOpen}
-        onCreated={() => {
-          setCreateOpen(false);
-        }}
-      />
-      <ServiceEditDialog />
+      <ServiceCreateDialog open={createOpen} onOpenChange={setCreateOpen} />
+      <ServiceEditPanel />
     </div>
   );
 }

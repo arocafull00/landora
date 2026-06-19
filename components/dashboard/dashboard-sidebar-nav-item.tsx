@@ -2,16 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { dashboardViews } from "@/lib/dashboard-data";
+import type { DashboardNavItem } from "@/lib/dashboard-data";
 import { Icon } from "@/components/ui/icon";
 import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-type DashboardViewItem = (typeof dashboardViews)[number];
-
-export function DashboardSidebarNavItem({ item }: { item: DashboardViewItem }) {
+export function DashboardSidebarNavItem({ item }: { item: DashboardNavItem }) {
   const pathname = usePathname();
   const isActive = pathname.startsWith(`/${item.id}`);
 

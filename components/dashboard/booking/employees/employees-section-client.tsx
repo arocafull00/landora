@@ -1,18 +1,13 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 import type { BookingService, Employee, EmployeeHours } from "@/db/schema";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { EmployeeRow } from "@/components/dashboard/booking/employees/employee-row";
-import { EmployeeSheet } from "@/components/dashboard/booking/employees/employee-sheet";
-import { createEmployeeAction } from "@/app/actions/employees";
-import { useEmployeeSheetStore } from "@/stores/employee-sheet-store";
-
-const DAY_LABELS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+import { EmployeeCard } from "@/components/dashboard/booking/employees/employee-card";
+import { EmployeeCreateDialog } from "@/components/dashboard/booking/employees/employee-create-dialog";
+import { EmployeeEditPanel } from "@/components/dashboard/booking/employees/employee-edit-panel";
+import { useEmployeeEditorStore } from "@/stores/employee-editor-store";
 
 export function EmployeesSectionClient({
   employees,
@@ -25,74 +20,52 @@ export function EmployeesSectionClient({
   hoursByEmployee: Record<string, EmployeeHours[]>;
   servicesByEmployee: Record<string, string[]>;
 }) {
-  const router = useRouter();
-  const [name, setName] = useState("");
-  const [pending, startTransition] = useTransition();
-  const setServices = useEmployeeSheetStore((s) => s.setServices);
-  const setDayLabels = useEmployeeSheetStore((s) => s.setDayLabels);
-  const openSheet = useEmployeeSheetStore((s) => s.openSheet);
+  const [createOpen, setCreateOpen] = useState(false);
+  const setServices = useEmployeeEditorStore((s) => s.setServices);
+  const openEdit = useEmployeeEditorStore((s) => s.openEdit);
 
   useEffect(() => {
     setServices(services);
-    setDayLabels(DAY_LABELS);
-  }, [services, setServices, setDayLabels]);
-
-  const create = () => {
-    startTransition(async () => {
-      const result = await createEmployeeAction(name);
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("Empleado creado");
-      setName("");
-      router.refresh();
-    });
-  };
+  }, [services, setServices]);
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       <DashboardPageHeader
         title="Empleados"
-        description="Gestiona profesionales, horarios y servicios asignados."
+        description="Profesionales, horarios y servicios de tu negocio."
+        actions={
+          <Button onClick={() => setCreateOpen(true)}>Nuevo empleado</Button>
+        }
       />
       <div className="flex-1 overflow-auto p-unit-lg">
-        <div className="mx-auto max-w-3xl space-y-6">
-          <div className="flex gap-2">
-            <Input
-              placeholder="Nombre del empleado"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Button onClick={create} disabled={pending || !name.trim()}>
-              Añadir
-            </Button>
-          </div>
-          <div className="space-y-3">
-            {employees.length === 0 ? (
-              <p className="font-body text-body-md text-on-surface-variant">
-                No hay empleados todavía.
-              </p>
-            ) : (
-              employees.map((employee) => (
-                <EmployeeRow
-                  key={employee.id}
-                  employee={employee}
-                  disabled={pending}
-                  onSelect={() =>
-                    openSheet(
-                      employee,
-                      hoursByEmployee[employee.id] ?? [],
-                      servicesByEmployee[employee.id] ?? [],
-                    )
-                  }
-                />
-              ))
-            )}
-          </div>
+        <div className="mx-auto max-w-3xl space-y-4">
+          {employees.length === 0 ? (
+            <p className="font-body text-body-md text-on-surface-variant">
+              No hay empleados todavía. Crea el primero para empezar.
+            </p>
+          ) : (
+            employees.map((employee) => (
+              <EmployeeCard
+                key={employee.id}
+                employee={employee}
+                hours={hoursByEmployee[employee.id] ?? []}
+                serviceIds={servicesByEmployee[employee.id] ?? []}
+                services={services}
+                disabled={false}
+                onEdit={() =>
+                  openEdit(
+                    employee,
+                    hoursByEmployee[employee.id] ?? [],
+                    servicesByEmployee[employee.id] ?? [],
+                  )
+                }
+              />
+            ))
+          )}
         </div>
       </div>
-      <EmployeeSheet />
+      <EmployeeCreateDialog open={createOpen} onOpenChange={setCreateOpen} />
+      <EmployeeEditPanel />
     </div>
   );
 }

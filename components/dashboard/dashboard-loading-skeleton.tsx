@@ -4,8 +4,10 @@ function DashboardSidebarSkeleton() {
   return (
     <aside className="hidden h-screen w-56 shrink-0 flex-col border-r border-outline-variant bg-sidebar md:flex">
       <div className="border-b border-sidebar-border px-unit-sm py-unit-lg">
-        <Skeleton className="h-6 w-24 bg-sidebar-accent" />
-        <Skeleton className="mt-2 h-4 w-16 bg-sidebar-accent" />
+        <div className="flex items-center gap-2.5 px-1">
+          <Skeleton className="size-8 shrink-0 rounded-lg bg-sidebar-accent" />
+          <Skeleton className="h-6 w-24 bg-sidebar-accent" />
+        </div>
       </div>
       <div className="flex flex-1 flex-col gap-2 p-unit-sm">
         {Array.from({ length: 8 }).map((_, index) => (

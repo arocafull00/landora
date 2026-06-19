@@ -2,7 +2,7 @@
 
 import type { BookingService } from "@/db/schema";
 import { Switch } from "@/components/ui/switch";
-import { useEmployeeSheetStore } from "@/stores/employee-sheet-store";
+import { useEmployeeEditorStore } from "@/stores/employee-editor-store";
 
 export function EmployeeServiceCheckbox({
   service,
@@ -11,8 +11,8 @@ export function EmployeeServiceCheckbox({
   service: BookingService;
   disabled: boolean;
 }) {
-  const checked = useEmployeeSheetStore((s) => s.serviceIds.includes(service.id));
-  const toggleServiceId = useEmployeeSheetStore((s) => s.toggleServiceId);
+  const checked = useEmployeeEditorStore((s) => s.serviceIds.includes(service.id));
+  const toggleServiceId = useEmployeeEditorStore((s) => s.toggleServiceId);
 
   return (
     <label className="flex items-center justify-between gap-2">

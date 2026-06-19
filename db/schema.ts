@@ -483,6 +483,7 @@ export const bookingServices = pgTable("booking_services", {
     .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   durationMinutes: integer("duration_minutes").notNull(),
+  priceCents: integer("price_cents").notNull().default(0),
   bufferAfterMinutes: integer("buffer_after_minutes").notNull().default(0),
   isActive: boolean("is_active").notNull().default(true),
   sortOrder: integer("sort_order").notNull().default(0),

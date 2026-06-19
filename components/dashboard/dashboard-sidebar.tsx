@@ -1,18 +1,14 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { dashboardViews } from "@/lib/dashboard-data";
+import { dashboardNavSections } from "@/lib/dashboard-data";
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { DashboardSidebarNavItem } from "@/components/dashboard/dashboard-sidebar-nav-item";
-import { DashboardSidebarSettingsLink } from "@/components/dashboard/dashboard-sidebar-settings-link";
+import { DashboardSidebarHeader } from "@/components/dashboard/dashboard-sidebar-header";
+import { DashboardSidebarNavSection } from "@/components/dashboard/dashboard-sidebar-nav-section";
 import { DashboardSidebarFooter } from "@/components/dashboard/dashboard-sidebar-footer";
 
 export function DashboardSidebar({
@@ -27,33 +23,16 @@ export function DashboardSidebar({
 
   return (
     <Sidebar collapsible="icon" className={impersonating ? "pt-10" : undefined}>
-      <SidebarHeader className="border-b border-sidebar-border px-unit-sm py-unit-lg">
-        <h1 className="font-headline text-headline-md font-bold text-sidebar-foreground">
-          Landora
-        </h1>
-        <p className="mt-1 font-body text-body-sm text-sidebar-accent-foreground">
-          Tu web
-        </p>
-      </SidebarHeader>
+      <DashboardSidebarHeader />
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {dashboardViews.map((item) => (
-                <DashboardSidebarNavItem item={item} key={item.id} />
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        {showAccountActions ? (
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <DashboardSidebarSettingsLink isActive={settingsActive} />
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ) : null}
+        {dashboardNavSections.map((section) => (
+          <DashboardSidebarNavSection
+            key={section.id}
+            section={section}
+            showAccountActions={showAccountActions}
+            settingsActive={settingsActive}
+          />
+        ))}
       </SidebarContent>
       {showAccountActions ? <DashboardSidebarFooter /> : null}
       <SidebarRail />
