@@ -14,6 +14,8 @@ import { CoffeeShopHoursSection } from "@/components/templates/coffee-shop/coffe
 import { CoffeeShopTestimonialsSection } from "@/components/templates/coffee-shop/coffee-shop-testimonials-section";
 import { CoffeeShopFaqSection } from "@/components/templates/coffee-shop/coffee-shop-faq-section";
 import { CoffeeShopContactSection } from "@/components/templates/coffee-shop/coffee-shop-contact-section";
+import { LandingBookingSection } from "@/components/booking/landing-booking-section";
+import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 function getCoffeeShopThemeVars(palette: ReturnType<typeof getTemplatePalette>): CSSProperties {
   return {
@@ -31,9 +33,13 @@ function getCoffeeShopThemeVars(palette: ReturnType<typeof getTemplatePalette>):
 export function CoffeeShopTemplateClient({
   content,
   topOffset = 0,
+  slug,
+  bookingEnabled = false,
 }: {
   content: LandingContent;
   topOffset?: number;
+  slug?: string;
+  bookingEnabled?: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
@@ -54,6 +60,8 @@ export function CoffeeShopTemplateClient({
 
         <CoffeeShopHero content={content} heroRef={heroRef} />
 
+        <ActiveOffersRenderer content={content} />
+
         {isSectionVisible(content, "story") ? (
           <CoffeeShopStorySection content={content} />
         ) : null}
@@ -73,6 +81,10 @@ export function CoffeeShopTemplateClient({
         ) : null}
 
         {isSectionVisible(content, "faq") ? <CoffeeShopFaqSection content={content} /> : null}
+
+        {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
+          <LandingBookingSection content={content} slug={slug} templateId="coffee-shop" />
+        ) : null}
 
         <CoffeeShopContactSection content={content} />
       </div>

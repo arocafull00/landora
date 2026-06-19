@@ -27,6 +27,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
       title: "Lo que nuestros clientes dicen de nosotros",
       subtitle: "",
     },
+    reservas: {
+      title: "Reserva tu visita",
+      subtitle: "Elige servicio, profesional y horario.",
+    },
   },
   studio: {
     galeria: {
@@ -51,6 +55,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
       subtitle:
         "Reserva tu próxima cita y déjate cuidar por nuestro equipo de profesionales.",
     },
+    reservas: {
+      title: "Reserva tu cita",
+      subtitle: "Elige servicio, profesional y horario.",
+    },
   },
   portfolio: {
     experiencia: {
@@ -72,6 +80,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
     contacto: {
       title: "Hablemos de tu proyecto",
       subtitle: "Cuéntame tu idea y diseñemos juntos algo memorable.",
+    },
+    reservas: {
+      title: "Reserva una consulta",
+      subtitle: "Elige servicio, profesional y horario.",
     },
   },
   ristorante: {
@@ -95,6 +107,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
       title: "Reserva tu mesa",
       subtitle: "Reserva tu próxima visita y disfruta de la auténtica cocina italiana.",
     },
+    reservas: {
+      title: "Reserva tu mesa",
+      subtitle: "Elige fecha y hora para tu visita.",
+    },
   },
   floristeria: {
     servicios: {
@@ -113,6 +129,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
     contacto: {
       title: "Haz tu pedido",
       subtitle: "Cuéntanos qué necesitas y crearemos el arreglo floral perfecto para ti.",
+    },
+    reservas: {
+      title: "Reserva tu cita",
+      subtitle: "Elige servicio, profesional y horario.",
     },
   },
   "oficio-pro": {
@@ -140,6 +160,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
       title: "Contáctanos",
       subtitle: "Déjanos tu aviso y te responderemos lo antes posible.",
     },
+    reservas: {
+      title: "Solicita una visita",
+      subtitle: "Reserva una cita con nuestro equipo.",
+    },
   },
   "coffee-shop": {
     carta: {
@@ -161,6 +185,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
     contacto: {
       title: "Visítanos",
       subtitle: "Pasa por la cafetería o escríbenos para reservar mesa o pedir para llevar.",
+    },
+    reservas: {
+      title: "Reserva tu mesa",
+      subtitle: "Elige fecha y hora para tu visita.",
     },
   },
 };

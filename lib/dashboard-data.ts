@@ -2,7 +2,15 @@ import { VELAR_ASSETS } from "@/lib/velar-assets";
 
 export { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 
-export type DashboardView = "editor" | "assets" | "domain" | "blog" | "analytics";
+export type DashboardView =
+  | "editor"
+  | "assets"
+  | "domain"
+  | "blog"
+  | "analytics"
+  | "bookings"
+  | "services"
+  | "employees";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
 
@@ -24,6 +32,7 @@ export type BaseContent = {
   contact: ContactContent;
   stats: StatContent[];
   testimonials: TestimonialContent[];
+  offers?: Offer[];
 };
 
 export type VelarExtensions = {
@@ -204,6 +213,7 @@ export type ContactContent = {
   copyrightSuffix?: string;
   copyrightExtra?: string;
   socialLinks?: SocialLink[];
+  whatsappEnabled?: boolean;
 };
 
 export type TeamMember = {
@@ -237,6 +247,39 @@ export type FaqItem = {
   question: string;
   answer: string;
 };
+
+export type OfferCard = {
+  title: string;
+  description: string;
+  badge?: string;
+  ctaText?: string;
+  expiresAt?: Date;
+};
+
+export type HeroBannerOffer = {
+  id: string;
+  type: "hero_banner";
+  title: string;
+  description: string;
+  badge?: string;
+  ctaText?: string;
+  expiresAt?: Date;
+  enabled: boolean;
+};
+
+export type PromotionCardsOffer = {
+  id: string;
+  type: "promotion_cards";
+  title: string;
+  description: string;
+  badge?: string;
+  ctaText?: string;
+  expiresAt?: Date;
+  enabled: boolean;
+  cards: OfferCard[];
+};
+
+export type Offer = HeroBannerOffer | PromotionCardsOffer;
 
 export type BlogConfig = {
   title: string;
@@ -310,7 +353,10 @@ export type IconName =
   | "close"
   | "info"
   | "tutorial"
-  | "chart";
+  | "chart"
+  | "calendar"
+  | "briefcase"
+  | "team";
 
 export const dashboardViews: Array<{
   id: DashboardView;
@@ -318,6 +364,9 @@ export const dashboardViews: Array<{
   icon: IconName;
 }> = [
   { id: "editor", label: "Editor", icon: "document" },
+  { id: "bookings", label: "Reservas", icon: "calendar" },
+  { id: "services", label: "Servicios", icon: "briefcase" },
+  { id: "employees", label: "Empleados", icon: "team" },
   { id: "assets", label: "Imágenes", icon: "image" },
   { id: "domain", label: "Dominio", icon: "link" },
   { id: "blog", label: "Blog", icon: "document" },

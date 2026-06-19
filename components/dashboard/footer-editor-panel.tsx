@@ -7,6 +7,7 @@ import { SectionHeadingFields } from "@/components/dashboard/section-heading-fie
 import { DEFAULT_COPYRIGHT_SUFFIX, type Landing, type TemplateId } from "@/lib/dashboard-data";
 import { getFooterAnchor } from "@/lib/footer-content";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { WhatsappFloatToggle } from "@/components/dashboard/whatsapp-float-toggle";
 
 type FooterEditorPanelProps = {
   activeLanding: Landing;
@@ -61,6 +62,7 @@ export function FooterEditorPanel({ activeLanding }: FooterEditorPanelProps) {
             onChange={(value) => updateContact(activeLanding.id, { address: value })}
             value={contact.address}
           />
+          <WhatsappFloatToggle activeLanding={activeLanding} />
         </div>
       ) : null}
 

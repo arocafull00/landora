@@ -1,1 +1,0 @@
-ALTER TABLE "landing_hero" ADD COLUMN "fan_images" jsonb DEFAULT '[]'::jsonb NOT NULL;

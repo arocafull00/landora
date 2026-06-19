@@ -12,7 +12,7 @@ import {
   normalizeHost,
 } from "@/lib/app-host";
 import { getSubscriptionStatusForProxy } from "@/data/subscriptions";
-import { hasActiveSubscription } from "@/lib/subscription-access";
+import { hasDashboardAccess } from "@/lib/subscription-access";
 import { getStripePaymentLinkUrl } from "@/lib/stripe";
 
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
@@ -110,12 +110,14 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
 
     const user = await getSubscriptionStatusForProxy(userId);
 
-    if (user?.type === "admin") {
+    if (hasDashboardAccess(user)) {
       return NextResponse.next();
     }
 
-    if (hasActiveSubscription(user?.subscriptionStatus)) {
-      return NextResponse.next();
+    if (user?.suspended) {
+      const redirectUrl = req.nextUrl.clone();
+      redirectUrl.pathname = "/sign-in";
+      return NextResponse.redirect(redirectUrl);
     }
 
     const paymentLink = getStripePaymentLinkUrl(userId);

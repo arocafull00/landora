@@ -10,3 +10,20 @@ export function hasActiveSubscription(status: SubscriptionStatus | null | undefi
 
   return ALLOWED_SUBSCRIPTION_STATUSES.includes(status);
 }
+
+export function hasDashboardAccess(user: {
+  type: "user" | "admin";
+  accessType: "subscription" | "manual";
+  suspended: boolean;
+  subscriptionStatus: SubscriptionStatus | null;
+} | null | undefined) {
+  if (!user) return false;
+
+  if (user.type === "admin") return true;
+
+  if (user.suspended) return false;
+
+  if (user.accessType === "manual") return true;
+
+  return hasActiveSubscription(user.subscriptionStatus);
+}

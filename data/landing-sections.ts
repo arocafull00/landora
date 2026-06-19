@@ -12,6 +12,7 @@ import {
   landingStats,
   landingSpaces,
   landingServices,
+  landingOffers,
   landingWorkflow,
   landingGallery,
   landingNav,
@@ -23,6 +24,7 @@ import type {
   LandingStat,
   LandingSpace,
   LandingService,
+  LandingOffer,
   LandingWorkflowStep,
   LandingTestimonial,
   LandingGalleryItem,
@@ -38,6 +40,7 @@ type ReplaceableLandingTable =
   | typeof landingStats
   | typeof landingSpaces
   | typeof landingServices
+  | typeof landingOffers
   | typeof landingWorkflow
   | typeof landingTestimonials
   | typeof landingGallery
@@ -175,6 +178,7 @@ export async function upsertLandingCta(
     copyrightSuffix: string;
     copyrightExtra: string;
     socialLinks: { platform: string; url: string }[];
+    whatsappEnabled: boolean;
   }
 ) {
   try {
@@ -206,6 +210,16 @@ export async function replaceLandingServices(
   items: Pick<LandingService, "title" | "subtitle" | "label" | "image">[]
 ) {
   return replaceLandingCollection(landingServices, landingId, items, "services");
+}
+
+export async function replaceLandingOffers(
+  landingId: string,
+  items: Pick<
+    LandingOffer,
+    "type" | "title" | "description" | "badge" | "ctaText" | "expiresAt" | "enabled" | "cards"
+  >[]
+) {
+  return replaceLandingCollection(landingOffers, landingId, items, "offers");
 }
 
 export async function replaceLandingWorkflow(

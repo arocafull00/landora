@@ -7,6 +7,7 @@ import {
   replaceLandingFaq,
   replaceLandingGallery,
   replaceLandingNav,
+  replaceLandingOffers,
   replaceLandingServiceMenu,
   replaceLandingServices,
   replaceLandingSpaces,
@@ -19,6 +20,33 @@ import {
 import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/dashboard-data";
 import { parseSocialLinks } from "@/lib/footer-content";
 import type { LandingPageMeta } from "@/data/landing-pages";
+import type { OfferCardRow } from "@/db/schema";
+
+function parseExpiresAt(value: unknown) {
+  if (value instanceof Date) return value;
+  if (typeof value !== "string" || !value.trim()) return null;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return parsed;
+}
+
+function parseOfferCards(value: unknown): OfferCardRow[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((card) => {
+    if (!card || typeof card !== "object") return [];
+    const item = card as Record<string, unknown>;
+    const expiresAt = parseExpiresAt(item.expiresAt);
+    return [
+      {
+        title: typeof item.title === "string" ? item.title : "",
+        description: typeof item.description === "string" ? item.description : "",
+        badge: typeof item.badge === "string" ? item.badge : undefined,
+        ctaText: typeof item.ctaText === "string" ? item.ctaText : undefined,
+        expiresAt: expiresAt ? expiresAt.toISOString() : undefined,
+      },
+    ];
+  });
+}
 
 function toMultilineList(value: unknown) {
   if (!Array.isArray(value)) return "";
@@ -143,6 +171,7 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
           : DEFAULT_COPYRIGHT_SUFFIX,
       copyrightExtra: typeof body.copyrightExtra === "string" ? body.copyrightExtra : "",
       socialLinks: parseSocialLinks(body.socialLinks),
+      whatsappEnabled: typeof body.whatsappEnabled === "boolean" ? body.whatsappEnabled : false,
     }),
     persist: (landingId, parsed) =>
       upsertLandingCta(
@@ -260,6 +289,29 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
       replaceLandingServices(
         landingId,
         parsed as Parameters<typeof replaceLandingServices>[1]
+      ),
+  },
+  offers: {
+    parse: (body) => {
+      const items = Array.isArray(body.items) ? body.items : [];
+      return items.map((item: Record<string, unknown>) => {
+        const type = item.type === "promotion_cards" ? "promotion_cards" : "hero_banner";
+        return {
+          type,
+          title: typeof item.title === "string" ? item.title : "",
+          description: typeof item.description === "string" ? item.description : "",
+          badge: typeof item.badge === "string" ? item.badge : "",
+          ctaText: typeof item.ctaText === "string" ? item.ctaText : "",
+          expiresAt: parseExpiresAt(item.expiresAt),
+          enabled: typeof item.enabled === "boolean" ? item.enabled : true,
+          cards: type === "promotion_cards" ? parseOfferCards(item.cards) : [],
+        };
+      });
+    },
+    persist: (landingId, parsed) =>
+      replaceLandingOffers(
+        landingId,
+        parsed as Parameters<typeof replaceLandingOffers>[1]
       ),
   },
   workflow: {

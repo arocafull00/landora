@@ -15,6 +15,8 @@ import { RistoranteChefSection } from "@/components/templates/ristorante/ristora
 import { RistoranteHoursSection } from "@/components/templates/ristorante/ristorante-hours-section";
 import { RistoranteTestimonialsSection } from "@/components/templates/ristorante/ristorante-testimonials-section";
 import { RistoranteContactSection } from "@/components/templates/ristorante/ristorante-contact-section";
+import { LandingBookingSection } from "@/components/booking/landing-booking-section";
+import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 function getRistoranteThemeVars(palette: ReturnType<typeof getTemplatePalette>): CSSProperties {
   return {
@@ -32,9 +34,13 @@ function getRistoranteThemeVars(palette: ReturnType<typeof getTemplatePalette>):
 export function RistoranteTemplateClient({
   content,
   topOffset = 0,
+  slug,
+  bookingEnabled = false,
 }: {
   content: LandingContent;
   topOffset?: number;
+  slug?: string;
+  bookingEnabled?: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
@@ -55,6 +61,8 @@ export function RistoranteTemplateClient({
 
         <RistoranteHero content={content} heroRef={heroRef} />
 
+        <ActiveOffersRenderer content={content} />
+
         {isSectionVisible(content, "story") ? (
           <RistoranteStorySection content={content} />
         ) : null}
@@ -73,6 +81,10 @@ export function RistoranteTemplateClient({
 
         {isSectionVisible(content, "testimonios") ? (
           <RistoranteTestimonialsSection content={content} />
+        ) : null}
+
+        {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
+          <LandingBookingSection content={content} slug={slug} templateId="ristorante" />
         ) : null}
 
         <RistoranteContactSection content={content} />

@@ -21,6 +21,7 @@ import {
 } from "@/lib/scroll-to-section";
 import { resolveSectionId } from "@/lib/template-sections";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
+import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -128,5 +129,12 @@ export function LandingPreviewFrame({
 
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
 
-  return <Component content={content} />;
+  return (
+    <>
+      <Component content={content} />
+      {content.contact.whatsappEnabled ? (
+        <WhatsappFloatButton phone={content.contact.phone} />
+      ) : null}
+    </>
+  );
 }

@@ -43,6 +43,11 @@ const CONTACT_EDITOR_TAB: EditorTab = {
   label: "Contacto",
 };
 
+const OFFERS_EDITOR_TAB: EditorTab = {
+  id: "Ofertas",
+  label: "Ofertas",
+};
+
 export type TemplateComponent = React.ComponentType<{ content: LandingContent; topOffset?: number }>;
 
 export type TemplateDefinition<T extends TemplateId = TemplateId> = {
@@ -70,6 +75,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Servicios", label: "Servicios" },
       { id: "Proceso", label: "Proceso" },
       { id: "Testimonios", label: "Testimonios" },
+      OFFERS_EDITOR_TAB,
       CONTACT_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
@@ -91,6 +97,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Equipo", label: "Equipo" },
       { id: "Galeria", label: "Galería" },
       { id: "FAQ", label: "FAQ" },
+      OFFERS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -110,6 +117,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Proyectos", label: "Proyectos" },
       { id: "Servicios", label: "Servicios" },
       { id: "FAQ", label: "FAQ" },
+      OFFERS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -130,6 +138,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Equipo", label: "Equipo" },
       { id: "Horarios", label: "Horarios" },
       { id: "FAQ", label: "FAQ" },
+      OFFERS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -149,6 +158,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Servicios", label: "Servicios" },
       { id: "Galeria", label: "Galería" },
       { id: "FAQ", label: "FAQ" },
+      OFFERS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -168,6 +178,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Instalaciones", label: "Instalaciones" },
       { id: "Testimonios", label: "Testimonios" },
       { id: "Experiencia", label: "Experiencia" },
+      OFFERS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -187,6 +198,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Galeria", label: "Galería" },
       { id: "Horarios", label: "Horarios" },
       { id: "FAQ", label: "FAQ" },
+      OFFERS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,

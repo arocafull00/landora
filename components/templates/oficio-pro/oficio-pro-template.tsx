@@ -4,18 +4,24 @@ import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { OficioProContactSection } from "@/components/templates/oficio-pro/oficio-pro-contact-section";
+import { LandingBookingSection } from "@/components/booking/landing-booking-section";
 import { OficioProExperienceSection } from "@/components/templates/oficio-pro/oficio-pro-experience-section";
 import { OficioProHero } from "@/components/templates/oficio-pro/oficio-pro-hero";
 import { OficioProNav } from "@/components/templates/oficio-pro/oficio-pro-nav";
 import { OficioProServicesSection } from "@/components/templates/oficio-pro/oficio-pro-services-section";
 import { OficioProTestimonialsSection } from "@/components/templates/oficio-pro/oficio-pro-testimonials-section";
+import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 export function OficioProTemplate({
   content,
   topOffset = 0,
+  slug,
+  bookingEnabled = false,
 }: {
   content: LandingContent;
   topOffset?: number;
+  slug?: string;
+  bookingEnabled?: boolean;
 }) {
   const heroRef = useRef<HTMLElement>(null);
 
@@ -37,6 +43,7 @@ export function OficioProTemplate({
         topOffset={topOffset}
       />
       <OficioProHero content={content} heroRef={heroRef} />
+      <ActiveOffersRenderer content={content} />
       {isSectionVisible(content, "servicios") ? (
         <OficioProServicesSection
           anchor="servicios"
@@ -57,6 +64,9 @@ export function OficioProTemplate({
       ) : null}
       {isSectionVisible(content, "experiencia") ? (
         <OficioProExperienceSection content={content} />
+      ) : null}
+      {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
+        <LandingBookingSection content={content} slug={slug} templateId="oficio-pro" />
       ) : null}
       <OficioProContactSection content={content} />
     </div>

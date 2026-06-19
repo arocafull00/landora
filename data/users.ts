@@ -28,6 +28,7 @@ export const getUserByInternalId = cache(async (id: string) => {
 export async function insertUser(data: {
   clerkUserId: string;
   name: string;
+  email?: string;
   type: User["type"];
 }) {
   try {

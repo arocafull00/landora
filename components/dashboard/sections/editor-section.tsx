@@ -16,6 +16,7 @@ import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-pane
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor-panel";
 import { VelarContactEditorPanel } from "@/components/dashboard/velar-contact-editor-panel";
+import { OffersEditorPanel } from "@/components/dashboard/offers-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { dispatchEditorFocusElement } from "@/lib/editor-element-focus";
@@ -409,6 +410,10 @@ export function EditorSection() {
 
           {activeEditorTab === "Contacto" ? (
             <VelarContactEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Ofertas" ? (
+            <OffersEditorPanel activeLanding={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Blog" ? (

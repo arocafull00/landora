@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getLandingPageBySlug, getLandingPageMetaBySlug } from "@/data/landing-pages";
+import { getBookingSettings } from "@/data/booking-settings";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
@@ -10,6 +11,7 @@ import { FloristeriaTemplate } from "@/components/templates/floristeria/floriste
 import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
 import { LandingAnalyticsInit } from "@/components/analytics/landing-analytics-init";
+import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -52,11 +54,19 @@ export default async function PublicLandingPage({
 
   const content = toLandingContent(landing);
   const Component = TEMPLATE_COMPONENTS[landing.template] ?? VelarTemplate;
+  const bookingSettings = await getBookingSettings(landing.userId);
 
   return (
     <>
       <LandingAnalyticsInit landingId={landing.id} clientId={landing.userId} />
-      <Component content={content} />
+      <Component
+        content={content}
+        slug={landing.slug}
+        bookingEnabled={bookingSettings.enabled}
+      />
+      {content.contact.whatsappEnabled ? (
+        <WhatsappFloatButton phone={content.contact.phone} />
+      ) : null}
     </>
   );
 }

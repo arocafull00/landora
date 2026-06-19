@@ -1,5 +1,5 @@
 import type { LandingWithSections } from "@/data/landing-pages";
-import type { Landing, LandingContent } from "@/lib/dashboard-data";
+import type { Landing, LandingContent, HeroBannerOffer, PromotionCardsOffer } from "@/lib/dashboard-data";
 import { resolveGalleryItems } from "@/lib/gallery-content";
 import { parseSocialLinks } from "@/lib/footer-content";
 import { shortDateTimeFormatter } from "@/lib/intl-formatters";
@@ -115,6 +115,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       copyrightSuffix: row.cta?.copyrightSuffix ?? "",
       copyrightExtra: row.cta?.copyrightExtra ?? "",
       socialLinks: parseSocialLinks(row.cta?.socialLinks),
+      whatsappEnabled: row.cta?.whatsappEnabled ?? false,
     },
     about: row.story ? { statement: row.story.statement } : undefined,
     team: (row.team ?? []).map((t) => ({
@@ -155,6 +156,37 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       highlights: parseMultilineList(item.highlights),
       technologies: parseCommaList(item.technologies),
     })),
+    offers: (row.offers ?? []).map((o) => {
+      const base = {
+        id: o.id,
+        type: o.type,
+        title: o.title,
+        description: o.description,
+        badge: o.badge || undefined,
+        ctaText: o.ctaText || undefined,
+        expiresAt: o.expiresAt ?? undefined,
+        enabled: o.enabled,
+      };
+
+      if (o.type === "promotion_cards") {
+        return {
+          ...base,
+          type: "promotion_cards" as const,
+          cards: (o.cards ?? []).map((card) => ({
+            title: card.title,
+            description: card.description,
+            badge: card.badge || undefined,
+            ctaText: card.ctaText || undefined,
+            expiresAt: card.expiresAt ? new Date(card.expiresAt) : undefined,
+          })),
+        } satisfies PromotionCardsOffer;
+      }
+
+      return {
+        ...base,
+        type: "hero_banner" as const,
+      } satisfies HeroBannerOffer;
+    }),
   };
 }
 

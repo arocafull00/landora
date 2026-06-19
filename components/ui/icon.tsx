@@ -11,6 +11,8 @@ import {
   Globe,
   GraduationCap,
   BarChart2,
+  Briefcase,
+  Calendar,
   GripVertical,
   Image,
   Info,
@@ -26,6 +28,7 @@ import {
   Trash2,
   Upload,
   User,
+  Users,
   X,
 } from "lucide-react";
 import type { IconName } from "@/lib/dashboard-data";
@@ -58,6 +61,9 @@ const icons: Record<IconName, LucideIcon> = {
   info: Info,
   tutorial: GraduationCap,
   chart: BarChart2,
+  calendar: Calendar,
+  briefcase: Briefcase,
+  team: Users,
 };
 
 export function Icon({

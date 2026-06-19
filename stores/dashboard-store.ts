@@ -15,6 +15,7 @@ import {
   initialPresentations,
   Landing,
   LandingContent,
+  Offer,
   Post,
   Presentation,
   SectionHeading,
@@ -115,6 +116,9 @@ type DashboardState = {
   updateTestimonial: (landingId: string, testimonialId: string, patch: Partial<TestimonialContent>) => void;
   updateSection: (landingId: string, section: string, data: unknown) => void;
   updateSectionItem: (landingId: string, section: string, itemId: string, patch: Record<string, unknown>) => void;
+  addOffer: (landingId: string, offer: Offer) => void;
+  removeOffer: (landingId: string, offerId: string) => void;
+  updateOffer: (landingId: string, offerId: string, patch: Partial<Offer>) => void;
   updateContact: (id: string, patch: Partial<ContactContent>) => void;
   updateBranding: (
     id: string,
@@ -191,6 +195,7 @@ async function persistAllSections(id: string, content: LandingContent) {
   if (content.benefits) calls.push(patchSection(`${base}/benefits`, { items: content.benefits }));
   if (content.faq) calls.push(patchSection(`${base}/faq`, { items: content.faq }));
   if (content.workHistory) calls.push(patchSection(`${base}/work-history`, { items: content.workHistory }));
+  if (content.offers) calls.push(patchSection(`${base}/offers`, { items: content.offers }));
 
   await Promise.all(calls);
 }
@@ -471,6 +476,53 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
                 ...landing.content,
                 [section]: ((landing.content as Record<string, unknown>)[section] as Array<Record<string, unknown>>)?.map(
                   (item) => (item.id === itemId ? { ...item, ...patch } : item),
+                ),
+              },
+            })
+          : landing,
+      ),
+    })),
+
+  addOffer: (landingId, offer) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                offers: [...(landing.content.offers ?? []), offer],
+              },
+            })
+          : landing,
+      ),
+    })),
+
+  removeOffer: (landingId, offerId) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                offers: (landing.content.offers ?? []).filter((offer) => offer.id !== offerId),
+              },
+            })
+          : landing,
+      ),
+    })),
+
+  updateOffer: (landingId, offerId, patch) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === landingId
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                offers: (landing.content.offers ?? []).map((offer) =>
+                  offer.id === offerId ? ({ ...offer, ...patch } as Offer) : offer,
                 ),
               },
             })

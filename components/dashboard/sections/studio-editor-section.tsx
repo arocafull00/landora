@@ -8,6 +8,7 @@ import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor-panel";
+import { OffersEditorPanel } from "@/components/dashboard/offers-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { createEmptyServiceMenuItem } from "@/components/dashboard/create-empty-service-menu-item";
@@ -291,6 +292,10 @@ export function StudioEditorSection() {
                 ))}
               </div>
             </section>
+          ) : null}
+
+          {activeEditorTab === "Ofertas" ? (
+            <OffersEditorPanel activeLanding={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Blog" ? (

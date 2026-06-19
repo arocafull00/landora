@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { getLandingBySlug } from "@/data/admin";
+import { getLandingBySlug, updateUserFields } from "@/data/admin";
 import {
   deleteLandingPageById,
   deleteLandingsByUserId,
@@ -74,7 +74,7 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
   }
 
   try {
-    await insertUser({ clerkUserId: clerkUser.id, name, type: "user" });
+    await insertUser({ clerkUserId: clerkUser.id, name, email, type: "user" });
   } catch {
     await clerk.users.deleteUser(clerkUser.id).catch(() => null);
     return { error: "Error al guardar el usuario en la base de datos" };
@@ -248,6 +248,108 @@ export async function deleteUser(userId: string): Promise<ActionResult> {
     await clerk.users.deleteUser(user.clerkUserId);
   } catch {
     return { error: "Datos eliminados, pero no se pudo eliminar el usuario en Clerk" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+async function updateUserById(
+  userId: string,
+  update: Parameters<typeof updateUserFields>[1],
+): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
+
+  const parsed = userIdSchema.safeParse(userId);
+  if (!parsed.success) {
+    return { error: parsed.error.message };
+  }
+
+  const user = await getUserByInternalId(parsed.data);
+  if (!user) {
+    return { error: "Usuario no encontrado" };
+  }
+
+  if (user.type === "admin") {
+    return { error: "No se puede modificar un administrador" };
+  }
+
+  try {
+    await updateUserFields(parsed.data, update);
+  } catch {
+    return { error: "Error al actualizar el usuario" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+export async function grantManualAccess(userId: string): Promise<ActionResult> {
+  return updateUserById(userId, { accessType: "manual" });
+}
+
+export async function revokeManualAccess(userId: string): Promise<ActionResult> {
+  return updateUserById(userId, { accessType: "subscription" });
+}
+
+export async function suspendUser(userId: string): Promise<ActionResult> {
+  return updateUserById(userId, { suspended: true });
+}
+
+export async function reactivateUser(userId: string): Promise<ActionResult> {
+  return updateUserById(userId, { suspended: false });
+}
+
+export async function unpublishUserLandings(userId: string): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
+
+  const parsed = userIdSchema.safeParse(userId);
+  if (!parsed.success) {
+    return { error: parsed.error.message };
+  }
+
+  const userLandings = await getLandingsByUserId(parsed.data);
+
+  try {
+    await Promise.all(
+      userLandings.map((landing) =>
+        updateLandingPage(landing.id, {
+          published: false,
+          updatedAt: new Date(),
+        }),
+      ),
+    );
+  } catch {
+    return { error: "Error al despublicar las landings" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+export async function publishUserLandings(userId: string): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
+
+  const parsed = userIdSchema.safeParse(userId);
+  if (!parsed.success) {
+    return { error: parsed.error.message };
+  }
+
+  const userLandings = await getLandingsByUserId(parsed.data);
+
+  try {
+    for (const landing of userLandings) {
+      await ensureLandingHasDefaultContent(landing.id);
+      await updateLandingPage(landing.id, {
+        published: true,
+        updatedAt: new Date(),
+      });
+    }
+  } catch {
+    return { error: "Error al publicar las landings" };
   }
 
   revalidatePath("/admin");

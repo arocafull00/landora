@@ -16,6 +16,8 @@ import { GallerySection } from "@/components/templates/shared/gallery-section";
 import { StudioTestimonialsSection } from "@/components/templates/studio/studio-testimonials-section";
 import { StudioFaqSection } from "@/components/templates/studio/studio-faq-section";
 import { StudioContactSection } from "@/components/templates/studio/studio-contact-section";
+import { LandingBookingSection } from "@/components/booking/landing-booking-section";
+import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 function isOverlappingTop(el: HTMLElement | null) {
   if (!el) return false;
@@ -26,9 +28,13 @@ function isOverlappingTop(el: HTMLElement | null) {
 export function StudioTemplate({
   content,
   topOffset = 0,
+  slug,
+  bookingEnabled = false,
 }: {
   content: LandingContent;
   topOffset?: number;
+  slug?: string;
+  bookingEnabled?: boolean;
 }) {
   const [overHero, setOverHero] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -87,6 +93,7 @@ export function StudioTemplate({
 
       <StudioHero content={content} heroRef={heroRef} />
 
+      <ActiveOffersRenderer content={content} />
 
       {isSectionVisible(content, "galeria") ? (
         <GallerySection content={content} templateId="studio" />
@@ -104,6 +111,10 @@ export function StudioTemplate({
       {isSectionVisible(content, "equipo") ? <StudioTeamSection content={content} /> : null}
 
       {isSectionVisible(content, "faq") ? <StudioFaqSection content={content} /> : null}
+
+      {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
+        <LandingBookingSection content={content} slug={slug} templateId="studio" />
+      ) : null}
 
       <StudioContactSection content={content} />
     </div>

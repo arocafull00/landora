@@ -9,6 +9,8 @@ async function fetchSubscriptionStatus(clerkUserId: string) {
       where: eq(users.clerkUserId, clerkUserId),
       columns: {
         type: true,
+        accessType: true,
+        suspended: true,
         subscriptionStatus: true,
         subscriptionCurrentPeriodEnd: true,
         subscriptionCancelAtPeriodEnd: true,

@@ -5,141 +5,29 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1780814454208,
-      "tag": "0000_rapid_oracle",
+      "when": 1781887672467,
+      "tag": "0000_rapid_master_chief",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1780815928837,
-      "tag": "0001_robust_barracuda",
+      "when": 1781888056582,
+      "tag": "0001_groovy_the_hunter",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "7",
-      "when": 1749283200000,
-      "tag": "0002_rename_clients_to_users",
+      "when": 1781888108134,
+      "tag": "0002_high_morbius",
       "breakpoints": true
     },
     {
       "idx": 3,
       "version": "7",
-      "when": 1780832792751,
-      "tag": "0003_legal_mandroid",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1780834183101,
-      "tag": "0004_premium_romulus",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1780845211818,
-      "tag": "0005_workable_blink",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1780852286782,
-      "tag": "0006_fearless_kitty_pryde",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1780856000000,
-      "tag": "0007_velar_asset_urls",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1780856377962,
-      "tag": "0008_smooth_sugar_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1780941809208,
-      "tag": "0009_gray_northstar",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "7",
-      "when": 1780946219711,
-      "tag": "0010_fantastic_paper_doll",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "7",
-      "when": 1780946953878,
-      "tag": "0011_gorgeous_terrax",
-      "breakpoints": true
-    },
-    {
-      "idx": 12,
-      "version": "7",
-      "when": 1781015930861,
-      "tag": "0012_rainy_fat_cobra",
-      "breakpoints": true
-    },
-    {
-      "idx": 13,
-      "version": "7",
-      "when": 1781020010242,
-      "tag": "0013_clever_carmella_unuscione",
-      "breakpoints": true
-    },
-    {
-      "idx": 14,
-      "version": "7",
-      "when": 1781022469488,
-      "tag": "0014_futuristic_starhawk",
-      "breakpoints": true
-    },
-    {
-      "idx": 15,
-      "version": "7",
-      "when": 1781025000000,
-      "tag": "0015_footer_cta_fields",
-      "breakpoints": true
-    },
-    {
-      "idx": 16,
-      "version": "7",
-      "when": 1781425453648,
-      "tag": "0016_wild_silk_fever",
-      "breakpoints": true
-    },
-    {
-      "idx": 17,
-      "version": "7",
-      "when": 1781632524830,
-      "tag": "0017_faulty_shinobi_shaw",
-      "breakpoints": true
-    },
-    {
-      "idx": 18,
-      "version": "7",
-      "when": 1781803697013,
-      "tag": "0018_tiresome_karma",
-      "breakpoints": true
-    },
-    {
-      "idx": 19,
-      "version": "7",
-      "when": 1781804079185,
-      "tag": "0019_rich_marvel_apes",
+      "when": 1781888514560,
+      "tag": "0003_light_joseph",
       "breakpoints": true
     }
   ]

@@ -58,6 +58,7 @@ export async function provisionProspectLandingContent(
       copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
       copyrightExtra: "",
       socialLinks: [],
+      whatsappEnabled: false,
     }),
     replaceLandingStats(
       landingId,

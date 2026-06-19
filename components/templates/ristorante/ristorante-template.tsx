@@ -5,13 +5,22 @@ import { RistoranteTemplateClient } from "@/components/templates/ristorante/rist
 export function RistoranteTemplate({
   content,
   topOffset = 0,
+  slug,
+  bookingEnabled = false,
 }: {
   content: LandingContent;
   topOffset?: number;
+  slug?: string;
+  bookingEnabled?: boolean;
 }) {
   return (
     <RistoranteFontScope>
-      <RistoranteTemplateClient content={content} topOffset={topOffset} />
+      <RistoranteTemplateClient
+        content={content}
+        topOffset={topOffset}
+        slug={slug}
+        bookingEnabled={bookingEnabled}
+      />
     </RistoranteFontScope>
   );
 }

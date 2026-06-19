@@ -164,7 +164,7 @@ export async function provisionProspectUser(payload: {
   }
 
   try {
-    const user = await insertUser({ clerkUserId: clerkUser.id, name, type: "user" });
+    const user = await insertUser({ clerkUserId: clerkUser.id, name, email, type: "user" });
 
     revalidatePath("/admin");
 

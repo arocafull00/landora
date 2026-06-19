@@ -3,6 +3,7 @@
 import { dispatchEditorFocusElement } from "@/lib/editor-element-focus";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
+import { WhatsappFloatToggle } from "@/components/dashboard/whatsapp-float-toggle";
 import type { Landing } from "@/lib/dashboard-data";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
@@ -73,6 +74,8 @@ export function VelarContactEditorPanel({ activeLanding }: { activeLanding: Land
           />
         </label>
       </div>
+
+      <WhatsappFloatToggle activeLanding={activeLanding} />
     </section>
   );
 }

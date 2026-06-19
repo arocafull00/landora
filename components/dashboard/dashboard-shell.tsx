@@ -21,12 +21,14 @@ export function DashboardShell({
   initialLanding,
   initialView,
   settingsContent,
+  customContent,
 }: {
   isAdmin: boolean;
   impersonating: boolean;
   initialLanding: Landing;
   initialView: DashboardView;
   settingsContent?: ReactNode;
+  customContent?: ReactNode;
 }) {
   useDashboardStore.getState().bootstrapDashboard({
     landing: initialLanding,
@@ -56,6 +58,8 @@ export function DashboardShell({
         <div className="flex min-h-0 flex-1 overflow-hidden">
           {settingsContent ? (
             settingsContent
+          ) : customContent ? (
+            customContent
           ) : (
             <>
               {activeView === "editor" ? <EditorSection /> : null}

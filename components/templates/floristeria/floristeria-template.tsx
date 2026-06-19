@@ -13,13 +13,19 @@ import { GallerySection } from "@/components/templates/shared/gallery-section";
 import { FloristeriaTestimonialsSection } from "@/components/templates/floristeria/floristeria-testimonials-section";
 import { FloristeriaFaqSection } from "@/components/templates/floristeria/floristeria-faq-section";
 import { FloristeriaContactSection } from "@/components/templates/floristeria/floristeria-contact-section";
+import { LandingBookingSection } from "@/components/booking/landing-booking-section";
+import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 export function FloristeriaTemplate({
   content,
   topOffset = 0,
+  slug,
+  bookingEnabled = false,
 }: {
   content: LandingContent;
   topOffset?: number;
+  slug?: string;
+  bookingEnabled?: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
@@ -43,6 +49,7 @@ export function FloristeriaTemplate({
         />
 
         <FloristeriaHero content={content} heroRef={heroRef} />
+        <ActiveOffersRenderer content={content} />
         {isSectionVisible(content, "galeria") ? (
           <GallerySection content={content} templateId="floristeria" />
         ) : null}
@@ -58,6 +65,10 @@ export function FloristeriaTemplate({
         ) : null}
 
         {isSectionVisible(content, "faq") ? <FloristeriaFaqSection content={content} /> : null}
+
+        {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
+          <LandingBookingSection content={content} slug={slug} templateId="floristeria" />
+        ) : null}
 
         <FloristeriaContactSection content={content} />
       </div>

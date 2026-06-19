@@ -7,6 +7,7 @@ import {
   landingFaq,
   landingGallery,
   landingNav,
+  landingOffers,
   landingServices,
   landingSpaces,
   landingStats,
@@ -29,6 +30,7 @@ import type {
   LandingStat,
   LandingSpace,
   LandingService,
+  LandingOffer,
   LandingWorkflowStep,
   LandingGalleryItem,
   LandingNavItem,
@@ -49,6 +51,7 @@ export type LandingWithSections = LandingPage & {
   stats: LandingStat[];
   spaces: LandingSpace[];
   services: LandingService[];
+  offers: LandingOffer[];
   workflow: LandingWorkflowStep[];
   gallery: LandingGalleryItem[];
   nav: LandingNavItem[];
@@ -95,6 +98,7 @@ function buildWith() {
     stats: { orderBy: [asc(landingStats.sortOrder)] },
     spaces: { orderBy: [asc(landingSpaces.sortOrder)] },
     services: { orderBy: [asc(landingServices.sortOrder)] },
+    offers: { orderBy: [asc(landingOffers.sortOrder)] },
     workflow: { orderBy: [asc(landingWorkflow.sortOrder)] },
     gallery: { orderBy: [asc(landingGallery.sortOrder)] },
     nav: { orderBy: [asc(landingNav.sortOrder)] },

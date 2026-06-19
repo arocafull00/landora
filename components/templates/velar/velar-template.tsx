@@ -18,6 +18,8 @@ import { VelarServicesSection } from "@/components/templates/velar/velar-service
 import { VelarWorkflowSection } from "@/components/templates/velar/velar-workflow-section";
 import { VelarTestimonialsSection } from "@/components/templates/velar/velar-testimonials-section";
 import { VelarContactSection } from "@/components/templates/velar/velar-contact-section";
+import { LandingBookingSection } from "@/components/booking/landing-booking-section";
+import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 const GRASS_GREEN = "#213138";
 
@@ -30,9 +32,13 @@ function isOverlappingTop(el: HTMLElement | null) {
 export function VelarTemplate({
   content,
   topOffset = 0,
+  slug,
+  bookingEnabled = false,
 }: {
   content: LandingContent;
   topOffset?: number;
+  slug?: string;
+  bookingEnabled?: boolean;
 }) {
   const [navColor, setNavColor] = useState(GRASS_GREEN);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -108,6 +114,8 @@ export function VelarTemplate({
 
       <VelarHero content={heroContent} heroRef={heroRef} heroVisible />
 
+      <ActiveOffersRenderer content={content} />
+
       <VelarHouseAnimation
         darkRef={darkRef}
         heroRef={heroRef}
@@ -136,6 +144,10 @@ export function VelarTemplate({
 
       {isSectionVisible(content, "testimonios") ? (
         <VelarTestimonialsSection content={content} />
+      ) : null}
+
+      {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
+        <LandingBookingSection content={content} slug={slug} templateId="velar" />
       ) : null}
 
       <div ref={footerRef}>

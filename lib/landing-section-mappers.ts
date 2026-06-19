@@ -72,6 +72,7 @@ export function mapDefaultCta(content: LandingContent) {
     copyrightSuffix: content.contact.copyrightSuffix ?? "| Todos los derechos reservados",
     copyrightExtra: content.contact.copyrightExtra ?? "",
     socialLinks: content.contact.socialLinks ?? [],
+    whatsappEnabled: content.contact.whatsappEnabled ?? false,
   };
 }
 

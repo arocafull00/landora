@@ -2,7 +2,7 @@ import { cache } from "react";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users, landingPages } from "@/db/schema";
-import type { LandingPage } from "@/db/schema";
+import type { LandingPage, User } from "@/db/schema";
 
 export const getAllUsers = cache(async () => {
   try {
@@ -29,5 +29,26 @@ export async function getLandingBySlug(slug: string): Promise<LandingPage | unde
     });
   } catch {
     throw new Error("Failed to check slug availability");
+  }
+}
+
+export async function updateUserFields(
+  id: string,
+  data: Partial<
+    Pick<
+      User,
+      | "email"
+      | "subscriptionPlan"
+      | "accessType"
+      | "suspended"
+      | "subscriptionStatus"
+      | "subscriptionCurrentPeriodEnd"
+    >
+  >,
+) {
+  try {
+    await db.update(users).set(data).where(eq(users.id, id));
+  } catch {
+    throw new Error("Failed to update user");
   }
 }
