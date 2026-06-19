@@ -1,7 +1,7 @@
 import { cache } from "react";
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { employeeHours, employees } from "@/db/schema";
+import { employeeHours } from "@/db/schema";
 import type { EmployeeHours } from "@/db/schema";
 import { assertEmployeeBelongsToTenant } from "@/data/employees";
 
@@ -10,7 +10,7 @@ export const getEmployeeHours = cache(async (tenantId: string, employeeId: strin
     await assertEmployeeBelongsToTenant(tenantId, employeeId);
     return await db.query.employeeHours.findMany({
       where: eq(employeeHours.employeeId, employeeId),
-      orderBy: (hours, { asc }) => [asc(hours.dayOfWeek)],
+      orderBy: [asc(employeeHours.dayOfWeek)],
     });
   } catch (error) {
     if (error instanceof Error && error.message === "Employee not found") {

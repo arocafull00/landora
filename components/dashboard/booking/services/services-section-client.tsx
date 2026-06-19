@@ -7,19 +7,24 @@ import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-heade
 import { Button } from "@/components/ui/button";
 import { ServiceRow } from "@/components/dashboard/booking/services/service-row";
 import { ServiceCreateDialog } from "@/components/dashboard/booking/services/service-create-dialog";
+import { ServiceEditDialog } from "@/components/dashboard/booking/services/service-edit-dialog";
 import {
   reorderBookingServicesAction,
   toggleBookingServiceActiveAction,
 } from "@/app/actions/booking-services";
+import { useBookingServicesStore } from "@/stores/booking-services-store";
 
 export function ServicesSectionClient({ services }: { services: BookingService[] }) {
-  const [items, setItems] = useState(services);
+  const items = useBookingServicesStore((s) => s.services);
+  const setServices = useBookingServicesStore((s) => s.setServices);
+  const reorderServices = useBookingServicesStore((s) => s.reorderServices);
+  const setServiceActive = useBookingServicesStore((s) => s.setServiceActive);
   const [createOpen, setCreateOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
   useEffect(() => {
-    setItems(services);
-  }, [services]);
+    setServices(services);
+  }, [services, setServices]);
 
   const move = (index: number, direction: -1 | 1) => {
     const target = index + direction;
@@ -31,13 +36,13 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
     const temp = next[index];
     next[index] = next[target];
     next[target] = temp;
-    setItems(next);
+    reorderServices(next);
 
     startTransition(async () => {
       const result = await reorderBookingServicesAction(next.map((s) => s.id));
       if ("error" in result) {
         toast.error(result.error);
-        setItems(services);
+        setServices(services);
         return;
       }
       toast.success("Orden actualizado");
@@ -51,9 +56,7 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
         toast.error(result.error);
         return;
       }
-      setItems((current) =>
-        current.map((s) => (s.id === id ? { ...s, isActive } : s)),
-      );
+      setServiceActive(id, isActive);
       toast.success(isActive ? "Servicio activado" : "Servicio desactivado");
     });
   };
@@ -86,11 +89,6 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
                 onMoveUp={() => move(index, -1)}
                 onMoveDown={() => move(index, 1)}
                 onToggleActive={(active) => toggleActive(service.id, active)}
-                onUpdated={(updated) =>
-                  setItems((current) =>
-                    current.map((s) => (s.id === updated.id ? updated : s)),
-                  )
-                }
               />
             ))
           )}
@@ -103,6 +101,7 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
           setCreateOpen(false);
         }}
       />
+      <ServiceEditDialog />
     </div>
   );
 }
