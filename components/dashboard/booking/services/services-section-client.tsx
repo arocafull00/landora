@@ -7,7 +7,6 @@ import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-heade
 import { Button } from "@/components/ui/button";
 import { ServiceCard } from "@/components/dashboard/booking/services/service-card";
 import { ServiceCreateDialog } from "@/components/dashboard/booking/services/service-create-dialog";
-import { ServiceEditPanel } from "@/components/dashboard/booking/services/service-edit-panel";
 import {
   reorderBookingServicesAction,
 } from "@/app/actions/booking-services";
@@ -17,7 +16,6 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
   const items = useBookingServicesStore((s) => s.services);
   const setServices = useBookingServicesStore((s) => s.setServices);
   const reorderServices = useBookingServicesStore((s) => s.reorderServices);
-  const openEdit = useBookingServicesStore((s) => s.openEdit);
   const [createOpen, setCreateOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -73,7 +71,6 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
                 index={index}
                 total={items.length}
                 disabled={pending}
-                onEdit={() => openEdit(service)}
                 onMoveUp={() => move(index, -1)}
                 onMoveDown={() => move(index, 1)}
               />
@@ -82,7 +79,6 @@ export function ServicesSectionClient({ services }: { services: BookingService[]
         </div>
       </div>
       <ServiceCreateDialog open={createOpen} onOpenChange={setCreateOpen} />
-      <ServiceEditPanel />
     </div>
   );
 }

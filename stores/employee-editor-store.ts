@@ -13,6 +13,7 @@ type EmployeeEditorState = {
   employee: Employee | null;
   services: BookingService[];
   name: string;
+  isActive: boolean;
   hourDrafts: HourDraft[];
   serviceIds: string[];
   customizeDays: boolean;
@@ -27,6 +28,7 @@ type EmployeeEditorState = {
   ) => void;
   closeEdit: () => void;
   setName: (name: string) => void;
+  setIsActive: (isActive: boolean) => void;
   setCustomizeDays: (customizeDays: boolean) => void;
   updateHourDraft: (dayOfWeek: number, draft: HourDraft) => void;
   toggleWorkingDay: (dayOfWeek: number, isWorking: boolean) => void;
@@ -41,6 +43,7 @@ export const useEmployeeEditorStore = create<EmployeeEditorState>((set) => ({
   employee: null,
   services: [],
   name: "",
+  isActive: true,
   hourDrafts: [],
   serviceIds: [],
   customizeDays: false,
@@ -54,6 +57,7 @@ export const useEmployeeEditorStore = create<EmployeeEditorState>((set) => ({
       open: true,
       employee,
       name: employee.name,
+      isActive: employee.isActive,
       hourDrafts,
       serviceIds: assignedServiceIds,
       customizeDays: !isUniformSchedule(hourDrafts),
@@ -65,6 +69,7 @@ export const useEmployeeEditorStore = create<EmployeeEditorState>((set) => ({
       employee: null,
     }),
   setName: (name) => set({ name }),
+  setIsActive: (isActive) => set({ isActive }),
   setCustomizeDays: (customizeDays) => set({ customizeDays }),
   updateHourDraft: (dayOfWeek, draft) =>
     set((state) => ({

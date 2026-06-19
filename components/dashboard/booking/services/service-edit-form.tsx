@@ -3,10 +3,16 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import type { BookingService } from "@/db/schema";
+import { Settings } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { BookingCallout } from "@/components/dashboard/booking/booking-callout";
+import { BookingCollapsibleSection } from "@/components/dashboard/booking/booking-collapsible-section";
+import { BookingDurationField } from "@/components/dashboard/booking/booking-duration-field";
+import { BookingEditModalFooter } from "@/components/dashboard/booking/booking-edit-modal-footer";
+import { BookingFormField } from "@/components/dashboard/booking/booking-form-field";
+import { BookingPriceField } from "@/components/dashboard/booking/booking-price-field";
 import {
   deleteBookingServiceAction,
   updateBookingServiceAction,
@@ -86,101 +92,95 @@ export function ServiceEditForm() {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="space-y-2">
-        <label className="font-body text-body-sm font-medium text-on-surface" htmlFor="service-edit-name">
-          Nombre
-        </label>
+    <div className="flex flex-col gap-6 pt-6">
+      <BookingFormField label="Nombre del servicio" htmlFor="service-edit-name">
         <Input
           id="service-edit-name"
           value={editName}
           onChange={(e) => setEditName(e.target.value)}
           disabled={pending}
         />
-      </div>
+      </BookingFormField>
 
-      <div className="space-y-2">
-        <label className="font-body text-body-sm font-medium text-on-surface" htmlFor="service-edit-duration">
-          Duración
-        </label>
-        <div className="flex items-center gap-2">
-          <Input
-            id="service-edit-duration"
-            type="number"
-            min={5}
-            max={480}
-            value={editDurationMinutes}
-            onChange={(e) => setEditDurationMinutes(e.target.value)}
-            disabled={pending}
-            className="w-24"
-          />
-          <span className="font-body text-body-sm text-on-surface-variant">min</span>
-        </div>
-      </div>
+      <Separator />
 
-      <div className="space-y-2">
-        <label className="font-body text-body-sm font-medium text-on-surface" htmlFor="service-edit-price">
-          Precio
-        </label>
-        <div className="flex items-center gap-2">
-          <Input
-            id="service-edit-price"
-            inputMode="decimal"
-            placeholder="15"
-            value={editPriceEuros}
-            onChange={(e) => setEditPriceEuros(e.target.value)}
-            disabled={pending}
-            className="w-24"
-          />
-          <span className="font-body text-body-sm text-on-surface-variant">€</span>
-        </div>
-      </div>
+      <BookingFormField
+        label="Duración"
+        htmlFor="service-edit-duration"
+        description="Tiempo estimado del servicio"
+      >
+        <BookingDurationField
+          id="service-edit-duration"
+          value={editDurationMinutes}
+          onChange={setEditDurationMinutes}
+          disabled={pending}
+          min={5}
+        />
+      </BookingFormField>
 
-      <div className="flex items-center justify-between">
-        <span className="font-body text-body-sm font-medium text-on-surface">Estado</span>
-        <div className="flex items-center gap-2">
-          <Switch checked={editIsActive} disabled={pending} onCheckedChange={setEditIsActive} />
-          <span className="font-body text-body-sm text-on-surface-variant">
-            {editIsActive ? "Activo" : "Inactivo"}
-          </span>
-        </div>
-      </div>
+      <BookingFormField
+        label="Precio"
+        htmlFor="service-edit-price"
+        description="Precio que paga el cliente"
+      >
+        <BookingPriceField
+          id="service-edit-price"
+          value={editPriceEuros}
+          onChange={setEditPriceEuros}
+          disabled={pending}
+        />
+      </BookingFormField>
 
-      <details className="group">
-        <summary className="cursor-pointer font-body text-body-sm text-primary">
-          Opciones avanzadas
-        </summary>
-        <div className="mt-3 space-y-2">
-          <label
-            className="font-body text-body-sm font-medium text-on-surface"
-            htmlFor="service-edit-buffer"
-          >
-            Margen posterior
-          </label>
+      <Separator />
+
+      <div className="space-y-3">
+        <BookingFormField
+          label="Estado del servicio"
+          description="Activa o desactiva la disponibilidad del servicio"
+        >
           <div className="flex items-center gap-2">
-            <Input
-              id="service-edit-buffer"
-              type="number"
-              min={0}
-              max={120}
-              value={editBufferAfterMinutes}
-              onChange={(e) => setEditBufferAfterMinutes(e.target.value)}
-              disabled={pending}
-              className="w-24"
-            />
-            <span className="font-body text-body-sm text-on-surface-variant">min</span>
+            <Switch checked={editIsActive} disabled={pending} onCheckedChange={setEditIsActive} />
+            <span className="font-body text-body-sm text-on-surface">
+              {editIsActive ? "Activo" : "Inactivo"}
+            </span>
           </div>
-        </div>
-      </details>
-
-      <div className="space-y-2 border-t border-outline-variant pt-5">
-        <Button onClick={submit} disabled={pending || !editName.trim()} className="w-full">
-          Guardar
-        </Button>
-        <Button variant="destructive" onClick={remove} disabled={pending} className="w-full">
-          Eliminar
-        </Button>
+        </BookingFormField>
+        <BookingCallout variant="info">
+          Los servicios inactivos no se mostrarán en el sistema de reservas.
+        </BookingCallout>
       </div>
+
+      <Separator />
+
+      <BookingCollapsibleSection title="Opciones avanzadas" icon={Settings}>
+        <div className="space-y-3">
+          <BookingFormField
+            label="Margen posterior (opcional)"
+            htmlFor="service-edit-buffer"
+            description="Tiempo adicional después del servicio antes de la siguiente cita"
+          >
+            <BookingDurationField
+              id="service-edit-buffer"
+              value={editBufferAfterMinutes}
+              onChange={setEditBufferAfterMinutes}
+              disabled={pending}
+              max={120}
+            />
+          </BookingFormField>
+          <BookingCallout variant="tip">
+            Útil para limpieza, preparación o descanso entre citas.
+          </BookingCallout>
+        </div>
+      </BookingCollapsibleSection>
+
+      <BookingEditModalFooter
+        deleteLabel="Eliminar servicio"
+        onDelete={remove}
+        onCancel={closeEdit}
+        onSave={submit}
+        pending={pending}
+        saveDisabled={!editName.trim()}
+      />
     </div>
   );
 }

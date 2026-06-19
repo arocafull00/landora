@@ -25,7 +25,6 @@ export function ServiceActionsMenu({
   disabled,
   canMoveUp,
   canMoveDown,
-  onEdit,
   onMoveUp,
   onMoveDown,
 }: {
@@ -33,7 +32,6 @@ export function ServiceActionsMenu({
   disabled: boolean;
   canMoveUp: boolean;
   canMoveDown: boolean;
-  onEdit: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
 }) {
@@ -91,7 +89,6 @@ export function ServiceActionsMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={onEdit}>Editar</DropdownMenuItem>
         <DropdownMenuItem onClick={duplicate}>Duplicar servicio</DropdownMenuItem>
         <DropdownMenuItem onClick={toggleActive}>
           {service.isActive ? "Desactivar" : "Activar"}

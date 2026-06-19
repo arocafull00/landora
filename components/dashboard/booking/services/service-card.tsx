@@ -16,7 +16,6 @@ export function ServiceCard({
   index,
   total,
   disabled,
-  onEdit,
   onMoveUp,
   onMoveDown,
 }: {
@@ -24,7 +23,6 @@ export function ServiceCard({
   index: number;
   total: number;
   disabled: boolean;
-  onEdit: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
 }) {
@@ -72,22 +70,6 @@ export function ServiceCard({
           </div>
         </div>
 
-        {!expanded ? (
-          <div className="mt-5 flex items-center justify-between gap-2">
-            <Button variant="outline" disabled={disabled} onClick={onEdit}>
-              Editar
-            </Button>
-            <ServiceActionsMenu
-              service={service}
-              disabled={disabled}
-              canMoveUp={index > 0}
-              canMoveDown={index < total - 1}
-              onEdit={onEdit}
-              onMoveUp={onMoveUp}
-              onMoveDown={onMoveDown}
-            />
-          </div>
-        ) : null}
       </div>
 
       {expanded ? (
@@ -97,6 +79,16 @@ export function ServiceCard({
             disabled={disabled}
             onSaved={() => setExpanded(false)}
           />
+          <div className="mt-3 flex justify-end">
+            <ServiceActionsMenu
+              service={service}
+              disabled={disabled}
+              canMoveUp={index > 0}
+              canMoveDown={index < total - 1}
+              onMoveUp={onMoveUp}
+              onMoveDown={onMoveDown}
+            />
+          </div>
         </div>
       ) : null}
     </Panel>

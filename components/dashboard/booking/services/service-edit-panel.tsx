@@ -10,11 +10,14 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
+  SheetTitle,
 } from "@/components/ui/sheet";
+import { BookingEditEntitySummary } from "@/components/dashboard/booking/booking-edit-entity-summary";
 import { ServiceActiveBadge } from "@/components/dashboard/booking/services/service-active-badge";
 import { ServiceEditForm } from "@/components/dashboard/booking/services/service-edit-form";
 import { useBookingServicesStore } from "@/stores/booking-services-store";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Scissors } from "lucide-react";
 
 export function ServiceEditPanel() {
   const isMobile = useIsMobile();
@@ -34,21 +37,28 @@ export function ServiceEditPanel() {
     return null;
   }
 
-  const header = (
-    <div className="flex items-center justify-between gap-3">
-      <span className="truncate font-headline text-headline-sm font-semibold text-on-surface">
-        {editName || "Editar servicio"}
-      </span>
-      <ServiceActiveBadge active={editIsActive} />
-    </div>
+  const summary = (
+    <BookingEditEntitySummary
+      name={editName}
+      icon={Scissors}
+      badge={<ServiceActiveBadge active={editIsActive} />}
+    />
   );
 
   if (isMobile) {
     return (
       <Sheet open={editOpen} onOpenChange={handleOpenChange}>
-        <SheetContent side="bottom" className="max-h-[90vh] overflow-y-auto rounded-t-xl">
-          <SheetHeader>{header}</SheetHeader>
-          <div className="px-4 pb-6">
+        <SheetContent
+          side="bottom"
+          className="flex max-h-[90vh] flex-col overflow-hidden rounded-t-xl p-0"
+        >
+          <SheetHeader className="shrink-0 space-y-4 border-b border-outline-variant px-4 pt-4 pb-4">
+            <SheetTitle className="font-headline text-headline-sm font-semibold text-on-surface">
+              Editar servicio
+            </SheetTitle>
+            {summary}
+          </SheetHeader>
+          <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
             <ServiceEditForm />
           </div>
         </SheetContent>
@@ -58,13 +68,16 @@ export function ServiceEditPanel() {
 
   return (
     <Dialog open={editOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[480px]">
-        <DialogHeader>
-          <DialogTitle asChild>
-            <div>{header}</div>
+      <DialogContent className="flex max-h-[90vh] flex-col gap-0 overflow-hidden p-0 sm:max-w-[540px]">
+        <DialogHeader className="shrink-0 space-y-4 border-b border-outline-variant px-6 pt-6 pb-4">
+          <DialogTitle className="font-headline text-headline-sm font-semibold text-on-surface">
+            Editar servicio
           </DialogTitle>
+          {summary}
         </DialogHeader>
-        <ServiceEditForm />
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-6">
+          <ServiceEditForm />
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -28,6 +28,9 @@ export function ServiceQuickEdit({
   const [name, setName] = useState(service.name);
   const [durationMinutes, setDurationMinutes] = useState(String(service.durationMinutes));
   const [priceEuros, setPriceEuros] = useState(priceCentsToEurosInput(service.priceCents));
+  const [bufferAfterMinutes, setBufferAfterMinutes] = useState(
+    String(service.bufferAfterMinutes),
+  );
   const [isActive, setIsActive] = useState(service.isActive);
   const [pending, startTransition] = useTransition();
 
@@ -43,7 +46,7 @@ export function ServiceQuickEdit({
         name,
         durationMinutes: Number(durationMinutes),
         priceCents,
-        bufferAfterMinutes: service.bufferAfterMinutes,
+        bufferAfterMinutes: Number(bufferAfterMinutes),
         isActive,
       });
       if ("error" in result) {
@@ -56,6 +59,7 @@ export function ServiceQuickEdit({
         name,
         durationMinutes: Number(durationMinutes),
         priceCents,
+        bufferAfterMinutes: Number(bufferAfterMinutes),
         isActive,
         updatedAt: new Date(),
       });
@@ -125,6 +129,32 @@ export function ServiceQuickEdit({
         <span className="font-body text-body-sm text-on-surface-variant">Activo</span>
         <Switch checked={isActive} disabled={pending || disabled} onCheckedChange={setIsActive} />
       </div>
+
+      <details className="group">
+        <summary className="cursor-pointer font-body text-body-sm text-primary">
+          Opciones avanzadas
+        </summary>
+        <div className="mt-3 space-y-2">
+          <label
+            className="font-body text-body-sm text-on-surface-variant"
+            htmlFor={`quick-buffer-${service.id}`}
+          >
+            Margen posterior
+          </label>
+          <div className="flex items-center gap-2">
+            <Input
+              id={`quick-buffer-${service.id}`}
+              type="number"
+              min={0}
+              max={120}
+              value={bufferAfterMinutes}
+              onChange={(e) => setBufferAfterMinutes(e.target.value)}
+              disabled={pending || disabled}
+            />
+            <span className="shrink-0 font-body text-body-sm text-on-surface-variant">min</span>
+          </div>
+        </div>
+      </details>
 
       <Button
         onClick={submit}
