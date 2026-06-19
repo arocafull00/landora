@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Booking, BookingSettings, BookingStatus, Employee } from "@/db/schema";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
@@ -32,13 +32,7 @@ export function BookingsSectionClient({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [settingsOpen, setSettingsOpen] = useState(false);
-
-  useEffect(() => {
-    if (!settings.enabled) {
-      setSettingsOpen(true);
-    }
-  }, [settings.enabled]);
+  const [settingsOpen, setSettingsOpen] = useState(() => !settings.enabled);
 
   const setView = (nextView: string) => {
     const params = new URLSearchParams(searchParams.toString());

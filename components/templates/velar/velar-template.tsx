@@ -18,7 +18,6 @@ import { VelarServicesSection } from "@/components/templates/velar/velar-service
 import { VelarWorkflowSection } from "@/components/templates/velar/velar-workflow-section";
 import { VelarTestimonialsSection } from "@/components/templates/velar/velar-testimonials-section";
 import { VelarContactSection } from "@/components/templates/velar/velar-contact-section";
-import { LandingBookingSection } from "@/components/booking/landing-booking-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 const GRASS_GREEN = "#213138";
@@ -144,10 +143,6 @@ export function VelarTemplate({
 
       {isSectionVisible(content, "testimonios") ? (
         <VelarTestimonialsSection content={content} />
-      ) : null}
-
-      {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
-        <LandingBookingSection content={content} slug={slug} templateId="velar" />
       ) : null}
 
       <div ref={footerRef}>

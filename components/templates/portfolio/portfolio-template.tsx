@@ -16,7 +16,6 @@ import { PortfolioServicesSection } from "@/components/templates/portfolio/portf
 import { PortfolioTestimonialsSection } from "@/components/templates/portfolio/portfolio-testimonials-section";
 import { PortfolioFaqSection } from "@/components/templates/portfolio/portfolio-faq-section";
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
-import { LandingBookingSection } from "@/components/booking/landing-booking-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 export function PortfolioTemplate({
@@ -32,7 +31,7 @@ export function PortfolioTemplate({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
+  const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
 
   return (
     <TemplateLazyMotion>
@@ -78,10 +77,6 @@ export function PortfolioTemplate({
       ) : null}
 
       {isSectionVisible(content, "faq") ? <PortfolioFaqSection content={content} /> : null}
-
-      {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
-        <LandingBookingSection content={content} slug={slug} templateId="portfolio" />
-      ) : null}
 
       <PortfolioContactSection content={content} />
     </div>

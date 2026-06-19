@@ -5,7 +5,6 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { OficioProContactSection } from "@/components/templates/oficio-pro/oficio-pro-contact-section";
-import { LandingBookingSection } from "@/components/booking/landing-booking-section";
 import { OficioProExperienceSection } from "@/components/templates/oficio-pro/oficio-pro-experience-section";
 import { OficioProHero } from "@/components/templates/oficio-pro/oficio-pro-hero";
 import { OficioProNav } from "@/components/templates/oficio-pro/oficio-pro-nav";
@@ -25,7 +24,7 @@ export function OficioProTemplate({
   bookingEnabled?: boolean;
 }) {
   const heroRef = useRef<HTMLElement>(null);
-  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
+  const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
 
   return (
     <div
@@ -67,9 +66,6 @@ export function OficioProTemplate({
       ) : null}
       {isSectionVisible(content, "experiencia") ? (
         <OficioProExperienceSection content={content} />
-      ) : null}
-      {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
-        <LandingBookingSection content={content} slug={slug} templateId="oficio-pro" />
       ) : null}
       <OficioProContactSection content={content} />
     </div>

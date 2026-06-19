@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { toast } from "react-toastify";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { usePublicBookingStore } from "@/stores/public-booking-store";
 import { BookingSummary } from "@/components/booking/booking-summary";
 import { BookingStepService } from "@/components/booking/booking-step-service";
 import { BookingStepProfessional } from "@/components/booking/booking-step-professional";
@@ -12,31 +13,25 @@ import { BookingStepContact } from "@/components/booking/booking-step-contact";
 import { BookingStepConfirmation } from "@/components/booking/booking-step-confirmation";
 import { createBookingAction } from "@/app/actions/bookings";
 
-export type BookingSelection = {
-  serviceId: string;
-  serviceName: string;
-  employeeId: string | "any";
-  employeeName: string;
-  date: string;
-  startsAt: string;
-  endsAt: string;
-  customerName: string;
-  customerPhone: string;
-  customerEmail: string;
-  notes: string;
-};
-
-const STEPS = ["service", "professional", "date", "time", "contact", "confirmation"] as const;
-type Step = (typeof STEPS)[number];
-
 export function BookingWidget({ slug }: { slug: string }) {
-  const [step, setStep] = useState<Step>("service");
-  const [selection, setSelection] = useState<Partial<BookingSelection>>({});
-  const [publicToken, setPublicToken] = useState<string | null>(null);
+  const {
+    step,
+    stepIndex,
+    selection,
+    publicToken,
+    setStep,
+    goBack,
+    setSelection,
+    setPublicToken,
+    reset,
+  } = usePublicBookingStore();
+
   const [turnstileToken, setTurnstileToken] = useState("");
   const [pending, startTransition] = useTransition();
 
-  const stepIndex = STEPS.indexOf(step);
+  useEffect(() => {
+    reset();
+  }, [slug]);
 
   const summary = useMemo(
     () => ({
@@ -97,8 +92,7 @@ export function BookingWidget({ slug }: { slug: string }) {
           <BookingStepService
             slug={slug}
             onSelect={(service) => {
-              setSelection((current) => ({
-                ...current,
+              setSelection({
                 serviceId: service.id,
                 serviceName: service.name,
                 employeeId: undefined,
@@ -106,7 +100,7 @@ export function BookingWidget({ slug }: { slug: string }) {
                 date: undefined,
                 startsAt: undefined,
                 endsAt: undefined,
-              }));
+              });
               setStep("professional");
             }}
           />
@@ -116,25 +110,23 @@ export function BookingWidget({ slug }: { slug: string }) {
             slug={slug}
             serviceId={selection.serviceId}
             onSelect={(employee) => {
-              setSelection((current) => ({
-                ...current,
+              setSelection({
                 employeeId: employee.id,
                 employeeName: employee.name,
                 date: undefined,
                 startsAt: undefined,
                 endsAt: undefined,
-              }));
+              });
               setStep("date");
             }}
             onAny={() => {
-              setSelection((current) => ({
-                ...current,
+              setSelection({
                 employeeId: "any",
                 employeeName: "Cualquier profesional",
                 date: undefined,
                 startsAt: undefined,
                 endsAt: undefined,
-              }));
+              });
               setStep("date");
             }}
           />
@@ -142,12 +134,7 @@ export function BookingWidget({ slug }: { slug: string }) {
         {step === "date" && selection.serviceId && selection.employeeId ? (
           <BookingStepDate
             onSelect={(date) => {
-              setSelection((current) => ({
-                ...current,
-                date,
-                startsAt: undefined,
-                endsAt: undefined,
-              }));
+              setSelection({ date, startsAt: undefined, endsAt: undefined });
               setStep("time");
             }}
           />
@@ -162,11 +149,7 @@ export function BookingWidget({ slug }: { slug: string }) {
             employeeId={selection.employeeId}
             date={selection.date}
             onSelect={(slot) => {
-              setSelection((current) => ({
-                ...current,
-                startsAt: slot.startsAt,
-                endsAt: slot.endsAt,
-              }));
+              setSelection({ startsAt: slot.startsAt, endsAt: slot.endsAt });
               setStep("contact");
             }}
           />
@@ -193,7 +176,7 @@ export function BookingWidget({ slug }: { slug: string }) {
           <button
             type="button"
             className="mt-4 font-body text-body-sm text-on-surface-variant underline"
-            onClick={() => setStep(STEPS[Math.max(stepIndex - 1, 0)])}
+            onClick={goBack}
           >
             Volver
           </button>

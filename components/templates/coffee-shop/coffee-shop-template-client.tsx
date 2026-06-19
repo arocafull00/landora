@@ -15,7 +15,6 @@ import { CoffeeShopHoursSection } from "@/components/templates/coffee-shop/coffe
 import { CoffeeShopTestimonialsSection } from "@/components/templates/coffee-shop/coffee-shop-testimonials-section";
 import { CoffeeShopFaqSection } from "@/components/templates/coffee-shop/coffee-shop-faq-section";
 import { CoffeeShopContactSection } from "@/components/templates/coffee-shop/coffee-shop-contact-section";
-import { LandingBookingSection } from "@/components/booking/landing-booking-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 function getCoffeeShopThemeVars(palette: ReturnType<typeof getTemplatePalette>): CSSProperties {
@@ -45,8 +44,8 @@ export function CoffeeShopTemplateClient({
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const palette = getTemplatePalette("coffee-shop");
-  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
-  const heroCtaHref = getBookingCtaHref(content, bookingEnabled, "#carta");
+  const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
+  const heroCtaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#carta");
 
   return (
     <TemplateLazyMotion>
@@ -85,10 +84,6 @@ export function CoffeeShopTemplateClient({
         ) : null}
 
         {isSectionVisible(content, "faq") ? <CoffeeShopFaqSection content={content} /> : null}
-
-        {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
-          <LandingBookingSection content={content} slug={slug} templateId="coffee-shop" />
-        ) : null}
 
         <CoffeeShopContactSection content={content} />
       </div>

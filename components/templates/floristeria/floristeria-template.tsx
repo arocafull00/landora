@@ -14,7 +14,6 @@ import { GallerySection } from "@/components/templates/shared/gallery-section";
 import { FloristeriaTestimonialsSection } from "@/components/templates/floristeria/floristeria-testimonials-section";
 import { FloristeriaFaqSection } from "@/components/templates/floristeria/floristeria-faq-section";
 import { FloristeriaContactSection } from "@/components/templates/floristeria/floristeria-contact-section";
-import { LandingBookingSection } from "@/components/booking/landing-booking-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 export function FloristeriaTemplate({
@@ -30,7 +29,7 @@ export function FloristeriaTemplate({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
+  const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
 
   return (
     <TemplateLazyMotion>
@@ -68,10 +67,6 @@ export function FloristeriaTemplate({
         ) : null}
 
         {isSectionVisible(content, "faq") ? <FloristeriaFaqSection content={content} /> : null}
-
-        {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
-          <LandingBookingSection content={content} slug={slug} templateId="floristeria" />
-        ) : null}
 
         <FloristeriaContactSection content={content} />
       </div>

@@ -17,7 +17,6 @@ import { GallerySection } from "@/components/templates/shared/gallery-section";
 import { StudioTestimonialsSection } from "@/components/templates/studio/studio-testimonials-section";
 import { StudioFaqSection } from "@/components/templates/studio/studio-faq-section";
 import { StudioContactSection } from "@/components/templates/studio/studio-contact-section";
-import { LandingBookingSection } from "@/components/booking/landing-booking-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
 function isOverlappingTop(el: HTMLElement | null) {
@@ -73,7 +72,7 @@ export function StudioTemplate({
     };
   }, [scrollContainer, updateNavState]);
 
-  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
+  const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
 
   return (
     <TemplateLazyMotion>
@@ -115,10 +114,6 @@ export function StudioTemplate({
       {isSectionVisible(content, "equipo") ? <StudioTeamSection content={content} /> : null}
 
       {isSectionVisible(content, "faq") ? <StudioFaqSection content={content} /> : null}
-
-      {bookingEnabled && slug && isSectionVisible(content, "reservas") ? (
-        <LandingBookingSection content={content} slug={slug} templateId="studio" />
-      ) : null}
 
       <StudioContactSection content={content} />
     </div>
