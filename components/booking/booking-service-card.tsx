@@ -1,7 +1,5 @@
 "use client";
 
-import { BookingEmployeeCard } from "@/components/booking/booking-employee-card";
-
 export function BookingServiceCard({
   service,
   onSelect,

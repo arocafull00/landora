@@ -29,7 +29,7 @@ export function ReservationDetails({
   const canCancel =
     booking.status !== "cancelled" &&
     booking.status !== "completed" &&
-    booking.startsAt.getTime() > Date.now();
+    booking.startsAt.getTime() > new Date().getTime();
 
   const cancel = () => {
     startTransition(async () => {

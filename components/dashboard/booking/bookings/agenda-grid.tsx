@@ -1,4 +1,4 @@
-import type { Booking, BookingStatus, Employee } from "@/db/schema";
+import type { Booking, Employee } from "@/db/schema";
 import { AgendaBookingCard } from "@/components/dashboard/booking/bookings/agenda-booking-card";
 
 const HOURS = Array.from({ length: 14 }, (_, i) => i + 8);
