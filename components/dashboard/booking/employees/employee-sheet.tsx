@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import type { BookingService, Employee, EmployeeHours } from "@/db/schema";
 import {
   Sheet,
   SheetContent,
@@ -22,62 +21,24 @@ import {
   setEmployeeActiveAction,
   updateEmployeeAction,
 } from "@/app/actions/employees";
+import { useEmployeeSheetStore } from "@/stores/employee-sheet-store";
 
-type HourDraft = {
-  dayOfWeek: number;
-  isWorking: boolean;
-  startTime: string;
-  endTime: string;
-};
-
-function buildDefaultHours(existing: EmployeeHours[]): HourDraft[] {
-  return Array.from({ length: 7 }, (_, dayOfWeek) => {
-    const row = existing.find((h) => h.dayOfWeek === dayOfWeek);
-    if (!row) {
-      return {
-        dayOfWeek,
-        isWorking: dayOfWeek >= 1 && dayOfWeek <= 5,
-        startTime: "09:00",
-        endTime: "18:00",
-      };
-    }
-    return {
-      dayOfWeek: row.dayOfWeek,
-      isWorking: row.isWorking,
-      startTime: row.startTime,
-      endTime: row.endTime,
-    };
-  });
-}
-
-export function EmployeeSheet({
-  employee,
-  services,
-  hours,
-  assignedServiceIds,
-  dayLabels,
-  open,
-  onOpenChange,
-}: {
-  employee: Employee;
-  services: BookingService[];
-  hours: EmployeeHours[];
-  assignedServiceIds: string[];
-  dayLabels: string[];
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}) {
+export function EmployeeSheet() {
   const router = useRouter();
-  const [name, setName] = useState(employee.name);
-  const [hourDrafts, setHourDrafts] = useState<HourDraft[]>(() => buildDefaultHours(hours));
-  const [serviceIds, setServiceIds] = useState<string[]>(assignedServiceIds);
+  const open = useEmployeeSheetStore((s) => s.open);
+  const employee = useEmployeeSheetStore((s) => s.employee);
+  const services = useEmployeeSheetStore((s) => s.services);
+  const dayLabels = useEmployeeSheetStore((s) => s.dayLabels);
+  const name = useEmployeeSheetStore((s) => s.name);
+  const hourDrafts = useEmployeeSheetStore((s) => s.hourDrafts);
+  const serviceIds = useEmployeeSheetStore((s) => s.serviceIds);
+  const closeSheet = useEmployeeSheetStore((s) => s.closeSheet);
+  const setName = useEmployeeSheetStore((s) => s.setName);
   const [pending, startTransition] = useTransition();
 
-  useEffect(() => {
-    setName(employee.name);
-    setHourDrafts(buildDefaultHours(hours));
-    setServiceIds(assignedServiceIds);
-  }, [employee, hours, assignedServiceIds]);
+  if (!employee) {
+    return null;
+  }
 
   const saveAll = () => {
     startTransition(async () => {
@@ -124,13 +85,19 @@ export function EmployeeSheet({
         return;
       }
       toast.success("Empleado eliminado");
-      onOpenChange(false);
+      closeSheet();
       router.refresh();
     });
   };
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      closeSheet();
+    }
+  };
+
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent className="overflow-y-auto sm:max-w-lg">
         <SheetHeader>
           <SheetTitle>Empleado</SheetTitle>
@@ -146,33 +113,16 @@ export function EmployeeSheet({
             {hourDrafts.map((row) => (
               <EmployeeHoursRow
                 key={row.dayOfWeek}
+                dayOfWeek={row.dayOfWeek}
                 label={dayLabels[row.dayOfWeek] ?? ""}
-                row={row}
                 disabled={pending}
-                onChange={(next) =>
-                  setHourDrafts((current) =>
-                    current.map((h) => (h.dayOfWeek === row.dayOfWeek ? next : h)),
-                  )
-                }
               />
             ))}
           </div>
           <div className="space-y-2">
             <p className="font-body text-body-sm font-medium text-on-surface">Servicios</p>
             {services.map((service) => (
-              <EmployeeServiceCheckbox
-                key={service.id}
-                service={service}
-                checked={serviceIds.includes(service.id)}
-                disabled={pending}
-                onCheckedChange={(checked) => {
-                  setServiceIds((current) =>
-                    checked
-                      ? [...current, service.id]
-                      : current.filter((id) => id !== service.id),
-                  );
-                }}
-              />
+              <EmployeeServiceCheckbox key={service.id} service={service} disabled={pending} />
             ))}
           </div>
           <div className="flex gap-2">

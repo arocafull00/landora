@@ -2,25 +2,28 @@
 
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-
-type HourDraft = {
-  dayOfWeek: number;
-  isWorking: boolean;
-  startTime: string;
-  endTime: string;
-};
+import { useEmployeeSheetStore } from "@/stores/employee-sheet-store";
 
 export function EmployeeHoursRow({
+  dayOfWeek,
   label,
-  row,
   disabled,
-  onChange,
 }: {
+  dayOfWeek: number;
   label: string;
-  row: HourDraft;
   disabled: boolean;
-  onChange: (row: HourDraft) => void;
 }) {
+  const row = useEmployeeSheetStore((s) => s.hourDrafts.find((h) => h.dayOfWeek === dayOfWeek));
+  const updateHourDraft = useEmployeeSheetStore((s) => s.updateHourDraft);
+
+  if (!row) {
+    return null;
+  }
+
+  const onChange = (next: typeof row) => {
+    updateHourDraft(dayOfWeek, next);
+  };
+
   return (
     <div className="grid grid-cols-[3rem_1fr_1fr_1fr] items-center gap-2">
       <span className="font-body text-body-sm text-on-surface">{label}</span>

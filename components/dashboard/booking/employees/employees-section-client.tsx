@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import type { BookingService, Employee, EmployeeHours } from "@/db/schema";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { EmployeeRow } from "@/components/dashboard/booking/employees/employee-row";
 import { EmployeeSheet } from "@/components/dashboard/booking/employees/employee-sheet";
 import { createEmployeeAction } from "@/app/actions/employees";
+import { useEmployeeSheetStore } from "@/stores/employee-sheet-store";
 
 const DAY_LABELS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
@@ -26,10 +27,15 @@ export function EmployeesSectionClient({
 }) {
   const router = useRouter();
   const [name, setName] = useState("");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const setServices = useEmployeeSheetStore((s) => s.setServices);
+  const setDayLabels = useEmployeeSheetStore((s) => s.setDayLabels);
+  const openSheet = useEmployeeSheetStore((s) => s.openSheet);
 
-  const selected = employees.find((e) => e.id === selectedId) ?? null;
+  useEffect(() => {
+    setServices(services);
+    setDayLabels(DAY_LABELS);
+  }, [services, setServices, setDayLabels]);
 
   const create = () => {
     startTransition(async () => {
@@ -73,28 +79,20 @@ export function EmployeesSectionClient({
                   key={employee.id}
                   employee={employee}
                   disabled={pending}
-                  onSelect={() => setSelectedId(employee.id)}
+                  onSelect={() =>
+                    openSheet(
+                      employee,
+                      hoursByEmployee[employee.id] ?? [],
+                      servicesByEmployee[employee.id] ?? [],
+                    )
+                  }
                 />
               ))
             )}
           </div>
         </div>
       </div>
-      {selected ? (
-        <EmployeeSheet
-          employee={selected}
-          services={services}
-          hours={hoursByEmployee[selected.id] ?? []}
-          assignedServiceIds={servicesByEmployee[selected.id] ?? []}
-          dayLabels={DAY_LABELS}
-          open={Boolean(selectedId)}
-          onOpenChange={(open) => {
-            if (!open) {
-              setSelectedId(null);
-            }
-          }}
-        />
-      ) : null}
+      <EmployeeSheet />
     </div>
   );
 }
