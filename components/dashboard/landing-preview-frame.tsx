@@ -36,9 +36,13 @@ const TEMPLATE_COMPONENTS = {
 export function LandingPreviewFrame({
   initialContent,
   template,
+  slug,
+  bookingEnabled = false,
 }: {
   initialContent: LandingContent;
   template: TemplateId;
+  slug?: string;
+  bookingEnabled?: boolean;
 }) {
   const [livePreview, setLivePreview] = useState<{
     content: LandingContent;
@@ -131,7 +135,7 @@ export function LandingPreviewFrame({
 
   return (
     <>
-      <Component content={content} />
+      <Component content={content} slug={slug} bookingEnabled={bookingEnabled} />
       {content.contact.whatsappEnabled ? (
         <WhatsappFloatButton phone={content.contact.phone} />
       ) : null}

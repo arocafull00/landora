@@ -21,8 +21,11 @@ import { SectionHeadingFields } from "@/components/dashboard/section-heading-fie
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { dispatchEditorFocusElement } from "@/lib/editor-element-focus";
 import { getEditorScrollTarget } from "@/lib/template-sections";
+import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 
 export function EditorSection() {
+  const { bookingEnabled } = useDashboardChrome();
   const {
     activeEditorTab,
     activeLandingId,
@@ -414,6 +417,13 @@ export function EditorSection() {
 
           {activeEditorTab === "Ofertas" ? (
             <OffersEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Reservas" ? (
+            <ReservasEditorPanel
+              activeLanding={activeLanding}
+              bookingEnabled={bookingEnabled}
+            />
           ) : null}
 
           {activeEditorTab === "Blog" ? (

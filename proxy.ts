@@ -12,7 +12,8 @@ import {
   normalizeHost,
 } from "@/lib/app-host";
 import { getSubscriptionStatusForProxy } from "@/data/subscriptions";
-import { hasDashboardAccess } from "@/lib/subscription-access";
+import { getBookingModuleAccessContextForClerkUser } from "@/data/user-addons";
+import { hasBookingModuleAccess, hasDashboardAccess } from "@/lib/subscription-access";
 import { getStripePaymentLinkUrl } from "@/lib/stripe";
 
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
@@ -33,6 +34,12 @@ const isProtectedRoute = createRouteMatcher([
   "/settings(.*)",
   "/admin(.*)",
   "/api(.*)",
+]);
+const isBookingRoute = createRouteMatcher([
+  "/bookings(.*)",
+  "/employees(.*)",
+  "/services(.*)",
+  "/settings/blocked-periods(.*)",
 ]);
 
 async function resolveCustomDomainSlug(host: string) {
@@ -126,6 +133,24 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     }
 
     return NextResponse.redirect(paymentLink);
+  }
+
+  if (isBookingRoute(req)) {
+    const { userId } = await auth.protect();
+
+    if (!userId) {
+      return NextResponse.next();
+    }
+
+    const user = await getBookingModuleAccessContextForClerkUser(userId);
+
+    if (hasBookingModuleAccess(user)) {
+      return NextResponse.next();
+    }
+
+    const upgradeUrl = req.nextUrl.clone();
+    upgradeUrl.pathname = "/booking-upgrade";
+    return NextResponse.redirect(upgradeUrl);
   }
 
   return NextResponse.next();

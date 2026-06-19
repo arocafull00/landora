@@ -15,6 +15,7 @@ export function StudioNav({
   brandLogoType,
   navLinks,
   ctaLabel,
+  ctaHref,
   overHero,
   topOffset = 0,
 }: {
@@ -23,6 +24,7 @@ export function StudioNav({
   brandLogoType: BrandLogoType;
   navLinks: NavLink[];
   ctaLabel: string;
+  ctaHref: string;
   overHero: boolean;
   topOffset?: number;
 }) {
@@ -67,7 +69,7 @@ export function StudioNav({
           ))}
           <TemplateNavAnchor
             className={`rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide transition-colors duration-300 ease-out ${overHero ? "bg-[#c99d43] text-black hover:bg-[#d9ad54]" : "bg-[#1a1a1a] text-white hover:bg-[#333]"}`}
-            href="#contacto"
+            href={ctaHref}
             onClick={() => trackCtaClick()}
           >
             {ctaLabel || "Reservar cita"}
@@ -114,10 +116,10 @@ export function StudioNav({
             ))}
             <m.a
               className="mt-6 rounded-full bg-[#1a1a1a] px-8 py-3 text-sm font-semibold text-white"
-              href="#contacto"
+              href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+                handleSectionNavClick(event, ctaHref, () => setMenuOpen(false));
               }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}

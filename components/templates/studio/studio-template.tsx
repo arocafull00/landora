@@ -3,6 +3,7 @@
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
@@ -72,6 +73,8 @@ export function StudioTemplate({
     };
   }, [scrollContainer, updateNavState]);
 
+  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
+
   return (
     <TemplateLazyMotion>
       <div
@@ -87,11 +90,12 @@ export function StudioTemplate({
         brandLogoImage={content.brandLogoImage ?? ""}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "studio")}
         ctaLabel={content.hero.ctaLabel ?? ""}
+        ctaHref={ctaHref}
         overHero={overHero}
         topOffset={topOffset}
       />
 
-      <StudioHero content={content} heroRef={heroRef} />
+      <StudioHero content={content} heroRef={heroRef} ctaHref={ctaHref} />
 
       <ActiveOffersRenderer content={content} />
 

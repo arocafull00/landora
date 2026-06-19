@@ -4,6 +4,7 @@ import { useRef } from "react";
 import type { CSSProperties } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { getTemplatePalette } from "@/lib/template-palettes";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { RistoranteNav } from "@/components/templates/ristorante/ristorante-nav";
@@ -45,6 +46,7 @@ export function RistoranteTemplateClient({
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const palette = getTemplatePalette("ristorante");
+  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
 
   return (
     <TemplateLazyMotion>
@@ -55,11 +57,12 @@ export function RistoranteTemplateClient({
           brandLogoImage={content.brandLogoImage ?? ""}
           navLinks={getVisibleNav(content.nav, content.hiddenSections, "ristorante")}
           ctaLabel={content.hero.ctaLabel ?? ""}
+          ctaHref={ctaHref}
           topOffset={topOffset}
           scrollRootRef={rootRef}
         />
 
-        <RistoranteHero content={content} heroRef={heroRef} />
+        <RistoranteHero content={content} heroRef={heroRef} ctaHref={ctaHref} />
 
         <ActiveOffersRenderer content={content} />
 

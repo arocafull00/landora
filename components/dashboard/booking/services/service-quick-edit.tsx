@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import type { BookingService } from "@/db/schema";
@@ -18,10 +18,12 @@ export function ServiceQuickEdit({
   service,
   disabled,
   onSaved,
+  actions,
 }: {
   service: BookingService;
   disabled: boolean;
   onSaved: () => void;
+  actions: ReactNode;
 }) {
   const router = useRouter();
   const updateService = useBookingServicesStore((s) => s.updateService);
@@ -156,14 +158,16 @@ export function ServiceQuickEdit({
         </div>
       </details>
 
-      <Button
-        onClick={submit}
-        disabled={pending || disabled || !name.trim()}
-        className="w-full"
-        size="sm"
-      >
-        Guardar
-      </Button>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-outline-variant pt-4">
+        <div className="flex flex-wrap gap-2">{actions}</div>
+        <Button
+          onClick={submit}
+          disabled={pending || disabled || !name.trim()}
+          size="sm"
+        >
+          Guardar
+        </Button>
+      </div>
     </div>
   );
 }

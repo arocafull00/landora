@@ -11,9 +11,11 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 export function RistoranteHero({
   content,
   heroRef,
+  ctaHref,
 }: {
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
+  ctaHref: string;
 }) {
   const reduce = useReducedMotion();
   const { trackCtaClick } = useAnalytics();
@@ -71,7 +73,7 @@ export function RistoranteHero({
                 {content.hero.subtitle}
               </p>
             ) : null}
-            <RistoranteButton href="#contacto" size="lg" variant="accent" onClick={() => trackCtaClick()}>
+            <RistoranteButton href={ctaHref} size="lg" variant="accent" onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Reservar mesa"}
             </RistoranteButton>
           </div>

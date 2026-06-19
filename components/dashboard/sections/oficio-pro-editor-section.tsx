@@ -13,8 +13,11 @@ import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-pane
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { NAV_EDITOR_TAB } from "@/lib/template-registry";
+import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 
 export function OficioProEditorSection() {
+  const { bookingEnabled } = useDashboardChrome();
   const {
     activeEditorTab,
     activeLandingId,
@@ -309,6 +312,13 @@ export function OficioProEditorSection() {
 
           {activeEditorTab === "Ofertas" ? (
             <OffersEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Reservas" ? (
+            <ReservasEditorPanel
+              activeLanding={activeLanding}
+              bookingEnabled={bookingEnabled}
+            />
           ) : null}
 
           {activeEditorTab === "Blog" ? (

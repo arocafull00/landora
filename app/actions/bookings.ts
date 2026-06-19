@@ -5,7 +5,6 @@ import { headers } from "next/headers";
 import { randomBytes } from "crypto";
 import { z } from "zod";
 import { db } from "@/db";
-import { getEffectiveClientId } from "@/lib/auth";
 import { getBookingSettings } from "@/data/booking-settings";
 import { getBookingServiceById } from "@/data/booking-services";
 import { getEmployeeById } from "@/data/employees";
@@ -18,6 +17,7 @@ import { sendBookingNotification } from "@/lib/booking/send-notification";
 import { captureBookingEvent } from "@/lib/booking/capture-event";
 import { addMinutes } from "@/lib/booking/overlap";
 import { formatDateInTimezone } from "@/lib/booking/timezone";
+import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 import type { BookingStatus } from "@/db/schema";
 
 const createBookingSchema = z.object({
@@ -218,25 +218,19 @@ async function changeBookingStatus(
 }
 
 export async function confirmBookingAction(id: string): Promise<StatusActionResult> {
-  const tenantId = await getEffectiveClientId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
-  return changeBookingStatus(tenantId, id, "confirmed");
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  return changeBookingStatus(access.tenantId, id, "confirmed");
 }
 
 export async function completeBookingAction(id: string): Promise<StatusActionResult> {
-  const tenantId = await getEffectiveClientId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
-  return changeBookingStatus(tenantId, id, "completed");
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  return changeBookingStatus(access.tenantId, id, "completed");
 }
 
 export async function cancelBookingAction(id: string): Promise<StatusActionResult> {
-  const tenantId = await getEffectiveClientId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
-  return changeBookingStatus(tenantId, id, "cancelled");
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  return changeBookingStatus(access.tenantId, id, "cancelled");
 }

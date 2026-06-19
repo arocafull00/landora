@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { OficioProContactSection } from "@/components/templates/oficio-pro/oficio-pro-contact-section";
 import { LandingBookingSection } from "@/components/booking/landing-booking-section";
 import { OficioProExperienceSection } from "@/components/templates/oficio-pro/oficio-pro-experience-section";
@@ -24,6 +25,7 @@ export function OficioProTemplate({
   bookingEnabled?: boolean;
 }) {
   const heroRef = useRef<HTMLElement>(null);
+  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
 
   return (
     <div
@@ -40,9 +42,10 @@ export function OficioProTemplate({
         brandLogoImage={content.brandLogoImage ?? ""}
         brandLogoType={content.brandLogoType ?? "text"}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "oficio-pro")}
+        ctaHref={ctaHref}
         topOffset={topOffset}
       />
-      <OficioProHero content={content} heroRef={heroRef} />
+      <OficioProHero content={content} heroRef={heroRef} ctaHref={ctaHref} />
       <ActiveOffersRenderer content={content} />
       {isSectionVisible(content, "servicios") ? (
         <OficioProServicesSection

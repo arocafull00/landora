@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { getEffectiveClientId } from "@/lib/auth";
 import {
   createEmployee,
   deleteEmployee,
@@ -12,6 +11,7 @@ import {
 import { replaceEmployeeHours } from "@/data/employee-hours";
 import { replaceEmployeeServices } from "@/data/employee-services";
 import { DEFAULT_HOUR_DRAFTS } from "@/lib/employee-schedule";
+import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 
 const nameSchema = z.string().trim().min(1).max(80);
 
@@ -26,22 +26,13 @@ const hoursSchema = z.array(
 
 type ActionResult = { success: true } | { error: string };
 
-async function getTenantId() {
-  const tenantId = await getEffectiveClientId();
-  if (!tenantId) {
-    return null;
-  }
-  return tenantId;
-}
-
 export async function createEmployeeAction(
   name: string,
   isActive = true,
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   const parsed = nameSchema.safeParse(name);
   if (!parsed.success) {
@@ -59,10 +50,9 @@ export async function createEmployeeAction(
 }
 
 export async function updateEmployeeAction(id: string, name: string): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   const parsed = nameSchema.safeParse(name);
   if (!parsed.success) {
@@ -85,10 +75,9 @@ export async function setEmployeeActiveAction(
   id: string,
   isActive: boolean,
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   try {
     const updated = await setEmployeeActive(tenantId, id, isActive);
@@ -104,10 +93,9 @@ export async function setEmployeeActiveAction(
 }
 
 export async function deleteEmployeeAction(id: string): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   try {
     await deleteEmployee(tenantId, id);
@@ -122,10 +110,9 @@ export async function replaceEmployeeHoursAction(
   employeeId: string,
   hours: z.infer<typeof hoursSchema>,
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   const parsed = hoursSchema.safeParse(hours);
   if (!parsed.success) {
@@ -145,10 +132,9 @@ export async function replaceEmployeeServicesAction(
   employeeId: string,
   serviceIds: string[],
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   try {
     await replaceEmployeeServices(tenantId, employeeId, serviceIds);

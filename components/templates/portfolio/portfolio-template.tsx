@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos-init";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
@@ -31,6 +32,7 @@ export function PortfolioTemplate({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
+  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
 
   return (
     <TemplateLazyMotion>
@@ -47,10 +49,11 @@ export function PortfolioTemplate({
         brandLogoImage={content.brandLogoImage ?? ""}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "portfolio")}
         ctaLabel={content.hero.ctaLabel ?? ""}
+        ctaHref={ctaHref}
         topOffset={topOffset}
       />
 
-      <PortfolioHero content={content} heroRef={heroRef} />
+      <PortfolioHero content={content} heroRef={heroRef} ctaHref={ctaHref} />
 
       <ActiveOffersRenderer content={content} />
 

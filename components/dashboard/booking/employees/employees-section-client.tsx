@@ -6,7 +6,6 @@ import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-heade
 import { Button } from "@/components/ui/button";
 import { EmployeeCard } from "@/components/dashboard/booking/employees/employee-card";
 import { EmployeeCreateDialog } from "@/components/dashboard/booking/employees/employee-create-dialog";
-import { EmployeeEditPanel } from "@/components/dashboard/booking/employees/employee-edit-panel";
 import { useEmployeeEditorStore } from "@/stores/employee-editor-store";
 
 export function EmployeesSectionClient({
@@ -21,8 +20,9 @@ export function EmployeesSectionClient({
   servicesByEmployee: Record<string, string[]>;
 }) {
   const [createOpen, setCreateOpen] = useState(false);
+  const [expandedEmployeeId, setExpandedEmployeeId] = useState<string | null>(null);
   const setServices = useEmployeeEditorStore((s) => s.setServices);
-  const openEdit = useEmployeeEditorStore((s) => s.openEdit);
+  const closeEdit = useEmployeeEditorStore((s) => s.closeEdit);
 
   useEffect(() => {
     setServices(services);
@@ -52,20 +52,23 @@ export function EmployeesSectionClient({
                 serviceIds={servicesByEmployee[employee.id] ?? []}
                 services={services}
                 disabled={false}
-                onEdit={() =>
-                  openEdit(
-                    employee,
-                    hoursByEmployee[employee.id] ?? [],
-                    servicesByEmployee[employee.id] ?? [],
-                  )
-                }
+                expanded={expandedEmployeeId === employee.id}
+                onExpandedChange={(next) => {
+                  if (!next) {
+                    if (expandedEmployeeId === employee.id) {
+                      closeEdit();
+                      setExpandedEmployeeId(null);
+                    }
+                    return;
+                  }
+                  setExpandedEmployeeId(employee.id);
+                }}
               />
             ))
           )}
         </div>
       </div>
       <EmployeeCreateDialog open={createOpen} onOpenChange={setCreateOpen} />
-      <EmployeeEditPanel />
     </div>
   );
 }

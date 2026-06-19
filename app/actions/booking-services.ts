@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { getEffectiveClientId } from "@/lib/auth";
 import {
   createBookingService,
   deleteBookingService,
@@ -11,6 +10,7 @@ import {
   setBookingServiceActive,
   updateBookingService,
 } from "@/data/booking-services";
+import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 
 const serviceSchema = z.object({
   name: z.string().trim().min(1).max(80),
@@ -22,21 +22,12 @@ const serviceSchema = z.object({
 
 type ActionResult = { success: true } | { error: string };
 
-async function getTenantId() {
-  const tenantId = await getEffectiveClientId();
-  if (!tenantId) {
-    return null;
-  }
-  return tenantId;
-}
-
 export async function createBookingServiceAction(
   input: z.infer<typeof serviceSchema>,
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   const parsed = serviceSchema.safeParse(input);
   if (!parsed.success) {
@@ -56,10 +47,9 @@ export async function updateBookingServiceAction(
   id: string,
   input: z.infer<typeof serviceSchema>,
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   const parsed = serviceSchema.safeParse(input);
   if (!parsed.success) {
@@ -82,10 +72,9 @@ export async function toggleBookingServiceActiveAction(
   id: string,
   isActive: boolean,
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   try {
     const updated = await setBookingServiceActive(tenantId, id, isActive);
@@ -100,10 +89,9 @@ export async function toggleBookingServiceActiveAction(
 }
 
 export async function reorderBookingServicesAction(orderedIds: string[]): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   try {
     await reorderBookingServices(tenantId, orderedIds);
@@ -115,10 +103,9 @@ export async function reorderBookingServicesAction(orderedIds: string[]): Promis
 }
 
 export async function deleteBookingServiceAction(id: string): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   try {
     await deleteBookingService(tenantId, id);
@@ -130,10 +117,9 @@ export async function deleteBookingServiceAction(id: string): Promise<ActionResu
 }
 
 export async function duplicateBookingServiceAction(id: string): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   try {
     const source = await getBookingServiceById(tenantId, id);

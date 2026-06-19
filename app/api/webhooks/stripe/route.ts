@@ -4,17 +4,35 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import {
+  getUserAddonByStripeSubscriptionId,
+  setUserAddonStatus,
+  upsertUserAddon,
+} from "@/data/user-addons";
+import {
   updateSubscriptionFromCheckout,
   updateSubscriptionStatus,
 } from "@/data/subscriptions";
 import { getStripe } from "@/lib/stripe";
+
+function isBookingSubscription(subscription: Stripe.Subscription) {
+  const bookingPriceId = process.env.STRIPE_BOOKING_PRICE_ID;
+  if (!bookingPriceId) return false;
+
+  return subscription.items.data.some((item) => item.price.id === bookingPriceId);
+}
+
+function getSubscriptionPeriodEnd(subscription: Stripe.Subscription) {
+  const currentPeriodEnd = subscription.items.data[0]?.current_period_end;
+  if (!currentPeriodEnd) return null;
+  return new Date(currentPeriodEnd * 1000);
+}
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const clerkUserId = session.client_reference_id;
   const stripeCustomerId = session.customer;
   const stripeSubscriptionId = session.subscription;
 
-  if (!clerkUserId || typeof stripeCustomerId !== "string" || typeof stripeSubscriptionId !== "string") {
+  if (!clerkUserId || typeof stripeSubscriptionId !== "string") {
     console.error("Checkout session missing required fields:", {
       clerkUserId,
       stripeCustomerId,
@@ -32,6 +50,33 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     return;
   }
 
+  const subscription = await getStripe().subscriptions.retrieve(stripeSubscriptionId);
+
+  if (isBookingSubscription(subscription)) {
+    await upsertUserAddon({
+      userId: user.id,
+      addonType: "bookings",
+      stripeSubscriptionId,
+      status: subscription.status as
+        | "active"
+        | "trialing"
+        | "past_due"
+        | "canceled"
+        | "unpaid",
+      currentPeriodEnd: getSubscriptionPeriodEnd(subscription),
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+    });
+    return;
+  }
+
+  if (typeof stripeCustomerId !== "string") {
+    console.error("Checkout session missing customer for main subscription:", {
+      clerkUserId,
+      stripeCustomerId,
+    });
+    return;
+  }
+
   await updateSubscriptionFromCheckout({
     clerkUserId,
     stripeCustomerId,
@@ -40,7 +85,22 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  const currentPeriodEnd = subscription.items.data[0]?.current_period_end;
+  const bookingAddon = await getUserAddonByStripeSubscriptionId(subscription.id);
+
+  if (bookingAddon) {
+    await setUserAddonStatus({
+      stripeSubscriptionId: subscription.id,
+      status: subscription.status as
+        | "active"
+        | "trialing"
+        | "past_due"
+        | "canceled"
+        | "unpaid",
+      currentPeriodEnd: getSubscriptionPeriodEnd(subscription),
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+    });
+    return;
+  }
 
   await updateSubscriptionStatus({
     stripeSubscriptionId: subscription.id,
@@ -50,14 +110,23 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       | "past_due"
       | "canceled"
       | "unpaid",
-    subscriptionCurrentPeriodEnd: currentPeriodEnd
-      ? new Date(currentPeriodEnd * 1000)
-      : null,
+    subscriptionCurrentPeriodEnd: getSubscriptionPeriodEnd(subscription),
     subscriptionCancelAtPeriodEnd: subscription.cancel_at_period_end,
   });
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  const bookingAddon = await getUserAddonByStripeSubscriptionId(subscription.id);
+
+  if (bookingAddon) {
+    await setUserAddonStatus({
+      stripeSubscriptionId: subscription.id,
+      status: "canceled",
+      cancelAtPeriodEnd: false,
+    });
+    return;
+  }
+
   await updateSubscriptionStatus({
     stripeSubscriptionId: subscription.id,
     subscriptionStatus: "canceled",
@@ -71,6 +140,16 @@ async function handlePaymentFailed(invoice: Stripe.Invoice) {
     typeof subscription === "string" ? subscription : subscription?.id;
 
   if (!subscriptionId) return;
+
+  const bookingAddon = await getUserAddonByStripeSubscriptionId(subscriptionId);
+
+  if (bookingAddon) {
+    await setUserAddonStatus({
+      stripeSubscriptionId: subscriptionId,
+      status: "past_due",
+    });
+    return;
+  }
 
   await updateSubscriptionStatus({
     stripeSubscriptionId: subscriptionId,

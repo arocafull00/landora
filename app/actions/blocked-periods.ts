@@ -2,12 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { getEffectiveClientId } from "@/lib/auth";
 import {
   createBlockedPeriod,
   deleteBlockedPeriod,
   updateBlockedPeriod,
 } from "@/data/blocked-periods";
+import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 
 const blockedPeriodSchema = z.object({
   employeeId: z.string().uuid().nullable(),
@@ -18,21 +18,12 @@ const blockedPeriodSchema = z.object({
 
 type ActionResult = { success: true } | { error: string };
 
-async function getTenantId() {
-  const tenantId = await getEffectiveClientId();
-  if (!tenantId) {
-    return null;
-  }
-  return tenantId;
-}
-
 export async function createBlockedPeriodAction(
   input: z.infer<typeof blockedPeriodSchema>,
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   const parsed = blockedPeriodSchema.safeParse(input);
   if (!parsed.success) {
@@ -64,10 +55,9 @@ export async function updateBlockedPeriodAction(
   id: string,
   input: z.infer<typeof blockedPeriodSchema>,
 ): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   const parsed = blockedPeriodSchema.safeParse(input);
   if (!parsed.success) {
@@ -99,10 +89,9 @@ export async function updateBlockedPeriodAction(
 }
 
 export async function deleteBlockedPeriodAction(id: string): Promise<ActionResult> {
-  const tenantId = await getTenantId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   try {
     await deleteBlockedPeriod(tenantId, id);

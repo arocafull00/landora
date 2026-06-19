@@ -4,13 +4,6 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import type { BookingService } from "@/db/schema";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import {
   deleteBookingServiceAction,
@@ -18,9 +11,9 @@ import {
   toggleBookingServiceActiveAction,
 } from "@/app/actions/booking-services";
 import { useBookingServicesStore } from "@/stores/booking-services-store";
-import { MoreHorizontal } from "lucide-react";
+import { ArrowDown, ArrowUp, Copy } from "lucide-react";
 
-export function ServiceActionsMenu({
+export function ServiceCardActions({
   service,
   disabled,
   canMoveUp,
@@ -40,6 +33,7 @@ export function ServiceActionsMenu({
   const removeService = useBookingServicesStore((s) => s.removeService);
   const closeEdit = useBookingServicesStore((s) => s.closeEdit);
   const [pending, startTransition] = useTransition();
+  const actionDisabled = disabled || pending;
 
   const toggleActive = () => {
     const nextActive = !service.isActive;
@@ -82,24 +76,29 @@ export function ServiceActionsMenu({
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" disabled={disabled || pending}>
-          <MoreHorizontal className="h-4 w-4" />
+    <div className="flex flex-wrap gap-2">
+      <Button variant="outline" size="sm" disabled={actionDisabled} onClick={duplicate}>
+        <Copy className="h-4 w-4" />
+        Duplicar
+      </Button>
+      <Button variant="outline" size="sm" disabled={actionDisabled} onClick={toggleActive}>
+        {service.isActive ? "Desactivar" : "Activar"}
+      </Button>
+      {canMoveUp ? (
+        <Button variant="outline" size="sm" disabled={actionDisabled} onClick={onMoveUp}>
+          <ArrowUp className="h-4 w-4" />
+          Subir
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={duplicate}>Duplicar servicio</DropdownMenuItem>
-        <DropdownMenuItem onClick={toggleActive}>
-          {service.isActive ? "Desactivar" : "Activar"}
-        </DropdownMenuItem>
-        {canMoveUp ? <DropdownMenuItem onClick={onMoveUp}>Mover arriba</DropdownMenuItem> : null}
-        {canMoveDown ? <DropdownMenuItem onClick={onMoveDown}>Mover abajo</DropdownMenuItem> : null}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive" onClick={remove}>
-          Eliminar
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      ) : null}
+      {canMoveDown ? (
+        <Button variant="outline" size="sm" disabled={actionDisabled} onClick={onMoveDown}>
+          <ArrowDown className="h-4 w-4" />
+          Bajar
+        </Button>
+      ) : null}
+      <Button variant="destructive" size="sm" disabled={actionDisabled} onClick={remove}>
+        Eliminar
+      </Button>
+    </div>
   );
 }

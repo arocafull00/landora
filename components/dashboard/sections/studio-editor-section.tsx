@@ -14,8 +14,11 @@ import { SectionHeadingFields } from "@/components/dashboard/section-heading-fie
 import { createEmptyServiceMenuItem } from "@/components/dashboard/create-empty-service-menu-item";
 import { StudioServiceMenuItemEditor } from "@/components/dashboard/studio-service-menu-item-editor";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 
 export function StudioEditorSection() {
+  const { bookingEnabled } = useDashboardChrome();
   const {
     activeEditorTab,
     activeLandingId,
@@ -296,6 +299,13 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Ofertas" ? (
             <OffersEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Reservas" ? (
+            <ReservasEditorPanel
+              activeLanding={activeLanding}
+              bookingEnabled={bookingEnabled}
+            />
           ) : null}
 
           {activeEditorTab === "Blog" ? (

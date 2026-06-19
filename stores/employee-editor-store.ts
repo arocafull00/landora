@@ -21,6 +21,11 @@ type EmployeeEditorState = {
   copiedFromName: string | null;
 
   setServices: (services: BookingService[]) => void;
+  initInlineEdit: (
+    employee: Employee,
+    hours: EmployeeHours[],
+    assignedServiceIds: string[],
+  ) => void;
   openEdit: (
     employee: Employee,
     hours: EmployeeHours[],
@@ -51,6 +56,18 @@ export const useEmployeeEditorStore = create<EmployeeEditorState>((set) => ({
   copiedFromName: null,
 
   setServices: (services) => set({ services }),
+  initInlineEdit: (employee, hours, assignedServiceIds) => {
+    const hourDrafts = buildHourDrafts(hours);
+    set({
+      open: false,
+      employee,
+      name: employee.name,
+      isActive: employee.isActive,
+      hourDrafts,
+      serviceIds: assignedServiceIds,
+      customizeDays: !isUniformSchedule(hourDrafts),
+    });
+  },
   openEdit: (employee, hours, assignedServiceIds) => {
     const hourDrafts = buildHourDrafts(hours);
     set({

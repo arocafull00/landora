@@ -15,11 +15,15 @@ export function DashboardShell({
   isAdmin,
   impersonating,
   landing,
+  bookingEnabled,
+  bookingModuleEnabled,
   children,
 }: {
   isAdmin: boolean;
   impersonating: boolean;
   landing: Landing;
+  bookingEnabled: boolean;
+  bookingModuleEnabled: boolean;
   children: ReactNode;
 }) {
   useDashboardStore.getState().bootstrapDashboard({
@@ -28,7 +32,11 @@ export function DashboardShell({
   });
 
   return (
-    <DashboardChromeProvider isAdmin={isAdmin} impersonating={impersonating}>
+    <DashboardChromeProvider
+      isAdmin={isAdmin}
+      impersonating={impersonating}
+      bookingEnabled={bookingEnabled}
+    >
       <SidebarProvider
         className="dashboard-app h-screen overflow-hidden bg-surface-bg text-on-background"
         style={
@@ -40,6 +48,7 @@ export function DashboardShell({
         <DashboardSidebar
           impersonating={impersonating}
           showAccountActions={!isAdmin}
+          bookingModuleEnabled={bookingModuleEnabled}
         />
         <SidebarInset className="flex h-screen min-w-0 flex-col overflow-hidden bg-surface-bg">
           <div className="flex items-center gap-2 border-b border-outline-variant px-unit-md py-2 md:hidden">

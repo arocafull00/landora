@@ -362,6 +362,8 @@ export type DashboardNavItem = {
   id: DashboardView;
   label: string;
   icon: IconName;
+  href?: string;
+  activePrefixes?: string[];
 };
 
 export type DashboardNavSection = {
@@ -392,7 +394,12 @@ export const dashboardNavSections: DashboardNavSection[] = [
     id: "gestion",
     label: "Gestión",
     items: [
-      { id: "bookings", label: "Reservas", icon: "calendar" },
+      {
+        id: "bookings",
+        label: "Reservas",
+        icon: "calendar",
+        activePrefixes: ["/bookings", "/settings/blocked-periods"],
+      },
       { id: "services", label: "Servicios", icon: "briefcase" },
       { id: "employees", label: "Empleados", icon: "team" },
     ],

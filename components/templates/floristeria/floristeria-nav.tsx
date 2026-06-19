@@ -16,6 +16,7 @@ export function FloristeriaNav({
   brandLogoType,
   navLinks,
   ctaLabel,
+  ctaHref,
   topOffset = 0,
 }: {
   brand: string;
@@ -23,6 +24,7 @@ export function FloristeriaNav({
   brandLogoType: BrandLogoType;
   navLinks: NavLink[];
   ctaLabel: string;
+  ctaHref: string;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,7 +65,7 @@ export function FloristeriaNav({
           <div className="hidden md:flex md:justify-end">
             <TemplateNavAnchor
               className="inline-flex items-center justify-center rounded-full bg-[#2D5016] px-6 py-2.5 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-[#234012]"
-              href="#contacto"
+              href={ctaHref}
               onClick={() => trackCtaClick()}
             >
               {ctaLabel || "Hacer pedido"}
@@ -111,10 +113,10 @@ export function FloristeriaNav({
             ))}
             <m.a
               className="mt-6 rounded-full bg-[#2D5016] px-8 py-3 text-sm font-semibold text-white"
-              href="#contacto"
+              href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+                handleSectionNavClick(event, ctaHref, () => setMenuOpen(false));
               }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}

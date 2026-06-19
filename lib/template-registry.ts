@@ -48,6 +48,11 @@ const OFFERS_EDITOR_TAB: EditorTab = {
   label: "Ofertas",
 };
 
+const RESERVAS_EDITOR_TAB: EditorTab = {
+  id: "Reservas",
+  label: "Reservas",
+};
+
 export type TemplateComponent = React.ComponentType<{ content: LandingContent; topOffset?: number }>;
 
 export type TemplateDefinition<T extends TemplateId = TemplateId> = {
@@ -76,6 +81,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Proceso", label: "Proceso" },
       { id: "Testimonios", label: "Testimonios" },
       OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
       CONTACT_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
@@ -98,6 +104,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Galeria", label: "Galería" },
       { id: "FAQ", label: "FAQ" },
       OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -118,6 +125,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Servicios", label: "Servicios" },
       { id: "FAQ", label: "FAQ" },
       OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -139,6 +147,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Horarios", label: "Horarios" },
       { id: "FAQ", label: "FAQ" },
       OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -159,6 +168,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Galeria", label: "Galería" },
       { id: "FAQ", label: "FAQ" },
       OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -179,6 +189,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Testimonios", label: "Testimonios" },
       { id: "Experiencia", label: "Experiencia" },
       OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
@@ -199,6 +210,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       { id: "Horarios", label: "Horarios" },
       { id: "FAQ", label: "FAQ" },
       OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,

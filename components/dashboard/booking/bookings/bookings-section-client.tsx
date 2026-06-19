@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import type { Booking, BookingStatus, Employee } from "@/db/schema";
+import type { Booking, BookingSettings, BookingStatus, Employee } from "@/db/schema";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
+import { BookingSettingsModal } from "@/components/dashboard/booking/booking-settings-modal";
 import { Button } from "@/components/ui/button";
+import { Panel } from "@/components/ui/primitives";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookingsList } from "@/components/dashboard/booking/bookings/bookings-list";
 import { BookingsAgenda } from "@/components/dashboard/booking/bookings/bookings-agenda";
@@ -13,7 +16,7 @@ import { BookingsFilters } from "@/components/dashboard/booking/bookings/booking
 export function BookingsSectionClient({
   bookings,
   employees,
-  timezone,
+  settings,
   view,
   date,
   status,
@@ -21,7 +24,7 @@ export function BookingsSectionClient({
 }: {
   bookings: (Booking & { employee: Employee | null })[];
   employees: Employee[];
-  timezone: string;
+  settings: BookingSettings;
   view: string;
   date: string;
   status: BookingStatus | "";
@@ -29,6 +32,13 @@ export function BookingsSectionClient({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!settings.enabled) {
+      setSettingsOpen(true);
+    }
+  }, [settings.enabled]);
 
   const setView = (nextView: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -43,8 +53,8 @@ export function BookingsSectionClient({
         description="Consulta y gestiona las reservas de tu negocio."
         actions={
           <div className="flex gap-2">
-            <Button variant="outline" asChild>
-              <Link href="/settings/booking">Ajustes</Link>
+            <Button variant="outline" onClick={() => setSettingsOpen(true)}>
+              Ajustes
             </Button>
             <Button variant="outline" asChild>
               <Link href="/settings/blocked-periods">Bloqueos</Link>
@@ -54,26 +64,45 @@ export function BookingsSectionClient({
       />
       <div className="flex-1 overflow-auto p-unit-lg">
         <div className="mx-auto max-w-6xl space-y-4">
-          <Tabs value={view} onValueChange={setView}>
-            <TabsList>
-              <TabsTrigger value="list">Lista</TabsTrigger>
-              <TabsTrigger value="agenda">Agenda</TabsTrigger>
-            </TabsList>
-            <TabsContent value="list" className="space-y-4">
-              <BookingsFilters employees={employees} status={status} employeeId={employeeId} />
-              <BookingsList bookings={bookings} timezone={timezone} />
-            </TabsContent>
-            <TabsContent value="agenda">
-              <BookingsAgenda
-                bookings={bookings}
-                employees={employees}
-                timezone={timezone}
-                date={date}
-              />
-            </TabsContent>
-          </Tabs>
+          {!settings.enabled ? (
+            <Panel className="flex flex-col items-start gap-4 p-6">
+              <div>
+                <p className="font-body text-body-md font-medium text-on-surface">
+                  Las reservas no están activadas
+                </p>
+                <p className="mt-1 font-body text-body-sm text-on-surface-variant">
+                  Actívalas para que tus clientes puedan reservar desde tu landing.
+                </p>
+              </div>
+              <Button onClick={() => setSettingsOpen(true)}>Configurar reservas</Button>
+            </Panel>
+          ) : (
+            <Tabs value={view} onValueChange={setView}>
+              <TabsList>
+                <TabsTrigger value="list">Lista</TabsTrigger>
+                <TabsTrigger value="agenda">Agenda</TabsTrigger>
+              </TabsList>
+              <TabsContent value="list" className="space-y-4">
+                <BookingsFilters employees={employees} status={status} employeeId={employeeId} />
+                <BookingsList bookings={bookings} timezone={settings.timezone} />
+              </TabsContent>
+              <TabsContent value="agenda">
+                <BookingsAgenda
+                  bookings={bookings}
+                  employees={employees}
+                  timezone={settings.timezone}
+                  date={date}
+                />
+              </TabsContent>
+            </Tabs>
+          )}
         </div>
       </div>
+      <BookingSettingsModal
+        settings={settings}
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+      />
     </div>
   );
 }

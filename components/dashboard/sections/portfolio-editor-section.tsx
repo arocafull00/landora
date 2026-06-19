@@ -14,8 +14,11 @@ import { SectionHeadingFields } from "@/components/dashboard/section-heading-fie
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { createEmptyWorkHistoryItem } from "@/components/dashboard/create-empty-work-history-item";
 import { PortfolioWorkHistoryItemEditor } from "@/components/dashboard/portfolio-work-history-item-editor";
+import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 
 export function PortfolioEditorSection() {
+  const { bookingEnabled } = useDashboardChrome();
   const {
     activeEditorTab,
     activeLandingId,
@@ -267,6 +270,13 @@ export function PortfolioEditorSection() {
 
           {activeEditorTab === "Ofertas" ? (
             <OffersEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Reservas" ? (
+            <ReservasEditorPanel
+              activeLanding={activeLanding}
+              bookingEnabled={bookingEnabled}
+            />
           ) : null}
 
           {activeEditorTab === "Blog" ? (

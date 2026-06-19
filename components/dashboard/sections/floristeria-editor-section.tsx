@@ -16,8 +16,11 @@ import {
   FLORISTERIA_HERO_FAN_LABELS,
   resolveFloristeriaFanImages,
 } from "@/lib/floristeria-assets";
+import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 
 export function FloristeriaEditorSection() {
+  const { bookingEnabled } = useDashboardChrome();
   const {
     activeEditorTab,
     activeLandingId,
@@ -239,6 +242,13 @@ export function FloristeriaEditorSection() {
 
           {activeEditorTab === "Ofertas" ? (
             <OffersEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "Reservas" ? (
+            <ReservasEditorPanel
+              activeLanding={activeLanding}
+              bookingEnabled={bookingEnabled}
+            />
           ) : null}
 
           {activeEditorTab === "Blog" ? (

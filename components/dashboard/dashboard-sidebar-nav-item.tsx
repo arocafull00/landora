@@ -11,12 +11,15 @@ import {
 
 export function DashboardSidebarNavItem({ item }: { item: DashboardNavItem }) {
   const pathname = usePathname();
-  const isActive = pathname.startsWith(`/${item.id}`);
+  const href = item.href ?? `/${item.id}`;
+  const isActive = item.activePrefixes
+    ? item.activePrefixes.some((prefix) => pathname.startsWith(prefix))
+    : pathname.startsWith(`/${item.id}`);
 
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive} tooltip={item.label}>
-        <Link className="transition-colors duration-150" href={`/${item.id}`}>
+        <Link className="transition-colors duration-150" href={href}>
           <Icon name={item.icon} className="h-4 w-4" />
           <span>{item.label}</span>
         </Link>

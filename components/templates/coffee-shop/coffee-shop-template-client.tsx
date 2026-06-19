@@ -3,6 +3,7 @@
 import { useRef, type CSSProperties } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { getTemplatePalette } from "@/lib/template-palettes";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { CoffeeShopNav } from "@/components/templates/coffee-shop/coffee-shop-nav";
@@ -44,6 +45,8 @@ export function CoffeeShopTemplateClient({
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const palette = getTemplatePalette("coffee-shop");
+  const ctaHref = getBookingCtaHref(content, bookingEnabled, "#contacto");
+  const heroCtaHref = getBookingCtaHref(content, bookingEnabled, "#carta");
 
   return (
     <TemplateLazyMotion>
@@ -54,11 +57,12 @@ export function CoffeeShopTemplateClient({
           brandLogoImage={content.brandLogoImage ?? ""}
           navLinks={getVisibleNav(content.nav, content.hiddenSections, "coffee-shop")}
           ctaLabel={content.hero.ctaLabel ?? ""}
+          ctaHref={ctaHref}
           topOffset={topOffset}
           scrollRootRef={rootRef}
         />
 
-        <CoffeeShopHero content={content} heroRef={heroRef} />
+        <CoffeeShopHero content={content} heroRef={heroRef} ctaHref={heroCtaHref} />
 
         <ActiveOffersRenderer content={content} />
 

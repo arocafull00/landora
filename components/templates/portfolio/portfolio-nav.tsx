@@ -15,6 +15,7 @@ export function PortfolioNav({
   brandLogoType,
   navLinks,
   ctaLabel,
+  ctaHref,
   topOffset = 0,
 }: {
   brand: string;
@@ -22,6 +23,7 @@ export function PortfolioNav({
   brandLogoType: BrandLogoType;
   navLinks: NavLink[];
   ctaLabel: string;
+  ctaHref: string;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -62,7 +64,7 @@ export function PortfolioNav({
           ))}
           <TemplateNavAnchor
             className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-wide text-[#0a0a0a] transition-colors hover:bg-white/90"
-            href="#contacto"
+            href={ctaHref}
             onClick={() => trackCtaClick()}
           >
             {ctaLabel || "Ver proyectos"}
@@ -109,10 +111,10 @@ export function PortfolioNav({
             ))}
             <m.a
               className="mt-6 rounded-full bg-white px-8 py-3 text-sm font-semibold text-[#0a0a0a]"
-              href="#contacto"
+              href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+                handleSectionNavClick(event, ctaHref, () => setMenuOpen(false));
               }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}

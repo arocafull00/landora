@@ -10,9 +10,11 @@ import { useAnalytics } from "@/hooks/use-analytics";
 export function PortfolioHero({
   content,
   heroRef,
+  ctaHref,
 }: {
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
+  ctaHref: string;
 }) {
   const { trackCtaClick } = useAnalytics();
 
@@ -54,7 +56,7 @@ export function PortfolioHero({
 
           <a
             className="pointer-events-auto mt-10 inline-block rounded-full bg-white px-8 py-3.5 text-sm font-semibold tracking-wide text-[#0a0a0a] transition-all hover:bg-white/90 hover:shadow-lg"
-            href="#contacto"
+            href={ctaHref}
             style={{ fontFamily: "var(--font-body)" }}
             onClick={() => trackCtaClick()}
           >

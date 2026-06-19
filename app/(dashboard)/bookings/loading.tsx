@@ -9,8 +9,8 @@ export default function BookingsLoading() {
       description="Consulta y gestiona las reservas de tu negocio."
       actions={
         <div className="flex gap-2">
-          <Button variant="outline" asChild>
-            <Link href="/settings/booking">Ajustes</Link>
+          <Button variant="outline" disabled>
+            Ajustes
           </Button>
           <Button variant="outline" asChild>
             <Link href="/settings/blocked-periods">Bloqueos</Link>

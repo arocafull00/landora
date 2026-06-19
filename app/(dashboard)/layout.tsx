@@ -9,7 +9,10 @@ import { isImpersonating, getEffectiveClientId } from "@/lib/auth";
 import { getUserByInternalId } from "@/data/users";
 import { getLandingPageByUserId } from "@/data/landing-pages";
 import { toLandingView } from "@/lib/landing-mapper";
+import { getBookingSettings } from "@/data/booking-settings";
+import { getUserAddon } from "@/data/user-addons";
 import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
+import { hasBookingModuleAccess } from "@/lib/subscription-access";
 
 export const metadata: Metadata = {
   icons: {
@@ -33,11 +36,14 @@ export default async function DashboardLayout({
   const clientId = await getEffectiveClientId();
   if (!clientId) redirect("/sign-in");
 
-  const [user, dbLanding, impersonating, admin] = await Promise.all([
+  const [user, dbLanding, impersonating, admin, bookingSettings, bookingsAddon] =
+    await Promise.all([
     getUserByInternalId(clientId),
     getLandingPageByUserId(clientId),
     isImpersonating(),
     isAdmin(),
+    getBookingSettings(clientId),
+    getUserAddon(clientId, "bookings"),
   ]);
 
   if (!dbLanding) {
@@ -66,12 +72,26 @@ export default async function DashboardLayout({
 
   const refreshedLanding = await ensureLandingHasDefaultContent(dbLanding);
   const landing = toLandingView(refreshedLanding, user ?? undefined);
+  const bookingModuleEnabled = user
+    ? hasBookingModuleAccess({
+        type: user.type,
+        accessType: user.accessType,
+        suspended: user.suspended,
+        bookingAddonStatus: bookingsAddon?.status ?? null,
+      })
+    : false;
 
   return (
     <>
       <DashboardThemeScope />
       {impersonating && <ImpersonationBanner />}
-      <DashboardShell landing={landing} isAdmin={admin} impersonating={impersonating}>
+      <DashboardShell
+        landing={landing}
+        isAdmin={admin}
+        impersonating={impersonating}
+        bookingEnabled={bookingSettings.enabled && bookingModuleEnabled}
+        bookingModuleEnabled={bookingModuleEnabled}
+      >
         {children}
       </DashboardShell>
     </>

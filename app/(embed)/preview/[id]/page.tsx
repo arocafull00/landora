@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getEffectiveClientId } from "@/lib/auth";
 import { getAuthorizedLanding } from "@/lib/api/landing-auth";
 import { toLandingContent } from "@/lib/landing-mapper";
+import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
 import { LandingPreviewFrame } from "@/components/dashboard/landing-preview-frame";
 
 export const metadata: Metadata = {
@@ -22,6 +23,14 @@ export default async function LandingPreviewPage({
   if (!landing) notFound();
 
   const content = toLandingContent(landing);
+  const tenant = await resolveTenantBySlug(landing.slug);
 
-  return <LandingPreviewFrame initialContent={content} template={landing.template} />;
+  return (
+    <LandingPreviewFrame
+      initialContent={content}
+      template={landing.template}
+      slug={landing.slug}
+      bookingEnabled={tenant?.enabled ?? false}
+    />
+  );
 }

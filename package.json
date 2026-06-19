@@ -13,6 +13,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "import:rocafull-blog": "tsx scripts/import-rocafull-blog.ts",
+    "sync:booking-access": "tsx scripts/sync-booking-access.ts",
     "doctor": "react-doctor --verbose"
   },
   "dependencies": {

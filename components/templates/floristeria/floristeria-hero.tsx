@@ -60,9 +60,11 @@ const bloomButtonsVariants: Variants = {
 export function FloristeriaHero({
   content,
   heroRef,
+  ctaHref,
 }: {
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
+  ctaHref: string;
 }) {
   const reduce = useReducedMotion();
   const { trackCtaClick } = useAnalytics();
@@ -123,7 +125,7 @@ export function FloristeriaHero({
             variants={bloomButtonsVariants}
             className="mx-auto mt-6 flex w-full max-w-xs flex-col items-center gap-3 sm:mt-7 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4"
           >
-            <FloristeriaButton href="#contacto" size="lg" className="w-full sm:w-auto" onClick={() => trackCtaClick()}>
+            <FloristeriaButton href={ctaHref} size="lg" className="w-full sm:w-auto" onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Hacer pedido"}
             </FloristeriaButton>
             <FloristeriaButton

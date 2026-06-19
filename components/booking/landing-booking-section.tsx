@@ -21,12 +21,15 @@ export function LandingBookingSection({
   const heading: SectionHeading = getSectionHeading(content, "reservas", fallback);
 
   return (
-    <section id="reservas" className="px-4 py-16 md:px-8">
+    <section id="reservas" className="bg-surface-container-low px-4 py-20 md:px-8 md:py-28">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-8 text-center">
-          <h2 className="font-headline text-headline-lg font-semibold">{heading.title}</h2>
+        <div className="mb-10">
+          <div className="mb-4 h-1 w-12 rounded-full bg-primary" />
+          <h2 className="font-headline text-headline-xl font-extrabold text-balance">
+            {heading.title}
+          </h2>
           {heading.subtitle ? (
-            <p className="mt-2 font-body text-body-md text-on-surface-variant">
+            <p className="mt-3 font-body text-body-lg text-on-surface-variant">
               {heading.subtitle}
             </p>
           ) : null}

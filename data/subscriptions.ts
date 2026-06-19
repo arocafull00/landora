@@ -42,6 +42,16 @@ export async function getUserByStripeSubscriptionId(subscriptionId: string) {
   }
 }
 
+export async function getUserByStripeCustomerId(stripeCustomerId: string) {
+  try {
+    return await db.query.users.findFirst({
+      where: eq(users.stripeCustomerId, stripeCustomerId),
+    });
+  } catch {
+    throw new Error("Failed to fetch user by stripe customer id");
+  }
+}
+
 export async function updateSubscriptionFromCheckout(data: {
   clerkUserId: string;
   stripeCustomerId: string;

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getLandingPageBySlug, getLandingPageMetaBySlug } from "@/data/landing-pages";
-import { getBookingSettings } from "@/data/booking-settings";
+import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
@@ -54,7 +54,7 @@ export default async function PublicLandingPage({
 
   const content = toLandingContent(landing);
   const Component = TEMPLATE_COMPONENTS[landing.template] ?? VelarTemplate;
-  const bookingSettings = await getBookingSettings(landing.userId);
+  const tenant = await resolveTenantBySlug(slug);
 
   return (
     <>
@@ -62,7 +62,7 @@ export default async function PublicLandingPage({
       <Component
         content={content}
         slug={landing.slug}
-        bookingEnabled={bookingSettings.enabled}
+        bookingEnabled={tenant?.enabled ?? false}
       />
       {content.contact.whatsappEnabled ? (
         <WhatsappFloatButton phone={content.contact.phone} />

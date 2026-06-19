@@ -44,6 +44,7 @@ export function RistoranteNav({
   brandLogoType,
   navLinks,
   ctaLabel,
+  ctaHref,
   topOffset = 0,
   scrollRootRef,
 }: {
@@ -52,6 +53,7 @@ export function RistoranteNav({
   brandLogoType: BrandLogoType;
   navLinks: NavLink[];
   ctaLabel: string;
+  ctaHref: string;
   topOffset?: number;
   scrollRootRef?: RefObject<HTMLElement | null>;
 }) {
@@ -121,7 +123,7 @@ export function RistoranteNav({
           ))}
           <TemplateNavAnchor
             className="rounded-md bg-[var(--ristorante-primary)] px-5 py-2.5 text-xs font-semibold tracking-wide text-[var(--ristorante-foreground)] transition-colors hover:bg-[var(--ristorante-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2"
-            href="#contacto"
+            href={ctaHref}
             onClick={() => trackCtaClick()}
           >
             {ctaLabel || "Reservar mesa"}
@@ -173,10 +175,10 @@ export function RistoranteNav({
             ))}
             <m.a
               className="mt-6 rounded-md bg-[var(--ristorante-secondary)] px-8 py-3 text-sm font-semibold text-[var(--ristorante-foreground)] transition-colors hover:bg-[var(--ristorante-secondary)]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ristorante-primary)]"
-              href="#contacto"
+              href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+                handleSectionNavClick(event, ctaHref, () => setMenuOpen(false));
               }}
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}

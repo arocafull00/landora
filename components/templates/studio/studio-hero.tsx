@@ -11,9 +11,11 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 export function StudioHero({
   content,
   heroRef,
+  ctaHref,
 }: {
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
+  ctaHref: string;
 }) {
   const description = content.hero.description || content.hero.subtitle;
   const phoneHref = `tel:${content.contact.phone.replace(/\s+/g, "")}`;
@@ -82,7 +84,7 @@ export function StudioHero({
         >
           <a
             className="inline-flex items-center justify-center gap-2 rounded-md bg-[#c99d43] px-7 py-3.5 text-sm font-bold uppercase tracking-[0.08em] text-black transition hover:bg-[#d9ad54]"
-            href="#contacto"
+            href={ctaHref}
             style={{ fontFamily: "var(--font-syne)" }}
             onClick={() => trackCtaClick()}
           >

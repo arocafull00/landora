@@ -5,7 +5,7 @@ import type { BookingService } from "@/db/schema";
 import { Panel } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { ServiceActiveBadge } from "@/components/dashboard/booking/services/service-active-badge";
-import { ServiceActionsMenu } from "@/components/dashboard/booking/services/service-actions-menu";
+import { ServiceCardActions } from "@/components/dashboard/booking/services/service-card-actions";
 import { ServiceQuickEdit } from "@/components/dashboard/booking/services/service-quick-edit";
 import { formatServicePrice } from "@/lib/service-price";
 import { ChevronDown, Scissors } from "lucide-react";
@@ -78,17 +78,17 @@ export function ServiceCard({
             service={service}
             disabled={disabled}
             onSaved={() => setExpanded(false)}
+            actions={
+              <ServiceCardActions
+                service={service}
+                disabled={disabled}
+                canMoveUp={index > 0}
+                canMoveDown={index < total - 1}
+                onMoveUp={onMoveUp}
+                onMoveDown={onMoveDown}
+              />
+            }
           />
-          <div className="mt-3 flex justify-end">
-            <ServiceActionsMenu
-              service={service}
-              disabled={disabled}
-              canMoveUp={index > 0}
-              canMoveDown={index < total - 1}
-              onMoveUp={onMoveUp}
-              onMoveDown={onMoveDown}
-            />
-          </div>
         </div>
       ) : null}
     </Panel>

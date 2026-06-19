@@ -11,9 +11,11 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 export function CoffeeShopHero({
   content,
   heroRef,
+  ctaHref,
 }: {
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
+  ctaHref: string;
 }) {
   const reduce = useReducedMotion();
   const { trackCtaClick } = useAnalytics();
@@ -64,7 +66,7 @@ export function CoffeeShopHero({
             </p>
           ) : null}
           <div className="mt-10">
-            <CoffeeShopButton href="#carta" size="lg" variant="accent" onClick={() => trackCtaClick()}>
+            <CoffeeShopButton href={ctaHref} size="lg" variant="accent" onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Ver carta"}
             </CoffeeShopButton>
           </div>

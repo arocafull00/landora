@@ -44,6 +44,7 @@ export function CoffeeShopNav({
   brandLogoType,
   navLinks,
   ctaLabel,
+  ctaHref,
   topOffset = 0,
   scrollRootRef,
 }: {
@@ -52,6 +53,7 @@ export function CoffeeShopNav({
   brandLogoType: BrandLogoType;
   navLinks: NavLink[];
   ctaLabel: string;
+  ctaHref: string;
   topOffset?: number;
   scrollRootRef?: RefObject<HTMLElement | null>;
 }) {
@@ -115,7 +117,7 @@ export function CoffeeShopNav({
           ))}
           <TemplateNavAnchor
             className="rounded-xl bg-[var(--coffee-accent)] px-5 py-2.5 text-xs font-semibold text-[var(--coffee-foreground)] transition-colors hover:bg-[var(--coffee-accent)]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] focus-visible:ring-offset-2"
-            href="#contacto"
+            href={ctaHref}
             style={{ fontFamily: "var(--font-coffee-body)" }}
             onClick={() => trackCtaClick()}
           >
@@ -164,10 +166,10 @@ export function CoffeeShopNav({
             ))}
             <m.a
               className="mt-6 rounded-xl bg-[var(--coffee-accent)] px-8 py-3 text-sm font-semibold text-[var(--coffee-foreground)] transition-colors hover:bg-[var(--coffee-accent)]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--coffee-primary)]"
-              href="#contacto"
+              href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();
-                handleSectionNavClick(event, "#contacto", () => setMenuOpen(false));
+                handleSectionNavClick(event, ctaHref, () => setMenuOpen(false));
               }}
               initial={reduce ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}

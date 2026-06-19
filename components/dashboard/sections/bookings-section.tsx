@@ -53,7 +53,7 @@ export async function BookingsSection({
     <BookingsSectionClient
       bookings={bookings}
       employees={employees}
-      timezone={settings.timezone}
+      settings={settings}
       view={view}
       date={date}
       status={status}

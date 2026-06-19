@@ -54,6 +54,7 @@ export type SubscriptionStatus = typeof subscriptionStatusEnum.enumValues[number
 export type DomainCheckStatus = typeof domainCheckStatusEnum.enumValues[number];
 export type SubscriptionPlan = "free" | "starter" | "pro";
 export type AccessType = "subscription" | "manual";
+export type AddonType = "bookings";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -72,6 +73,22 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 }, (table) => [
   index("users_stripe_subscription_id_idx").on(table.stripeSubscriptionId),
+]);
+
+export const userAddons = pgTable("user_addons", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  addonType: text("addon_type").$type<AddonType>().notNull(),
+  stripeSubscriptionId: text("stripe_subscription_id").unique(),
+  status: subscriptionStatusEnum("status"),
+  currentPeriodEnd: timestamp("current_period_end", { withTimezone: true }),
+  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+}, (table) => [
+  unique("user_addons_user_type_unique").on(table.userId, table.addonType),
+  index("user_addons_stripe_subscription_id_idx").on(table.stripeSubscriptionId),
 ]);
 
 export const landingPages = pgTable("landing_pages", {

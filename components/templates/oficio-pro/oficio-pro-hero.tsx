@@ -10,9 +10,11 @@ import { useAnalytics } from "@/hooks/use-analytics";
 export function OficioProHero({
   content,
   heroRef,
+  ctaHref,
 }: {
   content: LandingContent;
   heroRef: RefObject<HTMLElement | null>;
+  ctaHref: string;
 }) {
   const { trackCtaClick } = useAnalytics();
 
@@ -46,7 +48,7 @@ export function OficioProHero({
             {content.hero.description}
           </p>
           <div className="flex flex-col gap-5 sm:flex-row sm:flex-wrap">
-            <OficioProButton className="sm:min-w-[17rem]" href="#contacto" onClick={() => trackCtaClick()}>
+            <OficioProButton className="sm:min-w-[17rem]" href={ctaHref} onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Déjanos ayudarte"}
               <ArrowRight className="size-5" />
             </OficioProButton>

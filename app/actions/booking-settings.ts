@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { getEffectiveClientId } from "@/lib/auth";
 import { upsertBookingSettings } from "@/data/booking-settings";
+import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 
 const settingsSchema = z.object({
   enabled: z.boolean(),
@@ -20,10 +20,9 @@ type ActionResult = { success: true } | { error: string };
 export async function upsertBookingSettingsAction(
   input: z.infer<typeof settingsSchema>,
 ): Promise<ActionResult> {
-  const tenantId = await getEffectiveClientId();
-  if (!tenantId) {
-    return { error: "No autorizado" };
-  }
+  const access = await requireBookingModuleAccessForCurrentUser();
+  if ("error" in access) return { error: access.error };
+  const tenantId = access.tenantId;
 
   const parsed = settingsSchema.safeParse(input);
   if (!parsed.success) {
@@ -32,8 +31,8 @@ export async function upsertBookingSettingsAction(
 
   try {
     await upsertBookingSettings(tenantId, parsed.data);
-    revalidatePath("/settings/booking");
     revalidatePath("/bookings");
+    revalidatePath("/bookings", "layout");
     return { success: true };
   } catch {
     return { error: "No se pudieron guardar los ajustes" };

@@ -18,3 +18,12 @@ export function getStripePaymentLinkUrl(clerkUserId: string) {
   url.searchParams.set("client_reference_id", clerkUserId);
   return url.toString();
 }
+
+export function getStripeBookingPaymentLinkUrl(clerkUserId: string) {
+  const paymentLink = process.env.NEXT_PUBLIC_STRIPE_BOOKING_PAYMENT_LINK;
+  if (!paymentLink) return null;
+
+  const url = new URL(paymentLink);
+  url.searchParams.set("client_reference_id", clerkUserId);
+  return url.toString();
+}

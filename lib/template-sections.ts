@@ -148,6 +148,7 @@ const VELAR_SECTIONS: TemplateSectionDef[] = [
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["services"] },
   { anchor: "proceso", label: "Proceso", editorTabId: "Proceso", navHref: "#proceso", contentKeys: ["workflow"] },
   { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "inquire", label: "Pie de página", editorTabId: "Footer", navHref: "#inquire", required: true },
 ];
 
@@ -159,6 +160,7 @@ const STUDIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
   { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
@@ -171,6 +173,7 @@ const PORTFOLIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
   { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
@@ -183,6 +186,7 @@ const RISTORANTE_SECTIONS: TemplateSectionDef[] = [
   { anchor: "horarios", label: "Horarios", editorTabId: "Horarios", navHref: "#horarios", contentKeys: ["workflow"] },
   { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
@@ -193,6 +197,7 @@ const FLORISTERIA_SECTIONS: TemplateSectionDef[] = [
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
   { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
@@ -202,6 +207,7 @@ const OFICIO_PRO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "instalaciones", label: "Instalaciones", editorTabId: "Instalaciones", navHref: "#instalaciones" },
   { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "experiencia", label: "Experiencia", editorTabId: "Experiencia", navHref: "#experiencia", contentKeys: ["stats", "story"] },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
@@ -213,6 +219,7 @@ const COFFEE_SHOP_SECTIONS: TemplateSectionDef[] = [
   { anchor: "horarios", label: "Horarios", editorTabId: "Horarios", navHref: "#horarios", contentKeys: ["workflow"] },
   { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 

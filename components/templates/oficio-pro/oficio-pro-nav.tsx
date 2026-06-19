@@ -11,12 +11,14 @@ export function OficioProNav({
   brandLogoImage,
   brandLogoType,
   navLinks,
+  ctaHref,
   topOffset = 0,
 }: {
   brand: string;
   brandLogoImage: string;
   brandLogoType: "text" | "image";
   navLinks: NavLink[];
+  ctaHref: string;
   topOffset?: number;
 }) {
   const [open, setOpen] = useState(false);
@@ -81,7 +83,7 @@ export function OficioProNav({
             ))}
             <a
               className="ml-2 inline-flex items-center justify-center rounded-xl bg-[#1F4E79] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(31,78,121,0.28)] transition-all hover:-translate-y-0.5 hover:bg-[#F59E0B] hover:text-[#17212B]"
-              href="#contacto"
+              href={ctaHref}
               onClick={() => trackCtaClick()}
             >
               Contacto
@@ -132,7 +134,7 @@ export function OficioProNav({
           ))}
           <a
             className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[#1F4E79] px-3 py-3 text-base font-semibold text-white shadow-[0_8px_20px_rgba(31,78,121,0.22)] transition-all hover:bg-[#F59E0B] hover:text-[#17212B]"
-            href="#contacto"
+            href={ctaHref}
             onClick={() => {
               trackCtaClick();
               setOpen(false);
