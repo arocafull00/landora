@@ -1,5 +1,5 @@
-import { DashboardViewPage } from "@/components/dashboard/dashboard-view-page";
+import { EditorSection } from "@/components/dashboard/sections/editor-section";
 
-export default async function EditorDashboardPage() {
-  return DashboardViewPage({ view: "editor" });
+export default function EditorPage() {
+  return <EditorSection />;
 }

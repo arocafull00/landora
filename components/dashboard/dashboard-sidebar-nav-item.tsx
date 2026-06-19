@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { dashboardViews } from "@/lib/dashboard-data";
-import { useDashboardStore } from "@/stores/dashboard-store";
 import { Icon } from "@/components/ui/icon";
 import {
   SidebarMenuButton,
@@ -12,8 +12,8 @@ import {
 type DashboardViewItem = (typeof dashboardViews)[number];
 
 export function DashboardSidebarNavItem({ item }: { item: DashboardViewItem }) {
-  const activeView = useDashboardStore((state) => state.activeView);
-  const isActive = activeView === item.id;
+  const pathname = usePathname();
+  const isActive = pathname.startsWith(`/${item.id}`);
 
   return (
     <SidebarMenuItem>

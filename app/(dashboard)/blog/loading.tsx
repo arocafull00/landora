@@ -1,10 +1,10 @@
 import { DashboardSectionLoadingSkeleton } from "@/components/dashboard/dashboard-section-loading-skeleton";
 
-export default function ServicesLoading() {
+export default function BlogLoading() {
   return (
     <DashboardSectionLoadingSkeleton
-      title="Servicios"
-      description="Gestiona los servicios disponibles para reservas."
+      title="Blog"
+      description="Gestiona los posts de tu landing."
     />
   );
 }

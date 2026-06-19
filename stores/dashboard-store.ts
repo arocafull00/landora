@@ -8,7 +8,6 @@ import {
   BrandLogoType,
   ContactContent,
   ContentGroup,
-  DashboardView,
   HeroContent,
   initialAssets,
   initialPosts,
@@ -35,9 +34,6 @@ import {
   restoreNavItem,
 } from "@/lib/template-sections";
 import { formatBlogDate } from "@/lib/blog-slug";
-import { useAnalyticsStore } from "@/stores/analytics-store";
-import { useAssetsStore } from "@/stores/assets-store";
-import { useDomainStore } from "@/stores/domain-store";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 
@@ -70,7 +66,6 @@ function mapPostFromApi(row: BlogPostApi): Post {
 }
 
 type DashboardState = {
-  activeView: DashboardView;
   activeWorkspaceTab: string;
   activeContentGroup: ContentGroup;
   activeEditorTab: string;
@@ -92,11 +87,8 @@ type DashboardState = {
   assets: Asset[];
   bootstrapDashboard: (params: {
     landing: Landing;
-    view: DashboardView;
     isAdmin: boolean;
   }) => void;
-  hydrateActiveView: (view: DashboardView) => Promise<void>;
-  setActiveView: (view: DashboardView) => void;
   setActiveWorkspaceTab: (tab: string) => void;
   setActiveContentGroup: (group: ContentGroup) => void;
   setActiveEditorTab: (tab: string) => void;
@@ -225,7 +217,6 @@ async function persistLandingMeta(id: string, landing: Landing) {
 }
 
 export const useDashboardStore = create<DashboardState>()((set, get) => ({
-  activeView: "editor",
   activeWorkspaceTab: "Structure",
   activeContentGroup: "Pages",
   activeEditorTab: "Hero",
@@ -246,8 +237,8 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
   presentations: initialPresentations,
   assets: initialAssets,
 
-  bootstrapDashboard: ({ landing, view, isAdmin }) => {
-    const key = `${landing.id}:${view}:${isAdmin}`;
+  bootstrapDashboard: ({ landing, isAdmin }) => {
+    const key = `${landing.id}:${isAdmin}`;
     if (get()._bootstrapKey === key) return;
 
     if (get().activeLandingId !== landing.id) {
@@ -255,35 +246,8 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     }
 
     set({ isAdmin, _bootstrapKey: key });
-    get().setActiveView(view);
-    void useAssetsStore.getState().ensureLoaded();
   },
 
-  hydrateActiveView: async (view) => {
-    if (view === "blog") {
-      await get().ensureBlogPostsLoaded();
-      return;
-    }
-
-    if (view === "analytics") {
-      await useAnalyticsStore.getState().ensureLoaded();
-      return;
-    }
-
-    if (view === "assets") {
-      await useAssetsStore.getState().ensureLoaded();
-      return;
-    }
-
-    if (view === "domain") {
-      await useDomainStore.getState().ensureLoaded();
-    }
-  },
-
-  setActiveView: (activeView) => {
-    set({ activeView });
-    void get().hydrateActiveView(activeView);
-  },
   setActiveWorkspaceTab: (activeWorkspaceTab) => set({ activeWorkspaceTab }),
   setActiveContentGroup: (activeContentGroup) => set({ activeContentGroup }),
   setActiveEditorTab: (activeEditorTab) => {
@@ -294,7 +258,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     }
   },
   setActiveLandingId: (activeLandingId) =>
-    set({ activeLandingId, activeView: "editor", activeContentGroup: "Pages" }),
+    set({ activeLandingId, activeContentGroup: "Pages" }),
   setActivePostId: (activePostId) =>
     set({ activePostId, activeContentGroup: "Posts" }),
   setActivePresentationId: (activePresentationId) =>

@@ -1,15 +1,23 @@
+import type { ReactNode } from "react";
+import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export function DashboardSectionLoadingSkeleton() {
+export function DashboardSectionLoadingSkeleton({
+  title,
+  description,
+  actions,
+}: {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+}) {
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-unit-md">
-        <div className="min-w-0">
-          <Skeleton className="h-7 w-40" />
-          <Skeleton className="mt-1.5 h-4 w-56" />
-        </div>
-        <Skeleton className="h-9 w-28" />
-      </div>
+      <DashboardPageHeader
+        title={title}
+        description={description}
+        actions={actions}
+      />
       <div className="flex min-h-0 flex-1 flex-col gap-unit-md overflow-hidden p-unit-lg">
         <div className="flex gap-2">
           <Skeleton className="h-9 w-24" />

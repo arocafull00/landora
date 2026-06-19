@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Info, BarChart2 } from "lucide-react";
 import { AnalyticsChart } from "@/components/dashboard/analytics/analytics-chart";
 import { AnalyticsDateFilter } from "@/components/dashboard/analytics/analytics-date-filter";
@@ -12,6 +13,11 @@ import { useAnalyticsStore } from "@/stores/analytics-store";
 export function AnalyticsDashboard() {
   const data = useAnalyticsStore((state) => state.data);
   const loading = useAnalyticsStore((state) => state.loading);
+  const ensureLoaded = useAnalyticsStore((state) => state.ensureLoaded);
+
+  useEffect(() => {
+    void ensureLoaded();
+  }, [ensureLoaded]);
 
   const periodViews = data
     ? data.dailyViews.reduce((sum, d) => sum + d.views, 0)

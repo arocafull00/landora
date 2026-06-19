@@ -1,5 +1,5 @@
-import { DashboardViewPage } from "@/components/dashboard/dashboard-view-page";
+import { DomainSection } from "@/components/dashboard/sections/domain-section";
 
-export default async function DomainDashboardPage() {
-  return DashboardViewPage({ view: "domain" });
+export default function DomainPage() {
+  return <DomainSection />;
 }

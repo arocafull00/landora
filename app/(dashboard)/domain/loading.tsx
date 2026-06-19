@@ -1,10 +1,10 @@
 import { DashboardSectionLoadingSkeleton } from "@/components/dashboard/dashboard-section-loading-skeleton";
 
-export default function ServicesLoading() {
+export default function DomainLoading() {
   return (
     <DashboardSectionLoadingSkeleton
-      title="Servicios"
-      description="Gestiona los servicios disponibles para reservas."
+      title="Dominio"
+      description="Conecta tu dominio comprado para que los visitantes vean solo tu web."
     />
   );
 }

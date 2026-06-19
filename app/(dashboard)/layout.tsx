@@ -2,10 +2,14 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { DashboardAccountActions } from "@/components/dashboard/dashboard-account-actions";
 import { DashboardThemeScope } from "@/components/dashboard/dashboard-theme-scope";
+import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { ImpersonationBanner } from "@/components/dashboard/impersonation-banner";
 import { isAdmin } from "@/lib/is-admin";
 import { isImpersonating, getEffectiveClientId } from "@/lib/auth";
 import { getUserByInternalId } from "@/data/users";
-import { ImpersonationBanner } from "@/components/dashboard/impersonation-banner";
+import { getLandingPageByUserId } from "@/data/landing-pages";
+import { toLandingView } from "@/lib/landing-mapper";
+import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 
 export const metadata: Metadata = {
   icons: {
@@ -27,13 +31,16 @@ export default async function DashboardLayout({
   if (await isAdmin() && !(await isImpersonating())) redirect("/admin");
 
   const clientId = await getEffectiveClientId();
-  const [user, impersonating, admin] = await Promise.all([
-    clientId ? getUserByInternalId(clientId) : null,
+  if (!clientId) redirect("/sign-in");
+
+  const [user, dbLanding, impersonating, admin] = await Promise.all([
+    getUserByInternalId(clientId),
+    getLandingPageByUserId(clientId),
     isImpersonating(),
     isAdmin(),
   ]);
 
-  if (!user) {
+  if (!dbLanding) {
     return (
       <>
         <DashboardThemeScope />
@@ -57,11 +64,16 @@ export default async function DashboardLayout({
     );
   }
 
+  const refreshedLanding = await ensureLandingHasDefaultContent(dbLanding);
+  const landing = toLandingView(refreshedLanding, user ?? undefined);
+
   return (
     <>
       <DashboardThemeScope />
       {impersonating && <ImpersonationBanner />}
-      <div className={impersonating ? "pt-10" : undefined}>{children}</div>
+      <DashboardShell landing={landing} isAdmin={admin} impersonating={impersonating}>
+        {children}
+      </DashboardShell>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { employees } from "@/db/schema";
+import { employees, employeeHours } from "@/db/schema";
 
 export const getEmployees = cache(async (tenantId: string, activeOnly = false) => {
   try {
@@ -14,6 +14,23 @@ export const getEmployees = cache(async (tenantId: string, activeOnly = false) =
     });
   } catch {
     throw new Error("Failed to fetch employees");
+  }
+});
+
+export const getEmployeesWithDetails = cache(async (tenantId: string) => {
+  try {
+    return await db.query.employees.findMany({
+      where: eq(employees.tenantId, tenantId),
+      orderBy: [asc(employees.createdAt)],
+      with: {
+        hours: {
+          orderBy: [asc(employeeHours.dayOfWeek)],
+        },
+        services: true,
+      },
+    });
+  } catch {
+    throw new Error("Failed to fetch employees with details");
   }
 });
 

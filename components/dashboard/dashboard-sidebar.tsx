@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { dashboardViews } from "@/lib/dashboard-data";
 import {
   Sidebar,
@@ -16,13 +17,14 @@ import { DashboardSidebarFooter } from "@/components/dashboard/dashboard-sidebar
 
 export function DashboardSidebar({
   impersonating,
-  settingsActive = false,
   showAccountActions,
 }: {
   impersonating: boolean;
-  settingsActive?: boolean;
   showAccountActions: boolean;
 }) {
+  const pathname = usePathname();
+  const settingsActive = pathname.startsWith("/settings");
+
   return (
     <Sidebar collapsible="icon" className={impersonating ? "pt-10" : undefined}>
       <SidebarHeader className="border-b border-sidebar-border px-unit-sm py-unit-lg">

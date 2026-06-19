@@ -1,5 +1,5 @@
-import { DashboardViewPage } from "@/components/dashboard/dashboard-view-page";
+import { BlogSection } from "@/components/dashboard/sections/blog-section";
 
-export default async function BlogDashboardPage() {
-  return DashboardViewPage({ view: "blog" });
+export default function BlogPage() {
+  return <BlogSection />;
 }

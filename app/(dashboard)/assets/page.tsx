@@ -1,5 +1,5 @@
-import { DashboardViewPage } from "@/components/dashboard/dashboard-view-page";
+import { AssetsSection } from "@/components/dashboard/sections/assets-section";
 
-export default async function AssetsDashboardPage() {
-  return DashboardViewPage({ view: "assets" });
+export default function AssetsPage() {
+  return <AssetsSection />;
 }

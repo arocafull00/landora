@@ -1,5 +1,5 @@
-import { DashboardViewPage } from "@/components/dashboard/dashboard-view-page";
+import { AnalyticsDashboard } from "@/components/dashboard/analytics/analytics-dashboard";
 
-export default async function AnalyticsDashboardPage() {
-  return DashboardViewPage({ view: "analytics" });
+export default function AnalyticsPage() {
+  return <AnalyticsDashboard />;
 }
