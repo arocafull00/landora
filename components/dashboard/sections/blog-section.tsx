@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { BlogPostEditorPanel } from "@/components/dashboard/blog-post-editor-panel";
 import { BlogPostListItem } from "@/components/dashboard/blog-post-list-item";
 import { BlogPostListSkeleton } from "@/components/dashboard/blog-post-list-skeleton";
@@ -17,8 +17,12 @@ export function BlogSection() {
   const posts = useDashboardStore((state) => state.posts);
   const blogPostsLoaded = useDashboardStore((state) => state.blogPostsLoaded);
   const createPost = useDashboardStore((state) => state.createPost);
-  const isAdmin = useDashboardStore((state) => state.isAdmin);
+  const ensureBlogPostsLoaded = useDashboardStore((state) => state.ensureBlogPostsLoaded);
   const [isCreating, startCreateTransition] = useTransition();
+
+  useEffect(() => {
+    void ensureBlogPostsLoaded();
+  }, [ensureBlogPostsLoaded]);
 
   const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
 
@@ -33,9 +37,7 @@ export function BlogSection() {
 
   return (
     <>
-      <section
-        className={`flex min-w-0 flex-1 flex-col border-r border-outline-variant bg-surface sm:min-w-[320px] ${isAdmin ? "pt-10" : ""}`}
-      >
+      <section className="flex min-w-0 flex-1 flex-col border-r border-outline-variant bg-surface sm:min-w-[320px]">
         <DashboardPageHeader
           actions={
             <ActionButton disabled={isCreating} onClick={handleCreatePost} variant="primary">

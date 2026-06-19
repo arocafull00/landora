@@ -157,7 +157,11 @@ export async function setLandingPublished(
 
   if (published) {
     try {
-      await ensureLandingHasDefaultContent(parsed.data);
+      const landing = await getLandingPageById(parsed.data);
+      if (!landing) {
+        return { error: "Landing no encontrada" };
+      }
+      await ensureLandingHasDefaultContent(landing);
     } catch {
       return { error: "Error al inicializar el contenido de la landing" };
     }
@@ -342,7 +346,11 @@ export async function publishUserLandings(userId: string): Promise<ActionResult>
 
   try {
     for (const landing of userLandings) {
-      await ensureLandingHasDefaultContent(landing.id);
+      const fullLanding = await getLandingPageById(landing.id);
+      if (!fullLanding) {
+        continue;
+      }
+      await ensureLandingHasDefaultContent(fullLanding);
       await updateLandingPage(landing.id, {
         published: true,
         updatedAt: new Date(),

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { DomainDnsRecord } from "@/components/dashboard/domain-dns-record";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { ActionButton, Panel, StatusBadge } from "@/components/ui/primitives";
@@ -9,7 +10,6 @@ import { useDomainStore } from "@/stores/domain-store";
 export function DomainSection() {
   const landings = useDashboardStore((state) => state.landings);
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
-  const isAdmin = useDashboardStore((state) => state.isAdmin);
   const status = useDomainStore((state) => state.status);
   const domainInput = useDomainStore((state) => state.domainInput);
   const loading = useDomainStore((state) => state.loading);
@@ -18,6 +18,11 @@ export function DomainSection() {
   const setDomainInput = useDomainStore((state) => state.setDomainInput);
   const assignDomain = useDomainStore((state) => state.assignDomain);
   const removeDomain = useDomainStore((state) => state.removeDomain);
+  const ensureLoaded = useDomainStore((state) => state.ensureLoaded);
+
+  useEffect(() => {
+    void ensureLoaded();
+  }, [ensureLoaded]);
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
@@ -28,7 +33,7 @@ export function DomainSection() {
   const isBusy = loading || assigning || removing;
 
   return (
-    <div className={`flex flex-1 flex-col overflow-hidden ${isAdmin ? "pt-10" : ""}`}>
+    <div className="flex flex-1 flex-col overflow-hidden">
       <DashboardPageHeader
         description="Conecta tu dominio comprado para que los visitantes vean solo tu web."
         title="Dominio"

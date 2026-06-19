@@ -181,14 +181,27 @@ async function seedMissingLandingSections(landingId: string, landing: LandingWit
   });
 }
 
-export async function ensureLandingHasDefaultContent(landingId: string) {
-  const landing = await getLandingPageById(landingId);
-  if (!landing) return;
-
+export async function ensureLandingHasDefaultContent(
+  landing: LandingWithSections,
+): Promise<LandingWithSections> {
   if (isLandingFullyEmpty(landing)) {
-    await seedLandingSections(landingId, landing.template);
-    return;
+    await seedLandingSections(landing.id, landing.template);
+    const refreshed = await getLandingPageById(landing.id);
+    if (!refreshed) {
+      return landing;
+    }
+    return refreshed;
   }
 
-  await seedMissingLandingSections(landingId, landing);
+  const missing = getMissingLandingSections(landing);
+  if (missing.length === 0) {
+    return landing;
+  }
+
+  await seedMissingLandingSections(landing.id, landing);
+  const refreshed = await getLandingPageById(landing.id);
+  if (!refreshed) {
+    return landing;
+  }
+  return refreshed;
 }

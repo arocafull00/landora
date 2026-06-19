@@ -5,6 +5,7 @@ import { ImageField } from "@/components/dashboard/image-field";
 import { ActionButton, StatusBadge } from "@/components/ui/primitives";
 import { slugifyBlogTitle } from "@/lib/blog-slug";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 
 const INPUT_CLASS =
   "w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary";
@@ -18,7 +19,7 @@ export function BlogPostEditorPanel() {
   const savePost = useDashboardStore((state) => state.savePost);
   const publishPost = useDashboardStore((state) => state.publishPost);
   const deletePost = useDashboardStore((state) => state.deletePost);
-  const isAdmin = useDashboardStore((state) => state.isAdmin);
+  const { isAdmin } = useDashboardChrome();
 
   const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
   const resolvedActivePostId =
@@ -50,7 +51,7 @@ export function BlogPostEditorPanel() {
   const badgeStatus = post.status === "Changes" ? "Draft" : post.status;
 
   return (
-    <aside className={`flex w-[340px] shrink-0 flex-col border-l border-outline-variant bg-surface-container-lowest xl:w-[420px] ${isAdmin ? "pt-10" : ""}`}>
+    <aside className={`flex w-[340px] shrink-0 flex-col border-l border-outline-variant bg-surface-container-lowest xl:w-[420px] ${isAdmin ? "pt-12" : ""}`}>
       <div className="flex shrink-0 flex-col gap-3 border-b border-outline-variant px-unit-md py-unit-md">
         <div className="flex min-w-0 items-start justify-between gap-3">
           <div className="min-w-0">

@@ -1,4 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 
 export function DashboardPageHeader({
   title,
@@ -9,8 +13,15 @@ export function DashboardPageHeader({
   description?: string;
   actions?: ReactNode;
 }) {
+  const { isAdmin } = useDashboardChrome();
+
   return (
-    <header className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-unit-md">
+    <header
+      className={cn(
+        "flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-unit-md",
+        isAdmin && "pt-12",
+      )}
+    >
       <div className="min-w-0">
         <h2 className="font-headline text-headline-lg font-semibold text-on-surface">
           {title}

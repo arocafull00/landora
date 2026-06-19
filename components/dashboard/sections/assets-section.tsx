@@ -1,11 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import { AssetImage } from "@/components/ui/asset-image";
 import type { AssetRow } from "@/db/schema";
 import { shortDateFormatter } from "@/lib/intl-formatters";
 import { uploadAsset } from "@/lib/upload-asset";
 import { useAssetsStore } from "@/stores/assets-store";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 import { ActionButton, IconButton } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import { AssetNameField } from "@/components/dashboard/asset-name-field";
@@ -23,6 +25,12 @@ import {
 export function AssetsSection() {
   const inputRef = useRef<HTMLInputElement>(null);
   const assets = useAssetsStore((state) => state.rows);
+  const ensureLoaded = useAssetsStore((state) => state.ensureLoaded);
+
+  useEffect(() => {
+    void ensureLoaded();
+  }, [ensureLoaded]);
+  const isAdmin = useDashboardChrome().isAdmin;
   const prepend = useAssetsStore((state) => state.prepend);
   const remove = useAssetsStore((state) => state.remove);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -187,7 +195,7 @@ export function AssetsSection() {
         </div>
       </section>
       {active ? (
-        <aside className="flex w-[340px] shrink-0 flex-col border-l border-outline-variant bg-surface-container-lowest xl:w-[380px]">
+        <aside className={cn("flex w-[340px] shrink-0 flex-col border-l border-outline-variant bg-surface-container-lowest xl:w-[380px]", isAdmin && "pt-12")}>
           <div className="flex shrink-0 items-center justify-between border-b border-outline-variant px-unit-md py-unit-md">
             <h3 className="text-body-lg font-semibold text-on-surface">Detalle</h3>
             <DropdownMenu>

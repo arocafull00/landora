@@ -14,7 +14,7 @@ import {
   replaceLandingBenefits,
 } from "@/data/landing-sections";
 import { getLandingBySlug } from "@/data/admin";
-import { deleteLandingPageById, insertLandingPage } from "@/data/landing-pages";
+import { deleteLandingPageById, getLandingPageById, insertLandingPage } from "@/data/landing-pages";
 import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 import {
@@ -156,7 +156,11 @@ export async function createProspectLanding(params: {
 
   try {
     await provisionProspectLandingContent(landingId, template, content);
-    await ensureLandingHasDefaultContent(landingId);
+    const landing = await getLandingPageById(landingId);
+    if (!landing) {
+      throw new Error("Error al cargar la landing creada");
+    }
+    await ensureLandingHasDefaultContent(landing);
   } catch (err) {
     await deleteLandingPageById(landingId);
     throw err instanceof Error ? err : new Error("Error al inicializar el contenido de la landing");
