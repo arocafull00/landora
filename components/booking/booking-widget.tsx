@@ -31,7 +31,7 @@ export function BookingWidget({ slug }: { slug: string }) {
 
   useEffect(() => {
     reset();
-  }, [slug]);
+  }, [reset, slug]);
 
   const summary = useMemo(
     () => ({

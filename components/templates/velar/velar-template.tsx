@@ -31,8 +31,6 @@ function isOverlappingTop(el: HTMLElement | null) {
 export function VelarTemplate({
   content,
   topOffset = 0,
-  slug,
-  bookingEnabled = false,
 }: {
   content: LandingContent;
   topOffset?: number;
