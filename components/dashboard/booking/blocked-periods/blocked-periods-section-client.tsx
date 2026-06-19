@@ -17,7 +17,7 @@ export function BlockedPeriodsSectionClient({
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [pending, startTransition] = useTransition();
+  const [pending] = useTransition();
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
