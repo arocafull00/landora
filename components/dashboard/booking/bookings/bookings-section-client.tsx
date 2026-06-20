@@ -84,7 +84,6 @@ export function BookingsSectionClient({
                   bookings={bookings}
                   employees={employees}
                   timezone={settings.timezone}
-                  date={date}
                 />
               </TabsContent>
             </Tabs>

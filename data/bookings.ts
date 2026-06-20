@@ -42,14 +42,14 @@ export const getBookings = cache(async (tenantId: string, filters?: BookingFilte
   }
 });
 
-export const getBookingsForDay = cache(
-  async (tenantId: string, dayStart: Date, dayEnd: Date) => {
+export const getBookingsForRange = cache(
+  async (tenantId: string, rangeStart: Date, rangeEnd: Date) => {
     try {
       return await db.query.bookings.findMany({
         where: and(
           eq(bookings.tenantId, tenantId),
-          gte(bookings.startsAt, dayStart),
-          lte(bookings.startsAt, dayEnd),
+          gte(bookings.startsAt, rangeStart),
+          lte(bookings.startsAt, rangeEnd),
           ne(bookings.status, "cancelled"),
         ),
         orderBy: [asc(bookings.startsAt)],
@@ -58,7 +58,7 @@ export const getBookingsForDay = cache(
         },
       });
     } catch {
-      throw new Error("Failed to fetch bookings for day");
+      throw new Error("Failed to fetch bookings for range");
     }
   },
 );

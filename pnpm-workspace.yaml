@@ -3,3 +3,5 @@ packages:
 
 minimumReleaseAge: 10080
 trustPolicy: no-downgrade
+trustPolicyExclude:
+  - "@preact/signals@2.9.1"

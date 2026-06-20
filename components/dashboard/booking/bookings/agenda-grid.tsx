@@ -1,37 +1,98 @@
+"use client";
+
 import type { Booking, Employee } from "@/db/schema";
+import { useState, useMemo, useEffect } from "react";
+import { useNextCalendarApp, ScheduleXCalendar } from "@schedule-x/react";
+import {
+  createViewDay,
+  createViewWeek,
+  createViewMonthGrid,
+  createViewMonthAgenda,
+} from "@schedule-x/calendar";
+import { createEventsServicePlugin } from "@schedule-x/events-service";
 import { toZonedTime } from "date-fns-tz";
-import { AgendaBookingCard } from "@/components/dashboard/booking/bookings/agenda-booking-card";
+import "temporal-polyfill/global";
+import "@schedule-x/theme-default/dist/index.css";
+import {
+  AgendaEmployeeFilter,
+  buildCalendarsConfig,
+} from "@/components/dashboard/booking/bookings/agenda-employee-filter";
 
-const HOURS = Array.from({ length: 14 }, (_, i) => i + 8);
+function toTemporalZonedDateTime(date: Date, timezone: string) {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const iso = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}[${timezone}]`;
+  return Temporal.ZonedDateTime.from(iso);
+}
 
-function groupBookingsByEmployee(
-  bookings: (Booking & { employee: Employee | null })[],
+function bookingToCalendarEvent(
+  booking: Booking & { employee: Employee | null },
+  timezone: string,
 ) {
-  const bookingsByEmployee = new Map<string, (Booking & { employee: Employee | null })[]>();
-  for (const booking of bookings) {
-    const employeeBookings = bookingsByEmployee.get(booking.employeeId);
-    if (employeeBookings) {
-      employeeBookings.push(booking);
-      continue;
-    }
-    bookingsByEmployee.set(booking.employeeId, [booking]);
-  }
-  return bookingsByEmployee;
+  const zonedStart = toZonedTime(booking.startsAt, timezone);
+  const zonedEnd = toZonedTime(booking.endsAt, timezone);
+
+  return {
+    id: booking.id,
+    title: booking.customerName,
+    start: toTemporalZonedDateTime(zonedStart, timezone),
+    end: toTemporalZonedDateTime(zonedEnd, timezone),
+    calendarId: booking.employeeId,
+  };
 }
 
 export function AgendaGrid({
   bookings,
   employees,
   timezone,
-  date,
 }: {
   bookings: (Booking & { employee: Employee | null })[];
   employees: Employee[];
   timezone: string;
-  date: string;
 }) {
-  const activeEmployees = employees.filter((e) => e.isActive);
-  const bookingsByEmployee = groupBookingsByEmployee(bookings);
+  const activeEmployees = useMemo(
+    () => employees.filter((e) => e.isActive),
+    [employees],
+  );
+
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
+    null,
+  );
+
+  const allEvents = useMemo(
+    () => bookings.map((b) => bookingToCalendarEvent(b, timezone)),
+    [bookings, timezone],
+  );
+
+  const calendarsConfig = useMemo(
+    () => buildCalendarsConfig(activeEmployees),
+    [activeEmployees],
+  );
+
+  const eventsService = useState(() => createEventsServicePlugin())[0];
+
+  const calendar = useNextCalendarApp({
+    views: [
+      createViewDay(),
+      createViewWeek(),
+      createViewMonthGrid(),
+      createViewMonthAgenda(),
+    ],
+    defaultView: createViewWeek().name,
+    events: allEvents,
+    calendars: calendarsConfig,
+    locale: "es-ES",
+    timezone,
+    plugins: [eventsService],
+  });
+
+  useEffect(() => {
+    const filtered =
+      selectedEmployeeId === null
+        ? allEvents
+        : allEvents.filter((e) => e.calendarId === selectedEmployeeId);
+
+    eventsService.set(filtered);
+  }, [allEvents, selectedEmployeeId, eventsService]);
 
   if (activeEmployees.length === 0) {
     return (
@@ -42,77 +103,15 @@ export function AgendaGrid({
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-outline-variant">
-      <div
-        className="grid min-w-max"
-        style={{
-          gridTemplateColumns: `4rem repeat(${activeEmployees.length}, minmax(8rem, 1fr))`,
-        }}
-      >
-        <div className="border-b border-outline-variant bg-surface-container p-2" />
-        {activeEmployees.map((employee) => (
-          <div
-            key={employee.id}
-            className="border-b border-l border-outline-variant bg-surface-container p-2 font-body text-body-sm font-medium"
-          >
-            {employee.name}
-          </div>
-        ))}
-        {HOURS.map((hour) => (
-          <AgendaHourRow
-            key={hour}
-            hour={hour}
-            date={date}
-            timezone={timezone}
-            employees={activeEmployees}
-            bookingsByEmployee={bookingsByEmployee}
-          />
-        ))}
+    <div className="space-y-3">
+      <AgendaEmployeeFilter
+        employees={activeEmployees}
+        selectedEmployeeId={selectedEmployeeId}
+        onChange={setSelectedEmployeeId}
+      />
+      <div className="sx-react-calendar-wrapper" style={{ height: "720px" }}>
+        <ScheduleXCalendar calendarApp={calendar} />
       </div>
     </div>
-  );
-}
-
-function AgendaHourRow({
-  hour,
-  date,
-  timezone,
-  employees,
-  bookingsByEmployee,
-}: {
-  hour: number;
-  date: string;
-  timezone: string;
-  employees: Employee[];
-  bookingsByEmployee: Map<string, (Booking & { employee: Employee | null })[]>;
-}) {
-  return (
-    <>
-      <div className="border-b border-outline-variant p-2 font-body text-body-xs text-on-surface-variant">
-        {String(hour).padStart(2, "0")}:00
-      </div>
-      {employees.map((employee) => {
-        const employeeBookings = bookingsByEmployee.get(employee.id) ?? [];
-        const hourBookings = employeeBookings.filter((booking) => {
-          const zonedStart = toZonedTime(booking.startsAt, timezone);
-          const bookingDate = `${zonedStart.getFullYear()}-${String(zonedStart.getMonth() + 1).padStart(2, "0")}-${String(zonedStart.getDate()).padStart(2, "0")}`;
-          return bookingDate === date && zonedStart.getHours() === hour;
-        });
-        return (
-          <div
-            key={`${hour}-${employee.id}`}
-            className="relative min-h-16 overflow-visible border-b border-l border-outline-variant"
-          >
-            {hourBookings.map((booking) => (
-              <AgendaBookingCard
-                key={booking.id}
-                booking={booking}
-                timezone={timezone}
-              />
-            ))}
-          </div>
-        );
-      })}
-    </>
   );
 }

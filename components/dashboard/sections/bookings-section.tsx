@@ -1,9 +1,9 @@
 import { format } from "date-fns";
 import { getEffectiveClientId } from "@/lib/auth";
-import { getBookings, getBookingsForDay } from "@/data/bookings";
+import { getBookings, getBookingsForRange } from "@/data/bookings";
 import { getEmployees } from "@/data/employees";
 import { getBookingSettings } from "@/data/booking-settings";
-import { getDayBoundsInUtc } from "@/lib/booking/timezone";
+import { getWeekBoundsInUtc } from "@/lib/booking/timezone";
 import type { BookingStatus } from "@/db/schema";
 import { BookingsSectionClient } from "@/components/dashboard/booking/bookings/bookings-section-client";
 
@@ -32,9 +32,8 @@ export async function BookingsSection({
   let bookings;
 
   if (view === "agenda") {
-    const { dayStart, dayEnd } = getDayBoundsInUtc(date, settings.timezone);
-    bookings = await getBookingsForDay(tenantId, dayStart, dayEnd);
-    console.log(bookings);
+    const { weekStart, weekEnd } = getWeekBoundsInUtc(date, settings.timezone);
+    bookings = await getBookingsForRange(tenantId, weekStart, weekEnd);
   } else {
     const filters: Parameters<typeof getBookings>[1] = {};
     if (status) {
