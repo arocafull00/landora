@@ -1,3 +1,7 @@
+import { getRedis } from "@/lib/redis";
+
+const TURNSTILE_CACHE_TTL_SECONDS = 300;
+
 export async function verifyTurnstileToken(token: string, ip: string | null) {
   if (process.env.NODE_ENV === "development") {
     return true;
@@ -7,6 +11,18 @@ export async function verifyTurnstileToken(token: string, ip: string | null) {
   if (!secret) {
     return true;
   }
+
+  const redis = getRedis();
+  const cacheKey = `turnstile:verified:${token}`;
+
+  if (redis) {
+    const cached = await redis.get(cacheKey);
+    if (cached === "1") {
+      return true;
+    }
+  }
+
+  console.log("[turnstile] verifying token starting with:", token.slice(0, 20));
 
   const body = new URLSearchParams({ secret, response: token });
 
@@ -34,11 +50,18 @@ export async function verifyTurnstileToken(token: string, ip: string | null) {
       "error-codes"?: string[];
     };
 
-    if (!data.success) {
-      console.error("[turnstile] verification failed:", data["error-codes"]);
+    const errorCodes = data["error-codes"] ?? [];
+    const isDuplicate = errorCodes.includes("timeout-or-duplicate");
+
+    if (data.success || isDuplicate) {
+      if (redis) {
+        await redis.set(cacheKey, "1", { ex: TURNSTILE_CACHE_TTL_SECONDS });
+      }
+      return true;
     }
 
-    return data.success === true;
+    console.error("[turnstile] verification failed:", errorCodes);
+    return false;
   } catch (err) {
     console.error("[turnstile] fetch error:", err);
     return false;
