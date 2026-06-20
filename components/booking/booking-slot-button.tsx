@@ -1,9 +1,9 @@
+import { ToggleGroupItem } from "@/components/ui/toggle-group";
+
 export function BookingSlotButton({
   slot,
-  onSelect,
 }: {
   slot: { startsAt: string; endsAt: string };
-  onSelect: () => void;
 }) {
   const label = new Intl.DateTimeFormat("es-ES", {
     hour: "2-digit",
@@ -11,12 +11,12 @@ export function BookingSlotButton({
   }).format(new Date(slot.startsAt));
 
   return (
-    <button
-      type="button"
-      onClick={onSelect}
-      className="rounded-lg border border-outline-variant px-3 py-2 font-body text-body-sm transition hover:bg-surface-container"
+    <ToggleGroupItem
+      value={slot.startsAt}
+      className="w-full"
+      aria-label={`Reservar a las ${label}`}
     >
       {label}
-    </button>
+    </ToggleGroupItem>
   );
 }

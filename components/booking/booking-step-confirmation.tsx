@@ -1,18 +1,21 @@
 import Link from "next/link";
+import { CircleCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export function BookingStepConfirmation({ publicToken }: { publicToken: string }) {
   return (
-    <div className="space-y-4 text-center">
-      <h3 className="font-body text-body-lg font-semibold">Reserva confirmada</h3>
+    <div
+      role="status"
+      className="space-y-4 rounded-lg bg-success/5 p-6 text-center"
+    >
+      <CircleCheck className="mx-auto size-10 text-success" aria-hidden />
+      <h3 className="font-body text-body-lg font-semibold text-on-surface">Reserva confirmada</h3>
       <p className="font-body text-body-sm text-on-surface-variant">
         Hemos registrado tu reserva. Puedes gestionarla con el enlace siguiente.
       </p>
-      <Link
-        href={`/reservation/${publicToken}`}
-        className="inline-block font-body text-body-sm underline"
-      >
-        Ver o cancelar reserva
-      </Link>
+      <Button asChild>
+        <Link href={`/reservation/${publicToken}`}>Ver o cancelar reserva</Link>
+      </Button>
     </div>
   );
 }

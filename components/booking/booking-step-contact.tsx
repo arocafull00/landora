@@ -2,18 +2,24 @@
 
 import type { ReactNode } from "react";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { BookingStepHeader } from "@/components/booking/booking-step-header";
+import { cn } from "@/lib/utils";
+
+const textareaClassName = cn(
+  "min-h-24 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+  "focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+);
 
 export function BookingStepContact({
   pending,
   submitDisabled,
-  onBack,
   onSubmit,
   turnstile,
 }: {
   pending: boolean;
   submitDisabled: boolean;
-  onBack: () => void;
   onSubmit: (data: {
     customerName: string;
     customerPhone: string;
@@ -38,21 +44,47 @@ export function BookingStepContact({
         });
       }}
     >
-      <h3 className="font-body text-body-md font-semibold">Tus datos</h3>
-      <Input name="customerName" placeholder="Nombre" required />
-      <Input name="customerPhone" placeholder="Teléfono" required />
-      <Input name="customerEmail" type="email" placeholder="Email (opcional)" />
-      <Input name="notes" placeholder="Notas (opcional)" />
+      <BookingStepHeader
+        title="Tus datos"
+        description="Usaremos esta información para confirmar tu reserva."
+      />
+      <div className="space-y-2">
+        <Label htmlFor="customerName">
+          Nombre <span className="text-danger">*</span>
+        </Label>
+        <Input id="customerName" name="customerName" autoComplete="name" required aria-required="true" />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="customerPhone">
+          Teléfono <span className="text-danger">*</span>
+        </Label>
+        <Input
+          id="customerPhone"
+          name="customerPhone"
+          type="tel"
+          autoComplete="tel"
+          required
+          aria-required="true"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="customerEmail">Email</Label>
+        <Input
+          id="customerEmail"
+          name="customerEmail"
+          type="email"
+          autoComplete="email"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="notes">Notas</Label>
+        <textarea id="notes" name="notes" className={textareaClassName} />
+      </div>
       <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
       {turnstile}
-      <div className="flex gap-2">
-        <Button type="button" variant="outline" onClick={onBack}>
-          Volver
-        </Button>
-        <Button type="submit" disabled={pending || submitDisabled}>
-          Confirmar reserva
-        </Button>
-      </div>
+      <Button type="submit" className="w-full sm:w-auto" disabled={pending || submitDisabled}>
+        Confirmar reserva
+      </Button>
     </form>
   );
 }

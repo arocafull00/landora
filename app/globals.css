@@ -467,3 +467,41 @@ textarea {
   animation: portfolio-hero-shimmer 900ms ease-out forwards;
   animation-delay: var(--line-delay);
 }
+
+.booking-calendar .rdp-root {
+  --rdp-accent-color: var(--primary);
+  --rdp-accent-background-color: color-mix(in srgb, var(--primary-fixed) 40%, transparent);
+  --rdp-day_button-border-radius: var(--radius-lg);
+  --rdp-today-color: var(--primary);
+  font-family: var(--font-body), sans-serif;
+  color: var(--on-surface);
+}
+
+.booking-calendar .rdp-day_button:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.booking-calendar .rdp-button_previous,
+.booking-calendar .rdp-button_next {
+  border-radius: var(--radius-md);
+  color: var(--on-surface-variant);
+}
+
+.booking-calendar .rdp-button_previous:focus-visible,
+.booking-calendar .rdp-button_next:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.booking-calendar .rdp-weekday {
+  color: var(--on-surface-variant);
+  font-size: var(--text-body-sm);
+}
+
+.booking-calendar .rdp-caption_label {
+  font-size: var(--text-body-md);
+  font-weight: 600;
+  color: var(--on-surface);
+}

@@ -37,16 +37,16 @@ export default async function PublicBookingPage({
   const brand = landing.branding?.brand || landing.name;
 
   return (
-    <div className="min-h-screen bg-surface-container-low py-12">
+    <main className="min-h-screen bg-surface-container-low py-12">
       <div className="mx-auto max-w-5xl px-4">
-        <div className="mb-8">
+        <div className="mb-6 lg:mb-8">
           <p className="font-body text-body-sm text-on-surface-variant">{brand}</p>
-          <h1 className="font-display text-display-sm font-semibold text-on-surface">
+          <h1 className="font-headline text-headline-md font-semibold text-on-surface">
             Reservar cita
           </h1>
         </div>
         <BookingWidget slug={slug} />
       </div>
-    </div>
+    </main>
   );
 }
