@@ -83,7 +83,7 @@ export function BookingWidget({ slug }: { slug: string }) {
       });
 
       if (!result || "error" in result) {
-        toast.error(`${result} Error al crear la reserva`);
+        toast.error(result?.error ?? "Error al crear la reserva");
         return;
       }
 
