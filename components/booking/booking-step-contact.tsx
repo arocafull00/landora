@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 
 export function BookingStepContact({
   pending,
+  submitDisabled,
   onBack,
   onSubmit,
   turnstile,
 }: {
   pending: boolean;
+  submitDisabled: boolean;
   onBack: () => void;
   onSubmit: (data: {
     customerName: string;
@@ -47,7 +49,7 @@ export function BookingStepContact({
         <Button type="button" variant="outline" onClick={onBack}>
           Volver
         </Button>
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={pending || submitDisabled}>
           Confirmar reserva
         </Button>
       </div>

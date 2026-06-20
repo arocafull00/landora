@@ -157,6 +157,9 @@ export function BookingWidget({ slug }: { slug: string }) {
         {step === "contact" ? (
           <BookingStepContact
             pending={pending}
+            submitDisabled={
+              !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken
+            }
             onBack={() => setStep("time")}
             onSubmit={submitBooking}
             turnstile={
@@ -164,6 +167,8 @@ export function BookingWidget({ slug }: { slug: string }) {
                 <Turnstile
                   siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
                   onSuccess={setTurnstileToken}
+                  onExpire={() => setTurnstileToken("")}
+                  onError={() => setTurnstileToken("")}
                 />
               ) : null
             }
