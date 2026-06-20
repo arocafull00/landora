@@ -111,9 +111,13 @@ export const getBookingById = cache(async (tenantId: string, id: string) => {
 export async function createBookingRecord(tx: Transaction, data: NewBooking) {
   try {
     const [row] = await tx.insert(bookings).values(data).returning();
+    if (!row) {
+      throw new Error("Insert returned no row");
+    }
     return row;
-  } catch {
-    throw new Error("Failed to create booking");
+  } catch (err) {
+    console.error("[booking] createBookingRecord error:", err);
+    throw err;
   }
 }
 

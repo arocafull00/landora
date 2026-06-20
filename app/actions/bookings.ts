@@ -165,6 +165,7 @@ export async function createBookingAction(
     if (error instanceof Error && error.message === "slot_taken") {
       return { error: "Ese horario acaba de ser reservado" };
     }
+    console.error("[booking] createBookingAction error:", error);
     return { error: "No se pudo crear la reserva" };
   }
 }

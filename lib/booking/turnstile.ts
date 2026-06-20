@@ -16,9 +16,13 @@ export async function verifyTurnstileToken(token: string, ip: string | null) {
   const cacheKey = `turnstile:verified:${token}`;
 
   if (redis) {
-    const cached = await redis.get(cacheKey);
-    if (cached === "1") {
-      return true;
+    try {
+      const cached = await redis.get(cacheKey);
+      if (cached === "1") {
+        return true;
+      }
+    } catch (err) {
+      console.error("[turnstile] redis get error:", err);
     }
   }
 
@@ -55,7 +59,11 @@ export async function verifyTurnstileToken(token: string, ip: string | null) {
 
     if (data.success || isDuplicate) {
       if (redis) {
-        await redis.set(cacheKey, "1", { ex: TURNSTILE_CACHE_TTL_SECONDS });
+        try {
+          await redis.set(cacheKey, "1", { ex: TURNSTILE_CACHE_TTL_SECONDS });
+        } catch (err) {
+          console.error("[turnstile] redis set error:", err);
+        }
       }
       return true;
     }
