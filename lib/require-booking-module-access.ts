@@ -35,26 +35,4 @@ export async function requireBookingModuleAccessForCurrentUser(): Promise<
   return { tenantId };
 }
 
-async function requireBookingModuleAccessForTenant(
-  tenantId: string,
-): Promise<AccessDenied | AccessGranted> {
-  const user = await getUserByInternalId(tenantId);
-  if (!user) {
-    return { error: "No autorizado" };
-  }
 
-  const addon = await getUserAddon(tenantId, "bookings");
-
-  if (
-    !hasBookingModuleAccess({
-      type: user.type,
-      accessType: user.accessType,
-      suspended: user.suspended,
-      bookingAddonStatus: addon?.status ?? null,
-    })
-  ) {
-    return { error: "Reservas no disponibles" };
-  }
-
-  return { tenantId };
-}

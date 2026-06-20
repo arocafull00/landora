@@ -9,12 +9,7 @@ import { BookingStepHeader } from "@/components/booking/booking-step-header";
 import { BookingStepLoading } from "@/components/booking/booking-step-loading";
 
 export function BookingStepDate({ onSelect }: { onSelect: (date: string) => void }) {
-  const [minDate, setMinDate] = useState<Date | null>(null);
-
-  useEffect(() => {
-    setMinDate(new Date());
-  }, []);
-
+  const minDate = new Date();
   if (!minDate) {
     return (
       <div className="space-y-4">

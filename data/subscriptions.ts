@@ -32,25 +32,7 @@ export async function getSubscriptionStatusForProxy(clerkUserId: string) {
   return fetchSubscriptionStatus(clerkUserId);
 }
 
-async function getUserByStripeSubscriptionId(subscriptionId: string) {
-  try {
-    return await db.query.users.findFirst({
-      where: eq(users.stripeSubscriptionId, subscriptionId),
-    });
-  } catch {
-    throw new Error("Failed to fetch user by subscription id");
-  }
-}
 
-async function getUserByStripeCustomerId(stripeCustomerId: string) {
-  try {
-    return await db.query.users.findFirst({
-      where: eq(users.stripeCustomerId, stripeCustomerId),
-    });
-  } catch {
-    throw new Error("Failed to fetch user by stripe customer id");
-  }
-}
 
 export async function updateSubscriptionFromCheckout(data: {
   clerkUserId: string;

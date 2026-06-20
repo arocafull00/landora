@@ -1,24 +1,9 @@
-import { cache } from "react";
-import { and, asc, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { employeeHours } from "@/db/schema";
 import type { EmployeeHours } from "@/db/schema";
 import { assertEmployeeBelongsToTenant } from "@/data/employees";
 
-const getEmployeeHours = cache(async (tenantId: string, employeeId: string) => {
-  try {
-    await assertEmployeeBelongsToTenant(tenantId, employeeId);
-    return await db.query.employeeHours.findMany({
-      where: eq(employeeHours.employeeId, employeeId),
-      orderBy: [asc(employeeHours.dayOfWeek)],
-    });
-  } catch (error) {
-    if (error instanceof Error && error.message === "Employee not found") {
-      throw error;
-    }
-    throw new Error("Failed to fetch employee hours");
-  }
-});
 
 export async function replaceEmployeeHours(
   tenantId: string,

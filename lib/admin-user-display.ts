@@ -155,12 +155,3 @@ export function isPeriodEndingSoon(date: Date | null) {
 
   return diffDays >= 0 && diffDays <= 7;
 }
-
-function mapSubscriptionStatusToDisplay(
-  status: SubscriptionStatus | null,
-): AdminUserDisplayStatus {
-  if (status === "trialing") return "trial";
-  if (status === "canceled") return "cancelled";
-  if (hasActiveSubscription(status)) return "active";
-  return "expired";
-}

@@ -18,7 +18,6 @@ export function BookingsSectionClient({
   employees,
   settings,
   view,
-  date,
   status,
   employeeId,
 }: {

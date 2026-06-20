@@ -41,7 +41,3 @@ export function formatDateInTimezone(date: Date, timezone: string, pattern = "yy
   }
   return `${year}-${month}-${day}`;
 }
-
-function getNowInTimezone(timezone: string) {
-  return toZonedTime(new Date(), timezone);
-}

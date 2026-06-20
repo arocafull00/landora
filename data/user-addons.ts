@@ -1,12 +1,20 @@
 import { cache } from "react";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { userAddons, users, type AddonType, type SubscriptionStatus } from "@/db/schema";
+import {
+  userAddons,
+  users,
+  type AddonType,
+  type SubscriptionStatus,
+} from "@/db/schema";
 
 async function fetchUserAddon(userId: string, addonType: AddonType) {
   try {
     return await db.query.userAddons.findFirst({
-      where: and(eq(userAddons.userId, userId), eq(userAddons.addonType, addonType)),
+      where: and(
+        eq(userAddons.userId, userId),
+        eq(userAddons.addonType, addonType),
+      ),
     });
   } catch {
     throw new Error("Failed to fetch user addon");
@@ -15,7 +23,9 @@ async function fetchUserAddon(userId: string, addonType: AddonType) {
 
 export const getUserAddon = cache(fetchUserAddon);
 
-export async function getUserAddonByStripeSubscriptionId(subscriptionId: string) {
+export async function getUserAddonByStripeSubscriptionId(
+  subscriptionId: string,
+) {
   try {
     return await db.query.userAddons.findFirst({
       where: eq(userAddons.stripeSubscriptionId, subscriptionId),
@@ -25,7 +35,9 @@ export async function getUserAddonByStripeSubscriptionId(subscriptionId: string)
   }
 }
 
-export async function getBookingModuleAccessContextForClerkUser(clerkUserId: string) {
+export async function getBookingModuleAccessContextForClerkUser(
+  clerkUserId: string,
+) {
   try {
     const user = await db.query.users.findFirst({
       where: eq(users.clerkUserId, clerkUserId),
@@ -40,7 +52,10 @@ export async function getBookingModuleAccessContextForClerkUser(clerkUserId: str
     if (!user) return null;
 
     const addon = await db.query.userAddons.findFirst({
-      where: and(eq(userAddons.userId, user.id), eq(userAddons.addonType, "bookings")),
+      where: and(
+        eq(userAddons.userId, user.id),
+        eq(userAddons.addonType, "bookings"),
+      ),
       columns: { status: true },
     });
 
@@ -105,15 +120,5 @@ export async function setUserAddonStatus(data: {
       .where(eq(userAddons.stripeSubscriptionId, data.stripeSubscriptionId));
   } catch {
     throw new Error("Failed to update user addon status");
-  }
-}
-
-async function listBookingsAddons() {
-  try {
-    return await db.query.userAddons.findMany({
-      where: eq(userAddons.addonType, "bookings"),
-    });
-  } catch {
-    throw new Error("Failed to list bookings addons");
   }
 }
