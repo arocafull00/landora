@@ -7,6 +7,7 @@ import { Panel } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { BookingStatusBadge } from "@/components/dashboard/booking/bookings/booking-status-badge";
 import { cancelBookingByTokenAction } from "@/app/actions/cancel-by-token";
+import { formatFullDateTime } from "@/lib/booking/format-datetime";
 
 export function ReservationDetails({
   booking,
@@ -20,11 +21,7 @@ export function ReservationDetails({
 }) {
   const [pending, startTransition] = useTransition();
 
-  const formatted = new Intl.DateTimeFormat("es-ES", {
-    dateStyle: "full",
-    timeStyle: "short",
-    timeZone: timezone,
-  }).format(booking.startsAt);
+  const formatted = formatFullDateTime(booking.startsAt, timezone);
 
   const canCancel =
     booking.status !== "cancelled" &&

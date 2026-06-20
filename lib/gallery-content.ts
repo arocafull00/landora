@@ -1,7 +1,7 @@
 import type { GalleryItem, TemplateId } from "@/lib/dashboard-data";
 import { getDefaultContent } from "@/lib/default-content";
 
-export const GALLERY_SECTION_ITEM_COUNT = 7;
+const GALLERY_SECTION_ITEM_COUNT = 7;
 
 const GALLERY_SECTION_TEMPLATES = new Set<TemplateId>([
   "studio",
@@ -10,7 +10,7 @@ const GALLERY_SECTION_TEMPLATES = new Set<TemplateId>([
   "coffee-shop",
 ]);
 
-export function usesFixedGallerySection(templateId: TemplateId) {
+function usesFixedGallerySection(templateId: TemplateId) {
   return GALLERY_SECTION_TEMPLATES.has(templateId);
 }
 

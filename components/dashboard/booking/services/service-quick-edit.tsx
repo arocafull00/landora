@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, type ReactNode } from "react";
+import { useReducer, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import type { BookingService } from "@/db/schema";
@@ -13,6 +13,36 @@ import {
   priceCentsToEurosInput,
 } from "@/lib/service-price";
 import { useBookingServicesStore } from "@/stores/booking-services-store";
+
+type FormState = {
+  name: string;
+  durationMinutes: string;
+  priceEuros: string;
+  bufferAfterMinutes: string;
+  isActive: boolean;
+};
+
+type FormAction =
+  | { type: "setField"; field: keyof FormState; value: string | boolean }
+  | { type: "reset"; service: BookingService };
+
+function createInitialState(service: BookingService): FormState {
+  return {
+    name: service.name,
+    durationMinutes: String(service.durationMinutes),
+    priceEuros: priceCentsToEurosInput(service.priceCents),
+    bufferAfterMinutes: String(service.bufferAfterMinutes),
+    isActive: service.isActive,
+  };
+}
+
+function formReducer(state: FormState, action: FormAction): FormState {
+  if (action.type === "reset") {
+    return createInitialState(action.service);
+  }
+
+  return { ...state, [action.field]: action.value };
+}
 
 export function ServiceQuickEdit({
   service,
@@ -27,17 +57,11 @@ export function ServiceQuickEdit({
 }) {
   const router = useRouter();
   const updateService = useBookingServicesStore((s) => s.updateService);
-  const [name, setName] = useState(service.name);
-  const [durationMinutes, setDurationMinutes] = useState(String(service.durationMinutes));
-  const [priceEuros, setPriceEuros] = useState(priceCentsToEurosInput(service.priceCents));
-  const [bufferAfterMinutes, setBufferAfterMinutes] = useState(
-    String(service.bufferAfterMinutes),
-  );
-  const [isActive, setIsActive] = useState(service.isActive);
+  const [form, dispatch] = useReducer(formReducer, service, createInitialState);
   const [pending, startTransition] = useTransition();
 
   const submit = () => {
-    const priceCents = parseEurosToPriceCents(priceEuros);
+    const priceCents = parseEurosToPriceCents(form.priceEuros);
     if (priceCents === null) {
       toast.error("Precio inválido");
       return;
@@ -45,11 +69,11 @@ export function ServiceQuickEdit({
 
     startTransition(async () => {
       const result = await updateBookingServiceAction(service.id, {
-        name,
-        durationMinutes: Number(durationMinutes),
+        name: form.name,
+        durationMinutes: Number(form.durationMinutes),
         priceCents,
-        bufferAfterMinutes: Number(bufferAfterMinutes),
-        isActive,
+        bufferAfterMinutes: Number(form.bufferAfterMinutes),
+        isActive: form.isActive,
       });
       if ("error" in result) {
         toast.error(result.error);
@@ -58,11 +82,11 @@ export function ServiceQuickEdit({
       toast.success("Servicio actualizado");
       updateService({
         ...service,
-        name,
-        durationMinutes: Number(durationMinutes),
+        name: form.name,
+        durationMinutes: Number(form.durationMinutes),
         priceCents,
-        bufferAfterMinutes: Number(bufferAfterMinutes),
-        isActive,
+        bufferAfterMinutes: Number(form.bufferAfterMinutes),
+        isActive: form.isActive,
         updatedAt: new Date(),
       });
       onSaved();
@@ -78,8 +102,8 @@ export function ServiceQuickEdit({
         </label>
         <Input
           id={`quick-name-${service.id}`}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={form.name}
+          onChange={(e) => dispatch({ type: "setField", field: "name", value: e.target.value })}
           disabled={pending || disabled}
         />
       </div>
@@ -98,8 +122,10 @@ export function ServiceQuickEdit({
               type="number"
               min={5}
               max={480}
-              value={durationMinutes}
-              onChange={(e) => setDurationMinutes(e.target.value)}
+              value={form.durationMinutes}
+              onChange={(e) =>
+                dispatch({ type: "setField", field: "durationMinutes", value: e.target.value })
+              }
               disabled={pending || disabled}
             />
             <span className="shrink-0 font-body text-body-sm text-on-surface-variant">min</span>
@@ -118,8 +144,10 @@ export function ServiceQuickEdit({
               id={`quick-price-${service.id}`}
               inputMode="decimal"
               placeholder="0"
-              value={priceEuros}
-              onChange={(e) => setPriceEuros(e.target.value)}
+              value={form.priceEuros}
+              onChange={(e) =>
+                dispatch({ type: "setField", field: "priceEuros", value: e.target.value })
+              }
               disabled={pending || disabled}
             />
             <span className="shrink-0 font-body text-body-sm text-on-surface-variant">€</span>
@@ -129,7 +157,13 @@ export function ServiceQuickEdit({
 
       <div className="flex items-center justify-between">
         <span className="font-body text-body-sm text-on-surface-variant">Activo</span>
-        <Switch checked={isActive} disabled={pending || disabled} onCheckedChange={setIsActive} />
+        <Switch
+          checked={form.isActive}
+          disabled={pending || disabled}
+          onCheckedChange={(isActive) =>
+            dispatch({ type: "setField", field: "isActive", value: isActive })
+          }
+        />
       </div>
 
       <details className="group">
@@ -149,8 +183,10 @@ export function ServiceQuickEdit({
               type="number"
               min={0}
               max={120}
-              value={bufferAfterMinutes}
-              onChange={(e) => setBufferAfterMinutes(e.target.value)}
+              value={form.bufferAfterMinutes}
+              onChange={(e) =>
+                dispatch({ type: "setField", field: "bufferAfterMinutes", value: e.target.value })
+              }
               disabled={pending || disabled}
             />
             <span className="shrink-0 font-body text-body-sm text-on-surface-variant">min</span>
@@ -162,7 +198,7 @@ export function ServiceQuickEdit({
         <div className="flex flex-wrap gap-2">{actions}</div>
         <Button
           onClick={submit}
-          disabled={pending || disabled || !name.trim()}
+          disabled={pending || disabled || !form.name.trim()}
           size="sm"
         >
           Guardar

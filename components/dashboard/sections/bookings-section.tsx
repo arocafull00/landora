@@ -24,14 +24,17 @@ export async function BookingsSection({
   const status = (typeof params.status === "string" ? params.status : "") as BookingStatus | "";
   const employeeId = typeof params.employeeId === "string" ? params.employeeId : "";
 
-  const settings = await getBookingSettings(tenantId);
-  const employees = await getEmployees(tenantId);
+  const [settings, employees] = await Promise.all([
+    getBookingSettings(tenantId),
+    getEmployees(tenantId),
+  ]);
 
   let bookings;
 
   if (view === "agenda") {
     const { dayStart, dayEnd } = getDayBoundsInUtc(date, settings.timezone);
     bookings = await getBookingsForDay(tenantId, dayStart, dayEnd);
+    console.log(bookings);
   } else {
     const filters: Parameters<typeof getBookings>[1] = {};
     if (status) {

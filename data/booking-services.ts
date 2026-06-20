@@ -100,14 +100,16 @@ export async function setBookingServiceActive(tenantId: string, id: string, isAc
 export async function reorderBookingServices(tenantId: string, orderedIds: string[]) {
   try {
     await db.transaction(async (tx) => {
-      for (let i = 0; i < orderedIds.length; i++) {
-        await tx
-          .update(bookingServices)
-          .set({ sortOrder: i, updatedAt: new Date() })
-          .where(
-            and(eq(bookingServices.tenantId, tenantId), eq(bookingServices.id, orderedIds[i])),
-          );
-      }
+      await Promise.all(
+        orderedIds.map((id, i) =>
+          tx
+            .update(bookingServices)
+            .set({ sortOrder: i, updatedAt: new Date() })
+            .where(
+              and(eq(bookingServices.tenantId, tenantId), eq(bookingServices.id, id)),
+            ),
+        ),
+      );
     });
   } catch {
     throw new Error("Failed to reorder booking services");

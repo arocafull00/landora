@@ -11,6 +11,7 @@ import {
 import { replaceEmployeeHours } from "@/data/employee-hours";
 import { replaceEmployeeServices } from "@/data/employee-services";
 import { DEFAULT_HOUR_DRAFTS } from "@/lib/employee-schedule";
+import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 
 const nameSchema = z.string().trim().min(1).max(80);
@@ -30,6 +31,8 @@ export async function createEmployeeAction(
   name: string,
   isActive = true,
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -50,6 +53,8 @@ export async function createEmployeeAction(
 }
 
 export async function updateEmployeeAction(id: string, name: string): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -75,6 +80,8 @@ export async function setEmployeeActiveAction(
   id: string,
   isActive: boolean,
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -93,6 +100,8 @@ export async function setEmployeeActiveAction(
 }
 
 export async function deleteEmployeeAction(id: string): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -110,6 +119,8 @@ export async function replaceEmployeeHoursAction(
   employeeId: string,
   hours: z.infer<typeof hoursSchema>,
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -132,6 +143,8 @@ export async function replaceEmployeeServicesAction(
   employeeId: string,
   serviceIds: string[],
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;

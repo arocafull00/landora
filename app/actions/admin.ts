@@ -97,7 +97,7 @@ const createLandingSchema = z.object({
   template: z.enum(["velar", "studio", "portfolio", "ristorante", "floristeria", "oficio-pro", "coffee-shop"]).default("velar"),
 });
 
-export async function createLandingForUser(formData: FormData): Promise<ActionResult> {
+async function createLandingForUser(formData: FormData): Promise<ActionResult> {
   const authError = await checkAuth();
   if (authError) return authError;
 
@@ -143,7 +143,7 @@ export async function createLandingForUser(formData: FormData): Promise<ActionRe
 const landingIdSchema = z.uuid("ID de landing inválido");
 const userIdSchema = z.uuid("ID de usuario inválido");
 
-export async function setLandingPublished(
+async function setLandingPublished(
   landingId: string,
   published: boolean,
 ): Promise<ActionResult> {
@@ -180,7 +180,7 @@ export async function setLandingPublished(
   return { success: true };
 }
 
-export async function deleteLanding(landingId: string): Promise<ActionResult> {
+async function deleteLanding(landingId: string): Promise<ActionResult> {
   const authError = await checkAuth();
   if (authError) return authError;
 
@@ -262,9 +262,6 @@ async function updateUserById(
   userId: string,
   update: Parameters<typeof updateUserFields>[1],
 ): Promise<ActionResult> {
-  const authError = await checkAuth();
-  if (authError) return authError;
-
   const parsed = userIdSchema.safeParse(userId);
   if (!parsed.success) {
     return { error: parsed.error.message };
@@ -290,18 +287,26 @@ async function updateUserById(
 }
 
 export async function grantManualAccess(userId: string): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
   return updateUserById(userId, { accessType: "manual" });
 }
 
 export async function revokeManualAccess(userId: string): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
   return updateUserById(userId, { accessType: "subscription" });
 }
 
 export async function suspendUser(userId: string): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
   return updateUserById(userId, { suspended: true });
 }
 
 export async function reactivateUser(userId: string): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
   return updateUserById(userId, { suspended: false });
 }
 
@@ -345,17 +350,19 @@ export async function publishUserLandings(userId: string): Promise<ActionResult>
   const userLandings = await getLandingsByUserId(parsed.data);
 
   try {
-    for (const landing of userLandings) {
-      const fullLanding = await getLandingPageById(landing.id);
-      if (!fullLanding) {
-        continue;
-      }
-      await ensureLandingHasDefaultContent(fullLanding);
-      await updateLandingPage(landing.id, {
-        published: true,
-        updatedAt: new Date(),
-      });
-    }
+    await Promise.all(
+      userLandings.map(async (landing) => {
+        const fullLanding = await getLandingPageById(landing.id);
+        if (!fullLanding) {
+          return;
+        }
+        await ensureLandingHasDefaultContent(fullLanding);
+        await updateLandingPage(landing.id, {
+          published: true,
+          updatedAt: new Date(),
+        });
+      }),
+    );
   } catch {
     return { error: "Error al publicar las landings" };
   }

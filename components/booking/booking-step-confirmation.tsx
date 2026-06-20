@@ -4,10 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export function BookingStepConfirmation({ publicToken }: { publicToken: string }) {
   return (
-    <div
-      role="status"
-      className="space-y-4 rounded-lg bg-success/5 p-6 text-center"
-    >
+    <output className="block space-y-4 rounded-lg bg-success/5 p-6 text-center">
       <CircleCheck className="mx-auto size-10 text-success" aria-hidden />
       <h3 className="font-body text-body-lg font-semibold text-on-surface">Reserva confirmada</h3>
       <p className="font-body text-body-sm text-on-surface-variant">
@@ -16,6 +13,6 @@ export function BookingStepConfirmation({ publicToken }: { publicToken: string }
       <Button asChild>
         <Link href={`/reservation/${publicToken}`}>Ver o cancelar reserva</Link>
       </Button>
-    </div>
+    </output>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { Booking, Employee } from "@/db/schema";
 import { AgendaDayNav } from "@/components/dashboard/booking/bookings/agenda-day-nav";
 import { AgendaGrid } from "@/components/dashboard/booking/bookings/agenda-grid";
@@ -17,10 +17,9 @@ export function BookingsAgenda({
   date: string;
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const navigate = (nextDate: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(window.location.search);
     params.set("view", "agenda");
     params.set("date", nextDate);
     router.push(`/bookings?${params.toString()}`);

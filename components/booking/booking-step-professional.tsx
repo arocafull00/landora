@@ -7,6 +7,7 @@ import { BookingEmployeeCard } from "@/components/booking/booking-employee-card"
 import { BookingStepHeader } from "@/components/booking/booking-step-header";
 import { BookingStepLoading } from "@/components/booking/booking-step-loading";
 import { BookingEmptyState } from "@/components/booking/booking-empty-state";
+import { getPublicBookingEmployeesAction } from "@/app/actions/public-booking";
 
 type Employee = { id: string; name: string };
 
@@ -25,12 +26,26 @@ export function BookingStepProfessional({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(
-      `/api/booking/employees?slug=${encodeURIComponent(slug)}&serviceId=${encodeURIComponent(serviceId)}`,
-    )
-      .then((res) => res.json())
-      .then((json) => setEmployees(json.data ?? []))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+    getPublicBookingEmployeesAction(slug, serviceId)
+      .then((result) => {
+        if (cancelled) {
+          return;
+        }
+        if ("error" in result) {
+          setEmployees([]);
+          return;
+        }
+        setEmployees(result.data);
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [slug, serviceId]);
 
   if (loading) {

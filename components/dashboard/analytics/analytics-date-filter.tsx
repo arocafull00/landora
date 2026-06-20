@@ -35,14 +35,22 @@ export function AnalyticsDateFilter() {
       ))}
       {preset === "custom" ? (
         <div className="flex flex-wrap items-center gap-2">
+          <label className="font-body text-body-sm text-on-surface-variant" htmlFor="analytics-from">
+            Desde
+          </label>
           <input
+            id="analytics-from"
             className="rounded-md border border-outline-variant bg-surface-container-lowest px-2 py-1.5 font-body text-body-sm text-on-surface"
             type="date"
             value={from}
             onChange={(event) => setRange(event.target.value, to)}
           />
           <span className="font-body text-body-sm text-on-surface-variant">—</span>
+          <label className="font-body text-body-sm text-on-surface-variant" htmlFor="analytics-to">
+            Hasta
+          </label>
           <input
+            id="analytics-to"
             className="rounded-md border border-outline-variant bg-surface-container-lowest px-2 py-1.5 font-body text-body-sm text-on-surface"
             type="date"
             value={to}

@@ -1,5 +1,5 @@
 import { fromZonedTime, toZonedTime } from "date-fns-tz";
-import { startOfDay, endOfDay, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 
 export function getDayBoundsInUtc(date: string, timezone: string) {
   const localStart = parseISO(`${date}T00:00:00`);
@@ -30,8 +30,6 @@ export function formatDateInTimezone(date: Date, timezone: string, pattern = "yy
   return `${year}-${month}-${day}`;
 }
 
-export function getNowInTimezone(timezone: string) {
+function getNowInTimezone(timezone: string) {
   return toZonedTime(new Date(), timezone);
 }
-
-export { startOfDay, endOfDay };

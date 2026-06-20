@@ -11,29 +11,14 @@ const STATUS_COLORS: Record<BookingStatus, string> = {
 export function AgendaBookingCard({
   booking,
   timezone,
-  date,
-  gridStartHour,
 }: {
   booking: Booking;
   timezone: string;
-  date: string;
-  gridStartHour: number;
 }) {
   const zonedStart = toZonedTime(booking.startsAt, timezone);
-  const bookingDate = `${zonedStart.getFullYear()}-${String(zonedStart.getMonth() + 1).padStart(2, "0")}-${String(zonedStart.getDate()).padStart(2, "0")}`;
 
-  if (bookingDate !== date) {
-    return null;
-  }
-
-  const startMinutes = zonedStart.getHours() * 60 + zonedStart.getMinutes();
-  const gridStartMinutes = gridStartHour * 60;
-  const top = ((startMinutes - gridStartMinutes) / 60) * 64;
+  const top = (zonedStart.getMinutes() / 60) * 64;
   const height = (booking.durationMinutesSnapshot / 60) * 64;
-
-  if (top < 0) {
-    return null;
-  }
 
   return (
     <div

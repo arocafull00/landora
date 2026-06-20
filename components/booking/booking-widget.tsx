@@ -3,15 +3,14 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { ChevronLeft } from "lucide-react";
 import { toast } from "react-toastify";
-import { Turnstile } from "@marsidev/react-turnstile";
 import { VisuallyHidden } from "radix-ui";
 import { usePublicBookingStore } from "@/stores/public-booking-store";
 import { BookingSummary } from "@/components/booking/booking-summary";
 import { BookingSummaryCollapsible } from "@/components/booking/booking-summary-collapsible";
 import {
   BookingStepProgress,
-  getBookingProgressLabel,
 } from "@/components/booking/booking-step-progress";
+import { getBookingProgressLabel } from "@/lib/booking/progress-steps";
 import { BookingStepService } from "@/components/booking/booking-step-service";
 import { BookingStepProfessional } from "@/components/booking/booking-step-professional";
 import { BookingStepDate } from "@/components/booking/booking-step-date";
@@ -123,6 +122,7 @@ export function BookingWidget({ slug }: { slug: string }) {
           </VisuallyHidden.Root>
           {step === "service" ? (
             <BookingStepService
+              key={slug}
               slug={slug}
               onSelect={(service) => {
                 setSelection({
@@ -140,6 +140,7 @@ export function BookingWidget({ slug }: { slug: string }) {
           ) : null}
           {step === "professional" && selection.serviceId ? (
             <BookingStepProfessional
+              key={`${slug}-${selection.serviceId}`}
               slug={slug}
               serviceId={selection.serviceId}
               onSelect={(employee) => {
@@ -177,6 +178,7 @@ export function BookingWidget({ slug }: { slug: string }) {
             selection.employeeId &&
             selection.date ? (
             <BookingStepTime
+              key={`${slug}-${selection.serviceId}-${selection.employeeId}-${selection.date}`}
               slug={slug}
               serviceId={selection.serviceId}
               employeeId={selection.employeeId}
@@ -195,16 +197,10 @@ export function BookingWidget({ slug }: { slug: string }) {
                 !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken
               }
               onSubmit={submitBooking}
-              turnstile={
-                process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? (
-                  <Turnstile
-                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                    onSuccess={setTurnstileToken}
-                    onExpire={() => setTurnstileToken("")}
-                    onError={() => setTurnstileToken("")}
-                  />
-                ) : null
-              }
+              showTurnstile={!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+              onTurnstileSuccess={setTurnstileToken}
+              onTurnstileExpire={() => setTurnstileToken("")}
+              onTurnstileError={() => setTurnstileToken("")}
             />
           ) : null}
           {step === "confirmation" && publicToken ? (

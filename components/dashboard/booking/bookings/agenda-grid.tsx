@@ -1,7 +1,23 @@
 import type { Booking, Employee } from "@/db/schema";
+import { toZonedTime } from "date-fns-tz";
 import { AgendaBookingCard } from "@/components/dashboard/booking/bookings/agenda-booking-card";
 
 const HOURS = Array.from({ length: 14 }, (_, i) => i + 8);
+
+function groupBookingsByEmployee(
+  bookings: (Booking & { employee: Employee | null })[],
+) {
+  const bookingsByEmployee = new Map<string, (Booking & { employee: Employee | null })[]>();
+  for (const booking of bookings) {
+    const employeeBookings = bookingsByEmployee.get(booking.employeeId);
+    if (employeeBookings) {
+      employeeBookings.push(booking);
+      continue;
+    }
+    bookingsByEmployee.set(booking.employeeId, [booking]);
+  }
+  return bookingsByEmployee;
+}
 
 export function AgendaGrid({
   bookings,
@@ -15,6 +31,7 @@ export function AgendaGrid({
   date: string;
 }) {
   const activeEmployees = employees.filter((e) => e.isActive);
+  const bookingsByEmployee = groupBookingsByEmployee(bookings);
 
   if (activeEmployees.length === 0) {
     return (
@@ -48,7 +65,7 @@ export function AgendaGrid({
             date={date}
             timezone={timezone}
             employees={activeEmployees}
-            bookings={bookings}
+            bookingsByEmployee={bookingsByEmployee}
           />
         ))}
       </div>
@@ -61,37 +78,41 @@ function AgendaHourRow({
   date,
   timezone,
   employees,
-  bookings,
+  bookingsByEmployee,
 }: {
   hour: number;
   date: string;
   timezone: string;
   employees: Employee[];
-  bookings: (Booking & { employee: Employee | null })[];
+  bookingsByEmployee: Map<string, (Booking & { employee: Employee | null })[]>;
 }) {
   return (
     <>
       <div className="border-b border-outline-variant p-2 font-body text-body-xs text-on-surface-variant">
         {String(hour).padStart(2, "0")}:00
       </div>
-      {employees.map((employee) => (
-        <div
-          key={`${hour}-${employee.id}`}
-          className="relative min-h-16 border-b border-l border-outline-variant"
-        >
-          {bookings
-            .filter((b) => b.employeeId === employee.id)
-            .map((booking) => (
+      {employees.map((employee) => {
+        const employeeBookings = bookingsByEmployee.get(employee.id) ?? [];
+        const hourBookings = employeeBookings.filter((booking) => {
+          const zonedStart = toZonedTime(booking.startsAt, timezone);
+          const bookingDate = `${zonedStart.getFullYear()}-${String(zonedStart.getMonth() + 1).padStart(2, "0")}-${String(zonedStart.getDate()).padStart(2, "0")}`;
+          return bookingDate === date && zonedStart.getHours() === hour;
+        });
+        return (
+          <div
+            key={`${hour}-${employee.id}`}
+            className="relative min-h-16 overflow-visible border-b border-l border-outline-variant"
+          >
+            {hourBookings.map((booking) => (
               <AgendaBookingCard
                 key={booking.id}
                 booking={booking}
                 timezone={timezone}
-                date={date}
-                gridStartHour={8}
               />
             ))}
-        </div>
-      ))}
+          </div>
+        );
+      })}
     </>
   );
 }

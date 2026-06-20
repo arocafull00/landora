@@ -131,7 +131,7 @@ export function OfferBlockEditor({ offer, onChange, onRemove }: OfferBlockEditor
             <OfferCardEditor
               card={card}
               index={index}
-              key={`${offer.id}-card-${index}`}
+              key={`${offer.id}-card-${card.title}-${card.ctaText ?? ""}`}
               onChange={(patch) =>
                 updateCards(
                   offer.cards.map((currentCard, cardIndex) =>

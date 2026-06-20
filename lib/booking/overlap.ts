@@ -3,7 +3,7 @@ export type TimeInterval = {
   endsAt: Date;
 };
 
-export function intervalsOverlap(a: TimeInterval, b: TimeInterval) {
+function intervalsOverlap(a: TimeInterval, b: TimeInterval) {
   return a.startsAt < b.endsAt && a.endsAt > b.startsAt;
 }
 

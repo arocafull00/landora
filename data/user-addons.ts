@@ -108,7 +108,7 @@ export async function setUserAddonStatus(data: {
   }
 }
 
-export async function listBookingsAddons() {
+async function listBookingsAddons() {
   try {
     return await db.query.userAddons.findMany({
       where: eq(userAddons.addonType, "bookings"),

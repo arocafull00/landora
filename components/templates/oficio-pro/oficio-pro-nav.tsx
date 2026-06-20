@@ -114,6 +114,7 @@ export function OficioProNav({
         type="button"
       />
       <dialog
+        aria-labelledby="oficio-pro-mobile-nav-title"
         className={`fixed inset-x-0 bottom-0 z-40 m-0 flex max-h-[calc(100dvh-72px)] w-full max-w-none flex-col border-0 bg-[#FEFCFD] p-0 shadow-[0_-12px_48px_rgba(15,23,42,0.18)] transition-transform duration-300 lg:hidden ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
@@ -122,6 +123,9 @@ export function OficioProNav({
         style={{ top: topOffset + 72 }}
       >
         <div className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-4 pb-8 pt-5">
+          <p id="oficio-pro-mobile-nav-title" className="px-3 pb-2 text-sm font-semibold text-[#17212B]">
+            Menú
+          </p>
           {navLinks.map((link) => (
             <a
               className="w-full rounded-xl px-3 py-3 text-lg font-semibold text-[#17212B] transition-colors hover:bg-[#1F4E79]/10 hover:text-[#1F4E79]"

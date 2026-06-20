@@ -62,65 +62,70 @@ export async function getAvailableSlots(params: {
     candidates = [{ id: employee.id, createdAt: employee.createdAt }];
   }
 
-  const allSlots: AvailableSlot[] = [];
-
-  for (const candidate of candidates) {
-    const hours = await getEmployeeHoursForDay(tenantId, candidate.id, dayOfWeek);
-    if (!hours || !hours.isWorking) {
-      continue;
-    }
-
-    const blockedPeriods = await getBlockedPeriods(tenantId, {
-      rangeStart: dayStart,
-      rangeEnd: dayEnd,
-      employeeId: candidate.id,
-    });
-
-    const existingBookings = await getActiveBookingsForEmployeeInRange(
-      tenantId,
-      candidate.id,
-      dayStart,
-      dayEnd,
-    );
-
-    const blockers = [
-      ...blockedPeriods.map((bp) => ({ startsAt: bp.startsAt, endsAt: bp.endsAt })),
-      ...existingBookings.map((b) => ({
-        startsAt: b.startsAt,
-        endsAt: addMinutes(b.endsAt, service.bufferAfterMinutes),
-      })),
-    ];
-
-    const rawSlots = generateRawSlots({
-      date,
-      timezone,
-      startTime: hours.startTime,
-      endTime: hours.endTime,
-      granularityMinutes: settings.slotGranularityMinutes,
-      totalBlockMinutes,
-    });
-
-    for (const slot of rawSlots) {
-      if (slot.startsAt.getTime() < now.getTime() + minAdvanceMs) {
-        continue;
+  const candidateSlots = await Promise.all(
+    candidates.map(async (candidate) => {
+      const hours = await getEmployeeHoursForDay(tenantId, candidate.id, dayOfWeek);
+      if (!hours || !hours.isWorking) {
+        return [];
       }
-      if (slot.startsAt.getTime() > maxAdvanceDate.getTime()) {
-        continue;
-      }
-      if (slotOverlapsAny(slot, blockers)) {
-        continue;
-      }
-      allSlots.push({
-        startsAt: slot.startsAt,
-        endsAt: addMinutes(slot.startsAt, service.durationMinutes),
-        employeeId: candidate.id,
+
+      const [blockedPeriods, existingBookings] = await Promise.all([
+        getBlockedPeriods(tenantId, {
+          rangeStart: dayStart,
+          rangeEnd: dayEnd,
+          employeeId: candidate.id,
+        }),
+        getActiveBookingsForEmployeeInRange(
+          tenantId,
+          candidate.id,
+          dayStart,
+          dayEnd,
+        ),
+      ]);
+
+      const blockers = [
+        ...blockedPeriods.map((bp) => ({ startsAt: bp.startsAt, endsAt: bp.endsAt })),
+        ...existingBookings.map((b) => ({
+          startsAt: b.startsAt,
+          endsAt: addMinutes(b.endsAt, service.bufferAfterMinutes),
+        })),
+      ];
+
+      const rawSlots = generateRawSlots({
+        date,
+        timezone,
+        startTime: hours.startTime,
+        endTime: hours.endTime,
+        granularityMinutes: settings.slotGranularityMinutes,
+        totalBlockMinutes,
       });
-    }
-  }
+
+      const slots: AvailableSlot[] = [];
+      for (const slot of rawSlots) {
+        if (slot.startsAt.getTime() < now.getTime() + minAdvanceMs) {
+          continue;
+        }
+        if (slot.startsAt.getTime() > maxAdvanceDate.getTime()) {
+          continue;
+        }
+        if (slotOverlapsAny(slot, blockers)) {
+          continue;
+        }
+        slots.push({
+          startsAt: slot.startsAt,
+          endsAt: addMinutes(slot.startsAt, service.durationMinutes),
+          employeeId: candidate.id,
+        });
+      }
+      return slots;
+    }),
+  );
+
+  const allSlots = candidateSlots.flat();
 
   if (employeeId === "any") {
     const byStart = new Map<string, AvailableSlot>();
-    const sorted = [...allSlots].sort((a, b) => {
+    const sorted = [...allSlots].toSorted((a, b) => {
       const timeDiff = a.startsAt.getTime() - b.startsAt.getTime();
       if (timeDiff !== 0) {
         return timeDiff;
@@ -136,10 +141,10 @@ export async function getAvailableSlots(params: {
         byStart.set(key, slot);
       }
     }
-    return Array.from(byStart.values()).sort(
+    return Array.from(byStart.values()).toSorted(
       (a, b) => a.startsAt.getTime() - b.startsAt.getTime(),
     );
   }
 
-  return allSlots.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
+  return allSlots.toSorted((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
 }

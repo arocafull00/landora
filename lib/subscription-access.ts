@@ -1,6 +1,6 @@
 import type { SubscriptionStatus } from "@/db/schema";
 
-export const ALLOWED_SUBSCRIPTION_STATUSES: SubscriptionStatus[] = [
+const ALLOWED_SUBSCRIPTION_STATUSES: SubscriptionStatus[] = [
   "active",
   "trialing",
 ];

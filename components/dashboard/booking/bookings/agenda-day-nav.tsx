@@ -12,6 +12,10 @@ export function AgendaDayNav({
 }) {
   const current = parseISO(`${date}T12:00:00`);
 
+  const goToToday = () => {
+    onNavigate(format(new Date(), "yyyy-MM-dd"));
+  };
+
   return (
     <div className="flex items-center gap-2">
       <Button
@@ -20,7 +24,7 @@ export function AgendaDayNav({
       >
         Anterior
       </Button>
-      <Button variant="outline" onClick={() => onNavigate(format(new Date(), "yyyy-MM-dd"))}>
+      <Button variant="outline" onClick={goToToday}>
         Hoy
       </Button>
       <Button

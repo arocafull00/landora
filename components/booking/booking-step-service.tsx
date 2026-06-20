@@ -7,6 +7,7 @@ import { BookingServiceCard } from "@/components/booking/booking-service-card";
 import { BookingStepHeader } from "@/components/booking/booking-step-header";
 import { BookingStepLoading } from "@/components/booking/booking-step-loading";
 import { BookingEmptyState } from "@/components/booking/booking-empty-state";
+import { getPublicBookingServicesAction } from "@/app/actions/public-booking";
 
 type Service = { id: string; name: string; durationMinutes: number };
 
@@ -21,12 +22,26 @@ export function BookingStepService({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/api/booking/services?slug=${encodeURIComponent(slug)}`)
-      .then((res) => res.json())
-      .then((json) => {
-        setServices(json.data ?? []);
+    let cancelled = false;
+    getPublicBookingServicesAction(slug)
+      .then((result) => {
+        if (cancelled) {
+          return;
+        }
+        if ("error" in result) {
+          setServices([]);
+          return;
+        }
+        setServices(result.data);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   if (loading) {

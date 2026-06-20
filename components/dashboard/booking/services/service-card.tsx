@@ -75,6 +75,7 @@ export function ServiceCard({
       {expanded ? (
         <div className="px-5 pb-5">
           <ServiceQuickEdit
+            key={service.id}
             service={service}
             disabled={disabled}
             onSaved={() => setExpanded(false)}

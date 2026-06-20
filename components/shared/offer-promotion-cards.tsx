@@ -70,8 +70,8 @@ export function OfferPromotionCards({ offer, phone }: OfferPromotionCardsProps) 
           ) : null}
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {activeCards.map((card, index) => (
-            <PromotionCard card={card} key={`${offer.id}-card-${index}`} phone={phone} />
+          {activeCards.map((card) => (
+            <PromotionCard card={card} key={`${offer.id}-card-${card.title}-${card.description}`} phone={phone} />
           ))}
         </div>
       </div>

@@ -1,11 +1,9 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible } from "@/components/ui/collapsible";
+import { CollapsibleContent } from "@/components/ui/collapsible-content";
+import { CollapsibleTrigger } from "@/components/ui/collapsible-trigger";
 import { BookingSummary } from "@/components/booking/booking-summary";
 
 export function BookingSummaryCollapsible({

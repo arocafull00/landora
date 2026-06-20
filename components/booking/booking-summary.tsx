@@ -1,24 +1,6 @@
 import { Separator } from "@/components/ui/separator";
+import { formatSummaryDate, formatSummaryTime } from "@/lib/booking/format-datetime";
 import { cn } from "@/lib/utils";
-
-function formatSummaryDate(date: string) {
-  const parsed = new Date(`${date}T12:00:00`);
-  if (Number.isNaN(parsed.getTime())) {
-    return date;
-  }
-  return new Intl.DateTimeFormat("es-ES", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  }).format(parsed);
-}
-
-function formatSummaryTime(startsAt: string) {
-  return new Intl.DateTimeFormat("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(startsAt));
-}
 
 function SummaryRow({
   label,

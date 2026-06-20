@@ -5,7 +5,7 @@ import { employeeServices, employees, bookingServices } from "@/db/schema";
 import { assertEmployeeBelongsToTenant } from "@/data/employees";
 import { assertServiceBelongsToTenant } from "@/data/booking-services";
 
-export const getServicesForEmployee = cache(async (tenantId: string, employeeId: string) => {
+const getServicesForEmployee = cache(async (tenantId: string, employeeId: string) => {
   try {
     await assertEmployeeBelongsToTenant(tenantId, employeeId);
     const links = await db.query.employeeServices.findMany({
@@ -60,14 +60,17 @@ export async function replaceEmployeeServices(
   serviceIds: string[],
 ) {
   try {
-    await assertEmployeeBelongsToTenant(tenantId, employeeId);
-    for (const serviceId of serviceIds) {
-      await assertServiceBelongsToTenant(tenantId, serviceId);
-    }
-    await db.delete(employeeServices).where(eq(employeeServices.employeeId, employeeId));
     if (serviceIds.length === 0) {
+      await assertEmployeeBelongsToTenant(tenantId, employeeId);
+      await db.delete(employeeServices).where(eq(employeeServices.employeeId, employeeId));
       return;
     }
+
+    await assertEmployeeBelongsToTenant(tenantId, employeeId);
+    await Promise.all(
+      serviceIds.map((serviceId) => assertServiceBelongsToTenant(tenantId, serviceId)),
+    );
+    await db.delete(employeeServices).where(eq(employeeServices.employeeId, employeeId));
     await db
       .insert(employeeServices)
       .values(serviceIds.map((serviceId) => ({ employeeId, serviceId })));

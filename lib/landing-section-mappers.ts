@@ -14,7 +14,7 @@ import type {
 } from "@/db/schema";
 import type { LandingContent, TemplateContentMap, TemplateId } from "@/lib/dashboard-data";
 
-export function getDefaultStoryStatement(templateId: TemplateId, content: LandingContent) {
+function getDefaultStoryStatement(templateId: TemplateId, content: LandingContent) {
   if (templateId === "studio" || templateId === "oficio-pro") {
     return (
       (content as TemplateContentMap["studio"] | TemplateContentMap["oficio-pro"]).about

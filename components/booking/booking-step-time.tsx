@@ -7,6 +7,7 @@ import { BookingSlotButton } from "@/components/booking/booking-slot-button";
 import { BookingStepHeader } from "@/components/booking/booking-step-header";
 import { BookingStepLoading } from "@/components/booking/booking-step-loading";
 import { BookingEmptyState } from "@/components/booking/booking-empty-state";
+import { getPublicBookingSlotsAction } from "@/app/actions/public-booking";
 
 type Slot = { startsAt: string; endsAt: string; employeeId: string };
 
@@ -29,12 +30,26 @@ export function BookingStepTime({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(
-      `/api/booking/availability?slug=${encodeURIComponent(slug)}&serviceId=${encodeURIComponent(serviceId)}&employeeId=${encodeURIComponent(employeeId)}&date=${encodeURIComponent(date)}`,
-    )
-      .then((res) => res.json())
-      .then((json) => setSlots(json.data ?? []))
-      .finally(() => setLoading(false));
+    let cancelled = false;
+    getPublicBookingSlotsAction(slug, serviceId, employeeId, date)
+      .then((result) => {
+        if (cancelled) {
+          return;
+        }
+        if ("error" in result) {
+          setSlots([]);
+          return;
+        }
+        setSlots(result.data);
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [slug, serviceId, employeeId, date]);
 
   if (loading) {

@@ -17,17 +17,18 @@ import { sendBookingNotification } from "@/lib/booking/send-notification";
 import { captureBookingEvent } from "@/lib/booking/capture-event";
 import { addMinutes } from "@/lib/booking/overlap";
 import { formatDateInTimezone } from "@/lib/booking/timezone";
+import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 import type { BookingStatus } from "@/db/schema";
 
 const createBookingSchema = z.object({
   slug: z.string().trim().min(1),
-  serviceId: z.string().uuid(),
-  employeeId: z.union([z.string().uuid(), z.literal("any")]),
-  startsAt: z.string().datetime(),
+  serviceId: z.uuid(),
+  employeeId: z.union([z.uuid(), z.literal("any")]),
+  startsAt: z.iso.datetime(),
   customerName: z.string().trim().min(1).max(120),
   customerPhone: z.string().trim().min(5).max(30),
-  customerEmail: z.string().email().optional().or(z.literal("")),
+  customerEmail: z.email().optional().or(z.literal("")),
   notes: z.string().max(500).optional(),
   turnstileToken: z.string().min(1),
   honeypot: z.string().optional(),
@@ -176,18 +177,18 @@ export async function createBookingAction(
 
 type StatusActionResult = { success: true } | { error: string };
 
-const statusTransitions: Record<BookingStatus, BookingStatus[]> = {
-  pending: ["confirmed", "cancelled"],
-  confirmed: ["completed", "cancelled"],
-  completed: [],
-  cancelled: [],
-};
-
 async function changeBookingStatus(
   tenantId: string,
   id: string,
   nextStatus: BookingStatus,
 ): Promise<StatusActionResult> {
+  const statusTransitions: Record<BookingStatus, BookingStatus[]> = {
+    pending: ["confirmed", "cancelled"],
+    confirmed: ["completed", "cancelled"],
+    completed: [],
+    cancelled: [],
+  };
+
   const { getBookingById } = await import("@/data/bookings");
   const booking = await getBookingById(tenantId, id);
   if (!booking) {
@@ -223,18 +224,24 @@ async function changeBookingStatus(
 }
 
 export async function confirmBookingAction(id: string): Promise<StatusActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   return changeBookingStatus(access.tenantId, id, "confirmed");
 }
 
 export async function completeBookingAction(id: string): Promise<StatusActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   return changeBookingStatus(access.tenantId, id, "completed");
 }
 
 export async function cancelBookingAction(id: string): Promise<StatusActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   return changeBookingStatus(access.tenantId, id, "cancelled");

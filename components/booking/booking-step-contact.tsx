@@ -1,10 +1,10 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { BookingStepHeader } from "@/components/booking/booking-step-header";
+import { BookingTurnstileField } from "@/components/booking/booking-turnstile-field";
 import { cn } from "@/lib/utils";
 
 const textareaClassName = cn(
@@ -16,7 +16,10 @@ export function BookingStepContact({
   pending,
   submitDisabled,
   onSubmit,
-  turnstile,
+  showTurnstile,
+  onTurnstileSuccess,
+  onTurnstileExpire,
+  onTurnstileError,
 }: {
   pending: boolean;
   submitDisabled: boolean;
@@ -27,14 +30,15 @@ export function BookingStepContact({
     notes: string;
     honeypot: string;
   }) => void;
-  turnstile: ReactNode;
+  showTurnstile: boolean;
+  onTurnstileSuccess: (token: string) => void;
+  onTurnstileExpire: () => void;
+  onTurnstileError: () => void;
 }) {
   return (
     <form
       className="space-y-4"
-      onSubmit={(event) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+      action={(formData) => {
         onSubmit({
           customerName: String(formData.get("customerName") ?? ""),
           customerPhone: String(formData.get("customerPhone") ?? ""),
@@ -80,8 +84,26 @@ export function BookingStepContact({
         <Label htmlFor="notes">Notas</Label>
         <textarea id="notes" name="notes" className={textareaClassName} />
       </div>
-      <input name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
-      {turnstile}
+      <input
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+        aria-hidden
+        aria-label="Campo oculto"
+      />
+      {showTurnstile ? (
+        <div className="space-y-2">
+          <Label htmlFor="booking-turnstile">Verificación de seguridad</Label>
+          <div id="booking-turnstile">
+            <BookingTurnstileField
+              onSuccess={onTurnstileSuccess}
+              onExpire={onTurnstileExpire}
+              onError={onTurnstileError}
+            />
+          </div>
+        </div>
+      ) : null}
       <Button type="submit" className="w-full sm:w-auto" disabled={pending || submitDisabled}>
         Confirmar reserva
       </Button>

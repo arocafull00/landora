@@ -35,7 +35,7 @@ export async function requireBookingModuleAccessForCurrentUser(): Promise<
   return { tenantId };
 }
 
-export async function requireBookingModuleAccessForTenant(
+async function requireBookingModuleAccessForTenant(
   tenantId: string,
 ): Promise<AccessDenied | AccessGranted> {
   const user = await getUserByInternalId(tenantId);

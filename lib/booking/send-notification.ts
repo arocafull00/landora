@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { getBookingSettings } from "@/data/booking-settings";
 import { getLandingPageByUserId } from "@/data/landing-pages";
 import type { Booking, Employee } from "@/db/schema";
+import { formatFullDateTime } from "@/lib/booking/format-datetime";
 
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
@@ -38,11 +39,7 @@ export async function sendBookingNotification(
     return;
   }
 
-  const formattedDate = new Intl.DateTimeFormat("es-ES", {
-    dateStyle: "full",
-    timeStyle: "short",
-    timeZone: timezone,
-  }).format(booking.startsAt);
+  const formattedDate = formatFullDateTime(booking.startsAt, timezone);
 
   await resend.emails.send({
     from,

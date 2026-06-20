@@ -58,7 +58,7 @@ function formatDayRange(workingDays: number[]): string {
     return "Sin horario";
   }
 
-  const sorted = [...workingDays].sort((a, b) => {
+  const sorted = [...workingDays].toSorted((a, b) => {
     const orderA = a === 0 ? 7 : a;
     const orderB = b === 0 ? 7 : b;
     return orderA - orderB;
@@ -86,7 +86,7 @@ function formatDayRange(workingDays: number[]): string {
   return "Horario personalizado";
 }
 
-export function getScheduleSummary(hourDrafts: HourDraft[]): {
+function getScheduleSummary(hourDrafts: HourDraft[]): {
   headline: string;
   detail: string;
   isCustom: boolean;

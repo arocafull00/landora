@@ -156,7 +156,7 @@ export function isPeriodEndingSoon(date: Date | null) {
   return diffDays >= 0 && diffDays <= 7;
 }
 
-export function mapSubscriptionStatusToDisplay(
+function mapSubscriptionStatusToDisplay(
   status: SubscriptionStatus | null,
 ): AdminUserDisplayStatus {
   if (status === "trialing") return "trial";

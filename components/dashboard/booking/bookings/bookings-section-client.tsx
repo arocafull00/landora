@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import type { Booking, BookingSettings, BookingStatus, Employee } from "@/db/schema";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { BookingSettingsModal } from "@/components/dashboard/booking/booking-settings-modal";
@@ -31,11 +31,10 @@ export function BookingsSectionClient({
   employeeId: string;
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [settingsOpen, setSettingsOpen] = useState(() => !settings.enabled);
 
   const setView = (nextView: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(window.location.search);
     params.set("view", nextView);
     router.push(`/bookings?${params.toString()}`);
   };

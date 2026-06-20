@@ -32,7 +32,7 @@ export async function getSubscriptionStatusForProxy(clerkUserId: string) {
   return fetchSubscriptionStatus(clerkUserId);
 }
 
-export async function getUserByStripeSubscriptionId(subscriptionId: string) {
+async function getUserByStripeSubscriptionId(subscriptionId: string) {
   try {
     return await db.query.users.findFirst({
       where: eq(users.stripeSubscriptionId, subscriptionId),
@@ -42,7 +42,7 @@ export async function getUserByStripeSubscriptionId(subscriptionId: string) {
   }
 }
 
-export async function getUserByStripeCustomerId(stripeCustomerId: string) {
+async function getUserByStripeCustomerId(stripeCustomerId: string) {
   try {
     return await db.query.users.findFirst({
       where: eq(users.stripeCustomerId, stripeCustomerId),

@@ -16,6 +16,9 @@ import { StudioServiceMenuItemEditor } from "@/components/dashboard/studio-servi
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
+import { EditorSectionTitle } from "@/components/dashboard/editor-section-title";
+import { EditorTextField } from "@/components/dashboard/editor-text-field";
+import { EditorTextArea } from "@/components/dashboard/editor-text-area";
 
 export function StudioEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -57,11 +60,11 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Historia" ? (
             <section className="space-y-5 py-unit-lg">
-              <SectionTitle
+              <EditorSectionTitle
                 title="Historia"
                 description="Narrativa y métricas de la sección Nosotros."
               />
-              <TextArea
+              <EditorTextArea
                 label="Texto principal"
                 onChange={(value) =>
                   updateSection(activeLanding.id, "about", {
@@ -84,14 +87,14 @@ export function StudioEditorSection() {
                   <div className="grid gap-4 md:grid-cols-3">
                     {activeLanding.content.stats.map((stat) => (
                       <div className="space-y-3" key={stat.id}>
-                        <TextField
+                        <EditorTextField
                           label="Valor"
                           onChange={(value) =>
                             updateStat(activeLanding.id, stat.id, { value })
                           }
                           value={stat.value}
                         />
-                        <TextField
+                        <EditorTextField
                           label="Etiqueta"
                           onChange={(value) =>
                             updateStat(activeLanding.id, stat.id, { label: value })
@@ -108,29 +111,29 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Hero" ? (
             <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Portada" description="El bloque principal de la landing." />
-              <TextField
+              <EditorSectionTitle title="Portada" description="El bloque principal de la landing." />
+              <EditorTextField
                 label="Subtítulo superior"
                 onChange={(value) => updateHero(activeLanding.id, { eyebrow: value })}
                 value={activeLanding.content.hero.eyebrow}
               />
-              <TextField
+              <EditorTextField
                 label="Título"
                 onChange={(value) => updateHero(activeLanding.id, { title: value })}
                 value={activeLanding.content.hero.title}
               />
-              <TextArea
+              <EditorTextArea
                 label="Subtítulo"
                 onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
                 value={activeLanding.content.hero.subtitle}
               />
-              <TextArea
+              <EditorTextArea
                 label="Descripción"
                 onChange={(value) => updateHero(activeLanding.id, { description: value })}
                 rows={4}
                 value={activeLanding.content.hero.description}
               />
-              <TextField
+              <EditorTextField
                 label="Texto del botón"
                 onChange={(value) => updateHero(activeLanding.id, { ctaLabel: value })}
                 value={activeLanding.content.hero.ctaLabel ?? ""}
@@ -147,7 +150,7 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Servicios" ? (
             <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Servicios" description="Carta de servicios con precios y duraciones." />
+              <EditorSectionTitle title="Servicios" description="Carta de servicios con precios y duraciones." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="servicios"
@@ -189,7 +192,7 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Equipo" ? (
             <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Equipo" description="Miembros del equipo." />
+              <EditorSectionTitle title="Equipo" description="Miembros del equipo." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="equipo"
@@ -201,21 +204,21 @@ export function StudioEditorSection() {
                     className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
                     key={member.id}
                   >
-                    <TextField
+                    <EditorTextField
                       label="Nombre"
                       onChange={(value) =>
                         updateSectionItem(activeLanding.id, "team", member.id, { name: value })
                       }
                       value={member.name}
                     />
-                    <TextField
+                    <EditorTextField
                       label="Rol"
                       onChange={(value) =>
                         updateSectionItem(activeLanding.id, "team", member.id, { role: value })
                       }
                       value={member.role}
                     />
-                    <TextArea
+                    <EditorTextArea
                       label="Bio"
                       onChange={(value) =>
                         updateSectionItem(activeLanding.id, "team", member.id, { bio: value })
@@ -238,7 +241,7 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Galeria" ? (
             <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Galería" description="Imágenes de la galería." />
+              <EditorSectionTitle title="Galería" description="Imágenes de la galería." />
               <div className="space-y-6">
                 {(activeLanding.content.gallery ?? []).map((item, index) => (
                   <div
@@ -264,7 +267,7 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "FAQ" ? (
             <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Preguntas frecuentes" description="Dudas habituales de los clientes." />
+              <EditorSectionTitle title="Preguntas frecuentes" description="Dudas habituales de los clientes." />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="faq"
@@ -276,14 +279,14 @@ export function StudioEditorSection() {
                     className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
                     key={item.id}
                   >
-                    <TextField
+                    <EditorTextField
                       label="Pregunta"
                       onChange={(value) =>
                         updateSectionItem(activeLanding.id, "faq", item.id, { question: value })
                       }
                       value={item.question}
                     />
-                    <TextArea
+                    <EditorTextArea
                       label="Respuesta"
                       onChange={(value) =>
                         updateSectionItem(activeLanding.id, "faq", item.id, { answer: value })
@@ -318,66 +321,5 @@ export function StudioEditorSection() {
         </>
       }
     />
-  );
-}
-
-function SectionTitle({ title, description }: { title: string; description: string }) {
-  return (
-    <div>
-      <h3 className="text-body-lg font-semibold text-on-surface">{title}</h3>
-      <p className="mt-1 text-body-sm text-on-surface-variant">{description}</p>
-    </div>
-  );
-}
-
-function TextField({
-  className = "",
-  label,
-  onChange,
-  value,
-}: {
-  className?: string;
-  label: string;
-  onChange: (value: string) => void;
-  value: string;
-}) {
-  return (
-    <label className={`block ${className}`}>
-      <span className="mb-2 block font-label text-label-md text-on-surface-variant">
-        {label}
-      </span>
-      <input
-        className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-        onChange={(event) => onChange(event.target.value)}
-        type="text"
-        value={value}
-      />
-    </label>
-  );
-}
-
-function TextArea({
-  label,
-  onChange,
-  rows = 3,
-  value,
-}: {
-  label: string;
-  onChange: (value: string) => void;
-  rows?: number;
-  value: string;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-2 block font-label text-label-md text-on-surface-variant">
-        {label}
-      </span>
-      <textarea
-        className="w-full resize-none rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-        onChange={(event) => onChange(event.target.value)}
-        rows={rows}
-        value={value}
-      />
-    </label>
   );
 }

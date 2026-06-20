@@ -161,7 +161,7 @@ export function FloristeriaHeroFanBackdrop() {
             className={slot.className ?? ""}
             driftX={motion.driftX}
             floatY={motion.floatY}
-            key={index}
+            key={`${slot.asset}-${slot.left}-${slot.top}-${slot.bottom}-${slot.right}`}
             left={slot.left}
             opacity={slot.opacity}
             right={slot.right}

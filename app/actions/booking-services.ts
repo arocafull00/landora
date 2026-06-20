@@ -10,6 +10,7 @@ import {
   setBookingServiceActive,
   updateBookingService,
 } from "@/data/booking-services";
+import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 
 const serviceSchema = z.object({
@@ -25,6 +26,8 @@ type ActionResult = { success: true } | { error: string };
 export async function createBookingServiceAction(
   input: z.infer<typeof serviceSchema>,
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -47,6 +50,8 @@ export async function updateBookingServiceAction(
   id: string,
   input: z.infer<typeof serviceSchema>,
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -72,6 +77,8 @@ export async function toggleBookingServiceActiveAction(
   id: string,
   isActive: boolean,
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -89,6 +96,8 @@ export async function toggleBookingServiceActiveAction(
 }
 
 export async function reorderBookingServicesAction(orderedIds: string[]): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -103,6 +112,8 @@ export async function reorderBookingServicesAction(orderedIds: string[]): Promis
 }
 
 export async function deleteBookingServiceAction(id: string): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -117,6 +128,8 @@ export async function deleteBookingServiceAction(id: string): Promise<ActionResu
 }
 
 export async function duplicateBookingServiceAction(id: string): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;

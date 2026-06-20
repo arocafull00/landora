@@ -5,7 +5,7 @@ import { employeeHours } from "@/db/schema";
 import type { EmployeeHours } from "@/db/schema";
 import { assertEmployeeBelongsToTenant } from "@/data/employees";
 
-export const getEmployeeHours = cache(async (tenantId: string, employeeId: string) => {
+const getEmployeeHours = cache(async (tenantId: string, employeeId: string) => {
   try {
     await assertEmployeeBelongsToTenant(tenantId, employeeId);
     return await db.query.employeeHours.findMany({
@@ -26,11 +26,14 @@ export async function replaceEmployeeHours(
   hours: Pick<EmployeeHours, "dayOfWeek" | "isWorking" | "startTime" | "endTime">[],
 ) {
   try {
-    await assertEmployeeBelongsToTenant(tenantId, employeeId);
-    await db.delete(employeeHours).where(eq(employeeHours.employeeId, employeeId));
     if (hours.length === 0) {
+      await assertEmployeeBelongsToTenant(tenantId, employeeId);
+      await db.delete(employeeHours).where(eq(employeeHours.employeeId, employeeId));
       return [];
     }
+
+    await assertEmployeeBelongsToTenant(tenantId, employeeId);
+    await db.delete(employeeHours).where(eq(employeeHours.employeeId, employeeId));
     return await db
       .insert(employeeHours)
       .values(hours.map((h) => ({ employeeId, ...h })))

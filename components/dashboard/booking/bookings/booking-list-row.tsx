@@ -11,6 +11,7 @@ import {
   completeBookingAction,
   confirmBookingAction,
 } from "@/app/actions/bookings";
+import { formatBookingDateTime } from "@/lib/booking/format-datetime";
 
 export function BookingListRow({
   booking,
@@ -21,11 +22,7 @@ export function BookingListRow({
 }) {
   const [pending, startTransition] = useTransition();
 
-  const formatted = new Intl.DateTimeFormat("es-ES", {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: timezone,
-  }).format(booking.startsAt);
+  const formatted = formatBookingDateTime(booking.startsAt, timezone);
 
   const run = (action: () => Promise<{ success: true } | { error: string }>) => {
     startTransition(async () => {

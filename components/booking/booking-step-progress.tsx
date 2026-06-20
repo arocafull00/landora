@@ -1,23 +1,8 @@
 import { Check } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { getBookingProgressLabel, PROGRESS_STEPS } from "@/lib/booking/progress-steps";
 import { cn } from "@/lib/utils";
 import type { BookingStep } from "@/stores/public-booking-store";
-
-const PROGRESS_STEPS = [
-  { id: "service" as const, label: "Servicio" },
-  { id: "professional" as const, label: "Profesional" },
-  { id: "date" as const, label: "Fecha" },
-  { id: "time" as const, label: "Hora" },
-  { id: "contact" as const, label: "Datos" },
-];
-
-export function getBookingProgressLabel(step: BookingStep) {
-  const match = PROGRESS_STEPS.find((item) => item.id === step);
-  if (match) {
-    return match.label;
-  }
-  return "Confirmación";
-}
 
 export function BookingStepProgress({
   step,

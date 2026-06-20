@@ -2,6 +2,7 @@ import type { SubscriptionStatus } from "@/db/schema";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { ManageSubscriptionButton } from "@/components/dashboard/settings/manage-subscription-button";
 import { Panel } from "@/components/ui/primitives";
+import { formatLongDate } from "@/lib/booking/format-datetime";
 
 const STATUS_LABELS: Record<SubscriptionStatus, string> = {
   active: "Activa",
@@ -10,12 +11,6 @@ const STATUS_LABELS: Record<SubscriptionStatus, string> = {
   canceled: "Cancelada",
   unpaid: "Impagada",
 };
-
-function formatDate(date: Date | null | undefined) {
-  if (!date) return "—";
-
-  return new Intl.DateTimeFormat("es-ES", { dateStyle: "long" }).format(date);
-}
 
 export function SettingsSection({
   subscriptionStatus,
@@ -27,7 +22,7 @@ export function SettingsSection({
   subscriptionCancelAtPeriodEnd: boolean | null;
 }) {
   const isCanceling = subscriptionCancelAtPeriodEnd === true;
-  const renewalDate = formatDate(subscriptionCurrentPeriodEnd);
+  const renewalDate = formatLongDate(subscriptionCurrentPeriodEnd);
   const statusLabel = subscriptionStatus
     ? STATUS_LABELS[subscriptionStatus]
     : "Sin suscripcion";

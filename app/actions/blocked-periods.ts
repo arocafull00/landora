@@ -7,12 +7,13 @@ import {
   deleteBlockedPeriod,
   updateBlockedPeriod,
 } from "@/data/blocked-periods";
+import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
 
 const blockedPeriodSchema = z.object({
-  employeeId: z.string().uuid().nullable(),
-  startsAt: z.string().datetime(),
-  endsAt: z.string().datetime(),
+  employeeId: z.uuid().nullable(),
+  startsAt: z.iso.datetime(),
+  endsAt: z.iso.datetime(),
   reason: z.string().max(200),
 });
 
@@ -21,6 +22,8 @@ type ActionResult = { success: true } | { error: string };
 export async function createBlockedPeriodAction(
   input: z.infer<typeof blockedPeriodSchema>,
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -51,10 +54,12 @@ export async function createBlockedPeriodAction(
   }
 }
 
-export async function updateBlockedPeriodAction(
+async function updateBlockedPeriodAction(
   id: string,
   input: z.infer<typeof blockedPeriodSchema>,
 ): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
@@ -89,6 +94,8 @@ export async function updateBlockedPeriodAction(
 }
 
 export async function deleteBlockedPeriodAction(id: string): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;

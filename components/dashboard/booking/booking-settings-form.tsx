@@ -51,17 +51,23 @@ export function BookingSettingsForm({
 
   return (
     <div className="space-y-6 overflow-y-auto px-6 py-6">
-      <label className="flex items-center justify-between">
-        <span className="font-body text-body-sm">Activar reservas</span>
+      <div className="flex items-center justify-between gap-3">
+        <label className="font-body text-body-sm" htmlFor="booking-settings-enabled">
+          Activar reservas
+        </label>
         <Switch
+          id="booking-settings-enabled"
           checked={form.enabled}
           disabled={pending}
           onCheckedChange={(enabled) => setForm((current) => ({ ...current, enabled }))}
         />
-      </label>
+      </div>
       <div className="space-y-2">
-        <span className="font-body text-body-sm">Email de notificaciones</span>
+        <label className="font-body text-body-sm" htmlFor="booking-settings-notification-email">
+          Email de notificaciones
+        </label>
         <Input
+          id="booking-settings-notification-email"
           type="email"
           value={form.notificationEmail}
           placeholder="negocio@ejemplo.com"
@@ -88,16 +94,19 @@ export function BookingSettingsForm({
           </SelectContent>
         </Select>
       </div>
-      <label className="flex items-center justify-between">
-        <span className="font-body text-body-sm">Auto-confirmación</span>
+      <div className="flex items-center justify-between gap-3">
+        <label className="font-body text-body-sm" htmlFor="booking-settings-auto-confirm">
+          Auto-confirmación
+        </label>
         <Switch
+          id="booking-settings-auto-confirm"
           checked={form.autoConfirmBookings}
           disabled={pending}
           onCheckedChange={(autoConfirmBookings) =>
             setForm((current) => ({ ...current, autoConfirmBookings }))
           }
         />
-      </label>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <span className="font-body text-body-sm">Antelación mínima (horas)</span>

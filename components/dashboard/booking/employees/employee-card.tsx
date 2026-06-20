@@ -34,9 +34,10 @@ export function EmployeeCard({
   const hourDrafts = buildHourDrafts(hours);
   const scheduleLine =
     hours.length > 0 ? formatScheduleLine(hourDrafts) : "Sin horario configurado";
-  const assignedServices = services
-    .filter((service) => serviceIds.includes(service.id))
-    .map((service) => service.name);
+  const serviceNameById = new Map(services.map((service) => [service.id, service.name]));
+  const assignedServices = serviceIds
+    .map((serviceId) => serviceNameById.get(serviceId))
+    .filter((name): name is string => Boolean(name));
 
   const toggleExpanded = () => {
     if (expanded) {

@@ -24,7 +24,7 @@ import {
 import { normalizeNavHref } from "@/lib/template-sections";
 import type { TemplateId } from "@/lib/dashboard-data";
 
-export async function provisionProspectLandingContent(
+async function provisionProspectLandingContent(
   landingId: string,
   template: TemplateId,
   content: ProspectLandingContent

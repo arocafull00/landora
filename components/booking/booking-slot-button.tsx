@@ -1,14 +1,12 @@
 import { ToggleGroupItem } from "@/components/ui/toggle-group";
+import { formatSlotTime } from "@/lib/booking/format-datetime";
 
 export function BookingSlotButton({
   slot,
 }: {
   slot: { startsAt: string; endsAt: string };
 }) {
-  const label = new Intl.DateTimeFormat("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(slot.startsAt));
+  const label = formatSlotTime(slot.startsAt);
 
   return (
     <ToggleGroupItem

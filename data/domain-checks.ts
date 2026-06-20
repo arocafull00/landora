@@ -20,7 +20,7 @@ async function fetchActiveDomainChecks() {
   }
 }
 
-export const getActiveDomainChecks = cache(fetchActiveDomainChecks);
+const getActiveDomainChecks = cache(fetchActiveDomainChecks);
 
 export async function getActiveDomainChecksForMonitoring() {
   return fetchActiveDomainChecks();
@@ -41,14 +41,17 @@ export async function syncActiveDomainChecks() {
 
     const activeDomains = new Set<string>();
 
-    for (const landing of publishedLandings) {
-      if (!landing.customDomain) continue;
+    await Promise.all(
+      publishedLandings.map(async (landing) => {
+        if (!landing.customDomain) {
+          return;
+        }
 
-      const domain = normalizeHost(landing.customDomain);
-      activeDomains.add(domain);
-
-      await upsertDomainCheck(landing.id, domain);
-    }
+        const domain = normalizeHost(landing.customDomain);
+        activeDomains.add(domain);
+        await upsertDomainCheck(landing.id, domain);
+      }),
+    );
 
     const appDomain = getAppCanonicalHost();
     if (appDomain) {
@@ -60,9 +63,12 @@ export async function syncActiveDomainChecks() {
       columns: { id: true, domain: true },
     });
 
-    const staleCheckIds = allChecks
-      .filter((check) => !activeDomains.has(check.domain))
-      .map((check) => check.id);
+    const staleCheckIds: string[] = [];
+    for (const check of allChecks) {
+      if (!activeDomains.has(check.domain)) {
+        staleCheckIds.push(check.id);
+      }
+    }
 
     if (staleCheckIds.length === 0) return;
 
@@ -75,7 +81,7 @@ export async function syncActiveDomainChecks() {
   }
 }
 
-export async function upsertDomainCheck(
+async function upsertDomainCheck(
   landingPageId: string | null,
   domain: string,
 ) {

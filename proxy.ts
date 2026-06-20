@@ -105,11 +105,11 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   }
 
   if (isProtectedRoute(req)) {
-    const { userId } = await auth.protect();
-
     if (isSubscriptionExemptRoute(req)) {
       return NextResponse.next();
     }
+
+    const { userId } = await auth.protect();
 
     if (!userId) {
       return NextResponse.next();

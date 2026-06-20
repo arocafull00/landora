@@ -89,7 +89,7 @@ export function FloristeriaHeroFan({
             <FloristeriaHeroFanImage
               alt={alt}
               index={index}
-              key={index}
+              key={`${images[index]}-${slot.x}-${slot.y}`}
               priority={index === 2}
               reduceMotion={reduce ?? false}
               rotate={slot.rotate}

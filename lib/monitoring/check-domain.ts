@@ -26,7 +26,7 @@ function getErrorCode(error: unknown) {
   return error.name;
 }
 
-export async function checkDomain(domain: string): Promise<CheckResult> {
+async function checkDomain(domain: string): Promise<CheckResult> {
   try {
     const response = await fetch(`https://${domain}`, {
       method: "HEAD",
@@ -79,15 +79,16 @@ export async function checkAllDomains() {
     activeDomains.map((entry) => limit(() => checkDomain(entry.domain))),
   );
 
-  for (const [index, result] of results.entries()) {
-    const entry = activeDomains[index];
-    const value = result.status === "fulfilled" ? result.value : null;
-
-    await updateDomainCheckResult(
-      entry.id,
-      value ? toDomainCheckResult(value) : null,
-    );
-  }
+  await Promise.all(
+    results.map((result, index) => {
+      const entry = activeDomains[index];
+      const value = result.status === "fulfilled" ? result.value : null;
+      return updateDomainCheckResult(
+        entry.id,
+        value ? toDomainCheckResult(value) : null,
+      );
+    }),
+  );
 
   return results
     .filter((result): result is PromiseFulfilledResult<CheckResult> => {
