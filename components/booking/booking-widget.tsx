@@ -82,8 +82,8 @@ export function BookingWidget({ slug }: { slug: string }) {
         honeypot: contact.honeypot,
       });
 
-      if ("error" in result) {
-        toast.error(result.error);
+      if (!result || "error" in result) {
+        toast.error(`${result?.error} Error al crear la reserva`);
         return;
       }
 
@@ -173,9 +173,9 @@ export function BookingWidget({ slug }: { slug: string }) {
             />
           ) : null}
           {step === "time" &&
-          selection.serviceId &&
-          selection.employeeId &&
-          selection.date ? (
+            selection.serviceId &&
+            selection.employeeId &&
+            selection.date ? (
             <BookingStepTime
               slug={slug}
               serviceId={selection.serviceId}

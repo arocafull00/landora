@@ -42,69 +42,69 @@ function getClientIp(headerStore: Headers) {
 export async function createBookingAction(
   input: z.infer<typeof createBookingSchema>,
 ): Promise<ActionResult> {
-  if (input.honeypot?.trim()) {
-    return { error: "Solicitud inválida" };
-  }
-
-  const parsed = createBookingSchema.safeParse(input);
-  if (!parsed.success) {
-    return { error: "Datos inválidos" };
-  }
-
-  const headerStore = await headers();
-  const ip = getClientIp(headerStore);
-
-  const tenant = await resolveTenantBySlug(parsed.data.slug);
-  if (!tenant || !tenant.enabled) {
-    return { error: "Reservas no disponibles" };
-  }
-
-  const rateLimit = await checkBookingRateLimit(ip, tenant.tenantId);
-  if (!rateLimit.success) {
-    return { error: "Demasiadas solicitudes. Inténtalo más tarde." };
-  }
-
-  const turnstileOk = await verifyTurnstileToken(parsed.data.turnstileToken, ip);
-  if (!turnstileOk) {
-    return { error: "Verificación de seguridad fallida" };
-  }
-
-  const service = await getBookingServiceById(tenant.tenantId, parsed.data.serviceId);
-  if (!service || !service.isActive) {
-    return { error: "Servicio no disponible" };
-  }
-
-  const settings = await getBookingSettings(tenant.tenantId);
-  const startsAt = new Date(parsed.data.startsAt);
-  const date = formatDateInTimezone(startsAt, tenant.timezone);
-
-  const slots = await getAvailableSlots({
-    tenantId: tenant.tenantId,
-    serviceId: parsed.data.serviceId,
-    employeeId: parsed.data.employeeId,
-    date,
-    timezone: tenant.timezone,
-  });
-
-  const matchingSlot = slots.find(
-    (slot) => slot.startsAt.getTime() === startsAt.getTime(),
-  );
-
-  if (!matchingSlot) {
-    return { error: "Horario no disponible" };
-  }
-
-  const employeeId = matchingSlot.employeeId;
-  const employee = await getEmployeeById(tenant.tenantId, employeeId);
-  if (!employee) {
-    return { error: "Profesional no disponible" };
-  }
-
-  const endsAt = addMinutes(startsAt, service.durationMinutes);
-  const publicToken = randomBytes(24).toString("base64url");
-  const status: BookingStatus = settings.autoConfirmBookings ? "confirmed" : "pending";
-
   try {
+    if (input.honeypot?.trim()) {
+      return { error: "Solicitud inválida" };
+    }
+
+    const parsed = createBookingSchema.safeParse(input);
+    if (!parsed.success) {
+      return { error: "Datos inválidos" };
+    }
+
+    const headerStore = await headers();
+    const ip = getClientIp(headerStore);
+
+    const tenant = await resolveTenantBySlug(parsed.data.slug);
+    if (!tenant || !tenant.enabled) {
+      return { error: "Reservas no disponibles" };
+    }
+
+    const rateLimit = await checkBookingRateLimit(ip, tenant.tenantId);
+    if (!rateLimit.success) {
+      return { error: "Demasiadas solicitudes. Inténtalo más tarde." };
+    }
+
+    const turnstileOk = await verifyTurnstileToken(parsed.data.turnstileToken, ip);
+    if (!turnstileOk) {
+      return { error: "Verificación de seguridad fallida" };
+    }
+
+    const service = await getBookingServiceById(tenant.tenantId, parsed.data.serviceId);
+    if (!service || !service.isActive) {
+      return { error: "Servicio no disponible" };
+    }
+
+    const settings = await getBookingSettings(tenant.tenantId);
+    const startsAt = new Date(parsed.data.startsAt);
+    const date = formatDateInTimezone(startsAt, tenant.timezone);
+
+    const slots = await getAvailableSlots({
+      tenantId: tenant.tenantId,
+      serviceId: parsed.data.serviceId,
+      employeeId: parsed.data.employeeId,
+      date,
+      timezone: tenant.timezone,
+    });
+
+    const matchingSlot = slots.find(
+      (slot) => slot.startsAt.getTime() === startsAt.getTime(),
+    );
+
+    if (!matchingSlot) {
+      return { error: "Horario no disponible" };
+    }
+
+    const employeeId = matchingSlot.employeeId;
+    const employee = await getEmployeeById(tenant.tenantId, employeeId);
+    if (!employee) {
+      return { error: "Profesional no disponible" };
+    }
+
+    const endsAt = addMinutes(startsAt, service.durationMinutes);
+    const publicToken = randomBytes(24).toString("base64url");
+    const status: BookingStatus = settings.autoConfirmBookings ? "confirmed" : "pending";
+
     const booking = await db.transaction(async (tx) => {
       const recheckSlots = await getAvailableSlots({
         tenantId: tenant.tenantId,
