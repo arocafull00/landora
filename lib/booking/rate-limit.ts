@@ -9,7 +9,7 @@ export async function checkBookingRateLimit(ip: string, tenantId?: string) {
 
   const ipLimiter = new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(5, "1 h"),
+    limiter: Ratelimit.slidingWindow(30, "1 h"),
     prefix: "booking:create:ip",
   });
 
