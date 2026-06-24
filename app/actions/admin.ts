@@ -34,7 +34,6 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
     email: formData.get("email"),
     password: formData.get("password"),
   });
-
   if (!parsed.success) {
     return { error: parsed.error.message };
   }
