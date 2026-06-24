@@ -252,6 +252,7 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
           : typeof item.tags === "string"
             ? item.tags
             : "",
+        link: typeof item.link === "string" ? item.link : "",
       }));
     },
     persist: (landingId, parsed) =>

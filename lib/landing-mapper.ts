@@ -73,6 +73,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
         title: g.title || undefined,
         description: g.description || undefined,
         tags: parseCommaList(g.tags),
+        link: g.link || undefined,
       })),
     ),
     nav: uniqueBySortOrder(row.nav ?? []).map((n) => ({

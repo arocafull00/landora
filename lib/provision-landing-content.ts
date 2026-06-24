@@ -77,6 +77,7 @@ async function provisionProspectLandingContent(
         title: "",
         description: "",
         tags: "",
+        link: "",
       }))
     ),
     replaceLandingNav(

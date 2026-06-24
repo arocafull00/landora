@@ -305,6 +305,7 @@ export const landingGallery = pgTable("landing_gallery", {
   title: text("title").notNull().default(""),
   description: text("description").notNull().default(""),
   tags: text("tags").notNull().default(""),
+  link: text("link").notNull().default(""),
 }, (table) => [
   index("landing_gallery_landing_id_sort_idx").on(table.landingId, table.sortOrder),
 ]);

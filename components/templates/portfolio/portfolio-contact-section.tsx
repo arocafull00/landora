@@ -58,7 +58,7 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
             <div className="flex items-start gap-3">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-white/40" />
               <div>
-                <p className="text-xs font-medium text-white/40">Teléfono</p>
+                <p className="text-xs font-medium text-white/40">WhatsApp</p>
                 <a
                   className="text-sm text-white/70 transition-colors hover:text-white"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
@@ -87,7 +87,7 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
             <div className="flex items-start gap-3">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/40" />
               <div>
-                <p className="text-xs font-medium text-white/40">Ubicación</p>
+                <p className="text-xs font-medium text-white/40">Location</p>
                 <p className="text-sm text-white/70">{content.contact.address}</p>
               </div>
             </div>

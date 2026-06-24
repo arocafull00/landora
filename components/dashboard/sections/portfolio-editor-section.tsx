@@ -134,6 +134,14 @@ export function PortfolioEditorSection() {
                       }
                       value={item.tags ?? []}
                     />
+                    <TextField
+                      label="Enlace (opcional)"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, { link: value })
+                      }
+                      placeholder="https://..."
+                      value={item.link ?? ""}
+                    />
                   </div>
                 ))}
               </div>
@@ -305,11 +313,13 @@ function TextField({
   className = "",
   label,
   onChange,
+  placeholder,
   value,
 }: {
   className?: string;
   label: string;
   onChange: (value: string) => void;
+  placeholder?: string;
   value: string;
 }) {
   return (
@@ -320,6 +330,7 @@ function TextField({
       <input
         className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
         onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
         type="text"
         value={value}
       />

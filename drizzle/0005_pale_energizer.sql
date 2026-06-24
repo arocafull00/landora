@@ -1,0 +1,1 @@
+ALTER TABLE "landing_gallery" ADD COLUMN "link" text DEFAULT '' NOT NULL;

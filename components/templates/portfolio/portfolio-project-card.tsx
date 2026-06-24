@@ -15,13 +15,12 @@ export function PortfolioProjectCard({
 }) {
   const isLarge = index % 3 === 0;
   const showText = hasText(item);
+  const cardClassName = `group relative aspect-4/5 overflow-hidden rounded-lg bg-[#1a1a1a] md:aspect-auto md:h-full ${
+    isLarge ? "md:col-span-2 md:row-span-2" : ""
+  }`;
 
-  return (
-    <div
-      className={`group relative aspect-4/5 overflow-hidden rounded-lg bg-[#1a1a1a] md:aspect-auto md:h-full ${
-        isLarge ? "md:col-span-2 md:row-span-2" : ""
-      }`}
-    >
+  const content = (
+    <>
       {item.image ? (
         <AssetImage
           alt={item.title ?? ""}
@@ -72,6 +71,22 @@ export function PortfolioProjectCard({
           )}
         </div>
       )}
-    </div>
+    </>
   );
+
+  if (item.link) {
+    return (
+      <a
+        aria-label={item.title || "Ver proyecto"}
+        className={`${cardClassName} block cursor-pointer`}
+        href={item.link}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return <div className={cardClassName}>{content}</div>;
 }

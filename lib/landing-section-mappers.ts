@@ -89,12 +89,13 @@ export function mapDefaultStats(content: LandingContent) {
 
 export function mapDefaultGallery(content: LandingContent) {
   return (content.gallery ?? []).map(
-    (g): Pick<LandingGalleryItem, "image" | "video" | "title" | "description" | "tags"> => ({
+    (g): Pick<LandingGalleryItem, "image" | "video" | "title" | "description" | "tags" | "link"> => ({
       image: g.image ?? "",
       video: g.video ?? "",
       title: g.title ?? "",
       description: g.description ?? "",
       tags: (g.tags ?? []).join(", "),
+      link: g.link ?? "",
     })
   );
 }
