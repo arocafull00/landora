@@ -47,7 +47,7 @@ export function PortfolioHero({
 
           {content.hero.subtitle ? (
             <p
-              className="mt-[18px] text-[clamp(14px,2.2vw,18px)] text-[#a1a1aa]"
+              className="mx-auto mt-[18px] max-w-xl text-[clamp(14px,2.2vw,18px)] text-[#a1a1aa]"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {content.hero.subtitle}
