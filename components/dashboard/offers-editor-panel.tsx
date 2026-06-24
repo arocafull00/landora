@@ -57,6 +57,7 @@ export function OffersEditorPanel({ activeLanding }: OffersEditorPanelProps) {
               offer={offer}
               onChange={(patch) => updateOffer(activeLanding.id, offer.id, patch)}
               onRemove={() => removeOffer(activeLanding.id, offer.id)}
+              templateId={activeLanding.template}
             />
           ))}
         </div>

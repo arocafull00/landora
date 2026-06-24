@@ -71,7 +71,7 @@ export function LandingPreviewFrame({
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return;
+      if (event.source !== window.parent) return;
 
       if (isPreviewScrollToMessage(event.data)) {
         const { sectionId } = event.data;
@@ -115,7 +115,7 @@ export function LandingPreviewFrame({
     if (window.parent === window) return;
     window.parent.postMessage(
       { type: `${PREVIEW_CONTENT_UPDATE}:ready` },
-      window.location.origin
+      "*"
     );
   }, []);
 

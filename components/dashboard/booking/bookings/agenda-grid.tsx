@@ -82,6 +82,10 @@ export function AgendaGrid({
     calendars: calendarsConfig,
     locale: "es-ES",
     timezone,
+    dayBoundaries: {
+      start: "08:00",
+      end: "22:00",
+    },
     plugins: [eventsService],
   });
 

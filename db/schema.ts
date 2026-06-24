@@ -275,6 +275,8 @@ export const landingOffers = pgTable("landing_offers", {
   expiresAt: timestamp("expires_at", { withTimezone: true }),
   enabled: boolean("enabled").notNull().default(true),
   cards: jsonb("cards").$type<OfferCardRow[]>().notNull().default([]),
+  image: text("image").notNull().default(""),
+  features: jsonb("features").$type<string[]>().notNull().default([]),
 }, (table) => [
   index("landing_offers_landing_id_sort_idx").on(table.landingId, table.sortOrder),
 ]);

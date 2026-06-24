@@ -185,6 +185,10 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       return {
         ...base,
         type: "hero_banner" as const,
+        image: o.image || undefined,
+        features: (o.features ?? []).filter((feature) => feature.trim()).length > 0
+          ? o.features.filter((feature) => feature.trim())
+          : undefined,
       } satisfies HeroBannerOffer;
     }),
   };

@@ -305,6 +305,13 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
           expiresAt: parseExpiresAt(item.expiresAt),
           enabled: typeof item.enabled === "boolean" ? item.enabled : true,
           cards: type === "promotion_cards" ? parseOfferCards(item.cards) : [],
+          image: typeof item.image === "string" ? item.image : "",
+          features: Array.isArray(item.features)
+            ? item.features
+                .filter((feature): feature is string => typeof feature === "string")
+                .map((feature) => feature.trim())
+                .filter(Boolean)
+            : [],
         };
       });
     },

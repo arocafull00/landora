@@ -56,7 +56,7 @@ export function postPreviewContent(
   if (!target) return;
   target.postMessage(
     { type: PREVIEW_CONTENT_UPDATE, ...payload },
-    window.location.origin
+    "*"
   );
 }
 
@@ -67,7 +67,7 @@ export function postPreviewScrollTo(
   if (!target) return;
   target.postMessage(
     { type: PREVIEW_SCROLL_TO, sectionId },
-    window.location.origin
+    "*"
   );
 }
 
@@ -94,7 +94,7 @@ export function postPreviewHighlightSection(
   if (!target) return;
   target.postMessage(
     { type: PREVIEW_HIGHLIGHT_SECTION, sectionId, label },
-    window.location.origin,
+    "*",
   );
 }
 
@@ -105,6 +105,6 @@ export function postPreviewHighlightElement(
   if (!target) return;
   target.postMessage(
     { type: PREVIEW_HIGHLIGHT_ELEMENT, editorId },
-    window.location.origin,
+    "*",
   );
 }

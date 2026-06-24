@@ -265,6 +265,8 @@ export type HeroBannerOffer = {
   ctaText?: string;
   expiresAt?: Date;
   enabled: boolean;
+  image?: string;
+  features?: string[];
 };
 
 export type PromotionCardsOffer = {

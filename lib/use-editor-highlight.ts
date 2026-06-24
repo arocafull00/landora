@@ -8,7 +8,7 @@ export function useEditorHighlight(sectionId: string) {
 
   useEffect(() => {
     const handler = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return;
+      if (event.source !== window.parent) return;
       if (!isPreviewHighlightSectionMessage(event.data)) return;
       setIsHighlighted(event.data.sectionId === sectionId);
     };

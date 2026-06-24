@@ -1,15 +1,18 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { ImageField } from "@/components/dashboard/image-field";
 import { OfferCardEditor } from "@/components/dashboard/offer-card-editor";
-import type { Offer, OfferCard, PromotionCardsOffer } from "@/lib/dashboard-data";
+import { OfferHeroBannerFeaturesEditor } from "@/components/dashboard/offer-hero-banner-features-editor";
+import { Switch } from "@/components/ui/switch";
+import type { HeroBannerOffer, Offer, OfferCard, PromotionCardsOffer, TemplateId } from "@/lib/dashboard-data";
 import { isOfferActive } from "@/lib/offer-utils";
 
 type OfferBlockEditorProps = {
   offer: Offer;
   onChange: (patch: Partial<Offer>) => void;
   onRemove: () => void;
+  templateId: TemplateId;
 };
 
 function toDateInputValue(date?: Date) {
@@ -30,12 +33,17 @@ function getOfferTypeLabel(type: Offer["type"]) {
   return "Promociones";
 }
 
-export function OfferBlockEditor({ offer, onChange, onRemove }: OfferBlockEditorProps) {
+export function OfferBlockEditor({ offer, onChange, onRemove, templateId }: OfferBlockEditorProps) {
   const expired = !isOfferActive(offer);
 
   const updateCards = (cards: OfferCard[]) => {
     if (offer.type !== "promotion_cards") return;
     onChange({ cards } as Partial<PromotionCardsOffer>);
+  };
+
+  const updateFeatures = (features: string[]) => {
+    if (offer.type !== "hero_banner") return;
+    onChange({ features } as Partial<HeroBannerOffer>);
   };
 
   return (
@@ -90,6 +98,22 @@ export function OfferBlockEditor({ offer, onChange, onRemove }: OfferBlockEditor
         onChange={(value) => onChange({ badge: value || undefined })}
         value={offer.badge ?? ""}
       />
+      {offer.type === "hero_banner" ? (
+        <>
+          <ImageField
+            label="Imagen"
+            onChange={(value) =>
+              onChange({ image: value || undefined } as Partial<HeroBannerOffer>)
+            }
+            templateId={templateId}
+            value={offer.image ?? ""}
+          />
+          <OfferHeroBannerFeaturesEditor
+            features={offer.features ?? []}
+            onChange={updateFeatures}
+          />
+        </>
+      ) : null}
       <EditorField
         label="Texto del CTA"
         onChange={(value) => onChange({ ctaText: value || undefined })}

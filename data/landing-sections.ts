@@ -216,7 +216,16 @@ export async function replaceLandingOffers(
   landingId: string,
   items: Pick<
     LandingOffer,
-    "type" | "title" | "description" | "badge" | "ctaText" | "expiresAt" | "enabled" | "cards"
+    | "type"
+    | "title"
+    | "description"
+    | "badge"
+    | "ctaText"
+    | "expiresAt"
+    | "enabled"
+    | "cards"
+    | "image"
+    | "features"
   >[]
 ) {
   return replaceLandingCollection(landingOffers, landingId, items, "offers");

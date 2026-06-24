@@ -78,7 +78,6 @@ export function IframeLandingPreview({
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return;
       if (event.data?.type !== "landora:preview-content-update:ready") return;
       if (event.source !== iframeRef.current?.contentWindow) return;
       sendContent();
@@ -109,7 +108,7 @@ export function IframeLandingPreview({
             className="h-full w-full"
             onLoad={sendContent}
             ref={iframeRef}
-            sandbox="allow-scripts"
+            sandbox="allow-scripts allow-same-origin"
             src={`/preview/${landingId}?embed=1`}
             title="Landing preview"
           />
