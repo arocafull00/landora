@@ -71,6 +71,10 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   }
 
   if (!isAppHost(host)) {
+    if (pathname.startsWith("/ingest")) {
+      return NextResponse.next();
+    }
+
     if (isReservedPath(pathname)) {
       return new NextResponse("Not Found", { status: 404 });
     }
