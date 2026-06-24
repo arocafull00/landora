@@ -1,33 +1,10 @@
 import { cache } from "react";
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "@/db";
-import { employeeServices, employees, bookingServices } from "@/db/schema";
+import { employeeServices, employees } from "@/db/schema";
 import { assertEmployeeBelongsToTenant } from "@/data/employees";
 import { assertServiceBelongsToTenant } from "@/data/booking-services";
 
-const getServicesForEmployee = cache(async (tenantId: string, employeeId: string) => {
-  try {
-    await assertEmployeeBelongsToTenant(tenantId, employeeId);
-    const links = await db.query.employeeServices.findMany({
-      where: eq(employeeServices.employeeId, employeeId),
-    });
-    if (links.length === 0) {
-      return [];
-    }
-    const serviceIds = links.map((l) => l.serviceId);
-    return await db.query.bookingServices.findMany({
-      where: and(
-        eq(bookingServices.tenantId, tenantId),
-        inArray(bookingServices.id, serviceIds),
-      ),
-    });
-  } catch (error) {
-    if (error instanceof Error && error.message === "Employee not found") {
-      throw error;
-    }
-    throw new Error("Failed to fetch services for employee");
-  }
-});
 
 export const getEmployeesForService = cache(async (tenantId: string, serviceId: string) => {
   try {

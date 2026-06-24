@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";

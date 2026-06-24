@@ -1,4 +1,4 @@
-import type { AccessType, LandingPage, SubscriptionPlan, SubscriptionStatus, User } from "@/db/schema";
+import type { AccessType, LandingPage, SubscriptionPlan, User } from "@/db/schema";
 import { hasActiveSubscription } from "@/lib/subscription-access";
 
 export type AdminUserWithLanding = User & {
