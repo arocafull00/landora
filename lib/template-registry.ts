@@ -53,6 +53,12 @@ const RESERVAS_EDITOR_TAB: EditorTab = {
   label: "Reservas",
 };
 
+const SEO_EDITOR_TAB: EditorTab = {
+  id: "SEO",
+  label: "SEO",
+  group: "config",
+};
+
 export type TemplateComponent = React.ComponentType<{ content: LandingContent; topOffset?: number }>;
 
 export type TemplateDefinition<T extends TemplateId = TemplateId> = {
@@ -85,6 +91,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       CONTACT_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/velar/velar-template"),
@@ -107,6 +114,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/studio/studio-template"),
@@ -128,6 +136,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/portfolio/portfolio-template"),
@@ -150,6 +159,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/ristorante/ristorante-template"),
@@ -171,6 +181,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/floristeria/floristeria-template"),
@@ -192,6 +203,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/oficio-pro/oficio-pro-template"),
@@ -213,6 +225,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
       FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/coffee-shop/coffee-shop-template"),

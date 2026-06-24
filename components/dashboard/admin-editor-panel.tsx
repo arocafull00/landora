@@ -30,12 +30,6 @@ export function AdminEditorPanel({ activeLanding }: AdminEditorPanelProps) {
           onChange={(value) => updateLandingMeta(activeLanding.id, { slug: value })}
           value={activeLanding.slug}
         />
-        <TextField
-          className="md:col-span-2"
-          label="Título SEO"
-          onChange={(value) => updateLandingMeta(activeLanding.id, { seoTitle: value })}
-          value={activeLanding.seoTitle}
-        />
       </div>
     </section>
   );

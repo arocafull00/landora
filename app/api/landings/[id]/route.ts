@@ -24,13 +24,15 @@ export async function PATCH(
 
     const hasSeoTitle = typeof body.seoTitle === "string";
     const hasSeoDescription = typeof body.seoDescription === "string";
+    const hasSeoFavicon = typeof body.seoFavicon === "string";
 
-    if (hasSeoTitle || hasSeoDescription) {
+    if (hasSeoTitle || hasSeoDescription || hasSeoFavicon) {
       await upsertLandingSeo(id, {
         title: hasSeoTitle ? body.seoTitle : (landing.seo?.title ?? ""),
         description: hasSeoDescription
           ? body.seoDescription
           : (landing.seo?.description ?? ""),
+        favicon: hasSeoFavicon ? body.seoFavicon : (landing.seo?.favicon ?? ""),
       });
     }
 

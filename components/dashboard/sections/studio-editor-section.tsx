@@ -6,6 +6,7 @@ import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
+import { SeoEditorPanel } from "@/components/dashboard/seo-editor-panel";
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor-panel";
 import { OffersEditorPanel } from "@/components/dashboard/offers-editor-panel";
@@ -52,6 +53,10 @@ export function StudioEditorSection() {
 
           {activeEditorTab === "Secciones" ? (
             <SectionsEditorPanel activeLanding={activeLanding} />
+          ) : null}
+
+          {activeEditorTab === "SEO" ? (
+            <SeoEditorPanel activeLanding={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Navegación" ? (

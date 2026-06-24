@@ -212,7 +212,8 @@ async function persistLandingMeta(id: string, landing: Landing) {
     name: landing.name,
     slug: landing.slug,
     seoTitle: landing.seoTitle,
-    seoDescription: landing.content.hero.subtitle,
+    seoDescription: landing.seoDescription,
+    seoFavicon: landing.seoFavicon,
   });
 }
 

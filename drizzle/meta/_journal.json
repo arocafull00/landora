@@ -43,6 +43,13 @@
       "when": 1782330110196,
       "tag": "0005_pale_energizer",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1782331700582,
+      "tag": "0006_flaky_shaman",
+      "breakpoints": true
     }
   ]
 }

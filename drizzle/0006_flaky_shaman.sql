@@ -1,0 +1,1 @@
+ALTER TABLE "landing_seo" ADD COLUMN "favicon" text DEFAULT '' NOT NULL;

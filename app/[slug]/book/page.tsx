@@ -18,6 +18,7 @@ export async function generateMetadata({
 
   return {
     title: `Reservar cita — ${brand}`,
+    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
   };
 }
 

@@ -21,6 +21,7 @@ export async function generateMetadata({
   return {
     title: config?.title || `${brand} Blog`,
     description: config?.description || landing.seo?.description || "",
+    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
   };
 }
 

@@ -22,6 +22,7 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt || landing.seo?.description || "",
+    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
   };
 }
 

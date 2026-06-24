@@ -27,7 +27,7 @@ function getDefaultStoryStatement(templateId: TemplateId, content: LandingConten
 }
 
 export function mapDefaultSeo(content: LandingContent) {
-  return { title: content.hero.title, description: content.hero.subtitle };
+  return { title: content.hero.title, description: content.hero.subtitle, favicon: "" };
 }
 
 export function mapDefaultBranding(

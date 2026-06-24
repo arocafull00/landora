@@ -64,7 +64,7 @@ export type LandingPageMeta = Pick<
   LandingPage,
   "id" | "userId" | "name" | "slug" | "template" | "published" | "customDomain" | "updatedAt"
 > & {
-  seo: Pick<LandingSeo, "title" | "description"> | null;
+  seo: Pick<LandingSeo, "title" | "description" | "favicon"> | null;
   hero: Pick<
     LandingHero,
     | "eyebrow"

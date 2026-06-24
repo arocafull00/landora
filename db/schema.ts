@@ -116,6 +116,7 @@ export const landingSeo = pgTable("landing_seo", {
     .references(() => landingPages.id, { onDelete: "cascade" }),
   title: text("title").notNull().default(""),
   description: text("description").notNull().default(""),
+  favicon: text("favicon").notNull().default(""),
 });
 
 export const landingBranding = pgTable("landing_branding", {

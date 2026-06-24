@@ -207,6 +207,8 @@ export function toLandingView(row: LandingWithSections, user: User | undefined):
     status: row.published ? "Published" : "Draft",
     edited: updatedAt,
     seoTitle: row.seo?.title || row.name,
+    seoDescription: row.seo?.description ?? "",
+    seoFavicon: row.seo?.favicon ?? "",
     owner: user?.name ?? "—",
     template: row.template,
     customDomain: row.customDomain ?? null,

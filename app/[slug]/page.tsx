@@ -39,6 +39,7 @@ export async function generateMetadata({
     alternates: landing.customDomain
       ? { canonical: `https://${landing.customDomain}` }
       : undefined,
+    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
   };
 }
 

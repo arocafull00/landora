@@ -117,6 +117,8 @@ export type Landing = {
   status: LandingStatus;
   edited: string;
   seoTitle: string;
+  seoDescription: string;
+  seoFavicon: string;
   owner: string;
   template: TemplateId;
   customDomain: string | null;

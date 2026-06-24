@@ -71,7 +71,7 @@ async function replaceLandingCollection<T extends Record<string, unknown>>(
 
 export async function upsertLandingSeo(
   landingId: string,
-  data: { title: string; description: string }
+  data: { title: string; description: string; favicon: string }
 ) {
   try {
     await db

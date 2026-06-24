@@ -33,6 +33,7 @@ async function provisionProspectLandingContent(
     upsertLandingSeo(landingId, {
       title: content.hero.title,
       description: content.hero.subtitle,
+      favicon: "",
     }),
     upsertLandingBranding(landingId, {
       brand: content.brand,
