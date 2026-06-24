@@ -54,45 +54,6 @@ export async function createBlockedPeriodAction(
   }
 }
 
-async function updateBlockedPeriodAction(
-  id: string,
-  input: z.infer<typeof blockedPeriodSchema>,
-): Promise<ActionResult> {
-  const authResult = await requireAuth();
-  if ("error" in authResult) return { error: authResult.error };
-  const access = await requireBookingModuleAccessForCurrentUser();
-  if ("error" in access) return { error: access.error };
-  const tenantId = access.tenantId;
-
-  const parsed = blockedPeriodSchema.safeParse(input);
-  if (!parsed.success) {
-    return { error: "Datos inválidos" };
-  }
-
-  const startsAt = new Date(parsed.data.startsAt);
-  const endsAt = new Date(parsed.data.endsAt);
-  if (startsAt >= endsAt) {
-    return { error: "La fecha de fin debe ser posterior al inicio" };
-  }
-
-  try {
-    const updated = await updateBlockedPeriod(tenantId, id, {
-      employeeId: parsed.data.employeeId,
-      startsAt,
-      endsAt,
-      reason: parsed.data.reason,
-    });
-    if (!updated) {
-      return { error: "Bloqueo no encontrado" };
-    }
-    revalidatePath("/settings/blocked-periods");
-    revalidatePath("/bookings");
-    return { success: true };
-  } catch {
-    return { error: "No se pudo actualizar el bloqueo" };
-  }
-}
-
 export async function deleteBlockedPeriodAction(id: string): Promise<ActionResult> {
   const authResult = await requireAuth();
   if ("error" in authResult) return { error: authResult.error };

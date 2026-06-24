@@ -96,117 +96,11 @@ const createLandingSchema = z.object({
   template: z.enum(["velar", "studio", "portfolio", "ristorante", "floristeria", "oficio-pro", "coffee-shop"]).default("velar"),
 });
 
-async function createLandingForUser(formData: FormData): Promise<ActionResult> {
-  const authError = await checkAuth();
-  if (authError) return authError;
-
-  const parsed = createLandingSchema.safeParse({
-    userId: formData.get("userId"),
-    name: formData.get("name"),
-    slug: formData.get("slug"),
-    template: formData.get("template") ?? "velar",
-  });
-
-  if (!parsed.success) {
-    return { error: parsed.error.message };
-  }
-
-  const { userId, name, slug, template } = parsed.data;
-
-  const existing = await getLandingBySlug(slug);
-  if (existing) {
-    return { error: "Ya existe una landing con ese slug" };
-  }
-
-  let landingId: string;
-  try {
-    const landing = await insertLandingPage({ userId, name, slug, template });
-    landingId = landing.id;
-  } catch (err) {
-    console.error("[createLandingForUser] DB insert error:", err);
-    return { error: "Error al crear la landing" };
-  }
-
-  try {
-    await seedLandingSections(landingId, template);
-  } catch (err) {
-    console.error("[createLandingForUser] Seed error:", err);
-    await deleteLandingPageById(landingId);
-    return { error: "Error al inicializar el contenido de la landing" };
-  }
-
-  revalidatePath("/admin");
-  return { success: true };
-}
 
 const landingIdSchema = z.uuid("ID de landing inválido");
 const userIdSchema = z.uuid("ID de usuario inválido");
 
-async function setLandingPublished(
-  landingId: string,
-  published: boolean,
-): Promise<ActionResult> {
-  const authError = await checkAuth();
-  if (authError) return authError;
 
-  const parsed = landingIdSchema.safeParse(landingId);
-  if (!parsed.success) {
-    return { error: parsed.error.message };
-  }
-
-  if (published) {
-    try {
-      const landing = await getLandingPageById(parsed.data);
-      if (!landing) {
-        return { error: "Landing no encontrada" };
-      }
-      await ensureLandingHasDefaultContent(landing);
-    } catch {
-      return { error: "Error al inicializar el contenido de la landing" };
-    }
-  }
-
-  try {
-    await updateLandingPage(parsed.data, {
-      published,
-      updatedAt: new Date(),
-    });
-  } catch {
-    return { error: "Error al actualizar la landing" };
-  }
-
-  revalidatePath("/admin");
-  return { success: true };
-}
-
-async function deleteLanding(landingId: string): Promise<ActionResult> {
-  const authError = await checkAuth();
-  if (authError) return authError;
-
-  const parsed = landingIdSchema.safeParse(landingId);
-  if (!parsed.success) {
-    return { error: parsed.error.message };
-  }
-
-  const landing = await getLandingPageById(parsed.data);
-
-  if (landing?.customDomain) {
-    try {
-      await removeProjectDomain(landing.customDomain);
-    } catch {
-      return { error: "Error al eliminar el dominio de Vercel" };
-    }
-  }
-
-  try {
-    await deleteLandingPageById(parsed.data);
-  } catch {
-    return { error: "Error al eliminar la landing" };
-  }
-
-  revalidatePath("/admin");
-  return { success: true };
-}
 
 export async function deleteUser(userId: string): Promise<ActionResult> {
   const authError = await checkAuth();

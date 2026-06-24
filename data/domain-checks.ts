@@ -20,8 +20,6 @@ async function fetchActiveDomainChecks() {
   }
 }
 
-const getActiveDomainChecks = cache(fetchActiveDomainChecks);
-
 export async function getActiveDomainChecksForMonitoring() {
   return fetchActiveDomainChecks();
 }
