@@ -3,19 +3,16 @@
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { getLandingBySlug, updateUserFields } from "@/data/admin";
+import { updateUserFields } from "@/data/admin";
 import {
-  deleteLandingPageById,
   deleteLandingsByUserId,
   getLandingPageById,
   getLandingsByUserId,
-  insertLandingPage,
   updateLandingPage,
 } from "@/data/landing-pages";
 import { deleteUserById, getUserByInternalId, insertUser } from "@/data/users";
-import { isReservedSlug } from "@/lib/app-host";
 import { removeProjectDomain } from "@/lib/vercel-domains";
-import { seedLandingSections, ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
+import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { checkAuth } from "@/lib/auth";
 const createUserSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
@@ -83,21 +80,8 @@ export async function createUser(formData: FormData): Promise<ActionResult> {
   return { success: true };
 }
 
-const createLandingSchema = z.object({
-  userId: z.uuid("ID de usuario inválido"),
-  name: z.string().min(1, "El nombre es requerido"),
-  slug: z
-    .string()
-    .min(1, "El slug es requerido")
-    .regex(/^[a-z0-9-]+$/, "El slug solo puede contener letras, números y guiones")
-    .refine((value) => !isReservedSlug(value), {
-      message: "Ese slug está reservado por el sistema",
-    }),
-  template: z.enum(["velar", "studio", "portfolio", "ristorante", "floristeria", "oficio-pro", "coffee-shop"]).default("velar"),
-});
 
 
-const landingIdSchema = z.uuid("ID de landing inválido");
 const userIdSchema = z.uuid("ID de usuario inválido");
 
 

@@ -5,7 +5,6 @@ import { z } from "zod";
 import {
   createBlockedPeriod,
   deleteBlockedPeriod,
-  updateBlockedPeriod,
 } from "@/data/blocked-periods";
 import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
