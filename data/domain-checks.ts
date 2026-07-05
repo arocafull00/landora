@@ -1,4 +1,3 @@
-import { cache } from "react";
 import { and, eq, inArray, isNotNull, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { domainChecks, landingPages, type DomainCheckStatus } from "@/db/schema";
