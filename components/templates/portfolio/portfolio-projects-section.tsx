@@ -24,11 +24,11 @@ export function PortfolioProjectsSection({ content }: { content: LandingContent 
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#0a0a0a] to-transparent md:h-32"
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-[#0a0a0a] to-transparent md:h-32"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#111] to-transparent md:h-52"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-[#111] to-transparent md:h-52"
         aria-hidden
       />
       <div className="relative mx-auto max-w-7xl">
@@ -41,7 +41,7 @@ export function PortfolioProjectsSection({ content }: { content: LandingContent 
         </h2>
 
         <div
-          className="flex gap-4 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] md:hidden [&::-webkit-scrollbar]:hidden"
+          className="flex gap-4 overflow-x-auto pb-4 [-ms-overflow-style:none] scrollbar-none md:hidden [&::-webkit-scrollbar]:hidden"
           style={{ scrollSnapType: "x mandatory" }}
           data-aos="fade-up"
         >
