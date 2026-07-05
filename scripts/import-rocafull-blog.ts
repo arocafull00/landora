@@ -1,8 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
 import { and, eq, or } from "drizzle-orm";
+import { db } from "../db";
 import * as schema from "../db/schema";
 import { OFICIO_PRO_ASSETS } from "../lib/oficio-pro-assets";
 
@@ -166,7 +165,7 @@ function parseMarkdownFile(filePath: string, landingSlug: string): ParsedPost {
   };
 }
 
-async function findLandingBySlug(db: ReturnType<typeof drizzle<typeof schema>>, slug: string) {
+async function findLandingBySlug(db: typeof import("../db").db, slug: string) {
   const normalizedSlug = slug.replace(/^\//, "");
 
   return db.query.landingPages.findFirst({
@@ -185,8 +184,7 @@ async function main() {
     process.exit(1);
   }
 
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
+  if (!process.env.DATABASE_URL) {
     console.error("DATABASE_URL environment variable is not set");
     process.exit(1);
   }
@@ -197,9 +195,6 @@ async function main() {
     console.error(`Blog directory not found: ${blogDir}`);
     process.exit(1);
   }
-
-  const sql = neon(databaseUrl);
-  const db = drizzle(sql, { schema });
 
   const landing = await findLandingBySlug(db, slugArg);
 

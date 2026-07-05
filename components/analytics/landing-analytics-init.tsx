@@ -17,6 +17,7 @@ export function LandingAnalyticsInit({
     if (status !== "accepted") return;
 
     posthog.opt_in_capturing();
+    posthog.startSessionRecording();
     posthog.register({ landingId, clientId });
     posthog.capture("$pageview");
     posthog.capture("page_view");

@@ -36,6 +36,42 @@ No asumas APIs de versiones anteriores ni de la documentación sin versionar.
 
 **Server Actions:** Usa Server Actions para mutaciones. Valida la entrada con Zod en el servidor.
 
+## Arquitectura de componentes: separación por capas
+
+Todo componente que mezcle lógica de negocio con JSX debe dividirse en tres capas:
+
+**1. Custom hook** (`hooks/use-[feature].ts`) — toda la lógica: estado, derivaciones, handlers, efectos de datos.
+**2. Subcomponentes** (`components/`) — JSX puro, solo props, sin lógica de negocio ni acceso directo a stores.
+**3. Page/contenedor** (`page.client.tsx`) — orquesta hook + subcomponentes, JSX mínimo, side effects de navegación en `useEffect`.
+
+### Reglas concretas
+
+- Si un componente supera ~80 líneas, es señal de que necesita separarse.
+- Las derivaciones van en el hook como variables computadas, nunca como estado (`const x = a ?? b`, no `useState`).
+- El copy/strings van en objetos constantes tipados fuera del JSX, nunca inline.
+- Los subcomponentes reciben solo lo que necesitan por props; no acceden a stores directamente.
+- El redirect y otros side effects van en `useEffect` explícito en el contenedor, nunca como `if` en medio del render.
+
+### Estructura de carpetas
+
+```
+components/[dominio]/[feature]/
+├── page.client.tsx
+├── hooks/
+│   └── use-[feature].ts
+├── components/
+│   ├── [feature]-form.tsx
+│   └── [feature]-sidebar.tsx
+└── [feature]-copy.ts
+```
+
+### Señales de que un componente necesita refactor
+
+- Hay un `useEffect` que setea estado (ver regla de dependencias circulares).
+- El JSX tiene lógica ternaria compleja o strings largos inline.
+- El componente accede a más de 2 stores de Zustand directamente.
+- Los handlers (`handleSubmit`, etc.) tienen más de 10 líneas.
+
 ## Notificaciones al usuario
 
 Para **todos** los mensajes de error o éxito mostrados al usuario, usa **siempre** `react-toastify`. No uses `alert`, `confirm`, ni ningún otro mecanismo nativo o custom. Llama a `toast.error(...)` para errores y `toast.success(...)` para operaciones exitosas.
@@ -71,8 +107,58 @@ Todas las queries a la base de datos viven en `data/`, nunca directamente en com
 - `stores/` — stores Zustand
 - `scripts/` — scripts de mantenimiento
 
+
+## Nunca setState en useEffect con dependencia circular
+
+Si el estado que seteas está en las `deps` del efecto, es un bug.
+
+**❌**
+```tsx
+useEffect(() => { setFullName(user.name) }, [user, fullName]);
+```
+
+**✅ Lazy initializer**
+```tsx
+const [fullName, setFullName] = useState(() => user?.name ?? "");
+```
+
+**✅ Valor derivado**
+```tsx
+const fullName = user?.name ?? "";
+```
+
+**✅ Zustand: inicializar en el listener de auth, no en efectos de componentes hijos**
+
+> Si un `useEffect` setea estado que está en sus propias `deps`, rediseña: el valor es derivado, no independiente.
+
+
 Utiliza siempre pnpm.
 Utiliza siempre tailwind.
 Utiliza siempre lucide icons, nunca emojis.
-
+Los estados deben ser globales en muchas ocasiones. Evita el prop drilling. Si un componente no usa una prop, no deberia pasarlo a su hijo. Deberia accederse desde un estado de zustand.
 Coloca código nuevo en la carpeta que corresponda al dominio, no en rutas genéricas.
+
+## Colores y tema
+
+Los colores viven en `app/globals.css` como variables CSS en `:root` y se exponen a Tailwind v4 vía `@theme inline`. **Nunca uses colores hardcodeados** en componentes, layouts ni estilos inline salvo datos dinámicos de usuario (p. ej. color de empleado desde la base de datos).
+
+**Usa siempre clases del tema semántico:**
+
+| Rol | Clases Tailwind |
+|-----|-----------------|
+| Fondo app | `bg-canvas` |
+| Paneles / inputs | `bg-surface` |
+| Acciones / nav activa | `bg-primary`, `hover:bg-primary-hover`, `text-on-primary` |
+| Texto | `text-ink`, `text-ink-secondary`, `text-ink-muted` |
+| Bordes | `border-border`, `border-border-subtle`, `divide-border-subtle` |
+| Focus | `ring-primary` |
+| Estado error | `text-danger`, `bg-danger` |
+| Estado aviso | `text-warning`, `bg-warning` |
+| Estado éxito | `text-success`, `bg-success` |
+| Acentos suaves | `bg-primary-subtle`, `text-primary-light` |
+
+**Prohibido en UI:** valores hex/rgb/oklch literales, paletas de Tailwind no definidas en el tema (`zinc-*`, `red-500`, `emerald-600`, etc.) y `style={{ color: '...' }}` / `backgroundColor` con valores fijos.
+
+**Si falta un token:** añádelo primero en `:root` y `@theme inline` de `globals.css`, luego úsalo en el componente. No introduzcas el color directamente en el JSX.
+
+**Excepción:** colores dinámicos persistidos (color de empleado, marca de clínica). Usa `style` solo con el valor de datos; el fallback cuando falte debe ser una clase del tema (`bg-border`), no un hex.

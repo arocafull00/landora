@@ -1,10 +1,9 @@
-import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
 import { eq } from "drizzle-orm";
+import { db } from "../db";
 import * as schema from "../db/schema";
 import { VELAR_DEFAULT_CONTENT } from "../lib/default-content";
 
-type Db = ReturnType<typeof drizzle<typeof schema>>;
+type Db = typeof db;
 
 async function seedSections(db: Db, landingId: string) {
   const c = VELAR_DEFAULT_CONTENT;
@@ -138,14 +137,10 @@ async function main() {
     process.exit(1);
   }
 
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
+  if (!process.env.DATABASE_URL) {
     console.error("DATABASE_URL environment variable is not set");
     process.exit(1);
   }
-
-  const sql = neon(databaseUrl);
-  const db = drizzle(sql, { schema });
 
   const existing = await db.query.users.findFirst({
     where: eq(schema.users.clerkUserId, clerkUserId),

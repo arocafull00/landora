@@ -14,11 +14,34 @@ import {
 } from "@/data/subscriptions";
 import { getStripe } from "@/lib/stripe";
 
-function isBookingSubscription(subscription: Stripe.Subscription) {
+type LandoraProduct = "main" | "booking";
+
+function resolveLandoraProduct(
+  metadata: Stripe.Metadata | null | undefined,
+): LandoraProduct | null {
+  const product = metadata?.landora_product;
+  if (product === "main" || product === "booking") return product;
+  return null;
+}
+
+function isBookingSubscription(
+  subscription: Stripe.Subscription,
+  productHint: LandoraProduct | null = null,
+) {
+  if (productHint === "booking") return true;
+  if (productHint === "main") return false;
+
   const bookingPriceId = process.env.STRIPE_BOOKING_PRICE_ID;
   if (!bookingPriceId) return false;
 
   return subscription.items.data.some((item) => item.price.id === bookingPriceId);
+}
+
+function getStripeCustomerId(
+  customer: Stripe.Subscription["customer"] | Stripe.Checkout.Session["customer"],
+) {
+  if (typeof customer === "string") return customer;
+  return customer?.id ?? null;
 }
 
 function getSubscriptionPeriodEnd(subscription: Stripe.Subscription) {
@@ -29,16 +52,11 @@ function getSubscriptionPeriodEnd(subscription: Stripe.Subscription) {
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   const clerkUserId = session.client_reference_id;
-  const stripeCustomerId = session.customer;
+  const stripeCustomerId = getStripeCustomerId(session.customer);
   const stripeSubscriptionId = session.subscription;
 
   if (!clerkUserId || typeof stripeSubscriptionId !== "string") {
-    console.error("Checkout session missing required fields:", {
-      clerkUserId,
-      stripeCustomerId,
-      stripeSubscriptionId,
-    });
-    return;
+    throw new Error("Checkout session missing required fields");
   }
 
   const user = await db.query.users.findFirst({
@@ -46,13 +64,13 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   });
 
   if (!user) {
-    console.error("User not found for checkout:", { clerkUserId });
-    return;
+    throw new Error(`User not found for checkout: ${clerkUserId}`);
   }
 
   const subscription = await getStripe().subscriptions.retrieve(stripeSubscriptionId);
+  const productHint = resolveLandoraProduct(session.metadata);
 
-  if (isBookingSubscription(subscription)) {
+  if (isBookingSubscription(subscription, productHint)) {
     await upsertUserAddon({
       userId: user.id,
       addonType: "bookings",
@@ -69,12 +87,8 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     return;
   }
 
-  if (typeof stripeCustomerId !== "string") {
-    console.error("Checkout session missing customer for main subscription:", {
-      clerkUserId,
-      stripeCustomerId,
-    });
-    return;
+  if (!stripeCustomerId) {
+    throw new Error("Checkout session missing customer for main subscription");
   }
 
   await updateSubscriptionFromCheckout({
@@ -85,37 +99,43 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+  const stripeCustomerId = getStripeCustomerId(subscription.customer);
+  const productHint = resolveLandoraProduct(subscription.metadata);
+  const status = subscription.status as
+    | "active"
+    | "trialing"
+    | "past_due"
+    | "canceled"
+    | "unpaid";
+
   const bookingAddon = await getUserAddonByStripeSubscriptionId(subscription.id);
 
   if (bookingAddon) {
     await setUserAddonStatus({
       stripeSubscriptionId: subscription.id,
-      status: subscription.status as
-        | "active"
-        | "trialing"
-        | "past_due"
-        | "canceled"
-        | "unpaid",
+      status,
       currentPeriodEnd: getSubscriptionPeriodEnd(subscription),
       cancelAtPeriodEnd: subscription.cancel_at_period_end,
     });
     return;
   }
 
+  if (isBookingSubscription(subscription, productHint)) {
+    return;
+  }
+
   await updateSubscriptionStatus({
     stripeSubscriptionId: subscription.id,
-    subscriptionStatus: subscription.status as
-      | "active"
-      | "trialing"
-      | "past_due"
-      | "canceled"
-      | "unpaid",
+    stripeCustomerId,
+    subscriptionStatus: status,
     subscriptionCurrentPeriodEnd: getSubscriptionPeriodEnd(subscription),
     subscriptionCancelAtPeriodEnd: subscription.cancel_at_period_end,
   });
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
+  const stripeCustomerId = getStripeCustomerId(subscription.customer);
+  const productHint = resolveLandoraProduct(subscription.metadata);
   const bookingAddon = await getUserAddonByStripeSubscriptionId(subscription.id);
 
   if (bookingAddon) {
@@ -127,8 +147,13 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     return;
   }
 
+  if (isBookingSubscription(subscription, productHint)) {
+    return;
+  }
+
   await updateSubscriptionStatus({
     stripeSubscriptionId: subscription.id,
+    stripeCustomerId,
     subscriptionStatus: "canceled",
     subscriptionCancelAtPeriodEnd: false,
   });

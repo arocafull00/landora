@@ -55,19 +55,40 @@ export async function updateSubscriptionFromCheckout(data: {
 
 export async function updateSubscriptionStatus(data: {
   stripeSubscriptionId: string;
+  stripeCustomerId?: string | null;
   subscriptionStatus: SubscriptionStatus;
   subscriptionCurrentPeriodEnd?: Date | null;
   subscriptionCancelAtPeriodEnd?: boolean;
 }) {
   try {
+    const updateFields = {
+      subscriptionStatus: data.subscriptionStatus,
+      subscriptionCurrentPeriodEnd: data.subscriptionCurrentPeriodEnd,
+      subscriptionCancelAtPeriodEnd: data.subscriptionCancelAtPeriodEnd,
+    };
+
+    const userBySubscription = await db.query.users.findFirst({
+      where: eq(users.stripeSubscriptionId, data.stripeSubscriptionId),
+      columns: { id: true },
+    });
+
+    if (userBySubscription) {
+      await db
+        .update(users)
+        .set(updateFields)
+        .where(eq(users.id, userBySubscription.id));
+      return;
+    }
+
+    if (!data.stripeCustomerId) return;
+
     await db
       .update(users)
       .set({
-        subscriptionStatus: data.subscriptionStatus,
-        subscriptionCurrentPeriodEnd: data.subscriptionCurrentPeriodEnd,
-        subscriptionCancelAtPeriodEnd: data.subscriptionCancelAtPeriodEnd,
+        ...updateFields,
+        stripeSubscriptionId: data.stripeSubscriptionId,
       })
-      .where(eq(users.stripeSubscriptionId, data.stripeSubscriptionId));
+      .where(eq(users.stripeCustomerId, data.stripeCustomerId));
   } catch {
     throw new Error("Failed to update subscription status");
   }

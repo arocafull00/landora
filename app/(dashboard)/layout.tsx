@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { DashboardAccountActions } from "@/components/dashboard/dashboard-account-actions";
 import { DashboardThemeScope } from "@/components/dashboard/dashboard-theme-scope";
@@ -13,18 +12,6 @@ import { getBookingSettings } from "@/data/booking-settings";
 import { getUserAddon } from "@/data/user-addons";
 import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { hasBookingModuleAccess } from "@/lib/subscription-access";
-
-export const metadata: Metadata = {
-  icons: {
-    icon: [
-      { url: "/favicon_io/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon_io/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    shortcut: "/favicon_io/favicon.ico",
-    apple: "/favicon_io/apple-touch-icon.png",
-  },
-  manifest: "/favicon_io/site.webmanifest",
-};
 
 export default async function DashboardLayout({
   children,

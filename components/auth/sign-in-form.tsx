@@ -1,13 +1,11 @@
 "use client";
 
 import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { SignInEmailVerificationForm } from "@/components/auth/sign-in-email-verification-form";
 import { PasswordInput } from "@/components/ui/password-input";
 
 export function SignInForm() {
   const { signIn, errors, fetchStatus } = useSignIn();
-  const router = useRouter();
 
   const isLoading = fetchStatus === "fetching";
 
@@ -18,11 +16,7 @@ export function SignInForm() {
           ? `/sign-in/tasks/${session.currentTask.key}`
           : "/editor";
         const url = decorateUrl(destination);
-        if (url.startsWith("http")) {
-          window.location.href = url;
-        } else {
-          router.push(url);
-        }
+        window.location.assign(url);
       },
     });
 

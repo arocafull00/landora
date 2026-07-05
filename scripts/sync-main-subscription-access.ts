@@ -5,11 +5,7 @@ import * as schema from "../db/schema";
 import { getStripe } from "../lib/stripe";
 
 const bookingPriceId = process.env.STRIPE_BOOKING_PRICE_ID;
-
-if (!bookingPriceId) {
-  console.error("STRIPE_BOOKING_PRICE_ID is required");
-  process.exit(1);
-}
+const mainPriceId = process.env.STRIPE_MAIN_PRICE_ID;
 
 if (!process.env.DATABASE_URL) {
   console.error("DATABASE_URL is required");
@@ -27,6 +23,19 @@ function getSubscriptionPeriodEnd(subscription: Stripe.Subscription) {
   return new Date(currentPeriodEnd * 1000);
 }
 
+function isMainSubscription(subscription: Stripe.Subscription) {
+  if (subscription.metadata?.landora_product === "booking") return false;
+  if (subscription.metadata?.landora_product === "main") return true;
+
+  if (mainPriceId) {
+    return subscription.items.data.some((item) => item.price.id === mainPriceId);
+  }
+
+  if (!bookingPriceId) return true;
+
+  return !subscription.items.data.some((item) => item.price.id === bookingPriceId);
+}
+
 async function resolveUserForSubscription(subscription: Stripe.Subscription) {
   const customerId =
     typeof subscription.customer === "string"
@@ -39,6 +48,11 @@ async function resolveUserForSubscription(subscription: Stripe.Subscription) {
     });
     if (userByCustomer) return userByCustomer;
   }
+
+  const userBySubscription = await db.query.users.findFirst({
+    where: eq(schema.users.stripeSubscriptionId, subscription.id),
+  });
+  if (userBySubscription) return userBySubscription;
 
   const stripe = getStripe();
   const sessions = await stripe.checkout.sessions.list({
@@ -54,9 +68,8 @@ async function resolveUserForSubscription(subscription: Stripe.Subscription) {
   });
 }
 
-async function syncBookingAccess() {
+async function syncMainSubscriptionAccess() {
   const stripe = getStripe();
-  const syncedSubscriptionIds = new Set<string>();
   let synced = 0;
   let skipped = 0;
 
@@ -64,14 +77,16 @@ async function syncBookingAccess() {
 
   do {
     const page = await stripe.subscriptions.list({
-      price: bookingPriceId,
       status: "all",
       limit: 100,
       starting_after: startingAfter,
     });
 
     for (const subscription of page.data) {
-      syncedSubscriptionIds.add(subscription.id);
+      if (!isMainSubscription(subscription)) {
+        skipped += 1;
+        continue;
+      }
 
       const user = await resolveUserForSubscription(subscription);
       if (!user) {
@@ -80,25 +95,21 @@ async function syncBookingAccess() {
         continue;
       }
 
+      const customerId =
+        typeof subscription.customer === "string"
+          ? subscription.customer
+          : subscription.customer?.id;
+
       await db
-        .insert(schema.userAddons)
-        .values({
-          userId: user.id,
-          addonType: "bookings",
+        .update(schema.users)
+        .set({
           stripeSubscriptionId: subscription.id,
-          status: subscription.status as schema.SubscriptionStatus,
-          currentPeriodEnd: getSubscriptionPeriodEnd(subscription),
-          cancelAtPeriodEnd: subscription.cancel_at_period_end,
+          stripeCustomerId: customerId ?? user.stripeCustomerId,
+          subscriptionStatus: subscription.status as schema.SubscriptionStatus,
+          subscriptionCurrentPeriodEnd: getSubscriptionPeriodEnd(subscription),
+          subscriptionCancelAtPeriodEnd: subscription.cancel_at_period_end,
         })
-        .onConflictDoUpdate({
-          target: [schema.userAddons.userId, schema.userAddons.addonType],
-          set: {
-            stripeSubscriptionId: subscription.id,
-            status: subscription.status as schema.SubscriptionStatus,
-            currentPeriodEnd: getSubscriptionPeriodEnd(subscription),
-            cancelAtPeriodEnd: subscription.cancel_at_period_end,
-          },
-        });
+        .where(eq(schema.users.id, user.id));
 
       synced += 1;
     }
@@ -106,28 +117,10 @@ async function syncBookingAccess() {
     startingAfter = page.has_more ? page.data.at(-1)?.id : undefined;
   } while (startingAfter);
 
-  const existingAddons = await db.query.userAddons.findMany({
-    where: eq(schema.userAddons.addonType, "bookings"),
-  });
-
-  let canceled = 0;
-
-  for (const addon of existingAddons) {
-    if (!addon.stripeSubscriptionId) continue;
-    if (syncedSubscriptionIds.has(addon.stripeSubscriptionId)) continue;
-
-    await db
-      .update(schema.userAddons)
-      .set({ status: "canceled" })
-      .where(eq(schema.userAddons.id, addon.id));
-
-    canceled += 1;
-  }
-
-  console.log(`Synced ${synced} booking subscriptions, skipped ${skipped}, canceled ${canceled} orphans`);
+  console.log(`Synced ${synced} main subscriptions, skipped ${skipped}`);
 }
 
-syncBookingAccess().catch((error) => {
+syncMainSubscriptionAccess().catch((error) => {
   console.error("Sync failed:", error);
   process.exit(1);
 });

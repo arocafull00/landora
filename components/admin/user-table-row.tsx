@@ -41,6 +41,9 @@ export function UserTableRow({ user }: { user: AdminUserWithLanding }) {
           <p className="font-body text-body-sm text-on-surface-variant">
             {user.email ?? "Sin email"}
           </p>
+          <p className="mt-1 font-mono text-body-sm text-on-surface-variant/70">
+            {user.clerkUserId.slice(0, 12)}…
+          </p>
           <p className="mt-1 font-body text-body-sm text-on-surface-variant/70">
             Cliente desde {createdAt}
           </p>

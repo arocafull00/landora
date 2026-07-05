@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/favicon.ico",
+        destination: "/favicon_io/favicon.ico",
+      },
+      {
         source: "/ingest/static/:path*",
         destination: "https://eu-assets.i.posthog.com/static/:path*",
       },

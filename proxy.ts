@@ -14,7 +14,6 @@ import {
 import { getSubscriptionStatusForProxy } from "@/data/subscriptions";
 import { getBookingModuleAccessContextForClerkUser } from "@/data/user-addons";
 import { hasBookingModuleAccess, hasDashboardAccess } from "@/lib/subscription-access";
-import { getStripePaymentLinkUrl } from "@/lib/stripe";
 
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
 const isTenantResolveRoute = createRouteMatcher(["/api/tenant/resolve"]);
@@ -22,6 +21,8 @@ const isWebhookRoute = createRouteMatcher(["/api/webhooks/stripe"]);
 const isCronRoute = createRouteMatcher(["/api/cron/check-domains"]);
 const isSubscriptionExemptRoute = createRouteMatcher([
   "/settings(.*)",
+  "/subscribe(.*)",
+  "/account-pending(.*)",
   "/api/webhooks/stripe",
   "/api/stripe/(.*)",
 ]);
@@ -131,12 +132,9 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return NextResponse.redirect(redirectUrl);
     }
 
-    const paymentLink = getStripePaymentLinkUrl(userId);
-    if (!paymentLink) {
-      return NextResponse.next();
-    }
-
-    return NextResponse.redirect(paymentLink);
+    const redirectUrl = req.nextUrl.clone();
+    redirectUrl.pathname = user ? "/subscribe" : "/account-pending";
+    return NextResponse.redirect(redirectUrl);
   }
 
   if (isBookingRoute(req)) {
