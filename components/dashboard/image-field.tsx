@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import type { TemplateId } from "@/lib/dashboard-data";
 import { useAssetsStore } from "@/stores/assets-store";
-import { isBackgroundPreset } from "@/lib/background-assets";
+import { isLottieAsset } from "@/lib/background-assets";
 import { getTemplateImageOptions } from "@/lib/template-image-options";
 import { AssetNameField } from "@/components/dashboard/asset-name-field";
 import { AssetImage } from "@/components/ui/asset-image";
@@ -20,12 +20,14 @@ import {
 } from "@/components/ui/select";
 
 export function ImageField({
+  allowLottie = false,
   label,
   onChange,
   presets,
   templateId,
   value,
 }: {
+  allowLottie?: boolean;
   label: string;
   onChange: (value: string) => void;
   presets?: readonly { value: string; label: string }[];
@@ -55,12 +57,16 @@ export function ImageField({
     }
   };
 
-  const assetOptions = assets.map((a) => ({ value: a.url, label: a.name || a.url }));
+  const assetOptions: Array<{ value: string; label: string }> = [];
+  for (const asset of assets) {
+    if (!allowLottie && isLottieAsset(asset.url, asset.mimeType)) continue;
+    assetOptions.push({ value: asset.url, label: asset.name || asset.url });
+  }
   const templateImages = templateId ? getTemplateImageOptions(templateId) : [];
   const allOptions = [...(presets ?? []), ...templateImages, ...assetOptions];
   const activeAsset = assets.find((a) => a.url === value);
   const showThemedPreview = Boolean(
-    value && templateId && isBackgroundPreset(value),
+    value && templateId && isLottieAsset(value, activeAsset?.mimeType),
   );
 
   return (
@@ -144,7 +150,7 @@ export function ImageField({
       <input
         aria-label="Subir imagen"
         ref={inputRef}
-        accept="image/*"
+        accept={allowLottie ? "image/*,.json,application/json" : "image/*"}
         className="hidden"
         onChange={handleFileChange}
         type="file"

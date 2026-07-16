@@ -2,8 +2,8 @@
 
 import { ArrowUpRight } from "lucide-react";
 import { m, useReducedMotion } from "motion/react";
-import { AssetImage } from "@/components/ui/asset-image";
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
+import { HeroVariantMedia } from "@/components/templates/shared/heroes/hero-variant-media";
 import { useAnalytics } from "@/hooks/use-analytics";
 
 const MOSAICO_COPY = {
@@ -85,10 +85,10 @@ export function MosaicoHeroVariant({
         >
           <div className="absolute inset-y-0 right-0 w-[76%] rotate-2 overflow-hidden rounded-[2rem] border border-[var(--site-accent)] bg-[var(--site-surface-alt)]">
             {hero.image ? (
-              <AssetImage
+              <HeroVariantMedia
                 alt={hero.title}
+                appearance={content.appearance}
                 className="object-cover"
-                fill
                 priority
                 sizes="(max-width: 1024px) 76vw, 40vw"
                 src={hero.image}
@@ -97,10 +97,10 @@ export function MosaicoHeroVariant({
           </div>
           <div className="absolute bottom-[8%] left-0 aspect-[4/3] w-[58%] -rotate-3 overflow-hidden rounded-[1.5rem] border-4 border-[var(--site-dark)] bg-[var(--site-surface-alt)] shadow-2xl">
             {secondaryImage ? (
-              <AssetImage
+              <HeroVariantMedia
                 alt=""
+                appearance={content.appearance}
                 className="object-cover"
-                fill
                 priority
                 sizes="(max-width: 1024px) 58vw, 30vw"
                 src={secondaryImage}

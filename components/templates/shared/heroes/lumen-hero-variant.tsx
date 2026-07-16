@@ -2,8 +2,8 @@
 
 import { ArrowUpRight } from "lucide-react";
 import { m, useReducedMotion } from "motion/react";
-import { AssetImage } from "@/components/ui/asset-image";
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
+import { HeroVariantMedia } from "@/components/templates/shared/heroes/hero-variant-media";
 import { useAnalytics } from "@/hooks/use-analytics";
 
 const LUMEN_COPY = {
@@ -83,10 +83,10 @@ export function LumenHeroVariant({
           transition={{ delay: 0.12, duration: 0.9, ease: EASE_OUT }}
         >
           {hero.image ? (
-            <AssetImage
+            <HeroVariantMedia
               alt={hero.title}
+              appearance={content.appearance}
               className="object-cover"
-              fill
               priority
               sizes="(max-width: 1280px) 100vw, 1280px"
               src={hero.image}

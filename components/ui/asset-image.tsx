@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { isAnimatedImageAsset } from "@/lib/is-animated-image";
 import { isSvgAsset } from "@/lib/is-svg-url";
 
 export function AssetImage({
@@ -33,7 +34,11 @@ export function AssetImage({
       quality={quality}
       sizes={sizes}
       src={src}
-      unoptimized={isSvgAsset(src, mimeType) || src.startsWith("/")}
+      unoptimized={
+        isAnimatedImageAsset(src, mimeType) ||
+        isSvgAsset(src, mimeType) ||
+        src.startsWith("/")
+      }
     />
   );
 }

@@ -2,8 +2,8 @@
 
 import { ArrowRight } from "lucide-react";
 import { m, useReducedMotion } from "motion/react";
-import { AssetImage } from "@/components/ui/asset-image";
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
+import { HeroVariantMedia } from "@/components/templates/shared/heroes/hero-variant-media";
 import { useAnalytics } from "@/hooks/use-analytics";
 
 const OFFSET_COPY = {
@@ -25,7 +25,7 @@ export function OffsetHeroVariant({
 
   return (
     <section
-      className="relative min-h-dvh overflow-hidden bg-[var(--site-surface)] px-5 pb-12 pt-28 text-[var(--site-text)] sm:px-8 sm:pt-32 lg:px-12 lg:pb-16"
+      className="relative min-h-dvh overflow-hidden bg-(--site-surface) px-5 pb-12 pt-28 text-(--site-text) sm:px-8 sm:pt-32 lg:px-12 lg:pb-16"
       id="hero"
       ref={heroRef}
     >
@@ -36,9 +36,9 @@ export function OffsetHeroVariant({
           initial={reduceMotion ? false : { opacity: 0, x: -20 }}
           transition={{ duration: 0.65, ease: EASE_OUT }}
         >
-          <span aria-hidden className="h-px w-12 bg-[var(--site-primary)]" />
+          <span aria-hidden className="h-px w-12 bg-(--site-primary)" />
           {hero.eyebrow ? (
-            <p className="font-body text-xs font-semibold uppercase tracking-[0.24em] text-[var(--site-primary)] sm:text-sm">
+            <p className="font-body text-xs font-semibold uppercase tracking-[0.24em] text-(--site-primary) sm:text-sm">
               {hero.eyebrow}
             </p>
           ) : null}
@@ -92,19 +92,15 @@ export function OffsetHeroVariant({
           transition={{ delay: 0.16, duration: 0.9, ease: EASE_OUT }}
         >
           {hero.image ? (
-            <AssetImage
+            <HeroVariantMedia
               alt={hero.title}
+              appearance={content.appearance}
               className="object-cover"
-              fill
               priority
               sizes="(max-width: 1024px) 100vw, 42vw"
               src={hero.image}
             />
           ) : null}
-          <div
-            aria-hidden
-            className="absolute inset-x-0 bottom-0 h-1 bg-[var(--site-primary)]"
-          />
         </m.div>
       </div>
     </section>

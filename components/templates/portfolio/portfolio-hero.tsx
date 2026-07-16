@@ -25,7 +25,7 @@ export function PortfolioHero({
 
   return (
     <section
-      className="min-h-[100dvh] bg-portfolio-canvas px-4 pb-6 pt-28 text-portfolio-ink sm:px-6 md:px-10 md:pb-10 md:pt-32 lg:px-16"
+      className="min-h-dvh bg-portfolio-canvas px-4 pb-6 pt-28 text-portfolio-ink sm:px-6 md:px-10 md:pb-10 md:pt-32 lg:px-16"
       id="hero"
       ref={heroRef}
     >

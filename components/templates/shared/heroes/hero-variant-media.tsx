@@ -2,15 +2,22 @@
 
 import type { LandingAppearance } from "@/lib/dashboard-data";
 import { isLottieAsset } from "@/lib/background-assets";
+import { AssetImage } from "@/components/ui/asset-image";
 import { ThemedLottieBackground } from "@/components/ui/themed-lottie-background";
 
-export function HeroBackground({
+export function HeroVariantMedia({
+  alt,
   appearance,
   className,
+  priority,
+  sizes,
   src,
 }: {
+  alt: string;
   appearance: LandingAppearance;
   className?: string;
+  priority?: boolean;
+  sizes: string;
   src: string;
 }) {
   if (!src) return null;
@@ -26,14 +33,13 @@ export function HeroBackground({
   }
 
   return (
-    <div
-      className={[
-        "absolute inset-0 bg-cover bg-no-repeat",
-        className ?? "bg-bottom",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-      style={{ backgroundImage: `url(${src})` }}
+    <AssetImage
+      alt={alt}
+      className={className}
+      fill
+      priority={priority}
+      sizes={sizes}
+      src={src}
     />
   );
 }

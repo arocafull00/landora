@@ -11,8 +11,8 @@ type SignatureResponse = {
 type CloudinaryUploadResult = {
   public_id: string;
   secure_url: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   format: string;
   original_filename?: string;
   error?: { message: string };
@@ -52,6 +52,8 @@ export async function uploadAsset(file: File, name?: string): Promise<AssetRow> 
 
   const assetName =
     name ?? file.name.replace(/\.[^/.]+$/, "") ?? result.original_filename ?? "asset";
+  const mimeType =
+    file.type || (result.format === "json" ? "application/json" : `image/${result.format}`);
 
   const registerRes = await fetch("/api/assets", {
     method: "POST",
@@ -60,7 +62,7 @@ export async function uploadAsset(file: File, name?: string): Promise<AssetRow> 
       publicId: result.public_id,
       url: result.secure_url,
       name: assetName,
-      mimeType: `image/${result.format}`,
+      mimeType,
       width: result.width,
       height: result.height,
     }),

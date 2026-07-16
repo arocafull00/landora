@@ -34,6 +34,7 @@ export function HeroEditorPanel({ landing }: { landing: Landing }) {
         hero={hero}
         onChange={onHeroChange}
         templateId={templateId}
+        variantId={variantId}
       />
     </section>
   );

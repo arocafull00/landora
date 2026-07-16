@@ -1,20 +1,23 @@
 "use client";
 
-import type { HeroContent, TemplateId } from "@/lib/dashboard-data";
+import type { HeroContent, HeroVariantId, TemplateId } from "@/lib/dashboard-data";
 import type { HeroSpecificField } from "@/components/templates/shared/heroes/hero-variant-types";
 import { HeroFanImagesFields } from "@/components/dashboard/hero-editor/components/hero-fan-images-fields";
 import { ImageField } from "@/components/dashboard/image-field";
+import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 
 export function HeroSpecificFields({
   fields,
   hero,
   onChange,
   templateId,
+  variantId,
 }: {
   fields: readonly HeroSpecificField[];
   hero: HeroContent;
   onChange: (patch: Partial<HeroContent>) => void;
   templateId: TemplateId;
+  variantId: HeroVariantId;
 }) {
   if (fields.length === 0) return null;
 
@@ -22,8 +25,10 @@ export function HeroSpecificFields({
     <div className="space-y-5 border-t border-outline-variant pt-5">
       {fields.includes("houseImage") ? (
         <ImageField
+          allowLottie={variantId === "portfolio"}
           label="Imagen secundaria"
           onChange={(houseImage) => onChange({ houseImage })}
+          presets={variantId === "portfolio" ? BACKGROUND_IMAGE_OPTIONS : undefined}
           templateId={templateId}
           value={hero.houseImage ?? hero.image}
         />

@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { assertLandingAccess } from "@/lib/api/landing-auth";
 import { SECTION_REGISTRY } from "@/lib/api/landing-section-registry";
 
@@ -22,6 +23,10 @@ export async function PATCH(
     const body = await req.json();
     const parsed = handler.parse(body, meta);
     await handler.persist(id, parsed);
+    const slug = meta.slug.replace(/^\//, "");
+
+    revalidatePath(`/${slug}`);
+    revalidatePath(`/preview/${id}`);
 
     return Response.json({ ok: true });
   } catch {
