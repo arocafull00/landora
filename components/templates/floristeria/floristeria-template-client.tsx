@@ -35,8 +35,8 @@ export function FloristeriaTemplateClient({
     <TemplateLazyMotion>
       <div
         ref={rootRef}
-        className="relative"
-        style={{ backgroundColor: "#FAFAF7", overflowX: "clip" }}
+        className="relative bg-[var(--site-surface)]"
+        style={{ overflowX: "clip" }}
       >
         <FloristeriaAosInit rootRef={rootRef} />
 

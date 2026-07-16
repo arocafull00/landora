@@ -28,16 +28,16 @@ export function StudioHero({
       className="relative flex min-h-dvh flex-col justify-center overflow-hidden"
     >
       <HeroBackground
+        appearance={content.appearance}
         className="bg-right md:bg-bottom"
         src={content.hero.image}
-        template="studio"
       />
       <div className="absolute inset-0 bg-black/30" />
       <div className="absolute inset-y-0 left-0 w-full bg-linear-to-r from-black/95 via-black/75 to-transparent" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col px-6 pb-10 pt-24 md:px-10 lg:px-12 lg:pb-14 lg:pt-28">
         <m.p
-          className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-[#c99d43] sm:text-sm"
+          className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--site-accent-bright)] sm:text-sm"
           style={{ fontFamily: "var(--font-syne)" }}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -57,7 +57,7 @@ export function StudioHero({
         </m.h1>
 
         <m.p
-          className="mt-2 max-w-4xl text-[clamp(36px,2vw,92px)] font-black uppercase leading-[0.9] text-[#d4a948]"
+          className="mt-2 max-w-4xl text-[clamp(36px,2vw,92px)] font-black uppercase leading-[0.9] text-[var(--site-accent-bright)]"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ export function StudioHero({
           transition={{ duration: 0.6, delay: 0.82, ease: easeOut }}
         >
           <a
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-[#c99d43] px-7 py-3.5 text-sm font-bold uppercase tracking-[0.08em] text-black transition hover:bg-[#d9ad54]"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--site-accent-bright)] px-7 py-3.5 text-sm font-bold uppercase tracking-[0.08em] text-black transition hover:bg-[var(--site-accent-bright)]"
             href={ctaHref}
             style={{ fontFamily: "var(--font-syne)" }}
             onClick={() => trackCtaClick()}
@@ -93,7 +93,7 @@ export function StudioHero({
           </a>
 
           <a
-            className="inline-flex items-center justify-center gap-2 rounded-md border border-[#c99d43]/60 bg-black/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-[#f7d389] transition hover:bg-[#c99d43]/10"
+            className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--site-accent-bright)]/60 bg-black/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-[var(--site-accent-soft)] transition hover:bg-[var(--site-accent-bright)]/10"
             href={phoneHref}
             style={{ fontFamily: "var(--font-syne)" }}
             onClick={() => trackPhoneClick()}
@@ -111,12 +111,12 @@ export function StudioHero({
           style={{ fontFamily: "var(--font-body)" }}
         >
           <div className="inline-flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-[#c99d43]" />
+            <MapPin className="h-4 w-4 text-[var(--site-accent-bright)]" />
             <span>{content.contact.address}</span>
           </div>
           <div className="h-4 w-px bg-white/30" />
           <div className="inline-flex items-center gap-2">
-            <Clock3 className="h-4 w-4 text-[#c99d43]" />
+            <Clock3 className="h-4 w-4 text-[var(--site-accent-bright)]" />
             <span>Lun - Sáb: 10:00 - 20:00</span>
           </div>
         </m.div>

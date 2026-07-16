@@ -37,8 +37,8 @@ export function PortfolioTemplate({
     <TemplateLazyMotion>
       <div
         ref={rootRef}
-        className="relative"
-        style={{ backgroundColor: "#0a0a0a", overflowX: "clip" }}
+        className="relative bg-[var(--site-surface)]"
+        style={{ overflowX: "clip" }}
       >
       <PortfolioAosInit rootRef={rootRef} />
 

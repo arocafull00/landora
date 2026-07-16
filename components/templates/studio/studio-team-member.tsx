@@ -15,7 +15,7 @@ export function StudioTeamMember({
       className={`group shrink-0 snap-start ${offset ? "md:mt-12" : ""}`}
       style={{ width: "min(72vw, 280px)" }}
     >
-      <div className="relative mb-5 aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#e5e2dd]">
+      <div className="relative mb-5 aspect-[3/4] w-full overflow-hidden rounded-xl bg-[var(--site-surface-alt)]">
         {member.image ? (
           <AssetImage
             alt={member.name}
@@ -25,22 +25,22 @@ export function StudioTeamMember({
             src={member.image}
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-4xl font-bold text-[#8b7355]/30">
+          <div className="flex h-full items-center justify-center text-4xl font-bold text-[var(--site-primary)]/30">
             {member.name.charAt(0)}
           </div>
         )}
       </div>
       <h3
-        className="text-lg font-bold text-[#1a1a1a]"
+        className="text-lg font-bold text-[var(--site-text)]"
         style={{ fontFamily: "var(--font-syne)" }}
       >
         {member.name}
       </h3>
       {member.role && (
-        <p className="mt-1 text-sm font-medium text-[#8b7355]">{member.role}</p>
+        <p className="mt-1 text-sm font-medium text-[var(--site-primary)]">{member.role}</p>
       )}
       {member.bio && (
-        <p className="mt-3 text-sm leading-relaxed text-[#6b6560]">{member.bio}</p>
+        <p className="mt-3 text-sm leading-relaxed text-[var(--site-text-muted)]">{member.bio}</p>
       )}
     </article>
   );

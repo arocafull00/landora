@@ -1,11 +1,13 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { m, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
-import { PortfolioHeroAccentLines } from "@/components/templates/portfolio/portfolio-hero-accent-lines";
-import { PortfolioHeroParticles } from "@/components/templates/portfolio/portfolio-hero-particles";
+import { AssetImage } from "@/components/ui/asset-image";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 import { useAnalytics } from "@/hooks/use-analytics";
+
+const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function PortfolioHero({
   content,
@@ -17,64 +19,93 @@ export function PortfolioHero({
   ctaHref: string;
 }) {
   const { trackCtaClick } = useAnalytics();
+  const reduceMotion = useReducedMotion() ?? false;
+  const heroImage = content.hero.image;
+  const secondaryImage = content.hero.houseImage || heroImage;
 
   return (
     <section
-      ref={heroRef}
+      className="min-h-[100dvh] bg-portfolio-canvas px-4 pb-6 pt-28 text-portfolio-ink sm:px-6 md:px-10 md:pb-10 md:pt-32 lg:px-16"
       id="hero"
-      className="relative min-h-[100dvh] overflow-hidden bg-[#0a0a0a] text-[#fafafa]"
+      ref={heroRef}
     >
-      <PortfolioHeroParticles />
-      <PortfolioHeroAccentLines />
-
-      <main className="pointer-events-none absolute inset-0 grid place-items-center px-6 text-center">
-        <div>
+      <div className="mx-auto grid min-h-[calc(100dvh-9rem)] max-w-[1500px] grid-cols-1 border-l border-t border-portfolio-line md:grid-cols-12">
+        <m.div
+          animate={{ opacity: 1, y: 0 }}
+          className="flex min-h-72 flex-col justify-between border-b border-r border-portfolio-line p-6 md:col-span-7 md:min-h-[52dvh] md:p-10 lg:p-14"
+          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.7, ease: easeOut }}
+        >
           {content.hero.eyebrow ? (
-            <p
-              className="mb-3.5 text-xs uppercase tracking-[0.14em] text-[#a1a1aa]"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
+            <p className="max-w-sm text-sm leading-6 text-portfolio-ink-muted">
               {content.hero.eyebrow}
             </p>
-          ) : null}
-
+          ) : (
+            <span />
+          )}
           <h1
-            className="m-0 text-[clamp(32px,8vw,88px)] font-semibold leading-[0.95] text-[#fafafa]"
-            style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
+            className="max-w-[12ch] text-balance text-[clamp(3rem,7.5vw,6rem)] font-bold leading-[0.9] tracking-[-0.035em]"
+            style={{ fontFamily: "var(--font-syne)" }}
           >
             {content.hero.title}
           </h1>
+        </m.div>
 
-          {content.hero.subtitle ? (
-            <p
-              className="mx-auto mt-[18px] max-w-xl text-[clamp(14px,2.2vw,18px)] text-[#a1a1aa]"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              {content.hero.subtitle}
-            </p>
+        <m.div
+          animate={{ opacity: 1, scale: 1 }}
+          className="relative min-h-[42dvh] overflow-hidden border-b border-r border-portfolio-line md:col-span-5 md:min-h-0"
+          initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
+          transition={{ delay: 0.08, duration: 0.8, ease: easeOut }}
+        >
+          {heroImage ? (
+            <AssetImage
+              alt={content.hero.title}
+              className="object-cover transition-transform duration-700 hover:scale-[1.025]"
+              fill
+              priority
+              sizes="(max-width: 767px) 100vw, 42vw"
+              src={heroImage}
+            />
+          ) : (
+            <div className="flex h-full items-end p-8 text-portfolio-ink-muted">
+              {content.hero.description || content.hero.subtitle}
+            </div>
+          )}
+        </m.div>
+
+        <div className="flex min-h-48 flex-col justify-between border-b border-r border-portfolio-line p-6 md:col-span-4 md:min-h-60 md:p-8">
+          <span className="max-w-[30ch] text-pretty text-sm leading-6 text-portfolio-ink-muted">
+            {content.hero.description}
+          </span>
+          <ArrowDownRight aria-hidden className="text-portfolio-accent" size={30} />
+        </div>
+
+        <div className="relative min-h-64 overflow-hidden border-b border-r border-portfolio-line md:col-span-4 md:min-h-60">
+          {secondaryImage ? (
+            <AssetImage
+              alt=""
+              className="object-cover"
+              fill
+              sizes="(max-width: 767px) 100vw, 34vw"
+              src={secondaryImage}
+            />
           ) : null}
+        </div>
 
-          <a
-            className="pointer-events-auto mt-10 inline-block rounded-full bg-white px-8 py-3.5 text-sm font-semibold tracking-wide text-[#0a0a0a] transition-all hover:bg-white/90 hover:shadow-lg"
+        <div className="flex min-h-56 flex-col justify-between border-b border-r border-portfolio-line bg-portfolio-accent p-6 text-portfolio-accent-ink md:col-span-4 md:min-h-60 md:p-8">
+          <p className="max-w-[28ch] text-pretty text-base leading-7">
+            {content.hero.subtitle}
+          </p>
+          <TemplateNavAnchor
+            className="flex items-end justify-between gap-6 text-lg font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-accent-ink"
             href={ctaHref}
-            style={{ fontFamily: "var(--font-body)" }}
             onClick={() => trackCtaClick()}
           >
             {content.hero.ctaLabel || "Ver proyectos"}
-          </a>
+            <ArrowUpRight aria-hidden size={25} />
+          </TemplateNavAnchor>
         </div>
-      </main>
-
-      <section className="absolute inset-x-0 bottom-0 grid place-items-center gap-3 border-t border-[#27272a] px-6 py-8 text-center">
-        <TemplateNavAnchor
-          className="inline-flex items-center gap-1.5 text-sm text-[#a1a1aa] transition-colors hover:text-[#fafafa]"
-          href="#experiencia"
-          style={{ fontFamily: "var(--font-body)" }}
-        >
-          Show more
-          <ChevronDown size={16} aria-hidden />
-        </TemplateNavAnchor>
-      </section>
+      </div>
     </section>
   );
 }

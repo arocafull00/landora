@@ -1,18 +1,17 @@
 "use client";
 
-import type { TemplateId } from "@/lib/dashboard-data";
+import type { LandingAppearance } from "@/lib/dashboard-data";
 import { isBackgroundPreset } from "@/lib/background-assets";
-import { getTemplatePalette } from "@/lib/template-palettes";
 import { ThemedLottieBackground } from "@/components/ui/themed-lottie-background";
 
 export function HeroBackground({
+  appearance,
   className,
   src,
-  template,
 }: {
+  appearance: LandingAppearance;
   className?: string;
   src: string;
-  template: TemplateId;
 }) {
   if (!src) return null;
 
@@ -20,8 +19,8 @@ export function HeroBackground({
     return (
       <ThemedLottieBackground
         className={className}
-        palette={getTemplatePalette(template)}
         src={src}
+        themeKey={appearance.paletteId}
       />
     );
   }

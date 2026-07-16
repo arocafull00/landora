@@ -1,0 +1,2 @@
+ALTER TABLE "landing_branding" ADD COLUMN "palette_id" text DEFAULT 'default' NOT NULL;--> statement-breakpoint
+ALTER TABLE "landing_branding" ADD COLUMN "typography_id" text DEFAULT 'default' NOT NULL;

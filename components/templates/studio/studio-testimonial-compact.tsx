@@ -12,7 +12,7 @@ export function StudioTestimonialCompact({
     <div className="border-t border-white/10 pt-6">
       <div className="mb-3 flex gap-0.5">
         {Array.from({ length: testimonial.rating }).map((_, i) => (
-          <Star className="h-3.5 w-3.5 fill-[#8b7355] text-[#8b7355]" key={i} />
+          <Star className="h-3.5 w-3.5 fill-[var(--site-primary)] text-[var(--site-primary)]" key={i} />
         ))}
       </div>
       <p className="mb-4 text-sm leading-relaxed text-white/75">
@@ -21,7 +21,7 @@ export function StudioTestimonialCompact({
       <div className="flex items-center justify-between">
         <p className="text-sm font-semibold text-white">{testimonial.author}</p>
         {testimonial.verified && (
-          <span className="text-xs text-[#8b7355]">Verificado</span>
+          <span className="text-xs text-[var(--site-primary)]">Verificado</span>
         )}
       </div>
     </div>

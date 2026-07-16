@@ -33,7 +33,7 @@ export function VelarHero({
         )}
         style={{ minHeight: "100vh" }}
       >
-        <HeroBackground src={content.hero.image} template="velar" />
+        <HeroBackground appearance={content.appearance} src={content.hero.image} />
       </section>
     );
   }
@@ -55,7 +55,7 @@ export function VelarHero({
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.2, ease: easeOut }}
       >
-        <HeroBackground src={content.hero.image} template="velar" />
+        <HeroBackground appearance={content.appearance} src={content.hero.image} />
       </m.div>
 
       <div className="relative z-10 flex w-full flex-col items-start justify-center lg:block lg:pt-[calc(28vh-50px)]">
@@ -110,7 +110,7 @@ export function VelarHero({
 
         <m.p
           data-editor-id="hero:subtitle"
-          className="px-6 font-semibold text-[#171717]/85 max-lg:[text-shadow:0_1px_12px_rgba(255,255,255,0.6)] lg:hidden"
+          className="px-6 font-semibold text-[var(--site-text)]/85 max-lg:[text-shadow:0_1px_12px_rgba(255,255,255,0.6)] lg:hidden"
           style={{
             fontFamily: "var(--font-syne)",
             fontSize: "clamp(12px, 3vw, 15px)",

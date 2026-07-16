@@ -33,21 +33,21 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
       data-section-label="Servicios"
       id="servicios"
       className={cn(
-        "relative z-[25] scroll-mt-24 bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16",
+        "relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16",
         isHighlighted && "template-section--highlighted",
       )}
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
           <p
-            className="mb-6 text-xs uppercase tracking-widest text-[#8a8278]"
+            className="mb-6 text-xs uppercase tracking-widest text-[var(--site-accent)]"
             style={{ fontFamily: "var(--font-body)" }}
           >
             SERVICIOS GENERALES INCLUIDOS
           </p>
           <h2
             data-editor-id="servicios:heading:title"
-            className="mx-auto mb-6 max-w-4xl font-extrabold leading-tight text-[#171717]"
+            className="mx-auto mb-6 max-w-4xl font-extrabold leading-tight text-[var(--site-text)]"
             style={{
               fontFamily: "var(--font-syne)",
               fontSize: "clamp(32px, 5vw, 56px)",
@@ -59,7 +59,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
           {heading.subtitle ? (
             <p
               data-editor-id="servicios:heading:subtitle"
-              className="mb-6 text-lg text-[#171717]/80"
+              className="mb-6 text-lg text-[var(--site-text)]/80"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heading.subtitle}
@@ -67,7 +67,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
           ) : null}
           <a
             href={whatsappLink}
-            className="mx-auto inline-flex max-w-[280px] cursor-pointer flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-xs font-semibold uppercase tracking-wide text-[#213138] hover:underline sm:max-w-sm sm:text-sm"
+            className="mx-auto inline-flex max-w-[280px] cursor-pointer flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-xs font-semibold uppercase tracking-wide text-[var(--site-primary)] hover:underline sm:max-w-sm sm:text-sm"
             style={{ fontFamily: "var(--font-syne)" }}
             target="_blank"
             rel="noopener noreferrer"

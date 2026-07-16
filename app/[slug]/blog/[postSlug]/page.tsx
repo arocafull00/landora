@@ -4,6 +4,8 @@ import { BlogPostPage } from "@/components/blog/blog-post-page";
 import { getBlogPostBySlug } from "@/data/blog";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { normalizeLandingSlug } from "@/lib/blog-slug";
+import { resolveLandingAppearance } from "@/lib/site-appearance";
+import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 
 export async function generateMetadata({
   params,
@@ -41,21 +43,27 @@ export default async function PublicBlogPostRoute({
   if (!post) notFound();
 
   const brand = landing.branding?.brand || landing.name;
+  const appearance = resolveLandingAppearance(landing.template, {
+    paletteId: landing.branding?.paletteId,
+    typographyId: landing.branding?.typographyId,
+  });
 
   return (
-    <BlogPostPage
-      brand={brand}
-      brandLogoImage={landing.branding?.brandLogoImage ?? ""}
-      brandLogoType={landing.branding?.brandLogoType === "image" ? "image" : "text"}
-      landingSlug={normalizeLandingSlug(landing.slug)}
-      post={{
-        slug: post.slug,
-        title: post.title,
-        excerpt: post.excerpt,
-        body: post.body,
-        heroImage: post.heroImage,
-        publishedAt: post.updatedAt ?? post.createdAt,
-      }}
-    />
+    <SiteThemeScope appearance={appearance} template={landing.template}>
+      <BlogPostPage
+        brand={brand}
+        brandLogoImage={landing.branding?.brandLogoImage ?? ""}
+        brandLogoType={landing.branding?.brandLogoType === "image" ? "image" : "text"}
+        landingSlug={normalizeLandingSlug(landing.slug)}
+        post={{
+          slug: post.slug,
+          title: post.title,
+          excerpt: post.excerpt,
+          body: post.body,
+          heroImage: post.heroImage,
+          publishedAt: post.updatedAt ?? post.createdAt,
+        }}
+      />
+    </SiteThemeScope>
   );
 }

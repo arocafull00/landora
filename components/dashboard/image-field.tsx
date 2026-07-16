@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import type { TemplateId } from "@/lib/dashboard-data";
 import { useAssetsStore } from "@/stores/assets-store";
-import { getTemplatePalette } from "@/lib/template-palettes";
 import { isBackgroundPreset } from "@/lib/background-assets";
 import { getTemplateImageOptions } from "@/lib/template-image-options";
 import { AssetNameField } from "@/components/dashboard/asset-name-field";
@@ -60,16 +59,26 @@ export function ImageField({
   const templateImages = templateId ? getTemplateImageOptions(templateId) : [];
   const allOptions = [...(presets ?? []), ...templateImages, ...assetOptions];
   const activeAsset = assets.find((a) => a.url === value);
-  const palette = templateId ? getTemplatePalette(templateId) : null;
-  const showThemedPreview = Boolean(value && palette && isBackgroundPreset(value));
+  const showThemedPreview = Boolean(
+    value && templateId && isBackgroundPreset(value),
+  );
 
   return (
     <div className="space-y-2">
       <span className="block font-label text-label-md text-on-surface-variant">{label}</span>
       {value && (
-        <div className="relative h-28 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface-variant">
-          {showThemedPreview && palette ? (
-            <ThemedLottieBackground palette={palette} src={value} />
+        <div
+          className="relative h-28 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface-variant"
+          data-palette="default"
+          data-site-theme={templateId ? "" : undefined}
+          data-template={templateId}
+          data-typography="default"
+        >
+          {showThemedPreview && templateId ? (
+            <ThemedLottieBackground
+              src={value}
+              themeKey={`${templateId}:default`}
+            />
           ) : (
             <AssetImage
               alt={label}

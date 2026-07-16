@@ -35,7 +35,7 @@ export function OficioProHero({
       <div className="pointer-events-none absolute inset-0 z-[1] bg-black/60" />
       <div className="relative z-[2] mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 lg:pb-12 lg:pt-20">
         <div className="max-w-5xl text-left">
-          <p className="mb-5 text-sm font-bold uppercase tracking-[0.24em] text-[#F59E0B]">
+          <p className="mb-5 text-sm font-bold uppercase tracking-[0.24em] text-[var(--site-accent-bright)]">
             {content.hero.eyebrow}
           </p>
           <h1 className="mb-8 max-w-5xl text-balance text-5xl font-black uppercase leading-[1.08] tracking-normal text-white md:text-7xl lg:text-[clamp(3.5rem,7vw,5.5rem)]">

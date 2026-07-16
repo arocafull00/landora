@@ -3,7 +3,7 @@ import {
   lottieRgbToHex,
   mapColorsToPalette,
 } from "@/lib/background-palette";
-import type { TemplatePalette } from "@/lib/template-palettes";
+import type { SitePalette } from "@/lib/site-appearance";
 
 type LottieRgb = [number, number, number];
 
@@ -127,7 +127,7 @@ function applyColorsToShapes(shapes: LottieShapeItem[] | undefined, mapping: Map
 
 export function applyPaletteToLottie(
   data: LottieAnimation,
-  palette: TemplatePalette
+  palette: SitePalette
 ): LottieAnimation {
   const themed = structuredClone(data);
   const colors = extractLottieColors(themed);

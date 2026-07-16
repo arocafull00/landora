@@ -13,12 +13,12 @@ export function OficioProSectionHeader({
 }) {
   return (
     <header className={`mx-auto mb-10 max-w-4xl ${className}`}>
-      <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[#1F4E79]">
+      <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-[var(--site-primary)]">
         {subtitle}
       </p>
-      <h2 className="text-balance text-4xl font-black uppercase leading-[1.05] tracking-normal text-[#17212B] sm:text-5xl lg:text-6xl">
+      <h2 className="text-balance text-4xl font-black uppercase leading-[1.05] tracking-normal text-[var(--site-text)] sm:text-5xl lg:text-6xl">
         {children}
-        {accent ? <span className="text-[#F59E0B]"> {accent}</span> : null}
+        {accent ? <span className="text-[var(--site-accent-bright)]"> {accent}</span> : null}
       </h2>
     </header>
   );

@@ -4,6 +4,8 @@ import { BlogListPage } from "@/components/blog/blog-list-page";
 import { getBlogConfig, getBlogPostsByLandingId } from "@/data/blog";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { normalizeLandingSlug } from "@/lib/blog-slug";
+import { resolveLandingAppearance } from "@/lib/site-appearance";
+import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 
 export async function generateMetadata({
   params,
@@ -44,21 +46,28 @@ export default async function PublicBlogListPage({
   const title = config?.title || `${brand} Blog`;
   const description = config?.description || "";
 
+  const appearance = resolveLandingAppearance(landing.template, {
+    paletteId: landing.branding?.paletteId,
+    typographyId: landing.branding?.typographyId,
+  });
+
   return (
-    <BlogListPage
-      brand={brand}
-      brandLogoImage={landing.branding?.brandLogoImage ?? ""}
-      brandLogoType={landing.branding?.brandLogoType === "image" ? "image" : "text"}
-      description={description}
-      landingSlug={normalizeLandingSlug(landing.slug)}
-      posts={posts.map((post) => ({
-        slug: post.slug,
-        title: post.title,
-        excerpt: post.excerpt,
-        heroImage: post.heroImage,
-        publishedAt: post.updatedAt ?? post.createdAt,
-      }))}
-      title={title}
-    />
+    <SiteThemeScope appearance={appearance} template={landing.template}>
+      <BlogListPage
+        brand={brand}
+        brandLogoImage={landing.branding?.brandLogoImage ?? ""}
+        brandLogoType={landing.branding?.brandLogoType === "image" ? "image" : "text"}
+        description={description}
+        landingSlug={normalizeLandingSlug(landing.slug)}
+        posts={posts.map((post) => ({
+          slug: post.slug,
+          title: post.title,
+          excerpt: post.excerpt,
+          heroImage: post.heroImage,
+          publishedAt: post.updatedAt ?? post.createdAt,
+        }))}
+        title={title}
+      />
+    </SiteThemeScope>
   );
 }

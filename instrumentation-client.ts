@@ -1,4 +1,5 @@
 import posthog from "posthog-js";
+import * as Sentry from "@sentry/nextjs";
 
 const projectToken =
   process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN ?? process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -18,3 +19,14 @@ if (projectToken) {
     debug: process.env.NEXT_PUBLIC_POSTHOG_DEBUG === "1",
   });
 }
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  enableLogs: true,
+  tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1,
+  integrations: [
+    Sentry.consoleLoggingIntegration({ levels: ["warn", "error"] }),
+  ],
+});
+
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

@@ -74,7 +74,7 @@ export function FloristeriaHero({
     <section
       ref={heroRef}
       id="hero"
-      className="relative h-dvh overflow-x-clip bg-[#FAFAF7]"
+      className="relative h-dvh overflow-x-clip bg-[var(--site-surface)]"
     >
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <FloristeriaHeroFanBackdrop />
@@ -93,7 +93,7 @@ export function FloristeriaHero({
           {content.hero.eyebrow ? (
             <m.p
               variants={bloomEyebrowVariants}
-              className="mb-2 text-sm font-light italic text-[#2D5016]/80"
+              className="mb-2 text-sm font-light italic text-[var(--site-primary)]/80"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
               {content.hero.eyebrow}
@@ -102,7 +102,7 @@ export function FloristeriaHero({
 
           <m.h1
             variants={bloomTitleVariants}
-            className="text-balance text-[clamp(40px,7vw,72px)] font-bold leading-[1.08] tracking-tight text-[#1a1a1a] md:text-[clamp(48px,6vw,80px)]"
+            className="text-balance text-[clamp(40px,7vw,72px)] font-bold leading-[1.08] tracking-tight text-[var(--site-text)] md:text-[clamp(48px,6vw,80px)]"
             style={{
               fontFamily: "var(--font-cormorant)",
               letterSpacing: "-0.03em",
@@ -114,7 +114,7 @@ export function FloristeriaHero({
           {content.hero.subtitle ? (
             <m.p
               variants={bloomSubtitleVariants}
-              className="mx-auto mt-3 max-w-xl text-pretty text-base leading-relaxed text-[#1a1a1a]/60 md:mt-4 md:text-lg"
+              className="mx-auto mt-3 max-w-xl text-pretty text-base leading-relaxed text-[var(--site-text)]/60 md:mt-4 md:text-lg"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {content.hero.subtitle}

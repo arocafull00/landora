@@ -20,8 +20,6 @@ import { VelarTestimonialsSection } from "@/components/templates/velar/velar-tes
 import { VelarContactSection } from "@/components/templates/velar/velar-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 
-const GRASS_GREEN = "#213138";
-
 function isOverlappingTop(el: HTMLElement | null) {
   if (!el) return false;
   const rect = el.getBoundingClientRect();
@@ -37,7 +35,7 @@ export function VelarTemplate({
   slug?: string;
   bookingEnabled?: boolean;
 }) {
-  const [navColor, setNavColor] = useState(GRASS_GREEN);
+  const [navColor, setNavColor] = useState("var(--site-primary)");
   const [menuOpen, setMenuOpen] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -59,7 +57,7 @@ export function VelarTemplate({
       isOverlappingTop(galleryRef.current) ||
       isOverlappingTop(workflowRef.current) ||
       isOverlappingTop(footerRef.current);
-    setNavColor(onDark ? "#ffffff" : GRASS_GREEN);
+    setNavColor(onDark ? "var(--site-on-dark)" : "var(--site-primary)");
   }, []);
 
   useLayoutEffect(() => {
@@ -93,8 +91,8 @@ export function VelarTemplate({
     <TemplateLazyMotion>
       <div
         ref={rootRef}
-        className="relative"
-        style={{ backgroundColor: "#f5f0ea", overflowX: "clip" }}
+        className="relative bg-[var(--site-surface)]"
+        style={{ overflowX: "clip" }}
       >
       <VelarAosInit rootRef={rootRef} />
 

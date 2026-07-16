@@ -1,9 +1,15 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import type { LottieRefCurrentProps } from "lottie-react";
-import type { TemplatePalette } from "@/lib/template-palettes";
+import type { SitePalette } from "@/lib/site-appearance";
 import {
   applyPaletteToLottie,
   fetchLottieAnimation,
@@ -12,22 +18,53 @@ import {
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
+function subscribeReducedMotion(onChange: () => void) {
+  const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+  media.addEventListener("change", onChange);
+  return () => media.removeEventListener("change", onChange);
+}
+
+function getReducedMotionSnapshot() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function ThemedLottieBackground({
   className,
-  palette,
   src,
+  themeKey,
 }: {
   className?: string;
-  palette: TemplatePalette;
   src: string;
+  themeKey: string;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const lottieRef = useRef<LottieRefCurrentProps>(null);
   const [animationData, setAnimationData] = useState<LottieAnimation | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  const [palette, setPalette] = useState<SitePalette | null>(null);
+  const reducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    getReducedMotionSnapshot,
+    () => false,
   );
 
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const styles = getComputedStyle(container);
+    setPalette({
+      primary: styles.getPropertyValue("--site-primary").trim(),
+      secondary: styles.getPropertyValue("--site-dark").trim(),
+      accent: styles.getPropertyValue("--site-accent").trim(),
+      muted: styles.getPropertyValue("--site-surface-alt").trim(),
+      surface: styles.getPropertyValue("--site-surface").trim(),
+      foreground: styles.getPropertyValue("--site-on-dark").trim(),
+    });
+  }, [themeKey]);
+
   useEffect(() => {
+    if (!palette) return;
+
     let cancelled = false;
 
     fetchLottieAnimation(src).then((raw) => {
@@ -42,38 +79,26 @@ export function ThemedLottieBackground({
   }, [src, palette]);
 
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-
     const instance = lottieRef.current;
-    if (instance) {
-      if (media.matches) {
-        instance.pause();
-      } else {
-        instance.play();
-      }
+    if (!instance) return;
+
+    if (reducedMotion) {
+      instance.pause();
+      return;
     }
 
-    const handleChange = () => {
-      setReducedMotion(media.matches);
-
-      const current = lottieRef.current;
-      if (!current) return;
-
-      if (media.matches) {
-        current.pause();
-      } else {
-        current.play();
-      }
-    };
-
-    media.addEventListener("change", handleChange);
-    return () => media.removeEventListener("change", handleChange);
-  }, [animationData]);
+    instance.play();
+  }, [animationData, reducedMotion]);
 
   return (
     <div
-      className={["absolute inset-0 overflow-hidden", className].filter(Boolean).join(" ")}
-      style={{ backgroundColor: palette.surface }}
+      className={[
+        "absolute inset-0 overflow-hidden bg-[var(--site-surface)]",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      ref={containerRef}
     >
       {animationData ? (
         <Lottie

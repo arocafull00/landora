@@ -1,4 +1,4 @@
-import type { TemplatePalette } from "@/lib/template-palettes";
+import type { SitePalette } from "@/lib/site-appearance";
 
 const MIN_SURFACE_CONTRAST = 18;
 
@@ -22,7 +22,7 @@ function contrastWithSurface(color: string, surfaceLum: number): number {
   return Math.abs(hexLuminance(color) - surfaceLum);
 }
 
-function getVisiblePaletteColors(palette: TemplatePalette): string[] {
+function getVisiblePaletteColors(palette: SitePalette): string[] {
   const surfaceLum = hexLuminance(palette.surface);
   const candidates = [
     palette.accent,
@@ -43,7 +43,7 @@ function getVisiblePaletteColors(palette: TemplatePalette): string[] {
   return [...new Set(visible)].toSorted((a, b) => hexLuminance(a) - hexLuminance(b));
 }
 
-function getBestContrastColor(palette: TemplatePalette): string {
+function getBestContrastColor(palette: SitePalette): string {
   const surfaceLum = hexLuminance(palette.surface);
   const candidates = getVisiblePaletteColors(palette);
 
@@ -54,7 +54,7 @@ function getBestContrastColor(palette: TemplatePalette): string {
 
 export function mapColorsToPalette(
   colors: string[],
-  palette: TemplatePalette
+  palette: SitePalette
 ): Map<string, string> {
   const mapping = new Map<string, string>();
   if (colors.length === 0) return mapping;

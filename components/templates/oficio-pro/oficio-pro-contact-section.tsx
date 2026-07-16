@@ -78,14 +78,14 @@ export function OficioProContactSection({ content }: { content: LandingContent }
             />
           ) : null}
         </aside>
-        <div className="mt-14 space-y-6 rounded-2xl border border-[#1F4E79]/10 bg-white/80 p-6 text-center shadow-[0_10px_28px_rgba(31,78,121,0.08)]">
+        <div className="mt-14 space-y-6 rounded-2xl border border-[var(--site-primary)]/10 bg-[var(--site-surface)]/80 p-6 text-center shadow-[0_10px_28px_rgba(31,78,121,0.08)]">
           <FooterSocialLinks
             contact={content.contact}
-            linkClassName="text-[#1F4E79] transition-colors hover:text-[#F59E0B]"
+            linkClassName="text-[var(--site-primary)] transition-colors hover:text-[var(--site-accent-bright)]"
           />
           <FooterCopyright
             brand={content.brand}
-            className="text-xs text-[#4A4A4A]"
+            className="text-xs text-[var(--site-text-muted)]"
             contact={content.contact}
           />
         </div>

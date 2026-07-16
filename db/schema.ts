@@ -128,6 +128,8 @@ export const landingBranding = pgTable("landing_branding", {
   brand: text("brand").notNull().default(""),
   brandLogoType: text("brand_logo_type").notNull().default("text"),
   brandLogoImage: text("brand_logo_image").notNull().default(""),
+  paletteId: text("palette_id").notNull().default("default"),
+  typographyId: text("typography_id").notNull().default("default"),
   sectionHeadings: jsonb("section_headings")
     .$type<Record<string, { title: string; subtitle: string }>>()
     .notNull()

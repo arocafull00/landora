@@ -8,6 +8,7 @@ import type { PreviewDevice } from "@/components/dashboard/preview-toolbar";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { EditorLayoutTabs } from "@/components/dashboard/editor-layout-tabs";
 import { getEditorScrollTarget } from "@/lib/template-sections";
+import { AppearanceEditorPanel } from "@/components/dashboard/appearance/appearance-editor-panel";
 
 export function EditorLayout({
   form,
@@ -36,7 +37,13 @@ export function EditorLayout({
       <EditorLayoutTabs />
       <div className="grid min-h-0 flex-1 grid-cols-1 overflow-hidden xl:grid-cols-[minmax(320px,380px)_1fr]">
         <div id="tutorial-editor-form" className="min-h-0 overflow-y-auto border-r border-outline-variant bg-surface-container-low p-unit-lg">
-          <div className="space-y-unit-md">{form}</div>
+          <div className="space-y-unit-md">
+            {activeEditorTab === "Diseño" ? (
+              <AppearanceEditorPanel landing={activeLanding} />
+            ) : (
+              form
+            )}
+          </div>
         </div>
         <IframeLandingPreview
           className="min-h-0 bg-surface-bg p-unit-md"

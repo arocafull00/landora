@@ -20,19 +20,19 @@ export function OficioProServiceCard({
   item: ServiceMenuItem;
 }) {
   return (
-    <article className="group flex gap-4 rounded-2xl border border-[#1F4E79]/10 bg-white/90 p-5 shadow-[0_12px_30px_rgba(31,78,121,0.08)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(31,78,121,0.13)]">
-      <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[#1F4E79]/10 text-[#1F4E79] transition-colors group-hover:bg-[#F59E0B]/20 group-hover:text-[#17212B]">
+    <article className="group flex gap-4 rounded-2xl border border-[var(--site-primary)]/10 bg-[var(--site-surface)]/90 p-5 shadow-[0_12px_30px_rgba(31,78,121,0.08)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(31,78,121,0.13)]">
+      <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--site-primary)]/10 text-[var(--site-primary)] transition-colors group-hover:bg-[var(--site-accent-bright)]/20 group-hover:text-[var(--site-text)]">
         {getIconElement(item.category, index)}
       </div>
       <div className="min-w-0">
-        <h3 className="text-lg font-black uppercase leading-tight tracking-normal text-[#17212B]">
+        <h3 className="text-lg font-black uppercase leading-tight tracking-normal text-[var(--site-text)]">
           {item.name}
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-[#4A4A4A]">
+        <p className="mt-2 text-sm leading-relaxed text-[var(--site-text-muted)]">
           {item.description}
         </p>
         {item.price ? (
-          <p className="mt-3 text-xs font-bold uppercase tracking-[0.16em] text-[#1F4E79]">
+          <p className="mt-3 text-xs font-bold uppercase tracking-[0.16em] text-[var(--site-primary)]">
             {item.price}
           </p>
         ) : null}

@@ -6,9 +6,9 @@ const base =
   "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-all duration-300";
 
 const variants = {
-  primary: "bg-[#1a1a1a] text-white hover:bg-[#333] active:bg-[#111]",
+  primary: "bg-[var(--site-dark)] text-white hover:bg-[var(--site-text-muted)] active:bg-[var(--site-dark)]",
   secondary:
-    "border border-[#1a1a1a] text-[#1a1a1a] bg-transparent hover:bg-[#1a1a1a] hover:text-white",
+    "border border-[var(--site-text)] text-[var(--site-text)] bg-transparent hover:bg-[var(--site-dark)] hover:text-white",
 };
 
 const sizes = {

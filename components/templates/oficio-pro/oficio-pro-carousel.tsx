@@ -14,7 +14,7 @@ export function OficioProCarousel({ images }: { images: GalleryItem[] }) {
   const goNext = () => setActive((value) => (value + 1) % images.length);
 
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#17212B] shadow-[0_24px_70px_rgba(23,33,43,0.18)] xl:max-w-[56%]">
+    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[var(--site-dark)] shadow-[0_24px_70px_rgba(23,33,43,0.18)] xl:max-w-[56%]">
       <AssetImage
         alt={current.title ?? "Servicio técnico"}
         className="h-full w-full object-cover"

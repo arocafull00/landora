@@ -32,11 +32,9 @@ export function PortfolioNav({
   return (
     <>
       <nav
-        className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-10 lg:px-16"
+        className="fixed left-0 right-0 z-50 flex items-center justify-between border-b border-portfolio-line bg-portfolio-canvas/90 px-6 py-5 md:border-transparent md:bg-transparent md:px-10 lg:px-16"
         style={{
           ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
-          background: "linear-gradient(to bottom, rgba(10,10,10,0.9), rgba(10,10,10,0.7))",
-          backdropFilter: "blur(9px)",
         }}
       >
         <button
@@ -63,7 +61,7 @@ export function PortfolioNav({
             </TemplateNavAnchor>
           ))}
           <TemplateNavAnchor
-            className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold tracking-wide text-[#0a0a0a] transition-colors hover:bg-white/90"
+            className="rounded-full bg-portfolio-accent px-5 py-2.5 text-xs font-semibold tracking-wide text-portfolio-accent-ink transition-transform hover:-translate-y-0.5"
             href={ctaHref}
             onClick={() => trackCtaClick()}
           >
@@ -84,7 +82,7 @@ export function PortfolioNav({
       <AnimatePresence>
         {menuOpen && (
           <m.div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#0a0a0a]"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-portfolio-canvas"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -110,7 +108,7 @@ export function PortfolioNav({
               </m.a>
             ))}
             <m.a
-              className="mt-6 rounded-full bg-white px-8 py-3 text-sm font-semibold text-[#0a0a0a]"
+              className="mt-6 rounded-full bg-portfolio-accent px-8 py-3 text-sm font-semibold text-portfolio-accent-ink"
               href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();

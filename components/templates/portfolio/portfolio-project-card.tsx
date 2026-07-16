@@ -15,7 +15,7 @@ export function PortfolioProjectCard({
 }) {
   const isLarge = index % 3 === 0;
   const showText = hasText(item);
-  const cardClassName = `group relative aspect-4/5 overflow-hidden rounded-lg bg-[#1a1a1a] md:aspect-auto md:h-full ${
+  const cardClassName = `group relative aspect-4/5 overflow-hidden rounded-lg bg-[var(--site-surface-alt)] md:aspect-auto md:h-full ${
     isLarge ? "md:col-span-2 md:row-span-2" : ""
   }`;
 

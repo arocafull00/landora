@@ -2,7 +2,7 @@
 
 import type { WorkExperienceItem } from "@/lib/dashboard-data";
 
-const ACCENT = "#2dd4bf";
+const ACCENT = "var(--site-accent)";
 
 export function PortfolioWorkHistoryCard({
   item,
@@ -13,7 +13,7 @@ export function PortfolioWorkHistoryCard({
 }) {
   return (
     <article
-      className="rounded-2xl bg-[#141414] p-6 md:p-8 lg:p-10"
+      className="rounded-2xl bg-[var(--site-dark)] p-6 md:p-8 lg:p-10"
       data-aos="fade-up"
       data-aos-delay={index * 80}
     >
@@ -74,7 +74,7 @@ export function PortfolioWorkHistoryCard({
             <div className="flex flex-wrap gap-2 pt-2">
               {item.technologies.map((tech, techIndex) => (
                 <span
-                  className="rounded-md bg-[#1f1f1f] px-3 py-1.5 text-[11px] font-semibold tracking-wide text-white/80"
+                  className="rounded-md bg-[var(--site-surface-alt)] px-3 py-1.5 text-[11px] font-semibold tracking-wide text-white/80"
                   key={`${item.id}-tech-${techIndex}`}
                   style={{ fontFamily: "var(--font-body)" }}
                 >

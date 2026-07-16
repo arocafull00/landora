@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 import { useAnalytics } from "@/hooks/use-analytics";
 
 const WORKFLOW_ICONS = [
-  <CalendarCheck key="calendario" className="h-16 w-16" stroke="#e8e4df" />,
-  <Tent key="escenario" className="h-16 w-16" stroke="#e8e4df" />,
-  <Sofa key="tumbona" className="h-16 w-16" stroke="#e8e4df" />,
+  <CalendarCheck key="calendario" className="h-16 w-16 text-[var(--site-on-dark)]" />,
+  <Tent key="escenario" className="h-16 w-16 text-[var(--site-on-dark)]" />,
+  <Sofa key="tumbona" className="h-16 w-16 text-[var(--site-on-dark)]" />,
 ];
 
 function getWhatsAppLink(phone: string) {
@@ -34,14 +34,14 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
       data-section-label="Proceso"
       id="proceso"
       className={cn(
-        "relative z-[25] scroll-mt-24 bg-[#1a1a1a] px-6 py-20 md:px-10 lg:px-16",
+        "relative z-[25] scroll-mt-24 bg-[var(--site-dark)] px-6 py-20 md:px-10 lg:px-16",
         isHighlighted && "template-section--highlighted",
       )}
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16" data-aos="fade-up">
           <p
-            className="mb-6 text-center text-xs uppercase tracking-widest text-[#8a8278]"
+            className="mb-6 text-center text-xs uppercase tracking-widest text-[var(--site-accent)]"
             style={{ fontFamily: "var(--font-body)" }}
           >
             CÓMO TRABAJAMOS
@@ -50,7 +50,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
             <div className="text-center lg:text-left">
               <h2
                 data-editor-id="proceso:heading:title"
-                className="mb-6 font-extrabold leading-tight text-[#e8e4df]"
+                className="mb-6 font-extrabold leading-tight text-[var(--site-on-dark)]"
                 style={{
                   fontFamily: "var(--font-syne)",
                   fontSize: "clamp(32px, 5vw, 56px)",
@@ -63,7 +63,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
             <div className="text-center lg:text-left">
               {heading.subtitle ? (
                 <p
-                  className="mb-6 text-lg leading-relaxed text-[#e8e4df]/80"
+                  className="mb-6 text-lg leading-relaxed text-[var(--site-on-dark)]/80"
                   style={{ fontFamily: "var(--font-body)" }}
                 >
                   {heading.subtitle}
@@ -74,7 +74,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
                   href={whatsappLink}
                   variant="secondary"
                   size="sm"
-                  className="uppercase !border-[#e8e4df] !text-[#e8e4df] hover:!bg-[#e8e4df] hover:!text-[#1a1a1a]"
+                  className="uppercase !border-[var(--site-on-dark)] !text-[var(--site-on-dark)] hover:!bg-[var(--site-surface-alt)] hover:!text-[var(--site-text)]"
                   onClick={() => trackWhatsAppClick()}
                 >
                   CONTÁCTANOS
@@ -97,14 +97,14 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
               </div>
               <h3
                 data-editor-id={`proceso:step:${step.id}:title`}
-                className="mb-3 text-xl font-bold text-[#e8e4df]"
+                className="mb-3 text-xl font-bold text-[var(--site-on-dark)]"
                 style={{ fontFamily: "var(--font-syne)" }}
               >
                 {step.title}
               </h3>
               <p
                 data-editor-id={`proceso:step:${step.id}:description`}
-                className="leading-relaxed text-[#e8e4df]/70"
+                className="leading-relaxed text-[var(--site-on-dark)]/70"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {step.description}

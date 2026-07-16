@@ -10,12 +10,12 @@ export function StudioTestimonialsSection({ content }: { content: LandingContent
   const [featured, ...rest] = content.testimonials;
 
   return (
-    <section id="testimonios" className="scroll-mt-24 bg-[#1a1a1a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="testimonios" className="scroll-mt-24 bg-[var(--site-dark)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 border-b border-white/10 pb-12" data-aos="fade-up">
           <span
             aria-hidden
-            className="mb-6 block text-[clamp(64px,10vw,96px)] leading-none text-[#8b7355]/40"
+            className="mb-6 block text-[clamp(64px,10vw,96px)] leading-none text-[var(--site-primary)]/40"
             style={{ fontFamily: "var(--font-syne)", fontWeight: 700 }}
           >
             &ldquo;
@@ -29,12 +29,12 @@ export function StudioTestimonialsSection({ content }: { content: LandingContent
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex gap-0.5">
               {Array.from({ length: featured.rating }).map((_, i) => (
-                <Star className="h-4 w-4 fill-[#8b7355] text-[#8b7355]" key={i} />
+                <Star className="h-4 w-4 fill-[var(--site-primary)] text-[var(--site-primary)]" key={i} />
               ))}
             </div>
             <p className="text-sm font-semibold text-white">{featured.author}</p>
             {featured.verified && (
-              <span className="text-xs text-[#8b7355]">Verificado</span>
+              <span className="text-xs text-[var(--site-primary)]">Verificado</span>
             )}
           </div>
         </div>

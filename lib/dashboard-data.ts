@@ -21,7 +21,13 @@ export type SectionHeading = {
 
 export type BrandLogoType = "text" | "image";
 
+export type LandingAppearance = {
+  paletteId: string;
+  typographyId: string;
+};
+
 export type BaseContent = {
+  appearance: LandingAppearance;
   brand: string;
   brandLogoType: BrandLogoType;
   brandLogoImage: string;
@@ -473,6 +479,5 @@ export const initialAssets: Asset[] = [
     url: VELAR_ASSETS.toll6,
   },
 ];
-
 
 

@@ -49,3 +49,6 @@ users.md
 
 .vercel
 .claude/*
+
+# Sentry Config File
+.env.sentry-build-plugin

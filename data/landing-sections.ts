@@ -89,6 +89,8 @@ export async function upsertLandingBranding(
     brand: string;
     brandLogoType?: "text" | "image";
     brandLogoImage?: string;
+    paletteId?: string;
+    typographyId?: string;
     sectionHeadings?: Record<string, { title: string; subtitle: string }>;
     hiddenSections?: string[];
   }
@@ -98,6 +100,8 @@ export async function upsertLandingBranding(
       brand: string;
       brandLogoType?: "text" | "image";
       brandLogoImage?: string;
+      paletteId?: string;
+      typographyId?: string;
       sectionHeadings?: Record<string, { title: string; subtitle: string }>;
       hiddenSections?: string[];
     } = {
@@ -108,6 +112,12 @@ export async function upsertLandingBranding(
     }
     if (data.brandLogoImage !== undefined) {
       set.brandLogoImage = data.brandLogoImage;
+    }
+    if (data.paletteId !== undefined) {
+      set.paletteId = data.paletteId;
+    }
+    if (data.typographyId !== undefined) {
+      set.typographyId = data.typographyId;
     }
     if (data.sectionHeadings !== undefined) {
       set.sectionHeadings = data.sectionHeadings;
@@ -122,12 +132,39 @@ export async function upsertLandingBranding(
         brand: data.brand,
         brandLogoType: data.brandLogoType ?? "text",
         brandLogoImage: data.brandLogoImage ?? "",
+        paletteId: data.paletteId ?? "default",
+        typographyId: data.typographyId ?? "default",
         sectionHeadings: data.sectionHeadings ?? {},
         hiddenSections: data.hiddenSections ?? [],
       })
       .onConflictDoUpdate({ target: landingBranding.landingId, set });
   } catch {
     throw new Error("Failed to update branding");
+  }
+}
+
+export async function updateLandingAppearance(
+  landingId: string,
+  data: {
+    paletteId: string;
+    typographyId: string;
+  },
+) {
+  try {
+    await db
+      .insert(landingBranding)
+      .values({
+        landingId,
+        brand: "",
+        paletteId: data.paletteId,
+        typographyId: data.typographyId,
+      })
+      .onConflictDoUpdate({
+        target: landingBranding.landingId,
+        set: data,
+      });
+  } catch (error) {
+    throw new Error("Failed to update landing appearance", { cause: error });
   }
 }
 

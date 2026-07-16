@@ -84,7 +84,7 @@ export function VelarNav({
 
       {menuOpen && (
         <m.div
-          className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#f5f0ea]"
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[var(--site-surface)]"
           initial={reduce ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}

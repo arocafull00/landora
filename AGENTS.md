@@ -36,6 +36,20 @@ No asumas APIs de versiones anteriores ni de la documentación sin versionar.
 
 **Server Actions:** Usa Server Actions para mutaciones. Valida la entrada con Zod en el servidor.
 
+**Detección de móvil (lógica):** Para decidir comportamiento en JavaScript (render condicional, qué componente montar o handlers distintos), usa `useIsMobile()` de `@/hooks/use-mobile`. No uses directamente `window.matchMedia`, `window.innerWidth` ni breakpoints de Tailwind (`md:`, `lg:`, `hidden lg:block`, etc.) para lógica de programación. Tailwind sigue siendo válido para estilos responsivos; esta regla aplica solo cuando el código necesita conocer el tamaño de pantalla en runtime.
+
+## Formularios
+
+Todo formulario nuevo con 2 o más campos debe usar `react-hook-form` con `zodResolver` y un schema de Zod en `lib/schemas/`. No uses un `useState` independiente por campo ni limpies formularios mediante varios setters.
+
+- El hook del formulario configura `useForm`, sus `defaultValues`, `handleSubmit`, `formState.errors`, `reset` e `isPending`.
+- Los datos de contexto que el usuario no edita, como `tenantId`, se omiten del schema de formulario y se inyectan al enviar.
+- Los subcomponentes reciben solo los bindings y errores que necesitan; muestran los errores de campo con `text-danger`.
+- Los inputs y textareas nativos usan `register`. Los controles propios (fecha, selects, comboboxes o multiselect) usan `Controller`.
+- No uses `<select>` ni `<option>` nativos para controles nuevos: usa los componentes de `components/ui/` basados en Radix, como `@/components/ui/select`.
+- El estado auxiliar que no se persiste, como una búsqueda dentro de un selector, puede usar `useState` aparte del formulario.
+- Los errores globales de validación o envío también se notifican con `toast.error(...)`.
+
 ## Arquitectura de componentes: separación por capas
 
 Todo componente que mezcle lógica de negocio con JSX debe dividirse en tres capas:
@@ -75,6 +89,14 @@ components/[dominio]/[feature]/
 ## Notificaciones al usuario
 
 Para **todos** los mensajes de error o éxito mostrados al usuario, usa **siempre** `react-toastify`. No uses `alert`, `confirm`, ni ningún otro mecanismo nativo o custom. Llama a `toast.error(...)` para errores y `toast.success(...)` para operaciones exitosas.
+
+## Logging y errores
+
+Usa siempre `logger` de `@/lib/logger`. No importes `@sentry/nextjs` directamente fuera de `lib/logger.ts`, `instrumentation.ts`, `instrumentation-client.ts`, los archivos `sentry.*.config.ts` y `next.config.ts`.
+
+- Log estructurado: `logger.info(logger.fmt\`Booking ${bookingId} created\`)`.
+- Excepción con contexto: `logger.captureException(error, { action: "create-booking", tenantId, userId })`.
+- Aviso: `logger.warn(logger.fmt\`Retry ${attempt} for ${operationName}\`)`.
 
 ## Alcance del trabajo
 

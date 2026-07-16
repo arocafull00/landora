@@ -5,6 +5,7 @@ import { parseSocialLinks } from "@/lib/footer-content";
 import { shortDateTimeFormatter } from "@/lib/intl-formatters";
 import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
 import type { User } from "@/db/schema";
+import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 function mapImage(url: string | null | undefined) {
   if (!url) return "";
@@ -39,6 +40,10 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
   const hiddenSections = (row.branding?.hiddenSections ?? []) as string[];
 
   return {
+    appearance: resolveLandingAppearance(row.template, {
+      paletteId: row.branding?.paletteId,
+      typographyId: row.branding?.typographyId,
+    }),
     brand: row.branding?.brand ?? "",
     brandLogoType: row.branding?.brandLogoType === "image" ? "image" : "text",
     brandLogoImage: mapImage(row.branding?.brandLogoImage),

@@ -73,9 +73,14 @@ export function PortfolioEditorSection() {
                 value={activeLanding.content.hero.title}
               />
               <TextArea
-                label="Subtitle"
+                label="Subtítulo"
                 onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
                 value={activeLanding.content.hero.subtitle}
+              />
+              <TextArea
+                label="Descripción"
+                onChange={(value) => updateHero(activeLanding.id, { description: value })}
+                value={activeLanding.content.hero.description}
               />
               <TextField
                 label="Texto del botón"
@@ -83,11 +88,17 @@ export function PortfolioEditorSection() {
                 value={activeLanding.content.hero.ctaLabel ?? ""}
               />
               <ImageField
-                label="Hero image"
+                label="Imagen principal"
                 onChange={(value) => updateHero(activeLanding.id, { image: value })}
                 presets={BACKGROUND_IMAGE_OPTIONS}
                 templateId={activeLanding.template}
                 value={activeLanding.content.hero.image}
+              />
+              <ImageField
+                label="Imagen secundaria"
+                onChange={(value) => updateHero(activeLanding.id, { houseImage: value })}
+                templateId={activeLanding.template}
+                value={activeLanding.content.hero.houseImage ?? ""}
               />
             </section>
           ) : null}

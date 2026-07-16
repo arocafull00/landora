@@ -38,6 +38,8 @@ export function mapDefaultBranding(
     brand: content.brand,
     brandLogoType: content.brandLogoType,
     brandLogoImage: content.brandLogoImage,
+    paletteId: content.appearance.paletteId,
+    typographyId: content.appearance.typographyId,
     sectionHeadings: (content.sectionHeadings ?? {}) as Record<
       string,
       { title: string; subtitle: string }

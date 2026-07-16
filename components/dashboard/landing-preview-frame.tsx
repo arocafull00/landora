@@ -22,6 +22,7 @@ import {
 import { resolveSectionId } from "@/lib/template-sections";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
+import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -134,11 +135,11 @@ export function LandingPreviewFrame({
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
 
   return (
-    <>
+    <SiteThemeScope appearance={content.appearance} template={activeTemplate}>
       <Component content={content} slug={slug} bookingEnabled={bookingEnabled} />
       {content.contact.whatsappEnabled ? (
         <WhatsappFloatButton phone={content.contact.phone} />
       ) : null}
-    </>
+    </SiteThemeScope>
   );
 }

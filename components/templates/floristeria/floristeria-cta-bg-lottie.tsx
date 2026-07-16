@@ -60,7 +60,7 @@ export function FloristeriaCtaBgLottie({ src }: { src: string }) {
   }, [animationData]);
 
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden bg-[#F7F7F7]">
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden bg-[var(--site-surface-muted)]">
       {animationData ? (
         <Lottie
           animationData={animationData}

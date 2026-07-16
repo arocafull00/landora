@@ -13,6 +13,7 @@ import {
   initialPosts,
   initialPresentations,
   Landing,
+  LandingAppearance,
   LandingContent,
   Offer,
   Post,
@@ -26,6 +27,7 @@ import {
   TestimonialContent,
   WorkflowStep,
 } from "@/lib/dashboard-data";
+import { saveLandingAppearanceAction } from "@/app/actions/landing-appearance";
 import { getDefaultContent } from "@/lib/default-content";
 import { getVisibleEditorTabs } from "@/lib/template-registry";
 import {
@@ -116,6 +118,7 @@ type DashboardState = {
     id: string,
     patch: Partial<{ brand: string; brandLogoType: BrandLogoType; brandLogoImage: string }>,
   ) => void;
+  updateAppearance: (id: string, patch: Partial<LandingAppearance>) => void;
   updateNavItem: (
     landingId: string,
     navId: string,
@@ -215,6 +218,18 @@ async function persistLandingMeta(id: string, landing: Landing) {
     seoDescription: landing.seoDescription,
     seoFavicon: landing.seoFavicon,
   });
+}
+
+async function persistLandingAppearance(id: string, appearance: LandingAppearance) {
+  const result = await saveLandingAppearanceAction({
+    landingId: id,
+    paletteId: appearance.paletteId,
+    typographyId: appearance.typographyId,
+  });
+
+  if ("error" in result) {
+    throw new Error(result.error);
+  }
 }
 
 export const useDashboardStore = create<DashboardState>()((set, get) => ({
@@ -329,6 +344,21 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
           ? markEdited({
               ...landing,
               content: { ...landing.content, ...patch },
+            })
+          : landing,
+      ),
+    })),
+
+  updateAppearance: (id, patch) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === id
+          ? markEdited({
+              ...landing,
+              content: {
+                ...landing.content,
+                appearance: { ...landing.content.appearance, ...patch },
+              },
             })
           : landing,
       ),
@@ -690,7 +720,10 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
 
     try {
       await persistLandingMeta(id, landing);
-      await persistAllSections(id, landing.content);
+      await Promise.all([
+        persistAllSections(id, landing.content),
+        persistLandingAppearance(id, landing.content.appearance),
+      ]);
       set((state) => ({
         saveStatus: "saved",
         landings: state.landings.map((l) =>
@@ -714,6 +747,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
       await Promise.all([
         persistLandingMeta(id, landing),
         persistAllSections(id, landing.content),
+        persistLandingAppearance(id, landing.content.appearance),
       ]);
       await patchSection(`/api/landings/${id}`, { published: true });
       set((state) => ({

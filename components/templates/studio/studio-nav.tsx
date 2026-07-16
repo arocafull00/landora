@@ -39,14 +39,14 @@ export function StudioNav({
           ...(topOffset > 0 ? { top: topOffset } : {}),
           background: overHero
             ? "transparent"
-            : "linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.8))",
+            : "linear-gradient(to bottom, color-mix(in srgb, var(--site-surface-raised) 95%, transparent), color-mix(in srgb, var(--site-surface-raised) 80%, transparent))",
           backdropFilter: overHero ? "none" : "blur(9px)",
           transition: "background 0.35s ease, backdrop-filter 0.35s ease",
         }}
       >
         <button
           type="button"
-          className={`text-xl font-bold tracking-tight transition-colors duration-300 ease-out ${overHero ? "text-white" : "text-[#1a1a1a]"}`}
+          className={`text-xl font-bold tracking-tight transition-colors duration-300 ease-out ${overHero ? "text-white" : "text-[var(--site-text)]"}`}
           style={{ fontFamily: "var(--font-syne)" }}
         >
           <TemplateNavBrand
@@ -59,7 +59,7 @@ export function StudioNav({
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <TemplateNavAnchor
-              className={`text-sm font-medium transition-colors duration-300 ease-out ${overHero ? "text-white/75 hover:text-white" : "text-[#1a1a1a]/70 hover:text-[#1a1a1a]"}`}
+              className={`text-sm font-medium transition-colors duration-300 ease-out ${overHero ? "text-white/75 hover:text-white" : "text-[var(--site-text)]/70 hover:text-[var(--site-text)]"}`}
               href={link.href}
               key={link.id}
               style={{ fontFamily: "var(--font-body)" }}
@@ -68,7 +68,7 @@ export function StudioNav({
             </TemplateNavAnchor>
           ))}
           <TemplateNavAnchor
-            className={`rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide transition-colors duration-300 ease-out ${overHero ? "bg-[#c99d43] text-black hover:bg-[#d9ad54]" : "bg-[#1a1a1a] text-white hover:bg-[#333]"}`}
+            className={`rounded-full px-5 py-2.5 text-xs font-semibold tracking-wide transition-colors duration-300 ease-out ${overHero ? "bg-[var(--site-accent-bright)] text-black hover:bg-[var(--site-accent-bright)]" : "bg-[var(--site-dark)] text-white hover:bg-[var(--site-text-muted)]"}`}
             href={ctaHref}
             onClick={() => trackCtaClick()}
           >
@@ -77,7 +77,7 @@ export function StudioNav({
         </div>
 
         <button
-          className={`relative z-[1] flex items-center justify-center transition-colors duration-300 ease-out md:hidden ${overHero ? "text-white" : "text-[#1a1a1a]"}`}
+          className={`relative z-[1] flex items-center justify-center transition-colors duration-300 ease-out md:hidden ${overHero ? "text-white" : "text-[var(--site-text)]"}`}
           onClick={() => setMenuOpen((v) => !v)}
           type="button"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
@@ -89,7 +89,7 @@ export function StudioNav({
       <AnimatePresence>
         {menuOpen && (
           <m.div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-white"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[var(--site-surface-raised)]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -97,7 +97,7 @@ export function StudioNav({
           >
             {navLinks.map((link, i) => (
               <m.a
-                className="text-2xl font-semibold text-[#1a1a1a] transition-colors hover:text-[#8b7355]"
+                className="text-2xl font-semibold text-[var(--site-text)] transition-colors hover:text-[var(--site-primary)]"
                 href={link.href}
                 key={link.id}
                 onClick={(event) =>
@@ -115,7 +115,7 @@ export function StudioNav({
               </m.a>
             ))}
             <m.a
-              className="mt-6 rounded-full bg-[#1a1a1a] px-8 py-3 text-sm font-semibold text-white"
+              className="mt-6 rounded-full bg-[var(--site-dark)] px-8 py-3 text-sm font-semibold text-white"
               href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();

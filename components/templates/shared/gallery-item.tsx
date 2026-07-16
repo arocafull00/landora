@@ -76,7 +76,7 @@ export function GalleryItem({
 
   return (
     <div
-      className={`group relative min-h-0 overflow-hidden bg-[#e5e2dd] ${featured ? "rounded-xl" : "rounded-lg"} ${layoutClass}`}
+      className={`group relative min-h-0 overflow-hidden bg-[var(--site-surface-alt)] ${featured ? "rounded-xl" : "rounded-lg"} ${layoutClass}`}
       data-aos="fade-up"
       data-aos-delay={aosDelay}
     >

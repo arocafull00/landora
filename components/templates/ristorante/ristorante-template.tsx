@@ -1,5 +1,4 @@
 import type { LandingContent } from "@/lib/dashboard-data";
-import { RistoranteFontScope } from "@/components/templates/ristorante/ristorante-font-scope";
 import { RistoranteTemplateClient } from "@/components/templates/ristorante/ristorante-template-client";
 
 export function RistoranteTemplate({
@@ -14,13 +13,11 @@ export function RistoranteTemplate({
   bookingEnabled?: boolean;
 }) {
   return (
-    <RistoranteFontScope>
-      <RistoranteTemplateClient
-        content={content}
-        topOffset={topOffset}
-        slug={slug}
-        bookingEnabled={bookingEnabled}
-      />
-    </RistoranteFontScope>
+    <RistoranteTemplateClient
+      content={content}
+      topOffset={topOffset}
+      slug={slug}
+      bookingEnabled={bookingEnabled}
+    />
   );
 }

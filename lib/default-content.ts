@@ -13,6 +13,7 @@ const BG_IMG =
   "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260603_073200_7082add5-f1f8-4873-8696-d6f78a44089b.png&w=1920&q=85";
 
 export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
   brand: "Toll Story.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -218,6 +219,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
 };
 
 export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
   brand: "Lumière.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -336,6 +338,7 @@ export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
 };
 
 export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
   brand: "Mora.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -345,6 +348,7 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
     subtitle: "Diseño experiencias digitales que conectan marcas con personas.",
     description: "Portfolio de diseño y dirección creativa en Barcelona.",
     image: PORTFOLIO_ASSETS.hero,
+    houseImage: PORTFOLIO_ASSETS.project1,
     ctaLabel: "Ver proyectos",
   },
   nav: [
@@ -470,6 +474,7 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
 };
 
 export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
   brand: "Osteria da Luca.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -590,6 +595,7 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
 };
 
 export const COFFEE_SHOP_DEFAULT_CONTENT: TemplateContentMap["coffee-shop"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
   brand: "Grano & Taza.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -689,6 +695,7 @@ export const COFFEE_SHOP_DEFAULT_CONTENT: TemplateContentMap["coffee-shop"] = {
 };
 
 export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
   brand: "Jardín Secreto.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -786,6 +793,7 @@ export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
 };
 
 export const OFICIO_PRO_DEFAULT_CONTENT: TemplateContentMap["oficio-pro"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
   brand: "Oficio Pro",
   brandLogoType: "text",
   brandLogoImage: "",

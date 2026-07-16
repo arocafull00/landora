@@ -9,7 +9,7 @@ export function PortfolioTestimonialsSection({ content }: { content: LandingCont
   const [featured, ...rest] = content.testimonials;
 
   return (
-    <section id="testimonios" className="scroll-mt-24 bg-[#111] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="testimonios" className="scroll-mt-24 bg-[var(--site-dark)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 border-b border-white/10 pb-12" data-aos="fade-up">
           <span

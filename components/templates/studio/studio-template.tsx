@@ -78,8 +78,8 @@ export function StudioTemplate({
     <TemplateLazyMotion>
       <div
         ref={rootRef}
-        className="relative"
-        style={{ backgroundColor: "#faf9f7", overflowX: "clip" }}
+        className="relative bg-[var(--site-surface)]"
+        style={{ overflowX: "clip" }}
       >
       <StudioAosInit rootRef={rootRef} />
 

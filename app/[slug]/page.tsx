@@ -12,6 +12,7 @@ import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-
 import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
 import { LandingAnalyticsInit } from "@/components/analytics/landing-analytics-init";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
+import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -60,14 +61,16 @@ export default async function PublicLandingPage({
   return (
     <>
       <LandingAnalyticsInit landingId={landing.id} clientId={landing.userId} />
-      <Component
-        content={content}
-        slug={landing.slug}
-        bookingEnabled={tenant?.enabled ?? false}
-      />
-      {content.contact.whatsappEnabled ? (
-        <WhatsappFloatButton phone={content.contact.phone} />
-      ) : null}
+      <SiteThemeScope appearance={content.appearance} template={landing.template}>
+        <Component
+          content={content}
+          slug={landing.slug}
+          bookingEnabled={tenant?.enabled ?? false}
+        />
+        {content.contact.whatsappEnabled ? (
+          <WhatsappFloatButton phone={content.contact.phone} />
+        ) : null}
+      </SiteThemeScope>
     </>
   );
 }

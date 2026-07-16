@@ -6,7 +6,7 @@ const base =
   "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-all duration-300";
 
 const variants = {
-  primary: "bg-white text-[#0a0a0a] hover:bg-white/90 active:bg-white/80",
+  primary: "bg-white text-[var(--site-surface)] hover:bg-white/90 active:bg-white/80",
   secondary:
     "border border-white/30 text-white bg-transparent hover:bg-white/10",
 };

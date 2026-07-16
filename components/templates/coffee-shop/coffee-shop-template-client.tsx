@@ -1,10 +1,9 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import { useRef } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { getBookingCtaHref } from "@/lib/booking/cta-href";
-import { getTemplatePalette } from "@/lib/template-palettes";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { CoffeeShopNav } from "@/components/templates/coffee-shop/coffee-shop-nav";
 import { CoffeeShopHero } from "@/components/templates/coffee-shop/coffee-shop-hero";
@@ -16,19 +15,6 @@ import { CoffeeShopTestimonialsSection } from "@/components/templates/coffee-sho
 import { CoffeeShopFaqSection } from "@/components/templates/coffee-shop/coffee-shop-faq-section";
 import { CoffeeShopContactSection } from "@/components/templates/coffee-shop/coffee-shop-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
-
-function getCoffeeShopThemeVars(palette: ReturnType<typeof getTemplatePalette>): CSSProperties {
-  return {
-    ["--coffee-primary" as string]: palette.primary,
-    ["--coffee-secondary" as string]: palette.secondary,
-    ["--coffee-accent" as string]: palette.accent,
-    ["--coffee-muted" as string]: palette.muted,
-    ["--coffee-surface" as string]: palette.surface,
-    ["--coffee-foreground" as string]: palette.foreground,
-    backgroundColor: palette.surface,
-    overflowX: "clip",
-  };
-}
 
 export function CoffeeShopTemplateClient({
   content,
@@ -43,13 +29,16 @@ export function CoffeeShopTemplateClient({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-  const palette = getTemplatePalette("coffee-shop");
   const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
   const heroCtaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#carta");
 
   return (
     <TemplateLazyMotion>
-      <div ref={rootRef} className="relative" style={getCoffeeShopThemeVars(palette)}>
+      <div
+        ref={rootRef}
+        className="relative bg-[var(--site-surface)]"
+        style={{ overflowX: "clip" }}
+      >
         <CoffeeShopNav
           brand={content.brand || "Grano & Taza."}
           brandLogoType={content.brandLogoType ?? "text"}

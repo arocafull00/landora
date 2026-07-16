@@ -28,11 +28,11 @@ export function OficioProTemplate({
 
   return (
     <div
-      className="relative bg-[#FEFCFD] text-[#4A4A4A]"
+      className="relative bg-[var(--site-surface)] text-[var(--site-text-muted)]"
       style={{
         overflowX: "clip",
         backgroundImage:
-          "linear-gradient(to right, rgba(31,78,121,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(31,78,121,0.06) 1px, transparent 1px)",
+          "linear-gradient(to right, color-mix(in srgb, var(--site-primary) 8%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, var(--site-primary) 6%, transparent) 1px, transparent 1px)",
         backgroundSize: "18px 30px",
       }}
     >

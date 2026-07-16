@@ -19,6 +19,8 @@ const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
 const isTenantResolveRoute = createRouteMatcher(["/api/tenant/resolve"]);
 const isWebhookRoute = createRouteMatcher(["/api/webhooks/stripe"]);
 const isCronRoute = createRouteMatcher(["/api/cron/check-domains"]);
+const isSentryTunnelRoute = createRouteMatcher(["/monitoring(.*)"]);
+const isSentryExampleApiRoute = createRouteMatcher(["/api/sentry-example-api"]);
 const isSubscriptionExemptRoute = createRouteMatcher([
   "/settings(.*)",
   "/subscribe(.*)",
@@ -94,7 +96,14 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.rewrite(url);
   }
 
-  if (isSignInRoute(req) || isTenantResolveRoute(req) || isWebhookRoute(req) || isCronRoute(req)) {
+  if (
+    isSignInRoute(req) ||
+    isTenantResolveRoute(req) ||
+    isWebhookRoute(req) ||
+    isCronRoute(req) ||
+    isSentryTunnelRoute(req) ||
+    isSentryExampleApiRoute(req)
+  ) {
     return NextResponse.next();
   }
 
@@ -160,6 +169,6 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff2?|ttf)).*)",
+    "/((?!monitoring|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff2?|ttf)).*)",
   ],
 };

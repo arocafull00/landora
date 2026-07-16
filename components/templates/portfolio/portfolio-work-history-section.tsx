@@ -4,7 +4,7 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioWorkHistoryCard } from "@/components/templates/portfolio/portfolio-work-history-card";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
-const ACCENT = "#2dd4bf";
+const ACCENT = "var(--site-accent)";
 
 export function PortfolioWorkHistorySection({ content }: { content: LandingContent }) {
   const items = content.workHistory ?? [];
@@ -17,7 +17,7 @@ export function PortfolioWorkHistorySection({ content }: { content: LandingConte
   );
 
   return (
-    <section id="experiencia" className="scroll-mt-24 bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="experiencia" className="scroll-mt-24 bg-[var(--site-surface)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-6xl">
         <h2
           className="mb-12 text-balance text-3xl font-extrabold sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"

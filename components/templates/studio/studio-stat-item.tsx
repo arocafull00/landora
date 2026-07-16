@@ -53,7 +53,7 @@ export function StudioStatItem({ stat }: { stat: StatContent }) {
   return (
     <div ref={ref}>
       <div
-        className="leading-[1.05] text-[#1a1a1a]"
+        className="leading-[1.05] text-[var(--site-text)]"
         style={{
           fontFamily: "var(--font-syne)",
           fontWeight: 700,
@@ -64,7 +64,7 @@ export function StudioStatItem({ stat }: { stat: StatContent }) {
         {displayValue}
       </div>
       <div
-        className="mt-2 text-[#6b6560]"
+        className="mt-2 text-[var(--site-text-muted)]"
         style={{
           fontFamily: "var(--font-body)",
           fontWeight: 400,

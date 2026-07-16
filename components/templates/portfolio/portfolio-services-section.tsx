@@ -25,7 +25,7 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
   const categories = [...servicesByCategory.keys()];
 
   return (
-    <section id="servicios" className="scroll-mt-24 bg-[#0a0a0a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="servicios" className="scroll-mt-24 bg-[var(--site-surface)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 border-b border-white/10 pb-8" data-aos="fade-up">
           <h2

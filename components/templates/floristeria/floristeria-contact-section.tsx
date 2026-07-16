@@ -23,7 +23,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
   );
 
   return (
-    <footer id="contacto" className="scroll-mt-24 bg-[#1a1a1a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <footer id="contacto" className="scroll-mt-24 bg-[var(--site-dark)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 max-w-2xl" data-aos="fade-up">
           <h2
@@ -44,7 +44,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
             href={whatsappLink}
             variant="primary"
             size="lg"
-            className="!bg-[#2D5016] hover:!bg-[#234012]"
+            className="!bg-[var(--site-primary)] hover:!bg-[var(--site-primary-hover)]"
             onClick={() => {
               trackWhatsAppClick();
               trackLeadGenerated();
@@ -61,7 +61,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
         >
           {content.contact.phone && (
             <div className="flex items-start gap-3">
-              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#2D5016]" />
+              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-primary)]" />
               <div>
                 <p className="text-xs font-medium text-white/40">Teléfono</p>
                 <a
@@ -76,7 +76,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
           )}
           {content.contact.email && (
             <div className="flex items-start gap-3">
-              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#2D5016]" />
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-primary)]" />
               <div>
                 <p className="text-xs font-medium text-white/40">Email</p>
                 <a
@@ -90,7 +90,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
           )}
           {content.contact.address && (
             <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#2D5016]" />
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-primary)]" />
               <div>
                 <p className="text-xs font-medium text-white/40">Dirección</p>
                 <p className="text-sm text-white/70">{content.contact.address}</p>
@@ -102,7 +102,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
         <div className="mt-16 space-y-6 border-t border-white/10 pt-8 text-center">
           <FooterSocialLinks
             contact={content.contact}
-            linkClassName="text-[#2D5016] transition-colors hover:text-white"
+            linkClassName="text-[var(--site-primary)] transition-colors hover:text-white"
           />
           <FooterCopyright brand={content.brand} contact={content.contact} />
         </div>

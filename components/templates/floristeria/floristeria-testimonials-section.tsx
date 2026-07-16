@@ -8,7 +8,8 @@ export function FloristeriaTestimonialsSection({ content }: { content: LandingCo
   if (content.testimonials.length === 0) return null;
 
   const [featured, ...rest] = content.testimonials;
-  const textHalo = "0 0 20px #FAFAF7, 0 0 6px #FAFAF7";
+  const textHalo =
+    "0 0 20px var(--site-surface), 0 0 6px var(--site-surface)";
 
   return (
     <section
@@ -22,20 +23,20 @@ export function FloristeriaTestimonialsSection({ content }: { content: LandingCo
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[#FAFAF7]/15"
+        className="pointer-events-none absolute inset-0 bg-[var(--site-surface)]/15"
       />
 
       <div className="relative z-10 mx-auto max-w-6xl">
-        <div className="mb-16 border-b border-[#1F3A0F]/15 pb-12" data-aos="fade-up">
+        <div className="mb-16 border-b border-[var(--site-border)]/15 pb-12" data-aos="fade-up">
           <span
             aria-hidden
-            className="mb-6 block text-[clamp(64px,10vw,96px)] leading-none text-[#1F3A0F]/25"
+            className="mb-6 block text-[clamp(64px,10vw,96px)] leading-none text-[var(--site-dark)]/25"
             style={{ fontFamily: "var(--font-cormorant)", fontWeight: 700, textShadow: textHalo }}
           >
             &ldquo;
           </span>
           <blockquote
-            className="mb-8 max-w-4xl text-pretty text-xl font-light leading-relaxed text-[#0f0f0f] sm:text-2xl md:text-[clamp(22px,2.8vw,32px)]"
+            className="mb-8 max-w-4xl text-pretty text-xl font-light leading-relaxed text-[var(--site-text)] sm:text-2xl md:text-[clamp(22px,2.8vw,32px)]"
             style={{
               fontFamily: "var(--font-cormorant)",
               letterSpacing: "-0.02em",
@@ -47,17 +48,17 @@ export function FloristeriaTestimonialsSection({ content }: { content: LandingCo
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex gap-0.5">
               {Array.from({ length: featured.rating }).map((_, i) => (
-                <Star className="h-4 w-4 fill-[#2D5016] text-[#2D5016]" key={i} />
+                <Star className="h-4 w-4 fill-[var(--site-primary)] text-[var(--site-primary)]" key={i} />
               ))}
             </div>
             <p
-              className="text-sm font-semibold text-[#1A1A1A]"
+              className="text-sm font-semibold text-[var(--site-text)]"
               style={{ textShadow: textHalo }}
             >
               {featured.author}
             </p>
             {featured.verified && (
-              <span className="text-xs text-[#333333]" style={{ textShadow: textHalo }}>
+              <span className="text-xs text-[var(--site-text-muted)]" style={{ textShadow: textHalo }}>
                 Verificado
               </span>
             )}
@@ -71,27 +72,27 @@ export function FloristeriaTestimonialsSection({ content }: { content: LandingCo
             data-aos-delay="120"
           >
             {rest.map((testimonial) => (
-              <div className="border-t border-[#1F3A0F]/15 pt-6" key={testimonial.id}>
+              <div className="border-t border-[var(--site-border)]/15 pt-6" key={testimonial.id}>
                 <div className="mb-3 flex gap-0.5">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <Star className="h-3.5 w-3.5 fill-[#2D5016] text-[#2D5016]" key={i} />
+                    <Star className="h-3.5 w-3.5 fill-[var(--site-primary)] text-[var(--site-primary)]" key={i} />
                   ))}
                 </div>
                 <p
-                  className="mb-4 text-sm leading-relaxed text-[#333333]"
+                  className="mb-4 text-sm leading-relaxed text-[var(--site-text-muted)]"
                   style={{ textShadow: textHalo }}
                 >
                   {testimonial.comment}
                 </p>
                 <div className="flex items-center justify-between">
                   <p
-                    className="text-sm font-semibold text-[#1A1A1A]"
+                    className="text-sm font-semibold text-[var(--site-text)]"
                     style={{ textShadow: textHalo }}
                   >
                     {testimonial.author}
                   </p>
                   {testimonial.verified && (
-                    <span className="text-xs text-[#333333]" style={{ textShadow: textHalo }}>
+                    <span className="text-xs text-[var(--site-text-muted)]" style={{ textShadow: textHalo }}>
                       Verificado
                     </span>
                   )}

@@ -8,9 +8,9 @@ const base =
   "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-all duration-300";
 
 const variants = {
-  primary: "bg-[#2D5016] text-white hover:bg-[#234012] active:bg-[#1a300e]",
+  primary: "bg-[var(--site-primary)] text-white hover:bg-[var(--site-primary-hover)] active:bg-[var(--site-primary-hover)]",
   secondary:
-    "border border-[#2D5016] text-[#2D5016] bg-transparent hover:bg-[#2D5016] hover:text-white",
+    "border border-[var(--site-primary)] text-[var(--site-primary)] bg-transparent hover:bg-[var(--site-primary)] hover:text-white",
 };
 
 const sizes = {

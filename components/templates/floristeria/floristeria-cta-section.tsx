@@ -23,15 +23,15 @@ export function FloristeriaCtaSection({ content }: { content: LandingContent }) 
   return (
     <section id="servicios" className="scroll-mt-24">
       <div className="grid min-h-[420px] grid-cols-1 lg:min-h-[520px] lg:grid-cols-2">
-        <div className="relative flex items-center justify-center bg-[#F7F7F7] px-8 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
+        <div className="relative flex items-center justify-center bg-[var(--site-surface-muted)] px-8 py-16 md:px-12 md:py-20 lg:px-16 lg:py-24">
           <FloristeriaCtaBgLottie src={FLORISTERIA_ASSETS.ctaBgLottie} />
 
           <div
-            className="relative z-10 mx-auto max-w-md rounded-3xl bg-[#F7F7F7]/95 px-6 py-8 text-center shadow-[0_0_48px_32px_rgba(247,247,247,0.92)] backdrop-blur-sm sm:px-8"
+            className="relative z-10 mx-auto max-w-md rounded-3xl bg-[var(--site-surface-muted)]/95 px-6 py-8 text-center shadow-[0_0_48px_32px_color-mix(in_srgb,var(--site-surface-muted)_92%,transparent)] backdrop-blur-sm sm:px-8"
             data-aos="fade-up"
           >
             <h2
-              className="text-balance text-2xl font-bold text-[#1A1A1A] sm:text-3xl md:text-[clamp(28px,3.5vw,40px)]"
+              className="text-balance text-2xl font-bold text-[var(--site-text)] sm:text-3xl md:text-[clamp(28px,3.5vw,40px)]"
               style={{ fontFamily: "var(--font-body)", letterSpacing: "-0.02em" }}
             >
               {heading.title}
@@ -39,7 +39,7 @@ export function FloristeriaCtaSection({ content }: { content: LandingContent }) 
 
             {heading.subtitle ? (
               <p
-                className="mt-5 text-pretty text-base leading-relaxed text-[#333333] sm:text-lg"
+                className="mt-5 text-pretty text-base leading-relaxed text-[var(--site-text-muted)] sm:text-lg"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {heading.subtitle}

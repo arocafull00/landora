@@ -29,21 +29,21 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
       data-section-label="Testimonios"
       id="testimonios"
       className={cn(
-        "relative z-[25] scroll-mt-24 bg-[#f5f0ea] px-6 py-20 md:px-10 lg:px-16",
+        "relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16",
         isHighlighted && "template-section--highlighted",
       )}
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
           <p
-            className="mb-6 text-xs uppercase tracking-widest text-[#8a8278]"
+            className="mb-6 text-xs uppercase tracking-widest text-[var(--site-accent)]"
             style={{ fontFamily: "var(--font-body)" }}
           >
             testimonios
           </p>
           <h2
             data-editor-id="testimonios:heading:title"
-            className="mb-8 font-extrabold leading-tight text-[#171717]"
+            className="mb-8 font-extrabold leading-tight text-[var(--site-text)]"
             style={{
               fontFamily: "var(--font-syne)",
               fontSize: "clamp(32px, 5vw, 56px)",
@@ -54,7 +54,7 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
           </h2>
           <div className="mb-4 flex items-center justify-center gap-4">
             <span
-              className="text-2xl font-bold text-[#171717]"
+              className="text-2xl font-bold text-[var(--site-text)]"
               style={{ fontFamily: "var(--font-syne)" }}
             >
               EXCELENTE
@@ -62,11 +62,11 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
             <div className="flex text-xl text-yellow-400">★★★★★</div>
           </div>
           <p
-            className="mb-2 text-[#171717]/70"
+            className="mb-2 text-[var(--site-text)]/70"
             style={{ fontFamily: "var(--font-body)" }}
           >
             En base a{" "}
-            <strong className="font-semibold text-[#171717]">194 reseñas</strong>
+            <strong className="font-semibold text-[var(--site-text)]">194 reseñas</strong>
           </p>
           <div className="flex justify-center">
             <div className="relative h-6 w-20">
@@ -110,11 +110,11 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
 
           <button
             type="button"
-            className="swiper-button-prev-testimonios absolute left-0 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-[#213138]/20 bg-[#f5f0ea] transition-colors hover:bg-[#213138] hover:text-[#e8e4df] group sm:flex"
+            className="swiper-button-prev-testimonios absolute left-0 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-[var(--site-primary)]/20 bg-[var(--site-surface)] transition-colors hover:bg-[var(--site-primary)] hover:text-[var(--site-on-dark)] group sm:flex"
             aria-label="Anterior"
           >
             <svg
-              className="h-6 w-6 text-[#213138] group-hover:text-[#e8e4df]"
+              className="h-6 w-6 text-[var(--site-primary)] group-hover:text-[var(--site-on-dark)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -124,11 +124,11 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
           </button>
           <button
             type="button"
-            className="swiper-button-next-testimonios absolute right-0 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-[#213138]/20 bg-[#f5f0ea] transition-colors hover:bg-[#213138] hover:text-[#e8e4df] group sm:flex"
+            className="swiper-button-next-testimonios absolute right-0 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-[var(--site-primary)]/20 bg-[var(--site-surface)] transition-colors hover:bg-[var(--site-primary)] hover:text-[var(--site-on-dark)] group sm:flex"
             aria-label="Siguiente"
           >
             <svg
-              className="h-6 w-6 text-[#213138] group-hover:text-[#e8e4df]"
+              className="h-6 w-6 text-[var(--site-primary)] group-hover:text-[var(--site-on-dark)]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

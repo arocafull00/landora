@@ -25,7 +25,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
       data-section-label="Galería"
       id="listings"
       className={cn(
-        "s3-gallery-section relative z-25 mt-0 md:h-screen scroll-mt-24 overflow-hidden bg-[#1a1a1a] lg:mt-[-100vh]",
+        "s3-gallery-section relative z-25 mt-0 md:h-screen scroll-mt-24 overflow-hidden bg-[var(--site-dark)] lg:mt-[-100vh]",
         isHighlighted && "template-section--highlighted",
       )}
     >

@@ -15,7 +15,7 @@ export function PortfolioSkillsSection({ content }: { content: LandingContent })
   if (benefits.length === 0) return null;
 
   return (
-    <section id="skills" className="scroll-mt-24 bg-[#111] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <section id="skills" className="scroll-mt-24 bg-[var(--site-dark)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         <h2
           className="mb-12 text-balance text-3xl font-extrabold text-white sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"

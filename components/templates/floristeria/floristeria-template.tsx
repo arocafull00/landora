@@ -1,5 +1,4 @@
 import type { LandingContent } from "@/lib/dashboard-data";
-import { FloristeriaFontScope } from "@/components/templates/floristeria/floristeria-font-scope";
 import { FloristeriaTemplateClient } from "@/components/templates/floristeria/floristeria-template-client";
 
 export function FloristeriaTemplate({
@@ -14,13 +13,11 @@ export function FloristeriaTemplate({
   bookingEnabled?: boolean;
 }) {
   return (
-    <FloristeriaFontScope>
-      <FloristeriaTemplateClient
-        content={content}
-        topOffset={topOffset}
-        slug={slug}
-        bookingEnabled={bookingEnabled}
-      />
-    </FloristeriaFontScope>
+    <FloristeriaTemplateClient
+      content={content}
+      topOffset={topOffset}
+      slug={slug}
+      bookingEnabled={bookingEnabled}
+    />
   );
 }

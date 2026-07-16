@@ -19,7 +19,7 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
   const heading = getSectionHeading(content, "contacto", SECTION_HEADING_DEFAULTS.studio.contacto);
 
   return (
-    <footer id="contacto" className="scroll-mt-24 bg-[#1a1a1a] px-6 py-24 md:px-10 md:py-32 lg:px-16">
+    <footer id="contacto" className="scroll-mt-24 bg-[var(--site-dark)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 max-w-2xl" data-aos="fade-up">
           <h2
@@ -40,7 +40,7 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
             href={whatsappLink}
             variant="primary"
             size="lg"
-            className="!bg-[#8b7355] hover:!bg-[#7a6448]"
+            className="!bg-[var(--site-primary)] hover:!bg-[var(--site-primary-hover)]"
             onClick={() => {
               trackWhatsAppClick();
               trackLeadGenerated();
@@ -57,7 +57,7 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
         >
           {content.contact.phone && (
             <div className="flex items-start gap-3">
-              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[#8b7355]" />
+              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-primary)]" />
               <div>
                 <p className="text-xs font-medium text-white/50">Teléfono</p>
                 <a
@@ -72,7 +72,7 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
           )}
           {content.contact.email && (
             <div className="flex items-start gap-3">
-              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#8b7355]" />
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-primary)]" />
               <div>
                 <p className="text-xs font-medium text-white/50">Email</p>
                 <a
@@ -86,7 +86,7 @@ export function StudioContactSection({ content }: { content: LandingContent }) {
           )}
           {content.contact.address && (
             <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#8b7355]" />
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-primary)]" />
               <div>
                 <p className="text-xs font-medium text-white/50">Dirección</p>
                 <p className="text-sm text-white/70">{content.contact.address}</p>

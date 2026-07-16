@@ -14,20 +14,20 @@ export function FloristeriaFaqItem({
   const [open, setOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-[#2D5016]/10">
+    <div className="border-b border-[var(--site-primary)]/10">
       <button
         className="flex w-full items-center justify-between py-5 text-left"
         onClick={() => setOpen((v) => !v)}
         type="button"
       >
         <span
-          className="pr-4 text-base font-semibold text-[#1a1a1a]"
+          className="pr-4 text-base font-semibold text-[var(--site-text)]"
           style={{ fontFamily: "var(--font-body)" }}
         >
           {item.question}
         </span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-[#2D5016] transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`h-5 w-5 shrink-0 text-[var(--site-primary)] transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
       <AnimatePresence initial={false}>
@@ -39,7 +39,7 @@ export function FloristeriaFaqItem({
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-sm leading-relaxed text-[#1a1a1a]/60">
+            <p className="pb-5 text-sm leading-relaxed text-[var(--site-text)]/60">
               {item.answer}
             </p>
           </m.div>

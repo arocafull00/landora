@@ -1,5 +1,4 @@
 import type { LandingContent } from "@/lib/dashboard-data";
-import { CoffeeShopFontScope } from "@/components/templates/coffee-shop/coffee-shop-font-scope";
 import { CoffeeShopTemplateClient } from "@/components/templates/coffee-shop/coffee-shop-template-client";
 
 export function CoffeeShopTemplate({
@@ -14,13 +13,11 @@ export function CoffeeShopTemplate({
   bookingEnabled?: boolean;
 }) {
   return (
-    <CoffeeShopFontScope>
-      <CoffeeShopTemplateClient
-        content={content}
-        topOffset={topOffset}
-        slug={slug}
-        bookingEnabled={bookingEnabled}
-      />
-    </CoffeeShopFontScope>
+    <CoffeeShopTemplateClient
+      content={content}
+      topOffset={topOffset}
+      slug={slug}
+      bookingEnabled={bookingEnabled}
+    />
   );
 }

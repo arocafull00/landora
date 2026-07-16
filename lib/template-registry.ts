@@ -22,6 +22,12 @@ export const NAV_EDITOR_TAB: EditorTab = {
   group: "config",
 };
 
+const DESIGN_EDITOR_TAB: EditorTab = {
+  id: "Diseño",
+  label: "Diseño",
+  group: "config",
+};
+
 const ADMIN_EDITOR_TAB: EditorTab = {
   id: "Admin",
   label: "Admin",
@@ -80,6 +86,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
       { id: "Historia", label: "Historia" },
       { id: "Galería", label: "Galería" },
       { id: "Espacios", label: "Espacios" },
@@ -105,6 +112,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
       { id: "Historia", label: "Historia" },
       { id: "Servicios", label: "Servicios" },
       { id: "Equipo", label: "Equipo" },
@@ -128,6 +136,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
       { id: "Experiencia", label: "Experiencia" },
       { id: "Proyectos", label: "Proyectos" },
       { id: "Servicios", label: "Servicios" },
@@ -150,6 +159,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
       { id: "Carta", label: "Carta" },
       { id: "Galeria", label: "Galería" },
       { id: "Equipo", label: "Equipo" },
@@ -173,6 +183,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
       { id: "Historia", label: "Historia" },
       { id: "Servicios", label: "Servicios" },
       { id: "Galeria", label: "Galería" },
@@ -195,6 +206,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
       { id: "Servicios", label: "Servicios" },
       { id: "Instalaciones", label: "Instalaciones" },
       { id: "Testimonios", label: "Testimonios" },
@@ -217,6 +229,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
       { id: "Carta", label: "Carta" },
       { id: "Galeria", label: "Galería" },
       { id: "Horarios", label: "Horarios" },

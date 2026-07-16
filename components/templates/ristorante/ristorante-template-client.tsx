@@ -1,11 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import type { CSSProperties } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
 import { getBookingCtaHref } from "@/lib/booking/cta-href";
-import { getTemplatePalette } from "@/lib/template-palettes";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { RistoranteNav } from "@/components/templates/ristorante/ristorante-nav";
 import { RistoranteHero } from "@/components/templates/ristorante/ristorante-hero";
@@ -17,19 +15,6 @@ import { RistoranteHoursSection } from "@/components/templates/ristorante/ristor
 import { RistoranteTestimonialsSection } from "@/components/templates/ristorante/ristorante-testimonials-section";
 import { RistoranteContactSection } from "@/components/templates/ristorante/ristorante-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
-
-function getRistoranteThemeVars(palette: ReturnType<typeof getTemplatePalette>): CSSProperties {
-  return {
-    ["--ristorante-primary" as string]: palette.primary,
-    ["--ristorante-secondary" as string]: palette.secondary,
-    ["--ristorante-accent" as string]: palette.accent,
-    ["--ristorante-muted" as string]: palette.muted,
-    ["--ristorante-surface" as string]: palette.surface,
-    ["--ristorante-foreground" as string]: palette.foreground,
-    backgroundColor: palette.surface,
-    overflowX: "clip",
-  };
-}
 
 export function RistoranteTemplateClient({
   content,
@@ -44,12 +29,15 @@ export function RistoranteTemplateClient({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-  const palette = getTemplatePalette("ristorante");
   const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
 
   return (
     <TemplateLazyMotion>
-      <div ref={rootRef} className="relative" style={getRistoranteThemeVars(palette)}>
+      <div
+        ref={rootRef}
+        className="relative bg-[var(--site-surface)]"
+        style={{ overflowX: "clip" }}
+      >
         <RistoranteNav
           brand={content.brand || "Osteria da Luca."}
           brandLogoType={content.brandLogoType ?? "text"}

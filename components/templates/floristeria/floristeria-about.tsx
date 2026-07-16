@@ -9,12 +9,13 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
 
   if (!statement && stats.length === 0) return null;
 
-  const textHalo = "0 0 20px #FAFAF7, 0 0 6px #FAFAF7";
+  const textHalo =
+    "0 0 20px var(--site-surface), 0 0 6px var(--site-surface)";
 
   return (
     <section
       id="story"
-      className="relative scroll-mt-24 overflow-hidden bg-[#FAFAF7] px-6 py-24 md:px-10 md:py-32 lg:px-16"
+      className="relative scroll-mt-24 overflow-hidden bg-[var(--site-surface)] px-6 py-24 md:px-10 md:py-32 lg:px-16"
     >
       <div
         aria-hidden
@@ -26,13 +27,13 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[min(480px,58%)] bg-linear-to-t from-[#FAFAF7]/20 via-[#FAFAF7]/75 to-[#FAFAF7]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[min(480px,58%)] bg-linear-to-t from-[var(--site-surface)]/20 via-[var(--site-surface)]/75 to-[var(--site-surface)]"
       />
 
       <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-start gap-16 lg:grid-cols-[1.4fr_1fr] lg:gap-24">
         {statement && (
           <p
-            className="text-pretty text-2xl font-normal leading-relaxed text-[#0f0f0f] sm:text-3xl md:text-[clamp(26px,3.2vw,40px)]"
+            className="text-pretty text-2xl font-normal leading-relaxed text-[var(--site-text)] sm:text-3xl md:text-[clamp(26px,3.2vw,40px)]"
             style={{
               fontFamily: "var(--font-cormorant)",
               letterSpacing: "-0.02em",
@@ -54,7 +55,7 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
             {stats.map((stat) => (
               <div key={stat.id}>
                 <div
-                  className="leading-[1.05] text-[#1F3A0F]"
+                  className="leading-[1.05] text-[var(--site-dark)]"
                   style={{
                     fontFamily: "var(--font-cormorant)",
                     fontWeight: 700,
@@ -66,7 +67,7 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
                   {stat.value}
                 </div>
                 <div
-                  className="mt-2 font-medium text-[#333333]"
+                  className="mt-2 font-medium text-[var(--site-text-muted)]"
                   style={{
                     fontFamily: "var(--font-body)",
                     fontSize: "clamp(13px, 1.1vw, 15px)",

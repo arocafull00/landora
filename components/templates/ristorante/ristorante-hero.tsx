@@ -32,7 +32,7 @@ export function RistoranteHero({
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.2, ease: easeOut }}
       >
-        <HeroBackground src={content.hero.image} template="ristorante" />
+        <HeroBackground appearance={content.appearance} src={content.hero.image} />
       </m.div>
 
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--ristorante-secondary)]/95 via-[var(--ristorante-secondary)]/45 to-[var(--ristorante-secondary)]/20" />

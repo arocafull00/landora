@@ -39,7 +39,7 @@ export function FloristeriaNav({
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:px-8 md:py-5">
           <button
             type="button"
-            className="shrink-0 text-left text-xl font-bold tracking-tight text-[#2D5016] md:justify-self-start"
+            className="shrink-0 text-left text-xl font-bold tracking-tight text-[var(--site-primary)] md:justify-self-start"
             style={{ fontFamily: "var(--font-cormorant)" }}
           >
             <TemplateNavBrand
@@ -51,7 +51,7 @@ export function FloristeriaNav({
 
           <div className="hidden md:flex md:justify-center">
             <nav
-              className="rounded-full border border-[#2D5016]/10 bg-white px-1 py-1 shadow-sm"
+              className="rounded-full border border-[var(--site-primary)]/10 bg-[var(--site-surface-raised)] px-1 py-1 shadow-sm"
               aria-label="Principal"
             >
               <ul className="flex items-center gap-0.5">
@@ -64,7 +64,7 @@ export function FloristeriaNav({
 
           <div className="hidden md:flex md:justify-end">
             <TemplateNavAnchor
-              className="inline-flex items-center justify-center rounded-full bg-[#2D5016] px-6 py-2.5 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-[#234012]"
+              className="inline-flex items-center justify-center rounded-full bg-[var(--site-primary)] px-6 py-2.5 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-[var(--site-primary-hover)]"
               href={ctaHref}
               onClick={() => trackCtaClick()}
             >
@@ -73,7 +73,7 @@ export function FloristeriaNav({
           </div>
 
           <button
-            className="relative z-[1] flex items-center justify-center text-[#1a1a1a] md:hidden"
+            className="relative z-[1] flex items-center justify-center text-[var(--site-text)] md:hidden"
             onClick={() => setMenuOpen((v) => !v)}
             type="button"
             aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
@@ -86,7 +86,7 @@ export function FloristeriaNav({
       <AnimatePresence>
         {menuOpen && (
           <m.div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[#FAFAF7]"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-[var(--site-surface)]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -94,7 +94,7 @@ export function FloristeriaNav({
           >
             {navLinks.map((link, i) => (
               <m.a
-                className="text-2xl font-semibold text-[#1a1a1a] transition-colors hover:text-[#2D5016]"
+                className="text-2xl font-semibold text-[var(--site-text)] transition-colors hover:text-[var(--site-primary)]"
                 href={link.href}
                 key={link.id}
                 onClick={(event) =>
@@ -112,7 +112,7 @@ export function FloristeriaNav({
               </m.a>
             ))}
             <m.a
-              className="mt-6 rounded-full bg-[#2D5016] px-8 py-3 text-sm font-semibold text-white"
+              className="mt-6 rounded-full bg-[var(--site-primary)] px-8 py-3 text-sm font-semibold text-white"
               href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();

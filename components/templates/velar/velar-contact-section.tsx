@@ -23,7 +23,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
       data-section-label="Pie de página"
       id="inquire"
       className={cn(
-        "relative z-[25] scroll-mt-24 bg-[#1a1a1a] px-6 py-12 md:px-10 lg:px-16",
+        "relative z-[25] scroll-mt-24 bg-[var(--site-dark)] px-6 py-12 md:px-10 lg:px-16",
         isHighlighted && "template-section--highlighted",
       )}
     >
@@ -31,7 +31,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
         <div className="space-y-4 text-center">
           <div className="space-y-2">
             <p
-              className="text-sm font-bold uppercase tracking-widest text-[#8a8278]"
+              className="text-sm font-bold uppercase tracking-widest text-[var(--site-accent)]"
               style={{ fontFamily: "var(--font-syne)" }}
             >
               {heading.title}
@@ -40,7 +40,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
               <a
                 data-editor-id="inquire:phone"
                 href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                className="block text-sm text-[#e8e4df]/70 transition-colors hover:text-[#e8e4df]"
+                className="block text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
                 style={{ fontFamily: "var(--font-body)" }}
                 onClick={() => {
                   trackPhoneClick();
@@ -54,7 +54,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
               <a
                 data-editor-id="inquire:email"
                 href={`mailto:${content.contact.email}`}
-                className="block text-sm text-[#e8e4df]/70 transition-colors hover:text-[#e8e4df]"
+                className="block text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {content.contact.email}
@@ -63,7 +63,7 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
             {content.contact.address && (
               <p
                 data-editor-id="inquire:address"
-                className="text-sm text-[#e8e4df]/70"
+                className="text-sm text-[var(--site-on-dark)]/70"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {content.contact.address}
@@ -72,11 +72,11 @@ export function VelarContactSection({ content }: { content: LandingContent }) {
           </div>
           <FooterSocialLinks
             contact={content.contact}
-            linkClassName="text-[#8a8278] transition-colors hover:text-[#e8e4df]"
+            linkClassName="text-[var(--site-accent)] transition-colors hover:text-[var(--site-on-dark)]"
           />
           <FooterCopyright
             brand={content.brand}
-            className="text-xs text-[#8a8278]"
+            className="text-xs text-[var(--site-accent)]"
             contact={content.contact}
           />
         </div>
