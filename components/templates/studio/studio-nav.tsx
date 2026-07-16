@@ -8,6 +8,7 @@ import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 
 export function StudioNav({
   brand,
@@ -16,6 +17,7 @@ export function StudioNav({
   navLinks,
   ctaLabel,
   ctaHref,
+  heroNavTone,
   overHero,
   topOffset = 0,
 }: {
@@ -25,11 +27,13 @@ export function StudioNav({
   navLinks: NavLink[];
   ctaLabel: string;
   ctaHref: string;
+  heroNavTone: HeroNavTone;
   overHero: boolean;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { trackCtaClick } = useAnalytics();
+  const useLightText = overHero && heroNavTone === "light";
 
   return (
     <>
@@ -46,7 +50,7 @@ export function StudioNav({
       >
         <button
           type="button"
-          className={`text-xl font-bold tracking-tight transition-colors duration-300 ease-out ${overHero ? "text-white" : "text-[var(--site-text)]"}`}
+          className={`text-xl font-bold tracking-tight transition-colors duration-300 ease-out ${useLightText ? "text-white" : "text-[var(--site-text)]"}`}
           style={{ fontFamily: "var(--font-syne)" }}
         >
           <TemplateNavBrand
@@ -59,7 +63,7 @@ export function StudioNav({
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <TemplateNavAnchor
-              className={`text-sm font-medium transition-colors duration-300 ease-out ${overHero ? "text-white/75 hover:text-white" : "text-[var(--site-text)]/70 hover:text-[var(--site-text)]"}`}
+              className={`text-sm font-medium transition-colors duration-300 ease-out ${useLightText ? "text-white/75 hover:text-white" : "text-[var(--site-text)]/70 hover:text-[var(--site-text)]"}`}
               href={link.href}
               key={link.id}
               style={{ fontFamily: "var(--font-body)" }}
@@ -77,7 +81,7 @@ export function StudioNav({
         </div>
 
         <button
-          className={`relative z-[1] flex items-center justify-center transition-colors duration-300 ease-out md:hidden ${overHero ? "text-white" : "text-[var(--site-text)]"}`}
+          className={`relative z-[1] flex items-center justify-center transition-colors duration-300 ease-out md:hidden ${useLightText ? "text-white" : "text-[var(--site-text)]"}`}
           onClick={() => setMenuOpen((v) => !v)}
           type="button"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}

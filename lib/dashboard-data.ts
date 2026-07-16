@@ -109,6 +109,21 @@ export type TemplateContentMap = {
 
 export type TemplateId = keyof TemplateContentMap;
 
+export type HeroVariantId =
+  | "velar"
+  | "studio"
+  | "portfolio"
+  | "ristorante"
+  | "floristeria"
+  | "oficio-pro"
+  | "coffee-shop";
+
+export type SectionKey = "hero";
+
+export type LandingSectionSelections = {
+  hero: HeroVariantId;
+};
+
 export type LandingContent = BaseContent &
   Partial<VelarExtensions> &
   Partial<StudioExtensions> &
@@ -127,6 +142,7 @@ export type Landing = {
   seoFavicon: string;
   owner: string;
   template: TemplateId;
+  sectionSelections: LandingSectionSelections;
   customDomain: string | null;
   content: LandingContent;
 };
@@ -479,5 +495,4 @@ export const initialAssets: Asset[] = [
     url: VELAR_ASSETS.toll6,
   },
 ];
-
 

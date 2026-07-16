@@ -1,7 +1,7 @@
 "use client";
 
 import { m } from "motion/react";
-import { ArrowRight, Clock3, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Clock3, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
 import { useAnalytics } from "@/hooks/use-analytics";
@@ -12,14 +12,15 @@ export function StudioHero({
   content,
   heroRef,
   ctaHref,
+  secondaryCtaHref,
 }: {
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
   ctaHref: string;
+  secondaryCtaHref: string;
 }) {
   const description = content.hero.description || content.hero.subtitle;
-  const phoneHref = `tel:${content.contact.phone.replace(/\s+/g, "")}`;
-  const { trackCtaClick, trackPhoneClick } = useAnalytics();
+  const { trackCtaClick } = useAnalytics();
 
   return (
     <section
@@ -94,12 +95,11 @@ export function StudioHero({
 
           <a
             className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--site-accent-bright)]/60 bg-black/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-[var(--site-accent-soft)] transition hover:bg-[var(--site-accent-bright)]/10"
-            href={phoneHref}
+            href={secondaryCtaHref}
             style={{ fontFamily: "var(--font-syne)" }}
-            onClick={() => trackPhoneClick()}
           >
-            <Phone className="h-4 w-4" />
-            {content.contact.phone}
+            Descubrir
+            <ArrowRight className="h-4 w-4" />
           </a>
         </m.div>
 

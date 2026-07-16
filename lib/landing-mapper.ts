@@ -5,6 +5,7 @@ import { parseSocialLinks } from "@/lib/footer-content";
 import { shortDateTimeFormatter } from "@/lib/intl-formatters";
 import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
 import type { User } from "@/db/schema";
+import { resolveSectionSelections } from "@/lib/section-selections";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 function mapImage(url: string | null | undefined) {
@@ -216,6 +217,10 @@ export function toLandingView(row: LandingWithSections, user: User | undefined):
     seoFavicon: row.seo?.favicon ?? "",
     owner: user?.name ?? "—",
     template: row.template,
+    sectionSelections: resolveSectionSelections(
+      row.template,
+      row.sectionSelections ?? [],
+    ),
     customDomain: row.customDomain ?? null,
     content: toLandingContent(row),
   };

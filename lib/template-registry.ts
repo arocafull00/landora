@@ -1,4 +1,9 @@
-import type { TemplateId, TemplateContentMap, LandingContent } from "@/lib/dashboard-data";
+import type {
+  TemplateId,
+  TemplateContentMap,
+  LandingContent,
+  LandingSectionSelections,
+} from "@/lib/dashboard-data";
 import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT } from "@/lib/default-content";
 import { getTemplateSections } from "@/lib/template-sections";
 
@@ -65,7 +70,13 @@ const SEO_EDITOR_TAB: EditorTab = {
   group: "config",
 };
 
-export type TemplateComponent = React.ComponentType<{ content: LandingContent; topOffset?: number }>;
+export type TemplateComponent = React.ComponentType<{
+  bookingEnabled?: boolean;
+  content: LandingContent;
+  sectionSelections?: LandingSectionSelections;
+  slug?: string;
+  topOffset?: number;
+}>;
 
 export type TemplateDefinition<T extends TemplateId = TemplateId> = {
   id: T;

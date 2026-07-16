@@ -8,6 +8,7 @@ import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 
 export function PortfolioNav({
   brand,
@@ -16,6 +17,8 @@ export function PortfolioNav({
   navLinks,
   ctaLabel,
   ctaHref,
+  heroNavTone,
+  overHero,
   topOffset = 0,
 }: {
   brand: string;
@@ -24,22 +27,29 @@ export function PortfolioNav({
   navLinks: NavLink[];
   ctaLabel: string;
   ctaHref: string;
+  heroNavTone: HeroNavTone;
+  overHero: boolean;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { trackCtaClick } = useAnalytics();
+  const useLightText = !overHero || heroNavTone === "light";
 
   return (
     <>
       <nav
-        className="fixed left-0 right-0 z-50 flex items-center justify-between border-b border-portfolio-line bg-portfolio-canvas/90 px-6 py-5 md:border-transparent md:bg-transparent md:px-10 lg:px-16"
+        className={`fixed left-0 right-0 z-50 flex items-center justify-between border-b px-6 py-5 transition-colors md:px-10 lg:px-16 ${
+          overHero && heroNavTone === "dark"
+            ? "border-[var(--site-border)] bg-[var(--site-surface)]/85 backdrop-blur-md"
+            : "border-portfolio-line bg-portfolio-canvas/90 md:border-transparent md:bg-transparent"
+        }`}
         style={{
           ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
         }}
       >
         <button
           type="button"
-          className="text-xl font-bold tracking-tight text-white"
+          className={`text-xl font-bold tracking-tight ${useLightText ? "text-white" : "text-[var(--site-text)]"}`}
           style={{ fontFamily: "var(--font-syne)" }}
         >
           <TemplateNavBrand
@@ -52,7 +62,11 @@ export function PortfolioNav({
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <TemplateNavAnchor
-              className="text-sm font-medium text-white/60 transition-colors hover:text-white"
+              className={`text-sm font-medium transition-colors ${
+                useLightText
+                  ? "text-white/60 hover:text-white"
+                  : "text-[var(--site-text-muted)] hover:text-[var(--site-text)]"
+              }`}
               href={link.href}
               key={link.id}
               style={{ fontFamily: "var(--font-body)" }}
@@ -70,7 +84,7 @@ export function PortfolioNav({
         </div>
 
         <button
-          className="relative z-[1] flex items-center justify-center text-white md:hidden"
+          className={`relative z-[1] flex items-center justify-center md:hidden ${useLightText ? "text-white" : "text-[var(--site-text)]"}`}
           onClick={() => setMenuOpen((v) => !v)}
           type="button"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}

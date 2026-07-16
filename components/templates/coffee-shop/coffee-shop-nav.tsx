@@ -8,6 +8,7 @@ import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 
 function getScrollTargets(el: HTMLElement | null) {
   const targets: (Window | Element)[] = [window];
@@ -45,6 +46,7 @@ export function CoffeeShopNav({
   navLinks,
   ctaLabel,
   ctaHref,
+  heroNavTone,
   topOffset = 0,
   scrollRootRef,
 }: {
@@ -54,6 +56,7 @@ export function CoffeeShopNav({
   navLinks: NavLink[];
   ctaLabel: string;
   ctaHref: string;
+  heroNavTone: HeroNavTone;
   topOffset?: number;
   scrollRootRef?: RefObject<HTMLElement | null>;
 }) {
@@ -82,6 +85,7 @@ export function CoffeeShopNav({
   }, [scrollRootRef]);
 
   const navSolid = scrolled || menuOpen;
+  const useLightText = navSolid || heroNavTone === "light";
 
   return (
     <>
@@ -89,11 +93,15 @@ export function CoffeeShopNav({
         className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-4 transition-colors duration-300 md:px-10 lg:px-16"
         style={{
           ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
-          backgroundColor: navSolid ? "var(--coffee-secondary)" : "transparent",
+          backgroundColor: navSolid
+            ? "var(--coffee-secondary)"
+            : heroNavTone === "dark"
+              ? "color-mix(in srgb, var(--site-surface) 88%, transparent)"
+              : "transparent",
         }}
       >
         <TemplateNavAnchor
-          className="text-xl font-semibold tracking-tight text-[var(--coffee-foreground)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] focus-visible:ring-offset-2"
+          className={`text-xl font-semibold tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] focus-visible:ring-offset-2 ${useLightText ? "text-[var(--coffee-foreground)]" : "text-[var(--site-text)]"}`}
           href="#hero"
           style={{ fontFamily: "var(--font-coffee-display)" }}
         >
@@ -107,7 +115,7 @@ export function CoffeeShopNav({
         <div className="hidden items-center gap-7 md:flex">
           {navLinks.map((link) => (
             <TemplateNavAnchor
-              className="text-sm font-medium text-[var(--coffee-foreground)]/85 transition-colors hover:text-[var(--coffee-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] focus-visible:ring-offset-2"
+              className={`text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] focus-visible:ring-offset-2 ${useLightText ? "text-[var(--coffee-foreground)]/85 hover:text-[var(--coffee-accent)]" : "text-[var(--site-text-muted)] hover:text-[var(--site-text)]"}`}
               href={link.href}
               key={link.id}
               style={{ fontFamily: "var(--font-coffee-body)" }}
@@ -126,7 +134,7 @@ export function CoffeeShopNav({
         </div>
 
         <button
-          className="relative z-[1] flex h-11 w-11 items-center justify-center rounded-xl text-[var(--coffee-foreground)] transition-colors hover:bg-[var(--coffee-foreground)]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] focus-visible:ring-offset-2 md:hidden"
+          className={`relative z-[1] flex h-11 w-11 items-center justify-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] focus-visible:ring-offset-2 md:hidden ${useLightText ? "text-[var(--coffee-foreground)] hover:bg-[var(--coffee-foreground)]/10" : "text-[var(--site-text)] hover:bg-[var(--site-text)]/10"}`}
           onClick={() => setMenuOpen((v) => !v)}
           type="button"
           aria-expanded={menuOpen}

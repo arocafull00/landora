@@ -1,16 +1,16 @@
 "use client";
 
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import type { LandingContent } from "@/lib/dashboard-data";
+import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
+import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
-import { resolveVelarHeroImages } from "@/lib/velar-assets";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
+import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
+import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
 import { VelarAosInit } from "@/components/templates/velar/velar-aos-init";
 import { VelarNav } from "@/components/templates/velar/velar-nav";
-import { VelarHero } from "@/components/templates/velar/velar-hero";
-import { VelarHouseAnimation } from "@/components/templates/velar/velar-house-animation";
 import { VelarStatementSection } from "@/components/templates/velar/velar-statement-section";
 import { VelarGallerySection } from "@/components/templates/velar/velar-gallery-section";
 import { VelarSpacesSection } from "@/components/templates/velar/velar-spaces-section";
@@ -29,11 +29,15 @@ function isOverlappingTop(el: HTMLElement | null) {
 export function VelarTemplate({
   content,
   topOffset = 0,
+  slug,
+  bookingEnabled = false,
+  sectionSelections,
 }: {
   content: LandingContent;
   topOffset?: number;
   slug?: string;
   bookingEnabled?: boolean;
+  sectionSelections?: LandingSectionSelections;
 }) {
   const [navColor, setNavColor] = useState("var(--site-primary)");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,20 +49,32 @@ export function VelarTemplate({
   const workflowRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const scrollContainer = usePreviewScrollContainer();
-  const { backgroundImage, houseImage } = resolveVelarHeroImages(content.hero);
-  const heroContent: LandingContent = {
-    ...content,
-    hero: { ...content.hero, image: backgroundImage },
-  };
+  const heroVariantId = sectionSelections?.hero ?? "velar";
+  const heroNavTone = getHeroVariant(heroVariantId).navTone;
+  const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
+    bookingEnabled,
+    content,
+    slug: slug ?? "",
+    template: "velar",
+  });
 
   const updateNavColor = useCallback(() => {
+    if (isOverlappingTop(heroRef.current)) {
+      setNavColor(
+        heroNavTone === "light"
+          ? "var(--site-on-dark)"
+          : "var(--site-primary)",
+      );
+      return;
+    }
+
     const onDark =
       isOverlappingTop(darkRef.current) ||
       isOverlappingTop(galleryRef.current) ||
       isOverlappingTop(workflowRef.current) ||
       isOverlappingTop(footerRef.current);
     setNavColor(onDark ? "var(--site-on-dark)" : "var(--site-primary)");
-  }, []);
+  }, [heroNavTone]);
 
   useLayoutEffect(() => {
     updateNavColor();
@@ -107,15 +123,15 @@ export function VelarTemplate({
         topOffset={topOffset}
       />
 
-      <VelarHero content={heroContent} heroRef={heroRef} heroVisible />
+      <HeroRenderer
+        content={content}
+        heroRef={heroRef}
+        primaryCtaHref={primaryCtaHref}
+        secondaryCtaHref={secondaryCtaHref}
+        variantId={heroVariantId}
+      />
 
       <ActiveOffersRenderer content={content} />
-
-      <VelarHouseAnimation
-        darkRef={darkRef}
-        heroRef={heroRef}
-        houseImage={houseImage}
-      />
 
       {isSectionVisible(content, "story") ? (
         <VelarStatementSection content={content} sectionRef={darkRef} />

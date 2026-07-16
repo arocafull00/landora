@@ -8,6 +8,7 @@ import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 
 function getScrollTargets(el: HTMLElement | null) {
   const targets: (Window | Element)[] = [window];
@@ -45,6 +46,7 @@ export function RistoranteNav({
   navLinks,
   ctaLabel,
   ctaHref,
+  heroNavTone,
   topOffset = 0,
   scrollRootRef,
 }: {
@@ -54,6 +56,7 @@ export function RistoranteNav({
   navLinks: NavLink[];
   ctaLabel: string;
   ctaHref: string;
+  heroNavTone: HeroNavTone;
   topOffset?: number;
   scrollRootRef?: RefObject<HTMLElement | null>;
 }) {
@@ -82,6 +85,7 @@ export function RistoranteNav({
   }, [scrollRootRef]);
 
   const navSolid = scrolled || menuOpen;
+  const useLightText = navSolid || heroNavTone === "light";
 
   return (
     <>
@@ -89,12 +93,16 @@ export function RistoranteNav({
         className="fixed left-0 right-0 z-50 flex items-center justify-between px-6 py-5 transition-colors duration-300 md:px-10 lg:px-16"
         style={{
           ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
-          backgroundColor: navSolid ? "var(--ristorante-secondary)" : "transparent",
+          backgroundColor: navSolid
+            ? "var(--ristorante-secondary)"
+            : heroNavTone === "dark"
+              ? "color-mix(in srgb, var(--site-surface) 88%, transparent)"
+              : "transparent",
         }}
       >
         <TemplateNavAnchor
           className={`text-2xl font-normal tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 ${
-            navSolid ? "text-[var(--ristorante-foreground)]" : "text-[var(--ristorante-foreground)]"
+            useLightText ? "text-[var(--ristorante-foreground)]" : "text-[var(--site-text)]"
           }`}
           href="#hero"
           style={{ fontFamily: "var(--font-ristorante-display)" }}
@@ -110,9 +118,9 @@ export function RistoranteNav({
           {navLinks.map((link) => (
             <TemplateNavAnchor
               className={`text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 ${
-                navSolid
+                useLightText
                   ? "text-[var(--ristorante-foreground)]/80 hover:text-[var(--ristorante-accent)]"
-                  : "text-[var(--ristorante-foreground)]/90 hover:text-[var(--ristorante-accent)]"
+                  : "text-[var(--site-text-muted)] hover:text-[var(--site-text)]"
               }`}
               href={link.href}
               key={link.id}
@@ -132,9 +140,9 @@ export function RistoranteNav({
 
         <button
           className={`relative z-[1] flex h-11 w-11 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 md:hidden ${
-            navSolid
+            useLightText
               ? "text-[var(--ristorante-foreground)] hover:bg-[var(--ristorante-foreground)]/10"
-              : "text-[var(--ristorante-foreground)] hover:bg-[var(--ristorante-foreground)]/10"
+              : "text-[var(--site-text)] hover:bg-[var(--site-text)]/10"
           }`}
           onClick={() => setMenuOpen((v) => !v)}
           type="button"

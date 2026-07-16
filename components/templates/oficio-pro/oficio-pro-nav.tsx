@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { NavLink } from "@/lib/dashboard-data";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { useAnalytics } from "@/hooks/use-analytics";
+import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 
 export function OficioProNav({
   brand,
@@ -12,6 +13,7 @@ export function OficioProNav({
   brandLogoType,
   navLinks,
   ctaHref,
+  heroNavTone,
   topOffset = 0,
 }: {
   brand: string;
@@ -19,11 +21,13 @@ export function OficioProNav({
   brandLogoType: "text" | "image";
   navLinks: NavLink[];
   ctaHref: string;
+  heroNavTone: HeroNavTone;
   topOffset?: number;
 }) {
   const [open, setOpen] = useState(false);
   const [atHero, setAtHero] = useState(true);
   const { trackCtaClick } = useAnalytics();
+  const useLightText = atHero && !open && heroNavTone === "light";
 
   useEffect(() => {
     const update = () => {
@@ -48,9 +52,9 @@ export function OficioProNav({
   }, [open]);
 
   const headerClass =
-    atHero && !open
+    useLightText
       ? "border-white/15 bg-transparent text-white shadow-none"
-      : "border-white/50 bg-[var(--site-surface)]/95 text-[var(--site-text)] shadow-[0_12px_40px_rgba(15,23,42,0.14)]";
+      : "border-[var(--site-border)] bg-[var(--site-surface)]/95 text-[var(--site-text)] shadow-lg";
 
   return (
     <>
@@ -64,14 +68,14 @@ export function OficioProNav({
               brand={brand}
               brandLogoImage={brandLogoImage}
               brandLogoType={brandLogoType}
-              className={atHero && !open ? "text-white" : "text-[var(--site-text)]"}
+              className={useLightText ? "text-white" : "text-[var(--site-text)]"}
             />
           </a>
           <div className="hidden items-center gap-1.5 font-semibold lg:flex">
             {navLinks.map((link) => (
               <a
                 className={`rounded-xl px-3 py-2 text-[0.95rem] transition-all ${
-                  atHero
+                  useLightText
                     ? "text-white/90 hover:bg-[var(--site-surface)]/15 hover:text-white"
                     : "text-[var(--site-text-muted)] hover:bg-[var(--site-surface)] hover:text-[var(--site-primary)]"
                 }`}
@@ -94,7 +98,7 @@ export function OficioProNav({
             aria-expanded={open}
             aria-label={open ? "Cerrar menú de navegación" : "Abrir menú de navegación"}
             className={`inline-flex size-11 items-center justify-center rounded-xl border shadow-[0_6px_18px_rgba(31,78,121,0.12)] lg:hidden ${
-              atHero && !open
+              useLightText
                 ? "border-white/35 bg-[var(--site-surface)]/10 text-white"
                 : "border-[var(--site-primary)]/20 bg-[var(--site-surface)]/90 text-[var(--site-primary)]"
             }`}

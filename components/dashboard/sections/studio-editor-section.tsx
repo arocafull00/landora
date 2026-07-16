@@ -2,7 +2,6 @@
 
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
-import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
@@ -20,6 +19,7 @@ import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-cont
 import { EditorSectionTitle } from "@/components/dashboard/editor-section-title";
 import { EditorTextField } from "@/components/dashboard/editor-text-field";
 import { EditorTextArea } from "@/components/dashboard/editor-text-area";
+import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
 
 export function StudioEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -28,7 +28,6 @@ export function StudioEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    updateHero,
     updateSection,
     updateSectionItem,
     updateStat,
@@ -115,42 +114,7 @@ export function StudioEditorSection() {
           ) : null}
 
           {activeEditorTab === "Hero" ? (
-            <section className="space-y-5 py-unit-lg">
-              <EditorSectionTitle title="Portada" description="El bloque principal de la landing." />
-              <EditorTextField
-                label="Subtítulo superior"
-                onChange={(value) => updateHero(activeLanding.id, { eyebrow: value })}
-                value={activeLanding.content.hero.eyebrow}
-              />
-              <EditorTextField
-                label="Título"
-                onChange={(value) => updateHero(activeLanding.id, { title: value })}
-                value={activeLanding.content.hero.title}
-              />
-              <EditorTextArea
-                label="Subtítulo"
-                onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
-                value={activeLanding.content.hero.subtitle}
-              />
-              <EditorTextArea
-                label="Descripción"
-                onChange={(value) => updateHero(activeLanding.id, { description: value })}
-                rows={4}
-                value={activeLanding.content.hero.description}
-              />
-              <EditorTextField
-                label="Texto del botón"
-                onChange={(value) => updateHero(activeLanding.id, { ctaLabel: value })}
-                value={activeLanding.content.hero.ctaLabel ?? ""}
-              />
-              <ImageField
-                label="Imagen de portada"
-                onChange={(value) => updateHero(activeLanding.id, { image: value })}
-                presets={BACKGROUND_IMAGE_OPTIONS}
-                templateId={activeLanding.template}
-                value={activeLanding.content.hero.image}
-              />
-            </section>
+            <HeroEditorPanel landing={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Servicios" ? (

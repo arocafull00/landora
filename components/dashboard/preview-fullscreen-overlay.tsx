@@ -2,7 +2,11 @@
 
 import { useEffect } from "react";
 import { X } from "lucide-react";
-import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
+import type {
+  LandingContent,
+  LandingSectionSelections,
+  TemplateId,
+} from "@/lib/dashboard-data";
 import { IframeLandingPreview } from "@/components/dashboard/iframe-landing-preview";
 import {
   PreviewToolbar,
@@ -16,6 +20,7 @@ export function PreviewFullscreenOverlay({
   onClose,
   onDeviceChange,
   scrollTarget,
+  sectionSelections,
   template = "velar",
 }: {
   content: LandingContent;
@@ -24,6 +29,7 @@ export function PreviewFullscreenOverlay({
   onClose: () => void;
   onDeviceChange: (device: PreviewDevice) => void;
   scrollTarget?: string;
+  sectionSelections: LandingSectionSelections;
   template?: TemplateId;
 }) {
   useEffect(() => {
@@ -63,6 +69,7 @@ export function PreviewFullscreenOverlay({
         landingId={landingId}
         onDeviceChange={onDeviceChange}
         scrollTarget={scrollTarget}
+        sectionSelections={sectionSelections}
         showToolbar={false}
         template={template}
       />

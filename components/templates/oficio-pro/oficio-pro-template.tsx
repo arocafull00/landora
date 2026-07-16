@@ -1,30 +1,40 @@
 "use client";
 
 import { useRef } from "react";
-import type { LandingContent } from "@/lib/dashboard-data";
+import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
+import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
-import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { OficioProContactSection } from "@/components/templates/oficio-pro/oficio-pro-contact-section";
 import { OficioProExperienceSection } from "@/components/templates/oficio-pro/oficio-pro-experience-section";
-import { OficioProHero } from "@/components/templates/oficio-pro/oficio-pro-hero";
 import { OficioProNav } from "@/components/templates/oficio-pro/oficio-pro-nav";
 import { OficioProServicesSection } from "@/components/templates/oficio-pro/oficio-pro-services-section";
 import { OficioProTestimonialsSection } from "@/components/templates/oficio-pro/oficio-pro-testimonials-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
+import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
+import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
 
 export function OficioProTemplate({
   content,
   topOffset = 0,
   slug,
   bookingEnabled = false,
+  sectionSelections,
 }: {
   content: LandingContent;
   topOffset?: number;
   slug?: string;
   bookingEnabled?: boolean;
+  sectionSelections?: LandingSectionSelections;
 }) {
   const heroRef = useRef<HTMLElement>(null);
-  const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
+  const heroVariantId = sectionSelections?.hero ?? "oficio-pro";
+  const heroNavTone = getHeroVariant(heroVariantId).navTone;
+  const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
+    bookingEnabled,
+    content,
+    slug: slug ?? "",
+    template: "oficio-pro",
+  });
 
   return (
     <div
@@ -41,10 +51,17 @@ export function OficioProTemplate({
         brandLogoImage={content.brandLogoImage ?? ""}
         brandLogoType={content.brandLogoType ?? "text"}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "oficio-pro")}
-        ctaHref={ctaHref}
+        ctaHref={primaryCtaHref}
+        heroNavTone={heroNavTone}
         topOffset={topOffset}
       />
-      <OficioProHero content={content} heroRef={heroRef} ctaHref={ctaHref} />
+      <HeroRenderer
+        content={content}
+        heroRef={heroRef}
+        primaryCtaHref={primaryCtaHref}
+        secondaryCtaHref={secondaryCtaHref}
+        variantId={heroVariantId}
+      />
       <ActiveOffersRenderer content={content} />
       {isSectionVisible(content, "servicios") ? (
         <OficioProServicesSection

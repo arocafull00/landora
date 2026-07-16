@@ -61,10 +61,12 @@ export function FloristeriaHero({
   content,
   heroRef,
   ctaHref,
+  secondaryCtaHref = "#galeria",
 }: {
   content: LandingContent;
   heroRef: React.RefObject<HTMLElement | null>;
   ctaHref: string;
+  secondaryCtaHref?: string;
 }) {
   const reduce = useReducedMotion();
   const { trackCtaClick } = useAnalytics();
@@ -121,6 +123,15 @@ export function FloristeriaHero({
             </m.p>
           ) : null}
 
+          {content.hero.description ? (
+            <m.p
+              variants={bloomSubtitleVariants}
+              className="mx-auto mt-2 max-w-xl text-pretty text-sm leading-relaxed text-[var(--site-text)]/55 md:text-base"
+            >
+              {content.hero.description}
+            </m.p>
+          ) : null}
+
           <m.div
             variants={bloomButtonsVariants}
             className="mx-auto mt-6 flex w-full max-w-xs flex-col items-center gap-3 sm:mt-7 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4"
@@ -129,7 +140,7 @@ export function FloristeriaHero({
               {content.hero.ctaLabel || "Hacer pedido"}
             </FloristeriaButton>
             <FloristeriaButton
-              href="#galeria"
+              href={secondaryCtaHref}
               variant="secondary"
               size="lg"
               icon={null}

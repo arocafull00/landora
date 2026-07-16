@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getLandingPageBySlug, getLandingPageMetaBySlug } from "@/data/landing-pages";
 import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
 import { toLandingContent } from "@/lib/landing-mapper";
+import { resolveSectionSelections } from "@/lib/section-selections";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
@@ -55,6 +56,10 @@ export default async function PublicLandingPage({
   if (!landing) notFound();
 
   const content = toLandingContent(landing);
+  const sectionSelections = resolveSectionSelections(
+    landing.template,
+    landing.sectionSelections ?? [],
+  );
   const Component = TEMPLATE_COMPONENTS[landing.template] ?? VelarTemplate;
   const tenant = await resolveTenantBySlug(slug);
 
@@ -66,6 +71,7 @@ export default async function PublicLandingPage({
           content={content}
           slug={landing.slug}
           bookingEnabled={tenant?.enabled ?? false}
+          sectionSelections={sectionSelections}
         />
         {content.contact.whatsappEnabled ? (
           <WhatsappFloatButton phone={content.contact.phone} />

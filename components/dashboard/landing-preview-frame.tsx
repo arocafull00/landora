@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
+import type {
+  LandingContent,
+  LandingSectionSelections,
+  TemplateId,
+} from "@/lib/dashboard-data";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
@@ -36,23 +40,28 @@ const TEMPLATE_COMPONENTS = {
 
 export function LandingPreviewFrame({
   initialContent,
+  initialSectionSelections,
   template,
   slug,
   bookingEnabled = false,
 }: {
   initialContent: LandingContent;
+  initialSectionSelections: LandingSectionSelections;
   template: TemplateId;
   slug?: string;
   bookingEnabled?: boolean;
 }) {
   const [livePreview, setLivePreview] = useState<{
     content: LandingContent;
+    sectionSelections: LandingSectionSelections;
     template: TemplateId;
   } | null>(null);
   const highlightedEditorIdRef = useRef<string | null>(null);
   const scrollContainer = usePreviewScrollContainer();
   const content = livePreview?.content ?? initialContent;
   const activeTemplate = livePreview?.template ?? template;
+  const sectionSelections =
+    livePreview?.sectionSelections ?? initialSectionSelections;
 
   useLayoutEffect(() => {
     const editorId = highlightedEditorIdRef.current;
@@ -101,6 +110,7 @@ export function LandingPreviewFrame({
       if (!isPreviewContentMessage(event.data)) return;
       setLivePreview({
         content: event.data.content,
+        sectionSelections: event.data.sectionSelections,
         template: event.data.template,
       });
       requestAnimationFrame(() => {
@@ -136,7 +146,12 @@ export function LandingPreviewFrame({
 
   return (
     <SiteThemeScope appearance={content.appearance} template={activeTemplate}>
-      <Component content={content} slug={slug} bookingEnabled={bookingEnabled} />
+      <Component
+        bookingEnabled={bookingEnabled}
+        content={content}
+        sectionSelections={sectionSelections}
+        slug={slug}
+      />
       {content.contact.whatsappEnabled ? (
         <WhatsappFloatButton phone={content.contact.phone} />
       ) : null}

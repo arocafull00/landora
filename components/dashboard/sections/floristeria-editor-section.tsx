@@ -12,13 +12,9 @@ import { OffersEditorPanel } from "@/components/dashboard/offers-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import type { HeroContent } from "@/lib/dashboard-data";
-import {
-  FLORISTERIA_HERO_FAN_LABELS,
-  resolveFloristeriaFanImages,
-} from "@/lib/floristeria-assets";
 import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
+import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
 
 export function FloristeriaEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -27,7 +23,6 @@ export function FloristeriaEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    updateHero,
     updateSection,
     updateSectionItem,
     updateStat,
@@ -42,16 +37,6 @@ export function FloristeriaEditorSection() {
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
   const gallery = activeLanding.content.gallery ?? [];
   const faq = activeLanding.content.faq ?? [];
-  const fanImages = resolveFloristeriaFanImages(activeLanding.content.hero);
-
-  const updateFanImage = (index: number, value: string) => {
-    const nextFanImages = [...fanImages];
-    nextFanImages[index] = value;
-    const patch: Partial<HeroContent> = { fanImages: nextFanImages };
-    if (index === 2) patch.image = value;
-    updateHero(activeLanding.id, patch);
-  };
-
   return (
     <EditorLayout
       form={
@@ -73,45 +58,7 @@ export function FloristeriaEditorSection() {
           ) : null}
 
           {activeEditorTab === "Hero" ? (
-            <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Hero" description="Edita el bloque principal de la floristería." />
-              <TextField
-                label="Eyebrow"
-                onChange={(value) => updateHero(activeLanding.id, { eyebrow: value })}
-                value={activeLanding.content.hero.eyebrow}
-              />
-              <TextField
-                label="Title"
-                onChange={(value) => updateHero(activeLanding.id, { title: value })}
-                value={activeLanding.content.hero.title}
-              />
-              <TextArea
-                label="Subtitle"
-                onChange={(value) => updateHero(activeLanding.id, { subtitle: value })}
-                value={activeLanding.content.hero.subtitle}
-              />
-              <TextField
-                label="Texto del botón"
-                onChange={(value) => updateHero(activeLanding.id, { ctaLabel: value })}
-                value={activeLanding.content.hero.ctaLabel ?? ""}
-              />
-              <div>
-                <p className="mb-3 font-label text-label-md text-on-surface-variant">
-                  Imágenes del abanico
-                </p>
-                <div className="space-y-6">
-                  {FLORISTERIA_HERO_FAN_LABELS.map((label, index) => (
-                    <ImageField
-                      key={label}
-                      label={label}
-                      onChange={(value) => updateFanImage(index, value)}
-                      templateId={activeLanding.template}
-                      value={fanImages[index]}
-                    />
-                  ))}
-                </div>
-              </div>
-            </section>
+            <HeroEditorPanel landing={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Historia" ? (

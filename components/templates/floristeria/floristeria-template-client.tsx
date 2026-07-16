@@ -1,13 +1,14 @@
 "use client";
 
 import { useRef } from "react";
-import type { LandingContent } from "@/lib/dashboard-data";
+import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
+import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
-import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
+import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
+import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
 import { FloristeriaAosInit } from "@/components/templates/floristeria/floristeria-aos-init";
 import { FloristeriaNav } from "@/components/templates/floristeria/floristeria-nav";
-import { FloristeriaHero } from "@/components/templates/floristeria/floristeria-hero";
 import { FloristeriaAbout } from "@/components/templates/floristeria/floristeria-about";
 import { FloristeriaCtaSection } from "@/components/templates/floristeria/floristeria-cta-section";
 import { GallerySection } from "@/components/templates/shared/gallery-section";
@@ -21,15 +22,24 @@ export function FloristeriaTemplateClient({
   topOffset = 0,
   slug,
   bookingEnabled = false,
+  sectionSelections,
 }: {
   content: LandingContent;
   topOffset?: number;
   slug?: string;
   bookingEnabled?: boolean;
+  sectionSelections?: LandingSectionSelections;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-  const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
+  const heroVariantId = sectionSelections?.hero ?? "floristeria";
+  const heroNavTone = getHeroVariant(heroVariantId).navTone;
+  const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
+    bookingEnabled,
+    content,
+    slug: slug ?? "",
+    template: "floristeria",
+  });
 
   return (
     <TemplateLazyMotion>
@@ -46,11 +56,18 @@ export function FloristeriaTemplateClient({
           brandLogoImage={content.brandLogoImage ?? ""}
           navLinks={getVisibleNav(content.nav, content.hiddenSections, "floristeria")}
           ctaLabel={content.hero.ctaLabel ?? ""}
-          ctaHref={ctaHref}
+          ctaHref={primaryCtaHref}
+          heroNavTone={heroNavTone}
           topOffset={topOffset}
         />
 
-        <FloristeriaHero content={content} heroRef={heroRef} ctaHref={ctaHref} />
+        <HeroRenderer
+          content={content}
+          heroRef={heroRef}
+          primaryCtaHref={primaryCtaHref}
+          secondaryCtaHref={secondaryCtaHref}
+          variantId={heroVariantId}
+        />
         <ActiveOffersRenderer content={content} />
         {isSectionVisible(content, "galeria") ? (
           <GallerySection content={content} templateId="floristeria" />

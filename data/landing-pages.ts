@@ -3,6 +3,7 @@ import { and, asc, eq, or } from "drizzle-orm";
 import { db } from "@/db";
 import {
   landingPages,
+  landingSectionSelections,
   landingBenefits,
   landingFaq,
   landingGallery,
@@ -37,9 +38,12 @@ import type {
   LandingTeamMember,
   LandingServiceMenuItem,
   LandingWorkHistoryItem,
+  LandingSectionSelection,
 } from "@/db/schema";
+import { getDefaultSectionSelections } from "@/lib/section-selections";
 
 export type LandingWithSections = LandingPage & {
+  sectionSelections: LandingSectionSelection[];
   seo: LandingSeo | null;
   branding: LandingBranding | null;
   hero: LandingHero | null;
@@ -87,6 +91,7 @@ function buildMetaWith() {
 
 function buildWith() {
   return {
+    sectionSelections: true as const,
     seo: true as const,
     branding: true as const,
     hero: true as const,
@@ -213,11 +218,21 @@ export async function insertLandingPage(data: {
   template: LandingPage["template"];
 }) {
   try {
-    const [landing] = await db
-      .insert(landingPages)
-      .values(data)
-      .returning({ id: landingPages.id });
-    return landing;
+    return await db.transaction(async (tx) => {
+      const [landing] = await tx
+        .insert(landingPages)
+        .values(data)
+        .returning({ id: landingPages.id });
+      const selections = getDefaultSectionSelections(data.template);
+
+      await tx.insert(landingSectionSelections).values({
+        landingId: landing.id,
+        sectionKey: "hero",
+        variantId: selections.hero,
+      });
+
+      return landing;
+    });
   } catch {
     throw new Error("Failed to insert landing page");
   }

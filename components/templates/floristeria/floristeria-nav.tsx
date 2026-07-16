@@ -9,6 +9,7 @@ import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 import { FloristeriaNavPillLink } from "@/components/templates/floristeria/floristeria-nav-pill-link";
+import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 
 export function FloristeriaNav({
   brand,
@@ -17,6 +18,7 @@ export function FloristeriaNav({
   navLinks,
   ctaLabel,
   ctaHref,
+  heroNavTone,
   topOffset = 0,
 }: {
   brand: string;
@@ -25,6 +27,7 @@ export function FloristeriaNav({
   navLinks: NavLink[];
   ctaLabel: string;
   ctaHref: string;
+  heroNavTone: HeroNavTone;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,13 +36,19 @@ export function FloristeriaNav({
   return (
     <>
       <nav
-        className="fixed left-0 right-0 z-50 backdrop-blur-md"
+        className={`fixed left-0 right-0 z-50 backdrop-blur-md ${
+          heroNavTone === "dark"
+            ? "bg-[var(--site-surface)]/80"
+            : "bg-[var(--site-on-dark)]/10"
+        }`}
         style={topOffset > 0 ? { top: topOffset } : { top: 0 }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:px-8 md:py-5">
           <button
             type="button"
-            className="shrink-0 text-left text-xl font-bold tracking-tight text-[var(--site-primary)] md:justify-self-start"
+            className={`shrink-0 text-left text-xl font-bold tracking-tight md:justify-self-start ${
+              heroNavTone === "light" ? "text-white" : "text-[var(--site-primary)]"
+            }`}
             style={{ fontFamily: "var(--font-cormorant)" }}
           >
             <TemplateNavBrand
@@ -73,7 +82,9 @@ export function FloristeriaNav({
           </div>
 
           <button
-            className="relative z-[1] flex items-center justify-center text-[var(--site-text)] md:hidden"
+            className={`relative z-[1] flex items-center justify-center md:hidden ${
+              heroNavTone === "light" ? "text-white" : "text-[var(--site-text)]"
+            }`}
             onClick={() => setMenuOpen((v) => !v)}
             type="button"
             aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}

@@ -9,6 +9,7 @@ import {
   ContactContent,
   ContentGroup,
   HeroContent,
+  HeroVariantId,
   initialAssets,
   initialPosts,
   initialPresentations,
@@ -28,6 +29,7 @@ import {
   WorkflowStep,
 } from "@/lib/dashboard-data";
 import { saveLandingAppearanceAction } from "@/app/actions/landing-appearance";
+import { updateLandingSectionSelection } from "@/app/actions/landing-section-selections";
 import { getDefaultContent } from "@/lib/default-content";
 import { getVisibleEditorTabs } from "@/lib/template-registry";
 import {
@@ -102,6 +104,7 @@ type DashboardState = {
   initFromLanding: (landing: Landing) => void;
   updateLandingMeta: (id: string, patch: Partial<Landing>) => void;
   updateHero: (id: string, patch: Partial<HeroContent>) => void;
+  updateHeroVariant: (id: string, variantId: HeroVariantId) => void;
   updateStory: (id: string, patch: Partial<StoryContent>) => void;
   updateStat: (landingId: string, statId: string, patch: Partial<StatContent>) => void;
   updateSpace: (landingId: string, spaceId: string, patch: Partial<SpaceContent>) => void;
@@ -232,6 +235,31 @@ async function persistLandingAppearance(id: string, appearance: LandingAppearanc
   }
 }
 
+async function persistLandingSectionSelections(landing: Landing) {
+  const result = await updateLandingSectionSelection({
+    landingId: landing.id,
+    sectionKey: "hero",
+    variantId: landing.sectionSelections.hero,
+  });
+
+  if ("error" in result) {
+    throw new Error(result.error);
+  }
+}
+
+function migrateHeroContent(hero: HeroContent): HeroContent {
+  const image = hero.image;
+  const fanImages = Array.from({ length: 5 }, (_, index) => {
+    return hero.fanImages?.[index] || image;
+  });
+
+  return {
+    ...hero,
+    houseImage: hero.houseImage || image,
+    fanImages,
+  };
+}
+
 export const useDashboardStore = create<DashboardState>()((set, get) => ({
   activeWorkspaceTab: "Structure",
   activeContentGroup: "Pages",
@@ -308,6 +336,25 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
           ? markEdited({
               ...landing,
               content: { ...landing.content, hero: { ...landing.content.hero, ...patch } },
+            })
+          : landing,
+      ),
+    })),
+
+  updateHeroVariant: (id, variantId) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === id
+          ? markEdited({
+              ...landing,
+              sectionSelections: {
+                ...landing.sectionSelections,
+                hero: variantId,
+              },
+              content: {
+                ...landing.content,
+                hero: migrateHeroContent(landing.content.hero),
+              },
             })
           : landing,
       ),
@@ -723,6 +770,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
       await Promise.all([
         persistAllSections(id, landing.content),
         persistLandingAppearance(id, landing.content.appearance),
+        persistLandingSectionSelections(landing),
       ]);
       set((state) => ({
         saveStatus: "saved",
@@ -748,6 +796,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
         persistLandingMeta(id, landing),
         persistAllSections(id, landing.content),
         persistLandingAppearance(id, landing.content.appearance),
+        persistLandingSectionSelections(landing),
       ]);
       await patchSection(`/api/landings/${id}`, { published: true });
       set((state) => ({

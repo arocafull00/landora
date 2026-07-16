@@ -1,15 +1,16 @@
 "use client";
 
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
-import type { LandingContent } from "@/lib/dashboard-data";
+import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
+import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
-import { getBookingCtaHref } from "@/lib/booking/cta-href";
 import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
+import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
+import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
 import { StudioAosInit } from "@/components/templates/studio/studio-aos-init";
 import { StudioNav } from "@/components/templates/studio/studio-nav";
-import { StudioHero } from "@/components/templates/studio/studio-hero";
 import { StudioAbout } from "@/components/templates/studio/studio-about";
 import { StudioServicesSection } from "@/components/templates/studio/studio-services-section";
 import { StudioTeamSection } from "@/components/templates/studio/studio-team-section";
@@ -30,11 +31,13 @@ export function StudioTemplate({
   topOffset = 0,
   slug,
   bookingEnabled = false,
+  sectionSelections,
 }: {
   content: LandingContent;
   topOffset?: number;
   slug?: string;
   bookingEnabled?: boolean;
+  sectionSelections?: LandingSectionSelections;
 }) {
   const [overHero, setOverHero] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -72,7 +75,14 @@ export function StudioTemplate({
     };
   }, [scrollContainer, updateNavState]);
 
-  const ctaHref = getBookingCtaHref(bookingEnabled, slug ?? "", "#contacto");
+  const heroVariantId = sectionSelections?.hero ?? "studio";
+  const heroNavTone = getHeroVariant(heroVariantId).navTone;
+  const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
+    bookingEnabled,
+    content,
+    slug: slug ?? "",
+    template: "studio",
+  });
 
   return (
     <TemplateLazyMotion>
@@ -89,12 +99,19 @@ export function StudioTemplate({
         brandLogoImage={content.brandLogoImage ?? ""}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "studio")}
         ctaLabel={content.hero.ctaLabel ?? ""}
-        ctaHref={ctaHref}
+        ctaHref={primaryCtaHref}
+        heroNavTone={heroNavTone}
         overHero={overHero}
         topOffset={topOffset}
       />
 
-      <StudioHero content={content} heroRef={heroRef} ctaHref={ctaHref} />
+      <HeroRenderer
+        content={content}
+        heroRef={heroRef}
+        primaryCtaHref={primaryCtaHref}
+        secondaryCtaHref={secondaryCtaHref}
+        variantId={heroVariantId}
+      />
 
       <ActiveOffersRenderer content={content} />
 

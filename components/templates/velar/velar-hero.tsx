@@ -5,20 +5,26 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
 import { useEditorHighlight } from "@/lib/use-editor-highlight";
 import { cn } from "@/lib/utils";
+import { ArrowRight } from "lucide-react";
+import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import { useAnalytics } from "@/hooks/use-analytics";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function VelarHero({
   content,
+  ctaHref,
   heroRef,
   heroVisible,
 }: {
   content: LandingContent;
+  ctaHref?: string;
   heroRef: React.RefObject<HTMLElement | null>;
   heroVisible: boolean;
 }) {
   const reduce = useReducedMotion();
   const isHighlighted = useEditorHighlight("hero");
+  const { trackCtaClick } = useAnalytics();
 
   if (!heroVisible) {
     return (
@@ -122,6 +128,36 @@ export function VelarHero({
         >
           {content.hero.subtitle}
         </m.p>
+
+        {content.hero.description ? (
+          <m.p
+            data-editor-id="hero:description"
+            className="mt-4 max-w-xl px-6 text-sm font-medium leading-relaxed text-[var(--site-text)]/75 md:px-10 lg:px-16 lg:text-base"
+            initial={reduce ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 0.75, y: 0 }}
+            transition={{ duration: 0.6, delay: 1, ease: easeOut }}
+          >
+            {content.hero.description}
+          </m.p>
+        ) : null}
+
+        {ctaHref && content.hero.ctaLabel ? (
+          <m.div
+            className="mt-6 px-6 md:px-10 lg:px-16"
+            initial={reduce ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.08, ease: easeOut }}
+          >
+            <TemplateNavAnchor
+              className="inline-flex items-center gap-2 bg-[var(--site-primary)] px-6 py-3 text-sm font-bold uppercase tracking-wide text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)]"
+              href={ctaHref}
+              onClick={() => trackCtaClick()}
+            >
+              {content.hero.ctaLabel}
+              <ArrowRight className="size-4" />
+            </TemplateNavAnchor>
+          </m.div>
+        ) : null}
       </div>
     </section>
   );

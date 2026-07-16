@@ -11,10 +11,12 @@ export function OficioProHero({
   content,
   heroRef,
   ctaHref,
+  secondaryCtaHref = "#servicios",
 }: {
   content: LandingContent;
   heroRef: RefObject<HTMLElement | null>;
   ctaHref: string;
+  secondaryCtaHref?: string;
 }) {
   const { trackCtaClick } = useAnalytics();
 
@@ -52,7 +54,7 @@ export function OficioProHero({
               {content.hero.ctaLabel || "Déjanos ayudarte"}
               <ArrowRight className="size-5" />
             </OficioProButton>
-            <OficioProButton href="#servicios" variant="secondary">
+            <OficioProButton href={secondaryCtaHref} variant="secondary">
               Ver servicios
             </OficioProButton>
           </div>
@@ -61,7 +63,7 @@ export function OficioProHero({
       <a
         aria-label="Ir al contenido siguiente"
         className="absolute bottom-8 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-1 text-white/50 transition-colors hover:text-white/80"
-        href="#servicios"
+        href={secondaryCtaHref}
       >
         <span className="text-[10px] font-bold uppercase tracking-[0.35em]">
           Descubrir

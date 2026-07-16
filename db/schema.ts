@@ -108,6 +108,21 @@ export const landingPages = pgTable("landing_pages", {
   index("landing_pages_user_id_idx").on(table.userId),
 ]);
 
+export const landingSectionSelections = pgTable("landing_section_selections", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id")
+    .notNull()
+    .references(() => landingPages.id, { onDelete: "cascade" }),
+  sectionKey: text("section_key").notNull(),
+  variantId: text("variant_id").notNull(),
+}, (table) => [
+  unique("landing_section_selections_landing_section_uniq").on(
+    table.landingId,
+    table.sectionKey,
+  ),
+  index("landing_section_selections_landing_id_idx").on(table.landingId),
+]);
+
 export const landingSeo = pgTable("landing_seo", {
   id: uuid("id").primaryKey().defaultRandom(),
   landingId: uuid("landing_id")
@@ -620,6 +635,7 @@ export const landingPagesRelations = relations(landingPages, ({ one, many }) => 
   seo: one(landingSeo, { fields: [landingPages.id], references: [landingSeo.landingId] }),
   branding: one(landingBranding, { fields: [landingPages.id], references: [landingBranding.landingId] }),
   hero: one(landingHero, { fields: [landingPages.id], references: [landingHero.landingId] }),
+  sectionSelections: many(landingSectionSelections),
   story: one(landingStory, { fields: [landingPages.id], references: [landingStory.landingId] }),
   cta: one(landingCta, { fields: [landingPages.id], references: [landingCta.landingId] }),
   benefits: many(landingBenefits),
@@ -640,6 +656,16 @@ export const landingPagesRelations = relations(landingPages, ({ one, many }) => 
   domainChecks: many(domainChecks),
   assets: many(assets),
 }));
+
+export const landingSectionSelectionsRelations = relations(
+  landingSectionSelections,
+  ({ one }) => ({
+    landing: one(landingPages, {
+      fields: [landingSectionSelections.landingId],
+      references: [landingPages.id],
+    }),
+  }),
+);
 
 export const landingSeoRelations = relations(landingSeo, ({ one }) => ({
   landing: one(landingPages, { fields: [landingSeo.landingId], references: [landingPages.id] }),
@@ -725,6 +751,7 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type LandingPage = typeof landingPages.$inferSelect;
 export type NewLandingPage = typeof landingPages.$inferInsert;
+export type LandingSectionSelection = typeof landingSectionSelections.$inferSelect;
 export type LandingHero = typeof landingHero.$inferSelect;
 export type LandingBranding = typeof landingBranding.$inferSelect;
 export type LandingSeo = typeof landingSeo.$inferSelect;

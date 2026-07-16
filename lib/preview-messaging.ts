@@ -1,4 +1,8 @@
-import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
+import type {
+  LandingContent,
+  LandingSectionSelections,
+  TemplateId,
+} from "@/lib/dashboard-data";
 
 export const PREVIEW_CONTENT_UPDATE = "landora:preview-content-update";
 const PREVIEW_SCROLL_TO = "landora:preview-scroll-to";
@@ -8,6 +12,7 @@ const PREVIEW_HIGHLIGHT_ELEMENT = "landora:preview-highlight-element";
 export type PreviewContentMessage = {
   type: typeof PREVIEW_CONTENT_UPDATE;
   content: LandingContent;
+  sectionSelections: LandingSectionSelections;
   template: TemplateId;
 };
 
@@ -27,6 +32,7 @@ export function isPreviewContentMessage(data: unknown): data is PreviewContentMe
   const message = data as PreviewContentMessage;
   if (message.type !== PREVIEW_CONTENT_UPDATE) return false;
   if (!message.content || typeof message.content !== "object") return false;
+  if (!message.sectionSelections || typeof message.sectionSelections !== "object") return false;
   if (typeof message.template !== "string") return false;
   return true;
 }

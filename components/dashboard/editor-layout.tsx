@@ -53,6 +53,7 @@ export function EditorLayout({
           onDeviceChange={setDevice}
           onFullscreen={() => setIsFullscreen(true)}
           scrollTarget={resolvedScrollTarget}
+          sectionSelections={activeLanding.sectionSelections}
           template={activeLanding.template}
         />
       </div>
@@ -64,6 +65,7 @@ export function EditorLayout({
           onClose={() => setIsFullscreen(false)}
           onDeviceChange={setDevice}
           scrollTarget={resolvedScrollTarget}
+          sectionSelections={activeLanding.sectionSelections}
           template={activeLanding.template}
         />
       ) : null}

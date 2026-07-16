@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
+import type {
+  LandingContent,
+  LandingSectionSelections,
+  TemplateId,
+} from "@/lib/dashboard-data";
 import {
   PreviewToolbar,
   type PreviewDevice,
@@ -26,6 +30,7 @@ export function IframeLandingPreview({
   onDeviceChange,
   onFullscreen,
   scrollTarget,
+  sectionSelections,
   showToolbar = true,
   template = "velar",
 }: {
@@ -36,14 +41,19 @@ export function IframeLandingPreview({
   onDeviceChange: (device: PreviewDevice) => void;
   onFullscreen?: () => void;
   scrollTarget?: string;
+  sectionSelections: LandingSectionSelections;
   showToolbar?: boolean;
   template?: TemplateId;
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const sendContent = useCallback(() => {
-    postPreviewContent(iframeRef.current?.contentWindow, { content, template });
-  }, [content, template]);
+    postPreviewContent(iframeRef.current?.contentWindow, {
+      content,
+      sectionSelections,
+      template,
+    });
+  }, [content, sectionSelections, template]);
 
   useEffect(() => {
     sendContent();

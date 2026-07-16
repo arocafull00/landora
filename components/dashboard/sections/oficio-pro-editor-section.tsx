@@ -2,7 +2,6 @@
 
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { ImageField } from "@/components/dashboard/image-field";
-import { BACKGROUND_IMAGE_OPTIONS } from "@/lib/background-assets";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
@@ -16,6 +15,7 @@ import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { NAV_EDITOR_TAB } from "@/lib/template-registry";
 import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
+import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
 
 export function OficioProEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -24,7 +24,6 @@ export function OficioProEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    updateHero,
     updateSectionItem,
     updateStat,
     updateStory,
@@ -67,76 +66,7 @@ export function OficioProEditorSection() {
           ) : null}
 
           {activeEditorTab === "Hero" ? (
-            <section className="space-y-5 py-unit-lg">
-              <div>
-                <h3 className="text-body-lg font-semibold text-on-surface">Portada</h3>
-                <p className="mt-1 text-body-sm text-on-surface-variant">
-                  Bloque principal de la landing.
-                </p>
-              </div>
-              <label className="block">
-                <span className="mb-2 block font-label text-label-md text-on-surface-variant">
-                  Subtítulo superior
-                </span>
-                <input
-                  className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-                  onChange={(event) => updateHero(activeLanding.id, { eyebrow: event.target.value })}
-                  type="text"
-                  value={activeLanding.content.hero.eyebrow}
-                />
-              </label>
-              <label className="block">
-                <span className="mb-2 block font-label text-label-md text-on-surface-variant">
-                  Título
-                </span>
-                <input
-                  className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-                  onChange={(event) => updateHero(activeLanding.id, { title: event.target.value })}
-                  type="text"
-                  value={activeLanding.content.hero.title}
-                />
-              </label>
-              <label className="block">
-                <span className="mb-2 block font-label text-label-md text-on-surface-variant">
-                  Subtítulo
-                </span>
-                <textarea
-                  className="w-full resize-none rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-                  onChange={(event) => updateHero(activeLanding.id, { subtitle: event.target.value })}
-                  rows={3}
-                  value={activeLanding.content.hero.subtitle}
-                />
-              </label>
-              <label className="block">
-                <span className="mb-2 block font-label text-label-md text-on-surface-variant">
-                  Descripción
-                </span>
-                <textarea
-                  className="w-full resize-none rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-                  onChange={(event) => updateHero(activeLanding.id, { description: event.target.value })}
-                  rows={4}
-                  value={activeLanding.content.hero.description}
-                />
-              </label>
-              <label className="block">
-                <span className="mb-2 block font-label text-label-md text-on-surface-variant">
-                  Texto del botón
-                </span>
-                <input
-                  className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
-                  onChange={(event) => updateHero(activeLanding.id, { ctaLabel: event.target.value })}
-                  type="text"
-                  value={activeLanding.content.hero.ctaLabel ?? ""}
-                />
-              </label>
-              <ImageField
-                label="Imagen de portada"
-                onChange={(value) => updateHero(activeLanding.id, { image: value })}
-                presets={BACKGROUND_IMAGE_OPTIONS}
-                templateId={activeLanding.template}
-                value={activeLanding.content.hero.image}
-              />
-            </section>
+            <HeroEditorPanel landing={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Servicios" ? (

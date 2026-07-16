@@ -73,6 +73,14 @@ export function RistoranteHero({
                 {content.hero.subtitle}
               </p>
             ) : null}
+            {content.hero.description ? (
+              <p
+                className="text-pretty text-sm leading-relaxed text-[var(--ristorante-foreground)]/70"
+                style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
+              >
+                {content.hero.description}
+              </p>
+            ) : null}
             <RistoranteButton href={ctaHref} size="lg" variant="accent" onClick={() => trackCtaClick()}>
               {content.hero.ctaLabel || "Reservar mesa"}
             </RistoranteButton>
