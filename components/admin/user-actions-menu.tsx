@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Pencil } from "lucide-react";
+import { unstable_isUnrecognizedActionError } from "next/navigation";
 import { toast } from "react-toastify";
 import {
   deleteUser,
@@ -23,9 +24,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { AdminUserWithLanding } from "@/lib/admin-user-display";
 import { getLandingPublicUrl } from "@/lib/admin-user-display";
+import { logger } from "@/lib/logger";
+import { EditUserNameDialog } from "@/components/admin/edit-user-name-dialog";
 
 export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [showEditName, setShowEditName] = useState(false);
   const [isPending, startTransition] = useTransition();
   const landingUrl = getLandingPublicUrl(user.landing);
   const hasLanding = Boolean(user.landing);
@@ -57,7 +61,8 @@ export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
   };
 
   return (
-    <DropdownMenu
+    <>
+      <DropdownMenu
       onOpenChange={(open) => {
         if (!open) setConfirmDelete(false);
       }}
@@ -73,12 +78,30 @@ export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
           <span className="sr-only">Abrir acciones</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52">
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuItem onSelect={() => setShowEditName(true)}>
+          <Pencil aria-hidden className="size-4" />
+          Editar nombre
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           disabled={isPending}
           onClick={() =>
             startTransition(async () => {
-              await startImpersonation(user.id);
+              try {
+                await startImpersonation(user.id);
+              } catch (error) {
+                if (unstable_isUnrecognizedActionError(error)) {
+                  window.location.reload();
+                  return;
+                }
+
+                logger.captureException(error, {
+                  action: "start-impersonation",
+                  userId: user.id,
+                });
+                toast.error("No se pudo abrir el dashboard del cliente");
+              }
             })
           }
         >
@@ -168,6 +191,13 @@ export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
           {confirmDelete ? "Confirmar eliminación" : "Eliminar usuario"}
         </DropdownMenuItem>
       </DropdownMenuContent>
-    </DropdownMenu>
+      </DropdownMenu>
+      <EditUserNameDialog
+        name={user.name}
+        onOpenChange={setShowEditName}
+        open={showEditName}
+        userId={user.id}
+      />
+    </>
   );
 }

@@ -16,3 +16,10 @@ export const createUserSchema = z.object({
 });
 
 export type CreateUserValues = z.infer<typeof createUserSchema>;
+
+export const updateUserNameSchema = z.strictObject({
+  userId: z.uuid("ID de usuario inválido"),
+  name: z.string().trim().min(1, "El nombre es requerido").max(80),
+});
+
+export type UpdateUserNameValues = z.infer<typeof updateUserNameSchema>;

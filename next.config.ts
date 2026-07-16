@@ -14,7 +14,6 @@ const contentSecurityPolicy = `
   base-uri 'self';
   form-action 'self' https://*.clerk.accounts.dev https://*.clerk.com;
   frame-ancestors 'self';
-  upgrade-insecure-requests;
 `
   .replace(/\s{2,}/g, " ")
   .trim();

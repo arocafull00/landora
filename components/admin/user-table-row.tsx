@@ -32,21 +32,23 @@ export function UserTableRow({ user }: { user: AdminUserWithLanding }) {
     isPeriodEndingSoon(user.subscriptionCurrentPeriodEnd);
 
   return (
-    <tr className="border-b border-outline-variant/60 last:border-b-0">
+    <tr className="border-b border-outline-variant/60 transition-colors hover:bg-surface-container-low/55 last:border-b-0">
       <td className="px-4 py-3 align-top">
-        <div className="min-w-[180px]">
-          <p className="font-body text-body-sm font-medium text-on-surface">
-            {user.name}
-          </p>
-          <p className="font-body text-body-sm text-on-surface-variant">
-            {user.email ?? "Sin email"}
-          </p>
-          <p className="mt-1 font-mono text-body-sm text-on-surface-variant/70">
-            {user.clerkUserId.slice(0, 12)}…
-          </p>
-          <p className="mt-1 font-body text-body-sm text-on-surface-variant/70">
-            Cliente desde {createdAt}
-          </p>
+        <div className="flex min-w-[220px] items-start gap-3">
+          <span aria-hidden className="flex size-9 shrink-0 items-center justify-center rounded-md bg-primary-fixed font-headline text-body-sm font-semibold uppercase text-primary-fixed-variant">
+            {user.name.charAt(0)}
+          </span>
+          <div className="min-w-0">
+            <p className="truncate font-body text-body-sm font-semibold text-on-surface">
+              {user.name}
+            </p>
+            <p className="truncate font-body text-body-sm text-on-surface-variant">
+              {user.email ?? "Sin email"}
+            </p>
+            <p className="mt-1 font-body text-xs text-on-surface-variant/80">
+              Desde {createdAt}
+            </p>
+          </div>
         </div>
       </td>
       <td className="px-4 py-3 align-top">
@@ -77,34 +79,17 @@ export function UserTableRow({ user }: { user: AdminUserWithLanding }) {
       </td>
       <td className="px-4 py-3 align-top">
         {user.landing ? (
-          <StatusBadge status={user.landing.published ? "Published" : "Draft"} />
-        ) : (
-          <span className="font-body text-body-sm text-on-surface-variant">
-            Sin landing
-          </span>
-        )}
-      </td>
-      <td className="px-4 py-3 align-top">
-        {user.landing?.customDomain ? (
           <div>
-            <p className="font-body text-body-sm text-on-surface">
-              {user.landing.customDomain}
+            <StatusBadge status={user.landing.published ? "Published" : "Draft"} />
+            <p className="mt-2 max-w-[240px] truncate font-body text-body-sm text-on-surface">
+              {user.landing.customDomain ?? `/${user.landing.slug.replace(/^\//, "")}`}
             </p>
-            <p className="font-body text-body-sm text-on-surface-variant">
-              Personalizado
-            </p>
-          </div>
-        ) : user.landing ? (
-          <div>
-            <p className="font-body text-body-sm text-on-surface">
-              /{user.landing.slug.replace(/^\//, "")}
-            </p>
-            <p className="font-body text-body-sm text-on-surface-variant">
-              Subdominio
+            <p className="font-body text-xs text-on-surface-variant">
+              {user.landing.customDomain ? "Dominio personalizado" : "Subdominio"}
             </p>
           </div>
         ) : (
-          <span className="font-body text-body-sm text-on-surface-variant">—</span>
+          <span className="font-body text-body-sm text-on-surface-variant">Sin landing</span>
         )}
       </td>
       <td className="px-4 py-3 align-top">

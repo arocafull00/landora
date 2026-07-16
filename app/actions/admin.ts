@@ -17,7 +17,10 @@ import { checkAuth } from "@/lib/auth";
 import {
   createUserSchema,
   type CreateUserValues,
+  updateUserNameSchema,
+  type UpdateUserNameValues,
 } from "@/lib/schemas/admin";
+import { logger } from "@/lib/logger";
 
 type ActionResult = { success: true } | { error: string };
 
@@ -78,6 +81,58 @@ export async function createUser(input: CreateUserValues): Promise<ActionResult>
 
 
 const userIdSchema = z.uuid("ID de usuario inválido");
+
+export async function updateUserName(
+  input: UpdateUserNameValues,
+): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
+
+  const parsed = updateUserNameSchema.safeParse(input);
+  if (!parsed.success) {
+    return { error: "Nombre de usuario inválido" };
+  }
+
+  const { userId, name } = parsed.data;
+  const user = await getUserByInternalId(userId);
+
+  if (!user) {
+    return { error: "Usuario no encontrado" };
+  }
+
+  if (user.type === "admin") {
+    return { error: "No se puede modificar un administrador" };
+  }
+
+  try {
+    const clerk = await clerkClient();
+    await clerk.users.updateUser(user.clerkUserId, { firstName: name });
+  } catch (error) {
+    logger.captureException(error, { action: "update-user-name-clerk", userId });
+    return { error: "No se pudo actualizar el nombre del usuario" };
+  }
+
+  try {
+    await updateUserFields(userId, { name });
+  } catch (error) {
+    logger.captureException(error, { action: "update-user-name-database", userId });
+
+    try {
+      const clerk = await clerkClient();
+      await clerk.users.updateUser(user.clerkUserId, { firstName: user.name });
+    } catch (rollbackError) {
+      logger.captureException(rollbackError, {
+        action: "rollback-user-name-clerk",
+        userId,
+      });
+    }
+
+    return { error: "No se pudo guardar el nombre del usuario" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
+}
 
 
 

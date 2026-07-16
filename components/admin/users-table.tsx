@@ -6,8 +6,7 @@ const TABLE_HEADERS = [
   "Plan",
   "Estado",
   "Próximo pago",
-  "Landing",
-  "Dominio",
+  "Sitio web",
   "Acceso",
   "Acciones",
 ] as const;
@@ -15,9 +14,9 @@ const TABLE_HEADERS = [
 export function UsersTable({ users }: { users: AdminUserWithLanding[] }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-outline-variant bg-surface-container-lowest">
-      <table className="min-w-[960px] w-full border-collapse">
+      <table className="w-full min-w-[880px] border-collapse">
         <thead>
-          <tr className="border-b border-outline-variant bg-surface-container-low">
+          <tr className="border-b border-outline-variant bg-surface-container-low/70">
             {TABLE_HEADERS.map((header) => (
               <th
                 key={header}

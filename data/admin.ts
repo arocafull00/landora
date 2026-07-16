@@ -39,6 +39,7 @@ export async function updateUserFields(
   data: Partial<
     Pick<
       User,
+      | "name"
       | "email"
       | "subscriptionPlan"
       | "accessType"

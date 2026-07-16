@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Sparkles, UserPlus } from "lucide-react";
 import { ActionButton } from "@/components/ui/primitives";
 import { CreateUserForm } from "@/components/admin/create-user-form";
 import { ImportProspectForm } from "@/components/admin/import-prospect-form";
@@ -77,9 +78,11 @@ export function UsersSection({
         actions={
           <>
             <ActionButton variant="secondary" onClick={() => setShowImportForm(true)}>
+              <Sparkles aria-hidden className="size-4" />
               Creación automática
             </ActionButton>
             <ActionButton variant="primary" onClick={() => setShowForm(true)}>
+              <UserPlus aria-hidden className="size-4" />
               Crear usuario
             </ActionButton>
           </>
@@ -107,7 +110,7 @@ export function UsersSection({
           <CreateUserForm onSuccess={() => setShowForm(false)} />
         </DialogContent>
       </Dialog>
-      <div className="flex-1 space-y-4 p-unit-lg">
+      <div className="flex-1 space-y-5 p-4 lg:p-unit-lg">
         <UsersStatsBar stats={stats} />
         {users.length === 0 ? (
           <DashboardEmptyState
