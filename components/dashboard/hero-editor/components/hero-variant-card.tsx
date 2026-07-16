@@ -17,10 +17,10 @@ export function HeroVariantCard({
   return (
     <button
       aria-checked={selected}
-      className={`overflow-hidden rounded-xl border text-left transition-colors ${
+      className={`group overflow-hidden rounded-xl border bg-surface text-left transition-[color,background-color,border-color,box-shadow,transform] duration-200 ${
         selected
-          ? "border-primary bg-primary-container"
-          : "border-outline-variant bg-surface hover:border-primary"
+          ? "border-primary"
+          : "border-outline-variant hover:border-primary"
       }`}
       onClick={() => onSelect(definition.id)}
       role="radio"
@@ -36,12 +36,16 @@ export function HeroVariantCard({
         />
         {selected ? (
           <span className="absolute right-2 top-2 flex size-6 items-center justify-center rounded-full bg-primary text-on-primary">
-            <Check className="size-4" aria-hidden />
+            <Check className="size-3.5" aria-hidden />
           </span>
         ) : null}
       </span>
       <span className="block space-y-1 p-3">
-        <span className="block text-body-md font-semibold text-on-surface">
+        <span
+          className={`block text-body-md font-semibold ${
+            selected ? "text-primary" : "text-on-surface"
+          }`}
+        >
           {definition.label}
         </span>
         <span className="block text-body-sm text-on-surface-variant">

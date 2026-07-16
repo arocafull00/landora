@@ -59,7 +59,7 @@ export function OficioProNav({
   return (
     <>
       <header
-        className={`fixed left-0 right-0 z-50 h-[72px] border-b px-4 backdrop-blur-xl transition-all duration-300 sm:px-6 lg:px-10 ${headerClass}`}
+        className={`fixed left-0 right-0 z-50 h-[72px] border-b px-4 backdrop-blur-xl transition-[color,background-color,border-color,box-shadow] duration-300 sm:px-6 lg:px-10 ${headerClass}`}
         style={{ top: topOffset }}
       >
         <nav className="mx-auto flex h-full max-w-7xl items-center justify-between gap-8">
@@ -74,7 +74,7 @@ export function OficioProNav({
           <div className="hidden items-center gap-1.5 font-semibold lg:flex">
             {navLinks.map((link) => (
               <a
-                className={`rounded-xl px-3 py-2 text-[0.95rem] transition-all ${
+                className={`rounded-xl px-3 py-2 text-[0.95rem] transition-colors ${
                   useLightText
                     ? "text-white/90 hover:bg-[var(--site-surface)]/15 hover:text-white"
                     : "text-[var(--site-text-muted)] hover:bg-[var(--site-surface)] hover:text-[var(--site-primary)]"
@@ -86,7 +86,7 @@ export function OficioProNav({
               </a>
             ))}
             <a
-              className="ml-2 inline-flex items-center justify-center rounded-xl bg-[var(--site-primary)] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(31,78,121,0.28)] transition-all hover:-translate-y-0.5 hover:bg-[var(--site-accent-bright)] hover:text-[var(--site-text)]"
+              className="ml-2 inline-flex items-center justify-center rounded-xl bg-[var(--site-primary)] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(31,78,121,0.28)] transition-[color,background-color,box-shadow,transform] hover:-translate-y-0.5 hover:bg-[var(--site-accent-bright)] hover:text-[var(--site-text)]"
               href={ctaHref}
               onClick={() => trackCtaClick()}
             >
@@ -141,7 +141,7 @@ export function OficioProNav({
             </a>
           ))}
           <a
-            className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[var(--site-primary)] px-3 py-3 text-base font-semibold text-white shadow-[0_8px_20px_rgba(31,78,121,0.22)] transition-all hover:bg-[var(--site-accent-bright)] hover:text-[var(--site-text)]"
+            className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-[var(--site-primary)] px-3 py-3 text-base font-semibold text-white shadow-[0_8px_20px_rgba(31,78,121,0.22)] transition-[color,background-color,box-shadow] hover:bg-[var(--site-accent-bright)] hover:text-[var(--site-text)]"
             href={ctaHref}
             onClick={() => {
               trackCtaClick();

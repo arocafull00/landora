@@ -12,6 +12,7 @@ type BlogConfigEditorPanelProps = {
 
 export function BlogConfigEditorPanel({ activeLanding }: BlogConfigEditorPanelProps) {
   const blogConfig = useDashboardStore((state) => state.blogConfig);
+  const setBlogConfig = useDashboardStore((state) => state.setBlogConfig);
   const updateBlogConfig = useDashboardStore((state) => state.updateBlogConfig);
 
   const persistConfig = useDebouncedCallback(
@@ -37,9 +38,7 @@ export function BlogConfigEditorPanel({ activeLanding }: BlogConfigEditorPanelPr
           className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
           onChange={(event) => {
             const nextTitle = event.target.value;
-            useDashboardStore.setState({
-              blogConfig: { ...blogConfig, title: nextTitle },
-            });
+            setBlogConfig({ ...blogConfig, title: nextTitle });
             persistConfig({ title: nextTitle, description: blogConfig.description });
           }}
           placeholder={`Blog de ${activeLanding.content.brand || activeLanding.name}`}
@@ -55,9 +54,7 @@ export function BlogConfigEditorPanel({ activeLanding }: BlogConfigEditorPanelPr
           className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
           onChange={(event) => {
             const nextDescription = event.target.value;
-            useDashboardStore.setState({
-              blogConfig: { ...blogConfig, description: nextDescription },
-            });
+            setBlogConfig({ ...blogConfig, description: nextDescription });
             persistConfig({ title: blogConfig.title, description: nextDescription });
           }}
           rows={4}

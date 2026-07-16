@@ -1,8 +1,5 @@
 import { headers } from "next/headers";
 import Stripe from "stripe";
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { users } from "@/db/schema";
 import {
   getUserAddonByStripeSubscriptionId,
   setUserAddonStatus,
@@ -12,6 +9,9 @@ import {
   updateSubscriptionFromCheckout,
   updateSubscriptionStatus,
 } from "@/data/subscriptions";
+import { getUserByClerkUserId } from "@/data/users";
+import { requireServerEnv, serverEnv } from "@/lib/env/server";
+import { logger } from "@/lib/logger";
 import { getStripe } from "@/lib/stripe";
 
 type LandoraProduct = "main" | "booking";
@@ -31,7 +31,7 @@ function isBookingSubscription(
   if (productHint === "booking") return true;
   if (productHint === "main") return false;
 
-  const bookingPriceId = process.env.STRIPE_BOOKING_PRICE_ID;
+  const bookingPriceId = serverEnv.STRIPE_BOOKING_PRICE_ID;
   if (!bookingPriceId) return false;
 
   return subscription.items.data.some((item) => item.price.id === bookingPriceId);
@@ -59,9 +59,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     throw new Error("Checkout session missing required fields");
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.clerkUserId, clerkUserId),
-  });
+  const user = await getUserByClerkUserId(clerkUserId);
 
   if (!user) {
     throw new Error(`User not found for checkout: ${clerkUserId}`);
@@ -196,10 +194,10 @@ export async function POST(req: Request) {
     event = getStripe().webhooks.constructEvent(
       rawBody,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!,
+      requireServerEnv("STRIPE_WEBHOOK_SECRET"),
     );
   } catch (err) {
-    console.error("Webhook signature invalid:", err);
+    logger.captureException(err, { action: "stripe-webhook-signature" });
     return new Response("Invalid signature", { status: 400 });
   }
 
@@ -219,7 +217,7 @@ export async function POST(req: Request) {
         break;
     }
   } catch (err) {
-    console.error("Webhook handler failed:", err);
+    logger.captureException(err, { action: "stripe-webhook-handler" });
     return new Response("Webhook handler failed", { status: 500 });
   }
 

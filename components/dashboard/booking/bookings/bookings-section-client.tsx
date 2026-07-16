@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { Booking, BookingSettings, BookingStatus, Employee } from "@/db/schema";
+import type { Booking, BookingSettings, BookingStatus, Employee } from "@/lib/domain/dtos";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { BookingSettingsModal } from "@/components/dashboard/booking/booking-settings-modal";
 import { Button } from "@/components/ui/button";

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import type { BlockedPeriod, Employee } from "@/db/schema";
+import type { BlockedPeriod, Employee } from "@/lib/domain/dtos";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Button } from "@/components/ui/button";
 import { BlockedPeriodRow } from "@/components/dashboard/booking/blocked-periods/blocked-period-row";

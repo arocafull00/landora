@@ -1,35 +1,59 @@
-import { getRedis } from "@/lib/redis";
+import "server-only";
 
-const TURNSTILE_CACHE_TTL_SECONDS = 300;
+import { z } from "zod";
+import { TURNSTILE_ACTION } from "@/lib/booking/turnstile-config";
+import { serverEnv } from "@/lib/env/server";
+import { logger } from "@/lib/logger";
 
-export async function verifyTurnstileToken(token: string, ip: string | null) {
+const TURNSTILE_TEST_SECRET_KEY = "1x0000000000000000000000000000000AA";
+const MAX_TOKEN_LENGTH = 2048;
+
+const turnstileResponseSchema = z.object({
+  success: z.boolean().optional(),
+  hostname: z.string().optional(),
+  action: z.string().optional(),
+  "error-codes": z.array(z.string()).optional(),
+});
+
+export type TurnstileVerificationResult =
+  | { valid: true }
+  | {
+      valid: false;
+      reason:
+        | "invalid_token"
+        | "configuration_error"
+        | "verification_failed"
+        | "service_unavailable";
+    };
+
+function getTurnstileSecret() {
+  if (serverEnv.TURNSTILE_SECRET_KEY) {
+    return serverEnv.TURNSTILE_SECRET_KEY;
+  }
+
   if (process.env.NODE_ENV === "development") {
-    return true;
+    return TURNSTILE_TEST_SECRET_KEY;
   }
 
-  const secret = process.env.TURNSTILE_SECRET_KEY;
+  return null;
+}
+
+export async function verifyTurnstileToken(
+  token: string,
+  ip: string | null,
+): Promise<TurnstileVerificationResult> {
+  const normalizedToken = token.trim();
+  if (!normalizedToken || normalizedToken.length > MAX_TOKEN_LENGTH) {
+    return { valid: false, reason: "invalid_token" };
+  }
+
+  const secret = getTurnstileSecret();
   if (!secret) {
-    return true;
+    logger.error("Turnstile secret is not configured");
+    return { valid: false, reason: "configuration_error" };
   }
 
-  const redis = getRedis();
-  const cacheKey = `turnstile:verified:${token}`;
-
-  if (redis) {
-    try {
-      const cached = await redis.get(cacheKey);
-      if (cached === "1") {
-        return true;
-      }
-    } catch (err) {
-      console.error("[turnstile] redis get error:", err);
-    }
-  }
-
-  console.log("[turnstile] verifying token starting with:", token.slice(0, 20));
-
-  const body = new URLSearchParams({ secret, response: token });
-
+  const body = new URLSearchParams({ secret, response: normalizedToken });
   const isValidIp = ip && ip !== "unknown" && ip !== "::1" && ip !== "127.0.0.1";
   if (isValidIp) {
     body.set("remoteip", ip);
@@ -42,36 +66,42 @@ export async function verifyTurnstileToken(token: string, ip: string | null) {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body,
+        signal: AbortSignal.timeout(5000),
       },
     );
 
     if (!response.ok) {
-      return false;
+      logger.warn(logger.fmt`Turnstile verification returned HTTP ${response.status}`);
+      return { valid: false, reason: "service_unavailable" };
     }
 
-    const data = (await response.json()) as {
-      success?: boolean;
-      "error-codes"?: string[];
-    };
-
-    const errorCodes = data["error-codes"] ?? [];
-    const isDuplicate = errorCodes.includes("timeout-or-duplicate");
-
-    if (data.success || isDuplicate) {
-      if (redis) {
-        try {
-          await redis.set(cacheKey, "1", { ex: TURNSTILE_CACHE_TTL_SECONDS });
-        } catch (err) {
-          console.error("[turnstile] redis set error:", err);
-        }
-      }
-      return true;
+    const parsed = turnstileResponseSchema.safeParse(await response.json());
+    if (!parsed.success) {
+      logger.warn("Turnstile returned an invalid response");
+      return { valid: false, reason: "verification_failed" };
     }
 
-    console.error("[turnstile] verification failed:", errorCodes);
-    return false;
-  } catch (err) {
-    console.error("[turnstile] fetch error:", err);
-    return false;
+    const data = parsed.data;
+    if (!data.success) {
+      logger.warn(logger.fmt`Turnstile verification failed with ${data["error-codes"] ?? []}`);
+      return { valid: false, reason: "verification_failed" };
+    }
+
+    const expectedHostname = serverEnv.TURNSTILE_EXPECTED_HOSTNAME;
+    if (expectedHostname && data.hostname !== expectedHostname) {
+      logger.warn("Turnstile hostname validation failed");
+      return { valid: false, reason: "verification_failed" };
+    }
+
+    const expectedAction = serverEnv.TURNSTILE_EXPECTED_ACTION ?? TURNSTILE_ACTION;
+    if (data.action && data.action !== expectedAction) {
+      logger.warn("Turnstile action validation failed");
+      return { valid: false, reason: "verification_failed" };
+    }
+
+    return { valid: true };
+  } catch (error) {
+    logger.captureException(error, { action: "verify-turnstile" });
+    return { valid: false, reason: "service_unavailable" };
   }
 }

@@ -1,3 +1,5 @@
+import "server-only";
+
 type VercelDomainConfig = {
   configuredBy?: string | null;
   acceptedChallenges?: string[];

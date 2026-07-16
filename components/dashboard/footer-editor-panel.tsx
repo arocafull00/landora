@@ -14,7 +14,7 @@ type FooterEditorPanelProps = {
 };
 
 export function FooterEditorPanel({ activeLanding }: FooterEditorPanelProps) {
-  const { updateContact } = useDashboardStore();
+  const updateContact = useDashboardStore((state) => state.updateContact);
   const contact = activeLanding.content.contact;
   const templateId = activeLanding.template as TemplateId;
   const footerAnchor = getFooterAnchor(templateId);

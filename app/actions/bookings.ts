@@ -3,8 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { randomBytes } from "crypto";
-import { z } from "zod";
-import { db } from "@/db";
 import { getBookingSettings } from "@/data/booking-settings";
 import { getBookingServiceById } from "@/data/booking-services";
 import { getEmployeeById } from "@/data/employees";
@@ -19,38 +17,38 @@ import { addMinutes } from "@/lib/booking/overlap";
 import { formatDateInTimezone } from "@/lib/booking/timezone";
 import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
-import type { BookingStatus } from "@/db/schema";
+import { logger } from "@/lib/logger";
+import {
+  bookingIdSchema,
+  createBookingSchema,
+} from "@/lib/schemas/booking";
+import type { BookingStatus } from "@/lib/domain/dtos";
 
-const createBookingSchema = z.object({
-  slug: z.string().trim().min(1),
-  serviceId: z.uuid(),
-  employeeId: z.union([z.uuid(), z.literal("any")]),
-  startsAt: z.iso.datetime(),
-  customerName: z.string().trim().min(1).max(120),
-  customerPhone: z.string().trim().min(5).max(30),
-  customerEmail: z.email().optional().or(z.literal("")),
-  notes: z.string().max(500).optional(),
-  turnstileToken: z.string().min(1),
-  honeypot: z.string().optional(),
-});
+type ActionErrorStatus = "invalid_input" | "slot_taken" | "failed";
 
-type ActionResult = { publicToken: string } | { error: string };
+type ActionResult =
+  | { status: "created"; publicToken: string }
+  | { status: ActionErrorStatus; error: string };
+
+function actionError(status: ActionErrorStatus, error: string): ActionResult {
+  return { status, error };
+}
 
 function getClientIp(headerStore: Headers) {
   return headerStore.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 }
 
 export async function createBookingAction(
-  input: z.infer<typeof createBookingSchema>,
+  input: Parameters<typeof createBookingSchema.safeParse>[0],
 ): Promise<ActionResult> {
   try {
-    if (input.honeypot?.trim()) {
-      return { error: "Solicitud inválida" };
-    }
-
     const parsed = createBookingSchema.safeParse(input);
     if (!parsed.success) {
-      return { error: "Datos inválidos" };
+      return actionError("invalid_input", "Datos inválidos");
+    }
+
+    if (parsed.data.honeypot?.trim()) {
+      return actionError("invalid_input", "Solicitud inválida");
     }
 
     const headerStore = await headers();
@@ -58,22 +56,28 @@ export async function createBookingAction(
 
     const tenant = await resolveTenantBySlug(parsed.data.slug);
     if (!tenant || !tenant.enabled) {
-      return { error: "Reservas no disponibles" };
+      return actionError("failed", "Reservas no disponibles");
     }
 
     const rateLimit = await checkBookingRateLimit(ip, tenant.tenantId);
     if (!rateLimit.success) {
-      return { error: "Demasiadas solicitudes. Inténtalo más tarde." };
+      return actionError(
+        "failed",
+        "Demasiadas solicitudes. Inténtalo más tarde.",
+      );
     }
 
-    const turnstileOk = await verifyTurnstileToken(parsed.data.turnstileToken, ip);
-    if (!turnstileOk) {
-      return { error: "Verificación de seguridad fallida" };
+    const turnstileResult = await verifyTurnstileToken(
+      parsed.data.turnstileToken,
+      ip,
+    );
+    if (!turnstileResult.valid) {
+      return actionError("failed", "Verificación de seguridad fallida");
     }
 
     const service = await getBookingServiceById(tenant.tenantId, parsed.data.serviceId);
     if (!service || !service.isActive) {
-      return { error: "Servicio no disponible" };
+      return actionError("invalid_input", "Servicio no disponible");
     }
 
     const settings = await getBookingSettings(tenant.tenantId);
@@ -93,59 +97,49 @@ export async function createBookingAction(
     );
 
     if (!matchingSlot) {
-      return { error: "Horario no disponible" };
+      return actionError("slot_taken", "Horario no disponible");
     }
 
     const employeeId = matchingSlot.employeeId;
     const employee = await getEmployeeById(tenant.tenantId, employeeId);
     if (!employee) {
-      return { error: "Profesional no disponible" };
+      return actionError("invalid_input", "Profesional no disponible");
     }
 
     const endsAt = addMinutes(startsAt, service.durationMinutes);
     const publicToken = randomBytes(24).toString("base64url");
     const status: BookingStatus = settings.autoConfirmBookings ? "confirmed" : "pending";
 
-    const booking = await db.transaction(async (tx) => {
-      const recheckSlots = await getAvailableSlots({
-        tenantId: tenant.tenantId,
-        serviceId: parsed.data.serviceId,
-        employeeId: parsed.data.employeeId,
-        date,
-        timezone: tenant.timezone,
-      });
-
-      const stillAvailable = recheckSlots.some(
-        (slot) =>
-          slot.startsAt.getTime() === startsAt.getTime() &&
-          slot.employeeId === employeeId,
-      );
-
-      if (!stillAvailable) {
-        throw new Error("slot_taken");
-      }
-
-      return createBookingRecord(tx, {
-        tenantId: tenant.tenantId,
-        employeeId,
-        serviceId: service.id,
-        serviceNameSnapshot: service.name,
-        durationMinutesSnapshot: service.durationMinutes,
-        customerName: parsed.data.customerName,
-        customerPhone: parsed.data.customerPhone,
-        customerEmail: parsed.data.customerEmail?.trim() || null,
-        notes: parsed.data.notes?.trim() ?? "",
-        startsAt,
-        endsAt,
-        status,
-        publicToken,
-        wasAnyEmployee: parsed.data.employeeId === "any",
-      });
+    const createResult = await createBookingRecord({
+      tenantId: tenant.tenantId,
+      employeeId,
+      serviceId: service.id,
+      serviceNameSnapshot: service.name,
+      durationMinutesSnapshot: service.durationMinutes,
+      customerName: parsed.data.customerName,
+      customerPhone: parsed.data.customerPhone,
+      customerEmail: parsed.data.customerEmail?.trim() || null,
+      notes: parsed.data.notes?.trim() ?? "",
+      startsAt,
+      endsAt,
+      status,
+      publicToken,
+      wasAnyEmployee: parsed.data.employeeId === "any",
     });
+
+    if (createResult.status === "slot_taken") {
+      return actionError("slot_taken", "Ese horario acaba de ser reservado");
+    }
+
+    const booking = createResult.booking;
 
     try {
       await sendBookingNotification(booking, employee, tenant.timezone);
-    } catch {
+    } catch (error) {
+      logger.captureException(error, {
+        action: "send-booking-notification",
+        tenantId: tenant.tenantId,
+      });
     }
 
     try {
@@ -158,20 +152,17 @@ export async function createBookingAction(
           (startsAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000),
         ),
       });
-    } catch {
+    } catch (error) {
+      logger.captureException(error, {
+        action: "capture-booking-created-event",
+        tenantId: tenant.tenantId,
+      });
     }
 
-    return { publicToken: booking.publicToken };
+    return { status: "created", publicToken: booking.publicToken };
   } catch (error) {
-    if (error instanceof Error && error.message === "slot_taken") {
-      return { error: "Ese horario acaba de ser reservado" };
-    }
-    if (error instanceof Error) {
-      console.error("[booking] createBookingAction error:", error);
-      return { error: `No se pudo crear la reserva: ${error.message}` };
-    }
-    console.error("[booking] createBookingAction error:", error);
-    return { error: "No se pudo crear la reserva" };
+    logger.captureException(error, { action: "create-booking" });
+    return actionError("failed", "No se pudo crear la reserva");
   }
 }
 
@@ -224,25 +215,31 @@ async function changeBookingStatus(
 }
 
 export async function confirmBookingAction(id: string): Promise<StatusActionResult> {
+  const parsedId = bookingIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Reserva no válida" };
   const authResult = await requireAuth();
   if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
-  return changeBookingStatus(access.tenantId, id, "confirmed");
+  return changeBookingStatus(access.tenantId, parsedId.data, "confirmed");
 }
 
 export async function completeBookingAction(id: string): Promise<StatusActionResult> {
+  const parsedId = bookingIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Reserva no válida" };
   const authResult = await requireAuth();
   if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
-  return changeBookingStatus(access.tenantId, id, "completed");
+  return changeBookingStatus(access.tenantId, parsedId.data, "completed");
 }
 
 export async function cancelBookingAction(id: string): Promise<StatusActionResult> {
+  const parsedId = bookingIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Reserva no válida" };
   const authResult = await requireAuth();
   if ("error" in authResult) return { error: authResult.error };
   const access = await requireBookingModuleAccessForCurrentUser();
   if ("error" in access) return { error: access.error };
-  return changeBookingStatus(access.tenantId, id, "cancelled");
+  return changeBookingStatus(access.tenantId, parsedId.data, "cancelled");
 }

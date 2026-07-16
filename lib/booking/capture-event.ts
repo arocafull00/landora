@@ -1,3 +1,5 @@
+import "server-only";
+
 import { PostHog } from "posthog-node";
 
 let client: PostHog | null = null;

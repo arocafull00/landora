@@ -1,3 +1,5 @@
+import "server-only";
+
 import { cache } from "react";
 import { and, eq, gte, lte, or, isNull } from "drizzle-orm";
 import { db } from "@/db";
@@ -58,28 +60,6 @@ export async function createBlockedPeriod(
     return row;
   } catch {
     throw new Error("Failed to create blocked period");
-  }
-}
-
-export async function updateBlockedPeriod(
-  tenantId: string,
-  id: string,
-  data: {
-    employeeId?: string | null;
-    startsAt?: Date;
-    endsAt?: Date;
-    reason?: string;
-  },
-) {
-  try {
-    const [row] = await db
-      .update(blockedPeriods)
-      .set({ ...data, updatedAt: new Date() })
-      .where(and(eq(blockedPeriods.tenantId, tenantId), eq(blockedPeriods.id, id)))
-      .returning();
-    return row ?? null;
-  } catch {
-    throw new Error("Failed to update blocked period");
   }
 }
 

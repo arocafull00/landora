@@ -4,7 +4,6 @@ import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
-import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
@@ -43,7 +42,6 @@ export function PortfolioTemplate({
   const [overHero, setOverHero] = useState(true);
   const rootRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
-  const scrollContainer = usePreviewScrollContainer();
   const heroVariantId = sectionSelections?.hero ?? "portfolio";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
@@ -59,7 +57,7 @@ export function PortfolioTemplate({
 
   useLayoutEffect(() => {
     updateNavState();
-    const scrollTargets = getScrollTargets(rootRef.current, scrollContainer);
+    const scrollTargets = getScrollTargets(rootRef.current, null);
 
     for (const target of scrollTargets) {
       target.addEventListener("scroll", updateNavState, { passive: true });
@@ -72,7 +70,7 @@ export function PortfolioTemplate({
       }
       window.removeEventListener("resize", updateNavState);
     };
-  }, [scrollContainer, updateNavState]);
+  }, [updateNavState]);
 
   return (
     <TemplateLazyMotion>

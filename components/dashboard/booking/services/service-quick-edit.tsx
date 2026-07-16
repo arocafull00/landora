@@ -3,7 +3,7 @@
 import { useReducer, useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import type { BookingService } from "@/db/schema";
+import type { BookingService } from "@/lib/domain/dtos";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

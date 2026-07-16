@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useShallow } from "zustand/react/shallow";
 import { ImageField } from "@/components/dashboard/image-field";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
@@ -36,7 +37,22 @@ export function VelarEditorSection() {
     updateStory,
     updateTestimonial,
     updateWorkflowStep,
-  } = useDashboardStore();
+  } = useDashboardStore(
+    useShallow((state) => ({
+      activeEditorTab: state.activeEditorTab,
+      activeLandingId: state.activeLandingId,
+      isAdmin: state.isAdmin,
+      landings: state.landings,
+      updateSection: state.updateSection,
+      updateSectionItem: state.updateSectionItem,
+      updateService: state.updateService,
+      updateSpace: state.updateSpace,
+      updateStat: state.updateStat,
+      updateStory: state.updateStory,
+      updateTestimonial: state.updateTestimonial,
+      updateWorkflowStep: state.updateWorkflowStep,
+    })),
+  );
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];

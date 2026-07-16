@@ -14,23 +14,18 @@ import { deleteUserById, getUserByInternalId, insertUser } from "@/data/users";
 import { removeProjectDomain } from "@/lib/vercel-domains";
 import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { checkAuth } from "@/lib/auth";
-const createUserSchema = z.object({
-  name: z.string().min(1, "El nombre es requerido"),
-  email: z.email("Email inválido"),
-  password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
-});
+import {
+  createUserSchema,
+  type CreateUserValues,
+} from "@/lib/schemas/admin";
 
 type ActionResult = { success: true } | { error: string };
 
-export async function createUser(formData: FormData): Promise<ActionResult> {
+export async function createUser(input: CreateUserValues): Promise<ActionResult> {
   const authError = await checkAuth();
   if (authError) return authError;
 
-  const parsed = createUserSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
+  const parsed = createUserSchema.safeParse(input);
   if (!parsed.success) {
     return { error: parsed.error.message };
   }

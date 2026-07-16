@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "@/db";
 import { landingSectionSelections } from "@/db/schema";
 import type { HeroVariantId, SectionKey } from "@/lib/dashboard-data";

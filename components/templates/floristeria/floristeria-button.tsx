@@ -5,7 +5,7 @@ import { m, useReducedMotion } from "motion/react";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
 const base =
-  "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-all duration-300";
+  "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-[color,background-color,border-color,box-shadow,transform] duration-300";
 
 const variants = {
   primary: "bg-[var(--site-primary)] text-white hover:bg-[var(--site-primary-hover)] active:bg-[var(--site-primary-hover)]",

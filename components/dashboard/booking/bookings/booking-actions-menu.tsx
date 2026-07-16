@@ -1,6 +1,6 @@
 "use client";
 
-import type { Booking } from "@/db/schema";
+import type { Booking } from "@/lib/domain/dtos";
 import {
   DropdownMenu,
   DropdownMenuContent,

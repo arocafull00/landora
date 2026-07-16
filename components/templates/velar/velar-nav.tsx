@@ -70,7 +70,7 @@ export function VelarNav({
           ) : (
             <div className="flex flex-col gap-[6px]">
               <span
-                className="block h-px w-7 transition-all duration-300 group-hover:w-5"
+                className="block h-px w-7 transition-[width] duration-300 group-hover:w-5"
                 style={{ backgroundColor: navColor }}
               />
               <span

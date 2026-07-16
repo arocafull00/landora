@@ -1,4 +1,4 @@
-import type { AssetRow } from "@/db/schema";
+import type { AssetRow } from "@/lib/domain/dtos";
 
 export async function renameAsset(id: string, name: string): Promise<AssetRow> {
   const res = await fetch(`/api/assets/${id}`, {

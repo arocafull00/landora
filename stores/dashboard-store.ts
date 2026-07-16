@@ -1,6 +1,13 @@
 "use client";
 
-import { create } from "zustand";
+import {
+  createContext,
+  createElement,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
+import { createStore, useStore } from "zustand";
 import { toast } from "react-toastify";
 import {
   Asset,
@@ -69,7 +76,7 @@ function mapPostFromApi(row: BlogPostApi): Post {
   };
 }
 
-type DashboardState = {
+export type DashboardState = {
   activeWorkspaceTab: string;
   activeContentGroup: ContentGroup;
   activeEditorTab: string;
@@ -101,6 +108,7 @@ type DashboardState = {
   setActivePresentationId: (id: string) => void;
   setActiveAssetId: (id: string) => void;
   setIsAdmin: (isAdmin: boolean) => void;
+  setBlogConfig: (blogConfig: BlogConfig) => void;
   initFromLanding: (landing: Landing) => void;
   updateLandingMeta: (id: string, patch: Partial<Landing>) => void;
   updateHero: (id: string, patch: Partial<HeroContent>) => void;
@@ -260,19 +268,24 @@ function migrateHeroContent(hero: HeroContent): HeroContent {
   };
 }
 
-export const useDashboardStore = create<DashboardState>()((set, get) => ({
+function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) {
+  const initialLanding = initial?.landing;
+
+  return createStore<DashboardState>()((set, get) => ({
   activeWorkspaceTab: "Structure",
   activeContentGroup: "Pages",
   activeEditorTab: "Hero",
-  activeLandingId: "",
+  activeLandingId: initialLanding?.id ?? "",
   activePostId: "",
   activePresentationId: initialPresentations[0].id,
   activeAssetId: initialAssets[0].id,
   saveStatus: "idle",
-  isAdmin: false,
-  _bootstrapKey: "",
-  landings: [],
-  posts: initialPosts,
+  isAdmin: initial?.isAdmin ?? false,
+  _bootstrapKey: initialLanding
+    ? `${initialLanding.id}:${initial?.isAdmin ?? false}`
+    : "",
+  landings: initialLanding ? [initialLanding] : [],
+  posts: initialLanding ? [] : initialPosts,
   blogConfig: { title: "", description: "" },
   blogPostsLoaded: false,
   blogPostsLandingId: "",
@@ -309,6 +322,7 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
     set({ activePresentationId, activeContentGroup: "Presentations" }),
   setActiveAssetId: (activeAssetId) => set({ activeAssetId }),
   setIsAdmin: (isAdmin) => set({ isAdmin }),
+  setBlogConfig: (blogConfig) => set({ blogConfig }),
 
   initFromLanding: (landing) =>
     set({
@@ -1024,4 +1038,43 @@ export const useDashboardStore = create<DashboardState>()((set, get) => ({
         presentation.id === id ? { ...presentation, status: "Published" } : presentation,
       ),
     })),
-}));
+  }));
+}
+
+type DashboardStore = ReturnType<typeof createDashboardStore>;
+
+const DashboardStoreContext = createContext<DashboardStore | null>(null);
+
+export function DashboardStoreProvider({
+  children,
+  isAdmin,
+  landing,
+}: {
+  children: ReactNode;
+  isAdmin: boolean;
+  landing: Landing;
+}) {
+  const [store] = useState(() => createDashboardStore({ landing, isAdmin }));
+
+  return createElement(
+    DashboardStoreContext.Provider,
+    { value: store },
+    children,
+  );
+}
+
+export function useDashboardStore(): DashboardState;
+export function useDashboardStore<T>(selector: (state: DashboardState) => T): T;
+export function useDashboardStore<T = DashboardState>(
+  selector?: (state: DashboardState) => T,
+): T {
+  const store = useContext(DashboardStoreContext);
+  if (!store) {
+    throw new Error("useDashboardStore must be used within DashboardStoreProvider");
+  }
+
+  const resolvedSelector =
+    selector ?? ((state: DashboardState) => state as unknown as T);
+
+  return useStore(store, resolvedSelector);
+}

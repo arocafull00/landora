@@ -4,7 +4,7 @@ import { getBookings, getBookingsForRange } from "@/data/bookings";
 import { getEmployees } from "@/data/employees";
 import { getBookingSettings } from "@/data/booking-settings";
 import { getWeekBoundsInUtc } from "@/lib/booking/timezone";
-import type { BookingStatus } from "@/db/schema";
+import type { BookingStatus } from "@/lib/domain/dtos";
 import { BookingsSectionClient } from "@/components/dashboard/booking/bookings/bookings-section-client";
 
 export async function BookingsSection({

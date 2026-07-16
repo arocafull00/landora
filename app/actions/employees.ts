@@ -13,17 +13,12 @@ import { replaceEmployeeServices } from "@/data/employee-services";
 import { DEFAULT_HOUR_DRAFTS } from "@/lib/employee-schedule";
 import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
-
-const nameSchema = z.string().trim().min(1).max(80);
-
-const hoursSchema = z.array(
-  z.object({
-    dayOfWeek: z.number().int().min(0).max(6),
-    isWorking: z.boolean(),
-    startTime: z.string().regex(/^\d{2}:\d{2}$/),
-    endTime: z.string().regex(/^\d{2}:\d{2}$/),
-  }),
-);
+import {
+  employeeHoursSchema,
+  employeeNameSchema,
+  resourceIdSchema,
+  resourceIdsSchema,
+} from "@/lib/schemas/booking-admin";
 
 type ActionResult = { success: true } | { error: string };
 
@@ -37,7 +32,7 @@ export async function createEmployeeAction(
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
-  const parsed = nameSchema.safeParse(name);
+  const parsed = employeeNameSchema.safeParse(name);
   if (!parsed.success) {
     return { error: "Nombre inválido" };
   }
@@ -59,13 +54,14 @@ export async function updateEmployeeAction(id: string, name: string): Promise<Ac
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
-  const parsed = nameSchema.safeParse(name);
-  if (!parsed.success) {
+  const parsedId = resourceIdSchema.safeParse(id);
+  const parsed = employeeNameSchema.safeParse(name);
+  if (!parsedId.success || !parsed.success) {
     return { error: "Nombre inválido" };
   }
 
   try {
-    const updated = await updateEmployee(tenantId, id, parsed.data);
+    const updated = await updateEmployee(tenantId, parsedId.data, parsed.data);
     if (!updated) {
       return { error: "Empleado no encontrado" };
     }
@@ -86,8 +82,11 @@ export async function setEmployeeActiveAction(
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
+  const parsedId = resourceIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Datos inválidos" };
+
   try {
-    const updated = await setEmployeeActive(tenantId, id, isActive);
+    const updated = await setEmployeeActive(tenantId, parsedId.data, isActive);
     if (!updated) {
       return { error: "Empleado no encontrado" };
     }
@@ -106,8 +105,11 @@ export async function deleteEmployeeAction(id: string): Promise<ActionResult> {
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
+  const parsedId = resourceIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Datos inválidos" };
+
   try {
-    await deleteEmployee(tenantId, id);
+    await deleteEmployee(tenantId, parsedId.data);
     revalidatePath("/employees");
     return { success: true };
   } catch {
@@ -117,7 +119,7 @@ export async function deleteEmployeeAction(id: string): Promise<ActionResult> {
 
 export async function replaceEmployeeHoursAction(
   employeeId: string,
-  hours: z.infer<typeof hoursSchema>,
+  hours: z.infer<typeof employeeHoursSchema>,
 ): Promise<ActionResult> {
   const authResult = await requireAuth();
   if ("error" in authResult) return { error: authResult.error };
@@ -125,13 +127,14 @@ export async function replaceEmployeeHoursAction(
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
-  const parsed = hoursSchema.safeParse(hours);
-  if (!parsed.success) {
+  const parsedId = resourceIdSchema.safeParse(employeeId);
+  const parsed = employeeHoursSchema.safeParse(hours);
+  if (!parsedId.success || !parsed.success) {
     return { error: "Horario inválido" };
   }
 
   try {
-    await replaceEmployeeHours(tenantId, employeeId, parsed.data);
+    await replaceEmployeeHours(tenantId, parsedId.data, parsed.data);
     revalidatePath("/employees");
     return { success: true };
   } catch {
@@ -149,8 +152,18 @@ export async function replaceEmployeeServicesAction(
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
+  const parsedEmployeeId = resourceIdSchema.safeParse(employeeId);
+  const parsedServiceIds = resourceIdsSchema.safeParse(serviceIds);
+  if (!parsedEmployeeId.success || !parsedServiceIds.success) {
+    return { error: "Datos inválidos" };
+  }
+
   try {
-    await replaceEmployeeServices(tenantId, employeeId, serviceIds);
+    await replaceEmployeeServices(
+      tenantId,
+      parsedEmployeeId.data,
+      parsedServiceIds.data,
+    );
     revalidatePath("/employees");
     return { success: true };
   } catch {

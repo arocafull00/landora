@@ -3,7 +3,6 @@
 import { useEffect, type RefObject } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
 
 function setupIntersectionFallback(root: HTMLElement | null) {
@@ -34,8 +33,6 @@ export function VelarAosInit({
 }: {
   rootRef?: RefObject<HTMLElement | null>;
 }) {
-  const scrollContainer = usePreviewScrollContainer();
-
   useEffect(() => {
     AOS.init({
       duration: 800,
@@ -55,7 +52,7 @@ export function VelarAosInit({
 
     const scrollTargets = getScrollTargets(
       rootRef?.current ?? null,
-      scrollContainer
+      null,
     );
     for (const target of scrollTargets) {
       target.addEventListener("scroll", refresh, { passive: true });
@@ -71,7 +68,7 @@ export function VelarAosInit({
       }
       window.removeEventListener("resize", refresh);
     };
-  }, [rootRef, scrollContainer]);
+  }, [rootRef]);
 
   return null;
 }

@@ -10,21 +10,25 @@ import {
 } from "@/app/actions/provision-prospect";
 import type { TemplateId } from "@/lib/dashboard-data";
 import { getAllTemplates } from "@/lib/template-registry";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { PreviewField } from "@/components/admin/import-prospect/preview-field";
+import { ImportProspectStepItem } from "@/components/admin/import-prospect/import-prospect-step-item";
+import type {
+  ImportProspectStep as Step,
+  ImportProspectStepId as StepId,
+  ImportProspectStepState as StepState,
+} from "@/components/admin/import-prospect/import-prospect-types";
 
 const inputClass =
   "w-full rounded-md border border-outline-variant bg-surface-bg px-3 py-2 text-body-sm text-on-surface outline-none transition-colors placeholder:text-on-surface-variant/50 focus:border-primary focus:ring-1 focus:ring-primary";
 
 const templates = getAllTemplates();
-
-type StepId = "validate" | "user" | "landing";
-
-type StepState = "pending" | "active" | "done" | "error";
-
-type Step = {
-  id: StepId;
-  label: string;
-  state: StepState;
-};
 
 type PreviewData = {
   name: string;
@@ -232,28 +236,38 @@ export function ImportProspectForm({ onSuccess }: { onSuccess: () => void }) {
               value={templates.find((item) => item.id === state.preview!.template)?.label ?? state.preview.template}
             />
           ) : (
-            <label className="block">
-              <span className="mb-1.5 block font-label text-label-md text-on-surface-variant">
+            <div className="block">
+              <span
+                id="prospect-template-label"
+                className="mb-1.5 block font-label text-label-md text-on-surface-variant"
+              >
                 Plantilla
               </span>
-              <select
+              <Select
                 value={state.selectedTemplate}
-                onChange={(event) =>
+                onValueChange={(value) =>
                   dispatch({
                     type: "setSelectedTemplate",
-                    template: event.target.value as TemplateId,
+                    template: value as TemplateId,
                   })
                 }
-                className={inputClass}
                 disabled={isPending || state.isImporting}
               >
-                {templates.map((template) => (
-                  <option key={template.id} value={template.id}>
-                    {template.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+                <SelectTrigger
+                  aria-labelledby="prospect-template-label"
+                  className="w-full border-outline-variant bg-surface-bg"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {templates.map((template) => (
+                    <SelectItem key={template.id} value={template.id}>
+                      {template.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           )}
         </div>
       ) : null}
@@ -266,7 +280,7 @@ export function ImportProspectForm({ onSuccess }: { onSuccess: () => void }) {
         </ul>
       ) : null}
 
-      {state.error ? <p className="font-body text-body-sm text-error">{state.error}</p> : null}
+      {state.error ? <p className="font-body text-body-sm text-danger">{state.error}</p> : null}
 
       <div className="flex justify-end gap-2">
         <ActionButton
@@ -287,35 +301,5 @@ export function ImportProspectForm({ onSuccess }: { onSuccess: () => void }) {
         </ActionButton>
       </div>
     </div>
-  );
-}
-
-function PreviewField({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="font-label text-label-md text-on-surface-variant">{label}</p>
-      <p className="font-body text-body-sm text-on-surface">{value}</p>
-    </div>
-  );
-}
-
-function ImportProspectStepItem({ step }: { step: Step }) {
-  const icon =
-    step.state === "done" ? "✓" : step.state === "error" ? "✕" : step.state === "active" ? "…" : "○";
-
-  const tone =
-    step.state === "done"
-      ? "text-success"
-      : step.state === "error"
-        ? "text-error"
-        : step.state === "active"
-          ? "text-primary"
-          : "text-on-surface-variant/50";
-
-  return (
-    <li className={`flex items-center gap-2 font-body text-body-sm ${tone}`}>
-      <span>{icon}</span>
-      <span>{step.label}</span>
-    </li>
   );
 }

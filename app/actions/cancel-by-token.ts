@@ -5,6 +5,8 @@ import { headers } from "next/headers";
 import { getBookingByPublicToken, updateBookingStatusByToken } from "@/data/bookings";
 import { checkCancelRateLimit } from "@/lib/booking/rate-limit";
 import { captureBookingEvent } from "@/lib/booking/capture-event";
+import { logger } from "@/lib/logger";
+import { bookingPublicTokenSchema } from "@/lib/schemas/booking";
 
 type ActionResult = { success: true } | { error: string };
 
@@ -13,6 +15,11 @@ function getClientIp(headerStore: Headers) {
 }
 
 export async function cancelBookingByTokenAction(publicToken: string): Promise<ActionResult> {
+  const parsedToken = bookingPublicTokenSchema.safeParse(publicToken);
+  if (!parsedToken.success) {
+    return { error: "Reserva no encontrada" };
+  }
+
   const headerStore = await headers();
   const ip = getClientIp(headerStore);
 
@@ -21,36 +28,41 @@ export async function cancelBookingByTokenAction(publicToken: string): Promise<A
     return { error: "Demasiadas solicitudes. Inténtalo más tarde." };
   }
 
-  const booking = await getBookingByPublicToken(publicToken);
-  if (!booking) {
-    return { error: "Reserva no encontrada" };
-  }
-
-  if (booking.status === "cancelled") {
-    return { error: "La reserva ya está cancelada" };
-  }
-
-  if (booking.status === "completed") {
-    return { error: "No se puede cancelar una reserva completada" };
-  }
-
-  if (booking.startsAt.getTime() < Date.now()) {
-    return { error: "No se puede cancelar una reserva pasada" };
-  }
-
   try {
-    await updateBookingStatusByToken(publicToken, "cancelled");
-    revalidatePath(`/reservation/${publicToken}`);
+    const booking = await getBookingByPublicToken(parsedToken.data);
+    if (!booking) {
+      return { error: "Reserva no encontrada" };
+    }
+
+    if (booking.status === "cancelled") {
+      return { error: "La reserva ya está cancelada" };
+    }
+
+    if (booking.status === "completed") {
+      return { error: "No se puede cancelar una reserva completada" };
+    }
+
+    if (booking.startsAt.getTime() < Date.now()) {
+      return { error: "No se puede cancelar una reserva pasada" };
+    }
+
+    await updateBookingStatusByToken(parsedToken.data, "cancelled");
+    revalidatePath(`/reservation/${parsedToken.data}`);
 
     try {
       await captureBookingEvent("booking_cancelled_by_customer", booking.tenantId, {
         bookingId: booking.id,
       });
-    } catch {
+    } catch (error) {
+      logger.captureException(error, {
+        action: "capture-customer-booking-cancelled-event",
+        tenantId: booking.tenantId,
+      });
     }
 
     return { success: true };
-  } catch {
+  } catch (error) {
+    logger.captureException(error, { action: "cancel-booking-by-token" });
     return { error: "No se pudo cancelar la reserva" };
   }
 }

@@ -4,7 +4,7 @@ import { useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { CalendarDays } from "lucide-react";
-import type { BookingService, Employee } from "@/db/schema";
+import type { BookingService, Employee } from "@/lib/domain/dtos";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

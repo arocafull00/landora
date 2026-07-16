@@ -3,7 +3,7 @@
 import { ArrowRight } from "lucide-react";
 
 const base =
-  "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-all duration-300";
+  "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-[color,background-color,border-color,box-shadow,transform] duration-300";
 
 const variants = {
   primary: "bg-[var(--site-dark)] text-white hover:bg-[var(--site-text-muted)] active:bg-[var(--site-dark)]",
@@ -36,11 +36,26 @@ export function StudioButton({
 }) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
+  if (href?.startsWith("http")) {
+    return (
+      <a
+        className={classes}
+        href={href}
+        onClick={onClick}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {children}
+        {icon ?? <ArrowRight aria-hidden className="h-4 w-4" />}
+      </a>
+    );
+  }
+
   if (href) {
     return (
-      <a className={classes} href={href} onClick={onClick} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined}>
+      <a className={classes} href={href} onClick={onClick}>
         {children}
-        {icon ?? <ArrowRight className="h-4 w-4" />}
+        {icon ?? <ArrowRight aria-hidden className="h-4 w-4" />}
       </a>
     );
   }

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { m, AnimatePresence } from "motion/react";
 
 export function StudioFaqItem({
   item,
@@ -12,6 +11,7 @@ export function StudioFaqItem({
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+  const contentId = useId();
 
   return (
     <div className="border-b border-[var(--site-border)]">
@@ -19,6 +19,8 @@ export function StudioFaqItem({
         className="flex w-full items-center justify-between py-5 text-left"
         onClick={() => setOpen((v) => !v)}
         type="button"
+        aria-controls={contentId}
+        aria-expanded={open}
       >
         <span
           className="pr-4 text-base font-semibold text-[var(--site-text)]"
@@ -27,24 +29,17 @@ export function StudioFaqItem({
           {item.question}
         </span>
         <ChevronDown
+          aria-hidden
           className={`h-5 w-5 shrink-0 text-[var(--site-primary)] transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <m.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
-          >
+      {open ? (
+          <div id={contentId}>
             <p className="pb-5 text-sm leading-relaxed text-[var(--site-text-muted)]">
               {item.answer}
             </p>
-          </m.div>
-        )}
-      </AnimatePresence>
+          </div>
+      ) : null}
     </div>
   );
 }

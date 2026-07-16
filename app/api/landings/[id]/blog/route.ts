@@ -1,12 +1,21 @@
 import { assertLandingAccess } from "@/lib/api/landing-auth";
 import { getBlogPostsByLandingId, createBlogPost } from "@/data/blog";
+import { parseJsonBody } from "@/lib/api/parse-json";
+import {
+  createBlogPostSchema,
+  resourceIdSchema,
+} from "@/lib/schemas/api";
 
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const parsedId = resourceIdSchema.safeParse((await params).id);
+    if (!parsedId.success) {
+      return Response.json({ error: "Invalid landing id" }, { status: 400 });
+    }
+    const id = parsedId.data;
     const landing = await assertLandingAccess(id);
 
     if (!landing) {
@@ -34,23 +43,29 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const parsedId = resourceIdSchema.safeParse((await params).id);
+    if (!parsedId.success) {
+      return Response.json({ error: "Invalid landing id" }, { status: 400 });
+    }
+    const id = parsedId.data;
     const landing = await assertLandingAccess(id);
 
     if (!landing) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
-    const title = typeof body.title === "string" && body.title.trim() ? body.title.trim() : "Nuevo post";
-    const slug = typeof body.slug === "string" && body.slug.trim() ? body.slug.trim() : slugify(title);
+    const parsed = await parseJsonBody(req, createBlogPostSchema);
+    if (!parsed.success) return parsed.response;
+    const body = parsed.data;
+    const title = body.title;
+    const slug = body.slug ?? slugify(title);
 
     const post = await createBlogPost(id, {
       title,
       slug,
-      excerpt: typeof body.excerpt === "string" ? body.excerpt : "",
-      body: typeof body.body === "string" ? body.body : "",
-      heroImage: typeof body.heroImage === "string" ? body.heroImage : "",
+      excerpt: body.excerpt,
+      body: body.body,
+      heroImage: body.heroImage,
     });
 
     return Response.json(post, { status: 201 });

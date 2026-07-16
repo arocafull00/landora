@@ -1,7 +1,9 @@
+import "server-only";
+
 import { Resend } from "resend";
 import { getBookingSettings } from "@/data/booking-settings";
 import { getLandingPageByUserId } from "@/data/landing-pages";
-import type { Booking, Employee } from "@/db/schema";
+import type { Booking, Employee } from "@/lib/domain/dtos";
 import { formatFullDateTime } from "@/lib/booking/format-datetime";
 
 function getResendClient() {

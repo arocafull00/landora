@@ -159,15 +159,12 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.rewrite(url)
   }
 
-  // Cache miss: buscar en DB (solo para dominios no cacheados)
-  // La lógica de DB se ejecuta en la API route /api/tenant/resolve
-  // para no importar Drizzle directamente en el middleware (Edge runtime)
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/tenant/resolve?host=${host}`)
+  // Cache miss: resolver directamente mediante la DAL.
+  const landing = await getLandingByCustomDomain(host)
 
-  if (res.ok) {
-    const data = await res.json()
-    await kv.set(`domain:${host}`, data, { ex: 300 })
-    url.pathname = `/landing/${data.slug}`
+  if (landing) {
+    await kv.set(`domain:${host}`, landing, { ex: 300 })
+    url.pathname = `/landing/${landing.slug}`
     return NextResponse.rewrite(url)
   }
 
@@ -477,7 +474,7 @@ NEXT_PUBLIC_APP_URL=https://app.tudominio.com
 
 ### Fase 2 — Middleware multi-tenant
 1. Escribir `middleware.ts` con resolución de host
-2. Crear `app/api/tenant/resolve/route.ts`
+2. Resolver dominios directamente desde `data/domains.ts`
 3. Testar localmente con `/etc/hosts` apuntando subdominios a localhost
 
 ### Fase 3 — Plantilla clinic-v1

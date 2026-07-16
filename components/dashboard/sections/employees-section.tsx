@@ -2,7 +2,7 @@ import { getEffectiveClientId } from "@/lib/auth";
 import { getEmployeesWithDetails } from "@/data/employees";
 import { getBookingServices } from "@/data/booking-services";
 import { EmployeesSectionClient } from "@/components/dashboard/booking/employees/employees-section-client";
-import type { EmployeeHours } from "@/db/schema";
+import type { EmployeeHours } from "@/lib/domain/dtos";
 
 export async function EmployeesSection() {
   const tenantId = await getEffectiveClientId();

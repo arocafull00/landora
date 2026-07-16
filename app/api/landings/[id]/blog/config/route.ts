@@ -1,12 +1,21 @@
 import { assertLandingAccess } from "@/lib/api/landing-auth";
 import { getBlogConfig, upsertBlogConfig } from "@/data/blog";
+import { parseJsonBody } from "@/lib/api/parse-json";
+import {
+  resourceIdSchema,
+  updateBlogConfigSchema,
+} from "@/lib/schemas/api";
 
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const parsedId = resourceIdSchema.safeParse((await params).id);
+    if (!parsedId.success) {
+      return Response.json({ error: "Invalid landing id" }, { status: 400 });
+    }
+    const id = parsedId.data;
     const landing = await assertLandingAccess(id);
 
     if (!landing) {
@@ -25,21 +34,27 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const parsedId = resourceIdSchema.safeParse((await params).id);
+    if (!parsedId.success) {
+      return Response.json({ error: "Invalid landing id" }, { status: 400 });
+    }
+    const id = parsedId.data;
     const landing = await assertLandingAccess(id);
 
     if (!landing) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [body, existing] = await Promise.all([
-      req.json(),
+    const [parsed, existing] = await Promise.all([
+      parseJsonBody(req, updateBlogConfigSchema),
       getBlogConfig(id),
     ]);
+    if (!parsed.success) return parsed.response;
+    const body = parsed.data;
 
     await upsertBlogConfig(id, {
-      title: typeof body.title === "string" ? body.title : (existing?.title ?? ""),
-      description: typeof body.description === "string" ? body.description : (existing?.description ?? ""),
+      title: body.title ?? existing?.title ?? "",
+      description: body.description ?? existing?.description ?? "",
     });
 
     return Response.json({ ok: true });

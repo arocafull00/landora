@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useShallow } from "zustand/react/shallow";
 import { ImageField } from "@/components/dashboard/image-field";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
@@ -28,7 +29,18 @@ export function OficioProEditorSection() {
     updateStat,
     updateStory,
     updateTestimonial,
-  } = useDashboardStore();
+  } = useDashboardStore(
+    useShallow((state) => ({
+      activeEditorTab: state.activeEditorTab,
+      activeLandingId: state.activeLandingId,
+      isAdmin: state.isAdmin,
+      landings: state.landings,
+      updateSectionItem: state.updateSectionItem,
+      updateStat: state.updateStat,
+      updateStory: state.updateStory,
+      updateTestimonial: state.updateTestimonial,
+    })),
+  );
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];

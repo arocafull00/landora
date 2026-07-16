@@ -1,10 +1,11 @@
+import "server-only";
+
 import { cache } from "react";
 import { and, asc, eq, gte, lte, ne } from "drizzle-orm";
 import { db } from "@/db";
 import { bookings } from "@/db/schema";
 import type { BookingStatus, NewBooking } from "@/db/schema";
-
-type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
+import { logger } from "@/lib/logger";
 
 export type BookingFilters = {
   status?: BookingStatus;
@@ -108,16 +109,38 @@ export const getBookingById = cache(async (tenantId: string, id: string) => {
   }
 });
 
-export async function createBookingRecord(tx: Transaction, data: NewBooking) {
+export type CreateBookingRecordResult =
+  | { status: "created"; booking: typeof bookings.$inferSelect }
+  | { status: "slot_taken" };
+
+function isExclusionConstraintError(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    error.code === "23P01"
+  );
+}
+
+export async function createBookingRecord(
+  data: NewBooking,
+): Promise<CreateBookingRecordResult> {
   try {
-    const [row] = await tx.insert(bookings).values(data).returning();
+    const [row] = await db.insert(bookings).values(data).returning();
     if (!row) {
       throw new Error("Insert returned no row");
     }
-    return row;
-  } catch (err) {
-    console.error("[booking] createBookingRecord error:", err);
-    throw err;
+    return { status: "created", booking: row };
+  } catch (error) {
+    if (isExclusionConstraintError(error)) {
+      return { status: "slot_taken" };
+    }
+
+    logger.captureException(error, {
+      action: "create-booking-record",
+      tenantId: data.tenantId,
+    });
+    throw new Error("Failed to create booking", { cause: error });
   }
 }
 

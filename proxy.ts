@@ -13,10 +13,10 @@ import {
 } from "@/lib/app-host";
 import { getSubscriptionStatusForProxy } from "@/data/subscriptions";
 import { getBookingModuleAccessContextForClerkUser } from "@/data/user-addons";
+import { getLandingByCustomDomain } from "@/data/domains";
 import { hasBookingModuleAccess, hasDashboardAccess } from "@/lib/subscription-access";
 
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
-const isTenantResolveRoute = createRouteMatcher(["/api/tenant/resolve"]);
 const isWebhookRoute = createRouteMatcher(["/api/webhooks/stripe"]);
 const isCronRoute = createRouteMatcher(["/api/cron/check-domains"]);
 const isSentryTunnelRoute = createRouteMatcher(["/monitoring(.*)"]);
@@ -46,18 +46,9 @@ const isBookingRoute = createRouteMatcher([
 ]);
 
 async function resolveCustomDomainSlug(host: string) {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? `https://${host}`;
-  const response = await fetch(
-    `${appUrl}/api/tenant/resolve?host=${encodeURIComponent(host)}`,
-    { headers: { "x-landora-tenant-resolve": "1" } },
-  );
-
-  if (!response.ok) return null;
-
-  const data = (await response.json()) as { slug?: string };
-  if (!data.slug) return null;
-
-  return data.slug;
+  const landing = await getLandingByCustomDomain(host);
+  if (!landing) return null;
+  return landing.slug.replace(/^\//, "");
 }
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
@@ -98,7 +89,6 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
 
   if (
     isSignInRoute(req) ||
-    isTenantResolveRoute(req) ||
     isWebhookRoute(req) ||
     isCronRoute(req) ||
     isSentryTunnelRoute(req) ||

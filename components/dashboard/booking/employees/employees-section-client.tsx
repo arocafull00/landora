@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { BookingService, Employee, EmployeeHours } from "@/db/schema";
+import type { BookingService, Employee, EmployeeHours } from "@/lib/domain/dtos";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Button } from "@/components/ui/button";
 import { EmployeeCard } from "@/components/dashboard/booking/employees/employee-card";

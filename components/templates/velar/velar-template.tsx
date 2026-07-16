@@ -4,7 +4,6 @@ import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
-import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { getScrollTargets } from "@/lib/scroll-parent";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
@@ -48,7 +47,6 @@ export function VelarTemplate({
   const galleryRef = useRef<HTMLDivElement>(null);
   const workflowRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
-  const scrollContainer = usePreviewScrollContainer();
   const heroVariantId = sectionSelections?.hero ?? "velar";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
@@ -80,14 +78,10 @@ export function VelarTemplate({
     updateNavColor();
 
     const handleUpdate = () => updateNavColor();
-    const scrollTargets = getScrollTargets(rootRef.current, scrollContainer);
+    const scrollTargets = getScrollTargets(rootRef.current, null);
 
     for (const target of scrollTargets) {
       target.addEventListener("scroll", handleUpdate, { passive: true });
-    }
-
-    if (scrollContainer) {
-      scrollContainer.addEventListener("wheel", handleUpdate, { passive: true });
     }
 
     window.addEventListener("resize", handleUpdate);
@@ -96,12 +90,9 @@ export function VelarTemplate({
       for (const target of scrollTargets) {
         target.removeEventListener("scroll", handleUpdate);
       }
-      if (scrollContainer) {
-        scrollContainer.removeEventListener("wheel", handleUpdate);
-      }
       window.removeEventListener("resize", handleUpdate);
     };
-  }, [scrollContainer, updateNavColor]);
+  }, [updateNavColor]);
 
   return (
     <TemplateLazyMotion>

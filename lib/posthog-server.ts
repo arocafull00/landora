@@ -1,3 +1,5 @@
+import "server-only";
+
 const POSTHOG_QUERY_HOST = process.env.POSTHOG_QUERY_HOST ?? "https://eu.posthog.com";
 const POSTHOG_PERSONAL_API_KEY = process.env.POSTHOG_PERSONAL_API_KEY;
 const POSTHOG_PROJECT_ID = process.env.POSTHOG_PROJECT_ID;

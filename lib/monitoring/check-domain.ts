@@ -5,7 +5,7 @@ import {
   updateDomainCheckResult,
   type DomainCheckResult,
 } from "@/data/domain-checks";
-import type { DomainCheckStatus } from "@/db/schema";
+import type { DomainCheckStatus } from "@/lib/domain/dtos";
 
 export type CheckResult = {
   domain: string;

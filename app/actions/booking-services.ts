@@ -12,19 +12,16 @@ import {
 } from "@/data/booking-services";
 import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
-
-const serviceSchema = z.object({
-  name: z.string().trim().min(1).max(80),
-  durationMinutes: z.number().int().min(5).max(480),
-  priceCents: z.number().int().min(0).max(999_999_99),
-  bufferAfterMinutes: z.number().int().min(0).max(120),
-  isActive: z.boolean().optional(),
-});
+import {
+  bookingServiceSchema,
+  resourceIdSchema,
+  resourceIdsSchema,
+} from "@/lib/schemas/booking-admin";
 
 type ActionResult = { success: true } | { error: string };
 
 export async function createBookingServiceAction(
-  input: z.infer<typeof serviceSchema>,
+  input: z.infer<typeof bookingServiceSchema>,
 ): Promise<ActionResult> {
   const authResult = await requireAuth();
   if ("error" in authResult) return { error: authResult.error };
@@ -32,7 +29,7 @@ export async function createBookingServiceAction(
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
-  const parsed = serviceSchema.safeParse(input);
+  const parsed = bookingServiceSchema.safeParse(input);
   if (!parsed.success) {
     return { error: "Datos inválidos" };
   }
@@ -48,7 +45,7 @@ export async function createBookingServiceAction(
 
 export async function updateBookingServiceAction(
   id: string,
-  input: z.infer<typeof serviceSchema>,
+  input: z.infer<typeof bookingServiceSchema>,
 ): Promise<ActionResult> {
   const authResult = await requireAuth();
   if ("error" in authResult) return { error: authResult.error };
@@ -56,13 +53,14 @@ export async function updateBookingServiceAction(
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
-  const parsed = serviceSchema.safeParse(input);
-  if (!parsed.success) {
+  const parsedId = resourceIdSchema.safeParse(id);
+  const parsed = bookingServiceSchema.safeParse(input);
+  if (!parsedId.success || !parsed.success) {
     return { error: "Datos inválidos" };
   }
 
   try {
-    const updated = await updateBookingService(tenantId, id, parsed.data);
+    const updated = await updateBookingService(tenantId, parsedId.data, parsed.data);
     if (!updated) {
       return { error: "Servicio no encontrado" };
     }
@@ -83,8 +81,11 @@ export async function toggleBookingServiceActiveAction(
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
+  const parsedId = resourceIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Datos inválidos" };
+
   try {
-    const updated = await setBookingServiceActive(tenantId, id, isActive);
+    const updated = await setBookingServiceActive(tenantId, parsedId.data, isActive);
     if (!updated) {
       return { error: "Servicio no encontrado" };
     }
@@ -102,8 +103,11 @@ export async function reorderBookingServicesAction(orderedIds: string[]): Promis
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
+  const parsedIds = resourceIdsSchema.safeParse(orderedIds);
+  if (!parsedIds.success) return { error: "Datos inválidos" };
+
   try {
-    await reorderBookingServices(tenantId, orderedIds);
+    await reorderBookingServices(tenantId, parsedIds.data);
     revalidatePath("/services");
     return { success: true };
   } catch {
@@ -118,8 +122,11 @@ export async function deleteBookingServiceAction(id: string): Promise<ActionResu
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
+  const parsedId = resourceIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Datos inválidos" };
+
   try {
-    await deleteBookingService(tenantId, id);
+    await deleteBookingService(tenantId, parsedId.data);
     revalidatePath("/services");
     return { success: true };
   } catch {
@@ -134,8 +141,11 @@ export async function duplicateBookingServiceAction(id: string): Promise<ActionR
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
+  const parsedId = resourceIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Datos inválidos" };
+
   try {
-    const source = await getBookingServiceById(tenantId, id);
+    const source = await getBookingServiceById(tenantId, parsedId.data);
     if (!source) {
       return { error: "Servicio no encontrado" };
     }

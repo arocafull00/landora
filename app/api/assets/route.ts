@@ -1,6 +1,8 @@
 import { getEffectiveClientId } from "@/lib/auth";
 import { getAssetFolder } from "@/lib/cloudinary";
 import { getAssetsByUserId, insertAsset } from "@/data/assets";
+import { parseJsonBody } from "@/lib/api/parse-json";
+import { createAssetSchema } from "@/lib/schemas/api";
 
 export async function GET() {
   const userId = await getEffectiveClientId();
@@ -18,26 +20,10 @@ export async function POST(req: Request) {
   const userId = await getEffectiveClientId();
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: {
-    publicId?: string;
-    url?: string;
-    name?: string;
-    mimeType?: string;
-    width?: number;
-    height?: number;
-  };
+  const parsed = await parseJsonBody(req, createAssetSchema);
+  if (!parsed.success) return parsed.response;
 
-  try {
-    body = await req.json();
-  } catch {
-    return Response.json({ error: "Invalid request body" }, { status: 400 });
-  }
-
-  const { publicId, url, name, mimeType, width, height } = body;
-
-  if (!publicId || !url) {
-    return Response.json({ error: "Invalid asset data" }, { status: 400 });
-  }
+  const { publicId, url, name, mimeType, width, height } = parsed.data;
 
   const folderPrefix = getAssetFolder(userId);
   if (!publicId.startsWith(folderPrefix)) {
@@ -49,8 +35,8 @@ export async function POST(req: Request) {
       userId,
       publicId,
       url,
-      name: name || "asset",
-      mimeType: mimeType || "",
+      name,
+      mimeType,
       width: width ?? null,
       height: height ?? null,
     });

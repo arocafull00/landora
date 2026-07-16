@@ -1,4 +1,4 @@
-import type { AssetRow } from "@/db/schema";
+import type { AssetRow } from "@/lib/domain/dtos";
 
 type SignatureResponse = {
   cloudName: string;

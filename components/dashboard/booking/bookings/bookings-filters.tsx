@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import type { BookingStatus, Employee } from "@/db/schema";
+import type { BookingStatus, Employee } from "@/lib/domain/dtos";
 import {
   Select,
   SelectContent,

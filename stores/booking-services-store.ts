@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import type { BookingService } from "@/db/schema";
+import type { BookingService } from "@/lib/domain/dtos";
 import { priceCentsToEurosInput } from "@/lib/service-price";
 
 type BookingServicesState = {

@@ -10,7 +10,7 @@ type NavBrandEditorProps = {
 };
 
 export function NavBrandEditor({ activeLanding }: NavBrandEditorProps) {
-  const { updateBranding } = useDashboardStore();
+  const updateBranding = useDashboardStore((state) => state.updateBranding);
   const { brand, brandLogoImage, brandLogoType } = activeLanding.content;
   const logoType = brandLogoType ?? "text";
 

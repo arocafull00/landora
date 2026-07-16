@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useShallow } from "zustand/react/shallow";
 import type { Landing, TemplateId } from "@/lib/dashboard-data";
 import {
   getRemovableSections,
@@ -13,16 +14,22 @@ type SectionVisibilityEditorProps = {
 };
 
 export function SectionVisibilityEditor({ activeLanding }: SectionVisibilityEditorProps) {
-  const { hideSection, restoreSection } = useDashboardStore();
+  const { hideSection, restoreSection } = useDashboardStore(
+    useShallow((state) => ({
+      hideSection: state.hideSection,
+      restoreSection: state.restoreSection,
+    })),
+  );
   const templateId = activeLanding.template as TemplateId;
   const removableSections = getRemovableSections(templateId);
   const requiredSections = getTemplateSections(templateId).filter((section) => section.required);
   const hiddenSections = activeLanding.content.hiddenSections ?? [];
+  const hiddenSectionSet = new Set(hiddenSections);
   const visibleSections = removableSections.filter((section) =>
     isSectionVisible(activeLanding.content, section.anchor),
   );
   const hiddenRemovableSections = removableSections.filter((section) =>
-    hiddenSections.includes(section.anchor),
+    hiddenSectionSet.has(section.anchor),
   );
 
   return (

@@ -1,5 +1,5 @@
 import { KeyRound, Lock } from "lucide-react";
-import type { AccessType } from "@/db/schema";
+import type { AccessType } from "@/lib/domain/dtos";
 import { cn } from "@/lib/utils";
 
 const ACCESS_CONFIG: Record<

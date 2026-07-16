@@ -1,6 +1,6 @@
 "use client";
 
-import type { Booking, Employee } from "@/db/schema";
+import type { Booking, Employee } from "@/lib/domain/dtos";
 import { AgendaGrid } from "@/components/dashboard/booking/bookings/agenda-grid";
 
 export function BookingsAgenda({

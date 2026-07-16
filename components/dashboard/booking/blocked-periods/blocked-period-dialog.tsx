@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import type { Employee } from "@/db/schema";
+import type { EmployeeOptionDto } from "@/lib/booking/dtos";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createBlockedPeriodAction } from "@/app/actions/blocked-periods";
+import {
+  blockedPeriodFormSchema,
+  type BlockedPeriodFormValues,
+} from "@/lib/schemas/booking-admin";
 
 export function BlockedPeriodDialog({
   open,
@@ -27,60 +32,135 @@ export function BlockedPeriodDialog({
   onSaved,
 }: {
   open: boolean;
-  employees: Employee[];
+  employees: EmployeeOptionDto[];
   onOpenChange: (open: boolean) => void;
   onSaved: () => void;
 }) {
-  const [employeeId, setEmployeeId] = useState<string>("global");
-  const [startsAt, setStartsAt] = useState("");
-  const [endsAt, setEndsAt] = useState("");
-  const [reason, setReason] = useState("");
-  const [pending, startTransition] = useTransition();
+  const {
+    control,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    register,
+    reset,
+  } = useForm<BlockedPeriodFormValues>({
+    resolver: zodResolver(blockedPeriodFormSchema),
+    defaultValues: {
+      employeeId: "global",
+      startsAt: "",
+      endsAt: "",
+      reason: "",
+    },
+  });
 
-  const submit = () => {
-    startTransition(async () => {
-      const result = await createBlockedPeriodAction({
-        employeeId: employeeId === "global" ? null : employeeId,
-        startsAt: new Date(startsAt).toISOString(),
-        endsAt: new Date(endsAt).toISOString(),
-        reason,
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      reset({
+        employeeId: "global",
+        startsAt: "",
+        endsAt: "",
+        reason: "",
       });
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("Bloqueo creado");
-      onSaved();
+    }
+    onOpenChange(nextOpen);
+  };
+
+  const submit = async (values: BlockedPeriodFormValues) => {
+    const result = await createBlockedPeriodAction({
+      employeeId: values.employeeId === "global" ? null : values.employeeId,
+      startsAt: new Date(values.startsAt).toISOString(),
+      endsAt: new Date(values.endsAt).toISOString(),
+      reason: values.reason,
     });
+    if ("error" in result) {
+      toast.error(result.error);
+      return;
+    }
+    toast.success("Bloqueo creado");
+    reset();
+    onSaved();
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Nuevo bloqueo</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4">
-          <Select value={employeeId} onValueChange={setEmployeeId}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="global">Global</SelectItem>
-              {employees.map((employee) => (
-                <SelectItem key={employee.id} value={employee.id}>
-                  {employee.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Input type="datetime-local" value={startsAt} onChange={(e) => setStartsAt(e.target.value)} />
-          <Input type="datetime-local" value={endsAt} onChange={(e) => setEndsAt(e.target.value)} />
-          <Input placeholder="Motivo" value={reason} onChange={(e) => setReason(e.target.value)} />
-          <Button onClick={submit} disabled={pending || !startsAt || !endsAt}>
-            Crear
+        <form className="space-y-4" onSubmit={handleSubmit(submit)}>
+          <div className="space-y-2">
+            <span id="blocked-period-employee-label" className="text-body-sm">
+              Empleado
+            </span>
+            <Controller
+              control={control}
+              name="employeeId"
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={isSubmitting}
+                >
+                  <SelectTrigger aria-labelledby="blocked-period-employee-label">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="global">Global</SelectItem>
+                    {employees.map((employee) => (
+                      <SelectItem key={employee.id} value={employee.id}>
+                        {employee.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="blocked-period-start" className="text-body-sm">
+              Inicio
+            </label>
+            <Input
+              id="blocked-period-start"
+              type="datetime-local"
+              {...register("startsAt")}
+              disabled={isSubmitting}
+            />
+            {errors.startsAt ? (
+              <p className="text-body-sm text-danger">{errors.startsAt.message}</p>
+            ) : null}
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="blocked-period-end" className="text-body-sm">
+              Fin
+            </label>
+            <Input
+              id="blocked-period-end"
+              type="datetime-local"
+              {...register("endsAt")}
+              disabled={isSubmitting}
+            />
+            {errors.endsAt ? (
+              <p className="text-body-sm text-danger">{errors.endsAt.message}</p>
+            ) : null}
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="blocked-period-reason" className="text-body-sm">
+              Motivo
+            </label>
+            <Input
+              id="blocked-period-reason"
+              placeholder="Motivo"
+              {...register("reason")}
+              disabled={isSubmitting}
+            />
+            {errors.reason ? (
+              <p className="text-body-sm text-danger">{errors.reason.message}</p>
+            ) : null}
+          </div>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Creando…" : "Crear"}
           </Button>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -7,6 +7,7 @@ import {
   createEmptyPromotionCardsOffer,
 } from "@/components/dashboard/create-empty-offer";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useShallow } from "zustand/react/shallow";
 import type { Landing } from "@/lib/dashboard-data";
 
 type OffersEditorPanelProps = {
@@ -14,7 +15,13 @@ type OffersEditorPanelProps = {
 };
 
 export function OffersEditorPanel({ activeLanding }: OffersEditorPanelProps) {
-  const { addOffer, removeOffer, updateOffer } = useDashboardStore();
+  const { addOffer, removeOffer, updateOffer } = useDashboardStore(
+    useShallow((state) => ({
+      addOffer: state.addOffer,
+      removeOffer: state.removeOffer,
+      updateOffer: state.updateOffer,
+    })),
+  );
   const offers = activeLanding.content.offers ?? [];
 
   return (

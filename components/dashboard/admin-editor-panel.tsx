@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useShallow } from "zustand/react/shallow";
 import type { Landing } from "@/lib/dashboard-data";
 import { LockIcon } from "lucide-react";
 
@@ -9,7 +10,9 @@ type AdminEditorPanelProps = {
 };
 
 export function AdminEditorPanel({ activeLanding }: AdminEditorPanelProps) {
-  const { updateLandingMeta } = useDashboardStore();
+  const { updateLandingMeta } = useDashboardStore(
+    useShallow((state) => ({ updateLandingMeta: state.updateLandingMeta })),
+  );
 
   return (
     <section className="space-y-4 py-unit-lg">

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import type { BookingSettings } from "@/db/schema";
+import type { BookingSettingsDto } from "@/lib/booking/dtos";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -16,50 +17,68 @@ import {
 } from "@/components/ui/select";
 import { BOOKING_TIMEZONES } from "@/lib/booking/timezones";
 import { upsertBookingSettingsAction } from "@/app/actions/booking-settings";
+import {
+  bookingSettingsSchema,
+  type BookingSettingsFormValues,
+} from "@/lib/schemas/booking-admin";
 
 export function BookingSettingsForm({
   settings,
   onOpenChange,
 }: {
-  settings: BookingSettings;
+  settings: BookingSettingsDto;
   onOpenChange: (open: boolean) => void;
 }) {
   const router = useRouter();
-  const [form, setForm] = useState({
-    enabled: settings.enabled,
-    timezone: settings.timezone,
-    autoConfirmBookings: settings.autoConfirmBookings,
-    minAdvanceHours: settings.minAdvanceHours,
-    maxAdvanceDays: settings.maxAdvanceDays,
-    slotGranularityMinutes: settings.slotGranularityMinutes,
-    notificationEmail: settings.notificationEmail,
+  const {
+    control,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    register,
+  } = useForm<BookingSettingsFormValues>({
+    resolver: zodResolver(bookingSettingsSchema),
+    defaultValues: {
+      enabled: settings.enabled,
+      timezone: settings.timezone,
+      autoConfirmBookings: settings.autoConfirmBookings,
+      minAdvanceHours: settings.minAdvanceHours,
+      maxAdvanceDays: settings.maxAdvanceDays,
+      slotGranularityMinutes: settings.slotGranularityMinutes,
+      notificationEmail: settings.notificationEmail,
+    },
   });
-  const [pending, startTransition] = useTransition();
 
-  const save = () => {
-    startTransition(async () => {
-      const result = await upsertBookingSettingsAction(form);
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("Ajustes guardados");
-      onOpenChange(false);
-      router.refresh();
-    });
+  const save = async (values: BookingSettingsFormValues) => {
+    const result = await upsertBookingSettingsAction(values);
+    if ("error" in result) {
+      toast.error(result.error);
+      return;
+    }
+    toast.success("Ajustes guardados");
+    onOpenChange(false);
+    router.refresh();
   };
 
   return (
-    <div className="space-y-6 overflow-y-auto px-6 py-6">
+    <form
+      className="space-y-6 overflow-y-auto px-6 py-6"
+      onSubmit={handleSubmit(save)}
+    >
       <div className="flex items-center justify-between gap-3">
         <label className="font-body text-body-sm" htmlFor="booking-settings-enabled">
           Activar reservas
         </label>
-        <Switch
-          id="booking-settings-enabled"
-          checked={form.enabled}
-          disabled={pending}
-          onCheckedChange={(enabled) => setForm((current) => ({ ...current, enabled }))}
+        <Controller
+          control={control}
+          name="enabled"
+          render={({ field }) => (
+            <Switch
+              id="booking-settings-enabled"
+              checked={field.value}
+              disabled={isSubmitting}
+              onCheckedChange={field.onChange}
+            />
+          )}
         />
       </div>
       <div className="space-y-2">
@@ -69,98 +88,114 @@ export function BookingSettingsForm({
         <Input
           id="booking-settings-notification-email"
           type="email"
-          value={form.notificationEmail}
           placeholder="negocio@ejemplo.com"
-          onChange={(e) =>
-            setForm((current) => ({ ...current, notificationEmail: e.target.value }))
-          }
+          {...register("notificationEmail")}
+          disabled={isSubmitting}
         />
+        {errors.notificationEmail ? (
+          <p className="text-body-sm text-danger">{errors.notificationEmail.message}</p>
+        ) : null}
       </div>
       <div className="space-y-2">
         <span className="font-body text-body-sm">Zona horaria</span>
-        <Select
-          value={form.timezone}
-          onValueChange={(timezone) => setForm((current) => ({ ...current, timezone }))}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {BOOKING_TIMEZONES.map((tz) => (
-              <SelectItem key={tz.value} value={tz.value}>
-                {tz.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Controller
+          control={control}
+          name="timezone"
+          render={({ field }) => (
+            <Select
+              value={field.value}
+              onValueChange={field.onChange}
+              disabled={isSubmitting}
+            >
+              <SelectTrigger aria-label="Zona horaria">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {BOOKING_TIMEZONES.map((timezone) => (
+                  <SelectItem key={timezone.value} value={timezone.value}>
+                    {timezone.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
       </div>
       <div className="flex items-center justify-between gap-3">
         <label className="font-body text-body-sm" htmlFor="booking-settings-auto-confirm">
           Auto-confirmación
         </label>
-        <Switch
-          id="booking-settings-auto-confirm"
-          checked={form.autoConfirmBookings}
-          disabled={pending}
-          onCheckedChange={(autoConfirmBookings) =>
-            setForm((current) => ({ ...current, autoConfirmBookings }))
-          }
+        <Controller
+          control={control}
+          name="autoConfirmBookings"
+          render={({ field }) => (
+            <Switch
+              id="booking-settings-auto-confirm"
+              checked={field.value}
+              disabled={isSubmitting}
+              onCheckedChange={field.onChange}
+            />
+          )}
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
-          <span className="font-body text-body-sm">Antelación mínima (horas)</span>
+          <label className="font-body text-body-sm" htmlFor="booking-settings-min-hours">
+            Antelación mínima (horas)
+          </label>
           <Input
+            id="booking-settings-min-hours"
             type="number"
-            value={form.minAdvanceHours}
-            onChange={(e) =>
-              setForm((current) => ({
-                ...current,
-                minAdvanceHours: Number(e.target.value),
-              }))
-            }
+            {...register("minAdvanceHours", { valueAsNumber: true })}
+            disabled={isSubmitting}
           />
+          {errors.minAdvanceHours ? (
+            <p className="text-body-sm text-danger">{errors.minAdvanceHours.message}</p>
+          ) : null}
         </div>
         <div className="space-y-2">
-          <span className="font-body text-body-sm">Antelación máxima (días)</span>
+          <label className="font-body text-body-sm" htmlFor="booking-settings-max-days">
+            Antelación máxima (días)
+          </label>
           <Input
+            id="booking-settings-max-days"
             type="number"
-            value={form.maxAdvanceDays}
-            onChange={(e) =>
-              setForm((current) => ({
-                ...current,
-                maxAdvanceDays: Number(e.target.value),
-              }))
-            }
+            {...register("maxAdvanceDays", { valueAsNumber: true })}
+            disabled={isSubmitting}
           />
+          {errors.maxAdvanceDays ? (
+            <p className="text-body-sm text-danger">{errors.maxAdvanceDays.message}</p>
+          ) : null}
         </div>
       </div>
       <div className="space-y-2">
         <span className="font-body text-body-sm">Granularidad (minutos)</span>
-        <Select
-          value={String(form.slotGranularityMinutes)}
-          onValueChange={(value) =>
-            setForm((current) => ({
-              ...current,
-              slotGranularityMinutes: Number(value),
-            }))
-          }
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {[5, 10, 15, 30, 60].map((value) => (
-              <SelectItem key={value} value={String(value)}>
-                {value} min
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Controller
+          control={control}
+          name="slotGranularityMinutes"
+          render={({ field }) => (
+            <Select
+              value={String(field.value)}
+              onValueChange={(value) => field.onChange(Number(value))}
+              disabled={isSubmitting}
+            >
+              <SelectTrigger aria-label="Granularidad">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[5, 10, 15, 30, 60].map((value) => (
+                  <SelectItem key={value} value={String(value)}>
+                    {value} min
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
       </div>
-      <Button onClick={save} disabled={pending} className="w-full">
-        Guardar
+      <Button type="submit" disabled={isSubmitting} className="w-full">
+        {isSubmitting ? "Guardando…" : "Guardar"}
       </Button>
-    </div>
+    </form>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import type { BookingService } from "@/db/schema";
+import type { BookingService } from "@/lib/domain/dtos";
 import { Scissors } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useEmployeeEditorStore } from "@/stores/employee-editor-store";

@@ -12,7 +12,9 @@ type SeoEditorPanelProps = {
 };
 
 export function SeoEditorPanel({ activeLanding }: SeoEditorPanelProps) {
-  const { updateLandingMeta } = useDashboardStore();
+  const updateLandingMeta = useDashboardStore(
+    (state) => state.updateLandingMeta,
+  );
 
   return (
     <section className="space-y-5 py-unit-lg">

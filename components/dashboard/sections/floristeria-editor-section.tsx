@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useShallow } from "zustand/react/shallow";
 import { ImageField } from "@/components/dashboard/image-field";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
@@ -27,7 +28,18 @@ export function FloristeriaEditorSection() {
     updateSectionItem,
     updateStat,
     updateStory,
-  } = useDashboardStore();
+  } = useDashboardStore(
+    useShallow((state) => ({
+      activeEditorTab: state.activeEditorTab,
+      activeLandingId: state.activeLandingId,
+      isAdmin: state.isAdmin,
+      landings: state.landings,
+      updateSection: state.updateSection,
+      updateSectionItem: state.updateSectionItem,
+      updateStat: state.updateStat,
+      updateStory: state.updateStory,
+    })),
+  );
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];

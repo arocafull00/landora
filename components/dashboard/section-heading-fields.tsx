@@ -18,7 +18,9 @@ export function SectionHeadingFields({
   fallback,
   groupLabel,
 }: SectionHeadingFieldsProps) {
-  const { updateSectionHeading } = useDashboardStore();
+  const updateSectionHeading = useDashboardStore(
+    (state) => state.updateSectionHeading,
+  );
   const heading = getSectionHeading(activeLanding.content, anchor, fallback);
   const showSubtitle = hasSectionSubtitle(fallback);
 

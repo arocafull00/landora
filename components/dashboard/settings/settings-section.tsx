@@ -1,4 +1,4 @@
-import type { SubscriptionStatus } from "@/db/schema";
+import type { SubscriptionStatus } from "@/lib/domain/dtos";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { ManageSubscriptionButton } from "@/components/dashboard/settings/manage-subscription-button";
 import { Panel } from "@/components/ui/primitives";

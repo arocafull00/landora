@@ -82,6 +82,30 @@ button {
   --portfolio-accent: #2dd4bf;
   --portfolio-accent-ink: #062e2a;
   --portfolio-line: #343438;
+  --agenda-emerald-main: #10b981;
+  --agenda-emerald-container: #a7f3d0;
+  --agenda-emerald-ink: #02401f;
+  --agenda-blue-main: #3b82f6;
+  --agenda-blue-container: #bfdbfe;
+  --agenda-blue-ink: #1e3a8a;
+  --agenda-violet-main: #8b5cf6;
+  --agenda-violet-container: #ddd6fe;
+  --agenda-violet-ink: #4c1d95;
+  --agenda-amber-main: #f59e0b;
+  --agenda-amber-container: #fde68a;
+  --agenda-amber-ink: #78350f;
+  --agenda-rose-main: #f43f5e;
+  --agenda-rose-container: #fecdd3;
+  --agenda-rose-ink: #881337;
+  --agenda-cyan-main: #06b6d4;
+  --agenda-cyan-container: #a5f3fc;
+  --agenda-cyan-ink: #164e63;
+  --agenda-lime-main: #84cc16;
+  --agenda-lime-container: #d9f99d;
+  --agenda-lime-ink: #365314;
+  --agenda-fuchsia-main: #d946ef;
+  --agenda-fuchsia-container: #f5d0fe;
+  --agenda-fuchsia-ink: #701a75;
 }
 
 @theme inline {
@@ -652,15 +676,19 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --site-on-primary: #ffffff;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html[data-dashboard] [data-slot="sidebar-menu-button"],
-  html[data-dashboard] button {
-    transition-duration: 0.01ms !important;
-  }
-}
-
 * {
   box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {

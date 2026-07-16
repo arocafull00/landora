@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { BookingService } from "@/db/schema";
+import type { BookingService } from "@/lib/domain/dtos";
 import { Panel } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { ServiceActiveBadge } from "@/components/dashboard/booking/services/service-active-badge";

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "react-toastify";
-import type { BookingService } from "@/db/schema";
+import type { BookingService } from "@/lib/domain/dtos";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Button } from "@/components/ui/button";
 import { ServiceCard } from "@/components/dashboard/booking/services/service-card";

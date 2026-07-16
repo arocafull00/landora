@@ -19,6 +19,7 @@ import { BookingStepContact } from "@/components/booking/booking-step-contact";
 import { BookingStepConfirmation } from "@/components/booking/booking-step-confirmation";
 import { Button } from "@/components/ui/button";
 import { createBookingAction } from "@/app/actions/bookings";
+import { turnstileSiteKey } from "@/lib/booking/turnstile-config";
 
 export function BookingWidget({ slug }: { slug: string }) {
   const {
@@ -61,7 +62,7 @@ export function BookingWidget({ slug }: { slug: string }) {
       !selection.serviceId ||
       !selection.employeeId ||
       !selection.startsAt ||
-      (!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken)
+      (!!turnstileSiteKey && !turnstileToken)
     ) {
       toast.error("Completa todos los pasos");
       return;
@@ -194,10 +195,10 @@ export function BookingWidget({ slug }: { slug: string }) {
             <BookingStepContact
               pending={pending}
               submitDisabled={
-                !!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken
+                !!turnstileSiteKey && !turnstileToken
               }
               onSubmit={submitBooking}
-              showTurnstile={!!process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+              showTurnstile={!!turnstileSiteKey}
               onTurnstileSuccess={setTurnstileToken}
               onTurnstileExpire={() => setTurnstileToken("")}
               onTurnstileError={() => setTurnstileToken("")}

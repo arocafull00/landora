@@ -1,4 +1,4 @@
-import type { SubscriptionPlan } from "@/db/schema";
+import type { SubscriptionPlan } from "@/lib/domain/dtos";
 import { cn } from "@/lib/utils";
 
 const PLAN_STYLES: Record<SubscriptionPlan, string> = {

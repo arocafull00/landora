@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { AssetImage } from "@/components/ui/asset-image";
-import type { AssetRow } from "@/db/schema";
+import type { AssetRow } from "@/lib/domain/dtos";
 import { shortDateFormatter } from "@/lib/intl-formatters";
 import { uploadAsset } from "@/lib/upload-asset";
 import { useAssetsStore } from "@/stores/assets-store";

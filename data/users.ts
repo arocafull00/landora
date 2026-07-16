@@ -1,3 +1,5 @@
+import "server-only";
+
 import { cache } from "react";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
@@ -12,6 +14,16 @@ const getUserById = cache(async (userId: string) => {
     });
   } catch {
     throw new Error("Failed to fetch user");
+  }
+});
+
+export const getUserByClerkUserId = cache(async (clerkUserId: string) => {
+  try {
+    return await db.query.users.findFirst({
+      where: eq(users.clerkUserId, clerkUserId),
+    });
+  } catch {
+    throw new Error("Failed to fetch user by Clerk id");
   }
 });
 

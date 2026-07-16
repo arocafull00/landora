@@ -1,6 +1,6 @@
 "use client";
 
-import type { Booking, Employee } from "@/db/schema";
+import type { Booking, Employee } from "@/lib/domain/dtos";
 import { useState, useMemo, useEffect } from "react";
 import { useNextCalendarApp, ScheduleXCalendar } from "@schedule-x/react";
 import {
@@ -13,10 +13,8 @@ import { createEventsServicePlugin } from "@schedule-x/events-service";
 import { toZonedTime } from "date-fns-tz";
 import "temporal-polyfill/global";
 import "@schedule-x/theme-default/dist/index.css";
-import {
-  AgendaEmployeeFilter,
-  buildCalendarsConfig,
-} from "@/components/dashboard/booking/bookings/agenda-employee-filter";
+import { AgendaEmployeeFilter } from "@/components/dashboard/booking/bookings/agenda-employee-filter";
+import { buildCalendarsConfig } from "@/lib/booking/agenda-calendars";
 
 function toTemporalZonedDateTime(date: Date, timezone: string) {
   const pad = (n: number) => String(n).padStart(2, "0");

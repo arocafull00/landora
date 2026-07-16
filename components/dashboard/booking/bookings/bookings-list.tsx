@@ -1,4 +1,4 @@
-import type { Booking, Employee } from "@/db/schema";
+import type { Booking, Employee } from "@/lib/domain/dtos";
 import { BookingListRow } from "@/components/dashboard/booking/bookings/booking-list-row";
 
 export function BookingsList({

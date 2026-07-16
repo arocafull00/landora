@@ -45,7 +45,7 @@ import {
   mapDefaultTestimonials,
   mapDefaultWorkHistory,
   mapDefaultWorkflow,
-} from "@/lib/landing-section-mappers";
+} from "@/data/landing-section-mappers";
 
 const FULL_SECTION_KEYS: LandingSectionKey[] = [
   "hero",

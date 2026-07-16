@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useShallow } from "zustand/react/shallow";
 import { StudioEditorSection } from "@/components/dashboard/sections/studio-editor-section";
 import { PortfolioEditorSection } from "@/components/dashboard/sections/portfolio-editor-section";
 import { RistoranteEditorSection } from "@/components/dashboard/sections/ristorante-editor-section";
@@ -10,7 +11,12 @@ import { CoffeeShopEditorSection } from "@/components/dashboard/sections/coffee-
 import { VelarEditorSection } from "@/components/dashboard/sections/velar-editor-section";
 
 export function EditorSection() {
-  const { activeLandingId, landings } = useDashboardStore();
+  const { activeLandingId, landings } = useDashboardStore(
+    useShallow((state) => ({
+      activeLandingId: state.activeLandingId,
+      landings: state.landings,
+    })),
+  );
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];

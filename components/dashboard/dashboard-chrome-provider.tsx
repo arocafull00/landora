@@ -1,18 +1,10 @@
 "use client";
 
-import { createContext, use, useMemo, type ReactNode } from "react";
-
-type DashboardChrome = {
-  isAdmin: boolean;
-  impersonating: boolean;
-  bookingEnabled: boolean;
-};
-
-const DashboardChromeContext = createContext<DashboardChrome>({
-  isAdmin: false,
-  impersonating: false,
-  bookingEnabled: false,
-});
+import { useMemo, type ReactNode } from "react";
+import {
+  DashboardChromeContext,
+  type DashboardChrome,
+} from "@/components/dashboard/dashboard-chrome-context";
 
 export function DashboardChromeProvider({
   isAdmin,
@@ -30,8 +22,4 @@ export function DashboardChromeProvider({
       {children}
     </DashboardChromeContext>
   );
-}
-
-export function useDashboardChrome() {
-  return use(DashboardChromeContext);
 }

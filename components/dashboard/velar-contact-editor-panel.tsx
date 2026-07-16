@@ -8,7 +8,7 @@ import type { Landing } from "@/lib/dashboard-data";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 export function VelarContactEditorPanel({ activeLanding }: { activeLanding: Landing }) {
-  const { updateContact } = useDashboardStore();
+  const updateContact = useDashboardStore((state) => state.updateContact);
   const contact = activeLanding.content.contact;
 
   return (

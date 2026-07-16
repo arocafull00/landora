@@ -20,7 +20,7 @@ export function OficioProServiceCard({
   item: ServiceMenuItem;
 }) {
   return (
-    <article className="group flex gap-4 rounded-2xl border border-[var(--site-primary)]/10 bg-[var(--site-surface)]/90 p-5 shadow-[0_12px_30px_rgba(31,78,121,0.08)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(31,78,121,0.13)]">
+    <article className="group flex gap-4 rounded-2xl border border-[var(--site-primary)]/10 bg-[var(--site-surface)]/90 p-5 shadow-[0_12px_30px_rgba(31,78,121,0.08)] transition-[box-shadow,transform] hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(31,78,121,0.13)]">
       <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--site-primary)]/10 text-[var(--site-primary)] transition-colors group-hover:bg-[var(--site-accent-bright)]/20 group-hover:text-[var(--site-text)]">
         {getIconElement(item.category, index)}
       </div>

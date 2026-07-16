@@ -5,6 +5,8 @@ import type {
 } from "@/lib/dashboard-data";
 
 export const PREVIEW_CONTENT_UPDATE = "landora:preview-content-update";
+export const PREVIEW_CHANNEL_INIT = "landora:preview-channel-init";
+export const PREVIEW_CHANNEL_READY = "landora:preview-channel-ready";
 const PREVIEW_SCROLL_TO = "landora:preview-scroll-to";
 const PREVIEW_HIGHLIGHT_SECTION = "landora:preview-highlight-section";
 const PREVIEW_HIGHLIGHT_ELEMENT = "landora:preview-highlight-element";
@@ -56,25 +58,19 @@ export function isPreviewHighlightSectionMessage(
 }
 
 export function postPreviewContent(
-  target: Window | null | undefined,
+  target: MessagePort | null | undefined,
   payload: Omit<PreviewContentMessage, "type">
 ) {
   if (!target) return;
-  target.postMessage(
-    { type: PREVIEW_CONTENT_UPDATE, ...payload },
-    "*"
-  );
+  target.postMessage({ type: PREVIEW_CONTENT_UPDATE, ...payload });
 }
 
 export function postPreviewScrollTo(
-  target: Window | null | undefined,
+  target: MessagePort | null | undefined,
   sectionId: string
 ) {
   if (!target) return;
-  target.postMessage(
-    { type: PREVIEW_SCROLL_TO, sectionId },
-    "*"
-  );
+  target.postMessage({ type: PREVIEW_SCROLL_TO, sectionId });
 }
 
 export type PreviewHighlightElementMessage = {
@@ -93,24 +89,18 @@ export function isPreviewHighlightElementMessage(
 }
 
 export function postPreviewHighlightSection(
-  target: Window | null | undefined,
+  target: MessagePort | null | undefined,
   sectionId: string | null,
   label?: string,
 ) {
   if (!target) return;
-  target.postMessage(
-    { type: PREVIEW_HIGHLIGHT_SECTION, sectionId, label },
-    "*",
-  );
+  target.postMessage({ type: PREVIEW_HIGHLIGHT_SECTION, sectionId, label });
 }
 
 export function postPreviewHighlightElement(
-  target: Window | null | undefined,
+  target: MessagePort | null | undefined,
   editorId: string | null,
 ) {
   if (!target) return;
-  target.postMessage(
-    { type: PREVIEW_HIGHLIGHT_ELEMENT, editorId },
-    "*",
-  );
+  target.postMessage({ type: PREVIEW_HIGHLIGHT_ELEMENT, editorId });
 }

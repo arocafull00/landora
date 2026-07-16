@@ -5,7 +5,7 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import type { Landing } from "@/lib/dashboard-data";
 
 export function WhatsappFloatToggle({ activeLanding }: { activeLanding: Landing }) {
-  const { updateContact } = useDashboardStore();
+  const updateContact = useDashboardStore((state) => state.updateContact);
   const contact = activeLanding.content.contact;
   const enabled = contact.whatsappEnabled ?? false;
 

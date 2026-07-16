@@ -9,7 +9,7 @@ import { UsersStatsBar } from "@/components/admin/users-stats-bar";
 import { UsersTable } from "@/components/admin/users-table";
 import { DashboardEmptyState } from "@/components/dashboard/dashboard-empty-state";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
-import type { LandingPage, User } from "@/db/schema";
+import type { LandingPage, User } from "@/lib/domain/dtos";
 import {
   computeAdminUsersStats,
   filterAdminUsers,

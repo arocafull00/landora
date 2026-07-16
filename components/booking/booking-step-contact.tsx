@@ -84,13 +84,16 @@ export function BookingStepContact({
         <Label htmlFor="notes">Notas</Label>
         <textarea id="notes" name="notes" className={textareaClassName} />
       </div>
+      <label className="sr-only" htmlFor="booking-website">
+        Sitio web
+      </label>
       <input
+        id="booking-website"
         name="website"
         tabIndex={-1}
         autoComplete="off"
         className="hidden"
         aria-hidden
-        aria-label="Campo oculto"
       />
       {showTurnstile ? (
         <div className="space-y-2">

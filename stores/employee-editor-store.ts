@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import type { BookingService, Employee, EmployeeHours } from "@/db/schema";
+import type { BookingService, Employee, EmployeeHours } from "@/lib/domain/dtos";
 import {
   buildHourDrafts,
   isUniformSchedule,

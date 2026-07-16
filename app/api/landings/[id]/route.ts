@@ -1,38 +1,48 @@
 import { assertLandingAccess } from "@/lib/api/landing-auth";
 import { updateLandingPage } from "@/data/landing-pages";
 import { upsertLandingSeo } from "@/data/landing-sections";
+import { parseJsonBody } from "@/lib/api/parse-json";
+import {
+  resourceIdSchema,
+  updateLandingMetaSchema,
+} from "@/lib/schemas/api";
 
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await params;
+    const parsedId = resourceIdSchema.safeParse((await params).id);
+    if (!parsedId.success) {
+      return Response.json({ error: "Invalid landing id" }, { status: 400 });
+    }
+    const id = parsedId.data;
     const landing = await assertLandingAccess(id);
 
     if (!landing) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
+    const parsed = await parseJsonBody(req, updateLandingMetaSchema);
+    if (!parsed.success) return parsed.response;
+    const body = parsed.data;
 
     const patch: Parameters<typeof updateLandingPage>[1] = { updatedAt: new Date() };
 
-    if (typeof body.published === "boolean") patch.published = body.published;
-    if (typeof body.name === "string" && body.name.trim()) patch.name = body.name.trim();
-    if (typeof body.slug === "string" && body.slug.trim()) patch.slug = body.slug.trim();
+    if (body.published !== undefined) patch.published = body.published;
+    if (body.name !== undefined) patch.name = body.name;
+    if (body.slug !== undefined) patch.slug = body.slug;
 
-    const hasSeoTitle = typeof body.seoTitle === "string";
-    const hasSeoDescription = typeof body.seoDescription === "string";
-    const hasSeoFavicon = typeof body.seoFavicon === "string";
+    const hasSeoTitle = body.seoTitle !== undefined;
+    const hasSeoDescription = body.seoDescription !== undefined;
+    const hasSeoFavicon = body.seoFavicon !== undefined;
 
     if (hasSeoTitle || hasSeoDescription || hasSeoFavicon) {
       await upsertLandingSeo(id, {
-        title: hasSeoTitle ? body.seoTitle : (landing.seo?.title ?? ""),
-        description: hasSeoDescription
-          ? body.seoDescription
-          : (landing.seo?.description ?? ""),
-        favicon: hasSeoFavicon ? body.seoFavicon : (landing.seo?.favicon ?? ""),
+        title: body.seoTitle ?? landing.seo?.title ?? "",
+        description:
+          body.seoDescription ?? landing.seo?.description ?? "",
+        favicon: body.seoFavicon ?? landing.seo?.favicon ?? "",
       });
     }
 

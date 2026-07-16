@@ -17,14 +17,14 @@ import {
   isPreviewContentMessage,
   isPreviewHighlightElementMessage,
   isPreviewScrollToMessage,
-  PREVIEW_CONTENT_UPDATE,
+  PREVIEW_CHANNEL_INIT,
+  PREVIEW_CHANNEL_READY,
 } from "@/lib/preview-messaging";
 import {
   getHashSectionId,
   scrollToSectionIdWhenReady,
 } from "@/lib/scroll-to-section";
 import { resolveSectionId } from "@/lib/template-sections";
-import { usePreviewScrollContainer } from "@/lib/preview-scroll-context";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 
@@ -57,7 +57,7 @@ export function LandingPreviewFrame({
     template: TemplateId;
   } | null>(null);
   const highlightedEditorIdRef = useRef<string | null>(null);
-  const scrollContainer = usePreviewScrollContainer();
+  const portRef = useRef<MessagePort | null>(null);
   const content = livePreview?.content ?? initialContent;
   const activeTemplate = livePreview?.template ?? template;
   const sectionSelections =
@@ -72,19 +72,13 @@ export function LandingPreviewFrame({
   }, [content]);
 
   const refreshScrollPosition = useCallback(() => {
-    if (scrollContainer) {
-      scrollContainer.dispatchEvent(new Event("scroll"));
-      return;
-    }
     window.dispatchEvent(new Event("scroll"));
-  }, [scrollContainer]);
+  }, []);
 
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.source !== window.parent) return;
-
-      if (isPreviewScrollToMessage(event.data)) {
-        const { sectionId } = event.data;
+    const handlePreviewMessage = (data: unknown) => {
+      if (isPreviewScrollToMessage(data)) {
+        const { sectionId } = data;
         scrollToSectionIdWhenReady(sectionId);
         window.history.replaceState(
           null,
@@ -94,41 +88,50 @@ export function LandingPreviewFrame({
         return;
       }
 
-      if (isPreviewHighlightElementMessage(event.data)) {
+      if (isPreviewHighlightElementMessage(data)) {
         for (const el of document.querySelectorAll(".template-element--highlighted")) {
           el.classList.remove("template-element--highlighted");
         }
-        highlightedEditorIdRef.current = event.data.editorId;
-        if (event.data.editorId) {
-          for (const el of document.querySelectorAll(`[data-editor-id="${event.data.editorId}"]`)) {
+        highlightedEditorIdRef.current = data.editorId;
+        if (data.editorId) {
+          for (const el of document.querySelectorAll(`[data-editor-id="${data.editorId}"]`)) {
             el.classList.add("template-element--highlighted");
           }
         }
         return;
       }
 
-      if (!isPreviewContentMessage(event.data)) return;
+      if (!isPreviewContentMessage(data)) return;
       setLivePreview({
-        content: event.data.content,
-        sectionSelections: event.data.sectionSelections,
-        template: event.data.template,
+        content: data.content,
+        sectionSelections: data.sectionSelections,
+        template: data.template,
       });
       requestAnimationFrame(() => {
         requestAnimationFrame(refreshScrollPosition);
       });
     };
 
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, [refreshScrollPosition]);
+    const connectChannel = (event: MessageEvent) => {
+      if (event.source !== window.parent) return;
+      if (event.data?.type !== PREVIEW_CHANNEL_INIT) return;
+      const port = event.ports[0];
+      if (!port) return;
 
-  useEffect(() => {
-    if (window.parent === window) return;
-    window.parent.postMessage(
-      { type: `${PREVIEW_CONTENT_UPDATE}:ready` },
-      "*"
-    );
-  }, []);
+      portRef.current?.close();
+      portRef.current = port;
+      port.onmessage = (messageEvent) => handlePreviewMessage(messageEvent.data);
+      port.start();
+      port.postMessage({ type: PREVIEW_CHANNEL_READY });
+    };
+
+    window.addEventListener("message", connectChannel);
+    return () => {
+      window.removeEventListener("message", connectChannel);
+      portRef.current?.close();
+      portRef.current = null;
+    };
+  }, [refreshScrollPosition]);
 
   const scrollToResolvedHash = useCallback(() => {
     const sectionId = getHashSectionId();

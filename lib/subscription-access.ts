@@ -1,4 +1,4 @@
-import type { SubscriptionStatus } from "@/db/schema";
+import type { SubscriptionStatus } from "@/lib/domain/dtos";
 
 const ALLOWED_SUBSCRIPTION_STATUSES: SubscriptionStatus[] = [
   "active",

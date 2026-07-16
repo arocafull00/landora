@@ -7,7 +7,10 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import { useOnboardingStore } from "@/stores/onboarding-store";
 import { IconButton } from "@/components/ui/primitives";
 
-function buildTutorial(markSeen: () => void) {
+function buildTutorial(
+  markSeen: () => void,
+  setActiveEditorTab: (tab: string) => void,
+) {
   markSeen();
   const driverObj = driver({
       showProgress: true,
@@ -35,7 +38,7 @@ function buildTutorial(markSeen: () => void) {
         {
           element: "#tutorial-hero-tab",
           onHighlightStarted: () => {
-            useDashboardStore.getState().setActiveEditorTab("Hero");
+            setActiveEditorTab("Hero");
           },
           popover: {
             title: "Secciones del editor",
@@ -98,18 +101,24 @@ function buildTutorial(markSeen: () => void) {
 export function DashboardTutorialButton() {
   const tutorialSeen = useOnboardingStore((s) => s.tutorialSeen);
   const markTutorialSeen = useOnboardingStore((s) => s.markTutorialSeen);
+  const setActiveEditorTab = useDashboardStore(
+    (state) => state.setActiveEditorTab,
+  );
 
   useEffect(() => {
     if (tutorialSeen) return;
-    const timeout = setTimeout(() => buildTutorial(markTutorialSeen), 800);
+    const timeout = setTimeout(
+      () => buildTutorial(markTutorialSeen, setActiveEditorTab),
+      800,
+    );
     return () => clearTimeout(timeout);
-  }, [tutorialSeen, markTutorialSeen]);
+  }, [tutorialSeen, markTutorialSeen, setActiveEditorTab]);
 
   return (
     <IconButton
       icon="tutorial"
       label="Tutorial"
-      onClick={() => buildTutorial(markTutorialSeen)}
+      onClick={() => buildTutorial(markTutorialSeen, setActiveEditorTab)}
     />
   );
 }

@@ -20,7 +20,7 @@ import {
 import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/dashboard-data";
 import { parseSocialLinks } from "@/lib/footer-content";
 import type { LandingPageMeta } from "@/data/landing-pages";
-import type { OfferCardRow } from "@/db/schema";
+import type { OfferCardRow } from "@/lib/domain/dtos";
 
 function parseExpiresAt(value: unknown) {
   if (value instanceof Date) return value;
@@ -309,9 +309,11 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
           image: typeof item.image === "string" ? item.image : "",
           features: Array.isArray(item.features)
             ? item.features
-                .filter((feature): feature is string => typeof feature === "string")
-                .map((feature) => feature.trim())
-                .filter(Boolean)
+                .flatMap((feature) => {
+                  if (typeof feature !== "string") return [];
+                  const trimmed = feature.trim();
+                  return trimmed ? [trimmed] : [];
+                })
             : [],
         };
       });

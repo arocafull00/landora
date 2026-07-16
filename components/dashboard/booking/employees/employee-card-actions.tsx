@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import type { Employee } from "@/db/schema";
+import type { Employee } from "@/lib/domain/dtos";
 import type { HourDraft } from "@/lib/employee-schedule";
 import { Button } from "@/components/ui/button";
 import {

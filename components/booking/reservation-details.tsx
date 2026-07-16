@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { toast } from "react-toastify";
-import type { Booking, BookingStatus } from "@/db/schema";
+import type { Booking, BookingStatus } from "@/lib/domain/dtos";
 import { Panel } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { BookingStatusBadge } from "@/components/dashboard/booking/bookings/booking-status-badge";

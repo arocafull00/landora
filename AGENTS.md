@@ -2,7 +2,7 @@
 
 App de gestión inmobiliaria. **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Clerk · Neon Postgres · Drizzle ORM · Tailwind CSS v4 · shadcn/ui · Zustand · Zod · react-toastify.
 
-Arquitectura, rutas y fases de desarrollo: `docs/plan.md`.
+Arquitectura, rutas y fases de desarrollo: `PLAN.md`.
 
 ## Documentación
 

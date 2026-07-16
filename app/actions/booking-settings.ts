@@ -5,21 +5,12 @@ import { z } from "zod";
 import { upsertBookingSettings } from "@/data/booking-settings";
 import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
-
-const settingsSchema = z.object({
-  enabled: z.boolean(),
-  timezone: z.string().trim().min(1),
-  autoConfirmBookings: z.boolean(),
-  minAdvanceHours: z.number().int().min(0).max(168),
-  maxAdvanceDays: z.number().int().min(1).max(365),
-  slotGranularityMinutes: z.number().int().refine((v) => [5, 10, 15, 30, 60].includes(v)),
-  notificationEmail: z.email().or(z.literal("")),
-});
+import { bookingSettingsSchema } from "@/lib/schemas/booking-admin";
 
 type ActionResult = { success: true } | { error: string };
 
 export async function upsertBookingSettingsAction(
-  input: z.infer<typeof settingsSchema>,
+  input: z.infer<typeof bookingSettingsSchema>,
 ): Promise<ActionResult> {
   const authResult = await requireAuth();
   if ("error" in authResult) return { error: authResult.error };
@@ -27,7 +18,7 @@ export async function upsertBookingSettingsAction(
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
-  const parsed = settingsSchema.safeParse(input);
+  const parsed = bookingSettingsSchema.safeParse(input);
   if (!parsed.success) {
     return { error: "Datos inválidos" };
   }

@@ -54,14 +54,6 @@ export const FLORISTERIA_HERO_FAN_DEFAULT_IMAGES = [
   FLORISTERIA_ASSETS.bouquet5,
 ] as const;
 
-export const FLORISTERIA_HERO_FAN_LABELS = [
-  "Ramo izquierdo exterior",
-  "Ramo izquierdo interior",
-  "Imagen central",
-  "Ramo derecho interior",
-  "Ramo derecho exterior",
-] as const;
-
 export function resolveFloristeriaFanImages(hero: HeroContent): string[] {
   return FLORISTERIA_HERO_FAN_DEFAULT_IMAGES.map((fallback, index) => {
     const stored = hero.fanImages?.[index];

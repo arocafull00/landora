@@ -5,6 +5,8 @@ import {
   getAssetByIdAndUserId,
   updateAssetName,
 } from "@/data/assets";
+import { parseJsonBody } from "@/lib/api/parse-json";
+import { resourceIdSchema, updateAssetSchema } from "@/lib/schemas/api";
 
 export async function PATCH(
   req: Request,
@@ -13,20 +15,16 @@ export async function PATCH(
   const userId = await getEffectiveClientId();
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { id } = await params;
-
-  let body: { name?: string };
-
-  try {
-    body = await req.json();
-  } catch {
-    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  const parsedId = resourceIdSchema.safeParse((await params).id);
+  if (!parsedId.success) {
+    return Response.json({ error: "Invalid asset id" }, { status: 400 });
   }
 
-  const name = typeof body.name === "string" ? body.name.trim() : "";
-  if (!name) {
-    return Response.json({ error: "Name is required" }, { status: 400 });
-  }
+  const parsed = await parseJsonBody(req, updateAssetSchema);
+  if (!parsed.success) return parsed.response;
+
+  const { name } = parsed.data;
+  const id = parsedId.data;
 
   const row = await getAssetByIdAndUserId(id, userId);
 
@@ -47,7 +45,11 @@ export async function DELETE(
   const userId = await getEffectiveClientId();
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { id } = await params;
+  const parsedId = resourceIdSchema.safeParse((await params).id);
+  if (!parsedId.success) {
+    return Response.json({ error: "Invalid asset id" }, { status: 400 });
+  }
+  const id = parsedId.data;
 
   const row = await getAssetByIdAndUserId(id, userId);
 

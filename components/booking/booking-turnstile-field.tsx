@@ -1,6 +1,10 @@
 "use client";
 
 import { Turnstile } from "@marsidev/react-turnstile";
+import {
+  TURNSTILE_ACTION,
+  turnstileSiteKey,
+} from "@/lib/booking/turnstile-config";
 
 export function BookingTurnstileField({
   onSuccess,
@@ -11,14 +15,14 @@ export function BookingTurnstileField({
   onExpire: () => void;
   onError: () => void;
 }) {
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
-  if (!siteKey) {
+  if (!turnstileSiteKey) {
     return null;
   }
 
   return (
     <Turnstile
-      siteKey={siteKey}
+      options={{ action: TURNSTILE_ACTION }}
+      siteKey={turnstileSiteKey}
       onSuccess={onSuccess}
       onExpire={onExpire}
       onError={onError}

@@ -2,14 +2,14 @@
 
 import type { ReactNode } from "react";
 import type { Landing } from "@/lib/dashboard-data";
-import { useDashboardStore } from "@/stores/dashboard-store";
+import { DashboardStoreProvider } from "@/stores/dashboard-store";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { DashboardChromeProvider } from "@/components/dashboard/dashboard-chrome-context";
+import { DashboardChromeProvider } from "@/components/dashboard/dashboard-chrome-provider";
 
 export function DashboardShell({
   isAdmin,
@@ -26,39 +26,40 @@ export function DashboardShell({
   bookingModuleEnabled: boolean;
   children: ReactNode;
 }) {
-  useDashboardStore.getState().bootstrapDashboard({
-    landing,
-    isAdmin,
-  });
-
   return (
-    <DashboardChromeProvider
+    <DashboardStoreProvider
+      key={`${landing.id}:${isAdmin}`}
       isAdmin={isAdmin}
-      impersonating={impersonating}
-      bookingEnabled={bookingEnabled}
+      landing={landing}
     >
-      <SidebarProvider
-        className="dashboard-app h-screen overflow-hidden bg-surface-bg text-on-background"
-        style={
-          {
-            "--sidebar-width": "14rem",
-          } as React.CSSProperties
-        }
+      <DashboardChromeProvider
+        isAdmin={isAdmin}
+        impersonating={impersonating}
+        bookingEnabled={bookingEnabled}
       >
-        <DashboardSidebar
-          impersonating={impersonating}
-          showAccountActions={!isAdmin}
-          bookingModuleEnabled={bookingModuleEnabled}
-        />
-        <SidebarInset className="flex h-screen min-w-0 flex-col overflow-hidden bg-surface-bg">
-          <div className="flex items-center gap-2 border-b border-outline-variant px-unit-md py-2 md:hidden">
-            <SidebarTrigger />
-          </div>
-          <div className="flex min-h-0 flex-1 overflow-hidden">
-            {children}
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
-    </DashboardChromeProvider>
+        <SidebarProvider
+          className="dashboard-app h-dvh overflow-hidden bg-surface-bg text-on-background"
+          style={
+            {
+              "--sidebar-width": "14rem",
+            } as React.CSSProperties
+          }
+        >
+          <DashboardSidebar
+            impersonating={impersonating}
+            showAccountActions={!isAdmin}
+            bookingModuleEnabled={bookingModuleEnabled}
+          />
+          <SidebarInset className="flex h-dvh min-w-0 flex-col overflow-hidden bg-surface-bg">
+            <div className="flex items-center gap-2 border-b border-outline-variant px-unit-md py-2 md:hidden">
+              <SidebarTrigger />
+            </div>
+            <div className="flex min-h-0 flex-1 overflow-hidden">
+              {children}
+            </div>
+          </SidebarInset>
+        </SidebarProvider>
+      </DashboardChromeProvider>
+    </DashboardStoreProvider>
   );
 }

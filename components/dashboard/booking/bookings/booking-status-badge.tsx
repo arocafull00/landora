@@ -1,4 +1,4 @@
-import type { BookingStatus } from "@/db/schema";
+import type { BookingStatus } from "@/lib/domain/dtos";
 
 const STYLES: Record<BookingStatus, string> = {
   pending: "bg-amber-100 text-amber-900",

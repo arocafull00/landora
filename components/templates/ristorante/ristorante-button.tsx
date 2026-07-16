@@ -39,18 +39,32 @@ export function RistoranteButton({
 }) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
+  if (href?.startsWith("http")) {
+    return (
+      <a
+        className={classes}
+        href={href}
+        onClick={onClick}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ fontFamily: "var(--font-ristorante-body)" }}
+      >
+        {children}
+        {icon ?? <ArrowRight aria-hidden className="h-4 w-4" />}
+      </a>
+    );
+  }
+
   if (href) {
     return (
       <a
         className={classes}
         href={href}
         onClick={onClick}
-        target={href.startsWith("http") ? "_blank" : undefined}
-        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
         style={{ fontFamily: "var(--font-ristorante-body)" }}
       >
         {children}
-        {icon ?? <ArrowRight className="h-4 w-4" />}
+        {icon ?? <ArrowRight aria-hidden className="h-4 w-4" />}
       </a>
     );
   }

@@ -10,7 +10,6 @@ import { getLandingPageByUserId } from "@/data/landing-pages";
 import { toLandingView } from "@/lib/landing-mapper";
 import { getBookingSettings } from "@/data/booking-settings";
 import { getUserAddon } from "@/data/user-addons";
-import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { hasBookingModuleAccess } from "@/lib/subscription-access";
 
 export default async function DashboardLayout({
@@ -57,8 +56,7 @@ export default async function DashboardLayout({
     );
   }
 
-  const refreshedLanding = await ensureLandingHasDefaultContent(dbLanding);
-  const landing = toLandingView(refreshedLanding, user ?? undefined);
+  const landing = toLandingView(dbLanding, user ?? undefined);
   const bookingModuleEnabled = user
     ? hasBookingModuleAccess({
         type: user.type,

@@ -34,13 +34,21 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <body
-          className="min-h-full overflow-hidden bg-surface-bg text-on-background"
+          className="min-h-full bg-surface-bg text-on-background"
           suppressHydrationWarning
         >
+          <a
+            href="#main-content"
+            className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-primary px-4 py-2 text-on-primary focus:not-sr-only"
+          >
+            Saltar al contenido
+          </a>
           <Analytics />
           <SpeedInsights />
           <TooltipProvider>
-            {children}
+            <div id="main-content" tabIndex={-1}>
+              {children}
+            </div>
             <ToastContainer />
           </TooltipProvider>
         </body>

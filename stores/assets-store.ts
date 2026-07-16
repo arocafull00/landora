@@ -1,7 +1,7 @@
 "use client";
 
 import { create } from "zustand";
-import type { AssetRow } from "@/db/schema";
+import type { AssetRow } from "@/lib/domain/dtos";
 
 type AssetsStatus = "idle" | "loading" | "ready" | "error";
 

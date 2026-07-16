@@ -1,4 +1,4 @@
-import type { EmployeeHours } from "@/db/schema";
+import type { EmployeeHours } from "@/lib/domain/dtos";
 
 export type HourDraft = {
   dayOfWeek: number;

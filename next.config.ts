@@ -1,9 +1,75 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
+const isDevelopment = process.env.NODE_ENV === "development";
+const contentSecurityPolicy = `
+  default-src 'self';
+  script-src 'self' 'unsafe-inline' ${isDevelopment ? "'unsafe-eval'" : ""} https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://eu.i.posthog.com https://eu-assets.i.posthog.com;
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data: blob: https://res.cloudinary.com https://images.higgs.ai https://d8j0ntlcm91z4.cloudfront.net https://images.unsplash.com https://img.clerk.com;
+  font-src 'self' data:;
+  connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://api.stripe.com https://challenges.cloudflare.com https://eu.i.posthog.com https://eu.posthog.com https://*.sentry.io;
+  frame-src 'self' https://challenges.cloudflare.com https://*.clerk.accounts.dev https://*.clerk.com https://js.stripe.com;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self' https://*.clerk.accounts.dev https://*.clerk.com;
+  frame-ancestors 'self';
+  upgrade-insecure-requests;
+`
+  .replace(/\s{2,}/g, " ")
+  .trim();
+
+const securityHeaders = [
+  {
+    key: "Content-Security-Policy-Report-Only",
+    value: contentSecurityPolicy,
+  },
+  {
+    key: "X-Content-Type-Options",
+    value: "nosniff",
+  },
+  {
+    key: "Referrer-Policy",
+    value: "strict-origin-when-cross-origin",
+  },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=()",
+  },
+  {
+    key: "X-Frame-Options",
+    value: "SAMEORIGIN",
+  },
+  ...(isDevelopment
+    ? []
+    : [
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=63072000; includeSubDomains; preload",
+        },
+      ]),
+];
+
 const nextConfig: NextConfig = {
   experimental: {
-    proxyClientMaxBodySize: "50mb",
+    proxyClientMaxBodySize: "2mb",
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: securityHeaders,
+      },
+      {
+        source: "/reservation/:path*",
+        headers: [
+          {
+            key: "Referrer-Policy",
+            value: "no-referrer",
+          },
+        ],
+      },
+    ];
   },
   async rewrites() {
     return [

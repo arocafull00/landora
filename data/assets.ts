@@ -1,3 +1,5 @@
+import "server-only";
+
 import { and, desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { assets } from "@/db/schema";

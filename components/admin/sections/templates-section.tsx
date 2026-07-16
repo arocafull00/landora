@@ -58,7 +58,7 @@ export function TemplatesSection() {
               <div className="min-h-0 flex-1 overflow-hidden rounded-lg border border-outline-variant shadow-sm">
                 <iframe
                   className="h-full w-full"
-                  sandbox="allow-scripts allow-same-origin"
+                  sandbox="allow-scripts"
                   src={`/admin/templates/${selected.id}?embed=1`}
                   title={`Demo: ${selected.label}`}
                 />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useShallow } from "zustand/react/shallow";
 import type { Landing, TemplateId } from "@/lib/dashboard-data";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { createEmptyNavLink } from "@/components/dashboard/create-empty-nav-link";
@@ -16,7 +17,13 @@ type NavLabelsEditorProps = {
 };
 
 export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
-  const { updateNavItem, addNavItem, removeNavItem } = useDashboardStore();
+  const { updateNavItem, addNavItem, removeNavItem } = useDashboardStore(
+    useShallow((state) => ({
+      updateNavItem: state.updateNavItem,
+      addNavItem: state.addNavItem,
+      removeNavItem: state.removeNavItem,
+    })),
+  );
   const templateId = activeLanding.template as TemplateId;
   const navOnlyAnchors = NAV_ONLY_HEADING_ANCHORS[templateId] ?? [];
   const defaults = SECTION_HEADING_DEFAULTS[templateId] ?? {};

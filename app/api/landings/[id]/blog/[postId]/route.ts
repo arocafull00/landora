@@ -1,12 +1,25 @@
 import { assertLandingAccess } from "@/lib/api/landing-auth";
 import { getBlogPostById, updateBlogPost, deleteBlogPost } from "@/data/blog";
+import { parseJsonBody } from "@/lib/api/parse-json";
+import {
+  resourceIdSchema,
+  updateBlogPostSchema,
+} from "@/lib/schemas/api";
 
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string; postId: string }> }
 ) {
   try {
-    const { id, postId } = await params;
+    const routeParams = await params;
+    const parsedIds = resourceIdSchema.array().safeParse([
+      routeParams.id,
+      routeParams.postId,
+    ]);
+    if (!parsedIds.success) {
+      return Response.json({ error: "Invalid resource id" }, { status: 400 });
+    }
+    const [id, postId] = parsedIds.data;
     const landing = await assertLandingAccess(id);
 
     if (!landing) {
@@ -18,17 +31,10 @@ export async function PATCH(
       return Response.json({ error: "Not found" }, { status: 404 });
     }
 
-    const body = await req.json();
-    const patch: Record<string, unknown> = {};
+    const parsed = await parseJsonBody(req, updateBlogPostSchema);
+    if (!parsed.success) return parsed.response;
 
-    if (typeof body.title === "string") patch.title = body.title;
-    if (typeof body.slug === "string") patch.slug = body.slug;
-    if (typeof body.excerpt === "string") patch.excerpt = body.excerpt;
-    if (typeof body.body === "string") patch.body = body.body;
-    if (typeof body.heroImage === "string") patch.heroImage = body.heroImage;
-    if (typeof body.published === "boolean") patch.published = body.published;
-
-    const updated = await updateBlogPost(postId, patch);
+    const updated = await updateBlogPost(postId, parsed.data);
 
     return Response.json(updated);
   } catch {
@@ -41,7 +47,15 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string; postId: string }> }
 ) {
   try {
-    const { id, postId } = await params;
+    const routeParams = await params;
+    const parsedIds = resourceIdSchema.array().safeParse([
+      routeParams.id,
+      routeParams.postId,
+    ]);
+    if (!parsedIds.success) {
+      return Response.json({ error: "Invalid resource id" }, { status: 400 });
+    }
+    const [id, postId] = parsedIds.data;
     const landing = await assertLandingAccess(id);
 
     if (!landing) {

@@ -1,6 +1,6 @@
 "use client";
 
-import type { BookingSettings } from "@/db/schema";
+import type { BookingSettings } from "@/lib/domain/dtos";
 import {
   Dialog,
   DialogContent,

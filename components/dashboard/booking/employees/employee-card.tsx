@@ -1,7 +1,6 @@
 "use client";
 
-import type { Employee, EmployeeHours } from "@/db/schema";
-import type { BookingService } from "@/db/schema";
+import type { BookingService, Employee, EmployeeHours } from "@/lib/domain/dtos";
 import { Panel } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { EmployeeActiveBadge } from "@/components/dashboard/booking/employees/employee-active-badge";

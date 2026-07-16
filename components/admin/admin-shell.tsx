@@ -14,7 +14,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import type { User, LandingPage } from "@/db/schema";
+import type { User, LandingPage } from "@/lib/domain/dtos";
 
 export function AdminShell({
   users,

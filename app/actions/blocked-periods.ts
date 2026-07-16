@@ -8,13 +8,10 @@ import {
 } from "@/data/blocked-periods";
 import { requireAuth } from "@/lib/auth";
 import { requireBookingModuleAccessForCurrentUser } from "@/lib/require-booking-module-access";
-
-const blockedPeriodSchema = z.object({
-  employeeId: z.uuid().nullable(),
-  startsAt: z.iso.datetime(),
-  endsAt: z.iso.datetime(),
-  reason: z.string().max(200),
-});
+import {
+  blockedPeriodSchema,
+  resourceIdSchema,
+} from "@/lib/schemas/booking-admin";
 
 type ActionResult = { success: true } | { error: string };
 
@@ -60,8 +57,11 @@ export async function deleteBlockedPeriodAction(id: string): Promise<ActionResul
   if ("error" in access) return { error: access.error };
   const tenantId = access.tenantId;
 
+  const parsedId = resourceIdSchema.safeParse(id);
+  if (!parsedId.success) return { error: "Datos inválidos" };
+
   try {
-    await deleteBlockedPeriod(tenantId, id);
+    await deleteBlockedPeriod(tenantId, parsedId.data);
     revalidatePath("/settings/blocked-periods");
     revalidatePath("/bookings");
     return { success: true };

@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { toast } from "react-toastify";
-import type { BlockedPeriod, Employee } from "@/db/schema";
+import type { BlockedPeriod, Employee } from "@/lib/domain/dtos";
 import { Panel } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";
 import { deleteBlockedPeriodAction } from "@/app/actions/blocked-periods";

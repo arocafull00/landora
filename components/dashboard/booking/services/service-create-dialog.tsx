@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import {
   Dialog,
@@ -13,7 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { createBookingServiceAction } from "@/app/actions/booking-services";
-import { parseEurosToPriceCents } from "@/lib/service-price";
+import {
+  bookingServiceFormSchema,
+  type BookingServiceFormInput,
+  type BookingServiceFormValues,
+} from "@/lib/schemas/booking-admin";
 
 export function ServiceCreateDialog({
   open,
@@ -23,49 +28,44 @@ export function ServiceCreateDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [durationMinutes, setDurationMinutes] = useState("30");
-  const [priceEuros, setPriceEuros] = useState("");
-  const [isActive, setIsActive] = useState(true);
-  const [pending, startTransition] = useTransition();
-
-  const reset = () => {
-    setName("");
-    setDurationMinutes("30");
-    setPriceEuros("");
-    setIsActive(true);
-  };
+  const {
+    control,
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    register,
+    reset,
+  } = useForm<BookingServiceFormInput, unknown, BookingServiceFormValues>({
+    resolver: zodResolver(bookingServiceFormSchema),
+    defaultValues: {
+      name: "",
+      durationMinutes: "30",
+      priceEuros: "",
+      isActive: true,
+    },
+  });
+  const isActive = useWatch({ control, name: "isActive" });
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
-      reset();
+      reset({
+        name: "",
+        durationMinutes: "30",
+        priceEuros: "",
+        isActive: true,
+      });
     }
     onOpenChange(nextOpen);
   };
 
-  const submit = () => {
-    const priceCents = parseEurosToPriceCents(priceEuros);
-    if (priceCents === null) {
-      toast.error("Precio inválido");
+  const submit = async (values: BookingServiceFormValues) => {
+    const result = await createBookingServiceAction(values);
+    if ("error" in result) {
+      toast.error(result.error);
       return;
     }
-
-    startTransition(async () => {
-      const result = await createBookingServiceAction({
-        name,
-        durationMinutes: Number(durationMinutes),
-        priceCents,
-        bufferAfterMinutes: 0,
-        isActive,
-      });
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
-      }
-      toast.success("Servicio creado");
-      handleOpenChange(false);
-      router.refresh();
-    });
+    toast.success("Servicio creado");
+    handleOpenChange(false);
+    router.refresh();
   };
 
   return (
@@ -74,7 +74,7 @@ export function ServiceCreateDialog({
         <DialogHeader>
           <DialogTitle>Nuevo servicio</DialogTitle>
         </DialogHeader>
-        <div className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit(submit)}>
           <div className="space-y-2">
             <label className="font-body text-body-sm font-medium text-on-surface" htmlFor="service-name">
               Nombre
@@ -82,10 +82,10 @@ export function ServiceCreateDialog({
             <Input
               id="service-name"
               placeholder="Corte de pelo"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              disabled={pending}
+              {...register("name")}
+              disabled={isSubmitting}
             />
+            {errors.name ? <p className="text-body-sm text-danger">{errors.name.message}</p> : null}
           </div>
 
           <div className="space-y-2">
@@ -98,13 +98,15 @@ export function ServiceCreateDialog({
                 type="number"
                 min={5}
                 max={480}
-                value={durationMinutes}
-                onChange={(e) => setDurationMinutes(e.target.value)}
-                disabled={pending}
+                {...register("durationMinutes")}
+                disabled={isSubmitting}
                 className="w-24"
               />
               <span className="font-body text-body-sm text-on-surface-variant">min</span>
             </div>
+            {errors.durationMinutes ? (
+              <p className="text-body-sm text-danger">{errors.durationMinutes.message}</p>
+            ) : null}
           </div>
 
           <div className="space-y-2">
@@ -116,29 +118,41 @@ export function ServiceCreateDialog({
                 id="service-price"
                 inputMode="decimal"
                 placeholder="15"
-                value={priceEuros}
-                onChange={(e) => setPriceEuros(e.target.value)}
-                disabled={pending}
+                {...register("priceEuros")}
+                disabled={isSubmitting}
                 className="w-24"
               />
               <span className="font-body text-body-sm text-on-surface-variant">€</span>
             </div>
+            {errors.priceEuros ? (
+              <p className="text-body-sm text-danger">{errors.priceEuros.message}</p>
+            ) : null}
           </div>
 
           <div className="flex items-center justify-between">
             <span className="font-body text-body-sm font-medium text-on-surface">Estado</span>
             <div className="flex items-center gap-2">
-              <Switch checked={isActive} disabled={pending} onCheckedChange={setIsActive} />
+              <Controller
+                control={control}
+                name="isActive"
+                render={({ field }) => (
+                  <Switch
+                    checked={field.value}
+                    disabled={isSubmitting}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
+              />
               <span className="font-body text-body-sm text-on-surface-variant">
                 {isActive ? "Activo" : "Inactivo"}
               </span>
             </div>
           </div>
 
-          <Button onClick={submit} disabled={pending || !name.trim()} className="w-full">
-            Crear
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? "Creando…" : "Crear"}
           </Button>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

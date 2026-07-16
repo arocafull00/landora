@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { m, AnimatePresence, useReducedMotion } from "motion/react";
 
 export function CoffeeShopFaqItem({
   item,
@@ -12,7 +11,7 @@ export function CoffeeShopFaqItem({
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
-  const reduce = useReducedMotion();
+  const contentId = useId();
 
   return (
     <div className="border-b border-[var(--coffee-secondary)]/10">
@@ -20,6 +19,7 @@ export function CoffeeShopFaqItem({
         className="flex w-full items-center justify-between py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)]"
         onClick={() => setOpen((v) => !v)}
         type="button"
+        aria-controls={contentId}
         aria-expanded={open}
       >
         <span
@@ -29,27 +29,20 @@ export function CoffeeShopFaqItem({
           {item.question}
         </span>
         <ChevronDown
+          aria-hidden
           className={`h-5 w-5 shrink-0 text-[var(--coffee-primary)] transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <m.div
-            initial={reduce ? false : { height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
-          >
+      {open ? (
+          <div id={contentId}>
             <p
               className="pb-5 text-sm leading-relaxed text-[var(--coffee-secondary)]/75"
               style={{ fontFamily: "var(--font-coffee-body)" }}
             >
               {item.answer}
             </p>
-          </m.div>
-        )}
-      </AnimatePresence>
+          </div>
+      ) : null}
     </div>
   );
 }

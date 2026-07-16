@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-primary)] focus-visible:ring-offset-2 transition-all duration-300 cursor-pointer font-[family-name:var(--font-syne)] font-medium tracking-widest rounded-full";
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-primary)] focus-visible:ring-offset-2 transition-[color,background-color,border-color,box-shadow,transform] duration-300 cursor-pointer font-[family-name:var(--font-syne)] font-medium tracking-widest rounded-full";
 
 const sizeClasses = {
   sm: "h-10 px-6 py-2 text-xs",
