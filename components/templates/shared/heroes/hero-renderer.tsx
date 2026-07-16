@@ -39,6 +39,21 @@ const CoffeeShopHeroVariant = dynamic(() =>
     (module) => module.CoffeeShopHeroVariant,
   ),
 );
+const LumenHeroVariant = dynamic(() =>
+  import("@/components/templates/shared/heroes/lumen-hero-variant").then(
+    (module) => module.LumenHeroVariant,
+  ),
+);
+const OffsetHeroVariant = dynamic(() =>
+  import("@/components/templates/shared/heroes/offset-hero-variant").then(
+    (module) => module.OffsetHeroVariant,
+  ),
+);
+const MosaicoHeroVariant = dynamic(() =>
+  import("@/components/templates/shared/heroes/mosaico-hero-variant").then(
+    (module) => module.MosaicoHeroVariant,
+  ),
+);
 
 const HERO_COMPONENTS = {
   velar: VelarHeroVariant,
@@ -48,6 +63,9 @@ const HERO_COMPONENTS = {
   floristeria: FloristeriaHeroVariant,
   "oficio-pro": OficioProHeroVariant,
   "coffee-shop": CoffeeShopHeroVariant,
+  lumen: LumenHeroVariant,
+  offset: OffsetHeroVariant,
+  mosaico: MosaicoHeroVariant,
 } satisfies Record<HeroVariantId, React.ComponentType<HeroVariantProps>>;
 
 export function HeroRenderer({

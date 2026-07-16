@@ -77,6 +77,30 @@ const HERO_VARIANTS: Record<HeroVariantId, HeroVariantDefinition> = {
     navTone: "dark",
     specificFields: [],
   },
+  lumen: {
+    id: "lumen",
+    label: "Lumen",
+    description: "Composición minimalista centrada con una imagen panorámica.",
+    thumbnail: STUDIO_ASSETS.salon1,
+    navTone: "dark",
+    specificFields: [],
+  },
+  offset: {
+    id: "offset",
+    label: "Offset",
+    description: "Portada editorial asimétrica con tipografía de gran escala.",
+    thumbnail: PORTFOLIO_ASSETS.project1,
+    navTone: "dark",
+    specificFields: [],
+  },
+  mosaico: {
+    id: "mosaico",
+    label: "Mosaico",
+    description: "Composición gráfica oscura con dos imágenes superpuestas.",
+    thumbnail: FLORISTERIA_ASSETS.bouquet1,
+    navTone: "light",
+    specificFields: ["houseImage"],
+  },
 };
 
 export function getHeroVariants(): HeroVariantDefinition[] {

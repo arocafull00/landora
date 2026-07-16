@@ -2,10 +2,12 @@
 
 import { m, useReducedMotion, type Variants } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { isBackgroundPreset } from "@/lib/background-assets";
 import { resolveFloristeriaFanImages } from "@/lib/floristeria-assets";
 import { FloristeriaButton } from "@/components/templates/floristeria/floristeria-button";
 import { FloristeriaHeroFan } from "@/components/templates/floristeria/floristeria-hero-fan";
 import { FloristeriaHeroFanBackdrop } from "@/components/templates/floristeria/floristeria-hero-fan-backdrop";
+import { HeroBackground } from "@/components/ui/hero-background";
 import { useAnalytics } from "@/hooks/use-analytics";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as const;
@@ -78,6 +80,12 @@ export function FloristeriaHero({
       id="hero"
       className="relative h-dvh overflow-x-clip bg-[var(--site-surface)]"
     >
+      {isBackgroundPreset(content.hero.image) ? (
+        <HeroBackground
+          appearance={content.appearance}
+          src={content.hero.image}
+        />
+      ) : null}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <FloristeriaHeroFanBackdrop />
       </div>

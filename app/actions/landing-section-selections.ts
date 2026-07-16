@@ -14,6 +14,9 @@ const heroVariantSchema = z.enum([
   "floristeria",
   "oficio-pro",
   "coffee-shop",
+  "lumen",
+  "offset",
+  "mosaico",
 ]);
 
 const updateSectionSelectionSchema = z.object({

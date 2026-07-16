@@ -150,7 +150,7 @@ export function IframeLandingPreview({
           <iframe
             className="h-full w-full"
             ref={iframeRef}
-            sandbox="allow-scripts"
+            sandbox="allow-scripts allow-same-origin"
             src={`/preview/${landingId}?embed=1`}
             title="Landing preview"
           />

@@ -12,6 +12,9 @@ const HERO_VARIANT_IDS = [
   "floristeria",
   "oficio-pro",
   "coffee-shop",
+  "lumen",
+  "offset",
+  "mosaico",
 ] as const satisfies readonly HeroVariantId[];
 
 export function isHeroVariantId(value: string): value is HeroVariantId {

@@ -3,7 +3,7 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { m, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
-import { AssetImage } from "@/components/ui/asset-image";
+import { HeroBackground } from "@/components/ui/hero-background";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 import { useAnalytics } from "@/hooks/use-analytics";
 
@@ -58,12 +58,9 @@ export function PortfolioHero({
           transition={{ delay: 0.08, duration: 0.8, ease: easeOut }}
         >
           {heroImage ? (
-            <AssetImage
-              alt={content.hero.title}
-              className="object-cover transition-transform duration-700 hover:scale-[1.025]"
-              fill
-              priority
-              sizes="(max-width: 767px) 100vw, 42vw"
+            <HeroBackground
+              appearance={content.appearance}
+              className="bg-center transition-transform duration-700 hover:scale-[1.025]"
               src={heroImage}
             />
           ) : (
@@ -82,11 +79,9 @@ export function PortfolioHero({
 
         <div className="relative min-h-64 overflow-hidden border-b border-r border-portfolio-line md:col-span-4 md:min-h-60">
           {secondaryImage ? (
-            <AssetImage
-              alt=""
-              className="object-cover"
-              fill
-              sizes="(max-width: 767px) 100vw, 34vw"
+            <HeroBackground
+              appearance={content.appearance}
+              className="bg-center"
               src={secondaryImage}
             />
           ) : null}

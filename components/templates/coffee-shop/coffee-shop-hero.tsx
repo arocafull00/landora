@@ -1,9 +1,9 @@
 "use client";
 
 import { m, useReducedMotion } from "motion/react";
-import { AssetImage } from "@/components/ui/asset-image";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { CoffeeShopButton } from "@/components/templates/coffee-shop/coffee-shop-button";
+import { HeroBackground } from "@/components/ui/hero-background";
 import { useAnalytics } from "@/hooks/use-analytics";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
@@ -80,12 +80,9 @@ export function CoffeeShopHero({
         transition={{ duration: 0.9, delay: 0.15, ease: easeOut }}
       >
         {content.hero.image ? (
-          <AssetImage
-            alt={content.hero.title}
-            className="object-cover"
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
+          <HeroBackground
+            appearance={content.appearance}
+            className="bg-center"
             src={content.hero.image}
           />
         ) : (

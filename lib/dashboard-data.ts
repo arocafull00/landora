@@ -116,7 +116,10 @@ export type HeroVariantId =
   | "ristorante"
   | "floristeria"
   | "oficio-pro"
-  | "coffee-shop";
+  | "coffee-shop"
+  | "lumen"
+  | "offset"
+  | "mosaico";
 
 export type SectionKey = "hero";
 
@@ -495,4 +498,3 @@ export const initialAssets: Asset[] = [
     url: VELAR_ASSETS.toll6,
   },
 ];
-
