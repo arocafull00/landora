@@ -6,6 +6,7 @@ import { ActionButton, StatusBadge } from "@/components/ui/primitives";
 import { slugifyBlogTitle } from "@/lib/blog-slug";
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
+import { useBlogStore } from "@/stores/blog-store";
 
 const INPUT_CLASS =
   "w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary";
@@ -13,12 +14,12 @@ const INPUT_CLASS =
 export function BlogPostEditorPanel() {
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
   const landings = useDashboardStore((state) => state.landings);
-  const posts = useDashboardStore((state) => state.posts);
-  const activePostId = useDashboardStore((state) => state.activePostId);
-  const updatePost = useDashboardStore((state) => state.updatePost);
-  const savePost = useDashboardStore((state) => state.savePost);
-  const publishPost = useDashboardStore((state) => state.publishPost);
-  const deletePost = useDashboardStore((state) => state.deletePost);
+  const posts = useBlogStore((state) => state.posts);
+  const activePostId = useBlogStore((state) => state.activePostId);
+  const updatePost = useBlogStore((state) => state.updatePost);
+  const savePost = useBlogStore((state) => state.savePost);
+  const publishPost = useBlogStore((state) => state.publishPost);
+  const deletePost = useBlogStore((state) => state.deletePost);
   const { isAdmin } = useDashboardChrome();
 
   const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];

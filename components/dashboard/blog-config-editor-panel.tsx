@@ -4,20 +4,23 @@ import Link from "next/link";
 import { useDebouncedCallback } from "use-debounce";
 import type { Landing } from "@/lib/dashboard-data";
 import { Icon } from "@/components/ui/icon";
-import { useDashboardStore } from "@/stores/dashboard-store";
+import { useBlogStore } from "@/stores/blog-store";
 
 type BlogConfigEditorPanelProps = {
   activeLanding: Landing;
 };
 
 export function BlogConfigEditorPanel({ activeLanding }: BlogConfigEditorPanelProps) {
-  const blogConfig = useDashboardStore((state) => state.blogConfig);
-  const setBlogConfig = useDashboardStore((state) => state.setBlogConfig);
-  const updateBlogConfig = useDashboardStore((state) => state.updateBlogConfig);
+  const blogConfig = useBlogStore((state) => state.config);
+  const setBlogConfig = useBlogStore((state) => state.setConfig);
+  const updateBlogConfig = useBlogStore((state) => state.updateConfig);
 
   const persistConfig = useDebouncedCallback(
     (patch: Partial<{ title: string; description: string }>) => {
-      updateBlogConfig(activeLanding.id, patch);
+      updateBlogConfig(activeLanding.id, {
+        ...blogConfig,
+        ...patch,
+      });
     },
     500,
   );

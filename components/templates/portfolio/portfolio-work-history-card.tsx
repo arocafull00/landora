@@ -32,7 +32,7 @@ export function PortfolioWorkHistoryCard({
             {item.location}
           </p>
           <h3
-            className="pt-2 text-2xl font-extrabold text-white sm:text-3xl md:text-[clamp(28px,4vw,40px)]"
+            className="pt-2 text-2xl font-extrabold text-[var(--site-on-dark)] sm:text-3xl md:text-[clamp(28px,4vw,40px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
             {item.company}
@@ -41,14 +41,14 @@ export function PortfolioWorkHistoryCard({
 
         <div className="space-y-5">
           <h4
-            className="text-xl font-bold text-white sm:text-2xl"
+            className="text-xl font-bold text-[var(--site-on-dark)] sm:text-2xl"
             style={{ fontFamily: "var(--font-syne)" }}
           >
             {item.title}
           </h4>
 
           {item.summary ? (
-            <p className="text-sm leading-relaxed text-white/55 sm:text-base">
+            <p className="text-sm leading-relaxed text-[var(--site-on-dark)]/55 sm:text-base">
               {item.summary}
             </p>
           ) : null}
@@ -57,7 +57,7 @@ export function PortfolioWorkHistoryCard({
             <ul className="space-y-2.5">
               {item.highlights.map((highlight, highlightIndex) => (
                 <li
-                  className="flex gap-3 text-sm leading-relaxed text-white/55 sm:text-base"
+                  className="flex gap-3 text-sm leading-relaxed text-[var(--site-on-dark)]/55 sm:text-base"
                   key={`${item.id}-highlight-${highlightIndex}`}
                 >
                   <span
@@ -74,7 +74,7 @@ export function PortfolioWorkHistoryCard({
             <div className="flex flex-wrap gap-2 pt-2">
               {item.technologies.map((tech, techIndex) => (
                 <span
-                  className="rounded-md bg-[var(--site-surface-alt)] px-3 py-1.5 text-[11px] font-semibold tracking-wide text-white/80"
+                  className="rounded-md bg-[var(--site-on-dark)]/10 px-3 py-1.5 text-[11px] font-semibold tracking-wide text-[var(--site-on-dark)]/80"
                   key={`${item.id}-tech-${techIndex}`}
                   style={{ fontFamily: "var(--font-body)" }}
                 >

@@ -24,8 +24,8 @@ export async function requireBookingModuleAccessForCurrentUser(): Promise<
   if (
     !hasBookingModuleAccess({
       type: user.type,
-      accessType: user.accessType,
       suspended: user.suspended,
+      bookingManualAccess: addon?.manualAccess ?? false,
       bookingAddonStatus: addon?.status ?? null,
     })
   ) {
@@ -34,5 +34,4 @@ export async function requireBookingModuleAccessForCurrentUser(): Promise<
 
   return { tenantId };
 }
-
 

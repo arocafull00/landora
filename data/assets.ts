@@ -45,22 +45,24 @@ export async function getAssetByIdAndUserId(id: string, userId: string) {
   }
 }
 
-export async function updateAssetName(id: string, name: string) {
+export async function updateAssetName(id: string, userId: string, name: string) {
   try {
     const [updated] = await db
       .update(assets)
       .set({ name })
-      .where(eq(assets.id, id))
+      .where(and(eq(assets.id, id), eq(assets.userId, userId)))
       .returning();
-    return updated as AssetRow;
+    return (updated as AssetRow | undefined) ?? null;
   } catch {
     throw new Error("Failed to update asset");
   }
 }
 
-export async function deleteAssetById(id: string) {
+export async function deleteAssetById(id: string, userId: string) {
   try {
-    await db.delete(assets).where(eq(assets.id, id));
+    await db
+      .delete(assets)
+      .where(and(eq(assets.id, id), eq(assets.userId, userId)));
   } catch {
     throw new Error("Failed to delete asset");
   }

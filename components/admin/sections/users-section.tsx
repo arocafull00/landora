@@ -10,7 +10,11 @@ import { UsersStatsBar } from "@/components/admin/users-stats-bar";
 import { UsersTable } from "@/components/admin/users-table";
 import { DashboardEmptyState } from "@/components/dashboard/dashboard-empty-state";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
-import type { LandingPage, User } from "@/lib/domain/dtos";
+import type {
+  LandingPage,
+  User,
+  UserAddonManualAccess,
+} from "@/lib/domain/dtos";
 import {
   computeAdminUsersStats,
   filterAdminUsers,
@@ -36,9 +40,11 @@ const INITIAL_FILTERS: AdminUsersFilters = {
 export function UsersSection({
   users,
   landingPages,
+  bookingManualAccess,
 }: {
   users: User[];
   landingPages: LandingPage[];
+  bookingManualAccess: UserAddonManualAccess[];
 }) {
   const [showForm, setShowForm] = useState(false);
   const [showImportForm, setShowImportForm] = useState(false);
@@ -46,8 +52,8 @@ export function UsersSection({
   const [page, setPage] = useState(1);
 
   const usersWithLandings = useMemo(
-    () => joinUsersWithLandings(users, landingPages),
-    [users, landingPages],
+    () => joinUsersWithLandings(users, landingPages, bookingManualAccess),
+    [bookingManualAccess, landingPages, users],
   );
 
   const stats = useMemo(

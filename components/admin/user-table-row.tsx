@@ -93,7 +93,10 @@ export function UserTableRow({ user }: { user: AdminUserWithLanding }) {
         )}
       </td>
       <td className="px-4 py-3 align-top">
-        <UserAccessBadge accessType={user.accessType} />
+        <UserAccessBadge
+          accessType={user.accessType}
+          bookingManualAccess={user.bookingManualAccess}
+        />
       </td>
       <td className="px-4 py-3 align-top">
         <UserActionsMenu user={user} />

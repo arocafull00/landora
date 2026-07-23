@@ -14,15 +14,21 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import type { User, LandingPage } from "@/lib/domain/dtos";
+import type {
+  LandingPage,
+  User,
+  UserAddonManualAccess,
+} from "@/lib/domain/dtos";
 
 export function AdminShell({
   users,
   landingPages,
+  bookingManualAccess,
   initialView = "users",
 }: {
   users: User[];
   landingPages: LandingPage[];
+  bookingManualAccess: UserAddonManualAccess[];
   initialView?: AdminView;
 }) {
   const [activeView, setActiveView] = useState<AdminView>(initialView);
@@ -45,7 +51,11 @@ export function AdminShell({
         </div>
         <div className="flex min-h-0 flex-1 overflow-auto">
           {activeView === "users" ? (
-            <UsersSection users={users} landingPages={landingPages} />
+            <UsersSection
+              bookingManualAccess={bookingManualAccess}
+              users={users}
+              landingPages={landingPages}
+            />
           ) : null}
           {activeView === "templates" ? <TemplatesSection /> : null}
           {activeView === "settings" ? <AdminSettingsSection /> : null}

@@ -60,8 +60,8 @@ export default async function DashboardLayout({
   const bookingModuleEnabled = user
     ? hasBookingModuleAccess({
         type: user.type,
-        accessType: user.accessType,
         suspended: user.suspended,
+        bookingManualAccess: bookingsAddon?.manualAccess ?? false,
         bookingAddonStatus: bookingsAddon?.status ?? null,
       })
     : false;

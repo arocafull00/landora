@@ -1,5 +1,5 @@
 import { MessageCircle, Phone, TrendingUp, type LucideIcon } from "lucide-react";
-import type { LandingAnalytics } from "@/data/analytics";
+import type { LandingAnalyticsDto } from "@/lib/domain/dtos";
 import { AnalyticsMetricCard } from "@/components/dashboard/analytics/analytics-metric-card";
 
 type MetricConfig = {
@@ -21,7 +21,7 @@ export function AnalyticsMetricsGrid({
   analytics,
   periodViews,
 }: {
-  analytics: LandingAnalytics;
+  analytics: LandingAnalyticsDto;
   periodViews: number;
 }) {
   const metrics: MetricConfig[] = [

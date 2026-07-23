@@ -18,8 +18,9 @@ async function fetchUserAddon(userId: string, addonType: AddonType) {
         eq(userAddons.addonType, addonType),
       ),
     });
-  } catch {
-    throw new Error("Failed to fetch user addon");
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Failed to fetch user addon: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 }
 
@@ -46,7 +47,6 @@ export async function getBookingModuleAccessContextForClerkUser(
       columns: {
         id: true,
         type: true,
-        accessType: true,
         suspended: true,
       },
     });
@@ -58,13 +58,16 @@ export async function getBookingModuleAccessContextForClerkUser(
         eq(userAddons.userId, user.id),
         eq(userAddons.addonType, "bookings"),
       ),
-      columns: { status: true },
+      columns: {
+        manualAccess: true,
+        status: true,
+      },
     });
 
     return {
       type: user.type,
-      accessType: user.accessType,
       suspended: user.suspended,
+      bookingManualAccess: addon?.manualAccess ?? false,
       bookingAddonStatus: addon?.status ?? null,
     };
   } catch {

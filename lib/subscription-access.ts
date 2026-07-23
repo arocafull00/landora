@@ -30,8 +30,8 @@ export function hasDashboardAccess(user: {
 
 export function hasBookingModuleAccess(user: {
   type: "user" | "admin";
-  accessType: "subscription" | "manual";
   suspended: boolean;
+  bookingManualAccess: boolean;
   bookingAddonStatus: SubscriptionStatus | null;
 } | null | undefined) {
   if (!user) return false;
@@ -40,7 +40,7 @@ export function hasBookingModuleAccess(user: {
 
   if (user.suspended) return false;
 
-  if (user.accessType === "manual") return true;
+  if (user.bookingManualAccess) return true;
 
   return hasActiveSubscription(user.bookingAddonStatus);
 }

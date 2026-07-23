@@ -1,28 +1,22 @@
 "use client";
 
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import { BlogPostEditorPanel } from "@/components/dashboard/blog-post-editor-panel";
 import { BlogPostListItem } from "@/components/dashboard/blog-post-list-item";
-import { BlogPostListSkeleton } from "@/components/dashboard/blog-post-list-skeleton";
 import { DashboardEmptyState } from "@/components/dashboard/dashboard-empty-state";
 import { DashboardListShell } from "@/components/dashboard/dashboard-list-shell";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { ActionButton } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/icon";
 import { useDashboardStore } from "@/stores/dashboard-store";
+import { useBlogStore } from "@/stores/blog-store";
 
 export function BlogSection() {
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
   const landings = useDashboardStore((state) => state.landings);
-  const posts = useDashboardStore((state) => state.posts);
-  const blogPostsLoaded = useDashboardStore((state) => state.blogPostsLoaded);
-  const createPost = useDashboardStore((state) => state.createPost);
-  const ensureBlogPostsLoaded = useDashboardStore((state) => state.ensureBlogPostsLoaded);
+  const posts = useBlogStore((state) => state.posts);
+  const createPost = useBlogStore((state) => state.createPost);
   const [isCreating, startCreateTransition] = useTransition();
-
-  useEffect(() => {
-    void ensureBlogPostsLoaded();
-  }, [ensureBlogPostsLoaded]);
 
   const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
 
@@ -49,9 +43,7 @@ export function BlogSection() {
           title="Blog"
         />
         <div className="flex-1 overflow-y-auto p-unit-md">
-          {!blogPostsLoaded ? (
-            <BlogPostListSkeleton />
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <DashboardEmptyState
               action={
                 <ActionButton disabled={isCreating} onClick={handleCreatePost} variant="primary">

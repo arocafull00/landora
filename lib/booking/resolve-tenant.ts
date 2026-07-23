@@ -20,8 +20,8 @@ export const resolveTenantBySlug = cache(async (slug: string) => {
   const moduleEnabled = user
     ? hasBookingModuleAccess({
         type: user.type,
-        accessType: user.accessType,
         suspended: user.suspended,
+        bookingManualAccess: addon?.manualAccess ?? false,
         bookingAddonStatus: addon?.status ?? null,
       })
     : false;

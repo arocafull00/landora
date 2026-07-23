@@ -81,6 +81,7 @@ export const userAddons = pgTable("user_addons", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   addonType: text("addon_type").$type<AddonType>().notNull(),
+  manualAccess: boolean("manual_access").notNull().default(false),
   stripeSubscriptionId: text("stripe_subscription_id").unique(),
   status: subscriptionStatusEnum("status"),
   currentPeriodEnd: timestamp("current_period_end", { withTimezone: true }),
@@ -95,7 +96,7 @@ export const landingPages = pgTable("landing_pages", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
   template: templateEnum("template").notNull().default("velar"),

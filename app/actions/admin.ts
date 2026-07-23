@@ -3,24 +3,31 @@
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
-import { updateUserFields } from "@/data/admin";
 import {
-  deleteLandingsByUserId,
+  revokeUserManualAccess,
+  setUserManualAccess,
+  updateUserFields,
+} from "@/data/admin";
+import {
   getLandingPageById,
   getLandingsByUserId,
   updateLandingPage,
 } from "@/data/landing-pages";
-import { deleteUserById, getUserByInternalId, insertUser } from "@/data/users";
-import { removeProjectDomain } from "@/lib/vercel-domains";
+import { getUserByInternalId, insertUser } from "@/data/users";
 import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { checkAuth } from "@/lib/auth";
 import {
   createUserSchema,
   type CreateUserValues,
+  configureManualAccessSchema,
+  type ConfigureManualAccessValues,
+  deleteUserSchema,
+  type DeleteUserValues,
   updateUserNameSchema,
   type UpdateUserNameValues,
 } from "@/lib/schemas/admin";
 import { logger } from "@/lib/logger";
+import { deleteUserAccount } from "@/lib/admin/delete-user-account";
 
 type ActionResult = { success: true } | { error: string };
 
@@ -136,49 +143,31 @@ export async function updateUserName(
 
 
 
-export async function deleteUser(userId: string): Promise<ActionResult> {
+export async function deleteUser(
+  input: DeleteUserValues,
+): Promise<ActionResult> {
   const authError = await checkAuth();
   if (authError) return authError;
 
-  const parsed = userIdSchema.safeParse(userId);
+  const parsed = deleteUserSchema.safeParse(input);
   if (!parsed.success) {
-    return { error: parsed.error.message };
-  }
-
-  const user = await getUserByInternalId(parsed.data);
-
-  if (!user) {
-    return { error: "Usuario no encontrado" };
-  }
-
-  if (user.type === "admin") {
-    return { error: "No se puede eliminar un administrador" };
-  }
-
-  const userLandings = await getLandingsByUserId(parsed.data);
-
-  const customDomains = userLandings.flatMap((landing) =>
-    landing.customDomain ? [landing.customDomain] : [],
-  );
-
-  try {
-    await Promise.all(customDomains.map((domain) => removeProjectDomain(domain)));
-  } catch {
-    return { error: "Error al eliminar un dominio de Vercel" };
+    return { error: "Solicitud de eliminación inválida" };
   }
 
   try {
-    await deleteLandingsByUserId(parsed.data);
-    await deleteUserById(parsed.data);
-  } catch {
-    return { error: "Error al eliminar los datos del usuario" };
-  }
+    const result = await deleteUserAccount(parsed.data.userId);
 
-  try {
-    const clerk = await clerkClient();
-    await clerk.users.deleteUser(user.clerkUserId);
+    if (result === "not_found") {
+      return { error: "Usuario no encontrado" };
+    }
+
+    if (result === "protected") {
+      return { error: "No se puede eliminar un administrador" };
+    }
   } catch {
-    return { error: "Datos eliminados, pero no se pudo eliminar el usuario en Clerk" };
+    return {
+      error: "No se pudo completar la eliminación. Inténtalo de nuevo.",
+    };
   }
 
   revalidatePath("/admin");
@@ -213,16 +202,65 @@ async function updateUserById(
   return { success: true };
 }
 
-export async function grantManualAccess(userId: string): Promise<ActionResult> {
+export async function configureManualAccess(
+  input: ConfigureManualAccessValues,
+): Promise<ActionResult> {
   const authError = await checkAuth();
   if (authError) return authError;
-  return updateUserById(userId, { accessType: "manual" });
+
+  const parsed = configureManualAccessSchema.safeParse(input);
+  if (!parsed.success) {
+    return { error: "Configuración de acceso inválida" };
+  }
+
+  const user = await getUserByInternalId(parsed.data.userId);
+  if (!user) {
+    return { error: "Usuario no encontrado" };
+  }
+
+  if (user.type === "admin") {
+    return { error: "No se puede modificar un administrador" };
+  }
+
+  try {
+    await setUserManualAccess(
+      parsed.data.userId,
+      parsed.data.bookingManualAccess,
+    );
+  } catch {
+    return { error: "Error al actualizar el acceso manual" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
 }
 
 export async function revokeManualAccess(userId: string): Promise<ActionResult> {
   const authError = await checkAuth();
   if (authError) return authError;
-  return updateUserById(userId, { accessType: "subscription" });
+
+  const parsed = userIdSchema.safeParse(userId);
+  if (!parsed.success) {
+    return { error: parsed.error.message };
+  }
+
+  const user = await getUserByInternalId(parsed.data);
+  if (!user) {
+    return { error: "Usuario no encontrado" };
+  }
+
+  if (user.type === "admin") {
+    return { error: "No se puede modificar un administrador" };
+  }
+
+  try {
+    await revokeUserManualAccess(parsed.data);
+  } catch {
+    return { error: "Error al retirar el acceso manual" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
 }
 
 export async function suspendUser(userId: string): Promise<ActionResult> {

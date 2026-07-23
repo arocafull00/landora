@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import type { DailyView } from "@/data/analytics";
+import type { DailyViewDto } from "@/lib/domain/dtos";
 import { AnalyticsChartTooltip } from "@/components/dashboard/analytics/analytics-chart-tooltip";
 import { Panel } from "@/components/ui/primitives";
 
@@ -37,7 +37,7 @@ export function AnalyticsChartArea({
   dailyViews,
   previousPeriodViews,
 }: {
-  dailyViews: DailyView[];
+  dailyViews: DailyViewDto[];
   previousPeriodViews: number;
 }) {
   const periodViews = dailyViews.reduce((sum, d) => sum + d.views, 0);

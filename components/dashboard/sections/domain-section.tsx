@@ -1,28 +1,30 @@
 "use client";
 
-import { useEffect } from "react";
 import { DomainDnsRecord } from "@/components/dashboard/domain-dns-record";
+import { useDomainSection } from "@/components/dashboard/domain/hooks/use-domain-section";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { ActionButton, Panel, StatusBadge } from "@/components/ui/primitives";
+import type { DomainStatusDto } from "@/lib/domain/dtos";
 import { useDashboardStore } from "@/stores/dashboard-store";
-import { useDomainStore } from "@/stores/domain-store";
 
-export function DomainSection() {
+export function DomainSection({
+  initialError,
+  initialStatus,
+}: {
+  initialError?: string;
+  initialStatus: DomainStatusDto;
+}) {
   const landings = useDashboardStore((state) => state.landings);
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
-  const status = useDomainStore((state) => state.status);
-  const domainInput = useDomainStore((state) => state.domainInput);
-  const loading = useDomainStore((state) => state.loading);
-  const assigning = useDomainStore((state) => state.assigning);
-  const removing = useDomainStore((state) => state.removing);
-  const setDomainInput = useDomainStore((state) => state.setDomainInput);
-  const assignDomain = useDomainStore((state) => state.assignDomain);
-  const removeDomain = useDomainStore((state) => state.removeDomain);
-  const ensureLoaded = useDomainStore((state) => state.ensureLoaded);
-
-  useEffect(() => {
-    void ensureLoaded();
-  }, [ensureLoaded]);
+  const {
+    assigning,
+    assignDomain,
+    domainInput,
+    removeDomain,
+    removing,
+    setDomainInput,
+    status,
+  } = useDomainSection(initialStatus);
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
@@ -30,7 +32,7 @@ export function DomainSection() {
   if (!activeLanding) return null;
 
   const isPublished = activeLanding.status === "Published";
-  const isBusy = loading || assigning || removing;
+  const isBusy = assigning || removing;
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
@@ -41,6 +43,11 @@ export function DomainSection() {
 
       <div className="flex-1 overflow-auto p-unit-lg">
         <div className="mx-auto max-w-3xl space-y-6">
+          {initialError ? (
+            <Panel className="p-4">
+              <p className="font-body text-body-md text-danger">{initialError}</p>
+            </Panel>
+          ) : null}
           {!isPublished ? (
             <Panel className="p-4">
               <p className="font-body text-body-md text-on-surface">

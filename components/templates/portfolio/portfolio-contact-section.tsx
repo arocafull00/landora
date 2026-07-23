@@ -23,14 +23,14 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 max-w-2xl" data-aos="fade-up">
           <h2
-            className="mb-6 text-balance text-4xl font-extrabold text-white sm:text-5xl md:text-[clamp(40px,6vw,72px)]"
+            className="mb-6 text-balance text-4xl font-extrabold text-[var(--site-on-dark)] sm:text-5xl md:text-[clamp(40px,6vw,72px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           >
             {heading.title}
           </h2>
           {heading.subtitle ? (
             <p
-              className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-white/60"
+              className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-[var(--site-on-dark)]/60"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heading.subtitle}
@@ -50,17 +50,17 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
         </div>
 
         <div
-          className="flex flex-wrap gap-x-12 gap-y-6 border-t border-white/10 pt-10"
+          className="flex flex-wrap gap-x-12 gap-y-6 border-t border-[var(--site-on-dark)]/10 pt-10"
           data-aos="fade-up"
           data-aos-delay="100"
         >
           {content.contact.phone && (
             <div className="flex items-start gap-3">
-              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-white/40" />
+              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="text-xs font-medium text-white/40">WhatsApp</p>
+                <p className="text-xs font-medium text-[var(--site-on-dark)]/40">WhatsApp</p>
                 <a
-                  className="text-sm text-white/70 transition-colors hover:text-white"
+                  className="text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                   onClick={() => trackPhoneClick()}
                 >
@@ -71,11 +71,11 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
           )}
           {content.contact.email && (
             <div className="flex items-start gap-3">
-              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-white/40" />
+              <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="text-xs font-medium text-white/40">Email</p>
+                <p className="text-xs font-medium text-[var(--site-on-dark)]/40">Email</p>
                 <a
-                  className="text-sm text-white/70 transition-colors hover:text-white"
+                  className="text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
                   href={`mailto:${content.contact.email}`}
                 >
                   {content.contact.email}
@@ -85,18 +85,25 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
           )}
           {content.contact.address && (
             <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/40" />
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="text-xs font-medium text-white/40">Location</p>
-                <p className="text-sm text-white/70">{content.contact.address}</p>
+                <p className="text-xs font-medium text-[var(--site-on-dark)]/40">Location</p>
+                <p className="text-sm text-[var(--site-on-dark)]/70">{content.contact.address}</p>
               </div>
             </div>
           )}
         </div>
 
-        <div className="mt-16 space-y-6 border-t border-white/10 pt-8 text-center">
-          <FooterSocialLinks contact={content.contact} />
-          <FooterCopyright brand={content.brand} contact={content.contact} />
+        <div className="mt-16 space-y-6 border-t border-[var(--site-on-dark)]/10 pt-8 text-center">
+          <FooterSocialLinks
+            contact={content.contact}
+            linkClassName="text-[var(--site-on-dark)]/40 transition-colors hover:text-[var(--site-on-dark)]"
+          />
+          <FooterCopyright
+            brand={content.brand}
+            className="text-xs text-[var(--site-on-dark)]/30"
+            contact={content.contact}
+          />
         </div>
       </div>
     </footer>

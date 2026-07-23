@@ -11,12 +11,11 @@ import {
 import { isReservedAppDomain, normalizeHost } from "@/lib/app-host";
 import {
   addProjectDomain,
-  buildDnsRecords,
-  getDomainConfig,
-  getProjectDomain,
   removeProjectDomain,
-  type DnsRecord,
 } from "@/lib/vercel-domains";
+import { getDomainStatusForDomain } from "@/lib/domain-status";
+import type { DomainStatusDto } from "@/lib/domain/dtos";
+import { logger } from "@/lib/logger";
 
 const domainSchema = z
   .string()
@@ -33,14 +32,9 @@ const domainSchema = z
     message: "Ese dominio está reservado para la aplicación",
   });
 
-type ActionResult = { success: true } | { error: string };
-
-export type DomainStatus = {
-  domain: string | null;
-  verified: boolean;
-  misconfigured: boolean;
-  records: DnsRecord[];
-};
+type ActionResult =
+  | { success: true; data: DomainStatusDto }
+  | { error: string };
 
 async function getOwnedLanding() {
   const clientId = await getEffectiveClientId();
@@ -50,50 +44,6 @@ async function getOwnedLanding() {
   if (!landing) return null;
 
   return landing;
-}
-
-export async function getDomainStatus(): Promise<DomainStatus | { error: string }> {
-  const authResult = await requireAuth();
-  if ("error" in authResult) return authResult;
-
-  const landing = await getOwnedLanding();
-  if (!landing) {
-    return { error: "No tienes ninguna landing asignada" };
-  }
-
-  if (!landing.customDomain) {
-    return {
-      domain: null,
-      verified: false,
-      misconfigured: false,
-      records: [],
-    };
-  }
-
-  try {
-    const [projectDomain, domainConfig] = await Promise.all([
-      getProjectDomain(landing.customDomain),
-      getDomainConfig(landing.customDomain),
-    ]);
-
-    return {
-      domain: landing.customDomain,
-      verified: projectDomain?.verified ?? false,
-      misconfigured: domainConfig.misconfigured,
-      records: buildDnsRecords(
-        landing.customDomain,
-        domainConfig,
-        projectDomain?.verification,
-      ),
-    };
-  } catch (error) {
-    return {
-      error:
-        error instanceof Error
-          ? error.message
-          : "No se pudo obtener el estado del dominio",
-    };
-  }
 }
 
 export async function assignCustomDomain(domain: string): Promise<ActionResult> {
@@ -117,7 +67,14 @@ export async function assignCustomDomain(domain: string): Promise<ActionResult> 
   const normalizedDomain = normalizeHost(parsed.data);
 
   if (landing.customDomain === normalizedDomain) {
-    return { success: true };
+    try {
+      return {
+        success: true,
+        data: await getDomainStatusForDomain(normalizedDomain),
+      };
+    } catch {
+      return { error: "No se pudo obtener el estado del dominio" };
+    }
   }
 
   if (await isCustomDomainTaken(normalizedDomain, landing.id)) {
@@ -145,7 +102,19 @@ export async function assignCustomDomain(domain: string): Promise<ActionResult> 
 
   revalidatePath("/domain");
   revalidatePath("/admin");
-  return { success: true };
+  try {
+    return {
+      success: true,
+      data: await getDomainStatusForDomain(normalizedDomain),
+    };
+  } catch (error) {
+    logger.captureException(error, {
+      action: "refresh-domain-status",
+      landingId: landing.id,
+      tenantId: landing.userId,
+    });
+    return { error: "Dominio conectado, pero no se pudo actualizar su estado" };
+  }
 }
 
 export async function removeCustomDomain(): Promise<ActionResult> {
@@ -158,7 +127,10 @@ export async function removeCustomDomain(): Promise<ActionResult> {
   }
 
   if (!landing.customDomain) {
-    return { success: true };
+    return {
+      success: true,
+      data: await getDomainStatusForDomain(null),
+    };
   }
 
   const currentDomain = landing.customDomain;
@@ -177,5 +149,8 @@ export async function removeCustomDomain(): Promise<ActionResult> {
 
   revalidatePath("/domain");
   revalidatePath("/admin");
-  return { success: true };
+  return {
+    success: true,
+    data: await getDomainStatusForDomain(null),
+  };
 }

@@ -23,3 +23,18 @@ export const updateUserNameSchema = z.strictObject({
 });
 
 export type UpdateUserNameValues = z.infer<typeof updateUserNameSchema>;
+
+export const configureManualAccessSchema = z.strictObject({
+  userId: z.uuid("ID de usuario inválido"),
+  bookingManualAccess: z.boolean(),
+});
+
+export type ConfigureManualAccessValues = z.infer<
+  typeof configureManualAccessSchema
+>;
+
+export const deleteUserSchema = z.strictObject({
+  userId: z.uuid("ID de usuario inválido"),
+});
+
+export type DeleteUserValues = z.infer<typeof deleteUserSchema>;

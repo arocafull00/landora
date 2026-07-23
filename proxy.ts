@@ -108,6 +108,24 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(redirectUrl);
   }
 
+  if (isBookingRoute(req)) {
+    const { userId } = await auth.protect();
+
+    if (!userId) {
+      return NextResponse.next();
+    }
+
+    const user = await getBookingModuleAccessContextForClerkUser(userId);
+
+    if (hasBookingModuleAccess(user)) {
+      return NextResponse.next();
+    }
+
+    const upgradeUrl = req.nextUrl.clone();
+    upgradeUrl.pathname = "/booking-upgrade";
+    return NextResponse.redirect(upgradeUrl);
+  }
+
   if (isProtectedRoute(req)) {
     if (isSubscriptionExemptRoute(req)) {
       return NextResponse.next();
@@ -134,24 +152,6 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = user ? "/subscribe" : "/account-pending";
     return NextResponse.redirect(redirectUrl);
-  }
-
-  if (isBookingRoute(req)) {
-    const { userId } = await auth.protect();
-
-    if (!userId) {
-      return NextResponse.next();
-    }
-
-    const user = await getBookingModuleAccessContextForClerkUser(userId);
-
-    if (hasBookingModuleAccess(user)) {
-      return NextResponse.next();
-    }
-
-    const upgradeUrl = req.nextUrl.clone();
-    upgradeUrl.pathname = "/booking-upgrade";
-    return NextResponse.redirect(upgradeUrl);
   }
 
   return NextResponse.next();

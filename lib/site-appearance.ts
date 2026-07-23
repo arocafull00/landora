@@ -55,6 +55,9 @@ export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption
     { id: "default", label: "Original", description: "Negro tinta y turquesa." },
     { id: "lime", label: "Lima", description: "Carbón y verde eléctrico." },
     { id: "coral", label: "Coral", description: "Grafito y coral vivo." },
+    { id: "ivory", label: "Marfil", description: "Marfil cálido y azul cobalto." },
+    { id: "sand", label: "Arena", description: "Arena suave y terracota." },
+    { id: "mist", label: "Niebla", description: "Gris niebla y violeta." },
   ],
   ristorante: [
     { id: "default", label: "Original", description: "Vino, carbón y dorado." },

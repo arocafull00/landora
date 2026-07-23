@@ -1,4 +1,8 @@
-import type { AssetRow } from "@/lib/domain/dtos";
+import {
+  prepareAssetUploadAction,
+  registerAssetAction,
+} from "@/app/actions/assets";
+import type { AssetDto } from "@/lib/domain/dtos";
 
 type SignatureResponse = {
   cloudName: string;
@@ -26,11 +30,11 @@ function formatCloudinaryError(message: string): string {
   return `El archivo supera el límite de ${maxMb} MB de tu cuenta de Cloudinary`;
 }
 
-export async function uploadAsset(file: File, name?: string): Promise<AssetRow> {
-  const sigRes = await fetch("/api/assets/signature");
-  if (!sigRes.ok) throw new Error("No se pudo preparar la subida");
+export async function uploadAsset(file: File, name?: string): Promise<AssetDto> {
+  const signatureResult = await prepareAssetUploadAction();
+  if ("error" in signatureResult) throw new Error(signatureResult.error);
 
-  const sig = (await sigRes.json()) as SignatureResponse;
+  const sig: SignatureResponse = signatureResult.data;
 
   const formData = new FormData();
   formData.append("file", file);
@@ -55,23 +59,14 @@ export async function uploadAsset(file: File, name?: string): Promise<AssetRow> 
   const mimeType =
     file.type || (result.format === "json" ? "application/json" : `image/${result.format}`);
 
-  const registerRes = await fetch("/api/assets", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      publicId: result.public_id,
-      url: result.secure_url,
-      name: assetName,
-      mimeType,
-      width: result.width,
-      height: result.height,
-    }),
+  const registerResult = await registerAssetAction({
+    publicId: result.public_id,
+    url: result.secure_url,
+    name: assetName,
+    mimeType,
+    width: result.width,
+    height: result.height,
   });
-
-  if (!registerRes.ok) {
-    const data = (await registerRes.json().catch(() => null)) as { error?: string } | null;
-    throw new Error(data?.error ?? "Upload failed");
-  }
-
-  return registerRes.json() as Promise<AssetRow>;
+  if ("error" in registerResult) throw new Error(registerResult.error);
+  return registerResult.data;
 }

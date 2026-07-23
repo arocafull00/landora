@@ -2,23 +2,10 @@ import "server-only";
 
 import { cache } from "react";
 import { isPostHogConfigured, queryPostHog } from "@/lib/posthog-server";
-
-export type DailyView = {
-  day: string;
-  views: number;
-};
-
-export type LandingAnalytics = {
-  totalViews: number;
-  views7d: number;
-  views30d: number;
-  ctaClicks: number;
-  whatsappClicks: number;
-  phoneClicks: number;
-  leads: number;
-  dailyViews: DailyView[];
-  previousPeriodViews: number;
-};
+import type {
+  DailyViewDto,
+  LandingAnalyticsDto,
+} from "@/lib/domain/dtos";
 
 type MetricsRow = [
   number,
@@ -80,7 +67,7 @@ async function fetchDailyViews(
   landingId: string,
   from: Date,
   to: Date,
-): Promise<DailyView[]> {
+): Promise<DailyViewDto[]> {
   const id = escapeValue(landingId);
   const fromValue = formatDateTime(from);
   const toValue = formatDateTime(to);
@@ -160,7 +147,7 @@ export const getAllLandingsAnalytics = cache(
 );
 
 export const getLandingAnalytics = cache(
-  async (landingId: string, from: Date, to: Date): Promise<LandingAnalytics> => {
+  async (landingId: string, from: Date, to: Date): Promise<LandingAnalyticsDto> => {
     if (!isPostHogConfigured()) {
       throw new Error("PostHog analytics is not configured");
     }

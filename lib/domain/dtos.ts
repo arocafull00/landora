@@ -35,6 +35,11 @@ export type User = {
   createdAt: Date | null;
 };
 
+export type UserAddonManualAccess = {
+  userId: string;
+  manualAccess: boolean;
+};
+
 export type LandingPage = {
   id: string;
   userId: string;
@@ -48,17 +53,58 @@ export type LandingPage = {
   createdAt: Date | null;
 };
 
-export type AssetRow = {
+export type AssetDto = {
   id: string;
-  userId: string;
-  landingId: string | null;
   publicId: string;
   url: string;
   name: string;
   mimeType: string;
   width: number | null;
   height: number | null;
-  createdAt: Date | null;
+  createdAt: string | null;
+};
+
+export type BlogPostDto = {
+  id: string;
+  landingId: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  body: string;
+  heroImage: string;
+  published: boolean;
+  createdAt: string | null;
+  updatedAt: string | null;
+};
+
+export type DailyViewDto = {
+  day: string;
+  views: number;
+};
+
+export type LandingAnalyticsDto = {
+  totalViews: number;
+  views7d: number;
+  views30d: number;
+  ctaClicks: number;
+  whatsappClicks: number;
+  phoneClicks: number;
+  leads: number;
+  dailyViews: DailyViewDto[];
+  previousPeriodViews: number;
+};
+
+export type DomainDnsRecordDto = {
+  type: string;
+  name: string;
+  value: string;
+};
+
+export type DomainStatusDto = {
+  domain: string | null;
+  verified: boolean;
+  misconfigured: boolean;
+  records: DomainDnsRecordDto[];
 };
 
 export type BookingSettings = {

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { createCustomerPortalAction } from "@/app/actions/stripe";
 import { ActionButton } from "@/components/ui/primitives";
 
 export function ManageSubscriptionButton() {
@@ -11,24 +12,13 @@ export function ManageSubscriptionButton() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/stripe/customer-portal", {
-        method: "POST",
-      });
-
-      if (!response.ok) {
-        toast.error("No se pudo abrir la gestion de suscripcion");
+      const result = await createCustomerPortalAction();
+      if ("error" in result) {
+        toast.error(result.error);
         return;
       }
 
-      const data = (await response.json()) as { url?: string; redirect?: string };
-      const destination = data.url ?? data.redirect;
-
-      if (!destination) {
-        toast.error("No se pudo abrir la gestion de suscripcion");
-        return;
-      }
-
-      window.location.href = destination;
+      window.location.href = result.data.url;
     } catch {
       toast.error("No se pudo abrir la gestion de suscripcion");
     } finally {

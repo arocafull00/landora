@@ -88,6 +88,7 @@ export function PortfolioTemplate({
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "portfolio")}
         ctaLabel={content.hero.ctaLabel ?? ""}
         ctaHref={primaryCtaHref}
+        heroVariantId={heroVariantId}
         heroNavTone={heroNavTone}
         overHero={overHero}
         topOffset={topOffset}

@@ -33,7 +33,7 @@ export function PortfolioProjectsSection({ content }: { content: LandingContent 
       />
       <div className="relative mx-auto max-w-7xl">
         <h2
-          className="mb-12 max-w-xl text-balance text-3xl font-extrabold text-white sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
+          className="mb-12 max-w-xl text-balance text-3xl font-extrabold text-[var(--site-text)] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
         >

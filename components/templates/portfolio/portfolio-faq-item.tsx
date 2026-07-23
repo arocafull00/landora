@@ -14,7 +14,7 @@ export function PortfolioFaqItem({
   const contentId = useId();
 
   return (
-    <div className="border-b border-white/10">
+    <div className="border-b border-[var(--site-border)]">
       <button
         className="flex w-full items-center justify-between py-5 text-left"
         onClick={() => setOpen((v) => !v)}
@@ -23,19 +23,19 @@ export function PortfolioFaqItem({
         aria-expanded={open}
       >
         <span
-          className="pr-4 text-base font-semibold text-white"
+          className="pr-4 text-base font-semibold text-[var(--site-text)]"
           style={{ fontFamily: "var(--font-body)" }}
         >
           {item.question}
         </span>
         <ChevronDown
           aria-hidden
-          className={`h-5 w-5 shrink-0 text-white/40 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`h-5 w-5 shrink-0 text-[var(--site-text-muted)] transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
       {open ? (
           <div id={contentId}>
-            <p className="pb-5 text-sm leading-relaxed text-white/50">
+            <p className="pb-5 text-sm leading-relaxed text-[var(--site-text-muted)]">
               {item.answer}
             </p>
           </div>

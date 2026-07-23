@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { renameAsset } from "@/lib/rename-asset";
+import { renameAssetAction } from "@/app/actions/assets";
 import { useAssetsStore } from "@/stores/assets-store";
 
 export function AssetNameField({
@@ -27,8 +27,9 @@ export function AssetNameField({
     setSaving(true);
 
     try {
-      const row = await renameAsset(assetId, trimmed);
-      update(row);
+      const result = await renameAssetAction(assetId, trimmed);
+      if ("error" in result) throw new Error(result.error);
+      update(result.data);
       setDraft(null);
       toast.success("Nombre actualizado");
     } catch (err) {

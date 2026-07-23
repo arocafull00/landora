@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { X, Menu } from "lucide-react";
 import { m, AnimatePresence } from "motion/react";
-import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
+import type { BrandLogoType, HeroVariantId, NavLink } from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
@@ -17,6 +17,7 @@ export function PortfolioNav({
   navLinks,
   ctaLabel,
   ctaHref,
+  heroVariantId,
   heroNavTone,
   overHero,
   topOffset = 0,
@@ -27,13 +28,15 @@ export function PortfolioNav({
   navLinks: NavLink[];
   ctaLabel: string;
   ctaHref: string;
+  heroVariantId: HeroVariantId;
   heroNavTone: HeroNavTone;
   overHero: boolean;
   topOffset?: number;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { trackCtaClick } = useAnalytics();
-  const useLightText = !overHero || heroNavTone === "light";
+  const usePaletteText = !overHero || heroVariantId === "portfolio";
+  const useLightText = !usePaletteText && heroNavTone === "light";
 
   return (
     <>
@@ -49,7 +52,7 @@ export function PortfolioNav({
       >
         <button
           type="button"
-          className={`text-xl font-bold tracking-tight ${useLightText ? "text-white" : "text-[var(--site-text)]"}`}
+          className={`text-xl font-bold tracking-tight ${useLightText ? "text-white" : "text-portfolio-ink"}`}
           style={{ fontFamily: "var(--font-syne)" }}
         >
           <TemplateNavBrand
@@ -65,7 +68,7 @@ export function PortfolioNav({
               className={`text-sm font-medium transition-colors ${
                 useLightText
                   ? "text-white/60 hover:text-white"
-                  : "text-[var(--site-text-muted)] hover:text-[var(--site-text)]"
+                  : "text-portfolio-ink-muted hover:text-portfolio-ink"
               }`}
               href={link.href}
               key={link.id}
@@ -75,7 +78,7 @@ export function PortfolioNav({
             </TemplateNavAnchor>
           ))}
           <TemplateNavAnchor
-            className="rounded-full bg-portfolio-accent px-5 py-2.5 text-xs font-semibold tracking-wide text-portfolio-accent-ink transition-transform hover:-translate-y-0.5"
+            className="rounded-full bg-portfolio-accent px-5 py-2.5 text-xs font-semibold tracking-wide text-portfolio-accent-ink transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[var(--portfolio-accent-hover)]"
             href={ctaHref}
             onClick={() => trackCtaClick()}
           >
@@ -84,7 +87,7 @@ export function PortfolioNav({
         </div>
 
         <button
-          className={`relative z-[1] flex items-center justify-center md:hidden ${useLightText ? "text-white" : "text-[var(--site-text)]"}`}
+          className={`relative z-[1] flex items-center justify-center md:hidden ${useLightText ? "text-white" : "text-portfolio-ink"}`}
           onClick={() => setMenuOpen((v) => !v)}
           type="button"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
@@ -104,7 +107,7 @@ export function PortfolioNav({
           >
             {navLinks.map((link, i) => (
               <m.a
-                className="text-2xl font-semibold text-white transition-colors hover:text-white/70"
+                className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
                 href={link.href}
                 key={link.id}
                 onClick={(event) =>
@@ -122,7 +125,7 @@ export function PortfolioNav({
               </m.a>
             ))}
             <m.a
-              className="mt-6 rounded-full bg-portfolio-accent px-8 py-3 text-sm font-semibold text-portfolio-accent-ink"
+              className="mt-6 rounded-full bg-portfolio-accent px-8 py-3 text-sm font-semibold text-portfolio-accent-ink transition-colors hover:bg-[var(--portfolio-accent-hover)]"
               href={ctaHref}
               onClick={(event) => {
                 trackCtaClick();

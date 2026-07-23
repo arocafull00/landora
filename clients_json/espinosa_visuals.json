@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "name": "Jorge Espinosa"
+  },
+  "brand": "Jorge Espinosa Studio",
+  "hero": {
+    "eyebrow": "Interiorismo · Visualización 3D · Arquitectura",
+    "title": "Visualiza tu proyecto antes de construirlo",
+    "subtitle": "Diseño de interiores y renders hiperrealistas en Valencia",
+    "description": "Ayudo a particulares, arquitectos, interioristas, constructoras e inmobiliarias a transformar planos e ideas en imágenes 3D hiperrealistas. Descubre cómo quedará tu proyecto antes de empezar la obra y toma decisiones con total confianza.",
+    "image": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1200"
+  },
+  "story": {
+    "statement": "Hola, soy Jorge. Mi trabajo consiste en dar forma, color y vida a las ideas antes de que se coloque el primer ladrillo. A través del diseño de interiores y la visualización 3D hiperrealista elimino la incertidumbre de cualquier reforma, permitiéndote ver, sentir y perfeccionar cada espacio antes de realizar una gran inversión."
+  },
+  "stats": [
+    {
+      "id": "services",
+      "value": "2",
+      "label": "Áreas de especialización"
+    },
+    {
+      "id": "clients",
+      "value": "Particulares y empresas",
+      "label": "Tipos de clientes"
+    },
+    {
+      "id": "location",
+      "value": "Valencia",
+      "label": "Ubicación"
+    },
+    {
+      "id": "workflow",
+      "value": "100%",
+      "label": "Proyectos personalizados"
+    }
+  ],
+  "gallery": [
+    {
+      "id": "reforma-benifaio",
+      "image": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1200"
+    },
+    {
+      "id": "escenas-fotorrealistas",
+      "image": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200"
+    }
+  ],
+  "nav": [
+    {
+      "label": "Inicio",
+      "href": "#home"
+    },
+    {
+      "label": "Sobre mí",
+      "href": "#about"
+    },
+    {
+      "label": "Servicios",
+      "href": "#services"
+    },
+    {
+      "label": "Portfolio",
+      "href": "#portfolio"
+    },
+    {
+      "label": "Proceso",
+      "href": "#workflow"
+    },
+    {
+      "label": "Contacto",
+      "href": "#contact"
+    }
+  ],
+  "contact": {
+    "phone": "+34 663 23 50 82",
+    "email": "jorgeespinosaa13@gmail.com",
+    "address": "Torrent, Valencia, España"
+  },
+  "testimonials": [],
+  "benefits": [
+    {
+      "title": "Visualización hiperrealista",
+      "description": "Descubre el resultado final de tu proyecto antes de iniciar la obra gracias a imágenes con un nivel de realismo excepcional.",
+      "icon": "sparkles"
+    },
+    {
+      "title": "Decisiones sin incertidumbre",
+      "description": "Valida materiales, distribución, iluminación y acabados antes de realizar cualquier inversión.",
+      "icon": "shield"
+    },
+    {
+      "title": "Diseño de interiores",
+      "description": "Espacios funcionales y estéticos adaptados a tus necesidades y estilo.",
+      "icon": "heart"
+    },
+    {
+      "title": "Colaboración profesional",
+      "description": "Trabajo junto a arquitectos, interioristas, constructoras e inmobiliarias integrándome en su flujo de trabajo.",
+      "icon": "award"
+    },
+    {
+      "title": "Presentaciones impactantes",
+      "description": "Imágenes de alta calidad para vender proyectos, captar clientes o comunicar ideas con claridad.",
+      "icon": "star"
+    }
+  ],
+  "workflow": [
+    {
+      "number": "1",
+      "title": "Cuéntame tu proyecto",
+      "description": "Analizamos tus planos, referencias e ideas para entender exactamente lo que necesitas."
+    },
+    {
+      "number": "2",
+      "title": "Diseño y modelado",
+      "description": "Desarrollo el espacio en 3D cuidando cada detalle de distribución, materiales e iluminación."
+    },
+    {
+      "number": "3",
+      "title": "Renderizado hiperrealista",
+      "description": "Genero imágenes de alta calidad que muestran el resultado final con total fidelidad."
+    },
+    {
+      "number": "4",
+      "title": "Revisión y entrega",
+      "description": "Realizamos los ajustes necesarios hasta que el proyecto refleje exactamente la visión deseada."
+    }
+  ],
+  "serviceMenu": [
+    {
+      "category": "Servicios",
+      "items": [
+        {
+          "name": "Visualización 3D hiperrealista",
+          "description": "Creación de renders fotorrealistas para viviendas, interiores y proyectos comerciales."
+        },
+        {
+          "name": "Diseño de interiores",
+          "description": "Propuestas de distribución, mobiliario, iluminación y materiales para todo tipo de espacios."
+        },
+        {
+          "name": "Apoyo a profesionales",
+          "description": "Colaboración con estudios de arquitectura, interiorismo, constructoras e inmobiliarias."
+        }
+      ]
+    }
+  ],
+  "team": [
+    {
+      "name": "Jorge Espinosa",
+      "role": "Diseñador de interiores y especialista en visualización 3D",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800"
+    }
+  ]
+}

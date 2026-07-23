@@ -1,7 +1,5 @@
-"use client";
-
+import Link from "next/link";
 import type { DateRangePreset } from "@/lib/analytics-date-range";
-import { useAnalyticsStore } from "@/stores/analytics-store";
 
 const presets: Array<{ id: DateRangePreset; label: string }> = [
   { id: "7d", label: "7 días" },
@@ -10,53 +8,65 @@ const presets: Array<{ id: DateRangePreset; label: string }> = [
   { id: "custom", label: "Personalizado" },
 ];
 
-export function AnalyticsDateFilter() {
-  const preset = useAnalyticsStore((state) => state.preset);
-  const from = useAnalyticsStore((state) => state.from);
-  const to = useAnalyticsStore((state) => state.to);
-  const setPreset = useAnalyticsStore((state) => state.setPreset);
-  const setRange = useAnalyticsStore((state) => state.setRange);
-
+export function AnalyticsDateFilter({
+  from,
+  preset,
+  to,
+}: {
+  from: string;
+  preset: DateRangePreset;
+  to: string;
+}) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {presets.map((item) => (
-        <button
-          key={item.id}
-          type="button"
+        <Link
           className={`rounded-full px-3 py-1.5 font-body text-body-sm transition-colors ${
             preset === item.id
               ? "bg-primary text-on-primary"
               : "bg-surface-container-high text-on-surface-variant hover:text-on-surface"
           }`}
-          onClick={() => setPreset(item.id)}
+          href={
+            item.id === "custom"
+              ? `/analytics?range=custom&from=${from}&to=${to}`
+              : `/analytics?range=${item.id}`
+          }
+          key={item.id}
         >
           {item.label}
-        </button>
+        </Link>
       ))}
       {preset === "custom" ? (
-        <div className="flex flex-wrap items-center gap-2">
+        <form action="/analytics" className="flex flex-wrap items-center gap-2" method="get">
+          <input name="range" type="hidden" value="custom" />
           <label className="font-body text-body-sm text-on-surface-variant" htmlFor="analytics-from">
             Desde
           </label>
           <input
-            id="analytics-from"
             className="rounded-md border border-outline-variant bg-surface-container-lowest px-2 py-1.5 font-body text-body-sm text-on-surface"
+            defaultValue={from}
+            id="analytics-from"
+            name="from"
             type="date"
-            value={from}
-            onChange={(event) => setRange(event.target.value, to)}
           />
           <span className="font-body text-body-sm text-on-surface-variant">—</span>
           <label className="font-body text-body-sm text-on-surface-variant" htmlFor="analytics-to">
             Hasta
           </label>
           <input
-            id="analytics-to"
             className="rounded-md border border-outline-variant bg-surface-container-lowest px-2 py-1.5 font-body text-body-sm text-on-surface"
+            defaultValue={to}
+            id="analytics-to"
+            name="to"
             type="date"
-            value={to}
-            onChange={(event) => setRange(from, event.target.value)}
           />
-        </div>
+          <button
+            className="rounded-md bg-primary px-3 py-1.5 font-body text-body-sm text-on-primary transition-colors hover:bg-primary-fixed-variant"
+            type="submit"
+          >
+            Aplicar
+          </button>
+        </form>
       ) : null}
     </div>
   );

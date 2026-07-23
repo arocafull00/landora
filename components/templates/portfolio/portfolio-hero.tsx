@@ -29,7 +29,7 @@ export function PortfolioHero({
       id="hero"
       ref={heroRef}
     >
-      <div className="mx-auto grid max-w-[1500px] grid-cols-1 border-l border-t border-portfolio-line md:min-h-[calc(100dvh-9rem)] md:grid-cols-12">
+      <div className="mx-auto grid max-w-375 grid-cols-1 border-l border-t border-portfolio-line md:min-h-[calc(100dvh-9rem)] md:grid-cols-12">
         <m.div
           animate={{ opacity: 1, y: 0 }}
           className="flex min-h-64 flex-col justify-between border-b border-r border-portfolio-line p-5 sm:min-h-72 sm:p-6 md:col-span-7 md:min-h-[52dvh] md:p-10 lg:p-14"
@@ -44,7 +44,7 @@ export function PortfolioHero({
             <span />
           )}
           <h1
-            className="max-w-[12ch] text-balance text-[clamp(2.75rem,14vw,4.25rem)] font-bold leading-[0.92] tracking-[-0.035em] [overflow-wrap:anywhere] md:text-[clamp(3rem,7.5vw,6rem)] md:leading-[0.9]"
+            className="max-w-[12ch] text-balance text-[clamp(2rem,14vw,3.5rem)] font-bold leading-[0.92] tracking-[-0.035em] wrap-anywhere md:text-[clamp(3rem,7.5vw,5rem)] md:leading-[0.9]"
             style={{ fontFamily: "var(--font-syne)" }}
           >
             {content.hero.title}
@@ -91,7 +91,7 @@ export function PortfolioHero({
           ) : null}
         </div>
 
-        <div className="flex min-h-44 flex-col justify-between border-b border-r border-portfolio-line bg-portfolio-accent p-5 text-portfolio-accent-ink sm:p-6 md:col-span-4 md:min-h-60 md:p-8">
+        <div className="flex min-h-44 flex-col justify-between border-b border-r border-portfolio-line bg-portfolio-accent p-5 text-portfolio-accent-ink transition-colors hover:bg-[var(--portfolio-accent-hover)] focus-within:bg-[var(--portfolio-accent-hover)] sm:p-6 md:col-span-4 md:min-h-60 md:p-8">
           <p className="max-w-[28ch] text-pretty text-sm leading-6 sm:text-base sm:leading-7">
             {content.hero.subtitle}
           </p>

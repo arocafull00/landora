@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { deleteAssetAction } from "@/app/actions/assets";
 import { cn } from "@/lib/utils";
 import { AssetImage } from "@/components/ui/asset-image";
-import type { AssetRow } from "@/lib/domain/dtos";
+import type { AssetDto } from "@/lib/domain/dtos";
 import { shortDateFormatter } from "@/lib/intl-formatters";
 import { uploadAsset } from "@/lib/upload-asset";
 import { useAssetsStore } from "@/stores/assets-store";
@@ -25,11 +27,6 @@ import {
 export function AssetsSection() {
   const inputRef = useRef<HTMLInputElement>(null);
   const assets = useAssetsStore((state) => state.rows);
-  const ensureLoaded = useAssetsStore((state) => state.ensureLoaded);
-
-  useEffect(() => {
-    void ensureLoaded();
-  }, [ensureLoaded]);
   const isAdmin = useDashboardChrome().isAdmin;
   const prepend = useAssetsStore((state) => state.prepend);
   const remove = useAssetsStore((state) => state.remove);
@@ -68,7 +65,7 @@ export function AssetsSection() {
     );
 
     const uploaded = results
-      .filter((r): r is PromiseFulfilledResult<AssetRow> => r.status === "fulfilled")
+      .filter((r): r is PromiseFulfilledResult<AssetDto> => r.status === "fulfilled")
       .map((r) => r.value);
 
     if (uploaded.length > 0) {
@@ -92,11 +89,15 @@ export function AssetsSection() {
   const deleteAsset = async () => {
     if (!active) return;
 
-    const res = await fetch(`/api/assets/${active.id}`, { method: "DELETE" });
-    if (!res.ok) return;
+    const result = await deleteAssetAction(active.id);
+    if ("error" in result) {
+      toast.error(result.error);
+      return;
+    }
 
     remove(active.id);
     setActiveId(null);
+    toast.success("Imagen eliminada");
   };
 
   return (

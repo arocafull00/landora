@@ -27,9 +27,9 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
   return (
     <section id="servicios" className="scroll-mt-24 bg-[var(--site-surface)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-16 border-b border-white/10 pb-8" data-aos="fade-up">
+        <div className="mb-16 border-b border-[var(--site-border)] pb-8" data-aos="fade-up">
           <h2
-            className="text-balance text-3xl font-extrabold text-white sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
+            className="text-balance text-3xl font-extrabold text-[var(--site-text)] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
             {heading.title}
@@ -45,7 +45,7 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
               key={category}
             >
               <h3
-                className="mb-8 border-b border-white/10 pb-3 text-lg font-bold text-white"
+                className="mb-8 border-b border-[var(--site-border)] pb-3 text-lg font-bold text-[var(--site-text)]"
                 style={{ fontFamily: "var(--font-syne)" }}
               >
                 {category}
@@ -53,24 +53,24 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
               <div className="space-y-0">
                 {(servicesByCategory.get(category) ?? []).map((service) => (
                     <div
-                      className="flex items-baseline justify-between border-b border-white/[0.06] py-4"
+                      className="flex items-baseline justify-between border-b border-[var(--site-border)] py-4"
                       key={service.id}
                     >
                       <div className="min-w-0 flex-1 pr-4">
                         <p
-                          className="text-base font-semibold text-white"
+                          className="text-base font-semibold text-[var(--site-text)]"
                           style={{ fontFamily: "var(--font-body)" }}
                         >
                           {service.name}
                         </p>
                         {service.description && (
-                          <p className="mt-0.5 text-sm text-white/50">
+                          <p className="mt-0.5 text-sm text-[var(--site-text-muted)]">
                             {service.description}
                           </p>
                         )}
                       </div>
                       <span
-                        className="shrink-0 text-base font-bold text-white"
+                        className="shrink-0 text-base font-bold text-[var(--site-text)]"
                         style={{ fontFamily: "var(--font-body)" }}
                       >
                         {service.price}
@@ -84,20 +84,20 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
           <div className="space-y-0" data-aos="fade-up">
             {items.map((service) => (
               <div
-                className="flex items-baseline justify-between border-b border-white/[0.06] py-4"
+                className="flex items-baseline justify-between border-b border-[var(--site-border)] py-4"
                 key={service.id}
               >
                 <div className="min-w-0 flex-1 pr-4">
-                  <p className="text-base font-semibold text-white">
+                  <p className="text-base font-semibold text-[var(--site-text)]">
                     {service.name}
                   </p>
                   {service.description && (
-                    <p className="mt-0.5 text-sm text-white/50">
+                    <p className="mt-0.5 text-sm text-[var(--site-text-muted)]">
                       {service.description}
                     </p>
                   )}
                 </div>
-                <span className="shrink-0 text-base font-bold text-white">
+                <span className="shrink-0 text-base font-bold text-[var(--site-text)]">
                   {service.price}
                 </span>
               </div>

@@ -1,5 +1,7 @@
 import "server-only";
 
+import { requireServerEnv, serverEnv } from "@/lib/env/server";
+
 type VercelDomainConfig = {
   configuredBy?: string | null;
   acceptedChallenges?: string[];
@@ -20,30 +22,25 @@ type VercelProjectDomain = {
 };
 
 function getVercelHeaders() {
-  const token = process.env.VERCEL_API_TOKEN;
-  if (!token) {
-    throw new Error("VERCEL_API_TOKEN is not configured");
-  }
-
   return {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${requireServerEnv("VERCEL_API_TOKEN")}`,
     "Content-Type": "application/json",
   };
 }
 
 function getProjectPath() {
-  const projectId = process.env.VERCEL_PROJECT_ID;
-  if (!projectId) {
-    throw new Error("VERCEL_PROJECT_ID is not configured");
-  }
-
-  const teamId = process.env.VERCEL_TEAM_ID;
+  const projectId = requireServerEnv("VERCEL_PROJECT_ID");
+  const teamId = serverEnv.VERCEL_TEAM_ID;
   const teamQuery = teamId ? `?teamId=${encodeURIComponent(teamId)}` : "";
 
   return {
     projectId,
     teamQuery,
   };
+}
+
+export function isVercelDomainsConfigured() {
+  return Boolean(serverEnv.VERCEL_API_TOKEN && serverEnv.VERCEL_PROJECT_ID);
 }
 
 export async function addProjectDomain(domain: string) {
@@ -106,7 +103,7 @@ export async function getProjectDomain(domain: string) {
 }
 
 export async function getDomainConfig(domain: string) {
-  const teamId = process.env.VERCEL_TEAM_ID;
+  const teamId = serverEnv.VERCEL_TEAM_ID;
   const teamQuery = teamId ? `?teamId=${encodeURIComponent(teamId)}` : "";
 
   const response = await fetch(

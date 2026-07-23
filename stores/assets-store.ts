@@ -1,92 +1,67 @@
 "use client";
 
-import { create } from "zustand";
-import type { AssetRow } from "@/lib/domain/dtos";
-
-type AssetsStatus = "idle" | "loading" | "ready" | "error";
+import {
+  createContext,
+  createElement,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
+import { createStore, useStore } from "zustand";
+import type { AssetDto } from "@/lib/domain/dtos";
 
 type AssetsState = {
-  rows: AssetRow[];
-  status: AssetsStatus;
-  loadedAt: number | null;
-  ensureLoaded: () => Promise<void>;
-  refresh: () => Promise<void>;
-  prepend: (row: AssetRow) => void;
-  update: (row: AssetRow) => void;
+  rows: AssetDto[];
+  prepend: (row: AssetDto) => void;
+  update: (row: AssetDto) => void;
   remove: (id: string) => void;
 };
 
-let inflight: Promise<void> | null = null;
-
-async function fetchAssets(): Promise<AssetRow[]> {
-  const res = await fetch("/api/assets");
-  if (!res.ok) throw new Error("Failed to fetch assets");
-  const data: unknown = await res.json();
-  if (!Array.isArray(data)) throw new Error("Invalid assets response");
-  return data as AssetRow[];
+function createAssetsStore(initialRows: AssetDto[]) {
+  return createStore<AssetsState>((set) => ({
+    rows: initialRows,
+    prepend: (row) =>
+      set((state) => ({
+        rows: [row, ...state.rows.filter((existing) => existing.id !== row.id)],
+      })),
+    update: (row) =>
+      set((state) => ({
+        rows: state.rows.map((existing) =>
+          existing.id === row.id ? row : existing,
+        ),
+      })),
+    remove: (id) =>
+      set((state) => ({
+        rows: state.rows.filter((row) => row.id !== id),
+      })),
+  }));
 }
 
-export const useAssetsStore = create<AssetsState>((set, get) => ({
-  rows: [],
-  status: "idle",
-  loadedAt: null,
+type AssetsStore = ReturnType<typeof createAssetsStore>;
 
-  ensureLoaded: async () => {
-    if (get().status === "ready") return;
-    if (inflight) return inflight;
+const AssetsStoreContext = createContext<AssetsStore | null>(null);
 
-    set({ status: "loading" });
+export function AssetsStoreProvider({
+  children,
+  initialRows,
+}: {
+  children: ReactNode;
+  initialRows: AssetDto[];
+}) {
+  const [store] = useState(() => createAssetsStore(initialRows));
 
-    inflight = fetchAssets()
-      .then((rows) => {
-        set({ rows, status: "ready", loadedAt: Date.now() });
-      })
-      .catch(() => {
-        set({ status: "error" });
-      })
-      .finally(() => {
-        inflight = null;
-      });
+  return createElement(
+    AssetsStoreContext.Provider,
+    { value: store },
+    children,
+  );
+}
 
-    return inflight;
-  },
+export function useAssetsStore<T>(selector: (state: AssetsState) => T): T {
+  const store = useContext(AssetsStoreContext);
+  if (!store) {
+    throw new Error("useAssetsStore must be used within AssetsStoreProvider");
+  }
 
-  refresh: async () => {
-    if (inflight) {
-      await inflight;
-      return;
-    }
-
-    set({ status: "loading" });
-
-    inflight = fetchAssets()
-      .then((rows) => {
-        set({ rows, status: "ready", loadedAt: Date.now() });
-      })
-      .catch(() => {
-        set({ status: "error" });
-      })
-      .finally(() => {
-        inflight = null;
-      });
-
-    return inflight;
-  },
-
-  prepend: (row) =>
-    set((state) => ({
-      rows: [row, ...state.rows.filter((existing) => existing.id !== row.id)],
-      status: "ready",
-      loadedAt: state.loadedAt ?? Date.now(),
-    })),
-
-  update: (row) =>
-    set((state) => ({
-      rows: state.rows.map((existing) => (existing.id === row.id ? row : existing)),
-    })),
-
-  remove: (id) =>
-    set((state) => ({
-      rows: state.rows.filter((row) => row.id !== id),
-    })),
-}));
+  return useStore(store, selector);
+}

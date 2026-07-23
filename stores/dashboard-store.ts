@@ -11,20 +11,17 @@ import { createStore, useStore } from "zustand";
 import { toast } from "react-toastify";
 import {
   Asset,
-  BlogConfig,
   BrandLogoType,
   ContactContent,
   ContentGroup,
   HeroContent,
   HeroVariantId,
   initialAssets,
-  initialPosts,
   initialPresentations,
   Landing,
   LandingAppearance,
   LandingContent,
   Offer,
-  Post,
   Presentation,
   SectionHeading,
   ServiceContent,
@@ -35,8 +32,7 @@ import {
   TestimonialContent,
   WorkflowStep,
 } from "@/lib/dashboard-data";
-import { saveLandingAppearanceAction } from "@/app/actions/landing-appearance";
-import { updateLandingSectionSelection } from "@/app/actions/landing-section-selections";
+import { saveLandingAction } from "@/app/actions/landing-save";
 import { getDefaultContent } from "@/lib/default-content";
 import { getVisibleEditorTabs } from "@/lib/template-registry";
 import {
@@ -44,56 +40,20 @@ import {
   getSectionScrollHref,
   restoreNavItem,
 } from "@/lib/template-sections";
-import { formatBlogDate } from "@/lib/blog-slug";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
-
-type BlogPostApi = {
-  id: string;
-  landingId: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  body: string;
-  heroImage: string;
-  published: boolean;
-  createdAt: string | null;
-  updatedAt: string | null;
-};
-
-function mapPostFromApi(row: BlogPostApi): Post {
-  return {
-    id: row.id,
-    landingId: row.landingId,
-    title: row.title,
-    slug: row.slug,
-    excerpt: row.excerpt,
-    body: row.body,
-    heroImage: row.heroImage,
-    status: row.published ? "Published" : "Draft",
-    edited: formatBlogDate(row.updatedAt) || "—",
-    publishedAt: row.published && row.updatedAt ? row.updatedAt : undefined,
-  };
-}
 
 export type DashboardState = {
   activeWorkspaceTab: string;
   activeContentGroup: ContentGroup;
   activeEditorTab: string;
   activeLandingId: string;
-  activePostId: string;
   activePresentationId: string;
   activeAssetId: string;
   saveStatus: SaveStatus;
   isAdmin: boolean;
   _bootstrapKey: string;
   landings: Landing[];
-  posts: Post[];
-  blogConfig: BlogConfig;
-  blogPostsLoaded: boolean;
-  blogPostsLandingId: string;
-  blogConfigLoaded: boolean;
-  blogConfigLandingId: string;
   presentations: Presentation[];
   assets: Asset[];
   bootstrapDashboard: (params: {
@@ -104,11 +64,9 @@ export type DashboardState = {
   setActiveContentGroup: (group: ContentGroup) => void;
   setActiveEditorTab: (tab: string) => void;
   setActiveLandingId: (id: string) => void;
-  setActivePostId: (id: string) => void;
   setActivePresentationId: (id: string) => void;
   setActiveAssetId: (id: string) => void;
   setIsAdmin: (isAdmin: boolean) => void;
-  setBlogConfig: (blogConfig: BlogConfig) => void;
   initFromLanding: (landing: Landing) => void;
   updateLandingMeta: (id: string, patch: Partial<Landing>) => void;
   updateHero: (id: string, patch: Partial<HeroContent>) => void;
@@ -140,20 +98,10 @@ export type DashboardState = {
   updateSectionHeading: (landingId: string, anchor: string, patch: Partial<SectionHeading>) => void;
   hideSection: (landingId: string, anchor: string) => Promise<void>;
   restoreSection: (landingId: string, anchor: string) => Promise<void>;
-  updatePost: (postId: string, patch: Partial<Post>) => void;
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
-  loadBlogPosts: (landingId: string) => Promise<void>;
-  ensureBlogPostsLoaded: () => Promise<void>;
-  loadBlogConfig: (landingId: string) => Promise<void>;
-  ensureBlogConfigLoaded: () => Promise<void>;
-  createPost: (landingId: string, data?: Partial<Pick<Post, "title">>) => Promise<Post | null>;
-  updateBlogConfig: (landingId: string, patch: Partial<BlogConfig>) => Promise<void>;
   saveLanding: (id: string) => Promise<void>;
   publishLanding: (id: string) => Promise<void>;
-  savePost: (id: string) => Promise<void>;
-  publishPost: (id: string) => Promise<void>;
-  deletePost: (id: string) => Promise<void>;
   savePresentation: (id: string) => void;
   publishPresentation: (id: string) => void;
 };
@@ -164,95 +112,26 @@ const markEdited = (landing: Landing): Landing => ({
   edited: "Unsaved changes",
 });
 
-async function patchSection(url: string, body: Record<string, unknown>) {
-  const res = await fetch(url, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`PATCH ${url} failed`);
-}
-
-async function persistAllSections(id: string, content: LandingContent) {
-  const base = `/api/landings/${id}`;
-
-  const calls = [
-    patchSection(`${base}/hero`, content.hero),
-    patchSection(`${base}/cta`, content.contact),
-    patchSection(`${base}/branding`, {
-      brand: content.brand,
-      brandLogoType: content.brandLogoType ?? "text",
-      brandLogoImage: content.brandLogoImage ?? "",
-      sectionHeadings: content.sectionHeadings ?? {},
-      hiddenSections: content.hiddenSections ?? [],
-    }),
-    patchSection(`${base}/stats`, { items: content.stats }),
-    patchSection(`${base}/testimonials`, { items: content.testimonials }),
-    patchSection(`${base}/nav`, { items: content.nav }),
-  ];
-
-  if (content.story) calls.push(patchSection(`${base}/story`, content.story));
-  if (content.spaces) calls.push(patchSection(`${base}/spaces`, { items: content.spaces }));
-  if (content.services) calls.push(patchSection(`${base}/services`, { items: content.services }));
-  if (content.workflow) calls.push(patchSection(`${base}/workflow`, { items: content.workflow }));
-  if (content.gallery) calls.push(patchSection(`${base}/gallery`, { items: content.gallery }));
-  if (content.team) calls.push(patchSection(`${base}/team`, { items: content.team }));
-  if (content.serviceMenu) calls.push(patchSection(`${base}/service-menu`, { items: content.serviceMenu }));
-  if (content.benefits) calls.push(patchSection(`${base}/benefits`, { items: content.benefits }));
-  if (content.faq) calls.push(patchSection(`${base}/faq`, { items: content.faq }));
-  if (content.workHistory) calls.push(patchSection(`${base}/work-history`, { items: content.workHistory }));
-  if (content.offers) calls.push(patchSection(`${base}/offers`, { items: content.offers }));
-
-  await Promise.all(calls);
-}
-
-async function persistSectionVisibility(id: string, content: LandingContent) {
-  const base = `/api/landings/${id}`;
-
-  await Promise.all([
-    patchSection(`${base}/branding`, {
-      brand: content.brand,
-      brandLogoType: content.brandLogoType ?? "text",
-      brandLogoImage: content.brandLogoImage ?? "",
-      sectionHeadings: content.sectionHeadings ?? {},
-      hiddenSections: content.hiddenSections ?? [],
-    }),
-    patchSection(`${base}/nav`, { items: content.nav }),
-  ]);
-}
-
-async function persistLandingMeta(id: string, landing: Landing) {
-  await patchSection(`/api/landings/${id}`, {
-    name: landing.name,
-    slug: landing.slug,
-    seoTitle: landing.seoTitle,
-    seoDescription: landing.seoDescription,
-    seoFavicon: landing.seoFavicon,
-  });
-}
-
-async function persistLandingAppearance(id: string, appearance: LandingAppearance) {
-  const result = await saveLandingAppearanceAction({
-    landingId: id,
-    paletteId: appearance.paletteId,
-    typographyId: appearance.typographyId,
-  });
-
-  if ("error" in result) {
-    throw new Error(result.error);
-  }
-}
-
-async function persistLandingSectionSelections(landing: Landing) {
-  const result = await updateLandingSectionSelection({
+async function persistLanding(
+  landing: Landing,
+  mode: "draft" | "publish",
+) {
+  const result = await saveLandingAction({
     landingId: landing.id,
-    sectionKey: "hero",
-    variantId: landing.sectionSelections.hero,
+    mode,
+    meta: {
+      name: landing.name,
+      slug: landing.slug,
+      seoTitle: landing.seoTitle,
+      seoDescription: landing.seoDescription,
+      seoFavicon: landing.seoFavicon,
+    },
+    content: landing.content,
+    appearance: landing.content.appearance,
+    heroVariant: landing.sectionSelections.hero,
   });
 
-  if ("error" in result) {
-    throw new Error(result.error);
-  }
+  if ("error" in result) throw new Error(result.error);
 }
 
 function migrateHeroContent(hero: HeroContent): HeroContent {
@@ -276,7 +155,6 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
   activeContentGroup: "Pages",
   activeEditorTab: "Hero",
   activeLandingId: initialLanding?.id ?? "",
-  activePostId: "",
   activePresentationId: initialPresentations[0].id,
   activeAssetId: initialAssets[0].id,
   saveStatus: "idle",
@@ -285,12 +163,6 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     ? `${initialLanding.id}:${initial?.isAdmin ?? false}`
     : "",
   landings: initialLanding ? [initialLanding] : [],
-  posts: initialLanding ? [] : initialPosts,
-  blogConfig: { title: "", description: "" },
-  blogPostsLoaded: false,
-  blogPostsLandingId: "",
-  blogConfigLoaded: false,
-  blogConfigLandingId: "",
   presentations: initialPresentations,
   assets: initialAssets,
 
@@ -307,33 +179,18 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
 
   setActiveWorkspaceTab: (activeWorkspaceTab) => set({ activeWorkspaceTab }),
   setActiveContentGroup: (activeContentGroup) => set({ activeContentGroup }),
-  setActiveEditorTab: (activeEditorTab) => {
-    set({ activeEditorTab });
-
-    if (activeEditorTab === "Blog") {
-      void get().ensureBlogConfigLoaded();
-    }
-  },
+  setActiveEditorTab: (activeEditorTab) => set({ activeEditorTab }),
   setActiveLandingId: (activeLandingId) =>
     set({ activeLandingId, activeContentGroup: "Pages" }),
-  setActivePostId: (activePostId) =>
-    set({ activePostId, activeContentGroup: "Posts" }),
   setActivePresentationId: (activePresentationId) =>
     set({ activePresentationId, activeContentGroup: "Presentations" }),
   setActiveAssetId: (activeAssetId) => set({ activeAssetId }),
   setIsAdmin: (isAdmin) => set({ isAdmin }),
-  setBlogConfig: (blogConfig) => set({ blogConfig }),
 
   initFromLanding: (landing) =>
     set({
       landings: [landing],
       activeLandingId: landing.id,
-      blogPostsLoaded: false,
-      blogPostsLandingId: "",
-      blogConfigLoaded: false,
-      blogConfigLandingId: "",
-      posts: [],
-      blogConfig: { title: "", description: "" },
     }),
 
   updateLandingMeta: (id, patch) =>
@@ -697,7 +554,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     }));
 
     try {
-      await persistSectionVisibility(landingId, nextContent);
+      await persistLanding({ ...landing, content: nextContent }, "draft");
     } catch {
       toast.error("No se pudo ocultar la sección");
     }
@@ -734,20 +591,11 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     }));
 
     try {
-      await persistSectionVisibility(landingId, nextContent);
+      await persistLanding({ ...landing, content: nextContent }, "draft");
     } catch {
       toast.error("No se pudo restaurar la sección");
     }
   },
-
-  updatePost: (postId, patch) =>
-    set((state) => ({
-      posts: state.posts.map((post) =>
-        post.id === postId
-          ? { ...post, ...patch, status: post.status === "Published" ? "Changes" : post.status, edited: "Unsaved changes" }
-          : post,
-      ),
-    })),
 
   updatePresentation: (presentationId, patch) =>
     set((state) => ({
@@ -780,12 +628,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     set({ saveStatus: "saving" });
 
     try {
-      await persistLandingMeta(id, landing);
-      await Promise.all([
-        persistAllSections(id, landing.content),
-        persistLandingAppearance(id, landing.content.appearance),
-        persistLandingSectionSelections(landing),
-      ]);
+      await persistLanding(landing, "draft");
       set((state) => ({
         saveStatus: "saved",
         landings: state.landings.map((l) =>
@@ -806,13 +649,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     set({ saveStatus: "saving" });
 
     try {
-      await Promise.all([
-        persistLandingMeta(id, landing),
-        persistAllSections(id, landing.content),
-        persistLandingAppearance(id, landing.content.appearance),
-        persistLandingSectionSelections(landing),
-      ]);
-      await patchSection(`/api/landings/${id}`, { published: true });
+      await persistLanding(landing, "publish");
       set((state) => ({
         saveStatus: "saved",
         landings: state.landings.map((l) =>
@@ -823,205 +660,6 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     } catch {
       set({ saveStatus: "error" });
       toast.error("No se pudo publicar la landing");
-    }
-  },
-
-  savePost: async (id) => {
-    const post = get().posts.find((item) => item.id === id);
-    if (!post) return;
-
-    try {
-      const res = await fetch(`/api/landings/${post.landingId}/blog/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: post.title,
-          slug: post.slug,
-          excerpt: post.excerpt,
-          body: post.body,
-          heroImage: post.heroImage,
-          published: false,
-        }),
-      });
-
-      if (!res.ok) throw new Error("save failed");
-
-      const row = (await res.json()) as BlogPostApi;
-      const mapped = mapPostFromApi(row);
-
-      set((state) => ({
-        posts: state.posts.map((item) => (item.id === id ? mapped : item)),
-      }));
-      toast.success("Borrador guardado");
-    } catch {
-      toast.error("No se pudo guardar el post");
-    }
-  },
-
-  publishPost: async (id) => {
-    const post = get().posts.find((item) => item.id === id);
-    if (!post) return;
-
-    try {
-      const res = await fetch(`/api/landings/${post.landingId}/blog/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: post.title,
-          slug: post.slug,
-          excerpt: post.excerpt,
-          body: post.body,
-          heroImage: post.heroImage,
-          published: true,
-        }),
-      });
-
-      if (!res.ok) throw new Error("publish failed");
-
-      const row = (await res.json()) as BlogPostApi;
-      const mapped = mapPostFromApi(row);
-
-      set((state) => ({
-        posts: state.posts.map((item) => (item.id === id ? mapped : item)),
-      }));
-      toast.success("Post publicado");
-    } catch {
-      toast.error("No se pudo publicar el post");
-    }
-  },
-
-  deletePost: async (id) => {
-    const post = get().posts.find((item) => item.id === id);
-    if (!post) return;
-
-    try {
-      const res = await fetch(`/api/landings/${post.landingId}/blog/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) throw new Error("delete failed");
-
-      set((state) => ({
-        posts: state.posts.filter((item) => item.id !== id),
-        activePostId: state.activePostId === id ? "" : state.activePostId,
-      }));
-      toast.success("Post eliminado");
-    } catch {
-      toast.error("No se pudo eliminar el post");
-    }
-  },
-
-  loadBlogPosts: async (landingId) => {
-    set({ blogPostsLoaded: false });
-
-    try {
-      const res = await fetch(`/api/landings/${landingId}/blog`);
-      if (!res.ok) throw new Error("load failed");
-
-      const rows = (await res.json()) as BlogPostApi[];
-      const posts = rows.map(mapPostFromApi);
-      const { activePostId } = get();
-      const resolvedActivePostId =
-        activePostId && posts.some((post) => post.id === activePostId)
-          ? activePostId
-          : (posts[0]?.id ?? "");
-
-      set({
-        posts,
-        blogPostsLoaded: true,
-        blogPostsLandingId: landingId,
-        activePostId: resolvedActivePostId,
-      });
-    } catch {
-      toast.error("No se pudieron cargar los posts");
-    }
-  },
-
-  ensureBlogPostsLoaded: async () => {
-    const { activeLandingId, landings, blogPostsLoaded, blogPostsLandingId } = get();
-    const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
-    if (!landing) return;
-
-    if (blogPostsLoaded && blogPostsLandingId === landing.id) return;
-
-    await get().loadBlogPosts(landing.id);
-  },
-
-  ensureBlogConfigLoaded: async () => {
-    const { activeLandingId, landings, blogConfigLoaded, blogConfigLandingId } = get();
-    const landing = landings.find((item) => item.id === activeLandingId) ?? landings[0];
-    if (!landing) return;
-
-    if (blogConfigLoaded && blogConfigLandingId === landing.id) return;
-
-    await get().loadBlogConfig(landing.id);
-  },
-
-  loadBlogConfig: async (landingId) => {
-    try {
-      const res = await fetch(`/api/landings/${landingId}/blog/config`);
-      if (!res.ok) throw new Error("load failed");
-
-      const config = (await res.json()) as BlogConfig;
-
-      set({
-        blogConfig: {
-          title: config.title ?? "",
-          description: config.description ?? "",
-        },
-        blogConfigLoaded: true,
-        blogConfigLandingId: landingId,
-      });
-    } catch {
-      toast.error("No se pudo cargar la configuración del blog");
-    }
-  },
-
-  createPost: async (landingId, data) => {
-    try {
-      const res = await fetch(`/api/landings/${landingId}/blog`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: data?.title ?? "Nuevo post" }),
-      });
-
-      if (!res.ok) throw new Error("create failed");
-
-      const row = (await res.json()) as BlogPostApi;
-      const mapped = mapPostFromApi(row);
-
-      set((state) => ({
-        posts: [mapped, ...state.posts],
-        activePostId: mapped.id,
-        blogPostsLoaded: true,
-        blogPostsLandingId: landingId,
-      }));
-
-      return mapped;
-    } catch {
-      toast.error("No se pudo crear el post");
-      return null;
-    }
-  },
-
-  updateBlogConfig: async (landingId, patch) => {
-    const nextConfig = {
-      ...get().blogConfig,
-      ...patch,
-    };
-
-    set({ blogConfig: nextConfig });
-
-    try {
-      const res = await fetch(`/api/landings/${landingId}/blog/config`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nextConfig),
-      });
-
-      if (!res.ok) throw new Error("config failed");
-    } catch {
-      toast.error("No se pudo guardar la configuración del blog");
     }
   },
 

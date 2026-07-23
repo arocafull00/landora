@@ -1,38 +1,35 @@
-"use client";
-
-import { useEffect } from "react";
-import { Info, BarChart2 } from "lucide-react";
+import { BarChart2, Info } from "lucide-react";
 import { AnalyticsChart } from "@/components/dashboard/analytics/analytics-chart";
 import { AnalyticsDateFilter } from "@/components/dashboard/analytics/analytics-date-filter";
-import { AnalyticsLoadingSkeleton } from "@/components/dashboard/analytics/analytics-loading-skeleton";
 import { AnalyticsMetricsGrid } from "@/components/dashboard/analytics/analytics-metrics-grid";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Panel } from "@/components/ui/primitives";
-import { useAnalyticsStore } from "@/stores/analytics-store";
+import type { DateRangePreset } from "@/lib/analytics-date-range";
+import type { LandingAnalyticsDto } from "@/lib/domain/dtos";
 
-export function AnalyticsDashboard() {
-  const data = useAnalyticsStore((state) => state.data);
-  const loading = useAnalyticsStore((state) => state.loading);
-  const ensureLoaded = useAnalyticsStore((state) => state.ensureLoaded);
-
-  useEffect(() => {
-    void ensureLoaded();
-  }, [ensureLoaded]);
-
-  const periodViews = data
-    ? data.dailyViews.reduce((sum, d) => sum + d.views, 0)
-    : 0;
+export function AnalyticsDashboard({
+  data,
+  from,
+  preset,
+  to,
+}: {
+  data: LandingAnalyticsDto | null;
+  from: string;
+  preset: DateRangePreset;
+  to: string;
+}) {
+  const periodViews =
+    data?.dailyViews.reduce((sum, day) => sum + day.views, 0) ?? 0;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <DashboardPageHeader
-        title="Analíticas"
+        actions={<AnalyticsDateFilter from={from} preset={preset} to={to} />}
         description="Rendimiento de tu landing pública"
-        actions={<AnalyticsDateFilter />}
+        title="Analíticas"
       />
       <div className="min-h-0 flex-1 overflow-y-auto px-unit-lg py-unit-lg">
-        {loading ? <AnalyticsLoadingSkeleton /> : null}
-        {!loading && !data ? (
+        {!data ? (
           <Panel className="flex flex-col items-center gap-unit-md p-unit-xl text-center">
             <BarChart2 className="h-8 w-8 text-on-surface-variant" aria-hidden />
             <div>
@@ -44,8 +41,7 @@ export function AnalyticsDashboard() {
               </p>
             </div>
           </Panel>
-        ) : null}
-        {!loading && data ? (
+        ) : (
           <div className="space-y-unit-lg">
             <AnalyticsChart
               dailyViews={data.dailyViews}
@@ -57,7 +53,7 @@ export function AnalyticsDashboard() {
               Los datos se actualizan diariamente. La información puede tener un pequeño retraso.
             </p>
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );

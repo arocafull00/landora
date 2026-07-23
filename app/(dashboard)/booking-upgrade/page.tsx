@@ -18,8 +18,8 @@ export default async function BookingUpgradePage() {
   if (
     hasBookingModuleAccess({
       type: user.type,
-      accessType: user.accessType,
       suspended: user.suspended,
+      bookingManualAccess: bookingsAddon?.manualAccess ?? false,
       bookingAddonStatus: bookingsAddon?.status ?? null,
     })
   ) {

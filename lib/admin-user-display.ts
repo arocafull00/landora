@@ -1,8 +1,15 @@
-import type { AccessType, LandingPage, SubscriptionPlan, User } from "@/lib/domain/dtos";
+import type {
+  AccessType,
+  LandingPage,
+  SubscriptionPlan,
+  User,
+  UserAddonManualAccess,
+} from "@/lib/domain/dtos";
 import { hasActiveSubscription } from "@/lib/subscription-access";
 
 export type AdminUserWithLanding = User & {
   landing: LandingPage | null;
+  bookingManualAccess: boolean;
 };
 
 export type AdminUserDisplayStatus = "active" | "trial" | "expired" | "cancelled" | "suspended";
@@ -26,10 +33,16 @@ export type AdminUsersFilters = {
 export function joinUsersWithLandings(
   users: User[],
   landingPages: LandingPage[],
+  bookingManualAccess: UserAddonManualAccess[],
 ): AdminUserWithLanding[] {
+  const bookingAccessByUserId = new Map(
+    bookingManualAccess.map((access) => [access.userId, access.manualAccess]),
+  );
+
   return users.map((user) => ({
     ...user,
     landing: landingPages.find((landing) => landing.userId === user.id) ?? null,
+    bookingManualAccess: bookingAccessByUserId.get(user.id) ?? false,
   }));
 }
 

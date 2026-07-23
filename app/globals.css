@@ -327,6 +327,22 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   color: var(--site-text);
 }
 
+[data-site-theme][data-template="portfolio"] {
+  --portfolio-canvas: var(--site-surface);
+  --portfolio-surface: var(--site-dark);
+  --portfolio-surface-raised: var(--site-surface-alt);
+  --portfolio-ink: var(--site-text);
+  --portfolio-ink-muted: var(--site-text-muted);
+  --portfolio-accent: var(--site-accent);
+  --portfolio-accent-hover: color-mix(
+    in srgb,
+    var(--site-accent) 86%,
+    var(--site-dark)
+  );
+  --portfolio-accent-ink: var(--site-on-accent);
+  --portfolio-line: var(--site-border);
+}
+
 [data-site-theme][data-typography="editorial"] {
   --site-font-display: var(--font-source-playfair);
   --site-font-body: var(--font-source-source-sans);
@@ -472,6 +488,7 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --site-dark: #141414;
   --site-on-dark: #ffffff;
   --site-on-primary: #ffffff;
+  --site-on-accent: #141414;
 }
 
 [data-site-theme][data-template="portfolio"][data-palette="lime"] {
@@ -486,6 +503,7 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --site-dark: #151a10;
   --site-on-dark: #f7fee7;
   --site-on-primary: #ffffff;
+  --site-on-accent: #151a10;
 }
 
 [data-site-theme][data-template="portfolio"][data-palette="coral"] {
@@ -500,6 +518,52 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --site-dark: #1b1414;
   --site-on-dark: #fff7f5;
   --site-on-primary: #ffffff;
+  --site-on-accent: #1b1414;
+}
+
+[data-site-theme][data-template="portfolio"][data-palette="ivory"] {
+  --site-primary: #173b8f;
+  --site-primary-hover: #123071;
+  --site-accent: #2f6bff;
+  --site-surface: #fbf8f0;
+  --site-surface-alt: #eee8dc;
+  --site-text: #1b1c20;
+  --site-text-muted: #5f6169;
+  --site-border: #d2c9ba;
+  --site-dark: #1a2238;
+  --site-on-dark: #f9faff;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
+}
+
+[data-site-theme][data-template="portfolio"][data-palette="sand"] {
+  --site-primary: #9c3f28;
+  --site-primary-hover: #7d2f1d;
+  --site-accent: #e86f4a;
+  --site-surface: #f7f0e3;
+  --site-surface-alt: #e8d8c4;
+  --site-text: #2c211b;
+  --site-text-muted: #6e5b50;
+  --site-border: #cdb9a3;
+  --site-dark: #34231e;
+  --site-on-dark: #fff8f1;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #2e120a;
+}
+
+[data-site-theme][data-template="portfolio"][data-palette="mist"] {
+  --site-primary: #57408f;
+  --site-primary-hover: #463374;
+  --site-accent: #7457c8;
+  --site-surface: #f4f3f8;
+  --site-surface-alt: #e5e2ed;
+  --site-text: #24212a;
+  --site-text-muted: #65606e;
+  --site-border: #cbc6d5;
+  --site-dark: #272234;
+  --site-on-dark: #fbf9ff;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
 }
 
 [data-site-theme][data-template="ristorante"][data-palette="default"] {

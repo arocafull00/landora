@@ -15,14 +15,14 @@ export function PortfolioFaqSection({ content }: { content: LandingContent }) {
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
         <div data-aos="fade-right">
           <h2
-            className="mb-6 text-balance text-3xl font-extrabold text-white sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
+            className="mb-6 text-balance text-3xl font-extrabold text-[var(--site-text)] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
             {heading.title}
           </h2>
           {heading.subtitle ? (
             <p
-              className="max-w-sm text-pretty text-base leading-relaxed text-white/50"
+              className="max-w-sm text-pretty text-base leading-relaxed text-[var(--site-text-muted)]"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heading.subtitle}

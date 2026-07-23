@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import type { DailyView } from "@/data/analytics";
+import type { DailyViewDto } from "@/lib/domain/dtos";
 import { Panel } from "@/components/ui/primitives";
 
 const AnalyticsChartArea = dynamic(
@@ -23,7 +23,7 @@ export function AnalyticsChart({
   dailyViews,
   previousPeriodViews,
 }: {
-  dailyViews: DailyView[];
+  dailyViews: DailyViewDto[];
   previousPeriodViews: number;
 }) {
   return <AnalyticsChartArea dailyViews={dailyViews} previousPeriodViews={previousPeriodViews} />;
