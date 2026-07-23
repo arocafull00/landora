@@ -13,12 +13,21 @@ export const getLandingByCustomDomain = cache(async (host: string) => {
   const normalizedHost = normalizeHost(host);
 
   try {
-    return await db.query.landingPages.findFirst({
-      where: and(
-        eq(landingPages.customDomain, normalizedHost),
-        eq(landingPages.published, true),
-      ),
-    });
+    const [landing] = await db
+      .select({
+        slug: landingPages.slug,
+        customDomain: landingPages.customDomain,
+      })
+      .from(landingPages)
+      .where(
+        and(
+          eq(landingPages.customDomain, normalizedHost),
+          eq(landingPages.published, true),
+        ),
+      )
+      .limit(1);
+
+    return landing;
   } catch (error) {
     throw new Error("Failed to fetch landing by custom domain", { cause: error });
   }
@@ -28,19 +37,24 @@ export const getPublishedLandingRouteBySlug = cache(async (slug: string) => {
   const normalizedSlug = slug.replace(/^\/+|\/+$/g, "");
 
   try {
-    return await db.query.landingPages.findFirst({
-      columns: {
-        slug: true,
-        customDomain: true,
-      },
-      where: and(
-        or(
-          eq(landingPages.slug, normalizedSlug),
-          eq(landingPages.slug, `/${normalizedSlug}`),
+    const [landing] = await db
+      .select({
+        slug: landingPages.slug,
+        customDomain: landingPages.customDomain,
+      })
+      .from(landingPages)
+      .where(
+        and(
+          or(
+            eq(landingPages.slug, normalizedSlug),
+            eq(landingPages.slug, `/${normalizedSlug}`),
+          ),
+          eq(landingPages.published, true),
         ),
-        eq(landingPages.published, true),
-      ),
-    });
+      )
+      .limit(1);
+
+    return landing;
   } catch (error) {
     throw new Error("Failed to fetch published landing route", { cause: error });
   }

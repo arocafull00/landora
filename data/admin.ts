@@ -8,9 +8,7 @@ import type { LandingPage, User } from "@/db/schema";
 
 export const getAllUsers = cache(async () => {
   try {
-    return await db.query.users.findMany({
-      where: eq(users.type, "user"),
-    });
+    return await db.select().from(users).where(eq(users.type, "user"));
   } catch {
     throw new Error("Failed to fetch users");
   }
@@ -18,7 +16,20 @@ export const getAllUsers = cache(async () => {
 
 export const getAllLandingPages = cache(async () => {
   try {
-    return await db.query.landingPages.findMany();
+    return await db
+      .select({
+        id: landingPages.id,
+        userId: landingPages.userId,
+        name: landingPages.name,
+        slug: landingPages.slug,
+        template: landingPages.template,
+        published: landingPages.published,
+        customDomain: landingPages.customDomain,
+        domainVerified: landingPages.domainVerified,
+        updatedAt: landingPages.updatedAt,
+        createdAt: landingPages.createdAt,
+      })
+      .from(landingPages);
   } catch {
     throw new Error("Failed to fetch landing pages");
   }
@@ -26,13 +37,13 @@ export const getAllLandingPages = cache(async () => {
 
 export const getAllBookingManualAccess = cache(async () => {
   try {
-    return await db.query.userAddons.findMany({
-      where: eq(userAddons.addonType, "bookings"),
-      columns: {
-        userId: true,
-        manualAccess: true,
-      },
-    });
+    return await db
+      .select({
+        userId: userAddons.userId,
+        manualAccess: userAddons.manualAccess,
+      })
+      .from(userAddons)
+      .where(eq(userAddons.addonType, "bookings"));
   } catch {
     throw new Error("Failed to fetch booking manual access");
   }

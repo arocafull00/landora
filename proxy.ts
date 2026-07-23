@@ -11,18 +11,20 @@ import {
   isPublicSlugPath,
   normalizeHost,
 } from "@/lib/app-host";
-import { getSubscriptionStatusForProxy } from "@/data/subscriptions";
-import { getBookingModuleAccessContextForClerkUser } from "@/data/user-addons";
-import {
-  getLandingByCustomDomain,
-  getPublishedLandingRouteBySlug,
-} from "@/data/domains";
-import { hasBookingModuleAccess, hasDashboardAccess } from "@/lib/subscription-access";
 import { getPublicLandingHost } from "@/lib/public-site-url";
+import {
+  proxyAccessResponseSchema,
+  proxyLandingResponseSchema,
+  type ProxyAccessResponse,
+} from "@/lib/schemas/proxy-context";
 
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
 const isWebhookRoute = createRouteMatcher(["/api/webhooks/stripe"]);
 const isCronRoute = createRouteMatcher(["/api/cron/check-domains"]);
+const isInternalProxyRoute = createRouteMatcher([
+  "/api/internal/access-context",
+  "/api/internal/landing-route",
+]);
 const isSentryTunnelRoute = createRouteMatcher(["/monitoring(.*)"]);
 const isSentryExampleApiRoute = createRouteMatcher(["/api/sentry-example-api"]);
 const isSubscriptionExemptRoute = createRouteMatcher([
@@ -51,6 +53,16 @@ const isBookingRoute = createRouteMatcher([
 
 const PUBLIC_LANDING_PATH =
   /^\/(?:$|about\/?$|book\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$)$/;
+const PROXY_CONTEXT_TIMEOUT_MS = 5_000;
+
+type LandingRoute = {
+  slug: string;
+  customDomain: string | null;
+};
+
+type LandingResolution =
+  | { status: "resolved"; landing: LandingRoute | null }
+  | { status: "unavailable" };
 
 function isPublicLandingPath(pathname: string) {
   return PUBLIC_LANDING_PATH.test(pathname);
@@ -65,6 +77,92 @@ function getInternalLandingPath(slug: string, pathname: string) {
 function getLegacyPublicPath(pathname: string) {
   const [, , ...segments] = pathname.split("/");
   return segments.length > 0 ? `/${segments.join("/")}` : "/";
+}
+
+function getInternalProxyUrl(req: NextRequest, pathname: string) {
+  const url = req.nextUrl.clone();
+  const host = normalizeHost(req.headers.get("host") ?? "");
+
+  url.pathname = pathname;
+  url.search = "";
+
+  if (host.endsWith(".localhost")) {
+    url.hostname = "localhost";
+    return url;
+  }
+
+  if (isAppHost(host)) return url;
+
+  const canonicalHost = getAppCanonicalHost();
+  if (!canonicalHost) return null;
+
+  url.protocol = "https:";
+  url.hostname = canonicalHost;
+  url.port = "";
+  return url;
+}
+
+async function resolveLandingRoute(
+  req: NextRequest,
+  query: { host: string } | { slug: string },
+): Promise<LandingResolution> {
+  const url = getInternalProxyUrl(req, "/api/internal/landing-route");
+  if (!url) return { status: "unavailable" };
+
+  const [key, value] = Object.entries(query)[0];
+  url.searchParams.set(key, value);
+
+  try {
+    const response = await fetch(url, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(PROXY_CONTEXT_TIMEOUT_MS),
+    });
+
+    if (!response.ok) return { status: "unavailable" };
+
+    const parsed = proxyLandingResponseSchema.safeParse(await response.json());
+    if (!parsed.success) return { status: "unavailable" };
+
+    return {
+      status: "resolved",
+      landing: parsed.data.landing,
+    };
+  } catch {
+    return { status: "unavailable" };
+  }
+}
+
+async function resolveAccessContext(
+  req: NextRequest,
+): Promise<ProxyAccessResponse | null> {
+  const url = getInternalProxyUrl(req, "/api/internal/access-context");
+  if (!url) return null;
+
+  const headers = new Headers();
+  const authorization = req.headers.get("authorization");
+  const cookie = req.headers.get("cookie");
+
+  if (authorization) headers.set("authorization", authorization);
+  if (cookie) headers.set("cookie", cookie);
+
+  try {
+    const response = await fetch(url, {
+      cache: "no-store",
+      headers,
+      signal: AbortSignal.timeout(PROXY_CONTEXT_TIMEOUT_MS),
+    });
+
+    if (!response.ok) return null;
+
+    const parsed = proxyAccessResponseSchema.safeParse(await response.json());
+    return parsed.success ? parsed.data : null;
+  } catch {
+    return null;
+  }
+}
+
+function serviceUnavailable() {
+  return new NextResponse("Service Unavailable", { status: 503 });
 }
 
 function redirectToLandingHost(
@@ -102,6 +200,10 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(redirectUrl, 308);
   }
 
+  if (isAppHost(host) && isInternalProxyRoute(req)) {
+    return NextResponse.next();
+  }
+
   const platformSlug = getPlatformLandingSlug(host);
   if (platformSlug) {
     if (pathname.startsWith("/ingest")) {
@@ -112,16 +214,17 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    const landing = await getPublishedLandingRouteBySlug(platformSlug);
-    if (!landing) {
+    const resolution = await resolveLandingRoute(req, { slug: platformSlug });
+    if (resolution.status === "unavailable") return serviceUnavailable();
+    if (!resolution.landing) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    if (landing.customDomain) {
-      return redirectToLandingHost(req, landing, pathname);
+    if (resolution.landing.customDomain) {
+      return redirectToLandingHost(req, resolution.landing, pathname);
     }
 
-    return rewriteLandingRequest(req, landing.slug);
+    return rewriteLandingRequest(req, resolution.landing.slug);
   }
 
   if (!isAppHost(host)) {
@@ -133,12 +236,13 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    const landing = await getLandingByCustomDomain(host);
-    if (!landing) {
+    const resolution = await resolveLandingRoute(req, { host });
+    if (resolution.status === "unavailable") return serviceUnavailable();
+    if (!resolution.landing) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    return rewriteLandingRequest(req, landing.slug);
+    return rewriteLandingRequest(req, resolution.landing.slug);
   }
 
   if (
@@ -158,14 +262,15 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       (req.method === "GET" || req.method === "HEAD")
     ) {
       const slug = pathname.split("/").filter(Boolean)[0];
-      const landing = slug
-        ? await getPublishedLandingRouteBySlug(slug)
-        : null;
+      const resolution = slug
+        ? await resolveLandingRoute(req, { slug })
+        : { status: "resolved" as const, landing: null };
 
-      if (landing) {
+      if (resolution.status === "unavailable") return serviceUnavailable();
+      if (resolution.landing) {
         return redirectToLandingHost(
           req,
-          landing,
+          resolution.landing,
           getLegacyPublicPath(pathname),
         );
       }
@@ -188,9 +293,10 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return NextResponse.next();
     }
 
-    const user = await getBookingModuleAccessContextForClerkUser(userId);
+    const access = await resolveAccessContext(req);
+    if (!access || !access.authenticated) return serviceUnavailable();
 
-    if (hasBookingModuleAccess(user)) {
+    if (access.bookingAccess) {
       return NextResponse.next();
     }
 
@@ -210,20 +316,21 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return NextResponse.next();
     }
 
-    const user = await getSubscriptionStatusForProxy(userId);
+    const access = await resolveAccessContext(req);
+    if (!access || !access.authenticated) return serviceUnavailable();
 
-    if (hasDashboardAccess(user)) {
+    if (access.dashboardAccess) {
       return NextResponse.next();
     }
 
-    if (user?.suspended) {
+    if (access.suspended) {
       const redirectUrl = req.nextUrl.clone();
       redirectUrl.pathname = "/sign-in";
       return NextResponse.redirect(redirectUrl);
     }
 
     const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = user ? "/subscribe" : "/account-pending";
+    redirectUrl.pathname = access.userExists ? "/subscribe" : "/account-pending";
     return NextResponse.redirect(redirectUrl);
   }
 
