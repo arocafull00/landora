@@ -12,28 +12,16 @@ import {
   normalizeHost,
 } from "@/lib/app-host";
 import { getPublicLandingHost } from "@/lib/public-site-url";
-import {
-  proxyAccessResponseSchema,
-  proxyLandingResponseSchema,
-  type ProxyAccessResponse,
-} from "@/lib/schemas/proxy-context";
+import { proxyLandingResponseSchema } from "@/lib/schemas/proxy-context";
 
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
 const isWebhookRoute = createRouteMatcher(["/api/webhooks/stripe"]);
 const isCronRoute = createRouteMatcher(["/api/cron/check-domains"]);
 const isInternalProxyRoute = createRouteMatcher([
-  "/api/internal/access-context",
   "/api/internal/landing-route",
 ]);
 const isSentryTunnelRoute = createRouteMatcher(["/monitoring(.*)"]);
 const isSentryExampleApiRoute = createRouteMatcher(["/api/sentry-example-api"]);
-const isSubscriptionExemptRoute = createRouteMatcher([
-  "/settings(.*)",
-  "/subscribe(.*)",
-  "/account-pending(.*)",
-  "/api/webhooks/stripe",
-  "/api/stripe/(.*)",
-]);
 const isProtectedRoute = createRouteMatcher([
   "/editor(.*)",
   "/assets(.*)",
@@ -44,13 +32,6 @@ const isProtectedRoute = createRouteMatcher([
   "/admin(.*)",
   "/api(.*)",
 ]);
-const isBookingRoute = createRouteMatcher([
-  "/bookings(.*)",
-  "/employees(.*)",
-  "/services(.*)",
-  "/settings/blocked-periods(.*)",
-]);
-
 const PUBLIC_LANDING_PATH =
   /^\/(?:$|about\/?$|book\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$)$/;
 const PROXY_CONTEXT_TIMEOUT_MS = 5_000;
@@ -129,35 +110,6 @@ async function resolveLandingRoute(
     };
   } catch {
     return { status: "unavailable" };
-  }
-}
-
-async function resolveAccessContext(
-  req: NextRequest,
-): Promise<ProxyAccessResponse | null> {
-  const url = getInternalProxyUrl(req, "/api/internal/access-context");
-  if (!url) return null;
-
-  const headers = new Headers();
-  const authorization = req.headers.get("authorization");
-  const cookie = req.headers.get("cookie");
-
-  if (authorization) headers.set("authorization", authorization);
-  if (cookie) headers.set("cookie", cookie);
-
-  try {
-    const response = await fetch(url, {
-      cache: "no-store",
-      headers,
-      signal: AbortSignal.timeout(PROXY_CONTEXT_TIMEOUT_MS),
-    });
-
-    if (!response.ok) return null;
-
-    const parsed = proxyAccessResponseSchema.safeParse(await response.json());
-    return parsed.success ? parsed.data : null;
-  } catch {
-    return null;
   }
 }
 
@@ -286,52 +238,9 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (isBookingRoute(req)) {
-    const { userId } = await auth.protect();
-
-    if (!userId) {
-      return NextResponse.next();
-    }
-
-    const access = await resolveAccessContext(req);
-    if (!access || !access.authenticated) return serviceUnavailable();
-
-    if (access.bookingAccess) {
-      return NextResponse.next();
-    }
-
-    const upgradeUrl = req.nextUrl.clone();
-    upgradeUrl.pathname = "/booking-upgrade";
-    return NextResponse.redirect(upgradeUrl);
-  }
-
   if (isProtectedRoute(req)) {
-    if (isSubscriptionExemptRoute(req)) {
-      return NextResponse.next();
-    }
-
-    const { userId } = await auth.protect();
-
-    if (!userId) {
-      return NextResponse.next();
-    }
-
-    const access = await resolveAccessContext(req);
-    if (!access || !access.authenticated) return serviceUnavailable();
-
-    if (access.dashboardAccess) {
-      return NextResponse.next();
-    }
-
-    if (access.suspended) {
-      const redirectUrl = req.nextUrl.clone();
-      redirectUrl.pathname = "/sign-in";
-      return NextResponse.redirect(redirectUrl);
-    }
-
-    const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = access.userExists ? "/subscribe" : "/account-pending";
-    return NextResponse.redirect(redirectUrl);
+    await auth.protect();
+    return NextResponse.next();
   }
 
   return NextResponse.next();

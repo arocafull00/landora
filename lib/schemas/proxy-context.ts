@@ -31,13 +31,3 @@ export const proxyLandingResponseSchema = z.strictObject({
     })
     .nullable(),
 });
-
-export const proxyAccessResponseSchema = z.strictObject({
-  authenticated: z.boolean(),
-  userExists: z.boolean(),
-  suspended: z.boolean(),
-  dashboardAccess: z.boolean(),
-  bookingAccess: z.boolean(),
-});
-
-export type ProxyAccessResponse = z.infer<typeof proxyAccessResponseSchema>;

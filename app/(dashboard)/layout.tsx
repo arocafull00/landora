@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 import { DashboardAccountActions } from "@/components/dashboard/dashboard-account-actions";
 import { DashboardThemeScope } from "@/components/dashboard/dashboard-theme-scope";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
@@ -10,7 +11,10 @@ import { getLandingPageByUserId } from "@/data/landing-pages";
 import { toLandingView } from "@/lib/landing-mapper";
 import { getBookingSettings } from "@/data/booking-settings";
 import { getUserAddon } from "@/data/user-addons";
-import { hasBookingModuleAccess } from "@/lib/subscription-access";
+import {
+  hasBookingModuleAccess,
+  hasDashboardAccess,
+} from "@/lib/subscription-access";
 
 export default async function DashboardLayout({
   children,
@@ -19,8 +23,9 @@ export default async function DashboardLayout({
 }) {
   if (await isAdmin() && !(await isImpersonating())) redirect("/admin");
 
+  const { userId } = await auth();
   const clientId = await getEffectiveClientId();
-  if (!clientId) redirect("/sign-in");
+  if (!clientId) redirect(userId ? "/account-pending" : "/sign-in");
 
   const [user, dbLanding, impersonating, admin, bookingSettings, bookingsAddon] =
     await Promise.all([
@@ -31,6 +36,11 @@ export default async function DashboardLayout({
     getBookingSettings(clientId),
     getUserAddon(clientId, "bookings"),
   ]);
+
+  if (!admin && !hasDashboardAccess(user)) {
+    if (user?.suspended) redirect("/sign-in");
+    redirect("/subscribe");
+  }
 
   if (!dbLanding) {
     return (

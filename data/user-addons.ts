@@ -5,7 +5,6 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import {
   userAddons,
-  users,
   type AddonType,
   type SubscriptionStatus,
 } from "@/db/schema";
@@ -35,43 +34,6 @@ export async function getUserAddonByStripeSubscriptionId(
     });
   } catch {
     throw new Error("Failed to fetch user addon by subscription id");
-  }
-}
-
-export async function getBookingModuleAccessContextForClerkUser(
-  clerkUserId: string,
-) {
-  try {
-    const user = await db.query.users.findFirst({
-      where: eq(users.clerkUserId, clerkUserId),
-      columns: {
-        id: true,
-        type: true,
-        suspended: true,
-      },
-    });
-
-    if (!user) return null;
-
-    const addon = await db.query.userAddons.findFirst({
-      where: and(
-        eq(userAddons.userId, user.id),
-        eq(userAddons.addonType, "bookings"),
-      ),
-      columns: {
-        manualAccess: true,
-        status: true,
-      },
-    });
-
-    return {
-      type: user.type,
-      suspended: user.suspended,
-      bookingManualAccess: addon?.manualAccess ?? false,
-      bookingAddonStatus: addon?.status ?? null,
-    };
-  } catch {
-    throw new Error("Failed to fetch booking module access context");
   }
 }
 

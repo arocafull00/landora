@@ -30,12 +30,6 @@ async function fetchSubscriptionStatus(clerkUserId: string) {
 
 export const getSubscriptionStatus = cache(fetchSubscriptionStatus);
 
-export async function getSubscriptionStatusForProxy(clerkUserId: string) {
-  return fetchSubscriptionStatus(clerkUserId);
-}
-
-
-
 export async function updateSubscriptionFromCheckout(data: {
   clerkUserId: string;
   stripeCustomerId: string;
