@@ -26,6 +26,24 @@ type PublicSiteMetadataParams = {
   type?: "article" | "website";
 };
 
+type PublishedMetadataLanding = {
+  name: string;
+  slug: string;
+  customDomain?: string | null;
+  content: {
+    brand: string;
+    hero: {
+      image: string;
+      houseImage?: string;
+      fanImages?: string[];
+    };
+  };
+  seo: {
+    favicon: string;
+    socialImage: string;
+  };
+};
+
 function resolvePublicImageUrl(value: string, canonicalUrl: string) {
   const normalized = value.trim();
   if (!normalized) return null;
@@ -105,4 +123,27 @@ export function createPublicSiteMetadata({
       images,
     },
   };
+}
+
+export function createPublishedSiteMetadata({
+  landing,
+  ...metadata
+}: Omit<PublicSiteMetadataParams, "landing"> & {
+  landing: PublishedMetadataLanding;
+}): Metadata {
+  return createPublicSiteMetadata({
+    ...metadata,
+    landing: {
+      name: landing.name,
+      slug: landing.slug,
+      customDomain: landing.customDomain,
+      branding: { brand: landing.content.brand },
+      seo: landing.seo,
+      hero: {
+        image: landing.content.hero.image,
+        houseImage: landing.content.hero.houseImage ?? "",
+        fanImages: landing.content.hero.fanImages ?? [],
+      },
+    },
+  });
 }

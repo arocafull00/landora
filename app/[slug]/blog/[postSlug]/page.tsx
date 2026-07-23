@@ -3,9 +3,8 @@ import type { Metadata } from "next";
 import { BlogPostPage } from "@/components/blog/blog-post-page";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogPostBySlug } from "@/data/blog";
-import { getLandingPageBySlug } from "@/data/landing-pages";
-import { toLandingContent } from "@/lib/landing-mapper";
-import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
+import { getPublishedLandingBySlug } from "@/data/landing-publications";
+import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
 
 export async function generateMetadata({
   params,
@@ -13,7 +12,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string; postSlug: string }>;
 }): Promise<Metadata> {
   const { slug, postSlug } = await params;
-  const landing = await getLandingPageBySlug(slug);
+  const landing = await getPublishedLandingBySlug(slug);
 
   if (!landing) return {};
 
@@ -21,10 +20,10 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return createPublicSiteMetadata({
+  return createPublishedSiteMetadata({
     landing,
     title: post.title,
-    description: post.excerpt || landing.seo?.description || "",
+    description: post.excerpt || landing.seo.description || "",
     pathname: `/blog/${post.slug}`,
     image: post.heroImage,
     type: "article",
@@ -37,7 +36,7 @@ export default async function PublicBlogPostRoute({
   params: Promise<{ slug: string; postSlug: string }>;
 }) {
   const { slug, postSlug } = await params;
-  const landing = await getLandingPageBySlug(slug);
+  const landing = await getPublishedLandingBySlug(slug);
 
   if (!landing) notFound();
 
@@ -45,7 +44,7 @@ export default async function PublicBlogPostRoute({
 
   if (!post) notFound();
 
-  const content = toLandingContent(landing);
+  const content = landing.content;
 
   return (
     <SiteThemeScope appearance={content.appearance} template={landing.template}>

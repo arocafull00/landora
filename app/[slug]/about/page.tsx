@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PortfolioAboutPage } from "@/components/templates/portfolio/portfolio-about-page";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
-import { getLandingPageBySlug } from "@/data/landing-pages";
-import { toLandingContent } from "@/lib/landing-mapper";
+import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { resolvePortfolioAboutPageContent } from "@/lib/portfolio-about-content";
 import { isSitePageEnabled } from "@/lib/site-pages";
-import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
+import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
 
 type AboutPageProps = {
   params: Promise<{ slug: string }>;
@@ -16,27 +15,27 @@ export async function generateMetadata({
   params,
 }: AboutPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const landing = await getLandingPageBySlug(slug);
+  const landing = await getPublishedLandingBySlug(slug);
 
   if (
     !landing ||
     landing.template !== "portfolio" ||
-    !isSitePageEnabled(landing.branding?.enabledPages, "about")
+    !isSitePageEnabled(landing.content.enabledPages, "about")
   ) {
     return {};
   }
 
-  const brand = landing.branding?.brand || landing.name;
-  const content = toLandingContent(landing);
+  const brand = landing.content.brand || landing.name;
+  const content = landing.content;
   const about = resolvePortfolioAboutPageContent(content);
 
-  return createPublicSiteMetadata({
+  return createPublishedSiteMetadata({
     landing,
     title: `${about.title || "About me"} | ${brand}`,
     description:
       about.intro ||
-      landing.hero?.subtitle ||
-      landing.seo?.description ||
+      landing.content.hero.subtitle ||
+      landing.seo.description ||
       "",
     pathname: "/about",
     image: about.image,
@@ -45,17 +44,17 @@ export async function generateMetadata({
 
 export default async function PublicAboutPage({ params }: AboutPageProps) {
   const { slug } = await params;
-  const landing = await getLandingPageBySlug(slug);
+  const landing = await getPublishedLandingBySlug(slug);
 
   if (
     !landing ||
     landing.template !== "portfolio" ||
-    !isSitePageEnabled(landing.branding?.enabledPages, "about")
+    !isSitePageEnabled(landing.content.enabledPages, "about")
   ) {
     notFound();
   }
 
-  const content = toLandingContent(landing);
+  const content = landing.content;
 
   return (
     <SiteThemeScope appearance={content.appearance} template="portfolio">

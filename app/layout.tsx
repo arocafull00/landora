@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -46,9 +47,11 @@ export default function RootLayout({
           <Analytics />
           <SpeedInsights />
           <TooltipProvider>
-            <div id="main-content" tabIndex={-1}>
-              {children}
-            </div>
+            <Suspense fallback={null}>
+              <div id="main-content" tabIndex={-1}>
+                {children}
+              </div>
+            </Suspense>
             <ToastContainer />
           </TooltipProvider>
         </body>

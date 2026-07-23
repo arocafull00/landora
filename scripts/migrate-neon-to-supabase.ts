@@ -3,7 +3,10 @@ import fs from "node:fs";
 import path from "node:path";
 
 const neonUrl = process.env.NEON_DATABASE_URL;
-const targetUrl = process.env.DATABASE_URL_DIRECT ?? process.env.DATABASE_URL;
+const targetUrl =
+  process.env.DIRECT_URL ??
+  process.env.DATABASE_URL_DIRECT ??
+  process.env.DATABASE_URL;
 
 if (!neonUrl) {
   console.error("NEON_DATABASE_URL is required");
@@ -11,7 +14,7 @@ if (!neonUrl) {
 }
 
 if (!targetUrl) {
-  console.error("DATABASE_URL_DIRECT or DATABASE_URL is required");
+  console.error("DIRECT_URL or DATABASE_URL is required");
   process.exit(1);
 }
 

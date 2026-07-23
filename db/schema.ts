@@ -12,6 +12,7 @@ import {
   unique,
   uniqueIndex,
   check,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 
@@ -102,13 +103,54 @@ export const landingPages = pgTable("landing_pages", {
   slug: text("slug").notNull().unique(),
   template: templateEnum("template").notNull().default("velar"),
   published: boolean("published").notNull().default(false),
+  publishedVersionId: uuid("published_version_id").references(
+    (): AnyPgColumn => landingPageVersions.id,
+    { onDelete: "set null" },
+  ),
+  publishedAt: timestamp("published_at", { withTimezone: true }),
   customDomain: text("custom_domain").unique(),
   domainVerified: boolean("domain_verified").notNull().default(false),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
 }, (table) => [
   index("landing_pages_user_id_idx").on(table.userId),
+  index("landing_pages_published_idx").on(table.published),
 ]);
+
+export const landingPageVersions = pgTable(
+  "landing_page_versions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    landingPageId: uuid("landing_page_id")
+      .notNull()
+      .references(() => landingPages.id, { onDelete: "cascade" }),
+    version: integer("version").notNull(),
+    template: templateEnum("template").notNull(),
+    name: text("name").notNull(),
+    slug: text("slug").notNull(),
+    contentJson: jsonb("content_json")
+      .$type<Record<string, unknown>>()
+      .notNull(),
+    seoJson: jsonb("seo_json")
+      .$type<Record<string, unknown>>()
+      .notNull(),
+    sectionSelectionsJson: jsonb("section_selections_json")
+      .$type<Record<string, unknown>>()
+      .notNull(),
+    createdBy: text("created_by").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    unique("landing_page_versions_landing_version_unique").on(
+      table.landingPageId,
+      table.version,
+    ),
+    index("landing_page_versions_landing_page_idx").on(table.landingPageId),
+    index("landing_page_versions_slug_idx").on(table.slug),
+  ],
+);
 
 export const landingSectionSelections = pgTable("landing_section_selections", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -665,6 +707,11 @@ export const bookingSettingsRelations = relations(bookingSettings, ({ one }) => 
 }));
 
 export const landingPagesRelations = relations(landingPages, ({ one, many }) => ({
+  publishedVersion: one(landingPageVersions, {
+    fields: [landingPages.publishedVersionId],
+    references: [landingPageVersions.id],
+  }),
+  versions: many(landingPageVersions),
   seo: one(landingSeo, { fields: [landingPages.id], references: [landingSeo.landingId] }),
   branding: one(landingBranding, { fields: [landingPages.id], references: [landingBranding.landingId] }),
   hero: one(landingHero, { fields: [landingPages.id], references: [landingHero.landingId] }),
@@ -693,6 +740,16 @@ export const landingPagesRelations = relations(landingPages, ({ one, many }) => 
   domainChecks: many(domainChecks),
   assets: many(assets),
 }));
+
+export const landingPageVersionsRelations = relations(
+  landingPageVersions,
+  ({ one }) => ({
+    landing: one(landingPages, {
+      fields: [landingPageVersions.landingPageId],
+      references: [landingPages.id],
+    }),
+  }),
+);
 
 export const landingSectionSelectionsRelations = relations(
   landingSectionSelections,
@@ -798,6 +855,7 @@ export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type LandingPage = typeof landingPages.$inferSelect;
 export type NewLandingPage = typeof landingPages.$inferInsert;
+export type LandingPageVersion = typeof landingPageVersions.$inferSelect;
 export type LandingSectionSelection = typeof landingSectionSelections.$inferSelect;
 export type LandingHero = typeof landingHero.$inferSelect;
 export type LandingBranding = typeof landingBranding.$inferSelect;

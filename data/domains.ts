@@ -1,64 +1,38 @@
 import "server-only";
 
-import { cache } from "react";
-import { and, eq, ne, or } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { db } from "@/db";
 import { landingPages } from "@/db/schema";
+import {
+  getPublishedLandingByCustomDomain,
+  getPublishedLandingBySlug,
+} from "@/data/landing-publications";
 
 function normalizeHost(host: string) {
   return host.split(":")[0].trim().toLowerCase();
 }
 
-export const getLandingByCustomDomain = cache(async (host: string) => {
-  const normalizedHost = normalizeHost(host);
+export async function getLandingByCustomDomain(host: string) {
+  const landing = await getPublishedLandingByCustomDomain(host);
+  if (!landing) return undefined;
 
-  try {
-    const [landing] = await db
-      .select({
-        slug: landingPages.slug,
-        customDomain: landingPages.customDomain,
-      })
-      .from(landingPages)
-      .where(
-        and(
-          eq(landingPages.customDomain, normalizedHost),
-          eq(landingPages.published, true),
-        ),
-      )
-      .limit(1);
+  return {
+    id: landing.id,
+    slug: landing.slug,
+    customDomain: landing.customDomain,
+  };
+}
 
-    return landing;
-  } catch (error) {
-    throw new Error("Failed to fetch landing by custom domain", { cause: error });
-  }
-});
+export async function getPublishedLandingRouteBySlug(slug: string) {
+  const landing = await getPublishedLandingBySlug(slug);
+  if (!landing) return undefined;
 
-export const getPublishedLandingRouteBySlug = cache(async (slug: string) => {
-  const normalizedSlug = slug.replace(/^\/+|\/+$/g, "");
-
-  try {
-    const [landing] = await db
-      .select({
-        slug: landingPages.slug,
-        customDomain: landingPages.customDomain,
-      })
-      .from(landingPages)
-      .where(
-        and(
-          or(
-            eq(landingPages.slug, normalizedSlug),
-            eq(landingPages.slug, `/${normalizedSlug}`),
-          ),
-          eq(landingPages.published, true),
-        ),
-      )
-      .limit(1);
-
-    return landing;
-  } catch (error) {
-    throw new Error("Failed to fetch published landing route", { cause: error });
-  }
-});
+  return {
+    id: landing.id,
+    slug: landing.slug,
+    customDomain: landing.customDomain,
+  };
+}
 
 export async function isCustomDomainTaken(
   domain: string,

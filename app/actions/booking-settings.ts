@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { z } from "zod";
 import { upsertBookingSettings } from "@/data/booking-settings";
 import { requireAuth } from "@/lib/auth";
@@ -25,6 +25,7 @@ export async function upsertBookingSettingsAction(
 
   try {
     await upsertBookingSettings(tenantId, parsed.data);
+    updateTag(`booking-tenant:${tenantId}`);
     revalidatePath("/bookings");
     revalidatePath("/bookings", "layout");
     return { success: true };

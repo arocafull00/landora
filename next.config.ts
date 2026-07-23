@@ -50,6 +50,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
   experimental: {
     proxyClientMaxBodySize: "2mb",
   },

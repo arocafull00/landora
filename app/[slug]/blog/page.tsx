@@ -3,9 +3,8 @@ import type { Metadata } from "next";
 import { BlogListPage } from "@/components/blog/blog-list-page";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogConfig, getBlogPostsByLandingId } from "@/data/blog";
-import { getLandingPageBySlug } from "@/data/landing-pages";
-import { toLandingContent } from "@/lib/landing-mapper";
-import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
+import { getPublishedLandingBySlug } from "@/data/landing-publications";
+import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
 
 export async function generateMetadata({
   params,
@@ -13,17 +12,17 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const landing = await getLandingPageBySlug(slug);
+  const landing = await getPublishedLandingBySlug(slug);
 
   if (!landing) return {};
 
   const config = await getBlogConfig(landing.id);
-  const brand = landing.branding?.brand || landing.name;
+  const brand = landing.content.brand || landing.name;
 
-  return createPublicSiteMetadata({
+  return createPublishedSiteMetadata({
     landing,
     title: config?.title || `${brand} Blog`,
-    description: config?.description || landing.seo?.description || "",
+    description: config?.description || landing.seo.description || "",
     pathname: "/blog",
   });
 }
@@ -34,7 +33,7 @@ export default async function PublicBlogListPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const landing = await getLandingPageBySlug(slug);
+  const landing = await getPublishedLandingBySlug(slug);
 
   if (!landing) notFound();
 
@@ -43,7 +42,7 @@ export default async function PublicBlogListPage({
     getBlogPostsByLandingId(landing.id, true),
   ]);
 
-  const content = toLandingContent(landing);
+  const content = landing.content;
   const brand = content.brand || landing.name;
   const title = config?.title || `${brand} Blog`;
   const description = config?.description || "";

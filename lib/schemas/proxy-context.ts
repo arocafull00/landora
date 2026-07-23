@@ -26,6 +26,7 @@ export const proxyLandingQuerySchema = z
 export const proxyLandingResponseSchema = z.strictObject({
   landing: z
     .strictObject({
+      id: z.uuid(),
       slug: z.string().min(1).max(100),
       customDomain: z.string().min(1).max(253).nullable(),
     })

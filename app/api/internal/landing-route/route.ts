@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       landing: landing
         ? {
+            id: landing.id,
             slug: landing.slug,
             customDomain: landing.customDomain,
           }

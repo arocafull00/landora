@@ -33,10 +33,11 @@ const isProtectedRoute = createRouteMatcher([
   "/api(.*)",
 ]);
 const PUBLIC_LANDING_PATH =
-  /^\/(?:$|about\/?$|book\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$)$/;
+  /^\/(?:$|about\/?$|book\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$|sitemap\.xml$|robots\.txt$)$/;
 const PROXY_CONTEXT_TIMEOUT_MS = 5_000;
 
 type LandingRoute = {
+  id: string;
   slug: string;
   customDomain: string | null;
 };
@@ -49,9 +50,9 @@ function isPublicLandingPath(pathname: string) {
   return PUBLIC_LANDING_PATH.test(pathname);
 }
 
-function getInternalLandingPath(slug: string, pathname: string) {
-  const normalizedSlug = slug.replace(/^\/+|\/+$/g, "");
-  if (pathname === "/") return `/${normalizedSlug}`;
+function getInternalLandingPath(landing: LandingRoute, pathname: string) {
+  if (pathname === "/") return `/_sites/${landing.id}`;
+  const normalizedSlug = landing.slug.replace(/^\/+|\/+$/g, "");
   return `/${normalizedSlug}${pathname}`;
 }
 
@@ -132,10 +133,10 @@ function redirectToLandingHost(
 
 function rewriteLandingRequest(
   req: NextRequest,
-  slug: string,
+  landing: LandingRoute,
 ) {
   const url = req.nextUrl.clone();
-  url.pathname = getInternalLandingPath(slug, req.nextUrl.pathname);
+  url.pathname = getInternalLandingPath(landing, req.nextUrl.pathname);
   return NextResponse.rewrite(url);
 }
 
@@ -176,7 +177,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return redirectToLandingHost(req, resolution.landing, pathname);
     }
 
-    return rewriteLandingRequest(req, resolution.landing.slug);
+    return rewriteLandingRequest(req, resolution.landing);
   }
 
   if (!isAppHost(host)) {
@@ -194,7 +195,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    return rewriteLandingRequest(req, resolution.landing.slug);
+    return rewriteLandingRequest(req, resolution.landing);
   }
 
   if (

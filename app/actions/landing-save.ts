@@ -1,7 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { auth } from "@clerk/nextjs/server";
+import { revalidatePath, updateTag } from "next/cache";
+import { after } from "next/server";
 import { updateLandingPage } from "@/data/landing-pages";
+import { publishLandingVersion } from "@/data/landing-publications";
 import { upsertLandingSectionSelection } from "@/data/landing-section-selections";
 import {
   updateLandingAppearance,
@@ -17,6 +20,7 @@ import {
   isValidTypographyId,
 } from "@/lib/site-appearance";
 import { syncPortfolioAboutNavHrefs } from "@/lib/template-sections";
+import { warmPublicLanding } from "@/lib/warm-public-landing";
 
 function getSectionPayloads(content: LandingContent, template: string) {
   const navItems =
@@ -60,19 +64,26 @@ function getSectionPayloads(content: LandingContent, template: string) {
   };
 }
 
-function revalidateLandingRoutes(landingId: string, slugValue: string) {
-  const slug = slugValue.replace(/^\//, "");
-  revalidatePath(`/${slug}`);
-  revalidatePath(`/${slug}/blog`);
-  revalidatePath(`/${slug}/about`);
-  revalidatePath(`/${slug}/book`);
-  revalidatePath(`/${slug}/proyectos/[projectSlug]`, "page");
+function revalidateDraftRoutes(landingId: string) {
   revalidatePath(`/preview/${landingId}`);
   revalidatePath(
     `/preview/${landingId}/proyectos/[projectKey]`,
     "page",
   );
   revalidatePath("/editor");
+}
+
+function revalidatePublishedRoutes(landingId: string, slugValue: string) {
+  const slug = slugValue.replace(/^\//, "");
+  revalidatePath(`/${slug}`);
+  revalidatePath(`/${slug}/blog`);
+  revalidatePath(`/${slug}/about`);
+  revalidatePath(`/${slug}/book`);
+  revalidatePath(`/${slug}/proyectos/[projectSlug]`, "page");
+  updateTag(`landing:${landingId}`);
+  updateTag(`landing-slug:${slug}`);
+  updateTag("public-landings");
+  updateTag("public-sitemap");
 }
 
 export async function saveLandingAction(
@@ -83,6 +94,8 @@ export async function saveLandingAction(
 
   const landing = await assertLandingAccess(parsed.data.landingId);
   if (!landing) return { error: "No tienes acceso a esta web" };
+  const { userId: clerkUserId } = await auth();
+  if (!clerkUserId) return { error: "No autorizado" };
 
   if (!isValidPaletteId(landing.template, parsed.data.appearance.paletteId)) {
     return { error: "La paleta no está disponible para esta plantilla" };
@@ -114,7 +127,6 @@ export async function saveLandingAction(
       name: parsed.data.meta.name,
       slug: parsed.data.meta.slug,
       updatedAt: new Date(),
-      ...(parsed.data.mode === "publish" ? { published: true } : {}),
     };
 
     await Promise.all([
@@ -134,7 +146,44 @@ export async function saveLandingAction(
       ...sectionWrites,
     ]);
 
-    revalidateLandingRoutes(landing.id, parsed.data.meta.slug);
+    if (parsed.data.mode === "publish") {
+      const publication = await publishLandingVersion({
+        landingId: landing.id,
+        userId: landing.userId,
+        createdBy: clerkUserId,
+        template: landing.template,
+        name: parsed.data.meta.name,
+        slug: parsed.data.meta.slug,
+        content: {
+          ...content,
+          appearance: parsed.data.appearance,
+        },
+        seo: {
+          title: parsed.data.meta.seoTitle,
+          description: parsed.data.meta.seoDescription,
+          favicon: parsed.data.meta.seoFavicon,
+          socialImage: parsed.data.meta.seoSocialImage,
+        },
+        sectionSelections: {
+          hero: parsed.data.heroVariant,
+        },
+      });
+
+      if (publication.status === "not_found") {
+        return { error: "No tienes acceso a esta web" };
+      }
+
+      revalidatePublishedRoutes(landing.id, parsed.data.meta.slug);
+      after(() =>
+        warmPublicLanding({
+          id: landing.id,
+          slug: parsed.data.meta.slug,
+          customDomain: landing.customDomain,
+        }),
+      );
+    }
+
+    revalidateDraftRoutes(landing.id);
     return { success: true };
   } catch (error) {
     logger.captureException(error, {

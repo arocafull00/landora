@@ -1,7 +1,8 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { clerkClient } from "@clerk/nextjs/server";
+import { revalidatePath, updateTag } from "next/cache";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { after } from "next/server";
 import { z } from "zod";
 import {
   revokeUserManualAccess,
@@ -11,8 +12,11 @@ import {
 import {
   getLandingPageById,
   getLandingsByUserId,
-  updateLandingPage,
 } from "@/data/landing-pages";
+import {
+  publishLandingVersion,
+  unpublishLandingPage,
+} from "@/data/landing-publications";
 import { getUserByInternalId, insertUser } from "@/data/users";
 import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
 import { checkAuth } from "@/lib/auth";
@@ -28,6 +32,10 @@ import {
 } from "@/lib/schemas/admin";
 import { logger } from "@/lib/logger";
 import { deleteUserAccount } from "@/lib/admin/delete-user-account";
+import { toLandingContent } from "@/lib/landing-mapper";
+import { resolveSectionSelections } from "@/lib/section-selections";
+import { publishedLandingContentSchema } from "@/lib/schemas/landing-publication";
+import { warmPublicLanding } from "@/lib/warm-public-landing";
 
 type ActionResult = { success: true } | { error: string };
 
@@ -289,12 +297,15 @@ export async function unpublishUserLandings(userId: string): Promise<ActionResul
   try {
     await Promise.all(
       userLandings.map((landing) =>
-        updateLandingPage(landing.id, {
-          published: false,
-          updatedAt: new Date(),
-        }),
+        unpublishLandingPage(landing.id, landing.userId),
       ),
     );
+    for (const landing of userLandings) {
+      updateTag(`landing:${landing.id}`);
+      updateTag(`landing-slug:${landing.slug.replace(/^\/+|\/+$/g, "")}`);
+    }
+    updateTag("public-landings");
+    updateTag("public-sitemap");
   } catch {
     return { error: "Error al despublicar las landings" };
   }
@@ -313,6 +324,8 @@ export async function publishUserLandings(userId: string): Promise<ActionResult>
   }
 
   const userLandings = await getLandingsByUserId(parsed.data);
+  const { userId: clerkUserId } = await auth();
+  if (!clerkUserId) return { error: "No autorizado" };
 
   try {
     await Promise.all(
@@ -321,13 +334,49 @@ export async function publishUserLandings(userId: string): Promise<ActionResult>
         if (!fullLanding) {
           return;
         }
-        await ensureLandingHasDefaultContent(fullLanding);
-        await updateLandingPage(landing.id, {
-          published: true,
-          updatedAt: new Date(),
+        const publishableLanding =
+          await ensureLandingHasDefaultContent(fullLanding);
+        const result = await publishLandingVersion({
+          landingId: publishableLanding.id,
+          userId: publishableLanding.userId,
+          createdBy: clerkUserId,
+          template: publishableLanding.template,
+          name: publishableLanding.name,
+          slug: publishableLanding.slug,
+          content: publishedLandingContentSchema.parse(
+            toLandingContent(publishableLanding),
+          ),
+          seo: {
+            title: publishableLanding.seo?.title ?? "",
+            description: publishableLanding.seo?.description ?? "",
+            favicon: publishableLanding.seo?.favicon ?? "",
+            socialImage: publishableLanding.seo?.socialImage ?? "",
+          },
+          sectionSelections: resolveSectionSelections(
+            publishableLanding.template,
+            publishableLanding.sectionSelections,
+          ),
         });
+
+        if (result.status === "not_found") {
+          throw new Error("Landing page not found");
+        }
+
+        updateTag(`landing:${publishableLanding.id}`);
+        updateTag(
+          `landing-slug:${publishableLanding.slug.replace(/^\/+|\/+$/g, "")}`,
+        );
+        after(() =>
+          warmPublicLanding({
+            id: publishableLanding.id,
+            slug: publishableLanding.slug,
+            customDomain: publishableLanding.customDomain,
+          }),
+        );
       }),
     );
+    updateTag("public-landings");
+    updateTag("public-sitemap");
   } catch {
     return { error: "Error al publicar las landings" };
   }

@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { z } from "zod";
 import { getEffectiveClientId, requireAuth } from "@/lib/auth";
 import { getLandingPageByUserId } from "@/data/landing-pages";
@@ -100,6 +100,12 @@ export async function assignCustomDomain(domain: string): Promise<ActionResult> 
     };
   }
 
+  updateTag(`landing:${landing.id}`);
+  updateTag(`landing-domain:${normalizedDomain}`);
+  if (previousDomain) {
+    updateTag(`landing-domain:${previousDomain}`);
+  }
+  updateTag("public-sitemap");
   revalidatePath("/domain");
   revalidatePath("/admin");
   try {
@@ -147,6 +153,9 @@ export async function removeCustomDomain(): Promise<ActionResult> {
     };
   }
 
+  updateTag(`landing:${landing.id}`);
+  updateTag(`landing-domain:${currentDomain}`);
+  updateTag("public-sitemap");
   revalidatePath("/domain");
   revalidatePath("/admin");
   return {
