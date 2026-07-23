@@ -251,6 +251,7 @@ export function toLandingView(row: LandingWithSections, user: User | undefined):
     seoTitle: row.seo?.title || row.name,
     seoDescription: row.seo?.description ?? "",
     seoFavicon: row.seo?.favicon ?? "",
+    seoSocialImage: row.seo?.socialImage ?? "",
     owner: user?.name ?? "—",
     template: row.template,
     sectionSelections: resolveSectionSelections(

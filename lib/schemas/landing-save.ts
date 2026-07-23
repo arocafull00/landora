@@ -42,6 +42,7 @@ export const saveLandingSchema = z.strictObject({
     seoTitle: z.string().trim().max(200),
     seoDescription: z.string().trim().max(500),
     seoFavicon: z.union([z.url().max(2048), z.literal("")]),
+    seoSocialImage: z.union([z.url().max(2048), z.literal("")]),
   }),
   content: contentSchema,
   appearance: z.strictObject({

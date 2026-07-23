@@ -72,7 +72,11 @@ export type LandingPageMeta = Pick<
   LandingPage,
   "id" | "userId" | "name" | "slug" | "template" | "published" | "customDomain" | "updatedAt"
 > & {
-  seo: Pick<LandingSeo, "title" | "description" | "favicon"> | null;
+  seo: Pick<
+    LandingSeo,
+    "title" | "description" | "favicon" | "socialImage"
+  > | null;
+  branding: Pick<LandingBranding, "brand"> | null;
   hero: Pick<
     LandingHero,
     | "eyebrow"
@@ -89,6 +93,7 @@ export type LandingPageMeta = Pick<
 function buildMetaWith() {
   return {
     seo: true as const,
+    branding: true as const,
     hero: true as const,
   };
 }

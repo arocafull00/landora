@@ -160,6 +160,7 @@ export type Landing = {
   seoTitle: string;
   seoDescription: string;
   seoFavicon: string;
+  seoSocialImage: string;
   owner: string;
   template: TemplateId;
   sectionSelections: LandingSectionSelections;

@@ -5,7 +5,7 @@ import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
 import { BookingWidget } from "@/components/booking/booking-widget";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
-import { getPublicLandingUrl } from "@/lib/public-site-url";
+import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
 
 export async function generateMetadata({
   params,
@@ -19,13 +19,13 @@ export async function generateMetadata({
 
   const brand = landing.branding?.brand || landing.name;
 
-  return {
+  return createPublicSiteMetadata({
+    landing,
     title: `Reservar cita — ${brand}`,
-    alternates: {
-      canonical: getPublicLandingUrl(landing, "/book"),
-    },
-    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
-  };
+    description:
+      landing.seo?.description || landing.hero?.subtitle || "",
+    pathname: "/book",
+  });
 }
 
 export default async function PublicBookingPage({

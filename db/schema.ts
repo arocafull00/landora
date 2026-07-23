@@ -134,6 +134,7 @@ export const landingSeo = pgTable("landing_seo", {
   title: text("title").notNull().default(""),
   description: text("description").notNull().default(""),
   favicon: text("favicon").notNull().default(""),
+  socialImage: text("social_image").notNull().default(""),
 });
 
 export const landingBranding = pgTable("landing_branding", {

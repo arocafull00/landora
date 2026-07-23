@@ -14,7 +14,7 @@ import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-sh
 import { LandingAnalyticsInit } from "@/components/analytics/landing-analytics-init";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
-import { getPublicLandingUrl } from "@/lib/public-site-url";
+import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -36,12 +36,11 @@ export async function generateMetadata({
 
   if (!landing) return {};
 
-  return {
+  return createPublicSiteMetadata({
+    landing,
     title: landing.seo?.title || landing.hero?.title || landing.name,
     description: landing.seo?.description || landing.hero?.subtitle || "",
-    alternates: { canonical: getPublicLandingUrl(landing) },
-    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
-  };
+  });
 }
 
 export default async function PublicLandingPage({

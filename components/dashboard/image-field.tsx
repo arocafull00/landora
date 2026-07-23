@@ -21,6 +21,7 @@ import {
 
 export function ImageField({
   allowLottie = false,
+  description,
   label,
   onChange,
   presets,
@@ -28,6 +29,7 @@ export function ImageField({
   value,
 }: {
   allowLottie?: boolean;
+  description?: string;
   label: string;
   onChange: (value: string) => void;
   presets?: readonly { value: string; label: string }[];
@@ -72,6 +74,9 @@ export function ImageField({
   return (
     <div className="space-y-2">
       <span className="block font-label text-label-md text-on-surface-variant">{label}</span>
+      {description ? (
+        <p className="text-body-sm text-on-surface-variant">{description}</p>
+      ) : null}
       {value && (
         <div
           className="relative h-28 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface-variant"

@@ -6,7 +6,7 @@ import { getLandingPageBySlug } from "@/data/landing-pages";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { resolvePortfolioAboutPageContent } from "@/lib/portfolio-about-content";
 import { isSitePageEnabled } from "@/lib/site-pages";
-import { getPublicLandingUrl } from "@/lib/public-site-url";
+import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
 
 type AboutPageProps = {
   params: Promise<{ slug: string }>;
@@ -30,18 +30,17 @@ export async function generateMetadata({
   const content = toLandingContent(landing);
   const about = resolvePortfolioAboutPageContent(content);
 
-  return {
+  return createPublicSiteMetadata({
+    landing,
     title: `${about.title || "About me"} | ${brand}`,
     description:
       about.intro ||
       landing.hero?.subtitle ||
       landing.seo?.description ||
       "",
-    alternates: {
-      canonical: getPublicLandingUrl(landing, "/about"),
-    },
-    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
-  };
+    pathname: "/about",
+    image: about.image,
+  });
 }
 
 export default async function PublicAboutPage({ params }: AboutPageProps) {

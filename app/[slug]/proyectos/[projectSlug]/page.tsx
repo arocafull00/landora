@@ -5,7 +5,7 @@ import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { findInternalPortfolioProject } from "@/lib/portfolio-projects";
-import { getPublicLandingUrl } from "@/lib/public-site-url";
+import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string; projectSlug: string }>;
@@ -35,28 +35,13 @@ export async function generateMetadata({
   const title = data.project.title || "Proyecto";
   const description =
     data.project.description || data.landing.seo?.description || "";
-  return {
+  return createPublicSiteMetadata({
+    landing: data.landing,
     title: `${title} | ${data.content.brand}`,
     description,
-    alternates: data.project.projectSlug
-      ? {
-          canonical: getPublicLandingUrl(
-            data.landing,
-            `/proyectos/${data.project.projectSlug}`,
-          ),
-        }
-      : undefined,
-    icons: data.landing.seo?.favicon
-      ? { icon: data.landing.seo.favicon }
-      : undefined,
-    openGraph: data.project.image
-      ? {
-          title,
-          description,
-          images: [data.project.image],
-        }
-      : undefined,
-  };
+    pathname: `/proyectos/${data.project.projectSlug}`,
+    image: data.project.image,
+  });
 }
 
 export default async function PublicProjectPage({

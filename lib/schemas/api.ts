@@ -24,6 +24,7 @@ export const updateLandingMetaSchema = z.strictObject({
   seoTitle: z.string().trim().max(200).optional(),
   seoDescription: z.string().trim().max(500).optional(),
   seoFavicon: optionalUrl.optional(),
+  seoSocialImage: optionalUrl.optional(),
 }).refine((value) => Object.keys(value).length > 0);
 
 export const createBlogPostSchema = z.strictObject({

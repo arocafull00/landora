@@ -34,6 +34,7 @@ async function provisionProspectLandingContent(
       title: content.hero.title,
       description: content.hero.subtitle,
       favicon: "",
+      socialImage: "",
     }),
     upsertLandingBranding(landingId, {
       brand: content.brand,

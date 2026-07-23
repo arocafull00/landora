@@ -5,7 +5,7 @@ import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogConfig, getBlogPostsByLandingId } from "@/data/blog";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { toLandingContent } from "@/lib/landing-mapper";
-import { getPublicLandingUrl } from "@/lib/public-site-url";
+import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
 
 export async function generateMetadata({
   params,
@@ -20,14 +20,12 @@ export async function generateMetadata({
   const config = await getBlogConfig(landing.id);
   const brand = landing.branding?.brand || landing.name;
 
-  return {
+  return createPublicSiteMetadata({
+    landing,
     title: config?.title || `${brand} Blog`,
     description: config?.description || landing.seo?.description || "",
-    alternates: {
-      canonical: getPublicLandingUrl(landing, "/blog"),
-    },
-    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
-  };
+    pathname: "/blog",
+  });
 }
 
 export default async function PublicBlogListPage({

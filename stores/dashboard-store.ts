@@ -144,6 +144,7 @@ async function persistLanding(
       seoTitle: landing.seoTitle,
       seoDescription: landing.seoDescription,
       seoFavicon: landing.seoFavicon,
+      seoSocialImage: landing.seoSocialImage,
     },
     content: landing.content,
     appearance: landing.content.appearance,

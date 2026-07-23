@@ -123,6 +123,7 @@ export async function saveLandingAction(
         title: parsed.data.meta.seoTitle,
         description: parsed.data.meta.seoDescription,
         favicon: parsed.data.meta.seoFavicon,
+        socialImage: parsed.data.meta.seoSocialImage,
       }),
       updateLandingAppearance(landing.id, parsed.data.appearance),
       upsertLandingSectionSelection(

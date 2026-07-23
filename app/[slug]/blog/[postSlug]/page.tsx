@@ -5,7 +5,7 @@ import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogPostBySlug } from "@/data/blog";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { toLandingContent } from "@/lib/landing-mapper";
-import { getPublicLandingUrl } from "@/lib/public-site-url";
+import { createPublicSiteMetadata } from "@/lib/public-site-metadata";
 
 export async function generateMetadata({
   params,
@@ -21,14 +21,14 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return {
+  return createPublicSiteMetadata({
+    landing,
     title: post.title,
     description: post.excerpt || landing.seo?.description || "",
-    alternates: {
-      canonical: getPublicLandingUrl(landing, `/blog/${post.slug}`),
-    },
-    icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
-  };
+    pathname: `/blog/${post.slug}`,
+    image: post.heroImage,
+    type: "article",
+  });
 }
 
 export default async function PublicBlogPostRoute({

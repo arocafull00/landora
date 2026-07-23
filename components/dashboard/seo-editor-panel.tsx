@@ -39,6 +39,15 @@ export function SeoEditorPanel({ activeLanding }: SeoEditorPanelProps) {
         templateId={activeLanding.template}
         value={activeLanding.seoFavicon}
       />
+      <ImageField
+        description="Si no eliges una imagen, se usará automáticamente la imagen principal del hero."
+        label="Imagen para compartir"
+        onChange={(value) =>
+          updateLandingMeta(activeLanding.id, { seoSocialImage: value })
+        }
+        templateId={activeLanding.template}
+        value={activeLanding.seoSocialImage}
+      />
     </section>
   );
 }
