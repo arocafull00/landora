@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import type {
   LandingContent,
   LandingSectionSelections,
-  SitePageId,
+  EditorPageTarget,
   TemplateId,
 } from "@/lib/dashboard-data";
 import {
@@ -34,7 +34,7 @@ export function IframeLandingPreview({
   onFullscreen,
   scrollTarget,
   sectionSelections,
-  sitePage = "home",
+  pageTarget = { type: "home" },
   showToolbar = true,
   template = "velar",
 }: {
@@ -46,7 +46,7 @@ export function IframeLandingPreview({
   onFullscreen?: () => void;
   scrollTarget?: string;
   sectionSelections: LandingSectionSelections;
-  sitePage?: SitePageId;
+  pageTarget?: EditorPageTarget;
   showToolbar?: boolean;
   template?: TemplateId;
 }) {
@@ -156,9 +156,13 @@ export function IframeLandingPreview({
             ref={iframeRef}
             sandbox="allow-scripts allow-same-origin"
             src={
-              sitePage === "about"
+              pageTarget.type === "about"
                 ? `/preview/${landingId}/about?embed=1`
-                : `/preview/${landingId}?embed=1`
+                : pageTarget.type === "project"
+                  ? `/preview/${landingId}/proyectos/${encodeURIComponent(
+                      pageTarget.projectId,
+                    )}?embed=1`
+                  : `/preview/${landingId}?embed=1`
             }
             title="Landing preview"
           />

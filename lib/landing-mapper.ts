@@ -103,6 +103,13 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
         description: g.description || undefined,
         tags: parseCommaList(g.tags),
         link: g.link || undefined,
+        linkType:
+          g.linkType === "internal" || g.linkType === "external"
+            ? g.linkType
+            : "none",
+        projectSlug: g.projectSlug || undefined,
+        projectBody: g.projectBody || undefined,
+        projectGallery: (g.projectGallery ?? []).map(mapImage),
       })),
     ),
     nav: uniqueBySortOrder(row.nav ?? []).map((n) => ({

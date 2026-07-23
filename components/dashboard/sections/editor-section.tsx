@@ -11,12 +11,13 @@ import { CoffeeShopEditorSection } from "@/components/dashboard/sections/coffee-
 import { VelarEditorSection } from "@/components/dashboard/sections/velar-editor-section";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { PortfolioAboutPageEditor } from "@/components/dashboard/portfolio-about-page-editor";
+import { PortfolioProjectPageEditor } from "@/components/dashboard/portfolio-project-page-editor";
 
 export function EditorSection() {
-  const { activeLandingId, activeSitePage, landings } = useDashboardStore(
+  const { activeLandingId, activePageTarget, landings } = useDashboardStore(
     useShallow((state) => ({
       activeLandingId: state.activeLandingId,
-      activeSitePage: state.activeSitePage,
+      activePageTarget: state.activePageTarget,
       landings: state.landings,
     })),
   );
@@ -28,7 +29,10 @@ export function EditorSection() {
     return null;
   }
 
-  if (activeLanding.template === "portfolio" && activeSitePage === "about") {
+  if (
+    activeLanding.template === "portfolio" &&
+    activePageTarget.type === "about"
+  ) {
     return (
       <EditorLayout
         form={
@@ -39,6 +43,29 @@ export function EditorSection() {
         }
       />
     );
+  }
+
+  if (
+    activeLanding.template === "portfolio" &&
+    activePageTarget.type === "project"
+  ) {
+    const project = activeLanding.content.gallery?.find(
+      (item) => item.id === activePageTarget.projectId,
+    );
+
+    if (project) {
+      return (
+        <EditorLayout
+          form={
+            <PortfolioProjectPageEditor
+              key={project.id}
+              landing={activeLanding}
+              project={project}
+            />
+          }
+        />
+      );
+    }
   }
 
   if (activeLanding.template === "studio") {

@@ -79,6 +79,10 @@ async function provisionProspectLandingContent(
         description: "",
         tags: "",
         link: "",
+        linkType: "none",
+        projectSlug: "",
+        projectBody: "",
+        projectGallery: [],
       }))
     ),
     replaceLandingNav(

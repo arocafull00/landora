@@ -36,6 +36,7 @@ export default async function LandingPreviewPage({
       initialSectionSelections={sectionSelections}
       template={landing.template}
       slug={landing.slug}
+      previewLandingId={landing.id}
       bookingEnabled={tenant?.enabled ?? false}
     />
   );

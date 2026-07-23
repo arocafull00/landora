@@ -14,6 +14,7 @@ import {
   BrandLogoType,
   ContactContent,
   ContentGroup,
+  EditorPageTarget,
   HeroContent,
   HeroVariantId,
   initialAssets,
@@ -51,7 +52,7 @@ export type DashboardState = {
   activeWorkspaceTab: string;
   activeContentGroup: ContentGroup;
   activeEditorTab: string;
-  activeSitePage: SitePageId;
+  activePageTarget: EditorPageTarget;
   activeLandingId: string;
   activePresentationId: string;
   activeAssetId: string;
@@ -68,7 +69,7 @@ export type DashboardState = {
   setActiveWorkspaceTab: (tab: string) => void;
   setActiveContentGroup: (group: ContentGroup) => void;
   setActiveEditorTab: (tab: string) => void;
-  setActiveSitePage: (pageId: SitePageId) => void;
+  setActivePageTarget: (target: EditorPageTarget) => void;
   setActiveLandingId: (id: string) => void;
   setActivePresentationId: (id: string) => void;
   setActiveAssetId: (id: string) => void;
@@ -168,7 +169,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
   activeWorkspaceTab: "Structure",
   activeContentGroup: "Pages",
   activeEditorTab: "Hero",
-  activeSitePage: "home",
+  activePageTarget: { type: "home" },
   activeLandingId: initialLanding?.id ?? "",
   activePresentationId: initialPresentations[0].id,
   activeAssetId: initialAssets[0].id,
@@ -195,9 +196,13 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
   setActiveWorkspaceTab: (activeWorkspaceTab) => set({ activeWorkspaceTab }),
   setActiveContentGroup: (activeContentGroup) => set({ activeContentGroup }),
   setActiveEditorTab: (activeEditorTab) => set({ activeEditorTab }),
-  setActiveSitePage: (activeSitePage) => set({ activeSitePage }),
+  setActivePageTarget: (activePageTarget) => set({ activePageTarget }),
   setActiveLandingId: (activeLandingId) =>
-    set({ activeLandingId, activeContentGroup: "Pages", activeSitePage: "home" }),
+    set({
+      activeLandingId,
+      activeContentGroup: "Pages",
+      activePageTarget: { type: "home" },
+    }),
   setActivePresentationId: (activePresentationId) =>
     set({ activePresentationId, activeContentGroup: "Presentations" }),
   setActiveAssetId: (activeAssetId) => set({ activeAssetId }),
@@ -207,7 +212,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     set({
       landings: [landing],
       activeLandingId: landing.id,
-      activeSitePage: "home",
+      activePageTarget: { type: "home" },
     }),
 
   updateLandingMeta: (id, patch) =>
@@ -300,7 +305,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     const hasAboutNav = landing.content.nav.some((item) => item.href === aboutHref);
 
     set((state) => ({
-      activeSitePage: pageId,
+      activePageTarget: { type: pageId },
       landings: state.landings.map((item) =>
         item.id === landingId
           ? markEdited({
@@ -330,8 +335,10 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     if (pageId === "home") return;
 
     set((state) => ({
-      activeSitePage:
-        state.activeSitePage === pageId ? "home" : state.activeSitePage,
+      activePageTarget:
+        state.activePageTarget.type === pageId
+          ? { type: "home" }
+          : state.activePageTarget,
       landings: state.landings.map((landing) => {
         if (landing.id !== landingId) return landing;
 

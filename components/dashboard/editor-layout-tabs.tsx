@@ -9,7 +9,7 @@ const EMPTY_HIDDEN_SECTIONS: string[] = [];
 
 export function EditorLayoutTabs() {
   const activeEditorTab = useDashboardStore((state) => state.activeEditorTab);
-  const activeSitePage = useDashboardStore((state) => state.activeSitePage);
+  const activePageTarget = useDashboardStore((state) => state.activePageTarget);
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
   const isAdmin = useDashboardStore((state) => state.isAdmin);
   const landings = useDashboardStore((state) => state.landings);
@@ -26,7 +26,7 @@ export function EditorLayoutTabs() {
     [template, hiddenSections, isAdmin],
   );
 
-  if (!template || activeSitePage !== "home") return null;
+  if (!template || activePageTarget.type !== "home") return null;
 
   return (
     <EditorTabsBar

@@ -60,7 +60,12 @@ function revalidateLandingRoutes(landingId: string, slugValue: string) {
   revalidatePath(`/${slug}/blog`);
   revalidatePath(`/${slug}/about`);
   revalidatePath(`/${slug}/book`);
+  revalidatePath(`/${slug}/proyectos/[projectSlug]`, "page");
   revalidatePath(`/preview/${landingId}`);
+  revalidatePath(
+    `/preview/${landingId}/proyectos/[projectKey]`,
+    "page",
+  );
   revalidatePath("/editor");
 }
 

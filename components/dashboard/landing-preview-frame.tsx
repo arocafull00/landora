@@ -29,6 +29,7 @@ import { resolveSectionId } from "@/lib/template-sections";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { PortfolioAboutPage } from "@/components/templates/portfolio/portfolio-about-page";
+import { PortfolioProjectPage } from "@/components/templates/portfolio/portfolio-project-page";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -47,6 +48,7 @@ export function LandingPreviewFrame({
   slug,
   previewLandingId,
   sitePage = "home",
+  previewProjectKey,
   bookingEnabled = false,
 }: {
   initialContent: LandingContent;
@@ -54,7 +56,8 @@ export function LandingPreviewFrame({
   template: TemplateId;
   slug?: string;
   previewLandingId?: string;
-  sitePage?: SitePageId;
+  sitePage?: SitePageId | "project";
+  previewProjectKey?: string;
   bookingEnabled?: boolean;
 }) {
   const [livePreview, setLivePreview] = useState<{
@@ -154,10 +157,27 @@ export function LandingPreviewFrame({
   }, [scrollToResolvedHash]);
 
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
+  const previewProject =
+    sitePage === "project"
+      ? content.gallery?.find(
+          (item) =>
+            item.id === previewProjectKey ||
+            item.projectSlug === previewProjectKey,
+        )
+      : undefined;
 
   return (
     <SiteThemeScope appearance={content.appearance} template={activeTemplate}>
-      {sitePage === "about" && activeTemplate === "portfolio" ? (
+      {sitePage === "project" &&
+      activeTemplate === "portfolio" &&
+      previewProject ? (
+        <PortfolioProjectPage
+          content={content}
+          landingSlug={slug ?? ""}
+          previewLandingId={previewLandingId}
+          project={previewProject}
+        />
+      ) : sitePage === "about" && activeTemplate === "portfolio" ? (
         <PortfolioAboutPage
           content={content}
           landingSlug={slug ?? ""}

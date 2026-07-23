@@ -1,7 +1,9 @@
 "use client";
 
 import { AssetImage } from "@/components/ui/asset-image";
+import Link from "next/link";
 import type { GalleryItem } from "@/lib/dashboard-data";
+import { resolveProjectLinkType } from "@/lib/portfolio-projects";
 
 const hasText = (item: GalleryItem) =>
   !!(item.title || item.description || item.tags?.length);
@@ -9,9 +11,11 @@ const hasText = (item: GalleryItem) =>
 export function PortfolioProjectCard({
   item,
   index,
+  internalHref,
 }: {
   item: GalleryItem;
   index: number;
+  internalHref?: string;
 }) {
   const isLarge = index % 3 === 0;
   const showText = hasText(item);
@@ -74,7 +78,21 @@ export function PortfolioProjectCard({
     </>
   );
 
-  if (item.link) {
+  const linkType = resolveProjectLinkType(item);
+
+  if (linkType === "internal" && internalHref) {
+    return (
+      <Link
+        aria-label={item.title || "Ver proyecto"}
+        className={`${cardClassName} block cursor-pointer`}
+        href={internalHref}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  if (linkType === "external" && item.link) {
     return (
       <a
         aria-label={item.title || "Ver proyecto"}

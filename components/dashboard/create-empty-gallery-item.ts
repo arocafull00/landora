@@ -8,5 +8,9 @@ export function createEmptyGalleryItem(): GalleryItem {
     description: "",
     tags: [],
     link: "",
+    linkType: "none",
+    projectSlug: "",
+    projectBody: "",
+    projectGallery: [],
   };
 }

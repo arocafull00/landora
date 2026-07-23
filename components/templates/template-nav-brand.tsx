@@ -26,7 +26,7 @@ export function TemplateNavBrand({
 
   if (brandLogoType === "image" && brandLogoImage) {
     return (
-      <span className={`relative block h-9 w-[160px] ${className}`} style={style}>
+      <span className={`relative block h-9 w-40 ${className}`} style={style}>
         <AssetImage
           alt={brand || "Logo"}
           className="object-contain object-left"

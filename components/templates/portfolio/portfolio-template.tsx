@@ -33,10 +33,23 @@ function isOverlappingTop(el: HTMLElement | null) {
   return rect.top <= 0 && rect.bottom > 0;
 }
 
-function renderPortfolioBodySection(anchor: string, content: LandingContent) {
+function renderPortfolioBodySection(
+  anchor: string,
+  content: LandingContent,
+  landingSlug: string,
+  previewLandingId?: string,
+) {
   if (anchor === "story") return <PortfolioAbout content={content} />;
   if (anchor === "experiencia") return <PortfolioWorkHistorySection content={content} />;
-  if (anchor === "proyectos") return <PortfolioProjectsSection content={content} />;
+  if (anchor === "proyectos") {
+    return (
+      <PortfolioProjectsSection
+        content={content}
+        landingSlug={landingSlug}
+        previewLandingId={previewLandingId}
+      />
+    );
+  }
   if (anchor === "skills") return <PortfolioSkillsSection content={content} />;
   if (anchor === "servicios") return <PortfolioServicesSection content={content} />;
   if (anchor === "testimonios") return <PortfolioTestimonialsSection content={content} />;
@@ -75,22 +88,35 @@ export function PortfolioTemplate({
     : slug
       ? `/${normalizeLandingSlug(slug)}`
       : "/";
+  const aboutEnabled = isSitePageEnabled(content.enabledPages, "about");
   const publicAboutHref =
-    slug && isSitePageEnabled(content.enabledPages, "about")
-      ? getAboutNavHref(slug)
-      : undefined;
-  const aboutAlreadyInNav =
-    publicAboutHref !== undefined &&
-    content.nav.some(
-      (item) => normalizeNavHref("portfolio", item.href) === publicAboutHref,
-    );
+    slug && aboutEnabled ? getAboutNavHref(slug) : undefined;
+  const previewAboutHref = previewLandingId
+    ? `/preview/${previewLandingId}/about`
+    : undefined;
+  const resolvedAboutHref = aboutEnabled
+    ? (previewAboutHref ?? publicAboutHref)
+    : undefined;
+  const aboutAlreadyInNav = content.nav.some((item) => {
+    const href = normalizeNavHref("portfolio", item.href);
+    if (publicAboutHref && href === publicAboutHref) return true;
+    return /^\/[^/]+\/about\/?$/.test(href);
+  });
   const aboutHref =
-    publicAboutHref && !aboutAlreadyInNav
-      ? previewLandingId
-        ? `/preview/${previewLandingId}/about`
-        : `/${normalizeLandingSlug(slug!)}/about`
-      : undefined;
-  const navLinks = getVisibleNav(content.nav, content.hiddenSections, "portfolio");
+    resolvedAboutHref && !aboutAlreadyInNav ? resolvedAboutHref : undefined;
+  const navLinks = getVisibleNav(
+    content.nav,
+    content.hiddenSections,
+    "portfolio",
+  ).map((item) => {
+    if (!previewAboutHref) return item;
+    const href = normalizeNavHref("portfolio", item.href);
+    const isPublicAbout =
+      (publicAboutHref !== undefined && href === publicAboutHref) ||
+      /^\/[^/]+\/about\/?$/.test(href);
+    if (!isPublicAbout) return item;
+    return { ...item, href: previewAboutHref };
+  });
 
   const updateNavState = useCallback(() => {
     setOverHero(isOverlappingTop(heroRef.current));
@@ -150,7 +176,12 @@ export function PortfolioTemplate({
 
       {getOrderedVisibleBodySections("portfolio", content).map((section) => (
         <Fragment key={section.anchor}>
-          {renderPortfolioBodySection(section.anchor, content)}
+          {renderPortfolioBodySection(
+            section.anchor,
+            content,
+            slug ?? "",
+            previewLandingId,
+          )}
         </Fragment>
       ))}
 

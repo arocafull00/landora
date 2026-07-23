@@ -3,8 +3,17 @@
 import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioProjectCard } from "@/components/templates/portfolio/portfolio-project-card";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { getPortfolioProjectHref } from "@/lib/portfolio-projects";
 
-export function PortfolioProjectsSection({ content }: { content: LandingContent }) {
+export function PortfolioProjectsSection({
+  content,
+  landingSlug,
+  previewLandingId,
+}: {
+  content: LandingContent;
+  landingSlug: string;
+  previewLandingId?: string;
+}) {
   const gallery = content.gallery ?? [];
   if (gallery.length === 0) return null;
 
@@ -51,7 +60,20 @@ export function PortfolioProjectsSection({ content }: { content: LandingContent 
               style={{ width: "min(80vw, 360px)" }}
               key={item.id}
             >
-              <PortfolioProjectCard item={item} index={0} />
+              <PortfolioProjectCard
+                item={item}
+                index={0}
+                internalHref={
+                  item.projectSlug
+                    ? getPortfolioProjectHref({
+                        landingSlug,
+                        previewLandingId,
+                        projectId: item.id,
+                        projectSlug: item.projectSlug,
+                      })
+                    : undefined
+                }
+              />
             </div>
           ))}
         </div>
@@ -64,6 +86,16 @@ export function PortfolioProjectsSection({ content }: { content: LandingContent 
             <PortfolioProjectCard
               item={item}
               index={index}
+              internalHref={
+                item.projectSlug
+                  ? getPortfolioProjectHref({
+                      landingSlug,
+                      previewLandingId,
+                      projectId: item.id,
+                      projectSlug: item.projectSlug,
+                    })
+                  : undefined
+              }
               key={item.id}
             />
           ))}

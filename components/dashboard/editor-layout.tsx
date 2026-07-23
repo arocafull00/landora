@@ -18,7 +18,7 @@ export function EditorLayout({
   scrollTarget?: string;
 }) {
   const activeEditorTab = useDashboardStore((state) => state.activeEditorTab);
-  const activeSitePage = useDashboardStore((state) => state.activeSitePage);
+  const activePageTarget = useDashboardStore((state) => state.activePageTarget);
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
   const landings = useDashboardStore((state) => state.landings);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -30,7 +30,7 @@ export function EditorLayout({
   if (!activeLanding) return null;
 
   const resolvedScrollTarget =
-    activeSitePage === "home"
+    activePageTarget.type === "home"
       ? scrollTarget ??
         getEditorScrollTarget(activeLanding.template, activeEditorTab)
       : undefined;
@@ -58,7 +58,7 @@ export function EditorLayout({
           onFullscreen={() => setIsFullscreen(true)}
           scrollTarget={resolvedScrollTarget}
           sectionSelections={activeLanding.sectionSelections}
-          sitePage={activeSitePage}
+          pageTarget={activePageTarget}
           template={activeLanding.template}
         />
       </div>
@@ -71,7 +71,7 @@ export function EditorLayout({
           onDeviceChange={setDevice}
           scrollTarget={resolvedScrollTarget}
           sectionSelections={activeLanding.sectionSelections}
-          sitePage={activeSitePage}
+          pageTarget={activePageTarget}
           template={activeLanding.template}
         />
       ) : null}

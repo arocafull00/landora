@@ -4,11 +4,13 @@ import { useId, useState } from "react";
 import { Plus, X } from "lucide-react";
 
 type PortfolioGalleryTagsFieldProps = {
+  maxItems?: number;
   onChange: (value: string[]) => void;
   value: string[];
 };
 
 export function PortfolioGalleryTagsField({
+  maxItems,
   onChange,
   value,
 }: PortfolioGalleryTagsFieldProps) {
@@ -18,7 +20,8 @@ export function PortfolioGalleryTagsField({
   const isDuplicate = value.some(
     (tag) => tag.toLocaleLowerCase() === trimmedDraft.toLocaleLowerCase(),
   );
-  const canAdd = trimmedDraft.length > 0 && !isDuplicate;
+  const isAtLimit = maxItems !== undefined && value.length >= maxItems;
+  const canAdd = trimmedDraft.length > 0 && !isDuplicate && !isAtLimit;
 
   const addTag = () => {
     if (!canAdd) return;
@@ -67,6 +70,7 @@ export function PortfolioGalleryTagsField({
             addTag();
           }}
           placeholder="Escribe una etiqueta"
+          maxLength={40}
           type="text"
           value={draft}
         />
@@ -80,7 +84,11 @@ export function PortfolioGalleryTagsField({
           Añadir
         </button>
       </div>
-      {isDuplicate && trimmedDraft ? (
+      {isAtLimit ? (
+        <p className="mt-1.5 text-body-sm text-danger">
+          Puedes añadir hasta {maxItems} etiquetas.
+        </p>
+      ) : isDuplicate && trimmedDraft ? (
         <p className="mt-1.5 text-body-sm text-danger">
           Esta etiqueta ya está añadida.
         </p>

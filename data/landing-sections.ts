@@ -323,7 +323,19 @@ export async function replaceLandingTestimonials(
 
 export async function replaceLandingGallery(
   landingId: string,
-  items: Pick<LandingGalleryItem, "image" | "video" | "title" | "description" | "tags" | "link">[]
+  items: Pick<
+    LandingGalleryItem,
+    | "image"
+    | "video"
+    | "title"
+    | "description"
+    | "tags"
+    | "link"
+    | "linkType"
+    | "projectSlug"
+    | "projectBody"
+    | "projectGallery"
+  >[]
 ) {
   return replaceLandingCollection(landingGallery, landingId, items, "gallery");
 }

@@ -30,6 +30,7 @@ export function PortfolioEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
+    setActivePageTarget,
     updateSection,
     updateSectionItem,
   } = useDashboardStore(
@@ -38,6 +39,7 @@ export function PortfolioEditorSection() {
       activeLandingId: state.activeLandingId,
       isAdmin: state.isAdmin,
       landings: state.landings,
+      setActivePageTarget: state.setActivePageTarget,
       updateSection: state.updateSection,
       updateSectionItem: state.updateSectionItem,
     })),
@@ -89,11 +91,18 @@ export function PortfolioEditorSection() {
               <div className="space-y-6">
                 {gallery.map((item, index) => (
                   <PortfolioProjectItemEditor
+                    gallery={gallery}
                     index={index}
                     item={item}
                     key={item.id}
                     onChange={(patch) =>
                       updateSectionItem(activeLanding.id, "gallery", item.id, patch)
+                    }
+                    onEditPage={() =>
+                      setActivePageTarget({
+                        type: "project",
+                        projectId: item.id,
+                      })
                     }
                     onRemove={() =>
                       updateSection(

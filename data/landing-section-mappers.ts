@@ -105,13 +105,29 @@ export function mapDefaultStats(content: LandingContent) {
 
 export function mapDefaultGallery(content: LandingContent) {
   return (content.gallery ?? []).map(
-    (g): Pick<LandingGalleryItem, "image" | "video" | "title" | "description" | "tags" | "link"> => ({
+    (g): Pick<
+      LandingGalleryItem,
+      | "image"
+      | "video"
+      | "title"
+      | "description"
+      | "tags"
+      | "link"
+      | "linkType"
+      | "projectSlug"
+      | "projectBody"
+      | "projectGallery"
+    > => ({
       image: g.image ?? "",
       video: g.video ?? "",
       title: g.title ?? "",
       description: g.description ?? "",
       tags: (g.tags ?? []).join(", "),
       link: g.link ?? "",
+      linkType: g.linkType ?? (g.link ? "external" : "none"),
+      projectSlug: g.projectSlug ?? "",
+      projectBody: g.projectBody ?? "",
+      projectGallery: g.projectGallery ?? [],
     })
   );
 }

@@ -23,16 +23,19 @@ import {
 import { Icon } from "@/components/ui/icon";
 import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
+import { resolveProjectLinkType } from "@/lib/portfolio-projects";
 import { useDashboardStore } from "@/stores/dashboard-store";
 
 export function EditorToolbar() {
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
-  const activeSitePage = useDashboardStore((state) => state.activeSitePage);
+  const activePageTarget = useDashboardStore((state) => state.activePageTarget);
   const landings = useDashboardStore((state) => state.landings);
   const saveStatus = useDashboardStore((state) => state.saveStatus);
   const saveLanding = useDashboardStore((state) => state.saveLanding);
   const publishLanding = useDashboardStore((state) => state.publishLanding);
-  const setActiveSitePage = useDashboardStore((state) => state.setActiveSitePage);
+  const setActivePageTarget = useDashboardStore(
+    (state) => state.setActivePageTarget,
+  );
   const addSitePage = useDashboardStore((state) => state.addSitePage);
   const removeSitePage = useDashboardStore((state) => state.removeSitePage);
   const isAdmin = useDashboardStore((state) => state.isAdmin);
@@ -44,8 +47,19 @@ export function EditorToolbar() {
 
   const disabled = saveStatus === "saving";
   const aboutEnabled = activeLanding.content.enabledPages.includes("about");
+  const internalProjects = (activeLanding.content.gallery ?? []).filter(
+    (item) => resolveProjectLinkType(item) === "internal" && item.projectSlug,
+  );
+  const activeProject =
+    activePageTarget.type === "project"
+      ? internalProjects.find(
+          (item) => item.id === activePageTarget.projectId,
+        )
+      : undefined;
   const activePageLabel =
-    activeSitePage === "about" ? "About me" : activeLanding.name;
+    activePageTarget.type === "about"
+      ? "About me"
+      : activeProject?.title || activeLanding.name;
 
   const copyPreviewLink = async () => {
     let url: string;
@@ -60,8 +74,10 @@ export function EditorToolbar() {
       url = `${window.location.origin}/preview/${activeLanding.id}`;
     }
 
-    if (activeSitePage === "about") {
+    if (activePageTarget.type === "about") {
       url = `${url.replace(/\/$/, "")}/about`;
+    } else if (activeProject?.projectSlug) {
+      url = `${url.replace(/\/$/, "")}/proyectos/${activeProject.projectSlug}`;
     }
 
     try {
@@ -91,22 +107,46 @@ export function EditorToolbar() {
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuItem onClick={() => setActiveSitePage("home")}>
+            <DropdownMenuItem
+              onClick={() => setActivePageTarget({ type: "home" })}
+            >
               <HomeIcon aria-hidden />
               <span className="flex-1 truncate">Inicio</span>
-              {activeSitePage === "home" ? (
+              {activePageTarget.type === "home" ? (
                 <CheckIcon className="h-4 w-4 text-primary" />
               ) : null}
             </DropdownMenuItem>
             {aboutEnabled ? (
-              <DropdownMenuItem onClick={() => setActiveSitePage("about")}>
+              <DropdownMenuItem
+                onClick={() => setActivePageTarget({ type: "about" })}
+              >
                 <FileTextIcon aria-hidden />
                 <span className="flex-1 truncate">About me</span>
-                {activeSitePage === "about" ? (
+                {activePageTarget.type === "about" ? (
                   <CheckIcon className="h-4 w-4 text-primary" />
                 ) : null}
               </DropdownMenuItem>
             ) : null}
+            {internalProjects.map((project) => (
+              <DropdownMenuItem
+                key={project.id}
+                onClick={() =>
+                  setActivePageTarget({
+                    type: "project",
+                    projectId: project.id,
+                  })
+                }
+              >
+                <FileTextIcon aria-hidden />
+                <span className="flex-1 truncate">
+                  {project.title || "Proyecto sin título"}
+                </span>
+                {activePageTarget.type === "project" &&
+                activePageTarget.projectId === project.id ? (
+                  <CheckIcon className="h-4 w-4 text-primary" />
+                ) : null}
+              </DropdownMenuItem>
+            ))}
             <DropdownMenuSeparator />
             {activeLanding.template === "portfolio" && !aboutEnabled ? (
               <DropdownMenuSub>

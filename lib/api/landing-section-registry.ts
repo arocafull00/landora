@@ -25,6 +25,7 @@ import { parseSocialLinks } from "@/lib/footer-content";
 import type { LandingPageMeta } from "@/data/landing-pages";
 import type { OfferCardRow } from "@/lib/domain/dtos";
 import { portfolioAboutPageSchema } from "@/lib/schemas/portfolio-about";
+import { portfolioGallerySchema } from "@/lib/schemas/portfolio-project";
 import { normalizeEnabledPages } from "@/lib/site-pages";
 
 function parseExpiresAt(value: unknown) {
@@ -261,17 +262,17 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
   gallery: {
     parse: (body) => {
       const items = Array.isArray(body.items) ? body.items : [];
-      return items.map((item: Record<string, unknown>) => ({
-        image: typeof item.image === "string" ? item.image : "",
-        video: typeof item.video === "string" ? item.video : "",
-        title: typeof item.title === "string" ? item.title : "",
-        description: typeof item.description === "string" ? item.description : "",
-        tags: Array.isArray(item.tags)
-          ? item.tags.filter((tag) => typeof tag === "string").join(", ")
-          : typeof item.tags === "string"
-            ? item.tags
-            : "",
-        link: typeof item.link === "string" ? item.link : "",
+      return portfolioGallerySchema.parse(items).map((item) => ({
+        image: item.image,
+        video: item.video,
+        title: item.title,
+        description: item.description,
+        tags: item.tags.join(", "),
+        link: item.link,
+        linkType: item.linkType,
+        projectSlug: item.projectSlug,
+        projectBody: item.projectBody,
+        projectGallery: item.projectGallery,
       }));
     },
     persist: (landingId, parsed) =>

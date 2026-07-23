@@ -19,7 +19,6 @@ export function RecoverableError({
 
   return (
     <div className="flex min-h-64 items-center justify-center p-6">
-      <div className="space-y-4 text-center">
         <p className="text-on-surface-variant">
           No se ha podido cargar esta sección.
         </p>
@@ -31,7 +30,6 @@ export function RecoverableError({
           <RotateCcw aria-hidden className="size-4" />
           Reintentar
         </button>
-      </div>
     </div>
   );
 }

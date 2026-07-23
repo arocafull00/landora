@@ -10,6 +10,7 @@ import {
   jsonb,
   index,
   unique,
+  uniqueIndex,
   check,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
@@ -341,8 +342,22 @@ export const landingGallery = pgTable("landing_gallery", {
   description: text("description").notNull().default(""),
   tags: text("tags").notNull().default(""),
   link: text("link").notNull().default(""),
+  linkType: text("link_type").notNull().default("none"),
+  projectSlug: text("project_slug").notNull().default(""),
+  projectBody: text("project_body").notNull().default(""),
+  projectGallery: jsonb("project_gallery")
+    .$type<string[]>()
+    .notNull()
+    .default([]),
 }, (table) => [
   index("landing_gallery_landing_id_sort_idx").on(table.landingId, table.sortOrder),
+  uniqueIndex("landing_gallery_landing_project_slug_uniq")
+    .on(table.landingId, table.projectSlug)
+    .where(sql`${table.linkType} = 'internal' AND ${table.projectSlug} <> ''`),
+  check(
+    "landing_gallery_link_type_check",
+    sql`${table.linkType} IN ('none', 'internal', 'external')`,
+  ),
 ]);
 
 export const landingNav = pgTable("landing_nav", {

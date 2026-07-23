@@ -14,6 +14,10 @@ export type DashboardView =
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
 export type SitePageId = "home" | "about";
+export type EditorPageTarget =
+  | { type: "home" }
+  | { type: "about" }
+  | { type: "project"; projectId: string };
 
 export type SectionHeading = {
   title: string;
@@ -194,7 +198,13 @@ export type GalleryItem = {
   description?: string;
   tags?: string[];
   link?: string;
+  linkType?: ProjectLinkType;
+  projectSlug?: string;
+  projectBody?: string;
+  projectGallery?: string[];
 };
+
+export type ProjectLinkType = "none" | "internal" | "external";
 
 export type NavLink = {
   id: string;

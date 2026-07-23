@@ -25,12 +25,15 @@ export function PortfolioAboutPage({
     ? `${previewBaseHref}/about`
     : `${publicBaseHref}/about`;
   const about = resolvePortfolioAboutPageContent(content);
-  const navLinks = content.nav.map((link) => ({
-    ...link,
-    href: link.href.startsWith("#")
-      ? `${homeHref}${link.href}`
-      : link.href,
-  }));
+  const navLinks = content.nav.map((link) => {
+    if (link.href.startsWith("#")) {
+      return { ...link, href: `${homeHref}${link.href}` };
+    }
+    if (previewLandingId && link.href === `${publicBaseHref}/about`) {
+      return { ...link, href: aboutHref };
+    }
+    return link;
+  });
 
   return (
     <div className="min-h-screen bg-portfolio-canvas text-portfolio-ink">

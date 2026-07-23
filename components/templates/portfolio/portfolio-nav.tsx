@@ -32,7 +32,7 @@ export function PortfolioNav({
   overHero,
   topOffset = 0,
 }: {
-  activePage: SitePageId;
+  activePage: SitePageId | "project";
   aboutHref?: string;
   brand: string;
   brandLogoImage: string;
@@ -68,7 +68,7 @@ export function PortfolioNav({
         }}
       >
         <Link
-          className={`text-xl font-bold tracking-tight ${useLightText ? "text-white" : "text-portfolio-ink"}`}
+          className={`text-lg font-bold tracking-tight ${useLightText ? "text-white" : "text-portfolio-ink"}`}
           href={homeHref}
           style={{ fontFamily: "var(--font-syne)" }}
         >
@@ -76,49 +76,61 @@ export function PortfolioNav({
             brand={brand}
             brandLogoImage={brandLogoImage}
             brandLogoType={brandLogoType}
+            animated={true}
           />
         </Link>
 
         <div className="hidden items-center gap-4 lg:gap-8 md:flex">
-          {activePage === "about" ? (
-            <Link
-              className="text-sm font-medium text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
-              href={homeHref}
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              Inicio
-            </Link>
-          ) : null}
-          {aboutHref ? (
-            <Link
-              aria-current={activePage === "about" ? "page" : undefined}
-              className={`text-sm font-medium transition-colors ${
-                activePage === "about"
-                  ? "text-portfolio-accent"
-                  : useLightText
-                  ? "text-white/60 hover:text-white"
-                  : "text-portfolio-ink-muted hover:text-portfolio-ink"
-              }`}
-              href={aboutHref}
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              About me
-            </Link>
-          ) : null}
-          {navLinks.map((link) => (
-            <TemplateNavAnchor
-              className={`text-sm font-medium transition-colors ${
-                useLightText
-                  ? "text-white/60 hover:text-white"
-                  : "text-portfolio-ink-muted hover:text-portfolio-ink"
-              }`}
-              href={link.href}
-              key={link.id}
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              {link.label}
-            </TemplateNavAnchor>
-          ))}
+          {activePage !== "home" ? (
+            <>
+              <Link
+                className="text-sm font-medium text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
+                href={homeHref}
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                Inicio
+              </Link>
+              {activePage === "project" && aboutHref ? (
+                <Link
+                  className="text-sm font-medium text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
+                  href={aboutHref}
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  About me
+                </Link>
+              ) : null}
+            </>
+          ) : (
+            <>
+              {aboutHref ? (
+                <Link
+                  className={`text-sm font-medium transition-colors ${
+                    useLightText
+                      ? "text-white/60 hover:text-white"
+                      : "text-portfolio-ink-muted hover:text-portfolio-ink"
+                  }`}
+                  href={aboutHref}
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  About me
+                </Link>
+              ) : null}
+              {navLinks.map((link) => (
+                <TemplateNavAnchor
+                  className={`text-sm font-medium transition-colors ${
+                    useLightText
+                      ? "text-white/60 hover:text-white"
+                      : "text-portfolio-ink-muted hover:text-portfolio-ink"
+                  }`}
+                  href={link.href}
+                  key={link.id}
+                  style={{ fontFamily: "var(--font-body)" }}
+                >
+                  {link.label}
+                </TemplateNavAnchor>
+              ))}
+            </>
+          )}
           <TemplateNavAnchor
             className="rounded-full bg-portfolio-accent px-5 py-2.5 text-xs font-semibold tracking-wide text-portfolio-accent-ink transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[var(--portfolio-accent-hover)]"
             href={ctaHref}
@@ -151,70 +163,92 @@ export function PortfolioNav({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
-            {activePage === "about" ? (
-              <m.div
-                animate={{ opacity: 1, y: 0 }}
-                initial={{ opacity: 0, y: 16 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Link
-                  className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
-                  href={homeHref}
-                  onClick={() => setMenuOpen(false)}
-                  style={{
-                    fontFamily: "var(--font-syne)",
-                    lineHeight: 2.2,
-                  }}
+            {activePage !== "home" ? (
+              <>
+                <m.div
+                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: 16 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  Inicio
-                </Link>
-              </m.div>
-            ) : null}
-            {aboutHref ? (
-              <m.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Link
-                  className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
-                  href={aboutHref}
-                  onClick={() => setMenuOpen(false)}
-                  style={{
-                    fontFamily: "var(--font-syne)",
-                    lineHeight: 2.2,
-                  }}
-                >
-                  About me
-                </Link>
-              </m.div>
-            ) : null}
-            {navLinks.map((link, i) => (
-              <m.a
-                className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
-                href={link.href}
-                key={link.id}
-                onClick={(event) =>
-                  handleSectionNavClick(event, link.href, () => setMenuOpen(false))
-                }
-                style={{
-                  fontFamily: "var(--font-syne)",
-                  lineHeight: 2.2,
-                }}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.3,
-                  delay:
-                    (i +
-                      (aboutHref ? 1 : 0) +
-                      (activePage === "about" ? 1 : 0)) *
-                    0.06,
-                }}
-              >
-                {link.label}
-              </m.a>
-            ))}
+                  <Link
+                    className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
+                    href={homeHref}
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      fontFamily: "var(--font-syne)",
+                      lineHeight: 2.2,
+                    }}
+                  >
+                    Inicio
+                  </Link>
+                </m.div>
+                {activePage === "project" && aboutHref ? (
+                  <m.div
+                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 16 }}
+                    transition={{ delay: 0.06, duration: 0.3 }}
+                  >
+                    <Link
+                      className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
+                      href={aboutHref}
+                      onClick={() => setMenuOpen(false)}
+                      style={{
+                        fontFamily: "var(--font-syne)",
+                        lineHeight: 2.2,
+                      }}
+                    >
+                      About me
+                    </Link>
+                  </m.div>
+                ) : null}
+              </>
+            ) : (
+              <>
+                {aboutHref ? (
+                  <m.div
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Link
+                      className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
+                      href={aboutHref}
+                      onClick={() => setMenuOpen(false)}
+                      style={{
+                        fontFamily: "var(--font-syne)",
+                        lineHeight: 2.2,
+                      }}
+                    >
+                      About me
+                    </Link>
+                  </m.div>
+                ) : null}
+                {navLinks.map((link, i) => (
+                  <m.a
+                    className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
+                    href={link.href}
+                    key={link.id}
+                    onClick={(event) =>
+                      handleSectionNavClick(event, link.href, () =>
+                        setMenuOpen(false),
+                      )
+                    }
+                    style={{
+                      fontFamily: "var(--font-syne)",
+                      lineHeight: 2.2,
+                    }}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: (i + (aboutHref ? 1 : 0)) * 0.06,
+                    }}
+                  >
+                    {link.label}
+                  </m.a>
+                ))}
+              </>
+            )}
             <m.a
               className="mt-6 rounded-full bg-portfolio-accent px-8 py-3 text-sm font-semibold text-portfolio-accent-ink transition-colors hover:bg-[var(--portfolio-accent-hover)]"
               href={ctaHref}
@@ -227,10 +261,9 @@ export function PortfolioNav({
               transition={{
                 duration: 0.3,
                 delay:
-                  (navLinks.length +
-                    (aboutHref ? 1 : 0) +
-                    (activePage === "about" ? 1 : 0)) *
-                  0.06,
+                  (activePage !== "home"
+                    ? 1 + (activePage === "project" && aboutHref ? 1 : 0)
+                    : navLinks.length + (aboutHref ? 1 : 0)) * 0.06,
               }}
             >
               {ctaLabel || "Ver proyectos"}
