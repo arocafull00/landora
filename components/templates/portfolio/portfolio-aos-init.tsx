@@ -3,25 +3,16 @@
 import { useEffect, type RefObject } from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { getScrollTargets } from "@/lib/scroll-parent";
 
-function getScrollTargets(el: HTMLElement | null) {
-  const targets: (Window | Element)[] = [window];
-  let node = el?.parentElement;
-
-  while (node) {
-    const { overflowY, overflow } = getComputedStyle(node);
-    if (
-      overflowY === "auto" ||
-      overflowY === "scroll" ||
-      overflow === "auto" ||
-      overflow === "scroll"
-    ) {
-      targets.push(node);
-    }
-    node = node.parentElement;
+function revealVisibleAosElements(scope: ParentNode) {
+  const elements = scope.querySelectorAll<HTMLElement>("[data-aos]");
+  for (const el of elements) {
+    if (el.classList.contains("aos-animate")) continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.bottom <= 0 || rect.top >= window.innerHeight) continue;
+    el.classList.add("aos-animate");
   }
-
-  return targets;
 }
 
 function setupIntersectionFallback(root: HTMLElement | null) {
@@ -61,7 +52,11 @@ export function PortfolioAosInit({
       disable: false,
     });
 
-    const refresh = () => AOS.refresh();
+    const scope = rootRef?.current ?? document;
+    const refresh = () => {
+      AOS.refresh();
+      revealVisibleAosElements(scope);
+    };
 
     refresh();
     const t1 = window.setTimeout(refresh, 150);
@@ -69,11 +64,12 @@ export function PortfolioAosInit({
 
     const observer = setupIntersectionFallback(rootRef?.current ?? null);
 
-    const scrollTargets = getScrollTargets(rootRef?.current ?? null);
+    const scrollTargets = getScrollTargets(rootRef?.current ?? null, null);
     for (const target of scrollTargets) {
       target.addEventListener("scroll", refresh, { passive: true });
     }
     window.addEventListener("resize", refresh);
+    window.addEventListener("hashchange", refresh);
 
     return () => {
       window.clearTimeout(t1);
@@ -83,6 +79,7 @@ export function PortfolioAosInit({
         target.removeEventListener("scroll", refresh);
       }
       window.removeEventListener("resize", refresh);
+      window.removeEventListener("hashchange", refresh);
     };
   }, [rootRef]);
 

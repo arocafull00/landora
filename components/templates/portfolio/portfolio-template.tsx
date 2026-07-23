@@ -7,6 +7,7 @@ import {
   getAboutNavHref,
   getOrderedVisibleBodySections,
   getVisibleNav,
+  isPortfolioAboutNavHref,
   normalizeNavHref,
 } from "@/lib/template-sections";
 import { getScrollTargets } from "@/lib/scroll-parent";
@@ -99,23 +100,29 @@ export function PortfolioTemplate({
     : undefined;
   const aboutAlreadyInNav = content.nav.some((item) => {
     const href = normalizeNavHref("portfolio", item.href);
-    if (publicAboutHref && href === publicAboutHref) return true;
-    return /^\/[^/]+\/about\/?$/.test(href);
+    return (
+      isPortfolioAboutNavHref(href) ||
+      (previewAboutHref !== undefined && href === previewAboutHref)
+    );
   });
   const aboutHref =
-    resolvedAboutHref && !aboutAlreadyInNav ? resolvedAboutHref : undefined;
+    resolvedAboutHref && (!aboutAlreadyInNav || previewLandingId)
+      ? resolvedAboutHref
+      : undefined;
   const navLinks = getVisibleNav(
     content.nav,
     content.hiddenSections,
     "portfolio",
-  ).map((item) => {
-    if (!previewAboutHref) return item;
+  ).flatMap((item) => {
+    if (!resolvedAboutHref) return item;
     const href = normalizeNavHref("portfolio", item.href);
-    const isPublicAbout =
-      (publicAboutHref !== undefined && href === publicAboutHref) ||
-      /^\/[^/]+\/about\/?$/.test(href);
-    if (!isPublicAbout) return item;
-    return { ...item, href: previewAboutHref };
+    const isAboutLink =
+      isPortfolioAboutNavHref(href) ||
+      href === previewAboutHref ||
+      href === publicAboutHref;
+    if (!isAboutLink) return item;
+    if (previewLandingId) return [];
+    return { ...item, href: resolvedAboutHref };
   });
 
   const updateNavState = useCallback(() => {
@@ -161,6 +168,10 @@ export function PortfolioTemplate({
         heroVariantId={heroVariantId}
         heroNavTone={heroNavTone}
         overHero={overHero}
+        homePageTarget={previewLandingId ? { type: "home" } : undefined}
+        aboutPageTarget={
+          previewLandingId && aboutHref ? { type: "about" } : undefined
+        }
         topOffset={topOffset}
       />
 

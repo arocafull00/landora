@@ -63,6 +63,11 @@ export function PortfolioProjectsSection({
               <PortfolioProjectCard
                 item={item}
                 index={0}
+                pageTarget={
+                  previewLandingId
+                    ? { type: "project", projectId: item.id }
+                    : undefined
+                }
                 internalHref={
                   item.projectSlug
                     ? getPortfolioProjectHref({
@@ -86,6 +91,11 @@ export function PortfolioProjectsSection({
             <PortfolioProjectCard
               item={item}
               index={index}
+              pageTarget={
+                previewLandingId
+                  ? { type: "project", projectId: item.id }
+                  : undefined
+              }
               internalHref={
                 item.projectSlug
                   ? getPortfolioProjectHref({

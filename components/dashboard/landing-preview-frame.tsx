@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useLayoutEffect } from "react";
 import type {
   LandingContent,
   LandingSectionSelections,
   SitePageId,
   TemplateId,
 } from "@/lib/dashboard-data";
+import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
@@ -14,13 +15,6 @@ import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
-import {
-  isPreviewContentMessage,
-  isPreviewHighlightElementMessage,
-  isPreviewScrollToMessage,
-  PREVIEW_CHANNEL_INIT,
-  PREVIEW_CHANNEL_READY,
-} from "@/lib/preview-messaging";
 import {
   getHashSectionId,
   scrollToSectionIdWhenReady,
@@ -60,101 +54,62 @@ export function LandingPreviewFrame({
   previewProjectKey?: string;
   bookingEnabled?: boolean;
 }) {
-  const [livePreview, setLivePreview] = useState<{
-    content: LandingContent;
-    sectionSelections: LandingSectionSelections;
-    template: TemplateId;
-  } | null>(null);
-  const highlightedEditorIdRef = useRef<string | null>(null);
-  const portRef = useRef<MessagePort | null>(null);
+  const previewBridge = usePreviewBridge();
+  const livePreview = previewBridge?.livePreview;
   const content = livePreview?.content ?? initialContent;
   const activeTemplate = livePreview?.template ?? template;
   const sectionSelections =
     livePreview?.sectionSelections ?? initialSectionSelections;
+  const highlightedEditorId = previewBridge?.highlightedEditorId ?? null;
+  const scrollRequest = previewBridge?.scrollRequest ?? null;
 
   useLayoutEffect(() => {
-    const editorId = highlightedEditorIdRef.current;
-    if (!editorId) return;
-    for (const el of document.querySelectorAll(`[data-editor-id="${editorId}"]`)) {
+    for (const el of document.querySelectorAll(".template-element--highlighted")) {
+      el.classList.remove("template-element--highlighted");
+    }
+    if (!highlightedEditorId) return;
+    for (const el of document.querySelectorAll(
+      `[data-editor-id="${highlightedEditorId}"]`,
+    )) {
       el.classList.add("template-element--highlighted");
     }
-  }, [content]);
-
-  const refreshScrollPosition = useCallback(() => {
-    window.dispatchEvent(new Event("scroll"));
-  }, []);
+  }, [content, highlightedEditorId]);
 
   useEffect(() => {
-    let activePort: MessagePort | null = null;
-
-    const handlePreviewMessage = (data: unknown) => {
-      if (isPreviewScrollToMessage(data)) {
-        const { sectionId } = data;
-        scrollToSectionIdWhenReady(sectionId);
-        window.history.replaceState(
-          null,
-          "",
-          `${window.location.pathname}${window.location.search}#${sectionId}`,
-        );
-        return;
-      }
-
-      if (isPreviewHighlightElementMessage(data)) {
-        for (const el of document.querySelectorAll(".template-element--highlighted")) {
-          el.classList.remove("template-element--highlighted");
-        }
-        highlightedEditorIdRef.current = data.editorId;
-        if (data.editorId) {
-          for (const el of document.querySelectorAll(`[data-editor-id="${data.editorId}"]`)) {
-            el.classList.add("template-element--highlighted");
-          }
-        }
-        return;
-      }
-
-      if (!isPreviewContentMessage(data)) return;
-      setLivePreview({
-        content: data.content,
-        sectionSelections: data.sectionSelections,
-        template: data.template,
+    let secondFrame: number | undefined;
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        window.dispatchEvent(new Event("scroll"));
       });
-      requestAnimationFrame(() => {
-        requestAnimationFrame(refreshScrollPosition);
-      });
-    };
-
-    const connectChannel = (event: MessageEvent) => {
-      if (event.source !== window.parent) return;
-      if (event.data?.type !== PREVIEW_CHANNEL_INIT) return;
-      const port = event.ports[0];
-      if (!port) return;
-
-      activePort?.close();
-      activePort = port;
-      portRef.current = port;
-      port.onmessage = (messageEvent) => handlePreviewMessage(messageEvent.data);
-      port.start();
-      port.postMessage({ type: PREVIEW_CHANNEL_READY });
-    };
-
-    window.addEventListener("message", connectChannel);
+    });
     return () => {
-      window.removeEventListener("message", connectChannel);
-      activePort?.close();
+      cancelAnimationFrame(firstFrame);
+      if (secondFrame !== undefined) cancelAnimationFrame(secondFrame);
     };
-  }, [refreshScrollPosition]);
+  }, [content]);
 
-  const scrollToResolvedHash = useCallback(() => {
+  useEffect(() => {
+    if (!scrollRequest) return;
+    scrollToSectionIdWhenReady(scrollRequest.sectionId);
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}#${scrollRequest.sectionId}`,
+    );
+  }, [scrollRequest]);
+
+  const scrollToResolvedHash = useEffectEvent(() => {
     const sectionId = getHashSectionId();
     if (!sectionId) return;
     scrollToSectionIdWhenReady(resolveSectionId(activeTemplate, sectionId));
-  }, [activeTemplate]);
+  });
 
   useEffect(() => {
     scrollToResolvedHash();
-    window.addEventListener("hashchange", scrollToResolvedHash);
-    return () => window.removeEventListener("hashchange", scrollToResolvedHash);
-  }, [scrollToResolvedHash]);
+    const handleHashChange = () => scrollToResolvedHash();
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
   const previewProject =

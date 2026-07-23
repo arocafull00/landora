@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { BlogListPage } from "@/components/blog/blog-list-page";
+import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogConfig, getBlogPostsByLandingId } from "@/data/blog";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { normalizeLandingSlug } from "@/lib/blog-slug";
-import { resolveLandingAppearance } from "@/lib/site-appearance";
-import { SiteThemeScope } from "@/components/templates/site-theme-scope";
-import { isSitePageEnabled } from "@/lib/site-pages";
+import { toLandingContent } from "@/lib/landing-mapper";
 
 export async function generateMetadata({
   params,
@@ -43,25 +42,15 @@ export default async function PublicBlogListPage({
     getBlogPostsByLandingId(landing.id, true),
   ]);
 
-  const brand = landing.branding?.brand || landing.name;
+  const content = toLandingContent(landing);
+  const brand = content.brand || landing.name;
   const title = config?.title || `${brand} Blog`;
   const description = config?.description || "";
 
-  const appearance = resolveLandingAppearance(landing.template, {
-    paletteId: landing.branding?.paletteId,
-    typographyId: landing.branding?.typographyId,
-  });
-
   return (
-    <SiteThemeScope appearance={appearance} template={landing.template}>
+    <SiteThemeScope appearance={content.appearance} template={landing.template}>
       <BlogListPage
-        aboutEnabled={
-          landing.template === "portfolio" &&
-          isSitePageEnabled(landing.branding?.enabledPages, "about")
-        }
-        brand={brand}
-        brandLogoImage={landing.branding?.brandLogoImage ?? ""}
-        brandLogoType={landing.branding?.brandLogoType === "image" ? "image" : "text"}
+        content={content}
         description={description}
         landingSlug={normalizeLandingSlug(landing.slug)}
         posts={posts.map((post) => ({

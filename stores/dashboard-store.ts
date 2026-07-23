@@ -43,7 +43,9 @@ import {
   getSectionByAnchor,
   getSectionScrollHref,
   getOrderedRemovableSectionAnchors,
+  isPortfolioAboutNavHref,
   restoreNavItem,
+  syncPortfolioAboutNavHrefs,
 } from "@/lib/template-sections";
 
 type SaveStatus = "idle" | "saving" | "saved" | "error";
@@ -58,6 +60,7 @@ export type DashboardState = {
   activeAssetId: string;
   saveStatus: SaveStatus;
   isAdmin: boolean;
+  bookingModuleEnabled: boolean;
   _bootstrapKey: string;
   landings: Landing[];
   presentations: Presentation[];
@@ -65,6 +68,7 @@ export type DashboardState = {
   bootstrapDashboard: (params: {
     landing: Landing;
     isAdmin: boolean;
+    bookingModuleEnabled: boolean;
   }) => void;
   setActiveWorkspaceTab: (tab: string) => void;
   setActiveContentGroup: (group: ContentGroup) => void;
@@ -162,7 +166,11 @@ function migrateHeroContent(hero: HeroContent): HeroContent {
   };
 }
 
-function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) {
+function createDashboardStore(initial?: {
+  landing: Landing;
+  isAdmin: boolean;
+  bookingModuleEnabled: boolean;
+}) {
   const initialLanding = initial?.landing;
 
   return createStore<DashboardState>()((set, get) => ({
@@ -175,22 +183,23 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
   activeAssetId: initialAssets[0].id,
   saveStatus: "idle",
   isAdmin: initial?.isAdmin ?? false,
+  bookingModuleEnabled: initial?.bookingModuleEnabled ?? false,
   _bootstrapKey: initialLanding
-    ? `${initialLanding.id}:${initial?.isAdmin ?? false}`
+    ? `${initialLanding.id}:${initial?.isAdmin ?? false}:${initial?.bookingModuleEnabled ?? false}`
     : "",
   landings: initialLanding ? [initialLanding] : [],
   presentations: initialPresentations,
   assets: initialAssets,
 
-  bootstrapDashboard: ({ landing, isAdmin }) => {
-    const key = `${landing.id}:${isAdmin}`;
+  bootstrapDashboard: ({ landing, isAdmin, bookingModuleEnabled }) => {
+    const key = `${landing.id}:${isAdmin}:${bookingModuleEnabled}`;
     if (get()._bootstrapKey === key) return;
 
     if (get().activeLandingId !== landing.id) {
       get().initFromLanding(landing);
     }
 
-    set({ isAdmin, _bootstrapKey: key });
+    set({ isAdmin, bookingModuleEnabled, _bootstrapKey: key });
   },
 
   setActiveWorkspaceTab: (activeWorkspaceTab) => set({ activeWorkspaceTab }),
@@ -217,9 +226,23 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
 
   updateLandingMeta: (id, patch) =>
     set((state) => ({
-      landings: state.landings.map((landing) =>
-        landing.id === id ? markEdited({ ...landing, ...patch }) : landing,
-      ),
+      landings: state.landings.map((landing) => {
+        if (landing.id !== id) return landing;
+
+        const next = { ...landing, ...patch };
+        if (
+          typeof patch.slug === "string" &&
+          patch.slug !== landing.slug &&
+          landing.template === "portfolio"
+        ) {
+          next.content = {
+            ...landing.content,
+            nav: syncPortfolioAboutNavHrefs(landing.content.nav, patch.slug),
+          };
+        }
+
+        return markEdited(next);
+      }),
     })),
 
   updateHero: (id, patch) =>
@@ -302,7 +325,9 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     }
 
     const aboutHref = getAboutNavHref(landing.slug);
-    const hasAboutNav = landing.content.nav.some((item) => item.href === aboutHref);
+    const hasAboutNav = landing.content.nav.some((item) =>
+      isPortfolioAboutNavHref(item.href),
+    );
 
     set((state) => ({
       activePageTarget: { type: pageId },
@@ -314,7 +339,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
                 ...item.content,
                 enabledPages: [...item.content.enabledPages, pageId],
                 nav: hasAboutNav
-                  ? item.content.nav
+                  ? syncPortfolioAboutNavHrefs(item.content.nav, item.slug)
                   : [
                       {
                         id: crypto.randomUUID(),
@@ -342,9 +367,6 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
       landings: state.landings.map((landing) => {
         if (landing.id !== landingId) return landing;
 
-        const aboutHref =
-          pageId === "about" ? getAboutNavHref(landing.slug) : null;
-
         return markEdited({
           ...landing,
           content: {
@@ -352,9 +374,12 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
             enabledPages: landing.content.enabledPages.filter(
               (enabledPage) => enabledPage !== pageId,
             ),
-            nav: aboutHref
-              ? landing.content.nav.filter((item) => item.href !== aboutHref)
-              : landing.content.nav,
+            nav:
+              pageId === "about"
+                ? landing.content.nav.filter(
+                    (item) => !isPortfolioAboutNavHref(item.href),
+                  )
+                : landing.content.nav,
           },
         });
       }),
@@ -676,7 +701,12 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     const sectionHref = getSectionScrollHref(section);
     nav = nav.filter((item) => item.href !== sectionHref);
 
-    const visibleTabs = getVisibleEditorTabs(landing.template, hiddenSections);
+    const visibleTabs = getVisibleEditorTabs(
+      landing.template,
+      hiddenSections,
+      get().isAdmin,
+      get().bookingModuleEnabled,
+    );
     const activeTabVisible = visibleTabs.some((tab) => tab.id === get().activeEditorTab);
     const nextTab = activeTabVisible ? get().activeEditorTab : "Hero";
     const nextContent = {
@@ -880,13 +910,17 @@ const DashboardStoreContext = createContext<DashboardStore | null>(null);
 export function DashboardStoreProvider({
   children,
   isAdmin,
+  bookingModuleEnabled,
   landing,
 }: {
   children: ReactNode;
   isAdmin: boolean;
+  bookingModuleEnabled: boolean;
   landing: Landing;
 }) {
-  const [store] = useState(() => createDashboardStore({ landing, isAdmin }));
+  const [store] = useState(() =>
+    createDashboardStore({ landing, isAdmin, bookingModuleEnabled }),
+  );
 
   return createElement(
     DashboardStoreContext.Provider,

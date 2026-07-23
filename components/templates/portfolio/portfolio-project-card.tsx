@@ -2,7 +2,8 @@
 
 import { AssetImage } from "@/components/ui/asset-image";
 import Link from "next/link";
-import type { GalleryItem } from "@/lib/dashboard-data";
+import type { EditorPageTarget, GalleryItem } from "@/lib/dashboard-data";
+import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
 import { resolveProjectLinkType } from "@/lib/portfolio-projects";
 
 const hasText = (item: GalleryItem) =>
@@ -12,11 +13,14 @@ export function PortfolioProjectCard({
   item,
   index,
   internalHref,
+  pageTarget,
 }: {
   item: GalleryItem;
   index: number;
   internalHref?: string;
+  pageTarget?: EditorPageTarget;
 }) {
+  const previewBridge = usePreviewBridge();
   const isLarge = index % 3 === 0;
   const showText = hasText(item);
   const cardClassName = `group relative aspect-4/5 overflow-hidden rounded-lg bg-[var(--site-surface-alt)] md:aspect-auto md:h-full ${
@@ -86,6 +90,12 @@ export function PortfolioProjectCard({
         aria-label={item.title || "Ver proyecto"}
         className={`${cardClassName} block cursor-pointer`}
         href={internalHref}
+        onNavigate={() => {
+          if (pageTarget) {
+            previewBridge?.announcePageTarget(pageTarget);
+          }
+        }}
+        prefetch={pageTarget ? true : undefined}
       >
         {content}
       </Link>

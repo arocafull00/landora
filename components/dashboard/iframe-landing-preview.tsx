@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
 import type {
   LandingContent,
   LandingSectionSelections,
@@ -13,16 +12,7 @@ import {
 } from "@/components/dashboard/preview-toolbar";
 
 const MOBILE_WIDTH = 390;
-import { addEditorFocusElementListener } from "@/lib/editor-element-focus";
-import {
-  postPreviewContent,
-  postPreviewHighlightElement,
-  postPreviewHighlightSection,
-  postPreviewScrollTo,
-  PREVIEW_CHANNEL_INIT,
-  PREVIEW_CHANNEL_READY,
-} from "@/lib/preview-messaging";
-import { getSectionByAnchor } from "@/lib/template-sections";
+import { useIframePreviewBridge } from "@/components/dashboard/hooks/use-iframe-preview-bridge";
 import { cn } from "@/lib/utils";
 
 export function IframeLandingPreview({
@@ -32,6 +22,7 @@ export function IframeLandingPreview({
   landingId,
   onDeviceChange,
   onFullscreen,
+  onPageTargetChange,
   scrollTarget,
   sectionSelections,
   pageTarget = { type: "home" },
@@ -44,95 +35,22 @@ export function IframeLandingPreview({
   landingId: string;
   onDeviceChange: (device: PreviewDevice) => void;
   onFullscreen?: () => void;
+  onPageTargetChange?: (target: EditorPageTarget) => void;
   scrollTarget?: string;
   sectionSelections: LandingSectionSelections;
   pageTarget?: EditorPageTarget;
   showToolbar?: boolean;
   template?: TemplateId;
 }) {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const portRef = useRef<MessagePort | null>(null);
-
-  const sendContent = useCallback(() => {
-    postPreviewContent(portRef.current, {
-      content,
-      sectionSelections,
-      template,
-    });
-  }, [content, sectionSelections, template]);
-
-  useEffect(() => {
-    sendContent();
-  }, [sendContent]);
-
-  useEffect(() => {
-    const sendSectionFocus = () => {
-      const target = portRef.current;
-      if (scrollTarget) {
-        postPreviewScrollTo(target, scrollTarget);
-      }
-      const label = scrollTarget
-        ? getSectionByAnchor(template, scrollTarget)?.label
-        : undefined;
-      postPreviewHighlightSection(target, scrollTarget ?? null, label);
-    };
-
-    sendSectionFocus();
-
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-
-    iframe.addEventListener("load", sendSectionFocus);
-    return () => iframe.removeEventListener("load", sendSectionFocus);
-  }, [scrollTarget, template]);
-
-  useEffect(() => {
-    return addEditorFocusElementListener((editorId) => {
-      postPreviewHighlightElement(portRef.current, editorId);
-    });
-  }, []);
-
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-    let activePort: MessagePort | null = null;
-
-    const connectChannel = () => {
-      const target = iframe.contentWindow;
-      if (!target) return;
-
-      activePort?.close();
-      const channel = new MessageChannel();
-      activePort = channel.port1;
-      portRef.current = channel.port1;
-      channel.port1.onmessage = (event) => {
-        if (event.data?.type === PREVIEW_CHANNEL_READY) {
-          sendContent();
-          if (scrollTarget) {
-            postPreviewScrollTo(channel.port1, scrollTarget);
-          }
-          const label = scrollTarget
-            ? getSectionByAnchor(template, scrollTarget)?.label
-            : undefined;
-          postPreviewHighlightSection(
-            channel.port1,
-            scrollTarget ?? null,
-            label,
-          );
-        }
-      };
-      channel.port1.start();
-      target.postMessage({ type: PREVIEW_CHANNEL_INIT }, "*", [channel.port2]);
-    };
-
-    iframe.addEventListener("load", connectChannel);
-    connectChannel();
-
-    return () => {
-      iframe.removeEventListener("load", connectChannel);
-      activePort?.close();
-    };
-  }, [scrollTarget, sendContent, template]);
+  const { iframeRef, initialSrc } = useIframePreviewBridge({
+    content,
+    landingId,
+    onPageTargetChange,
+    pageTarget,
+    scrollTarget,
+    sectionSelections,
+    template,
+  });
 
   const frameWidth = device === "mobile" ? MOBILE_WIDTH : "100%";
 
@@ -155,15 +73,7 @@ export function IframeLandingPreview({
             className="h-full w-full"
             ref={iframeRef}
             sandbox="allow-scripts allow-same-origin"
-            src={
-              pageTarget.type === "about"
-                ? `/preview/${landingId}/about?embed=1`
-                : pageTarget.type === "project"
-                  ? `/preview/${landingId}/proyectos/${encodeURIComponent(
-                      pageTarget.projectId,
-                    )}?embed=1`
-                  : `/preview/${landingId}?embed=1`
-            }
+            src={initialSrc}
             title="Landing preview"
           />
         </div>

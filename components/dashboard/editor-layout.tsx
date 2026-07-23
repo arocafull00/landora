@@ -21,6 +21,9 @@ export function EditorLayout({
   const activePageTarget = useDashboardStore((state) => state.activePageTarget);
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
   const landings = useDashboardStore((state) => state.landings);
+  const setActivePageTarget = useDashboardStore(
+    (state) => state.setActivePageTarget,
+  );
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [device, setDevice] = useState<PreviewDevice>("desktop");
 
@@ -56,6 +59,7 @@ export function EditorLayout({
           landingId={activeLanding.id}
           onDeviceChange={setDevice}
           onFullscreen={() => setIsFullscreen(true)}
+          onPageTargetChange={setActivePageTarget}
           scrollTarget={resolvedScrollTarget}
           sectionSelections={activeLanding.sectionSelections}
           pageTarget={activePageTarget}
@@ -69,6 +73,7 @@ export function EditorLayout({
           landingId={activeLanding.id}
           onClose={() => setIsFullscreen(false)}
           onDeviceChange={setDevice}
+          onPageTargetChange={setActivePageTarget}
           scrollTarget={resolvedScrollTarget}
           sectionSelections={activeLanding.sectionSelections}
           pageTarget={activePageTarget}

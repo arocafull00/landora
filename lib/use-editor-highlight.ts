@@ -1,21 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { isPreviewHighlightSectionMessage } from "@/lib/preview-messaging";
+import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
 
 export function useEditorHighlight(sectionId: string) {
-  const [isHighlighted, setIsHighlighted] = useState(false);
-
-  useEffect(() => {
-    const handler = (event: MessageEvent) => {
-      if (event.source !== window.parent) return;
-      if (!isPreviewHighlightSectionMessage(event.data)) return;
-      setIsHighlighted(event.data.sectionId === sectionId);
-    };
-
-    window.addEventListener("message", handler);
-    return () => window.removeEventListener("message", handler);
-  }, [sectionId]);
-
-  return isHighlighted;
+  const previewBridge = usePreviewBridge();
+  return previewBridge?.highlightedSectionId === sectionId;
 }

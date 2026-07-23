@@ -6,10 +6,12 @@ import { X, Menu } from "lucide-react";
 import { m, AnimatePresence } from "motion/react";
 import type {
   BrandLogoType,
+  EditorPageTarget,
   HeroVariantId,
   NavLink,
   SitePageId,
 } from "@/lib/dashboard-data";
+import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
@@ -29,10 +31,12 @@ export function PortfolioNav({
   heroVariantId,
   heroNavTone,
   homeHref,
+  homePageTarget,
+  aboutPageTarget,
   overHero,
   topOffset = 0,
 }: {
-  activePage: SitePageId | "project";
+  activePage: SitePageId | "project" | "blog";
   aboutHref?: string;
   brand: string;
   brandLogoImage: string;
@@ -43,11 +47,14 @@ export function PortfolioNav({
   heroVariantId: HeroVariantId;
   heroNavTone: HeroNavTone;
   homeHref: string;
+  homePageTarget?: EditorPageTarget;
+  aboutPageTarget?: EditorPageTarget;
   overHero: boolean;
   topOffset?: number;
 }) {
   const navRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const previewBridge = usePreviewBridge();
   const scrolled = usePortfolioNavScroll(navRef);
   const { trackCtaClick } = useAnalytics();
   const hasBackground = scrolled || (overHero && heroNavTone === "dark");
@@ -70,6 +77,12 @@ export function PortfolioNav({
         <Link
           className={`text-lg font-bold tracking-tight ${useLightText ? "text-white" : "text-portfolio-ink"}`}
           href={homeHref}
+          onNavigate={() => {
+            if (homePageTarget) {
+              previewBridge?.announcePageTarget(homePageTarget);
+            }
+          }}
+          prefetch={homePageTarget ? true : undefined}
           style={{ fontFamily: "var(--font-syne)" }}
         >
           <TemplateNavBrand
@@ -81,26 +94,7 @@ export function PortfolioNav({
         </Link>
 
         <div className="hidden items-center gap-4 lg:gap-8 md:flex">
-          {activePage !== "home" ? (
-            <>
-              <Link
-                className="text-sm font-medium text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
-                href={homeHref}
-                style={{ fontFamily: "var(--font-body)" }}
-              >
-                Inicio
-              </Link>
-              {activePage === "project" && aboutHref ? (
-                <Link
-                  className="text-sm font-medium text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
-                  href={aboutHref}
-                  style={{ fontFamily: "var(--font-body)" }}
-                >
-                  About me
-                </Link>
-              ) : null}
-            </>
-          ) : (
+          {activePage === "home" ? (
             <>
               {aboutHref ? (
                 <Link
@@ -110,6 +104,12 @@ export function PortfolioNav({
                       : "text-portfolio-ink-muted hover:text-portfolio-ink"
                   }`}
                   href={aboutHref}
+                  onNavigate={() => {
+                    if (aboutPageTarget) {
+                      previewBridge?.announcePageTarget(aboutPageTarget);
+                    }
+                  }}
+                  prefetch={aboutPageTarget ? true : undefined}
                   style={{ fontFamily: "var(--font-body)" }}
                 >
                   About me
@@ -130,6 +130,20 @@ export function PortfolioNav({
                 </TemplateNavAnchor>
               ))}
             </>
+          ) : (
+            <Link
+              className="text-sm font-medium text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
+              href={homeHref}
+              onNavigate={() => {
+                if (homePageTarget) {
+                  previewBridge?.announcePageTarget(homePageTarget);
+                }
+              }}
+              prefetch={homePageTarget ? true : undefined}
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              Inicio
+            </Link>
           )}
           <TemplateNavAnchor
             className="rounded-full bg-portfolio-accent px-5 py-2.5 text-xs font-semibold tracking-wide text-portfolio-accent-ink transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[var(--portfolio-accent-hover)]"
@@ -163,46 +177,7 @@ export function PortfolioNav({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
-            {activePage !== "home" ? (
-              <>
-                <m.div
-                  animate={{ opacity: 1, y: 0 }}
-                  initial={{ opacity: 0, y: 16 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Link
-                    className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
-                    href={homeHref}
-                    onClick={() => setMenuOpen(false)}
-                    style={{
-                      fontFamily: "var(--font-syne)",
-                      lineHeight: 2.2,
-                    }}
-                  >
-                    Inicio
-                  </Link>
-                </m.div>
-                {activePage === "project" && aboutHref ? (
-                  <m.div
-                    animate={{ opacity: 1, y: 0 }}
-                    initial={{ opacity: 0, y: 16 }}
-                    transition={{ delay: 0.06, duration: 0.3 }}
-                  >
-                    <Link
-                      className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
-                      href={aboutHref}
-                      onClick={() => setMenuOpen(false)}
-                      style={{
-                        fontFamily: "var(--font-syne)",
-                        lineHeight: 2.2,
-                      }}
-                    >
-                      About me
-                    </Link>
-                  </m.div>
-                ) : null}
-              </>
-            ) : (
+            {activePage === "home" ? (
               <>
                 {aboutHref ? (
                   <m.div
@@ -213,7 +188,13 @@ export function PortfolioNav({
                     <Link
                       className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
                       href={aboutHref}
+                      onNavigate={() => {
+                        if (aboutPageTarget) {
+                          previewBridge?.announcePageTarget(aboutPageTarget);
+                        }
+                      }}
                       onClick={() => setMenuOpen(false)}
+                      prefetch={aboutPageTarget ? true : undefined}
                       style={{
                         fontFamily: "var(--font-syne)",
                         lineHeight: 2.2,
@@ -248,6 +229,30 @@ export function PortfolioNav({
                   </m.a>
                 ))}
               </>
+            ) : (
+              <m.div
+                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Link
+                  className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
+                  href={homeHref}
+                  onNavigate={() => {
+                    if (homePageTarget) {
+                      previewBridge?.announcePageTarget(homePageTarget);
+                    }
+                  }}
+                  onClick={() => setMenuOpen(false)}
+                  prefetch={homePageTarget ? true : undefined}
+                  style={{
+                    fontFamily: "var(--font-syne)",
+                    lineHeight: 2.2,
+                  }}
+                >
+                  Inicio
+                </Link>
+              </m.div>
             )}
             <m.a
               className="mt-6 rounded-full bg-portfolio-accent px-8 py-3 text-sm font-semibold text-portfolio-accent-ink transition-colors hover:bg-[var(--portfolio-accent-hover)]"
@@ -261,9 +266,9 @@ export function PortfolioNav({
               transition={{
                 duration: 0.3,
                 delay:
-                  (activePage !== "home"
-                    ? 1 + (activePage === "project" && aboutHref ? 1 : 0)
-                    : navLinks.length + (aboutHref ? 1 : 0)) * 0.06,
+                  (activePage === "home"
+                    ? navLinks.length + (aboutHref ? 1 : 0)
+                    : 1) * 0.06,
               }}
             >
               {ctaLabel || "Ver proyectos"}

@@ -16,8 +16,14 @@ import {
   isValidPaletteId,
   isValidTypographyId,
 } from "@/lib/site-appearance";
+import { syncPortfolioAboutNavHrefs } from "@/lib/template-sections";
 
-function getSectionPayloads(content: LandingContent) {
+function getSectionPayloads(content: LandingContent, slug: string, template: string) {
+  const navItems =
+    template === "portfolio"
+      ? syncPortfolioAboutNavHrefs(content.nav, slug)
+      : content.nav;
+
   return {
     hero: content.hero,
     cta: content.contact,
@@ -32,7 +38,7 @@ function getSectionPayloads(content: LandingContent) {
     },
     stats: { items: content.stats },
     testimonials: { items: content.testimonials },
-    nav: { items: content.nav },
+    nav: { items: navItems },
     ...(content.story ? { story: content.story } : {}),
     ...(content.aboutPage
       ? { "portfolio-about": content.aboutPage }
@@ -86,7 +92,11 @@ export async function saveLandingAction(
   }
 
   const content = parsed.data.content as unknown as LandingContent;
-  const sectionPayloads = getSectionPayloads(content);
+  const sectionPayloads = getSectionPayloads(
+    content,
+    parsed.data.meta.slug,
+    landing.template,
+  );
 
   try {
     const sectionWrites = Object.entries(sectionPayloads).map(

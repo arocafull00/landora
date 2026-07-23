@@ -270,6 +270,7 @@ export function getVisibleEditorTabs(
   templateId: TemplateId,
   hiddenSections: string[] | undefined,
   isAdmin = false,
+  bookingModuleEnabled = false,
 ): EditorTab[] {
   const template = getTemplate(templateId);
   if (!template) return [];
@@ -282,7 +283,11 @@ export function getVisibleEditorTabs(
     hiddenTabIds.add(section.editorTabId);
   }
 
-  const tabs = template.editorTabs.filter((tab) => !hiddenTabIds.has(tab.id));
+  const tabs = template.editorTabs.filter((tab) => {
+    if (hiddenTabIds.has(tab.id)) return false;
+    if (tab.id === RESERVAS_EDITOR_TAB.id && !bookingModuleEnabled) return false;
+    return true;
+  });
   if (!isAdmin) return tabs;
 
   return [...tabs, ADMIN_EDITOR_TAB];

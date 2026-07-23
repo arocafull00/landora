@@ -20,8 +20,8 @@ export function BlogPostCard({ post, landingSlug }: BlogPostCardProps) {
   const href = `/${slug}/blog/${post.slug}`;
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest transition-shadow hover:shadow-md">
-      <Link className="relative block aspect-[16/10] overflow-hidden bg-surface-container" href={href}>
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-portfolio-line bg-portfolio-surface transition-[box-shadow,transform] hover:-translate-y-0.5">
+      <Link className="relative block aspect-[16/10] overflow-hidden bg-portfolio-canvas" href={href}>
         {post.heroImage ? (
           <AssetImage
             alt={post.title}
@@ -31,24 +31,32 @@ export function BlogPostCard({ post, landingSlug }: BlogPostCardProps) {
             src={post.heroImage}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-on-surface-variant">
+          <div className="flex h-full w-full items-center justify-center text-portfolio-ink-muted">
             Sin imagen
           </div>
         )}
       </Link>
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <time className="text-body-sm text-on-surface-variant">
+        <time className="text-sm text-portfolio-ink-muted">
           {formatBlogDate(post.publishedAt)}
         </time>
-        <h2 className="font-headline text-headline-sm text-on-surface">
-          <Link className="transition-colors hover:text-primary" href={href}>
+        <h2
+          className="text-xl font-semibold text-portfolio-ink"
+          style={{ fontFamily: "var(--font-syne)" }}
+        >
+          <Link className="transition-colors hover:text-portfolio-ink-muted" href={href}>
             {post.title}
           </Link>
         </h2>
         {post.excerpt ? (
-          <p className="line-clamp-3 flex-1 text-body-md text-on-surface-variant">{post.excerpt}</p>
+          <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-portfolio-ink-muted">
+            {post.excerpt}
+          </p>
         ) : null}
-        <Link className="text-body-sm font-medium text-primary" href={href}>
+        <Link
+          className="text-sm font-semibold text-portfolio-accent transition-colors hover:text-portfolio-ink"
+          href={href}
+        >
           Leer más
         </Link>
       </div>

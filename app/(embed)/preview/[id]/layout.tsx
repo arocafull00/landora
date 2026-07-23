@@ -1,7 +1,17 @@
-export default function PreviewLayout({
+import { PreviewBridgeProvider } from "@/components/dashboard/preview-bridge-provider";
+
+export default async function PreviewLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ id: string }>;
 }) {
-  return children;
+  const { id } = await params;
+
+  return (
+    <PreviewBridgeProvider landingId={id}>
+      {children}
+    </PreviewBridgeProvider>
+  );
 }

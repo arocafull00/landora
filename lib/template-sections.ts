@@ -42,6 +42,30 @@ export function getAboutNavHref(landingSlug: string): string {
   return `/${slug}/about`;
 }
 
+export function isPortfolioAboutNavHref(href: string): boolean {
+  return /^\/[^/]+\/about\/?$/.test(href.trim());
+}
+
+export function remapPortfolioAboutNavHref(
+  href: string,
+  landingSlug: string,
+): string {
+  if (!isPortfolioAboutNavHref(href)) return href;
+  return getAboutNavHref(landingSlug);
+}
+
+export function syncPortfolioAboutNavHrefs(
+  nav: NavLink[],
+  landingSlug: string,
+): NavLink[] {
+  const aboutHref = getAboutNavHref(landingSlug);
+  return nav.map((item) => {
+    if (!isPortfolioAboutNavHref(item.href)) return item;
+    if (item.href === aboutHref) return item;
+    return { ...item, href: aboutHref };
+  });
+}
+
 function getAboutNavTarget(landingSlug: string): NavScrollTarget {
   return {
     anchor: ABOUT_NAV_ANCHOR,

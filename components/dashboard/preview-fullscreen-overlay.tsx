@@ -20,6 +20,7 @@ export function PreviewFullscreenOverlay({
   landingId,
   onClose,
   onDeviceChange,
+  onPageTargetChange,
   scrollTarget,
   sectionSelections,
   pageTarget = { type: "home" },
@@ -30,6 +31,7 @@ export function PreviewFullscreenOverlay({
   landingId: string;
   onClose: () => void;
   onDeviceChange: (device: PreviewDevice) => void;
+  onPageTargetChange: (target: EditorPageTarget) => void;
   scrollTarget?: string;
   sectionSelections: LandingSectionSelections;
   pageTarget?: EditorPageTarget;
@@ -71,6 +73,7 @@ export function PreviewFullscreenOverlay({
         device={device}
         landingId={landingId}
         onDeviceChange={onDeviceChange}
+        onPageTargetChange={onPageTargetChange}
         scrollTarget={scrollTarget}
         sectionSelections={sectionSelections}
         showToolbar={false}

@@ -28,14 +28,16 @@ export function DashboardShell({
 }) {
   return (
     <DashboardStoreProvider
-      key={`${landing.id}:${isAdmin}`}
+      key={`${landing.id}:${isAdmin}:${bookingModuleEnabled}`}
       isAdmin={isAdmin}
+      bookingModuleEnabled={bookingModuleEnabled}
       landing={landing}
     >
       <DashboardChromeProvider
         isAdmin={isAdmin}
         impersonating={impersonating}
         bookingEnabled={bookingEnabled}
+        bookingModuleEnabled={bookingModuleEnabled}
       >
         <SidebarProvider
           className="dashboard-app h-dvh overflow-hidden bg-surface-bg text-on-background"

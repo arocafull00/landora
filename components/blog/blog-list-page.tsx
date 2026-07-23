@@ -1,57 +1,83 @@
-import { BlogNavbar } from "@/components/blog/blog-navbar";
+"use client";
+
 import { BlogPostCard, type PublicBlogPostSummary } from "@/components/blog/blog-post-card";
+import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos-init";
+import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
+import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
+import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
+import { normalizeLandingSlug } from "@/lib/blog-slug";
+import type { LandingContent } from "@/lib/dashboard-data";
 
 type BlogListPageProps = {
-  aboutEnabled?: boolean;
-  brand: string;
+  content: LandingContent;
   landingSlug: string;
-  brandLogoType?: "text" | "image";
-  brandLogoImage?: string;
+  previewLandingId?: string;
   title: string;
   description: string;
   posts: PublicBlogPostSummary[];
 };
 
 export function BlogListPage({
-  aboutEnabled,
-  brand,
+  content,
   landingSlug,
-  brandLogoType,
-  brandLogoImage,
+  previewLandingId,
   title,
   description,
   posts,
 }: BlogListPageProps) {
+  const slug = normalizeLandingSlug(landingSlug);
+  const homeHref = previewLandingId
+    ? `/preview/${previewLandingId}`
+    : `/${slug}`;
+
   return (
-    <div className="min-h-screen bg-surface-bg text-on-background">
-      <BlogNavbar
-        aboutEnabled={aboutEnabled}
-        brand={brand}
-        brandLogoImage={brandLogoImage}
-        brandLogoType={brandLogoType}
-        landingSlug={landingSlug}
-      />
-      <main className="mx-auto max-w-6xl px-5 py-10 md:py-14">
-        <section className="grid gap-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-7">
-            <h1 className="font-headline text-headline-lg text-on-surface">{title}</h1>
-            {description ? (
-              <p className="mt-4 max-w-2xl text-body-lg text-on-surface-variant">{description}</p>
-            ) : null}
-          </div>
-        </section>
-        {posts.length === 0 ? (
-          <p className="mt-12 text-body-md text-on-surface-variant">
-            Todavía no hay posts publicados.
-          </p>
-        ) : (
-          <section className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {posts.map((post) => (
-              <BlogPostCard key={post.slug} landingSlug={landingSlug} post={post} />
-            ))}
+    <TemplateLazyMotion>
+      <div className="min-h-screen bg-portfolio-canvas text-portfolio-ink">
+        <PortfolioAosInit />
+        <PortfolioNav
+          activePage="blog"
+          brand={content.brand || "Mora."}
+          brandLogoImage={content.brandLogoImage ?? ""}
+          brandLogoType={content.brandLogoType ?? "text"}
+          ctaHref="#contacto"
+          ctaLabel={content.hero.ctaLabel ?? ""}
+          heroNavTone="dark"
+          heroVariantId="portfolio"
+          homeHref={homeHref}
+          homePageTarget={previewLandingId ? { type: "home" } : undefined}
+          navLinks={[]}
+          overHero={false}
+        />
+        <main className="mx-auto max-w-6xl px-6 pb-16 pt-32 md:px-10 md:pb-24 md:pt-40 lg:px-16">
+          <section className="grid gap-8 lg:grid-cols-12 lg:gap-10">
+            <div className="lg:col-span-7">
+              <h1
+                className="text-balance text-4xl font-extrabold tracking-[-0.04em] text-portfolio-ink sm:text-5xl"
+                style={{ fontFamily: "var(--font-syne)" }}
+              >
+                {title}
+              </h1>
+              {description ? (
+                <p className="mt-4 max-w-2xl text-lg leading-relaxed text-portfolio-ink-muted">
+                  {description}
+                </p>
+              ) : null}
+            </div>
           </section>
-        )}
-      </main>
-    </div>
+          {posts.length === 0 ? (
+            <p className="mt-12 text-sm text-portfolio-ink-muted">
+              Todavía no hay posts publicados.
+            </p>
+          ) : (
+            <section className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {posts.map((post) => (
+                <BlogPostCard key={post.slug} landingSlug={landingSlug} post={post} />
+              ))}
+            </section>
+          )}
+        </main>
+        <PortfolioContactSection content={content} />
+      </div>
+    </TemplateLazyMotion>
   );
 }

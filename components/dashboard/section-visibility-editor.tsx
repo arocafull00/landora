@@ -4,6 +4,7 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import { useShallow } from "zustand/react/shallow";
 import type { Landing, TemplateId } from "@/lib/dashboard-data";
 import { SectionVisibilityRow } from "@/components/dashboard/section-visibility-row";
+import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 import {
   getOrderedRemovableSections,
   getTemplateSections,
@@ -15,6 +16,7 @@ type SectionVisibilityEditorProps = {
 };
 
 export function SectionVisibilityEditor({ activeLanding }: SectionVisibilityEditorProps) {
+  const { bookingModuleEnabled } = useDashboardChrome();
   const { hideSection, restoreSection, moveSection } = useDashboardStore(
     useShallow((state) => ({
       hideSection: state.hideSection,
@@ -27,7 +29,7 @@ export function SectionVisibilityEditor({ activeLanding }: SectionVisibilityEdit
   const orderedRemovableSections = getOrderedRemovableSections(
     templateId,
     activeLanding.content.sectionOrder,
-  );
+  ).filter((section) => bookingModuleEnabled || section.anchor !== "reservas");
   const hiddenSectionSet = new Set(activeLanding.content.hiddenSections ?? []);
   const visibleSections = orderedRemovableSections.filter((section) =>
     isSectionVisible(activeLanding.content, section.anchor),

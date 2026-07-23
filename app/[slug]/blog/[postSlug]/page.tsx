@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { BlogPostPage } from "@/components/blog/blog-post-page";
+import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogPostBySlug } from "@/data/blog";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { normalizeLandingSlug } from "@/lib/blog-slug";
-import { resolveLandingAppearance } from "@/lib/site-appearance";
-import { SiteThemeScope } from "@/components/templates/site-theme-scope";
-import { isSitePageEnabled } from "@/lib/site-pages";
+import { toLandingContent } from "@/lib/landing-mapper";
 
 export async function generateMetadata({
   params,
@@ -43,22 +42,12 @@ export default async function PublicBlogPostRoute({
 
   if (!post) notFound();
 
-  const brand = landing.branding?.brand || landing.name;
-  const appearance = resolveLandingAppearance(landing.template, {
-    paletteId: landing.branding?.paletteId,
-    typographyId: landing.branding?.typographyId,
-  });
+  const content = toLandingContent(landing);
 
   return (
-    <SiteThemeScope appearance={appearance} template={landing.template}>
+    <SiteThemeScope appearance={content.appearance} template={landing.template}>
       <BlogPostPage
-        aboutEnabled={
-          landing.template === "portfolio" &&
-          isSitePageEnabled(landing.branding?.enabledPages, "about")
-        }
-        brand={brand}
-        brandLogoImage={landing.branding?.brandLogoImage ?? ""}
-        brandLogoType={landing.branding?.brandLogoType === "image" ? "image" : "text"}
+        content={content}
         landingSlug={normalizeLandingSlug(landing.slug)}
         post={{
           slug: post.slug,

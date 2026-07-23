@@ -1,10 +1,13 @@
 import { PortfolioAboutHero } from "@/components/templates/portfolio/portfolio-about-hero";
 import { PortfolioAboutStorySection } from "@/components/templates/portfolio/portfolio-about-story-section";
+import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos-init";
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
+import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { normalizeLandingSlug } from "@/lib/blog-slug";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { resolvePortfolioAboutPageContent } from "@/lib/portfolio-about-content";
+import { isPortfolioAboutNavHref } from "@/lib/template-sections";
 
 export function PortfolioAboutPage({
   content,
@@ -29,33 +32,36 @@ export function PortfolioAboutPage({
     if (link.href.startsWith("#")) {
       return { ...link, href: `${homeHref}${link.href}` };
     }
-    if (previewLandingId && link.href === `${publicBaseHref}/about`) {
+    if (isPortfolioAboutNavHref(link.href) || link.href === aboutHref) {
       return { ...link, href: aboutHref };
     }
     return link;
   });
 
   return (
-    <div className="min-h-screen bg-portfolio-canvas text-portfolio-ink">
-      <PortfolioNav
-        activePage="about"
-        aboutHref={aboutHref}
-        brand={content.brand}
-        brandLogoImage={content.brandLogoImage}
-        brandLogoType={content.brandLogoType}
-        ctaHref="#contacto"
-        ctaLabel={content.hero.ctaLabel}
-        heroNavTone="dark"
-        heroVariantId="portfolio"
-        homeHref={homeHref}
-        navLinks={navLinks}
-        overHero
-      />
-      <main>
-        <PortfolioAboutHero about={about} />
-        <PortfolioAboutStorySection about={about} />
-      </main>
-      <PortfolioContactSection content={content} />
-    </div>
+    <TemplateLazyMotion>
+      <div className="min-h-screen bg-portfolio-canvas text-portfolio-ink">
+        <PortfolioAosInit />
+        <PortfolioNav
+          activePage="about"
+          brand={content.brand || "Mora."}
+          brandLogoImage={content.brandLogoImage ?? ""}
+          brandLogoType={content.brandLogoType ?? "text"}
+          ctaHref="#contacto"
+          ctaLabel={content.hero.ctaLabel ?? ""}
+          heroNavTone="dark"
+          heroVariantId="portfolio"
+          homeHref={homeHref}
+          homePageTarget={previewLandingId ? { type: "home" } : undefined}
+          navLinks={navLinks}
+          overHero={false}
+        />
+        <main>
+          <PortfolioAboutHero about={about} />
+          <PortfolioAboutStorySection about={about} />
+        </main>
+        <PortfolioContactSection content={content} />
+      </div>
+    </TemplateLazyMotion>
   );
 }
