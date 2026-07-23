@@ -6,6 +6,7 @@ import type {
   UserAddonManualAccess,
 } from "@/lib/domain/dtos";
 import { hasActiveSubscription } from "@/lib/subscription-access";
+import { getPublicLandingUrl } from "@/lib/public-site-url";
 
 export type AdminUserWithLanding = User & {
   landing: LandingPage | null;
@@ -135,12 +136,7 @@ export function filterAdminUsers(
 
 export function getLandingPublicUrl(landing: LandingPage | null) {
   if (!landing) return null;
-
-  if (landing.customDomain) {
-    return `https://${landing.customDomain}`;
-  }
-
-  return `/${landing.slug.replace(/^\//, "")}`;
+  return getPublicLandingUrl(landing);
 }
 
 export function getRelativePeriodEndLabel(date: Date | null) {

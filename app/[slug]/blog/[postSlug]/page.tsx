@@ -4,8 +4,8 @@ import { BlogPostPage } from "@/components/blog/blog-post-page";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogPostBySlug } from "@/data/blog";
 import { getLandingPageBySlug } from "@/data/landing-pages";
-import { normalizeLandingSlug } from "@/lib/blog-slug";
 import { toLandingContent } from "@/lib/landing-mapper";
+import { getPublicLandingUrl } from "@/lib/public-site-url";
 
 export async function generateMetadata({
   params,
@@ -24,6 +24,9 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt || landing.seo?.description || "",
+    alternates: {
+      canonical: getPublicLandingUrl(landing, `/blog/${post.slug}`),
+    },
     icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
   };
 }
@@ -48,7 +51,6 @@ export default async function PublicBlogPostRoute({
     <SiteThemeScope appearance={content.appearance} template={landing.template}>
       <BlogPostPage
         content={content}
-        landingSlug={normalizeLandingSlug(landing.slug)}
         post={{
           slug: post.slug,
           title: post.title,

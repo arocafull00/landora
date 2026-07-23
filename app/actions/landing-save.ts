@@ -18,10 +18,10 @@ import {
 } from "@/lib/site-appearance";
 import { syncPortfolioAboutNavHrefs } from "@/lib/template-sections";
 
-function getSectionPayloads(content: LandingContent, slug: string, template: string) {
+function getSectionPayloads(content: LandingContent, template: string) {
   const navItems =
     template === "portfolio"
-      ? syncPortfolioAboutNavHrefs(content.nav, slug)
+      ? syncPortfolioAboutNavHrefs(content.nav)
       : content.nav;
 
   return {
@@ -94,7 +94,6 @@ export async function saveLandingAction(
   const content = parsed.data.content as unknown as LandingContent;
   const sectionPayloads = getSectionPayloads(
     content,
-    parsed.data.meta.slug,
     landing.template,
   );
 

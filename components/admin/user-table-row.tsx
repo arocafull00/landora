@@ -14,6 +14,7 @@ import {
   type AdminUserWithLanding,
 } from "@/lib/admin-user-display";
 import { mediumDateFormatter } from "@/lib/intl-formatters";
+import { getPublicLandingHost } from "@/lib/public-site-url";
 
 export function UserTableRow({ user }: { user: AdminUserWithLanding }) {
   const displayStatus = getUserDisplayStatus(user);
@@ -82,7 +83,7 @@ export function UserTableRow({ user }: { user: AdminUserWithLanding }) {
           <div>
             <StatusBadge status={user.landing.published ? "Published" : "Draft"} />
             <p className="mt-2 max-w-[240px] truncate font-body text-body-sm text-on-surface">
-              {user.landing.customDomain ?? `/${user.landing.slug.replace(/^\//, "")}`}
+              {getPublicLandingHost(user.landing)}
             </p>
             <p className="font-body text-xs text-on-surface-variant">
               {user.landing.customDomain ? "Dominio personalizado" : "Subdominio"}

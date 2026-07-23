@@ -31,12 +31,14 @@ export function CoffeeShopTemplateClient({
   content,
   topOffset = 0,
   slug,
+  previewLandingId,
   bookingEnabled = false,
   sectionSelections,
 }: {
   content: LandingContent;
   topOffset?: number;
   slug?: string;
+  previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
@@ -47,6 +49,7 @@ export function CoffeeShopTemplateClient({
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
     bookingEnabled,
     content,
+    previewLandingId,
     slug: slug ?? "",
     template: "coffee-shop",
   });

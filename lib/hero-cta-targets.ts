@@ -29,6 +29,7 @@ function getFirstVisibleSectionHref(
 export function getHeroCtaTargets(params: {
   bookingEnabled: boolean;
   content: LandingContent;
+  previewLandingId?: string;
   slug: string;
   template: TemplateId;
 }) {
@@ -39,6 +40,7 @@ export function getHeroCtaTargets(params: {
       params.bookingEnabled,
       params.slug,
       contactHref,
+      params.previewLandingId,
     ),
     secondaryCtaHref: getFirstVisibleSectionHref(
       params.template,

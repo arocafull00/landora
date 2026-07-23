@@ -38,12 +38,14 @@ export function OficioProTemplate({
   content,
   topOffset = 0,
   slug,
+  previewLandingId,
   bookingEnabled = false,
   sectionSelections,
 }: {
   content: LandingContent;
   topOffset?: number;
   slug?: string;
+  previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
@@ -53,6 +55,7 @@ export function OficioProTemplate({
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
     bookingEnabled,
     content,
+    previewLandingId,
     slug: slug ?? "",
     template: "oficio-pro",
   });

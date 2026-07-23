@@ -128,14 +128,12 @@ export function LandingPreviewFrame({
       previewProject ? (
         <PortfolioProjectPage
           content={content}
-          landingSlug={slug ?? ""}
           previewLandingId={previewLandingId}
           project={previewProject}
         />
       ) : sitePage === "about" && activeTemplate === "portfolio" ? (
         <PortfolioAboutPage
           content={content}
-          landingSlug={slug ?? ""}
           previewLandingId={previewLandingId}
         />
       ) : activeTemplate === "portfolio" ? (
@@ -150,6 +148,7 @@ export function LandingPreviewFrame({
         <Component
           bookingEnabled={bookingEnabled}
           content={content}
+          previewLandingId={previewLandingId}
           sectionSelections={sectionSelections}
           slug={slug}
         />

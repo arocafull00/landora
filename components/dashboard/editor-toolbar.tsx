@@ -24,6 +24,10 @@ import { Icon } from "@/components/ui/icon";
 import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 import { resolveProjectLinkType } from "@/lib/portfolio-projects";
+import {
+  getPreviewLandingPath,
+  getPublicLandingUrl,
+} from "@/lib/public-site-url";
 import { useDashboardStore } from "@/stores/dashboard-store";
 
 export function EditorToolbar() {
@@ -63,21 +67,21 @@ export function EditorToolbar() {
 
   const copyPreviewLink = async () => {
     let url: string;
-
-    if (activeLanding.status === "Published") {
-      if (activeLanding.customDomain) {
-        url = `https://${activeLanding.customDomain}`;
-      } else {
-        url = `${window.location.origin}/${activeLanding.slug.replace(/^\//, "")}`;
-      }
-    } else {
-      url = `${window.location.origin}/preview/${activeLanding.id}`;
-    }
+    let pathname = "";
 
     if (activePageTarget.type === "about") {
-      url = `${url.replace(/\/$/, "")}/about`;
+      pathname = "/about";
     } else if (activeProject?.projectSlug) {
-      url = `${url.replace(/\/$/, "")}/proyectos/${activeProject.projectSlug}`;
+      pathname = `/proyectos/${activeProject.projectSlug}`;
+    }
+
+    if (activeLanding.status === "Published") {
+      url = getPublicLandingUrl(activeLanding, pathname);
+    } else {
+      url = `${window.location.origin}${getPreviewLandingPath(
+        activeLanding.id,
+        pathname,
+      )}`;
     }
 
     try {

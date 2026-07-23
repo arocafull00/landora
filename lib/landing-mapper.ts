@@ -120,7 +120,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
         href: n.href,
       }));
       if (row.template !== "portfolio") return items;
-      return syncPortfolioAboutNavHrefs(items, row.slug);
+      return syncPortfolioAboutNavHrefs(items);
     })(),
     spaces: (row.spaces ?? []).map((s) => ({
       id: s.id,

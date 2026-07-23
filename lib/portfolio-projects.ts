@@ -46,12 +46,10 @@ export function createUniqueProjectSlug(
 }
 
 export function getPortfolioProjectHref({
-  landingSlug,
   previewLandingId,
   projectId,
   projectSlug,
 }: {
-  landingSlug: string;
   previewLandingId?: string;
   projectId?: string;
   projectSlug: string;
@@ -59,8 +57,7 @@ export function getPortfolioProjectHref({
   if (previewLandingId && projectId) {
     return `/preview/${previewLandingId}/proyectos/${projectId}`;
   }
-  const base = `/${landingSlug.replace(/^\/+|\/+$/g, "")}`;
-  return `${base}/proyectos/${projectSlug}`;
+  return `/proyectos/${projectSlug}`;
 }
 
 export function findInternalPortfolioProject(

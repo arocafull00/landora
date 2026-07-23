@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AssetImage } from "@/components/ui/asset-image";
-import { formatBlogDate, normalizeLandingSlug } from "@/lib/blog-slug";
+import { formatBlogDate } from "@/lib/blog-slug";
+import { getPublicLandingPath } from "@/lib/public-site-url";
 
 export type PublicBlogPostSummary = {
   slug: string;
@@ -12,12 +13,10 @@ export type PublicBlogPostSummary = {
 
 type BlogPostCardProps = {
   post: PublicBlogPostSummary;
-  landingSlug: string;
 };
 
-export function BlogPostCard({ post, landingSlug }: BlogPostCardProps) {
-  const slug = normalizeLandingSlug(landingSlug);
-  const href = `/${slug}/blog/${post.slug}`;
+export function BlogPostCard({ post }: BlogPostCardProps) {
+  const href = getPublicLandingPath(`/blog/${post.slug}`);
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-portfolio-line bg-portfolio-surface transition-[box-shadow,transform] hover:-translate-y-0.5">

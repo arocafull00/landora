@@ -1,7 +1,7 @@
 import "server-only";
 
 import { cache } from "react";
-import { and, eq, ne } from "drizzle-orm";
+import { and, eq, ne, or } from "drizzle-orm";
 import { db } from "@/db";
 import { landingPages } from "@/db/schema";
 
@@ -21,6 +21,28 @@ export const getLandingByCustomDomain = cache(async (host: string) => {
     });
   } catch (error) {
     throw new Error("Failed to fetch landing by custom domain", { cause: error });
+  }
+});
+
+export const getPublishedLandingRouteBySlug = cache(async (slug: string) => {
+  const normalizedSlug = slug.replace(/^\/+|\/+$/g, "");
+
+  try {
+    return await db.query.landingPages.findFirst({
+      columns: {
+        slug: true,
+        customDomain: true,
+      },
+      where: and(
+        or(
+          eq(landingPages.slug, normalizedSlug),
+          eq(landingPages.slug, `/${normalizedSlug}`),
+        ),
+        eq(landingPages.published, true),
+      ),
+    });
+  } catch (error) {
+    throw new Error("Failed to fetch published landing route", { cause: error });
   }
 });
 

@@ -7,11 +7,9 @@ import { getPortfolioProjectHref } from "@/lib/portfolio-projects";
 
 export function PortfolioProjectsSection({
   content,
-  landingSlug,
   previewLandingId,
 }: {
   content: LandingContent;
-  landingSlug: string;
   previewLandingId?: string;
 }) {
   const gallery = content.gallery ?? [];
@@ -71,7 +69,6 @@ export function PortfolioProjectsSection({
                 internalHref={
                   item.projectSlug
                     ? getPortfolioProjectHref({
-                        landingSlug,
                         previewLandingId,
                         projectId: item.id,
                         projectSlug: item.projectSlug,
@@ -99,7 +96,6 @@ export function PortfolioProjectsSection({
               internalHref={
                 item.projectSlug
                   ? getPortfolioProjectHref({
-                      landingSlug,
                       previewLandingId,
                       projectId: item.id,
                       projectSlug: item.projectSlug,

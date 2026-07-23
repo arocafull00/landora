@@ -5,6 +5,7 @@ import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getLandingPageBySlug } from "@/data/landing-pages";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { findInternalPortfolioProject } from "@/lib/portfolio-projects";
+import { getPublicLandingUrl } from "@/lib/public-site-url";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string; projectSlug: string }>;
@@ -34,19 +35,17 @@ export async function generateMetadata({
   const title = data.project.title || "Proyecto";
   const description =
     data.project.description || data.landing.seo?.description || "";
-  const canonicalBase = data.landing.customDomain
-    ? `https://${data.landing.customDomain}`
-    : undefined;
-
   return {
     title: `${title} | ${data.content.brand}`,
     description,
-    alternates:
-      canonicalBase && data.project.projectSlug
-        ? {
-            canonical: `${canonicalBase}/proyectos/${data.project.projectSlug}`,
-          }
-        : undefined,
+    alternates: data.project.projectSlug
+      ? {
+          canonical: getPublicLandingUrl(
+            data.landing,
+            `/proyectos/${data.project.projectSlug}`,
+          ),
+        }
+      : undefined,
     icons: data.landing.seo?.favicon
       ? { icon: data.landing.seo.favicon }
       : undefined,
@@ -73,7 +72,6 @@ export default async function PublicProjectPage({
     >
       <PortfolioProjectPage
         content={data.content}
-        landingSlug={data.landing.slug}
         project={data.project}
       />
     </SiteThemeScope>

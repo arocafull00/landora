@@ -1,3 +1,5 @@
+import { getPublicAppDomain } from "@/lib/public-site-url";
+
 const RESERVED_SLUGS = new Set([
   "editor",
   "assets",
@@ -19,21 +21,14 @@ export function normalizeHost(host: string) {
 }
 
 function getAppDomainHosts() {
-  const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN?.trim().toLowerCase();
+  const appDomain = getPublicAppDomain();
   if (!appDomain) return [];
-
-  if (appDomain.startsWith("www.")) return [appDomain];
 
   return [appDomain, `www.${appDomain}`];
 }
 
 export function getAppCanonicalHost() {
-  const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN?.trim().toLowerCase();
-  if (!appDomain) return null;
-
-  if (appDomain.startsWith("www.")) return appDomain.slice(4);
-
-  return appDomain;
+  return getPublicAppDomain();
 }
 
 export function getAppWwwHost() {
@@ -45,8 +40,10 @@ export function getAppWwwHost() {
 
 export function isReservedAppDomain(host: string) {
   const normalized = normalizeHost(host);
+  const canonicalHost = getAppCanonicalHost();
 
   if (normalized.endsWith(".vercel.app")) return true;
+  if (canonicalHost && normalized.endsWith(`.${canonicalHost}`)) return true;
 
   return getAppDomainHosts().includes(normalized);
 }
@@ -56,9 +53,27 @@ export function isAppHost(host: string) {
 
   if (getAppDomainHosts().includes(normalized)) return true;
   if (normalized.endsWith(".vercel.app")) return true;
-  if (normalized === "localhost" || normalized.endsWith(".localhost")) return true;
+  if (normalized === "localhost") return true;
 
   return false;
+}
+
+export function getPlatformLandingSlug(host: string) {
+  const normalized = normalizeHost(host);
+  const canonicalHost = getAppCanonicalHost();
+
+  if (normalized.endsWith(".localhost")) {
+    const slug = normalized.slice(0, -".localhost".length);
+    if (!slug || slug.includes(".") || isReservedSlug(slug)) return null;
+    return slug;
+  }
+
+  if (!canonicalHost || !normalized.endsWith(`.${canonicalHost}`)) return null;
+
+  const slug = normalized.slice(0, -(canonicalHost.length + 1));
+  if (!slug || slug.includes(".") || isReservedSlug(slug)) return null;
+
+  return slug;
 }
 
 export function isReservedSlug(slug: string) {

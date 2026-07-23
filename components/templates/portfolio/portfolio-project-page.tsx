@@ -12,25 +12,25 @@ import { PortfolioProjectPageTag } from "@/components/templates/portfolio/portfo
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
 import type { GalleryItem, LandingContent } from "@/lib/dashboard-data";
-import { normalizeLandingSlug } from "@/lib/blog-slug";
+import {
+  getPreviewLandingPath,
+  getPublicLandingPath,
+} from "@/lib/public-site-url";
 
 export function PortfolioProjectPage({
   content,
-  landingSlug,
   previewLandingId,
   project,
 }: {
   content: LandingContent;
-  landingSlug: string;
   previewLandingId?: string;
   project: GalleryItem;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const previewBridge = usePreviewBridge();
-  const slug = normalizeLandingSlug(landingSlug);
   const homeHref = previewLandingId
-    ? `/preview/${previewLandingId}`
-    : `/${slug}`;
+    ? getPreviewLandingPath(previewLandingId)
+    : getPublicLandingPath();
   const projectsHref = `${homeHref}#proyectos`;
   const title = project.title || "Proyecto";
   const gallery = project.projectGallery ?? [];

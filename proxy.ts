@@ -6,15 +6,19 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getAppCanonicalHost,
   getAppWwwHost,
+  getPlatformLandingSlug,
   isAppHost,
   isPublicSlugPath,
-  isReservedPath,
   normalizeHost,
 } from "@/lib/app-host";
 import { getSubscriptionStatusForProxy } from "@/data/subscriptions";
 import { getBookingModuleAccessContextForClerkUser } from "@/data/user-addons";
-import { getLandingByCustomDomain } from "@/data/domains";
+import {
+  getLandingByCustomDomain,
+  getPublishedLandingRouteBySlug,
+} from "@/data/domains";
 import { hasBookingModuleAccess, hasDashboardAccess } from "@/lib/subscription-access";
+import { getPublicLandingHost } from "@/lib/public-site-url";
 
 const isSignInRoute = createRouteMatcher(["/sign-in(.*)"]);
 const isWebhookRoute = createRouteMatcher(["/api/webhooks/stripe"]);
@@ -45,10 +49,44 @@ const isBookingRoute = createRouteMatcher([
   "/settings/blocked-periods(.*)",
 ]);
 
-async function resolveCustomDomainSlug(host: string) {
-  const landing = await getLandingByCustomDomain(host);
-  if (!landing) return null;
-  return landing.slug.replace(/^\//, "");
+const PUBLIC_LANDING_PATH =
+  /^\/(?:$|about\/?$|book\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$)$/;
+
+function isPublicLandingPath(pathname: string) {
+  return PUBLIC_LANDING_PATH.test(pathname);
+}
+
+function getInternalLandingPath(slug: string, pathname: string) {
+  const normalizedSlug = slug.replace(/^\/+|\/+$/g, "");
+  if (pathname === "/") return `/${normalizedSlug}`;
+  return `/${normalizedSlug}${pathname}`;
+}
+
+function getLegacyPublicPath(pathname: string) {
+  const [, , ...segments] = pathname.split("/");
+  return segments.length > 0 ? `/${segments.join("/")}` : "/";
+}
+
+function redirectToLandingHost(
+  req: NextRequest,
+  landing: { slug: string; customDomain: string | null },
+  pathname: string,
+) {
+  const redirectUrl = req.nextUrl.clone();
+  redirectUrl.protocol = "https:";
+  redirectUrl.hostname = getPublicLandingHost(landing);
+  redirectUrl.port = "";
+  redirectUrl.pathname = pathname;
+  return NextResponse.redirect(redirectUrl, 308);
+}
+
+function rewriteLandingRequest(
+  req: NextRequest,
+  slug: string,
+) {
+  const url = req.nextUrl.clone();
+  url.pathname = getInternalLandingPath(slug, req.nextUrl.pathname);
+  return NextResponse.rewrite(url);
 }
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
@@ -64,27 +102,43 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(redirectUrl, 308);
   }
 
+  const platformSlug = getPlatformLandingSlug(host);
+  if (platformSlug) {
+    if (pathname.startsWith("/ingest")) {
+      return NextResponse.next();
+    }
+
+    if (!isPublicLandingPath(pathname)) {
+      return new NextResponse("Not Found", { status: 404 });
+    }
+
+    const landing = await getPublishedLandingRouteBySlug(platformSlug);
+    if (!landing) {
+      return new NextResponse("Not Found", { status: 404 });
+    }
+
+    if (landing.customDomain) {
+      return redirectToLandingHost(req, landing, pathname);
+    }
+
+    return rewriteLandingRequest(req, landing.slug);
+  }
+
   if (!isAppHost(host)) {
     if (pathname.startsWith("/ingest")) {
       return NextResponse.next();
     }
 
-    if (isReservedPath(pathname)) {
+    if (!isPublicLandingPath(pathname)) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    if (pathname !== "/") {
+    const landing = await getLandingByCustomDomain(host);
+    if (!landing) {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    const slug = await resolveCustomDomainSlug(host);
-    if (!slug) {
-      return new NextResponse("Not Found", { status: 404 });
-    }
-
-    const url = req.nextUrl.clone();
-    url.pathname = `/${slug}`;
-    return NextResponse.rewrite(url);
+    return rewriteLandingRequest(req, landing.slug);
   }
 
   if (
@@ -98,6 +152,25 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   }
 
   if (isPublicSlugPath(pathname)) {
+    if (
+      canonicalHost &&
+      host === canonicalHost &&
+      (req.method === "GET" || req.method === "HEAD")
+    ) {
+      const slug = pathname.split("/").filter(Boolean)[0];
+      const landing = slug
+        ? await getPublishedLandingRouteBySlug(slug)
+        : null;
+
+      if (landing) {
+        return redirectToLandingHost(
+          req,
+          landing,
+          getLegacyPublicPath(pathname),
+        );
+      }
+    }
+
     return NextResponse.next();
   }
 

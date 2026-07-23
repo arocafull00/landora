@@ -26,7 +26,10 @@ import { PortfolioFaqSection } from "@/components/templates/portfolio/portfolio-
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 import { isSitePageEnabled } from "@/lib/site-pages";
-import { normalizeLandingSlug } from "@/lib/blog-slug";
+import {
+  getPreviewLandingPath,
+  getPublicLandingPath,
+} from "@/lib/public-site-url";
 
 function isOverlappingTop(el: HTMLElement | null) {
   if (!el) return false;
@@ -37,7 +40,6 @@ function isOverlappingTop(el: HTMLElement | null) {
 function renderPortfolioBodySection(
   anchor: string,
   content: LandingContent,
-  landingSlug: string,
   previewLandingId?: string,
 ) {
   if (anchor === "story") return <PortfolioAbout content={content} />;
@@ -46,7 +48,6 @@ function renderPortfolioBodySection(
     return (
       <PortfolioProjectsSection
         content={content}
-        landingSlug={landingSlug}
         previewLandingId={previewLandingId}
       />
     );
@@ -81,19 +82,18 @@ export function PortfolioTemplate({
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
     bookingEnabled,
     content,
+    previewLandingId,
     slug: slug ?? "",
     template: "portfolio",
   });
   const homeHref = previewLandingId
-    ? `/preview/${previewLandingId}`
-    : slug
-      ? `/${normalizeLandingSlug(slug)}`
-      : "/";
+    ? getPreviewLandingPath(previewLandingId)
+    : getPublicLandingPath();
   const aboutEnabled = isSitePageEnabled(content.enabledPages, "about");
   const publicAboutHref =
-    slug && aboutEnabled ? getAboutNavHref(slug) : undefined;
+    slug && aboutEnabled ? getAboutNavHref() : undefined;
   const previewAboutHref = previewLandingId
-    ? `/preview/${previewLandingId}/about`
+    ? getPreviewLandingPath(previewLandingId, "/about")
     : undefined;
   const resolvedAboutHref = aboutEnabled
     ? (previewAboutHref ?? publicAboutHref)
@@ -190,7 +190,6 @@ export function PortfolioTemplate({
           {renderPortfolioBodySection(
             section.anchor,
             content,
-            slug ?? "",
             previewLandingId,
           )}
         </Fragment>

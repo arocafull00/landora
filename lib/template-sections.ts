@@ -24,41 +24,37 @@ export function getSectionScrollHref(section: TemplateSectionDef): string {
 const BLOG_NAV_ANCHOR = "__blog__";
 const ABOUT_NAV_ANCHOR = "__about__";
 
-function getBlogNavHref(landingSlug: string): string {
-  const slug = landingSlug.replace(/^\//, "");
-  return `/${slug}/blog`;
+function getBlogNavHref(): string {
+  return "/blog";
 }
 
-function getBlogNavTarget(landingSlug: string): NavScrollTarget {
+function getBlogNavTarget(): NavScrollTarget {
   return {
     anchor: BLOG_NAV_ANCHOR,
-    href: getBlogNavHref(landingSlug),
+    href: getBlogNavHref(),
     label: "Blog",
   };
 }
 
-export function getAboutNavHref(landingSlug: string): string {
-  const slug = landingSlug.replace(/^\//, "");
-  return `/${slug}/about`;
+export function getAboutNavHref(): string {
+  return "/about";
 }
 
 export function isPortfolioAboutNavHref(href: string): boolean {
-  return /^\/[^/]+\/about\/?$/.test(href.trim());
+  return /^\/(?:[^/]+\/)?about\/?$/.test(href.trim());
 }
 
 export function remapPortfolioAboutNavHref(
   href: string,
-  landingSlug: string,
 ): string {
   if (!isPortfolioAboutNavHref(href)) return href;
-  return getAboutNavHref(landingSlug);
+  return getAboutNavHref();
 }
 
 export function syncPortfolioAboutNavHrefs(
   nav: NavLink[],
-  landingSlug: string,
 ): NavLink[] {
-  const aboutHref = getAboutNavHref(landingSlug);
+  const aboutHref = getAboutNavHref();
   return nav.map((item) => {
     if (!isPortfolioAboutNavHref(item.href)) return item;
     if (item.href === aboutHref) return item;
@@ -66,10 +62,10 @@ export function syncPortfolioAboutNavHrefs(
   });
 }
 
-function getAboutNavTarget(landingSlug: string): NavScrollTarget {
+function getAboutNavTarget(): NavScrollTarget {
   return {
     anchor: ABOUT_NAV_ANCHOR,
-    href: getAboutNavHref(landingSlug),
+    href: getAboutNavHref(),
     label: "About me",
   };
 }
@@ -97,10 +93,10 @@ export function getNavScrollTargets(
     templateId === "portfolio" &&
     isSitePageEnabled(enabledPages, "about")
   ) {
-    targets.push(getAboutNavTarget(landingSlug));
+    targets.push(getAboutNavTarget());
   }
 
-  return [...targets, getBlogNavTarget(landingSlug)];
+  return [...targets, getBlogNavTarget()];
 }
 
 export function getVisibleNavScrollTargets(

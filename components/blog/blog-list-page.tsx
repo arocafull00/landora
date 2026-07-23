@@ -5,12 +5,14 @@ import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
-import { normalizeLandingSlug } from "@/lib/blog-slug";
 import type { LandingContent } from "@/lib/dashboard-data";
+import {
+  getPreviewLandingPath,
+  getPublicLandingPath,
+} from "@/lib/public-site-url";
 
 type BlogListPageProps = {
   content: LandingContent;
-  landingSlug: string;
   previewLandingId?: string;
   title: string;
   description: string;
@@ -19,16 +21,14 @@ type BlogListPageProps = {
 
 export function BlogListPage({
   content,
-  landingSlug,
   previewLandingId,
   title,
   description,
   posts,
 }: BlogListPageProps) {
-  const slug = normalizeLandingSlug(landingSlug);
   const homeHref = previewLandingId
-    ? `/preview/${previewLandingId}`
-    : `/${slug}`;
+    ? getPreviewLandingPath(previewLandingId)
+    : getPublicLandingPath();
 
   return (
     <TemplateLazyMotion>
@@ -71,7 +71,7 @@ export function BlogListPage({
           ) : (
             <section className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
               {posts.map((post) => (
-                <BlogPostCard key={post.slug} landingSlug={landingSlug} post={post} />
+                <BlogPostCard key={post.slug} post={post} />
               ))}
             </section>
           )}

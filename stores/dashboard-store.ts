@@ -237,7 +237,7 @@ function createDashboardStore(initial?: {
         ) {
           next.content = {
             ...landing.content,
-            nav: syncPortfolioAboutNavHrefs(landing.content.nav, patch.slug),
+            nav: syncPortfolioAboutNavHrefs(landing.content.nav),
           };
         }
 
@@ -324,7 +324,7 @@ function createDashboardStore(initial?: {
       return;
     }
 
-    const aboutHref = getAboutNavHref(landing.slug);
+    const aboutHref = getAboutNavHref();
     const hasAboutNav = landing.content.nav.some((item) =>
       isPortfolioAboutNavHref(item.href),
     );
@@ -339,7 +339,7 @@ function createDashboardStore(initial?: {
                 ...item.content,
                 enabledPages: [...item.content.enabledPages, pageId],
                 nav: hasAboutNav
-                  ? syncPortfolioAboutNavHrefs(item.content.nav, item.slug)
+                  ? syncPortfolioAboutNavHrefs(item.content.nav)
                   : [
                       {
                         id: crypto.randomUUID(),

@@ -39,12 +39,14 @@ export function StudioTemplate({
   content,
   topOffset = 0,
   slug,
+  previewLandingId,
   bookingEnabled = false,
   sectionSelections,
 }: {
   content: LandingContent;
   topOffset?: number;
   slug?: string;
+  previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
@@ -81,6 +83,7 @@ export function StudioTemplate({
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
     bookingEnabled,
     content,
+    previewLandingId,
     slug: slug ?? "",
     template: "studio",
   });

@@ -7,8 +7,12 @@ import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
-import { formatBlogDate, normalizeLandingSlug } from "@/lib/blog-slug";
+import { formatBlogDate } from "@/lib/blog-slug";
 import type { LandingContent } from "@/lib/dashboard-data";
+import {
+  getPreviewLandingPath,
+  getPublicLandingPath,
+} from "@/lib/public-site-url";
 
 export type PublicBlogPost = {
   slug: string;
@@ -21,22 +25,21 @@ export type PublicBlogPost = {
 
 type BlogPostPageProps = {
   content: LandingContent;
-  landingSlug: string;
   previewLandingId?: string;
   post: PublicBlogPost;
 };
 
 export function BlogPostPage({
   content,
-  landingSlug,
   previewLandingId,
   post,
 }: BlogPostPageProps) {
-  const slug = normalizeLandingSlug(landingSlug);
   const homeHref = previewLandingId
-    ? `/preview/${previewLandingId}`
-    : `/${slug}`;
-  const blogHref = `${homeHref}/blog`;
+    ? getPreviewLandingPath(previewLandingId)
+    : getPublicLandingPath();
+  const blogHref = previewLandingId
+    ? getPreviewLandingPath(previewLandingId, "/blog")
+    : getPublicLandingPath("/blog");
 
   return (
     <TemplateLazyMotion>

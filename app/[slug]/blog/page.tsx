@@ -4,8 +4,8 @@ import { BlogListPage } from "@/components/blog/blog-list-page";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogConfig, getBlogPostsByLandingId } from "@/data/blog";
 import { getLandingPageBySlug } from "@/data/landing-pages";
-import { normalizeLandingSlug } from "@/lib/blog-slug";
 import { toLandingContent } from "@/lib/landing-mapper";
+import { getPublicLandingUrl } from "@/lib/public-site-url";
 
 export async function generateMetadata({
   params,
@@ -23,6 +23,9 @@ export async function generateMetadata({
   return {
     title: config?.title || `${brand} Blog`,
     description: config?.description || landing.seo?.description || "",
+    alternates: {
+      canonical: getPublicLandingUrl(landing, "/blog"),
+    },
     icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
   };
 }
@@ -52,7 +55,6 @@ export default async function PublicBlogListPage({
       <BlogListPage
         content={content}
         description={description}
-        landingSlug={normalizeLandingSlug(landing.slug)}
         posts={posts.map((post) => ({
           slug: post.slug,
           title: post.title,

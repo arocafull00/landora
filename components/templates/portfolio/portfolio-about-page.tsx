@@ -4,29 +4,29 @@ import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
-import { normalizeLandingSlug } from "@/lib/blog-slug";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { resolvePortfolioAboutPageContent } from "@/lib/portfolio-about-content";
 import { isPortfolioAboutNavHref } from "@/lib/template-sections";
+import {
+  getPreviewLandingPath,
+  getPublicLandingPath,
+} from "@/lib/public-site-url";
 
 export function PortfolioAboutPage({
   content,
-  landingSlug,
   previewLandingId,
 }: {
   content: LandingContent;
-  landingSlug: string;
   previewLandingId?: string;
 }) {
-  const slug = normalizeLandingSlug(landingSlug);
-  const publicBaseHref = `/${slug}`;
+  const publicBaseHref = getPublicLandingPath();
   const previewBaseHref = previewLandingId
-    ? `/preview/${previewLandingId}`
+    ? getPreviewLandingPath(previewLandingId)
     : undefined;
   const homeHref = previewBaseHref ?? publicBaseHref;
-  const aboutHref = previewBaseHref
-    ? `${previewBaseHref}/about`
-    : `${publicBaseHref}/about`;
+  const aboutHref = previewLandingId
+    ? getPreviewLandingPath(previewLandingId, "/about")
+    : getPublicLandingPath("/about");
   const about = resolvePortfolioAboutPageContent(content);
   const navLinks = content.nav.map((link) => {
     if (link.href.startsWith("#")) {

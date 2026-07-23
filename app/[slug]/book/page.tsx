@@ -5,6 +5,7 @@ import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
 import { BookingWidget } from "@/components/booking/booking-widget";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
+import { getPublicLandingUrl } from "@/lib/public-site-url";
 
 export async function generateMetadata({
   params,
@@ -20,6 +21,9 @@ export async function generateMetadata({
 
   return {
     title: `Reservar cita — ${brand}`,
+    alternates: {
+      canonical: getPublicLandingUrl(landing, "/book"),
+    },
     icons: landing.seo?.favicon ? { icon: landing.seo.favicon } : undefined,
   };
 }

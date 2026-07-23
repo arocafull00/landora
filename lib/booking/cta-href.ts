@@ -2,9 +2,10 @@ export function getBookingCtaHref(
   bookingEnabled: boolean,
   slug: string,
   fallbackHref: string,
+  previewLandingId?: string,
 ): string {
   if (bookingEnabled && slug) {
-    return `/${slug}/book`;
+    return previewLandingId ? `/${slug}/book` : "/book";
   }
 
   return fallbackHref;
