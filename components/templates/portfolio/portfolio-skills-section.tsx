@@ -2,6 +2,7 @@
 
 import { Target, Users, TrendingUp, Clock } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   target: Target,
@@ -13,6 +14,11 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
 export function PortfolioSkillsSection({ content }: { content: LandingContent }) {
   const benefits = content.benefits ?? [];
   if (benefits.length === 0) return null;
+  const heading = getSectionHeading(
+    content,
+    "skills",
+    SECTION_HEADING_DEFAULTS.portfolio.skills,
+  );
 
   return (
     <section id="skills" className="scroll-mt-24 bg-[var(--site-dark)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
@@ -22,7 +28,7 @@ export function PortfolioSkillsSection({ content }: { content: LandingContent })
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
         >
-          Cómo trabajo
+          {heading.title}
         </h2>
 
         <div

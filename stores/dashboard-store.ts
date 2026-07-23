@@ -22,9 +22,11 @@ import {
   LandingAppearance,
   LandingContent,
   Offer,
+  PortfolioAboutPageContent,
   Presentation,
   SectionHeading,
   ServiceContent,
+  SitePageId,
   SpaceContent,
   StatContent,
   StoryContent,
@@ -36,8 +38,10 @@ import { saveLandingAction } from "@/app/actions/landing-save";
 import { getDefaultContent } from "@/lib/default-content";
 import { getVisibleEditorTabs } from "@/lib/template-registry";
 import {
+  getAboutNavHref,
   getSectionByAnchor,
   getSectionScrollHref,
+  getOrderedRemovableSectionAnchors,
   restoreNavItem,
 } from "@/lib/template-sections";
 
@@ -47,6 +51,7 @@ export type DashboardState = {
   activeWorkspaceTab: string;
   activeContentGroup: ContentGroup;
   activeEditorTab: string;
+  activeSitePage: SitePageId;
   activeLandingId: string;
   activePresentationId: string;
   activeAssetId: string;
@@ -63,6 +68,7 @@ export type DashboardState = {
   setActiveWorkspaceTab: (tab: string) => void;
   setActiveContentGroup: (group: ContentGroup) => void;
   setActiveEditorTab: (tab: string) => void;
+  setActiveSitePage: (pageId: SitePageId) => void;
   setActiveLandingId: (id: string) => void;
   setActivePresentationId: (id: string) => void;
   setActiveAssetId: (id: string) => void;
@@ -72,6 +78,12 @@ export type DashboardState = {
   updateHero: (id: string, patch: Partial<HeroContent>) => void;
   updateHeroVariant: (id: string, variantId: HeroVariantId) => void;
   updateStory: (id: string, patch: Partial<StoryContent>) => void;
+  updatePortfolioAbout: (
+    id: string,
+    patch: Partial<PortfolioAboutPageContent>,
+  ) => void;
+  addSitePage: (landingId: string, pageId: SitePageId) => void;
+  removeSitePage: (landingId: string, pageId: SitePageId) => void;
   updateStat: (landingId: string, statId: string, patch: Partial<StatContent>) => void;
   updateSpace: (landingId: string, spaceId: string, patch: Partial<SpaceContent>) => void;
   updateService: (landingId: string, serviceId: string, patch: Partial<ServiceContent>) => void;
@@ -95,9 +107,11 @@ export type DashboardState = {
   ) => void;
   addNavItem: (landingId: string, item: LandingContent["nav"][number]) => void;
   removeNavItem: (landingId: string, navId: string) => void;
+  moveNavItem: (landingId: string, navId: string, direction: -1 | 1) => void;
   updateSectionHeading: (landingId: string, anchor: string, patch: Partial<SectionHeading>) => void;
   hideSection: (landingId: string, anchor: string) => Promise<void>;
   restoreSection: (landingId: string, anchor: string) => Promise<void>;
+  moveSection: (landingId: string, anchor: string, direction: -1 | 1) => Promise<void>;
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
   saveLanding: (id: string) => Promise<void>;
@@ -154,6 +168,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
   activeWorkspaceTab: "Structure",
   activeContentGroup: "Pages",
   activeEditorTab: "Hero",
+  activeSitePage: "home",
   activeLandingId: initialLanding?.id ?? "",
   activePresentationId: initialPresentations[0].id,
   activeAssetId: initialAssets[0].id,
@@ -180,8 +195,9 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
   setActiveWorkspaceTab: (activeWorkspaceTab) => set({ activeWorkspaceTab }),
   setActiveContentGroup: (activeContentGroup) => set({ activeContentGroup }),
   setActiveEditorTab: (activeEditorTab) => set({ activeEditorTab }),
+  setActiveSitePage: (activeSitePage) => set({ activeSitePage }),
   setActiveLandingId: (activeLandingId) =>
-    set({ activeLandingId, activeContentGroup: "Pages" }),
+    set({ activeLandingId, activeContentGroup: "Pages", activeSitePage: "home" }),
   setActivePresentationId: (activePresentationId) =>
     set({ activePresentationId, activeContentGroup: "Presentations" }),
   setActiveAssetId: (activeAssetId) => set({ activeAssetId }),
@@ -191,6 +207,7 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
     set({
       landings: [landing],
       activeLandingId: landing.id,
+      activeSitePage: "home",
     }),
 
   updateLandingMeta: (id, patch) =>
@@ -234,14 +251,109 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
   updateStory: (id, patch) =>
     set((state) => ({
       landings: state.landings.map((landing) =>
+        landing.id === id ? (() => {
+          const story = { statement: "", ...landing.content.story, ...patch };
+          return markEdited({
+            ...landing,
+            content: { ...landing.content, story, about: story },
+          });
+        })() : landing,
+      ),
+    })),
+
+  updatePortfolioAbout: (id, patch) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
         landing.id === id
           ? markEdited({
               ...landing,
-              content: { ...landing.content, story: { statement: "", ...landing.content.story, ...patch } },
+              content: {
+                ...landing.content,
+                aboutPage: {
+                  title: "",
+                  intro: "",
+                  image: "",
+                  storyTitle: "Mi historia",
+                  storyBody: "",
+                  storyImage: "",
+                  ...landing.content.aboutPage,
+                  ...patch,
+                },
+              },
             })
           : landing,
       ),
     })),
+
+  addSitePage: (landingId, pageId) => {
+    const landing = get().landings.find((item) => item.id === landingId);
+    if (
+      !landing ||
+      landing.template !== "portfolio" ||
+      pageId !== "about" ||
+      landing.content.enabledPages.includes(pageId)
+    ) {
+      return;
+    }
+
+    const aboutHref = getAboutNavHref(landing.slug);
+    const hasAboutNav = landing.content.nav.some((item) => item.href === aboutHref);
+
+    set((state) => ({
+      activeSitePage: pageId,
+      landings: state.landings.map((item) =>
+        item.id === landingId
+          ? markEdited({
+              ...item,
+              content: {
+                ...item.content,
+                enabledPages: [...item.content.enabledPages, pageId],
+                nav: hasAboutNav
+                  ? item.content.nav
+                  : [
+                      {
+                        id: crypto.randomUUID(),
+                        label: "About me",
+                        href: aboutHref,
+                      },
+                      ...item.content.nav,
+                    ],
+              },
+            })
+          : item,
+      ),
+    }));
+    toast.success("Página About me añadida");
+  },
+
+  removeSitePage: (landingId, pageId) => {
+    if (pageId === "home") return;
+
+    set((state) => ({
+      activeSitePage:
+        state.activeSitePage === pageId ? "home" : state.activeSitePage,
+      landings: state.landings.map((landing) => {
+        if (landing.id !== landingId) return landing;
+
+        const aboutHref =
+          pageId === "about" ? getAboutNavHref(landing.slug) : null;
+
+        return markEdited({
+          ...landing,
+          content: {
+            ...landing.content,
+            enabledPages: landing.content.enabledPages.filter(
+              (enabledPage) => enabledPage !== pageId,
+            ),
+            nav: aboutHref
+              ? landing.content.nav.filter((item) => item.href !== aboutHref)
+              : landing.content.nav,
+          },
+        });
+      }),
+    }));
+    toast.success("Página About me quitada");
+  },
 
   updateContact: (id, patch) =>
     set((state) => ({
@@ -490,6 +602,31 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
       ),
     })),
 
+  moveNavItem: (landingId, navId, direction) =>
+    set((state) => ({
+      landings: state.landings.map((landing) => {
+        if (landing.id !== landingId) return landing;
+
+        const nav = landing.content.nav;
+        const index = nav.findIndex((item) => item.id === navId);
+        if (index === -1) return landing;
+
+        const nextIndex = index + direction;
+        if (nextIndex < 0 || nextIndex >= nav.length) return landing;
+
+        const nextNav = [...nav];
+        [nextNav[index], nextNav[nextIndex]] = [nextNav[nextIndex], nextNav[index]];
+
+        return markEdited({
+          ...landing,
+          content: {
+            ...landing.content,
+            nav: nextNav,
+          },
+        });
+      }),
+    })),
+
   updateSectionHeading: (landingId, anchor, patch) =>
     set((state) => ({
       landings: state.landings.map((landing) =>
@@ -594,6 +731,56 @@ function createDashboardStore(initial?: { landing: Landing; isAdmin: boolean }) 
       await persistLanding({ ...landing, content: nextContent }, "draft");
     } catch {
       toast.error("No se pudo restaurar la sección");
+    }
+  },
+
+  moveSection: async (landingId, anchor, direction) => {
+    const landing = get().landings.find((item) => item.id === landingId);
+    if (!landing) return;
+
+    const section = getSectionByAnchor(landing.template, anchor);
+    if (!section || section.required) return;
+
+    const anchors = getOrderedRemovableSectionAnchors(
+      landing.template,
+      landing.content.sectionOrder,
+    );
+    const hidden = new Set(landing.content.hiddenSections ?? []);
+    const visibleAnchors = anchors.filter((item) => !hidden.has(item));
+    const visibleIndex = visibleAnchors.indexOf(anchor);
+    if (visibleIndex === -1) return;
+
+    const nextVisibleIndex = visibleIndex + direction;
+    if (nextVisibleIndex < 0 || nextVisibleIndex >= visibleAnchors.length) return;
+
+    const swapAnchor = visibleAnchors[nextVisibleIndex];
+    const indexA = anchors.indexOf(anchor);
+    const indexB = anchors.indexOf(swapAnchor);
+    if (indexA === -1 || indexB === -1) return;
+
+    const nextAnchors = [...anchors];
+    [nextAnchors[indexA], nextAnchors[indexB]] = [nextAnchors[indexB], nextAnchors[indexA]];
+
+    const nextContent = {
+      ...landing.content,
+      sectionOrder: nextAnchors,
+    };
+
+    set((state) => ({
+      landings: state.landings.map((item) =>
+        item.id === landingId
+          ? markEdited({
+              ...item,
+              content: nextContent,
+            })
+          : item,
+      ),
+    }));
+
+    try {
+      await persistLanding({ ...landing, content: nextContent }, "draft");
+    } catch {
+      toast.error("No se pudo reordenar la sección");
     }
   },
 

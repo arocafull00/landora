@@ -1,16 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import Link from "next/link";
 import { X, Menu } from "lucide-react";
 import { m, AnimatePresence } from "motion/react";
-import type { BrandLogoType, HeroVariantId, NavLink } from "@/lib/dashboard-data";
+import type {
+  BrandLogoType,
+  HeroVariantId,
+  NavLink,
+  SitePageId,
+} from "@/lib/dashboard-data";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
+import { usePortfolioNavScroll } from "@/components/templates/portfolio/hooks/use-portfolio-nav-scroll";
 
 export function PortfolioNav({
+  activePage,
+  aboutHref,
   brand,
   brandLogoImage,
   brandLogoType,
@@ -19,9 +28,12 @@ export function PortfolioNav({
   ctaHref,
   heroVariantId,
   heroNavTone,
+  homeHref,
   overHero,
   topOffset = 0,
 }: {
+  activePage: SitePageId;
+  aboutHref?: string;
   brand: string;
   brandLogoImage: string;
   brandLogoType: BrandLogoType;
@@ -30,29 +42,34 @@ export function PortfolioNav({
   ctaHref: string;
   heroVariantId: HeroVariantId;
   heroNavTone: HeroNavTone;
+  homeHref: string;
   overHero: boolean;
   topOffset?: number;
 }) {
+  const navRef = useRef<HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const scrolled = usePortfolioNavScroll(navRef);
   const { trackCtaClick } = useAnalytics();
-  const usePaletteText = !overHero || heroVariantId === "portfolio";
+  const hasBackground = scrolled || (overHero && heroNavTone === "dark");
+  const usePaletteText = scrolled || !overHero || heroVariantId === "portfolio";
   const useLightText = !usePaletteText && heroNavTone === "light";
 
   return (
     <>
       <nav
+        ref={navRef}
         className={`fixed left-0 right-0 z-50 flex items-center justify-between border-b px-6 py-5 transition-colors md:px-10 lg:px-16 ${
-          overHero && heroNavTone === "dark"
-            ? "border-[var(--site-border)] bg-[var(--site-surface)]/85 backdrop-blur-md"
+          hasBackground
+            ? "border-portfolio-line bg-portfolio-canvas/90 backdrop-blur-md"
             : "border-portfolio-line bg-portfolio-canvas/90 md:border-transparent md:bg-transparent"
         }`}
         style={{
           ...(topOffset > 0 ? { top: topOffset } : { top: 0 }),
         }}
       >
-        <button
-          type="button"
+        <Link
           className={`text-xl font-bold tracking-tight ${useLightText ? "text-white" : "text-portfolio-ink"}`}
+          href={homeHref}
           style={{ fontFamily: "var(--font-syne)" }}
         >
           <TemplateNavBrand
@@ -60,9 +77,34 @@ export function PortfolioNav({
             brandLogoImage={brandLogoImage}
             brandLogoType={brandLogoType}
           />
-        </button>
+        </Link>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-4 lg:gap-8 md:flex">
+          {activePage === "about" ? (
+            <Link
+              className="text-sm font-medium text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
+              href={homeHref}
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              Inicio
+            </Link>
+          ) : null}
+          {aboutHref ? (
+            <Link
+              aria-current={activePage === "about" ? "page" : undefined}
+              className={`text-sm font-medium transition-colors ${
+                activePage === "about"
+                  ? "text-portfolio-accent"
+                  : useLightText
+                  ? "text-white/60 hover:text-white"
+                  : "text-portfolio-ink-muted hover:text-portfolio-ink"
+              }`}
+              href={aboutHref}
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              About me
+            </Link>
+          ) : null}
           {navLinks.map((link) => (
             <TemplateNavAnchor
               className={`text-sm font-medium transition-colors ${
@@ -92,7 +134,11 @@ export function PortfolioNav({
           type="button"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {menuOpen ? (
+            <X aria-hidden size={24} />
+          ) : (
+            <Menu aria-hidden size={24} />
+          )}
         </button>
       </nav>
 
@@ -105,6 +151,44 @@ export function PortfolioNav({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
           >
+            {activePage === "about" ? (
+              <m.div
+                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 16 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Link
+                  className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
+                  href={homeHref}
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    fontFamily: "var(--font-syne)",
+                    lineHeight: 2.2,
+                  }}
+                >
+                  Inicio
+                </Link>
+              </m.div>
+            ) : null}
+            {aboutHref ? (
+              <m.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Link
+                  className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
+                  href={aboutHref}
+                  onClick={() => setMenuOpen(false)}
+                  style={{
+                    fontFamily: "var(--font-syne)",
+                    lineHeight: 2.2,
+                  }}
+                >
+                  About me
+                </Link>
+              </m.div>
+            ) : null}
             {navLinks.map((link, i) => (
               <m.a
                 className="text-2xl font-semibold text-portfolio-ink transition-colors hover:text-portfolio-ink-muted"
@@ -119,7 +203,14 @@ export function PortfolioNav({
                 }}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: i * 0.06 }}
+                transition={{
+                  duration: 0.3,
+                  delay:
+                    (i +
+                      (aboutHref ? 1 : 0) +
+                      (activePage === "about" ? 1 : 0)) *
+                    0.06,
+                }}
               >
                 {link.label}
               </m.a>
@@ -133,7 +224,14 @@ export function PortfolioNav({
               }}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: navLinks.length * 0.06 }}
+              transition={{
+                duration: 0.3,
+                delay:
+                  (navLinks.length +
+                    (aboutHref ? 1 : 0) +
+                    (activePage === "about" ? 1 : 0)) *
+                  0.06,
+              }}
             >
               {ctaLabel || "Ver proyectos"}
             </m.a>

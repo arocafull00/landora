@@ -10,6 +10,7 @@ export function HeroVariantMedia({
   appearance,
   className,
   priority,
+  quality,
   sizes,
   src,
 }: {
@@ -17,6 +18,7 @@ export function HeroVariantMedia({
   appearance: LandingAppearance;
   className?: string;
   priority?: boolean;
+  quality?: number;
   sizes: string;
   src: string;
 }) {
@@ -38,6 +40,7 @@ export function HeroVariantMedia({
       className={className}
       fill
       priority={priority}
+      quality={quality}
       sizes={sizes}
       src={src}
     />

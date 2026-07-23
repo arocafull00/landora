@@ -4,7 +4,16 @@ const contentSchema = z
   .record(z.string().trim().min(1).max(80), z.unknown())
   .refine(
     (value) =>
-      ["hero", "contact", "brand", "nav", "stats", "testimonials", "appearance"].every(
+      [
+        "hero",
+        "contact",
+        "brand",
+        "nav",
+        "stats",
+        "testimonials",
+        "appearance",
+        "enabledPages",
+      ].every(
         (key) => key in value,
       ),
     "Missing landing content",

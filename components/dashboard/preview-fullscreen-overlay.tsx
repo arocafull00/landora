@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import type {
   LandingContent,
   LandingSectionSelections,
+  SitePageId,
   TemplateId,
 } from "@/lib/dashboard-data";
 import { IframeLandingPreview } from "@/components/dashboard/iframe-landing-preview";
@@ -21,6 +22,7 @@ export function PreviewFullscreenOverlay({
   onDeviceChange,
   scrollTarget,
   sectionSelections,
+  sitePage = "home",
   template = "velar",
 }: {
   content: LandingContent;
@@ -30,6 +32,7 @@ export function PreviewFullscreenOverlay({
   onDeviceChange: (device: PreviewDevice) => void;
   scrollTarget?: string;
   sectionSelections: LandingSectionSelections;
+  sitePage?: SitePageId;
   template?: TemplateId;
 }) {
   useEffect(() => {
@@ -71,6 +74,7 @@ export function PreviewFullscreenOverlay({
         scrollTarget={scrollTarget}
         sectionSelections={sectionSelections}
         showToolbar={false}
+        sitePage={sitePage}
         template={template}
       />
     </div>

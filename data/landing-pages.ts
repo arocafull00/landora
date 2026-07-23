@@ -26,6 +26,7 @@ import type {
   LandingBranding,
   LandingSeo,
   LandingStory,
+  LandingPortfolioAbout,
   LandingCta,
   LandingBenefit,
   LandingTestimonial,
@@ -50,6 +51,7 @@ export type LandingWithSections = LandingPage & {
   branding: LandingBranding | null;
   hero: LandingHero | null;
   story: LandingStory | null;
+  portfolioAbout: LandingPortfolioAbout | null;
   cta: LandingCta | null;
   benefits: LandingBenefit[];
   testimonials: LandingTestimonial[];
@@ -98,6 +100,7 @@ function buildWith() {
     branding: true as const,
     hero: true as const,
     story: true as const,
+    portfolioAbout: true as const,
     cta: true as const,
     benefits: { orderBy: [asc(landingBenefits.sortOrder)] },
     testimonials: { orderBy: [asc(landingTestimonials.sortOrder)] },

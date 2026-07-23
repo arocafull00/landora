@@ -10,25 +10,34 @@ import {
   NAV_ONLY_HEADING_ANCHORS,
   SECTION_HEADING_DEFAULTS,
 } from "@/lib/section-headings";
-import { getNavScrollTargets } from "@/lib/template-sections";
+import { getVisibleNavScrollTargets } from "@/lib/template-sections";
 
 type NavLabelsEditorProps = {
   activeLanding: Landing;
 };
 
 export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
-  const { updateNavItem, addNavItem, removeNavItem } = useDashboardStore(
+  const { updateNavItem, addNavItem, removeNavItem, moveNavItem } = useDashboardStore(
     useShallow((state) => ({
       updateNavItem: state.updateNavItem,
       addNavItem: state.addNavItem,
       removeNavItem: state.removeNavItem,
+      moveNavItem: state.moveNavItem,
     })),
   );
   const templateId = activeLanding.template as TemplateId;
   const navOnlyAnchors = NAV_ONLY_HEADING_ANCHORS[templateId] ?? [];
   const defaults = SECTION_HEADING_DEFAULTS[templateId] ?? {};
-  const scrollTargets = getNavScrollTargets(templateId, activeLanding.slug);
+  const scrollTargets = getVisibleNavScrollTargets(
+    templateId,
+    activeLanding.content.hiddenSections,
+    activeLanding.slug,
+    activeLanding.content.sectionOrder,
+    activeLanding.content.enabledPages,
+  );
   const nav = activeLanding.content.nav;
+  const defaultAddTarget =
+    scrollTargets.find((target) => target.href.startsWith("#")) ?? scrollTargets[0];
 
   return (
     <div className="space-y-5">
@@ -42,10 +51,14 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
       <div className="space-y-4">
         {nav.map((item, index) => (
           <NavLinkEditor
+            canMoveDown={index < nav.length - 1}
+            canMoveUp={index > 0}
             index={index}
             item={item}
             key={item.id}
             onChange={(patch) => updateNavItem(activeLanding.id, item.id, patch)}
+            onMoveDown={() => moveNavItem(activeLanding.id, item.id, 1)}
+            onMoveUp={() => moveNavItem(activeLanding.id, item.id, -1)}
             onRemove={() => removeNavItem(activeLanding.id, item.id)}
             scrollTargets={scrollTargets}
           />
@@ -53,12 +66,13 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
       </div>
 
       <button
-        className="w-full rounded-lg border border-dashed border-outline-variant px-4 py-3 font-label text-label-md text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+        className="w-full rounded-lg border border-dashed border-outline-variant px-4 py-3 font-label text-label-md text-on-surface-variant transition-colors hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={!defaultAddTarget}
         onClick={() => {
-          const firstTarget = scrollTargets[0];
+          if (!defaultAddTarget) return;
           addNavItem(
             activeLanding.id,
-            createEmptyNavLink(firstTarget?.href ?? "#", firstTarget?.label ?? "Nuevo enlace"),
+            createEmptyNavLink(defaultAddTarget.href, defaultAddTarget.label),
           );
         }}
         type="button"

@@ -3,6 +3,7 @@ import {
   registerAssetAction,
 } from "@/app/actions/assets";
 import type { AssetDto } from "@/lib/domain/dtos";
+import { prepareImageUpload } from "@/lib/prepare-image-upload";
 
 type SignatureResponse = {
   cloudName: string;
@@ -31,13 +32,14 @@ function formatCloudinaryError(message: string): string {
 }
 
 export async function uploadAsset(file: File, name?: string): Promise<AssetDto> {
+  const preparedFile = await prepareImageUpload(file);
   const signatureResult = await prepareAssetUploadAction();
   if ("error" in signatureResult) throw new Error(signatureResult.error);
 
   const sig: SignatureResponse = signatureResult.data;
 
   const formData = new FormData();
-  formData.append("file", file);
+  formData.append("file", preparedFile);
   formData.append("api_key", sig.apiKey);
   formData.append("timestamp", String(sig.timestamp));
   formData.append("signature", sig.signature);
@@ -57,7 +59,8 @@ export async function uploadAsset(file: File, name?: string): Promise<AssetDto> 
   const assetName =
     name ?? file.name.replace(/\.[^/.]+$/, "") ?? result.original_filename ?? "asset";
   const mimeType =
-    file.type || (result.format === "json" ? "application/json" : `image/${result.format}`);
+    preparedFile.type ||
+    (result.format === "json" ? "application/json" : `image/${result.format}`);
 
   const registerResult = await registerAssetAction({
     publicId: result.public_id,

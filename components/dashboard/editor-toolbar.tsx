@@ -1,27 +1,40 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { useDashboardStore } from "@/stores/dashboard-store";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  FileTextIcon,
+  HomeIcon,
+  PlusIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { toast } from "react-toastify";
-import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
-import { Icon } from "@/components/ui/icon";
 import { DashboardTutorialButton } from "@/components/dashboard/dashboard-tutorial";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CheckIcon, ChevronDownIcon } from "lucide-react";
+import { Icon } from "@/components/ui/icon";
+import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
+import { cn } from "@/lib/utils";
+import { useDashboardStore } from "@/stores/dashboard-store";
 
 export function EditorToolbar() {
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
+  const activeSitePage = useDashboardStore((state) => state.activeSitePage);
   const landings = useDashboardStore((state) => state.landings);
   const saveStatus = useDashboardStore((state) => state.saveStatus);
   const saveLanding = useDashboardStore((state) => state.saveLanding);
   const publishLanding = useDashboardStore((state) => state.publishLanding);
-  const setActiveLandingId = useDashboardStore((state) => state.setActiveLandingId);
+  const setActiveSitePage = useDashboardStore((state) => state.setActiveSitePage);
+  const addSitePage = useDashboardStore((state) => state.addSitePage);
+  const removeSitePage = useDashboardStore((state) => state.removeSitePage);
   const isAdmin = useDashboardStore((state) => state.isAdmin);
 
   const activeLanding =
@@ -30,6 +43,9 @@ export function EditorToolbar() {
   if (!activeLanding) return null;
 
   const disabled = saveStatus === "saving";
+  const aboutEnabled = activeLanding.content.enabledPages.includes("about");
+  const activePageLabel =
+    activeSitePage === "about" ? "About me" : activeLanding.name;
 
   const copyPreviewLink = async () => {
     let url: string;
@@ -42,6 +58,10 @@ export function EditorToolbar() {
       }
     } else {
       url = `${window.location.origin}/preview/${activeLanding.id}`;
+    }
+
+    if (activeSitePage === "about") {
+      url = `${url.replace(/\/$/, "")}/about`;
     }
 
     try {
@@ -63,29 +83,64 @@ export function EditorToolbar() {
         <DropdownMenu>
           <DropdownMenuTrigger className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors duration-150 hover:bg-surface-container-high">
             <h1 className="truncate font-headline text-headline-md font-semibold text-on-surface">
-              {activeLanding.name}
+              {activePageLabel}
             </h1>
-            <ChevronDownIcon className="h-4 w-4 shrink-0 text-on-surface-variant" />
+            <ChevronDownIcon
+              aria-hidden
+              className="h-4 w-4 shrink-0 text-on-surface-variant"
+            />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
-            {landings.map((landing) => {
-              const active = landing.id === activeLanding.id;
-
-              return (
-                <DropdownMenuItem
-                  key={landing.id}
-                  onClick={() => setActiveLandingId(landing.id)}
-                >
-                  <span className="flex-1 truncate">{landing.name}</span>
-                  {active ? <CheckIcon className="h-4 w-4 text-primary" /> : null}
-                </DropdownMenuItem>
-              );
-            })}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem disabled>
-              <Icon name="add" className="h-4 w-4" />
-              Añadir página
+            <DropdownMenuItem onClick={() => setActiveSitePage("home")}>
+              <HomeIcon aria-hidden />
+              <span className="flex-1 truncate">Inicio</span>
+              {activeSitePage === "home" ? (
+                <CheckIcon className="h-4 w-4 text-primary" />
+              ) : null}
             </DropdownMenuItem>
+            {aboutEnabled ? (
+              <DropdownMenuItem onClick={() => setActiveSitePage("about")}>
+                <FileTextIcon aria-hidden />
+                <span className="flex-1 truncate">About me</span>
+                {activeSitePage === "about" ? (
+                  <CheckIcon className="h-4 w-4 text-primary" />
+                ) : null}
+              </DropdownMenuItem>
+            ) : null}
+            <DropdownMenuSeparator />
+            {activeLanding.template === "portfolio" && !aboutEnabled ? (
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <PlusIcon aria-hidden />
+                  Añadir página
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem
+                    onClick={() => addSitePage(activeLanding.id, "about")}
+                  >
+                    <FileTextIcon aria-hidden />
+                    About me
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+            ) : (
+              <DropdownMenuItem disabled>
+                <PlusIcon aria-hidden />
+                Añadir página
+              </DropdownMenuItem>
+            )}
+            {aboutEnabled ? (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => removeSitePage(activeLanding.id, "about")}
+                  variant="destructive"
+                >
+                  <Trash2Icon aria-hidden />
+                  Quitar About me
+                </DropdownMenuItem>
+              </>
+            ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
         <div className="hidden items-center gap-2 sm:flex">
@@ -98,7 +153,12 @@ export function EditorToolbar() {
       </div>
       <div className="flex shrink-0 items-center gap-3">
         <DashboardTutorialButton />
-        <IconButton id="tutorial-copy-link" icon="link" label="Copiar enlace" onClick={copyPreviewLink} />
+        <IconButton
+          id="tutorial-copy-link"
+          icon="link"
+          label="Copiar enlace"
+          onClick={copyPreviewLink}
+        />
         <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
         <ActionButton
           disabled={disabled}

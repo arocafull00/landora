@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
-import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
 import { getScrollTargets } from "@/lib/scroll-parent";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
@@ -23,6 +23,16 @@ function isOverlappingTop(el: HTMLElement | null) {
   if (!el) return false;
   const rect = el.getBoundingClientRect();
   return rect.top <= 0 && rect.bottom > 0;
+}
+
+function renderStudioBodySection(anchor: string, content: LandingContent) {
+  if (anchor === "galeria") return <GallerySection content={content} templateId="studio" />;
+  if (anchor === "story") return <StudioAbout content={content} />;
+  if (anchor === "servicios") return <StudioServicesSection content={content} />;
+  if (anchor === "testimonios") return <StudioTestimonialsSection content={content} />;
+  if (anchor === "equipo") return <StudioTeamSection content={content} />;
+  if (anchor === "faq") return <StudioFaqSection content={content} />;
+  return null;
 }
 
 export function StudioTemplate({
@@ -106,22 +116,11 @@ export function StudioTemplate({
 
       <ActiveOffersRenderer content={content} />
 
-      {isSectionVisible(content, "galeria") ? (
-        <GallerySection content={content} templateId="studio" />
-      ) : null}
-
-
-      {isSectionVisible(content, "story") ? <StudioAbout content={content} /> : null}
-
-      {isSectionVisible(content, "servicios") ? (
-        <StudioServicesSection content={content} />
-      ) : null}
-      {isSectionVisible(content, "testimonios") ? (
-        <StudioTestimonialsSection content={content} />
-      ) : null}
-      {isSectionVisible(content, "equipo") ? <StudioTeamSection content={content} /> : null}
-
-      {isSectionVisible(content, "faq") ? <StudioFaqSection content={content} /> : null}
+      {getOrderedVisibleBodySections("studio", content).map((section) => (
+        <Fragment key={section.anchor}>
+          {renderStudioBodySection(section.anchor, content)}
+        </Fragment>
+      ))}
 
       <StudioContactSection content={content} />
     </div>

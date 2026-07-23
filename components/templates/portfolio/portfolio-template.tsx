@@ -1,9 +1,14 @@
 "use client";
 
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
-import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import {
+  getAboutNavHref,
+  getOrderedVisibleBodySections,
+  getVisibleNav,
+  normalizeNavHref,
+} from "@/lib/template-sections";
 import { getScrollTargets } from "@/lib/scroll-parent";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
@@ -19,6 +24,8 @@ import { PortfolioTestimonialsSection } from "@/components/templates/portfolio/p
 import { PortfolioFaqSection } from "@/components/templates/portfolio/portfolio-faq-section";
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
+import { isSitePageEnabled } from "@/lib/site-pages";
+import { normalizeLandingSlug } from "@/lib/blog-slug";
 
 function isOverlappingTop(el: HTMLElement | null) {
   if (!el) return false;
@@ -26,16 +33,29 @@ function isOverlappingTop(el: HTMLElement | null) {
   return rect.top <= 0 && rect.bottom > 0;
 }
 
+function renderPortfolioBodySection(anchor: string, content: LandingContent) {
+  if (anchor === "story") return <PortfolioAbout content={content} />;
+  if (anchor === "experiencia") return <PortfolioWorkHistorySection content={content} />;
+  if (anchor === "proyectos") return <PortfolioProjectsSection content={content} />;
+  if (anchor === "skills") return <PortfolioSkillsSection content={content} />;
+  if (anchor === "servicios") return <PortfolioServicesSection content={content} />;
+  if (anchor === "testimonios") return <PortfolioTestimonialsSection content={content} />;
+  if (anchor === "faq") return <PortfolioFaqSection content={content} />;
+  return null;
+}
+
 export function PortfolioTemplate({
   content,
   topOffset = 0,
   slug,
+  previewLandingId,
   bookingEnabled = false,
   sectionSelections,
 }: {
   content: LandingContent;
   topOffset?: number;
   slug?: string;
+  previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
@@ -50,6 +70,27 @@ export function PortfolioTemplate({
     slug: slug ?? "",
     template: "portfolio",
   });
+  const homeHref = previewLandingId
+    ? `/preview/${previewLandingId}`
+    : slug
+      ? `/${normalizeLandingSlug(slug)}`
+      : "/";
+  const publicAboutHref =
+    slug && isSitePageEnabled(content.enabledPages, "about")
+      ? getAboutNavHref(slug)
+      : undefined;
+  const aboutAlreadyInNav =
+    publicAboutHref !== undefined &&
+    content.nav.some(
+      (item) => normalizeNavHref("portfolio", item.href) === publicAboutHref,
+    );
+  const aboutHref =
+    publicAboutHref && !aboutAlreadyInNav
+      ? previewLandingId
+        ? `/preview/${previewLandingId}/about`
+        : `/${normalizeLandingSlug(slug!)}/about`
+      : undefined;
+  const navLinks = getVisibleNav(content.nav, content.hiddenSections, "portfolio");
 
   const updateNavState = useCallback(() => {
     setOverHero(isOverlappingTop(heroRef.current));
@@ -82,10 +123,13 @@ export function PortfolioTemplate({
       <PortfolioAosInit rootRef={rootRef} />
 
       <PortfolioNav
+        activePage="home"
         brand={content.brand || "Mora."}
         brandLogoType={content.brandLogoType ?? "text"}
         brandLogoImage={content.brandLogoImage ?? ""}
-        navLinks={getVisibleNav(content.nav, content.hiddenSections, "portfolio")}
+        aboutHref={aboutHref}
+        homeHref={homeHref}
+        navLinks={navLinks}
         ctaLabel={content.hero.ctaLabel ?? ""}
         ctaHref={primaryCtaHref}
         heroVariantId={heroVariantId}
@@ -104,27 +148,11 @@ export function PortfolioTemplate({
 
       <ActiveOffersRenderer content={content} />
 
-      {isSectionVisible(content, "story") ? <PortfolioAbout content={content} /> : null}
-
-      {isSectionVisible(content, "experiencia") ? (
-        <PortfolioWorkHistorySection content={content} />
-      ) : null}
-
-      {isSectionVisible(content, "proyectos") ? (
-        <PortfolioProjectsSection content={content} />
-      ) : null}
-
-      {isSectionVisible(content, "skills") ? <PortfolioSkillsSection content={content} /> : null}
-
-      {isSectionVisible(content, "servicios") ? (
-        <PortfolioServicesSection content={content} />
-      ) : null}
-
-      {isSectionVisible(content, "testimonios") ? (
-        <PortfolioTestimonialsSection content={content} />
-      ) : null}
-
-      {isSectionVisible(content, "faq") ? <PortfolioFaqSection content={content} /> : null}
+      {getOrderedVisibleBodySections("portfolio", content).map((section) => (
+        <Fragment key={section.anchor}>
+          {renderPortfolioBodySection(section.anchor, content)}
+        </Fragment>
+      ))}
 
       <PortfolioContactSection content={content} />
     </div>

@@ -47,6 +47,7 @@ export function mapDefaultBranding(
       { title: string; subtitle: string }
     >,
     hiddenSections,
+    enabledPages: content.enabledPages,
   };
 }
 
@@ -65,6 +66,17 @@ export function mapDefaultHero(content: LandingContent) {
 
 export function mapDefaultStory(templateId: TemplateId, content: LandingContent) {
   return { statement: getDefaultStoryStatement(templateId, content) };
+}
+
+export function mapDefaultPortfolioAbout(content: LandingContent) {
+  return content.aboutPage ?? {
+    title: content.hero.title,
+    intro: content.story?.statement ?? content.about?.statement ?? "",
+    image: content.hero.image || content.hero.houseImage || "",
+    storyTitle: "Mi historia",
+    storyBody: "",
+    storyImage: "",
+  };
 }
 
 export function mapDefaultCta(content: LandingContent) {

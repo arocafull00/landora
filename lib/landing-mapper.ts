@@ -7,6 +7,7 @@ import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
 import type { User } from "@/lib/domain/dtos";
 import { resolveSectionSelections } from "@/lib/section-selections";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
+import { normalizeEnabledPages } from "@/lib/site-pages";
 
 function mapImage(url: string | null | undefined) {
   if (!url) return "";
@@ -39,6 +40,26 @@ function uniqueBySortOrder<T extends { sortOrder: number }>(items: T[]) {
 export function toLandingContent(row: LandingWithSections): LandingContent {
   const sectionHeadings = (row.branding?.sectionHeadings ?? {}) as LandingContent["sectionHeadings"];
   const hiddenSections = (row.branding?.hiddenSections ?? []) as string[];
+  const sectionOrder = (row.branding?.sectionOrder ?? []) as string[];
+  const portfolioAbout = row.portfolioAbout
+    ? {
+        title: row.portfolioAbout.title,
+        intro: row.portfolioAbout.intro,
+        image: mapImage(row.portfolioAbout.image),
+        storyTitle: row.portfolioAbout.storyTitle,
+        storyBody: row.portfolioAbout.storyBody,
+        storyImage: mapImage(row.portfolioAbout.storyImage),
+      }
+    : row.template === "portfolio"
+      ? {
+          title: row.hero?.title ?? "",
+          intro: row.story?.statement ?? "",
+          image: mapImage(row.hero?.image || row.hero?.houseImage),
+          storyTitle: "Mi historia",
+          storyBody: "",
+          storyImage: "",
+        }
+      : undefined;
 
   return {
     appearance: resolveLandingAppearance(row.template, {
@@ -50,6 +71,8 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
     brandLogoImage: mapImage(row.branding?.brandLogoImage),
     sectionHeadings,
     hiddenSections,
+    sectionOrder,
+    enabledPages: normalizeEnabledPages(row.branding?.enabledPages),
     hero: {
       eyebrow: row.hero?.eyebrow ?? "",
       title: row.hero?.title ?? "",
@@ -125,6 +148,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       whatsappEnabled: row.cta?.whatsappEnabled ?? false,
     },
     about: row.story ? { statement: row.story.statement } : undefined,
+    aboutPage: portfolioAbout,
     team: (row.team ?? []).map((t) => ({
       id: t.id,
       name: t.name,

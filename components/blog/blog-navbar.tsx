@@ -3,6 +3,7 @@ import { AssetImage } from "@/components/ui/asset-image";
 import { normalizeLandingSlug } from "@/lib/blog-slug";
 
 type BlogNavbarProps = {
+  aboutEnabled?: boolean;
   brand: string;
   landingSlug: string;
   brandLogoType?: "text" | "image";
@@ -10,6 +11,7 @@ type BlogNavbarProps = {
 };
 
 export function BlogNavbar({
+  aboutEnabled = false,
   brand,
   landingSlug,
   brandLogoType = "text",
@@ -18,6 +20,7 @@ export function BlogNavbar({
   const slug = normalizeLandingSlug(landingSlug);
   const landingHref = `/${slug}`;
   const blogHref = `/${slug}/blog`;
+  const aboutHref = `/${slug}/about`;
 
   return (
     <header className="border-b border-outline-variant bg-surface/95 backdrop-blur">
@@ -34,6 +37,14 @@ export function BlogNavbar({
           <Link className="text-on-surface-variant transition-colors hover:text-primary" href={landingHref}>
             Inicio
           </Link>
+          {aboutEnabled ? (
+            <Link
+              className="text-on-surface-variant transition-colors hover:text-primary"
+              href={aboutHref}
+            >
+              About me
+            </Link>
+          ) : null}
           <Link className="font-medium text-primary" href={blogHref}>
             Blog
           </Link>

@@ -9,11 +9,14 @@ import { FloristeriaEditorSection } from "@/components/dashboard/sections/floris
 import { OficioProEditorSection } from "@/components/dashboard/sections/oficio-pro-editor-section";
 import { CoffeeShopEditorSection } from "@/components/dashboard/sections/coffee-shop-editor-section";
 import { VelarEditorSection } from "@/components/dashboard/sections/velar-editor-section";
+import { EditorLayout } from "@/components/dashboard/editor-layout";
+import { PortfolioAboutPageEditor } from "@/components/dashboard/portfolio-about-page-editor";
 
 export function EditorSection() {
-  const { activeLandingId, landings } = useDashboardStore(
+  const { activeLandingId, activeSitePage, landings } = useDashboardStore(
     useShallow((state) => ({
       activeLandingId: state.activeLandingId,
+      activeSitePage: state.activeSitePage,
       landings: state.landings,
     })),
   );
@@ -23,6 +26,19 @@ export function EditorSection() {
 
   if (!activeLanding) {
     return null;
+  }
+
+  if (activeLanding.template === "portfolio" && activeSitePage === "about") {
+    return (
+      <EditorLayout
+        form={
+          <PortfolioAboutPageEditor
+            key={activeLanding.id}
+            landing={activeLanding}
+          />
+        }
+      />
+    );
   }
 
   if (activeLanding.template === "studio") {

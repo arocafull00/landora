@@ -18,6 +18,7 @@ export function EditorLayout({
   scrollTarget?: string;
 }) {
   const activeEditorTab = useDashboardStore((state) => state.activeEditorTab);
+  const activeSitePage = useDashboardStore((state) => state.activeSitePage);
   const activeLandingId = useDashboardStore((state) => state.activeLandingId);
   const landings = useDashboardStore((state) => state.landings);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -29,7 +30,10 @@ export function EditorLayout({
   if (!activeLanding) return null;
 
   const resolvedScrollTarget =
-    scrollTarget ?? getEditorScrollTarget(activeLanding.template, activeEditorTab);
+    activeSitePage === "home"
+      ? scrollTarget ??
+        getEditorScrollTarget(activeLanding.template, activeEditorTab)
+      : undefined;
 
   return (
     <section className="relative flex min-w-0 flex-1 flex-col overflow-hidden bg-surface">
@@ -54,6 +58,7 @@ export function EditorLayout({
           onFullscreen={() => setIsFullscreen(true)}
           scrollTarget={resolvedScrollTarget}
           sectionSelections={activeLanding.sectionSelections}
+          sitePage={activeSitePage}
           template={activeLanding.template}
         />
       </div>
@@ -66,6 +71,7 @@ export function EditorLayout({
           onDeviceChange={setDevice}
           scrollTarget={resolvedScrollTarget}
           sectionSelections={activeLanding.sectionSelections}
+          sitePage={activeSitePage}
           template={activeLanding.template}
         />
       ) : null}

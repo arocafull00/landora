@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useLayoutEffect, useRef, useState, type RefObject } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
-import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
 import { getScrollTargets } from "@/lib/scroll-parent";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
@@ -23,6 +23,38 @@ function isOverlappingTop(el: HTMLElement | null) {
   if (!el) return false;
   const rect = el.getBoundingClientRect();
   return rect.top <= 0 && rect.bottom > 0;
+}
+
+function renderVelarBodySection(
+  anchor: string,
+  content: LandingContent,
+  refs: {
+    darkRef: RefObject<HTMLDivElement | null>;
+    galleryRef: RefObject<HTMLDivElement | null>;
+    workflowRef: RefObject<HTMLDivElement | null>;
+  },
+) {
+  if (anchor === "story") {
+    return <VelarStatementSection content={content} sectionRef={refs.darkRef} />;
+  }
+  if (anchor === "listings") {
+    return (
+      <div ref={refs.galleryRef}>
+        <VelarGallerySection content={content} />
+      </div>
+    );
+  }
+  if (anchor === "residences") return <VelarSpacesSection content={content} />;
+  if (anchor === "servicios") return <VelarServicesSection content={content} />;
+  if (anchor === "proceso") {
+    return (
+      <div ref={refs.workflowRef}>
+        <VelarWorkflowSection content={content} />
+      </div>
+    );
+  }
+  if (anchor === "testimonios") return <VelarTestimonialsSection content={content} />;
+  return null;
 }
 
 export function VelarTemplate({
@@ -124,29 +156,15 @@ export function VelarTemplate({
 
       <ActiveOffersRenderer content={content} />
 
-      {isSectionVisible(content, "story") ? (
-        <VelarStatementSection content={content} sectionRef={darkRef} />
-      ) : null}
-
-      {isSectionVisible(content, "listings") ? (
-        <div ref={galleryRef}>
-          <VelarGallerySection content={content} />
-        </div>
-      ) : null}
-
-      {isSectionVisible(content, "residences") ? <VelarSpacesSection content={content} /> : null}
-
-      {isSectionVisible(content, "servicios") ? <VelarServicesSection content={content} /> : null}
-
-      {isSectionVisible(content, "proceso") ? (
-        <div ref={workflowRef}>
-          <VelarWorkflowSection content={content} />
-        </div>
-      ) : null}
-
-      {isSectionVisible(content, "testimonios") ? (
-        <VelarTestimonialsSection content={content} />
-      ) : null}
+      {getOrderedVisibleBodySections("velar", content).map((section) => (
+        <Fragment key={section.anchor}>
+          {renderVelarBodySection(section.anchor, content, {
+            darkRef,
+            galleryRef,
+            workflowRef,
+          })}
+        </Fragment>
+      ))}
 
       <div ref={footerRef}>
         <VelarContactSection content={content} />

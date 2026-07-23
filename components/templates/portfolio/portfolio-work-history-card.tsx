@@ -13,7 +13,7 @@ export function PortfolioWorkHistoryCard({
 }) {
   return (
     <article
-      className="rounded-2xl bg-[var(--site-dark)] p-6 md:p-8 lg:p-10"
+      className="rounded-2xl bg-(--site-dark) p-6 md:p-8 lg:p-10"
       data-aos="fade-up"
       data-aos-delay={index * 80}
     >
@@ -32,7 +32,7 @@ export function PortfolioWorkHistoryCard({
             {item.location}
           </p>
           <h3
-            className="pt-2 text-2xl font-extrabold text-[var(--site-on-dark)] sm:text-3xl md:text-[clamp(28px,4vw,40px)]"
+            className="pt-2 text-2xl font-extrabold text-(--site-on-dark) sm:text-3xl md:text-[clamp(28px,4vw,40px)]"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
             {item.company}

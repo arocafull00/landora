@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
-import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
@@ -16,6 +16,16 @@ import { CoffeeShopTestimonialsSection } from "@/components/templates/coffee-sho
 import { CoffeeShopFaqSection } from "@/components/templates/coffee-shop/coffee-shop-faq-section";
 import { CoffeeShopContactSection } from "@/components/templates/coffee-shop/coffee-shop-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
+
+function renderCoffeeShopBodySection(anchor: string, content: LandingContent) {
+  if (anchor === "story") return <CoffeeShopStorySection content={content} />;
+  if (anchor === "carta") return <CoffeeShopMenuSection content={content} />;
+  if (anchor === "galeria") return <GallerySection content={content} templateId="coffee-shop" />;
+  if (anchor === "horarios") return <CoffeeShopHoursSection content={content} />;
+  if (anchor === "testimonios") return <CoffeeShopTestimonialsSection content={content} />;
+  if (anchor === "faq") return <CoffeeShopFaqSection content={content} />;
+  return null;
+}
 
 export function CoffeeShopTemplateClient({
   content,
@@ -70,25 +80,11 @@ export function CoffeeShopTemplateClient({
 
         <ActiveOffersRenderer content={content} />
 
-        {isSectionVisible(content, "story") ? (
-          <CoffeeShopStorySection content={content} />
-        ) : null}
-
-        {isSectionVisible(content, "carta") ? <CoffeeShopMenuSection content={content} /> : null}
-
-        {isSectionVisible(content, "galeria") ? (
-          <GallerySection content={content} templateId="coffee-shop" />
-        ) : null}
-
-        {isSectionVisible(content, "horarios") ? (
-          <CoffeeShopHoursSection content={content} />
-        ) : null}
-
-        {isSectionVisible(content, "testimonios") ? (
-          <CoffeeShopTestimonialsSection content={content} />
-        ) : null}
-
-        {isSectionVisible(content, "faq") ? <CoffeeShopFaqSection content={content} /> : null}
+        {getOrderedVisibleBodySections("coffee-shop", content).map((section) => (
+          <Fragment key={section.anchor}>
+            {renderCoffeeShopBodySection(section.anchor, content)}
+          </Fragment>
+        ))}
 
         <CoffeeShopContactSection content={content} />
       </div>

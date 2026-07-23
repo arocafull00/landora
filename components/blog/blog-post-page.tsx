@@ -14,6 +14,7 @@ export type PublicBlogPost = {
 };
 
 type BlogPostPageProps = {
+  aboutEnabled?: boolean;
   brand: string;
   landingSlug: string;
   brandLogoType?: "text" | "image";
@@ -22,6 +23,7 @@ type BlogPostPageProps = {
 };
 
 export function BlogPostPage({
+  aboutEnabled,
   brand,
   landingSlug,
   brandLogoType,
@@ -34,6 +36,7 @@ export function BlogPostPage({
   return (
     <div className="min-h-screen bg-surface-bg text-on-background">
       <BlogNavbar
+        aboutEnabled={aboutEnabled}
         brand={brand}
         brandLogoImage={brandLogoImage}
         brandLogoType={brandLogoType}

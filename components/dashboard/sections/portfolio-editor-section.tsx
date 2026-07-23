@@ -20,6 +20,8 @@ import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-cont
 import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
 import { createEmptyGalleryItem } from "@/components/dashboard/create-empty-gallery-item";
 import { PortfolioProjectItemEditor } from "@/components/dashboard/portfolio-project-item-editor";
+import { createEmptyBenefitItem } from "@/components/dashboard/create-empty-benefit-item";
+import { PortfolioBenefitItemEditor } from "@/components/dashboard/portfolio-benefit-item-editor";
 
 export function PortfolioEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -47,6 +49,7 @@ export function PortfolioEditorSection() {
   if (!activeLanding) return null;
 
   const gallery = activeLanding.content.gallery ?? [];
+  const benefits = activeLanding.content.benefits ?? [];
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
   const workHistory = activeLanding.content.workHistory ?? [];
   const faq = activeLanding.content.faq ?? [];
@@ -160,6 +163,52 @@ export function PortfolioEditorSection() {
                 type="button"
               >
                 Añadir experiencia
+              </button>
+            </section>
+          ) : null}
+
+          {activeEditorTab === "Cómo trabajo" ? (
+            <section className="space-y-5 py-unit-lg">
+              <SectionTitle
+                title="Cómo trabajo"
+                description="Edita los principios que explican tu forma de trabajar."
+              />
+              <SectionHeadingFields
+                activeLanding={activeLanding}
+                anchor="skills"
+                fallback={SECTION_HEADING_DEFAULTS.portfolio.skills}
+              />
+              <div className="space-y-6">
+                {benefits.map((item, index) => (
+                  <PortfolioBenefitItemEditor
+                    index={index}
+                    item={item}
+                    key={item.id}
+                    onChange={(patch) =>
+                      updateSectionItem(activeLanding.id, "benefits", item.id, patch)
+                    }
+                    onRemove={() =>
+                      updateSection(
+                        activeLanding.id,
+                        "benefits",
+                        benefits.filter((entry) => entry.id !== item.id),
+                      )
+                    }
+                  />
+                ))}
+              </div>
+              <button
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-outline-variant px-4 py-3 font-label text-label-md text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+                onClick={() =>
+                  updateSection(activeLanding.id, "benefits", [
+                    ...benefits,
+                    createEmptyBenefitItem(),
+                  ])
+                }
+                type="button"
+              >
+                <Plus aria-hidden className="size-4" />
+                Añadir elemento
               </button>
             </section>
           ) : null}

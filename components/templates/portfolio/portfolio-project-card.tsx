@@ -40,13 +40,13 @@ export function PortfolioProjectCard({
       ) : null}
 
       {showText ? (
-        <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent opacity-100 transition-opacity duration-500 ease-out group-hover:opacity-0 motion-reduce:transition-none" />
       ) : (
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none" />
       )}
 
       {showText && (
-        <div className="absolute bottom-0 left-0 w-full p-5 md:p-6">
+        <div className="absolute bottom-0 left-0 w-full p-5 opacity-100 transition-[opacity,transform] duration-500 ease-out group-hover:translate-y-2 group-hover:opacity-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 md:p-6">
           {item.title && (
             <h3 className="mb-1 text-lg font-bold text-white md:text-xl">
               {item.title}

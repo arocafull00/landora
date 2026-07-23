@@ -6,6 +6,7 @@ import { getLandingPageBySlug } from "@/data/landing-pages";
 import { normalizeLandingSlug } from "@/lib/blog-slug";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
+import { isSitePageEnabled } from "@/lib/site-pages";
 
 export async function generateMetadata({
   params,
@@ -51,6 +52,10 @@ export default async function PublicBlogPostRoute({
   return (
     <SiteThemeScope appearance={appearance} template={landing.template}>
       <BlogPostPage
+        aboutEnabled={
+          landing.template === "portfolio" &&
+          isSitePageEnabled(landing.branding?.enabledPages, "about")
+        }
         brand={brand}
         brandLogoImage={landing.branding?.brandLogoImage ?? ""}
         brandLogoType={landing.branding?.brandLogoType === "image" ? "image" : "text"}

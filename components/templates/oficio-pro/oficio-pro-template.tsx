@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
-import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
 import { OficioProContactSection } from "@/components/templates/oficio-pro/oficio-pro-contact-section";
 import { OficioProExperienceSection } from "@/components/templates/oficio-pro/oficio-pro-experience-section";
 import { OficioProNav } from "@/components/templates/oficio-pro/oficio-pro-nav";
@@ -12,6 +12,27 @@ import { OficioProTestimonialsSection } from "@/components/templates/oficio-pro/
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
+
+function renderOficioProBodySection(anchor: string, content: LandingContent) {
+  if (anchor === "servicios") {
+    return (
+      <OficioProServicesSection anchor="servicios" category="Servicios" content={content} />
+    );
+  }
+  if (anchor === "instalaciones") {
+    return (
+      <OficioProServicesSection
+        anchor="instalaciones"
+        category="Instalaciones"
+        content={content}
+        reverse
+      />
+    );
+  }
+  if (anchor === "testimonios") return <OficioProTestimonialsSection content={content} />;
+  if (anchor === "experiencia") return <OficioProExperienceSection content={content} />;
+  return null;
+}
 
 export function OficioProTemplate({
   content,
@@ -63,27 +84,11 @@ export function OficioProTemplate({
         variantId={heroVariantId}
       />
       <ActiveOffersRenderer content={content} />
-      {isSectionVisible(content, "servicios") ? (
-        <OficioProServicesSection
-          anchor="servicios"
-          category="Servicios"
-          content={content}
-        />
-      ) : null}
-      {isSectionVisible(content, "instalaciones") ? (
-        <OficioProServicesSection
-          anchor="instalaciones"
-          category="Instalaciones"
-          content={content}
-          reverse
-        />
-      ) : null}
-      {isSectionVisible(content, "testimonios") ? (
-        <OficioProTestimonialsSection content={content} />
-      ) : null}
-      {isSectionVisible(content, "experiencia") ? (
-        <OficioProExperienceSection content={content} />
-      ) : null}
+      {getOrderedVisibleBodySections("oficio-pro", content).map((section) => (
+        <Fragment key={section.anchor}>
+          {renderOficioProBodySection(section.anchor, content)}
+        </Fragment>
+      ))}
       <OficioProContactSection content={content} />
     </div>
   );

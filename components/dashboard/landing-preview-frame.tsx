@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import type {
   LandingContent,
   LandingSectionSelections,
+  SitePageId,
   TemplateId,
 } from "@/lib/dashboard-data";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
@@ -27,6 +28,7 @@ import {
 import { resolveSectionId } from "@/lib/template-sections";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
+import { PortfolioAboutPage } from "@/components/templates/portfolio/portfolio-about-page";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -43,12 +45,16 @@ export function LandingPreviewFrame({
   initialSectionSelections,
   template,
   slug,
+  previewLandingId,
+  sitePage = "home",
   bookingEnabled = false,
 }: {
   initialContent: LandingContent;
   initialSectionSelections: LandingSectionSelections;
   template: TemplateId;
   slug?: string;
+  previewLandingId?: string;
+  sitePage?: SitePageId;
   bookingEnabled?: boolean;
 }) {
   const [livePreview, setLivePreview] = useState<{
@@ -76,6 +82,8 @@ export function LandingPreviewFrame({
   }, []);
 
   useEffect(() => {
+    let activePort: MessagePort | null = null;
+
     const handlePreviewMessage = (data: unknown) => {
       if (isPreviewScrollToMessage(data)) {
         const { sectionId } = data;
@@ -118,7 +126,8 @@ export function LandingPreviewFrame({
       const port = event.ports[0];
       if (!port) return;
 
-      portRef.current?.close();
+      activePort?.close();
+      activePort = port;
       portRef.current = port;
       port.onmessage = (messageEvent) => handlePreviewMessage(messageEvent.data);
       port.start();
@@ -128,8 +137,7 @@ export function LandingPreviewFrame({
     window.addEventListener("message", connectChannel);
     return () => {
       window.removeEventListener("message", connectChannel);
-      portRef.current?.close();
-      portRef.current = null;
+      activePort?.close();
     };
   }, [refreshScrollPosition]);
 
@@ -149,13 +157,29 @@ export function LandingPreviewFrame({
 
   return (
     <SiteThemeScope appearance={content.appearance} template={activeTemplate}>
-      <Component
-        bookingEnabled={bookingEnabled}
-        content={content}
-        sectionSelections={sectionSelections}
-        slug={slug}
-      />
-      {content.contact.whatsappEnabled ? (
+      {sitePage === "about" && activeTemplate === "portfolio" ? (
+        <PortfolioAboutPage
+          content={content}
+          landingSlug={slug ?? ""}
+          previewLandingId={previewLandingId}
+        />
+      ) : activeTemplate === "portfolio" ? (
+        <PortfolioTemplate
+          bookingEnabled={bookingEnabled}
+          content={content}
+          previewLandingId={previewLandingId}
+          sectionSelections={sectionSelections}
+          slug={slug}
+        />
+      ) : (
+        <Component
+          bookingEnabled={bookingEnabled}
+          content={content}
+          sectionSelections={sectionSelections}
+          slug={slug}
+        />
+      )}
+      {sitePage === "home" && content.contact.whatsappEnabled ? (
         <WhatsappFloatButton phone={content.contact.phone} />
       ) : null}
     </SiteThemeScope>

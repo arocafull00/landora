@@ -151,6 +151,8 @@ export const landingBranding = pgTable("landing_branding", {
     .notNull()
     .default({}),
   hiddenSections: jsonb("hidden_sections").$type<string[]>().notNull().default([]),
+  sectionOrder: jsonb("section_order").$type<string[]>().notNull().default([]),
+  enabledPages: jsonb("enabled_pages").$type<string[]>().notNull().default([]),
 });
 
 export const landingHero = pgTable("landing_hero", {
@@ -176,6 +178,20 @@ export const landingStory = pgTable("landing_story", {
     .unique()
     .references(() => landingPages.id, { onDelete: "cascade" }),
   statement: text("statement").notNull().default(""),
+});
+
+export const landingPortfolioAbout = pgTable("landing_portfolio_about", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id")
+    .notNull()
+    .unique()
+    .references(() => landingPages.id, { onDelete: "cascade" }),
+  title: text("title").notNull().default(""),
+  intro: text("intro").notNull().default(""),
+  image: text("image").notNull().default(""),
+  storyTitle: text("story_title").notNull().default(""),
+  storyBody: text("story_body").notNull().default(""),
+  storyImage: text("story_image").notNull().default(""),
 });
 
 export const landingCta = pgTable("landing_cta", {
@@ -638,6 +654,10 @@ export const landingPagesRelations = relations(landingPages, ({ one, many }) => 
   hero: one(landingHero, { fields: [landingPages.id], references: [landingHero.landingId] }),
   sectionSelections: many(landingSectionSelections),
   story: one(landingStory, { fields: [landingPages.id], references: [landingStory.landingId] }),
+  portfolioAbout: one(landingPortfolioAbout, {
+    fields: [landingPages.id],
+    references: [landingPortfolioAbout.landingId],
+  }),
   cta: one(landingCta, { fields: [landingPages.id], references: [landingCta.landingId] }),
   benefits: many(landingBenefits),
   testimonials: many(landingTestimonials),
@@ -683,6 +703,16 @@ export const landingHeroRelations = relations(landingHero, ({ one }) => ({
 export const landingStoryRelations = relations(landingStory, ({ one }) => ({
   landing: one(landingPages, { fields: [landingStory.landingId], references: [landingPages.id] }),
 }));
+
+export const landingPortfolioAboutRelations = relations(
+  landingPortfolioAbout,
+  ({ one }) => ({
+    landing: one(landingPages, {
+      fields: [landingPortfolioAbout.landingId],
+      references: [landingPages.id],
+    }),
+  }),
+);
 
 export const landingCtaRelations = relations(landingCta, ({ one }) => ({
   landing: one(landingPages, { fields: [landingCta.landingId], references: [landingPages.id] }),
@@ -757,6 +787,7 @@ export type LandingHero = typeof landingHero.$inferSelect;
 export type LandingBranding = typeof landingBranding.$inferSelect;
 export type LandingSeo = typeof landingSeo.$inferSelect;
 export type LandingStory = typeof landingStory.$inferSelect;
+export type LandingPortfolioAbout = typeof landingPortfolioAbout.$inferSelect;
 export type LandingCta = typeof landingCta.$inferSelect;
 export type LandingBenefit = typeof landingBenefits.$inferSelect;
 export type LandingTestimonial = typeof landingTestimonials.$inferSelect;

@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { PortfolioFaqItem } from "@/components/templates/portfolio/portfolio-faq-item";
 
 export function PortfolioFaqSection({ content }: { content: LandingContent }) {
   const faq = content.faq ?? [];
+  const [openId, setOpenId] = useState<string | null>(() => faq[0]?.id ?? null);
+
   if (faq.length === 0) return null;
 
   const heading = getSectionHeading(content, "faq", SECTION_HEADING_DEFAULTS.portfolio.faq);
@@ -31,8 +34,15 @@ export function PortfolioFaqSection({ content }: { content: LandingContent }) {
         </div>
 
         <div className="space-y-0" data-aos="fade-left" data-aos-delay="100">
-          {faq.map((item, index) => (
-            <PortfolioFaqItem item={item} key={item.id} defaultOpen={index === 0} />
+          {faq.map((item) => (
+            <PortfolioFaqItem
+              item={item}
+              key={item.id}
+              open={openId === item.id}
+              onOpenChange={(nextOpen) => {
+                setOpenId(nextOpen ? item.id : null);
+              }}
+            />
           ))}
         </div>
       </div>

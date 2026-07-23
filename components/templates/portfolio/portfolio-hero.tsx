@@ -3,8 +3,8 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { m, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
-import { HeroBackground } from "@/components/ui/hero-background";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import { HeroVariantMedia } from "@/components/templates/shared/heroes/hero-variant-media";
 import { useAnalytics } from "@/hooks/use-analytics";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
@@ -58,9 +58,13 @@ export function PortfolioHero({
           transition={{ delay: 0.08, duration: 0.8, ease: easeOut }}
         >
           {heroImage ? (
-            <HeroBackground
+            <HeroVariantMedia
+              alt={content.hero.title}
               appearance={content.appearance}
-              className="bg-center transition-transform duration-700 hover:scale-[1.025] motion-reduce:transition-none"
+              className="object-cover object-center transition-transform duration-700 hover:scale-[1.025] motion-reduce:transition-none"
+              priority
+              quality={95}
+              sizes="(min-width: 1500px) 625px, (min-width: 768px) 42vw, 100vw"
               src={heroImage}
             />
           ) : (
@@ -83,9 +87,12 @@ export function PortfolioHero({
 
         <div className="relative hidden min-h-64 overflow-hidden border-b border-r border-portfolio-line md:col-span-4 md:block md:min-h-60">
           {secondaryImage ? (
-            <HeroBackground
+            <HeroVariantMedia
+              alt=""
               appearance={content.appearance}
-              className="bg-center"
+              className="object-cover object-center"
+              quality={95}
+              sizes="(min-width: 1500px) 500px, 33vw"
               src={secondaryImage}
             />
           ) : null}

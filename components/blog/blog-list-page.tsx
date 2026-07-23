@@ -2,6 +2,7 @@ import { BlogNavbar } from "@/components/blog/blog-navbar";
 import { BlogPostCard, type PublicBlogPostSummary } from "@/components/blog/blog-post-card";
 
 type BlogListPageProps = {
+  aboutEnabled?: boolean;
   brand: string;
   landingSlug: string;
   brandLogoType?: "text" | "image";
@@ -12,6 +13,7 @@ type BlogListPageProps = {
 };
 
 export function BlogListPage({
+  aboutEnabled,
   brand,
   landingSlug,
   brandLogoType,
@@ -23,6 +25,7 @@ export function BlogListPage({
   return (
     <div className="min-h-screen bg-surface-bg text-on-background">
       <BlogNavbar
+        aboutEnabled={aboutEnabled}
         brand={brand}
         brandLogoImage={brandLogoImage}
         brandLogoType={brandLogoType}

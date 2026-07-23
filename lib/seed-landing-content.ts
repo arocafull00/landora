@@ -4,6 +4,7 @@ import {
   upsertLandingBranding,
   upsertLandingHero,
   upsertLandingStory,
+  upsertLandingPortfolioAbout,
   upsertLandingCta,
   replaceLandingStats,
   replaceLandingSpaces,
@@ -35,6 +36,7 @@ import {
   mapDefaultGallery,
   mapDefaultHero,
   mapDefaultNav,
+  mapDefaultPortfolioAbout,
   mapDefaultSeo,
   mapDefaultServiceMenu,
   mapDefaultServices,
@@ -51,6 +53,7 @@ const FULL_SECTION_KEYS: LandingSectionKey[] = [
   "hero",
   "branding",
   "story",
+  "portfolioAbout",
   "cta",
   "stats",
   "gallery",
@@ -96,6 +99,15 @@ async function applySectionDefaults(
 
   if (sections.includes("story")) {
     ops.push(upsertLandingStory(landingId, mapDefaultStory(templateId, content)));
+  }
+
+  if (templateId === "portfolio" && sections.includes("portfolioAbout")) {
+    ops.push(
+      upsertLandingPortfolioAbout(
+        landingId,
+        mapDefaultPortfolioAbout(content),
+      ),
+    );
   }
 
   if (sections.includes("cta")) {

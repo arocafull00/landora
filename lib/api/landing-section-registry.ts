@@ -4,6 +4,7 @@ import {
   upsertLandingBranding,
   upsertLandingCta,
   upsertLandingHero,
+  upsertLandingPortfolioAbout,
   upsertLandingStory,
   replaceLandingBenefits,
   replaceLandingFaq,
@@ -23,6 +24,8 @@ import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/dashboard-data";
 import { parseSocialLinks } from "@/lib/footer-content";
 import type { LandingPageMeta } from "@/data/landing-pages";
 import type { OfferCardRow } from "@/lib/domain/dtos";
+import { portfolioAboutPageSchema } from "@/lib/schemas/portfolio-about";
+import { normalizeEnabledPages } from "@/lib/site-pages";
 
 function parseExpiresAt(value: unknown) {
   if (value instanceof Date) return value;
@@ -128,6 +131,10 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
       const hiddenSections = Array.isArray(body.hiddenSections)
         ? (body.hiddenSections as string[])
         : undefined;
+      const sectionOrder = Array.isArray(body.sectionOrder)
+        ? (body.sectionOrder as string[])
+        : undefined;
+      const enabledPages = normalizeEnabledPages(body.enabledPages);
 
       const brandLogoType =
         body.brandLogoType === "text" || body.brandLogoType === "image"
@@ -143,6 +150,8 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
         brandLogoImage,
         sectionHeadings,
         hiddenSections,
+        sectionOrder,
+        enabledPages,
       };
     },
     persist: (landingId, parsed) =>
@@ -159,6 +168,14 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
       upsertLandingStory(
         landingId,
         parsed as Parameters<typeof upsertLandingStory>[1]
+      ),
+  },
+  "portfolio-about": {
+    parse: (body) => portfolioAboutPageSchema.parse(body),
+    persist: (landingId, parsed) =>
+      upsertLandingPortfolioAbout(
+        landingId,
+        parsed as Parameters<typeof upsertLandingPortfolioAbout>[1],
       ),
   },
   cta: {

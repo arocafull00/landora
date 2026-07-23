@@ -14,6 +14,7 @@ const BG_IMG =
 
 export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
   appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
   brand: "Toll Story.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -220,6 +221,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
 
 export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
   appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
   brand: "Lumière.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -339,6 +341,7 @@ export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
 
 export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
   appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
   brand: "Mora.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -396,6 +399,16 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
   ],
   about: {
     statement: "Diseño con propósito. Cada proyecto es una oportunidad para crear algo que no solo se vea bien, sino que funcione, comunique y genere resultados medibles.",
+  },
+  aboutPage: {
+    title: "Diseño para conectar ideas con personas",
+    intro:
+      "Soy Elena Mora, diseñadora y directora creativa. Combino estrategia, narrativa y tecnología para construir experiencias digitales con una identidad clara y resultados medibles.",
+    image: PORTFOLIO_ASSETS.hero,
+    storyTitle: "Mi historia",
+    storyBody:
+      "Empecé diseñando identidades para pequeños proyectos culturales y descubrí que lo que más me interesaba no era una pieza aislada, sino todo el sistema que la hacía reconocible.\n\nDesde entonces he trabajado entre marca, producto y dirección creativa, colaborando con equipos que buscan transformar ideas complejas en experiencias sencillas, útiles y memorables.",
+    storyImage: PORTFOLIO_ASSETS.project1,
   },
   gallery: [
     { id: "p1", image: PORTFOLIO_ASSETS.project1, title: "Identidad de marca – Nómada Studio", description: "Logotipo, sistema tipográfico y guía de estilo para estudio de arquitectura.", tags: ["Branding", "Figma"] },
@@ -475,6 +488,7 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
 
 export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
   appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
   brand: "Osteria da Luca.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -596,6 +610,7 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
 
 export const COFFEE_SHOP_DEFAULT_CONTENT: TemplateContentMap["coffee-shop"] = {
   appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
   brand: "Grano & Taza.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -696,6 +711,7 @@ export const COFFEE_SHOP_DEFAULT_CONTENT: TemplateContentMap["coffee-shop"] = {
 
 export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
   appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
   brand: "Jardín Secreto.",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -794,6 +810,7 @@ export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
 
 export const OFICIO_PRO_DEFAULT_CONTENT: TemplateContentMap["oficio-pro"] = {
   appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
   brand: "Oficio Pro",
   brandLogoType: "text",
   brandLogoImage: "",

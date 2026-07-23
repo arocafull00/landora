@@ -1,5 +1,6 @@
 import type { LandingContent, NavLink, TemplateId } from "@/lib/dashboard-data";
 import type { LandingSectionKey } from "@/lib/landing-content-gaps";
+import { isSitePageEnabled } from "@/lib/site-pages";
 
 export type TemplateSectionDef = {
   anchor: string;
@@ -21,6 +22,7 @@ export function getSectionScrollHref(section: TemplateSectionDef): string {
 }
 
 const BLOG_NAV_ANCHOR = "__blog__";
+const ABOUT_NAV_ANCHOR = "__about__";
 
 function getBlogNavHref(landingSlug: string): string {
   const slug = landingSlug.replace(/^\//, "");
@@ -35,13 +37,28 @@ function getBlogNavTarget(landingSlug: string): NavScrollTarget {
   };
 }
 
+export function getAboutNavHref(landingSlug: string): string {
+  const slug = landingSlug.replace(/^\//, "");
+  return `/${slug}/about`;
+}
+
+function getAboutNavTarget(landingSlug: string): NavScrollTarget {
+  return {
+    anchor: ABOUT_NAV_ANCHOR,
+    href: getAboutNavHref(landingSlug),
+    label: "About me",
+  };
+}
+
 export function getNavScrollTargets(
   templateId: TemplateId,
   landingSlug?: string,
+  sectionOrder?: string[],
+  enabledPages?: readonly string[],
 ): NavScrollTarget[] {
   const targets: NavScrollTarget[] = [];
 
-  for (const section of getTemplateSections(templateId)) {
+  for (const section of getOrderedTemplateSections(templateId, sectionOrder)) {
     if (section.anchor === "hero") continue;
     targets.push({
       anchor: section.anchor,
@@ -52,7 +69,35 @@ export function getNavScrollTargets(
 
   if (!landingSlug) return targets;
 
+  if (
+    templateId === "portfolio" &&
+    isSitePageEnabled(enabledPages, "about")
+  ) {
+    targets.push(getAboutNavTarget(landingSlug));
+  }
+
   return [...targets, getBlogNavTarget(landingSlug)];
+}
+
+export function getVisibleNavScrollTargets(
+  templateId: TemplateId,
+  hiddenSections: string[] | undefined,
+  landingSlug?: string,
+  sectionOrder?: string[],
+  enabledPages?: readonly string[],
+): NavScrollTarget[] {
+  const hidden = new Set(hiddenSections ?? []);
+  return getNavScrollTargets(
+    templateId,
+    landingSlug,
+    sectionOrder,
+    enabledPages,
+  ).filter(
+    (target) =>
+      target.anchor === BLOG_NAV_ANCHOR ||
+      target.anchor === ABOUT_NAV_ANCHOR ||
+      !hidden.has(target.anchor),
+  );
 }
 
 const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = {
@@ -169,9 +214,9 @@ const PORTFOLIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story"] },
   { anchor: "experiencia", label: "Experiencia", editorTabId: "Experiencia", navHref: "#experiencia", contentKeys: ["workHistory"] },
   { anchor: "proyectos", label: "Proyectos", editorTabId: "Proyectos", navHref: "#proyectos", contentKeys: ["gallery"] },
-  { anchor: "skills", label: "Habilidades", navHref: "#skills", contentKeys: ["benefits"] },
-  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
   { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
+  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
+  { anchor: "skills", label: "Cómo trabajo", editorTabId: "Cómo trabajo", navHref: "#skills", contentKeys: ["benefits"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
   { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
@@ -237,6 +282,62 @@ export function getTemplateSections(templateId: TemplateId): TemplateSectionDef[
   return TEMPLATE_SECTIONS[templateId] ?? [];
 }
 
+function splitTemplateSections(sections: TemplateSectionDef[]) {
+  const startRequired = sections.filter((section) => section.required && section.anchor === "hero");
+  const endRequired = sections.filter((section) => section.required && section.anchor !== "hero");
+  const middle = sections.filter((section) => !section.required);
+  return { startRequired, middle, endRequired };
+}
+
+function orderMiddleSections(
+  middle: TemplateSectionDef[],
+  sectionOrder: string[] | undefined,
+): TemplateSectionDef[] {
+  const middleByAnchor = new Map(middle.map((section) => [section.anchor, section]));
+  const defaultOrder = middle.map((section) => section.anchor);
+  const order = sectionOrder?.length ? sectionOrder : defaultOrder;
+  const result: TemplateSectionDef[] = [];
+  const seen = new Set<string>();
+
+  for (const anchor of order) {
+    const section = middleByAnchor.get(anchor);
+    if (!section) continue;
+    result.push(section);
+    seen.add(anchor);
+  }
+
+  for (const section of middle) {
+    if (seen.has(section.anchor)) continue;
+    result.push(section);
+  }
+
+  return result;
+}
+
+export function getOrderedTemplateSections(
+  templateId: TemplateId,
+  sectionOrder?: string[],
+): TemplateSectionDef[] {
+  const sections = getTemplateSections(templateId);
+  const { startRequired, middle, endRequired } = splitTemplateSections(sections);
+  const orderedMiddle = orderMiddleSections(middle, sectionOrder);
+  return [...startRequired, ...orderedMiddle, ...endRequired];
+}
+
+export function getOrderedRemovableSections(
+  templateId: TemplateId,
+  sectionOrder?: string[],
+): TemplateSectionDef[] {
+  return getOrderedTemplateSections(templateId, sectionOrder).filter((section) => !section.required);
+}
+
+export function getOrderedRemovableSectionAnchors(
+  templateId: TemplateId,
+  sectionOrder?: string[],
+): string[] {
+  return getOrderedRemovableSections(templateId, sectionOrder).map((section) => section.anchor);
+}
+
 export function getSectionByAnchor(templateId: TemplateId, anchor: string): TemplateSectionDef | undefined {
   return getTemplateSections(templateId).find((section) => section.anchor === anchor);
 }
@@ -244,6 +345,15 @@ export function getSectionByAnchor(templateId: TemplateId, anchor: string): Temp
 export function isSectionVisible(content: LandingContent, anchor: string): boolean {
   const hidden = content.hiddenSections ?? [];
   return !hidden.includes(anchor);
+}
+
+export function getOrderedVisibleBodySections(
+  templateId: TemplateId,
+  content: LandingContent,
+): TemplateSectionDef[] {
+  return getOrderedTemplateSections(templateId, content.sectionOrder).filter(
+    (section) => !section.required && isSectionVisible(content, section.anchor),
+  );
 }
 
 export function getVisibleNav(

@@ -13,6 +13,7 @@ export type DashboardView =
   | "employees";
 export type ContentGroup = "Pages" | "Posts" | "Presentations" | "Assets";
 export type LandingStatus = "Published" | "Draft" | "Changes";
+export type SitePageId = "home" | "about";
 
 export type SectionHeading = {
   title: string;
@@ -35,6 +36,8 @@ export type BaseContent = {
   nav: NavLink[];
   sectionHeadings: Partial<Record<string, SectionHeading>>;
   hiddenSections?: string[];
+  sectionOrder?: string[];
+  enabledPages: SitePageId[];
   contact: ContactContent;
   stats: StatContent[];
   testimonials: TestimonialContent[];
@@ -70,8 +73,18 @@ export type WorkExperienceItem = {
   technologies: string[];
 };
 
+export type PortfolioAboutPageContent = {
+  title: string;
+  intro: string;
+  image: string;
+  storyTitle: string;
+  storyBody: string;
+  storyImage: string;
+};
+
 export type PortfolioExtensions = {
   about: { statement: string };
+  aboutPage: PortfolioAboutPageContent;
   gallery: GalleryItem[];
   benefits: BenefitItem[];
   serviceMenu: ServiceMenuItem[];

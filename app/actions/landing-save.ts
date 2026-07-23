@@ -27,11 +27,16 @@ function getSectionPayloads(content: LandingContent) {
       brandLogoImage: content.brandLogoImage ?? "",
       sectionHeadings: content.sectionHeadings ?? {},
       hiddenSections: content.hiddenSections ?? [],
+      sectionOrder: content.sectionOrder ?? [],
+      enabledPages: content.enabledPages,
     },
     stats: { items: content.stats },
     testimonials: { items: content.testimonials },
     nav: { items: content.nav },
     ...(content.story ? { story: content.story } : {}),
+    ...(content.aboutPage
+      ? { "portfolio-about": content.aboutPage }
+      : {}),
     ...(content.spaces ? { spaces: { items: content.spaces } } : {}),
     ...(content.services ? { services: { items: content.services } } : {}),
     ...(content.workflow ? { workflow: { items: content.workflow } } : {}),
@@ -53,6 +58,7 @@ function revalidateLandingRoutes(landingId: string, slugValue: string) {
   const slug = slugValue.replace(/^\//, "");
   revalidatePath(`/${slug}`);
   revalidatePath(`/${slug}/blog`);
+  revalidatePath(`/${slug}/about`);
   revalidatePath(`/${slug}/book`);
   revalidatePath(`/preview/${landingId}`);
   revalidatePath("/editor");

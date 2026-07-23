@@ -69,6 +69,10 @@ export const SECTION_HEADING_DEFAULTS: Record<
       title: "Proyectos seleccionados",
       subtitle: "",
     },
+    skills: {
+      title: "Cómo trabajo",
+      subtitle: "",
+    },
     servicios: {
       title: "Servicios",
       subtitle: "",

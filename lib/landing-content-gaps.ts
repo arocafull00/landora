@@ -6,6 +6,7 @@ export type LandingSectionKey =
   | "hero"
   | "branding"
   | "story"
+  | "portfolioAbout"
   | "stats"
   | "gallery"
   | "nav"

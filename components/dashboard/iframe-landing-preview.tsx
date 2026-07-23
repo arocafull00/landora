@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import type {
   LandingContent,
   LandingSectionSelections,
+  SitePageId,
   TemplateId,
 } from "@/lib/dashboard-data";
 import {
@@ -33,6 +34,7 @@ export function IframeLandingPreview({
   onFullscreen,
   scrollTarget,
   sectionSelections,
+  sitePage = "home",
   showToolbar = true,
   template = "velar",
 }: {
@@ -44,6 +46,7 @@ export function IframeLandingPreview({
   onFullscreen?: () => void;
   scrollTarget?: string;
   sectionSelections: LandingSectionSelections;
+  sitePage?: SitePageId;
   showToolbar?: boolean;
   template?: TemplateId;
 }) {
@@ -92,13 +95,15 @@ export function IframeLandingPreview({
   useEffect(() => {
     const iframe = iframeRef.current;
     if (!iframe) return;
+    let activePort: MessagePort | null = null;
 
     const connectChannel = () => {
       const target = iframe.contentWindow;
       if (!target) return;
 
-      portRef.current?.close();
+      activePort?.close();
       const channel = new MessageChannel();
+      activePort = channel.port1;
       portRef.current = channel.port1;
       channel.port1.onmessage = (event) => {
         if (event.data?.type === PREVIEW_CHANNEL_READY) {
@@ -125,8 +130,7 @@ export function IframeLandingPreview({
 
     return () => {
       iframe.removeEventListener("load", connectChannel);
-      portRef.current?.close();
-      portRef.current = null;
+      activePort?.close();
     };
   }, [scrollTarget, sendContent, template]);
 
@@ -151,7 +155,11 @@ export function IframeLandingPreview({
             className="h-full w-full"
             ref={iframeRef}
             sandbox="allow-scripts allow-same-origin"
-            src={`/preview/${landingId}?embed=1`}
+            src={
+              sitePage === "about"
+                ? `/preview/${landingId}/about?embed=1`
+                : `/preview/${landingId}?embed=1`
+            }
             title="Landing preview"
           />
         </div>

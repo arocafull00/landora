@@ -150,6 +150,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       DESIGN_EDITOR_TAB,
       { id: "Experiencia", label: "Experiencia" },
       { id: "Proyectos", label: "Proyectos" },
+      { id: "Cómo trabajo", label: "Cómo trabajo" },
       { id: "Servicios", label: "Servicios" },
       { id: "FAQ", label: "FAQ" },
       OFFERS_EDITOR_TAB,

@@ -1,23 +1,24 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId } from "react";
 import { ChevronDown } from "lucide-react";
 
 export function PortfolioFaqItem({
   item,
-  defaultOpen = false,
+  open,
+  onOpenChange,
 }: {
   item: { id: string; question: string; answer: string };
-  defaultOpen?: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const [open, setOpen] = useState(defaultOpen);
   const contentId = useId();
 
   return (
     <div className="border-b border-[var(--site-border)]">
       <button
         className="flex w-full items-center justify-between py-5 text-left"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => onOpenChange(!open)}
         type="button"
         aria-controls={contentId}
         aria-expanded={open}
@@ -30,16 +31,18 @@ export function PortfolioFaqItem({
         </span>
         <ChevronDown
           aria-hidden
-          className={`h-5 w-5 shrink-0 text-[var(--site-text-muted)] transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`h-5 w-5 shrink-0 text-[var(--site-text-muted)] transition-transform duration-300 motion-reduce:transition-none ${open ? "rotate-180" : ""}`}
         />
       </button>
-      {open ? (
-          <div id={contentId}>
-            <p className="pb-5 text-sm leading-relaxed text-[var(--site-text-muted)]">
-              {item.answer}
-            </p>
-          </div>
-      ) : null}
+      <div
+        className={`grid transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+      >
+        <div className="overflow-hidden" id={contentId}>
+          <p className="pb-5 text-sm leading-relaxed text-[var(--site-text-muted)]">
+            {item.answer}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

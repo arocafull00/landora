@@ -7,6 +7,7 @@ import {
   landingBranding,
   landingHero,
   landingStory,
+  landingPortfolioAbout,
   landingCta,
   landingBenefits,
   landingTestimonials,
@@ -95,6 +96,8 @@ export async function upsertLandingBranding(
     typographyId?: string;
     sectionHeadings?: Record<string, { title: string; subtitle: string }>;
     hiddenSections?: string[];
+    sectionOrder?: string[];
+    enabledPages?: string[];
   }
 ) {
   try {
@@ -106,6 +109,8 @@ export async function upsertLandingBranding(
       typographyId?: string;
       sectionHeadings?: Record<string, { title: string; subtitle: string }>;
       hiddenSections?: string[];
+      sectionOrder?: string[];
+      enabledPages?: string[];
     } = {
       brand: data.brand,
     };
@@ -127,6 +132,12 @@ export async function upsertLandingBranding(
     if (data.hiddenSections !== undefined) {
       set.hiddenSections = data.hiddenSections;
     }
+    if (data.sectionOrder !== undefined) {
+      set.sectionOrder = data.sectionOrder;
+    }
+    if (data.enabledPages !== undefined) {
+      set.enabledPages = data.enabledPages;
+    }
     await db
       .insert(landingBranding)
       .values({
@@ -138,6 +149,8 @@ export async function upsertLandingBranding(
         typographyId: data.typographyId ?? "default",
         sectionHeadings: data.sectionHeadings ?? {},
         hiddenSections: data.hiddenSections ?? [],
+        sectionOrder: data.sectionOrder ?? [],
+        enabledPages: data.enabledPages ?? [],
       })
       .onConflictDoUpdate({ target: landingBranding.landingId, set });
   } catch {
@@ -204,6 +217,30 @@ export async function upsertLandingStory(
       .onConflictDoUpdate({ target: landingStory.landingId, set: data });
   } catch {
     throw new Error("Failed to update story");
+  }
+}
+
+export async function upsertLandingPortfolioAbout(
+  landingId: string,
+  data: {
+    title: string;
+    intro: string;
+    image: string;
+    storyTitle: string;
+    storyBody: string;
+    storyImage: string;
+  },
+) {
+  try {
+    await db
+      .insert(landingPortfolioAbout)
+      .values({ landingId, ...data })
+      .onConflictDoUpdate({
+        target: landingPortfolioAbout.landingId,
+        set: data,
+      });
+  } catch (error) {
+    throw new Error("Failed to update portfolio about page", { cause: error });
   }
 }
 

@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
-import { getVisibleNav, isSectionVisible } from "@/lib/template-sections";
+import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
 import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
@@ -16,6 +16,15 @@ import { FloristeriaTestimonialsSection } from "@/components/templates/florister
 import { FloristeriaFaqSection } from "@/components/templates/floristeria/floristeria-faq-section";
 import { FloristeriaContactSection } from "@/components/templates/floristeria/floristeria-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
+
+function renderFloristeriaBodySection(anchor: string, content: LandingContent) {
+  if (anchor === "galeria") return <GallerySection content={content} templateId="floristeria" />;
+  if (anchor === "servicios") return <FloristeriaCtaSection content={content} />;
+  if (anchor === "story") return <FloristeriaAbout content={content} />;
+  if (anchor === "testimonios") return <FloristeriaTestimonialsSection content={content} />;
+  if (anchor === "faq") return <FloristeriaFaqSection content={content} />;
+  return null;
+}
 
 export function FloristeriaTemplateClient({
   content,
@@ -69,20 +78,11 @@ export function FloristeriaTemplateClient({
           variantId={heroVariantId}
         />
         <ActiveOffersRenderer content={content} />
-        {isSectionVisible(content, "galeria") ? (
-          <GallerySection content={content} templateId="floristeria" />
-        ) : null}
-        {isSectionVisible(content, "servicios") ? (
-          <FloristeriaCtaSection content={content} />
-        ) : null}
-
-        {isSectionVisible(content, "story") ? <FloristeriaAbout content={content} /> : null}
-
-        {isSectionVisible(content, "testimonios") ? (
-          <FloristeriaTestimonialsSection content={content} />
-        ) : null}
-
-        {isSectionVisible(content, "faq") ? <FloristeriaFaqSection content={content} /> : null}
+        {getOrderedVisibleBodySections("floristeria", content).map((section) => (
+          <Fragment key={section.anchor}>
+            {renderFloristeriaBodySection(section.anchor, content)}
+          </Fragment>
+        ))}
 
         <FloristeriaContactSection content={content} />
       </div>
