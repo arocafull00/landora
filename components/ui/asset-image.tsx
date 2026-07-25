@@ -27,6 +27,7 @@ export function AssetImage({
 
   return (
     <Image
+      key={src}
       alt={alt}
       className={className}
       fill={fill}

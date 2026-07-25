@@ -10,7 +10,7 @@ export function PortfolioProjectCarouselSlide({
   src: string;
 }) {
   return (
-    <div className="relative aspect-[16/9] w-full overflow-hidden bg-portfolio-surface md:aspect-[21/9]">
+    <div className="relative h-dvh w-full overflow-hidden bg-portfolio-surface">
       <AssetImage
         alt={`${alt}, imagen ${index + 1}`}
         className="object-cover"

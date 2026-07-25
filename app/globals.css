@@ -548,7 +548,7 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --site-dark: #34231e;
   --site-on-dark: #fff8f1;
   --site-on-primary: #ffffff;
-  --site-on-accent: #2e120a;
+  --site-on-accent: #ffffff;
 }
 
 [data-site-theme][data-template="portfolio"][data-palette="mist"] {

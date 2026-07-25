@@ -21,6 +21,7 @@ export function PortfolioProjectCarousel({
     <section aria-label="Galería del proyecto" className="w-full">
       <div className="relative">
         <Swiper
+          key={slides.join("\0")}
           className="project-gallery-swiper"
           modules={[Navigation, Pagination]}
           navigation={{
