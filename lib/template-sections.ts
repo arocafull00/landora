@@ -28,6 +28,24 @@ function getBlogNavHref(): string {
   return "/blog";
 }
 
+export function isBlogNavHref(href: string): boolean {
+  return /^\/(?:[^/]+\/)?blog\/?$/.test(href.trim());
+}
+
+function remapBlogNavHref(href: string): string {
+  if (!isBlogNavHref(href)) return href;
+  return getBlogNavHref();
+}
+
+export function syncBlogNavHrefs(nav: NavLink[]): NavLink[] {
+  const blogHref = getBlogNavHref();
+  return nav.map((item) => {
+    if (!isBlogNavHref(item.href)) return item;
+    if (item.href === blogHref) return item;
+    return { ...item, href: blogHref };
+  });
+}
+
 function getBlogNavTarget(): NavScrollTarget {
   return {
     anchor: BLOG_NAV_ANCHOR,
@@ -178,7 +196,7 @@ const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = 
 };
 
 export function normalizeNavHref(templateId: TemplateId, href: string): string {
-  if (!href.startsWith("#")) return href;
+  if (!href.startsWith("#")) return remapBlogNavHref(href);
 
   const sections = getTemplateSections(templateId);
   const validHrefs = new Set(sections.map(getSectionScrollHref));

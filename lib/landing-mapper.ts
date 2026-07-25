@@ -8,7 +8,10 @@ import type { User } from "@/lib/domain/dtos";
 import { resolveSectionSelections } from "@/lib/section-selections";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 import { normalizeEnabledPages } from "@/lib/site-pages";
-import { syncPortfolioAboutNavHrefs } from "@/lib/template-sections";
+import {
+  syncBlogNavHrefs,
+  syncPortfolioAboutNavHrefs,
+} from "@/lib/template-sections";
 
 function mapImage(url: string | null | undefined) {
   if (!url) return "";
@@ -114,11 +117,13 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       })),
     ),
     nav: (() => {
-      const items = uniqueBySortOrder(row.nav ?? []).map((n) => ({
-        id: n.id,
-        label: n.label,
-        href: n.href,
-      }));
+      const items = syncBlogNavHrefs(
+        uniqueBySortOrder(row.nav ?? []).map((n) => ({
+          id: n.id,
+          label: n.label,
+          href: n.href,
+        })),
+      );
       if (row.template !== "portfolio") return items;
       return syncPortfolioAboutNavHrefs(items);
     })(),

@@ -19,14 +19,18 @@ import {
   isValidPaletteId,
   isValidTypographyId,
 } from "@/lib/site-appearance";
-import { syncPortfolioAboutNavHrefs } from "@/lib/template-sections";
+import {
+  syncBlogNavHrefs,
+  syncPortfolioAboutNavHrefs,
+} from "@/lib/template-sections";
 import { warmPublicLanding } from "@/lib/warm-public-landing";
 
 function getSectionPayloads(content: LandingContent, template: string) {
-  const navItems =
+  const navItems = syncBlogNavHrefs(
     template === "portfolio"
       ? syncPortfolioAboutNavHrefs(content.nav)
-      : content.nav;
+      : content.nav,
+  );
 
   return {
     hero: content.hero,
