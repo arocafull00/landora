@@ -35,6 +35,7 @@ const isProtectedRoute = createRouteMatcher([
 const PUBLIC_LANDING_PATH =
   /^\/(?:$|about\/?$|book\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$|sitemap\.xml$|robots\.txt$)$/;
 const PROXY_CONTEXT_TIMEOUT_MS = 5_000;
+const LANDING_ROUTE_TTL_MS = 60_000;
 
 type LandingRoute = {
   id: string;
@@ -46,13 +47,22 @@ type LandingResolution =
   | { status: "resolved"; landing: LandingRoute | null }
   | { status: "unavailable" };
 
+const landingRouteCache = new Map<
+  string,
+  { expiresAt: number; landing: LandingRoute | null }
+>();
+
 function isPublicLandingPath(pathname: string) {
   return PUBLIC_LANDING_PATH.test(pathname);
 }
 
-function getInternalLandingPath(landing: LandingRoute, pathname: string) {
-  if (pathname === "/") return `/_sites/${landing.id}`;
-  const normalizedSlug = landing.slug.replace(/^\/+|\/+$/g, "");
+function isDocumentRequest(req: NextRequest) {
+  return !req.headers.has("rsc") && !req.headers.has("next-router-prefetch");
+}
+
+function getInternalLandingPath(slug: string, pathname: string) {
+  const normalizedSlug = slug.replace(/^\/+|\/+$/g, "");
+  if (pathname === "/") return `/${normalizedSlug}`;
   return `/${normalizedSlug}${pathname}`;
 }
 
@@ -88,10 +98,17 @@ async function resolveLandingRoute(
   req: NextRequest,
   query: { host: string } | { slug: string },
 ): Promise<LandingResolution> {
+  const [key, value] = Object.entries(query)[0];
+  const cacheKey = `${key}:${value}`;
+  const cached = landingRouteCache.get(cacheKey);
+
+  if (cached && cached.expiresAt > Date.now()) {
+    return { status: "resolved", landing: cached.landing };
+  }
+
   const url = getInternalProxyUrl(req, "/api/internal/landing-route");
   if (!url) return { status: "unavailable" };
 
-  const [key, value] = Object.entries(query)[0];
   url.searchParams.set(key, value);
 
   try {
@@ -104,6 +121,11 @@ async function resolveLandingRoute(
 
     const parsed = proxyLandingResponseSchema.safeParse(await response.json());
     if (!parsed.success) return { status: "unavailable" };
+
+    landingRouteCache.set(cacheKey, {
+      expiresAt: Date.now() + LANDING_ROUTE_TTL_MS,
+      landing: parsed.data.landing,
+    });
 
     return {
       status: "resolved",
@@ -131,12 +153,9 @@ function redirectToLandingHost(
   return NextResponse.redirect(redirectUrl, 308);
 }
 
-function rewriteLandingRequest(
-  req: NextRequest,
-  landing: LandingRoute,
-) {
+function rewriteLandingRequest(req: NextRequest, slug: string) {
   const url = req.nextUrl.clone();
-  url.pathname = getInternalLandingPath(landing, req.nextUrl.pathname);
+  url.pathname = getInternalLandingPath(slug, req.nextUrl.pathname);
   return NextResponse.rewrite(url);
 }
 
@@ -167,17 +186,19 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    const resolution = await resolveLandingRoute(req, { slug: platformSlug });
-    if (resolution.status === "unavailable") return serviceUnavailable();
-    if (!resolution.landing) {
-      return new NextResponse("Not Found", { status: 404 });
+    if (isDocumentRequest(req)) {
+      const resolution = await resolveLandingRoute(req, { slug: platformSlug });
+      if (resolution.status === "unavailable") return serviceUnavailable();
+      if (!resolution.landing) {
+        return new NextResponse("Not Found", { status: 404 });
+      }
+
+      if (resolution.landing.customDomain) {
+        return redirectToLandingHost(req, resolution.landing, pathname);
+      }
     }
 
-    if (resolution.landing.customDomain) {
-      return redirectToLandingHost(req, resolution.landing, pathname);
-    }
-
-    return rewriteLandingRequest(req, resolution.landing);
+    return rewriteLandingRequest(req, platformSlug);
   }
 
   if (!isAppHost(host)) {
@@ -195,7 +216,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
       return new NextResponse("Not Found", { status: 404 });
     }
 
-    return rewriteLandingRequest(req, resolution.landing);
+    return rewriteLandingRequest(req, resolution.landing.slug);
   }
 
   if (

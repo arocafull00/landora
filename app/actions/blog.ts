@@ -1,9 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import {
   createBlogPost,
   deleteBlogPost,
+  getBlogCacheTag,
   getBlogConfig,
   getBlogPostById,
   updateBlogPost,
@@ -34,10 +35,9 @@ function slugify(text: string): string {
 }
 
 function revalidateBlogRoutes(landing: { id: string; slug: string }) {
-  const slugValue = landing.slug.replace(/^\//, "");
+  updateTag(getBlogCacheTag(landing.id));
   revalidatePath("/blog");
   revalidatePath("/editor");
-  revalidatePath(`/${slugValue}/blog`);
   revalidatePath(`/preview/${landing.id}`);
 }
 

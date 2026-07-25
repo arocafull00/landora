@@ -1,4 +1,3 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
@@ -28,34 +27,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html
-        lang="es"
-        className={`${siteFontVariables} h-full antialiased`}
+    <html
+      lang="es"
+      className={`${siteFontVariables} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <body
+        className="min-h-full bg-surface-bg text-on-background"
         suppressHydrationWarning
       >
-        <body
-          className="min-h-full bg-surface-bg text-on-background"
-          suppressHydrationWarning
+        <a
+          href="#main-content"
+          className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-primary px-4 py-2 text-on-primary focus:not-sr-only"
         >
-          <a
-            href="#main-content"
-            className="sr-only fixed left-4 top-4 z-[100] rounded-md bg-primary px-4 py-2 text-on-primary focus:not-sr-only"
-          >
-            Saltar al contenido
-          </a>
-          <Analytics />
-          <SpeedInsights />
-          <TooltipProvider>
-            <Suspense fallback={null}>
-              <div id="main-content" tabIndex={-1}>
-                {children}
-              </div>
-            </Suspense>
-            <ToastContainer />
-          </TooltipProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+          Saltar al contenido
+        </a>
+        <Analytics />
+        <SpeedInsights />
+        <TooltipProvider>
+          <Suspense fallback={null}>
+            <div id="main-content" tabIndex={-1}>
+              {children}
+            </div>
+          </Suspense>
+          <ToastContainer />
+        </TooltipProvider>
+      </body>
+    </html>
   );
 }

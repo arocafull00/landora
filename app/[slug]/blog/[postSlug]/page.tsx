@@ -1,16 +1,18 @@
-import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { BlogPostPage } from "@/components/blog/blog-post-page";
-import { SiteThemeScope } from "@/components/templates/site-theme-scope";
+import { BlogPostPageContent } from "@/components/blog/blog-post-page-content";
+import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
 import { getBlogPostBySlug } from "@/data/blog";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
 
+type BlogPostPageProps = {
+  params: Promise<{ slug: string; postSlug: string }>;
+};
+
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ slug: string; postSlug: string }>;
-}): Promise<Metadata> {
+}: BlogPostPageProps): Promise<Metadata> {
   const { slug, postSlug } = await params;
   const landing = await getPublishedLandingBySlug(slug);
 
@@ -30,35 +32,12 @@ export async function generateMetadata({
   });
 }
 
-export default async function PublicBlogPostRoute({
-  params,
-}: {
-  params: Promise<{ slug: string; postSlug: string }>;
-}) {
-  const { slug, postSlug } = await params;
-  const landing = await getPublishedLandingBySlug(slug);
-
-  if (!landing) notFound();
-
-  const post = await getBlogPostBySlug(landing.id, postSlug);
-
-  if (!post) notFound();
-
-  const content = landing.content;
-
+export default function PublicBlogPostRoute({ params }: BlogPostPageProps) {
   return (
-    <SiteThemeScope appearance={content.appearance} template={landing.template}>
-      <BlogPostPage
-        content={content}
-        post={{
-          slug: post.slug,
-          title: post.title,
-          excerpt: post.excerpt,
-          body: post.body,
-          heroImage: post.heroImage,
-          publishedAt: post.updatedAt ?? post.createdAt,
-        }}
-      />
-    </SiteThemeScope>
+    <Suspense fallback={<PublicLandingSkeleton />}>
+      {params.then(({ slug, postSlug }) => (
+        <BlogPostPageContent postSlug={postSlug} slug={slug} />
+      ))}
+    </Suspense>
   );
 }

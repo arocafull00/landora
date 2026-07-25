@@ -1,14 +1,22 @@
-import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { PublicLanding } from "@/components/templates/public-landing";
+import { PublicLandingContent } from "@/components/templates/public-landing-content";
+import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
+import { getPublishedLandingParams } from "@/lib/public-static-params";
+
+type PublicLandingPageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export function generateStaticParams() {
+  return getPublishedLandingParams();
+}
 
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+}: PublicLandingPageProps): Promise<Metadata> {
   const { slug } = await params;
   const landing = await getPublishedLandingBySlug(slug);
 
@@ -22,15 +30,12 @@ export async function generateMetadata({
   });
 }
 
-export default async function PublicLandingPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const landing = await getPublishedLandingBySlug(slug);
-
-  if (!landing) notFound();
-
-  return <PublicLanding landing={landing} />;
+export default function PublicLandingPage({ params }: PublicLandingPageProps) {
+  return (
+    <Suspense fallback={<PublicLandingSkeleton />}>
+      {params.then(({ slug }) => (
+        <PublicLandingContent slug={slug} />
+      ))}
+    </Suspense>
+  );
 }

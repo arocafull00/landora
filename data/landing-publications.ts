@@ -298,6 +298,30 @@ export async function getPublishedLandingBySlug(
   return toPublishedLanding(row);
 }
 
+export async function getPublishedLandingSlugs(): Promise<string[]> {
+  "use cache";
+
+  cacheLife("max");
+  cacheTag("public-landings");
+
+  try {
+    const rows = await db
+      .select({ slug: landingPageVersions.slug })
+      .from(landingPages)
+      .innerJoin(
+        landingPageVersions,
+        eq(landingPages.publishedVersionId, landingPageVersions.id),
+      )
+      .where(eq(landingPages.published, true));
+
+    return [...new Set(rows.map((row) => normalizePublishedSlug(row.slug)))];
+  } catch (error) {
+    throw new Error("Failed to fetch published landing slugs", {
+      cause: error,
+    });
+  }
+}
+
 export async function getPublishedLandingById(
   landingId: string,
 ): Promise<PublishedLanding | null> {

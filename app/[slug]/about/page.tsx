@@ -1,7 +1,7 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { PortfolioAboutPage } from "@/components/templates/portfolio/portfolio-about-page";
-import { SiteThemeScope } from "@/components/templates/site-theme-scope";
+import { PortfolioAboutPageContent } from "@/components/templates/portfolio/portfolio-about-page-content";
+import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { resolvePortfolioAboutPageContent } from "@/lib/portfolio-about-content";
 import { isSitePageEnabled } from "@/lib/site-pages";
@@ -26,8 +26,7 @@ export async function generateMetadata({
   }
 
   const brand = landing.content.brand || landing.name;
-  const content = landing.content;
-  const about = resolvePortfolioAboutPageContent(content);
+  const about = resolvePortfolioAboutPageContent(landing.content);
 
   return createPublishedSiteMetadata({
     landing,
@@ -42,25 +41,12 @@ export async function generateMetadata({
   });
 }
 
-export default async function PublicAboutPage({ params }: AboutPageProps) {
-  const { slug } = await params;
-  const landing = await getPublishedLandingBySlug(slug);
-
-  if (
-    !landing ||
-    landing.template !== "portfolio" ||
-    !isSitePageEnabled(landing.content.enabledPages, "about")
-  ) {
-    notFound();
-  }
-
-  const content = landing.content;
-
+export default function PublicAboutPage({ params }: AboutPageProps) {
   return (
-    <SiteThemeScope appearance={content.appearance} template="portfolio">
-      <PortfolioAboutPage
-        content={content}
-      />
-    </SiteThemeScope>
+    <Suspense fallback={<PublicLandingSkeleton />}>
+      {params.then(({ slug }) => (
+        <PortfolioAboutPageContent slug={slug} />
+      ))}
+    </Suspense>
   );
 }

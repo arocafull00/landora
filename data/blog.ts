@@ -1,27 +1,38 @@
 import "server-only";
 
 import { cache } from "react";
+import { cacheLife, cacheTag } from "next/cache";
 import { and, asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { blogPosts, blogConfig } from "@/db/schema";
 import type { BlogPost } from "@/db/schema";
 
-export const getBlogPostsByLandingId = cache(
-  async (landingId: string, publishedOnly = false) => {
-    try {
-      const conditions = publishedOnly
-        ? and(eq(blogPosts.landingId, landingId), eq(blogPosts.published, true))
-        : eq(blogPosts.landingId, landingId);
+export function getBlogCacheTag(landingId: string) {
+  return `blog:${landingId}`;
+}
 
-      return await db.query.blogPosts.findMany({
-        where: conditions,
-        orderBy: [asc(blogPosts.sortOrder)],
-      });
-    } catch (error) {
-      throw new Error("Failed to fetch blog posts", { cause: error });
-    }
+export async function getBlogPostsByLandingId(
+  landingId: string,
+  publishedOnly = false,
+) {
+  "use cache";
+
+  cacheLife("max");
+  cacheTag(getBlogCacheTag(landingId));
+
+  try {
+    const conditions = publishedOnly
+      ? and(eq(blogPosts.landingId, landingId), eq(blogPosts.published, true))
+      : eq(blogPosts.landingId, landingId);
+
+    return await db.query.blogPosts.findMany({
+      where: conditions,
+      orderBy: [asc(blogPosts.sortOrder)],
+    });
+  } catch (error) {
+    throw new Error("Failed to fetch blog posts", { cause: error });
   }
-);
+}
 
 export const getBlogPostById = cache(async (postId: string) => {
   try {
@@ -35,23 +46,26 @@ export const getBlogPostById = cache(async (postId: string) => {
   }
 });
 
-export const getBlogPostBySlug = cache(
-  async (landingId: string, postSlug: string) => {
-    try {
-      return (
-        (await db.query.blogPosts.findFirst({
-          where: and(
-            eq(blogPosts.landingId, landingId),
-            eq(blogPosts.slug, postSlug),
-            eq(blogPosts.published, true)
-          ),
-        })) ?? null
-      );
-    } catch (error) {
-      throw new Error("Failed to fetch blog post", { cause: error });
-    }
+export async function getBlogPostBySlug(landingId: string, postSlug: string) {
+  "use cache";
+
+  cacheLife("max");
+  cacheTag(getBlogCacheTag(landingId));
+
+  try {
+    return (
+      (await db.query.blogPosts.findFirst({
+        where: and(
+          eq(blogPosts.landingId, landingId),
+          eq(blogPosts.slug, postSlug),
+          eq(blogPosts.published, true)
+        ),
+      })) ?? null
+    );
+  } catch (error) {
+    throw new Error("Failed to fetch blog post", { cause: error });
   }
-);
+}
 
 export async function createBlogPost(
   landingId: string,
@@ -110,7 +124,12 @@ export async function deleteBlogPost(postId: string) {
   }
 }
 
-export const getBlogConfig = cache(async (landingId: string) => {
+export async function getBlogConfig(landingId: string) {
+  "use cache";
+
+  cacheLife("max");
+  cacheTag(getBlogCacheTag(landingId));
+
   try {
     return (
       (await db.query.blogConfig.findFirst({
@@ -120,7 +139,7 @@ export const getBlogConfig = cache(async (landingId: string) => {
   } catch (error) {
     throw new Error("Failed to fetch blog config", { cause: error });
   }
-});
+}
 
 export async function upsertBlogConfig(
   landingId: string,

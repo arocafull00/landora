@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { ClerkProvider } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { DashboardAccountActions } from "@/components/dashboard/dashboard-account-actions";
 import { DashboardThemeScope } from "@/components/dashboard/dashboard-theme-scope";
@@ -44,7 +45,7 @@ export default async function DashboardLayout({
 
   if (!dbLanding) {
     return (
-      <>
+      <ClerkProvider>
         <DashboardThemeScope />
         <div className="relative flex min-h-screen items-center justify-center bg-surface-bg">
           {!admin ? (
@@ -62,7 +63,7 @@ export default async function DashboardLayout({
             </p>
           </div>
         </div>
-      </>
+      </ClerkProvider>
     );
   }
 
@@ -77,7 +78,7 @@ export default async function DashboardLayout({
     : false;
 
   return (
-    <>
+    <ClerkProvider>
       <DashboardThemeScope />
       {impersonating && <ImpersonationBanner />}
       <DashboardShell
@@ -89,6 +90,6 @@ export default async function DashboardLayout({
       >
         {children}
       </DashboardShell>
-    </>
+    </ClerkProvider>
   );
 }
