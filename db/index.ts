@@ -7,9 +7,10 @@ import { serverEnv } from "@/lib/env/server";
 
 const client = postgres(serverEnv.DATABASE_URL, {
   prepare: false,
-  max: 1,
+  max: 10,
   idle_timeout: 20,
   connect_timeout: 10,
+  max_lifetime: 60 * 30,
 });
 
 export const db = drizzle(client, { schema });
