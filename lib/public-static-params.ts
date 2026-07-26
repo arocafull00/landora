@@ -1,3 +1,4 @@
+import { getBlogPostsByLandingId } from "@/data/blog";
 import {
   getPublishedLandingBySlug,
   getPublishedLandingSlugs,
@@ -36,6 +37,30 @@ export async function getPublishedPortfolioProjectParams() {
     } catch (error) {
       logger.captureException(error, {
         action: "static-params-projects",
+      });
+    }
+  }
+
+  return params;
+}
+
+export async function getPublishedBlogPostParams() {
+  const slugs = await readPublishedSlugs("static-params-blog-posts");
+  const params: { slug: string; postSlug: string }[] = [];
+
+  for (const slug of slugs) {
+    try {
+      const landing = await getPublishedLandingBySlug(slug);
+      if (!landing) continue;
+
+      const posts = await getBlogPostsByLandingId(landing.id, true);
+      for (const post of posts) {
+        if (!post.slug) continue;
+        params.push({ slug, postSlug: post.slug });
+      }
+    } catch (error) {
+      logger.captureException(error, {
+        action: "static-params-blog-posts",
       });
     }
   }

@@ -1,14 +1,17 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { BlogPostPageContent } from "@/components/blog/blog-post-page-content";
-import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
 import { getBlogPostBySlug } from "@/data/blog";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
+import { getPublishedBlogPostParams } from "@/lib/public-static-params";
 
 type BlogPostPageProps = {
   params: Promise<{ slug: string; postSlug: string }>;
 };
+
+export function generateStaticParams() {
+  return getPublishedBlogPostParams();
+}
 
 export async function generateMetadata({
   params,
@@ -32,12 +35,9 @@ export async function generateMetadata({
   });
 }
 
-export default function PublicBlogPostRoute({ params }: BlogPostPageProps) {
-  return (
-    <Suspense fallback={<PublicLandingSkeleton />}>
-      {params.then(({ slug, postSlug }) => (
-        <BlogPostPageContent postSlug={postSlug} slug={slug} />
-      ))}
-    </Suspense>
-  );
+export default async function PublicBlogPostRoute({
+  params,
+}: BlogPostPageProps) {
+  const { slug, postSlug } = await params;
+  return <BlogPostPageContent postSlug={postSlug} slug={slug} />;
 }

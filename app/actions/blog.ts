@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { revalidatePath, updateTag } from "next/cache";
 import {
   createBlogPost,
@@ -20,6 +21,7 @@ import {
   updateBlogConfigSchema,
   updateBlogPostSchema,
 } from "@/lib/schemas/api";
+import { warmPublicBlogPost } from "@/lib/warm-public-landing";
 
 type BlogPostResult =
   | { success: true; data: BlogPostDto }
@@ -34,11 +36,34 @@ function slugify(text: string): string {
     .replace(/(^-|-$)+/g, "");
 }
 
-function revalidateBlogRoutes(landing: { id: string; slug: string }) {
+function normalizeLandingSlug(slug: string) {
+  return slug.replace(/^\/+|\/+$/g, "");
+}
+
+function revalidateBlogRoutes(
+  landing: { id: string; slug: string; customDomain?: string | null },
+  options?: { postSlug?: string; warm?: boolean },
+) {
+  const landingSlug = normalizeLandingSlug(landing.slug);
+  const postSlug = options?.postSlug;
+
   updateTag(getBlogCacheTag(landing.id));
   revalidatePath("/blog");
+  revalidatePath(`/${landingSlug}/blog`);
   revalidatePath("/editor");
   revalidatePath(`/preview/${landing.id}`);
+
+  if (!postSlug) return;
+
+  revalidatePath(`/blog/${postSlug}`);
+  revalidatePath(`/${landingSlug}/blog/${postSlug}`);
+  revalidatePath(`/preview/${landing.id}/blog/${postSlug}`);
+
+  if (!options?.warm) return;
+
+  after(() => {
+    void warmPublicBlogPost(landing, postSlug);
+  });
 }
 
 export async function createBlogPostAction(
@@ -62,7 +87,10 @@ export async function createBlogPostAction(
       body: parsed.data.body,
       heroImage: parsed.data.heroImage,
     });
-    revalidateBlogRoutes(landing);
+    revalidateBlogRoutes(landing, {
+      postSlug: row.slug,
+      warm: row.published,
+    });
     return { success: true, data: toBlogPostDto(row) };
   } catch (error) {
     logger.captureException(error, {
@@ -96,7 +124,14 @@ export async function updateBlogPostAction(
     }
 
     const row = await updateBlogPost(validPostId, parsed.data);
-    revalidateBlogRoutes(landing);
+    const nextSlug = row.slug ?? post.slug;
+    revalidateBlogRoutes(landing, {
+      postSlug: nextSlug,
+      warm: row.published ?? post.published,
+    });
+    if (post.slug !== nextSlug) {
+      revalidateBlogRoutes(landing, { postSlug: post.slug });
+    }
     return { success: true, data: toBlogPostDto(row) };
   } catch (error) {
     logger.captureException(error, {
@@ -126,7 +161,7 @@ export async function deleteBlogPostAction(
     }
 
     await deleteBlogPost(validPostId);
-    revalidateBlogRoutes(landing);
+    revalidateBlogRoutes(landing, { postSlug: post.slug });
     return { success: true };
   } catch (error) {
     logger.captureException(error, {

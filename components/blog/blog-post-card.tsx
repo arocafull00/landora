@@ -36,24 +36,24 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         )}
       </Link>
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <time className="text-sm text-portfolio-ink-muted">
+        <time className="text-sm text-[var(--site-on-dark)]/55">
           {formatBlogDate(post.publishedAt)}
         </time>
         <h2
-          className="text-xl font-semibold text-portfolio-ink"
+          className="text-xl font-semibold text-[var(--site-on-dark)]"
           style={{ fontFamily: "var(--font-syne)" }}
         >
-          <Link className="transition-colors hover:text-portfolio-ink-muted" href={href}>
+          <Link className="transition-colors hover:text-[var(--site-on-dark)]/70" href={href}>
             {post.title}
           </Link>
         </h2>
         {post.excerpt ? (
-          <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-portfolio-ink-muted">
+          <p className="line-clamp-3 flex-1 text-sm leading-relaxed text-[var(--site-on-dark)]/70">
             {post.excerpt}
           </p>
         ) : null}
         <Link
-          className="text-sm font-semibold text-portfolio-accent transition-colors hover:text-portfolio-ink"
+          className="text-sm font-semibold text-portfolio-accent transition-colors hover:text-[var(--site-on-dark)]"
           href={href}
         >
           Leer más
