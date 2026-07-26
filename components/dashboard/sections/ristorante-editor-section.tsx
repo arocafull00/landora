@@ -16,7 +16,7 @@ import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
-import { RISTORANTE_IMAGE_OPTIONS } from "@/lib/ristorante-assets";
+import { RistoranteMenuEditorPanel } from "@/components/dashboard/ristorante-menu-editor/ristorante-menu-editor-panel";
 
 export function RistoranteEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -41,7 +41,6 @@ export function RistoranteEditorSection() {
 
   if (!activeLanding) return null;
 
-  const serviceMenu = activeLanding.content.serviceMenu ?? [];
   const team = activeLanding.content.team ?? [];
   const workflow = activeLanding.content.workflow ?? [];
   const faq = activeLanding.content.faq ?? [];
@@ -71,60 +70,7 @@ export function RistoranteEditorSection() {
           ) : null}
 
           {activeEditorTab === "Carta" ? (
-            <section className="space-y-5 py-unit-lg">
-              <SectionTitle title="Carta" description="Edita la carta con categorías y precios." />
-              <SectionHeadingFields
-                activeLanding={activeLanding}
-                anchor="carta"
-                fallback={SECTION_HEADING_DEFAULTS.ristorante.carta}
-              />
-              <div className="space-y-6">
-                {serviceMenu.map((item) => (
-                  <div
-                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
-                    key={item.id}
-                  >
-                  <TextField
-                    label="Categoría"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { category: value })
-                    }
-                    value={item.category}
-                  />
-                  <TextField
-                    label="Nombre"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { name: value })
-                    }
-                    value={item.name}
-                  />
-                  <TextArea
-                    label="Descripción"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { description: value })
-                    }
-                    value={item.description}
-                  />
-                  <TextField
-                    label="Precio"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { price: value })
-                    }
-                    value={item.price}
-                  />
-                  <ImageField
-                    label="Imagen del plato"
-                    onChange={(value) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { image: value })
-                    }
-                    presets={RISTORANTE_IMAGE_OPTIONS}
-                    templateId={activeLanding.template}
-                    value={item.image ?? ""}
-                  />
-                  </div>
-                ))}
-              </div>
-            </section>
+            <RistoranteMenuEditorPanel landing={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Galeria" ? (
