@@ -1,13 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState, type RefObject } from "react";
 import { X, Menu } from "lucide-react";
 import { m, AnimatePresence, useReducedMotion } from "motion/react";
-import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
+import type { BrandLogoType, EditorPageTarget, NavLink } from "@/lib/dashboard-data";
+import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
 import { handleSectionNavClick } from "@/lib/scroll-to-section";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import { RistoranteNavLink } from "@/components/templates/ristorante/ristorante-nav-link";
 import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 
 function getScrollTargets(el: HTMLElement | null) {
@@ -40,29 +43,40 @@ function getScrollTop(targets: (Window | Element)[]) {
 }
 
 export function RistoranteNav({
+  activePage = "home",
   brand,
   brandLogoImage,
   brandLogoType,
+  cartaHref,
+  cartaPageTarget,
   navLinks,
   ctaLabel,
   ctaHref,
   heroNavTone,
+  homeHref = "#hero",
+  homePageTarget,
   topOffset = 0,
   scrollRootRef,
 }: {
+  activePage?: "home" | "carta";
   brand: string;
   brandLogoImage: string;
   brandLogoType: BrandLogoType;
+  cartaHref?: string;
+  cartaPageTarget?: EditorPageTarget;
   navLinks: NavLink[];
   ctaLabel: string;
   ctaHref: string;
   heroNavTone: HeroNavTone;
+  homeHref?: string;
+  homePageTarget?: EditorPageTarget;
   topOffset?: number;
   scrollRootRef?: RefObject<HTMLElement | null>;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
+  const previewBridge = usePreviewBridge();
   const { trackCtaClick } = useAnalytics();
 
   useEffect(() => {
@@ -100,37 +114,47 @@ export function RistoranteNav({
               : "transparent",
         }}
       >
-        <TemplateNavAnchor
+        <Link
           className={`text-2xl font-normal tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 ${
             useLightText ? "text-[var(--ristorante-foreground)]" : "text-[var(--site-text)]"
           }`}
-          href="#hero"
+          href={homeHref}
+          onNavigate={() => {
+            if (homePageTarget) {
+              previewBridge?.announcePageTarget(homePageTarget);
+            }
+          }}
+          prefetch={homePageTarget ? true : undefined}
           style={{ fontFamily: "var(--font-ristorante-display)" }}
         >
           <TemplateNavBrand
             brand={brand}
             brandLogoImage={brandLogoImage}
             brandLogoType={brandLogoType}
+            className={brandLogoType === "image" ? "h-16 w-56" : undefined}
           />
-        </TemplateNavAnchor>
+        </Link>
 
         <div className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <TemplateNavAnchor
+            <RistoranteNavLink
+              activePage={activePage}
+              cartaHref={cartaHref}
+              cartaPageTarget={cartaPageTarget}
               className={`text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 ${
                 useLightText
                   ? "text-[var(--ristorante-foreground)]/80 hover:text-[var(--ristorante-accent)]"
                   : "text-[var(--site-text-muted)] hover:text-[var(--site-text)]"
               }`}
+              homePageTarget={homePageTarget}
               href={link.href}
               key={link.id}
+              label={link.label}
               style={{ fontFamily: "var(--font-ristorante-body)" }}
-            >
-              {link.label}
-            </TemplateNavAnchor>
+            />
           ))}
           <TemplateNavAnchor
-            className="rounded-md bg-[var(--ristorante-primary)] px-5 py-2.5 text-xs font-semibold tracking-wide text-[var(--ristorante-foreground)] transition-colors hover:bg-[var(--ristorante-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2"
+            className="rounded-md bg-[var(--ristorante-primary)] px-5 py-2.5 text-xs font-semibold tracking-wide text-[var(--site-on-primary)] transition-colors hover:bg-[var(--ristorante-secondary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2"
             href={ctaHref}
             onClick={() => trackCtaClick()}
           >
@@ -163,23 +187,27 @@ export function RistoranteNav({
             transition={{ duration: 0.25 }}
           >
             {navLinks.map((link, i) => (
-              <m.a
-                className="text-3xl font-normal text-[var(--ristorante-foreground)] transition-colors hover:text-[var(--ristorante-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)]"
-                href={link.href}
+              <m.div
                 key={link.id}
-                onClick={(event) =>
-                  handleSectionNavClick(event, link.href, () => setMenuOpen(false))
-                }
-                style={{
-                  fontFamily: "var(--font-ristorante-display)",
-                  lineHeight: 2.2,
-                }}
                 initial={reduce ? false : { opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: i * 0.06 }}
               >
-                {link.label}
-              </m.a>
+                <RistoranteNavLink
+                  activePage={activePage}
+                  cartaHref={cartaHref}
+                  cartaPageTarget={cartaPageTarget}
+                  className="text-3xl font-normal text-[var(--ristorante-foreground)] transition-colors hover:text-[var(--ristorante-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)]"
+                  homePageTarget={homePageTarget}
+                  href={link.href}
+                  label={link.label}
+                  onNavigate={() => setMenuOpen(false)}
+                  style={{
+                    fontFamily: "var(--font-ristorante-display)",
+                    lineHeight: 2.2,
+                  }}
+                />
+              </m.div>
             ))}
             <m.a
               className="mt-6 rounded-md bg-[var(--ristorante-secondary)] px-8 py-3 text-sm font-semibold text-[var(--ristorante-foreground)] transition-colors hover:bg-[var(--ristorante-secondary)]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ristorante-primary)]"

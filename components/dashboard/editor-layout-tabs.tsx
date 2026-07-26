@@ -16,6 +16,9 @@ export function EditorLayoutTabs() {
   const isAdmin = useDashboardStore((state) => state.isAdmin);
   const landings = useDashboardStore((state) => state.landings);
   const setActiveEditorTab = useDashboardStore((state) => state.setActiveEditorTab);
+  const setActivePageTarget = useDashboardStore(
+    (state) => state.setActivePageTarget,
+  );
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
@@ -37,12 +40,27 @@ export function EditorLayoutTabs() {
     setActiveEditorTab("Hero");
   }, [tabs, activeEditorTab, setActiveEditorTab]);
 
-  if (!template || activePageTarget.type !== "home") return null;
+  const showTabs =
+    activePageTarget.type === "home" || activePageTarget.type === "carta";
+
+  if (!template || !showTabs) return null;
+
+  const handleTabChange = (tab: string) => {
+    setActiveEditorTab(tab);
+    if (template !== "ristorante") return;
+    if (tab === "Carta") {
+      setActivePageTarget({ type: "carta" });
+      return;
+    }
+    if (activePageTarget.type === "carta") {
+      setActivePageTarget({ type: "home" });
+    }
+  };
 
   return (
     <EditorTabsBar
       activeTab={activeEditorTab}
-      onTabChange={setActiveEditorTab}
+      onTabChange={handleTabChange}
       tabs={tabs}
     />
   );

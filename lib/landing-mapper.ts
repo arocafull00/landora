@@ -11,6 +11,7 @@ import { normalizeEnabledPages } from "@/lib/site-pages";
 import {
   syncBlogNavHrefs,
   syncPortfolioAboutNavHrefs,
+  syncRistoranteCartaNavHrefs,
 } from "@/lib/template-sections";
 
 function mapImage(url: string | null | undefined) {
@@ -124,8 +125,13 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
           href: n.href,
         })),
       );
-      if (row.template !== "portfolio") return items;
-      return syncPortfolioAboutNavHrefs(items);
+      if (row.template === "portfolio") {
+        return syncPortfolioAboutNavHrefs(items);
+      }
+      if (row.template === "ristorante") {
+        return syncRistoranteCartaNavHrefs(items);
+      }
+      return items;
     })(),
     spaces: (row.spaces ?? []).map((s) => ({
       id: s.id,

@@ -8,6 +8,7 @@ export type TemplateSectionDef = {
   editorTabId?: string;
   navHref?: string;
   required?: boolean;
+  separatePage?: boolean;
   contentKeys?: LandingSectionKey[];
 };
 
@@ -86,6 +87,28 @@ function getAboutNavTarget(): NavScrollTarget {
     href: getAboutNavHref(),
     label: "About me",
   };
+}
+
+export function getCartaNavHref(): string {
+  return "/carta";
+}
+
+export function isRistoranteCartaNavHref(href: string): boolean {
+  return /^\/(?:[^/]+\/)?carta\/?$/.test(href.trim()) || href.trim() === "#carta";
+}
+
+export function remapRistoranteCartaNavHref(href: string): string {
+  if (!isRistoranteCartaNavHref(href)) return href;
+  return getCartaNavHref();
+}
+
+export function syncRistoranteCartaNavHrefs(nav: NavLink[]): NavLink[] {
+  const cartaHref = getCartaNavHref();
+  return nav.map((item) => {
+    if (!isRistoranteCartaNavHref(item.href)) return item;
+    if (item.href === cartaHref) return item;
+    return { ...item, href: cartaHref };
+  });
 }
 
 export function getNavScrollTargets(
@@ -196,7 +219,13 @@ const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = 
 };
 
 export function normalizeNavHref(templateId: TemplateId, href: string): string {
-  if (!href.startsWith("#")) return remapBlogNavHref(href);
+  if (!href.startsWith("#")) {
+    const remapped = remapBlogNavHref(href);
+    if (templateId === "ristorante") {
+      return remapRistoranteCartaNavHref(remapped);
+    }
+    return remapped;
+  }
 
   const sections = getTemplateSections(templateId);
   const validHrefs = new Set(sections.map(getSectionScrollHref));
@@ -263,7 +292,14 @@ const PORTFOLIO_SECTIONS: TemplateSectionDef[] = [
 const RISTORANTE_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
   { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
-  { anchor: "carta", label: "Carta", editorTabId: "Carta", navHref: "#carta", contentKeys: ["serviceMenu"] },
+  {
+    anchor: "carta",
+    label: "Carta",
+    editorTabId: "Carta",
+    navHref: "/carta",
+    separatePage: true,
+    contentKeys: ["serviceMenu"],
+  },
   { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
   { anchor: "equipo", label: "Equipo", editorTabId: "Equipo", navHref: "#equipo", contentKeys: ["team"] },
   { anchor: "horarios", label: "Horarios", editorTabId: "Horarios", navHref: "#horarios", contentKeys: ["workflow"] },
@@ -390,7 +426,10 @@ export function getOrderedVisibleBodySections(
   content: LandingContent,
 ): TemplateSectionDef[] {
   return getOrderedTemplateSections(templateId, content.sectionOrder).filter(
-    (section) => !section.required && isSectionVisible(content, section.anchor),
+    (section) =>
+      !section.required &&
+      !section.separatePage &&
+      isSectionVisible(content, section.anchor),
   );
 }
 

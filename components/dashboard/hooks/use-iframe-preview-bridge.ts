@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import type {
   EditorPageTarget,
   LandingContent,
@@ -10,7 +10,6 @@ import type {
 import { addEditorFocusElementListener } from "@/lib/editor-element-focus";
 import {
   isPreviewChannelReadyMessage,
-  isPreviewPageChangedMessage,
   isPreviewPageIntentMessage,
   postPreviewContent,
   postPreviewHighlightElement,
@@ -25,6 +24,7 @@ import {
   isSameEditorPageTarget,
 } from "@/lib/preview-page-target";
 import { getSectionByAnchor } from "@/lib/template-sections";
+import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 type IframePreviewBridgeParams = {
   content: LandingContent;
@@ -47,9 +47,11 @@ export function useIframePreviewBridge({
 }: IframePreviewBridgeParams) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const portRef = useRef<MessagePort | null>(null);
-  const [initialSrc] = useState(
-    () => `${getPreviewPageHref(landingId, pageTarget)}?embed=1`,
-  );
+  const heroVariantId = sectionSelections.hero;
+  const resolvedAppearance = resolveLandingAppearance(template, content.appearance);
+  const paletteId = resolvedAppearance.paletteId;
+  const typographyId = resolvedAppearance.typographyId;
+  const previewSrc = `${getPreviewPageHref(landingId, pageTarget)}?embed=1`;
   const latestRef = useRef({
     content,
     onPageTargetChange,
@@ -59,22 +61,34 @@ export function useIframePreviewBridge({
     template,
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const syncedContent = {
+      ...content,
+      appearance: { paletteId, typographyId },
+    };
     latestRef.current = {
-      content,
+      content: syncedContent,
       onPageTargetChange,
       pageTarget,
       scrollTarget,
       sectionSelections,
       template,
     };
+    postPreviewContent(portRef.current, {
+      content: syncedContent,
+      sectionSelections,
+      template,
+    });
   }, [
     content,
+    heroVariantId,
     onPageTargetChange,
     pageTarget,
+    paletteId,
     scrollTarget,
     sectionSelections,
     template,
+    typographyId,
   ]);
 
   const sendContent = useCallback(
@@ -115,14 +129,6 @@ export function useIframePreviewBridge({
   );
 
   useEffect(() => {
-    postPreviewContent(portRef.current, {
-      content,
-      sectionSelections,
-      template,
-    });
-  }, [content, sectionSelections, template]);
-
-  useEffect(() => {
     if (scrollTarget) {
       postPreviewScrollTo(portRef.current, scrollTarget);
     }
@@ -131,10 +137,6 @@ export function useIframePreviewBridge({
       : undefined;
     postPreviewHighlightSection(portRef.current, scrollTarget ?? null, label);
   }, [scrollTarget, template]);
-
-  useEffect(() => {
-    postPreviewNavigateTo(portRef.current, pageTarget);
-  }, [pageTarget]);
 
   useEffect(() => {
     return addEditorFocusElementListener((editorId) => {
@@ -165,10 +167,7 @@ export function useIframePreviewBridge({
           return;
         }
 
-        if (
-          !isPreviewPageIntentMessage(data) &&
-          !isPreviewPageChangedMessage(data)
-        ) {
+        if (!isPreviewPageIntentMessage(data)) {
           return;
         }
 
@@ -204,5 +203,41 @@ export function useIframePreviewBridge({
     };
   }, [landingId, sendContent, sendPageTarget, sendSectionFocus]);
 
-  return { iframeRef, initialSrc };
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+
+    const webpackHot = (
+      import.meta as ImportMeta & {
+        webpackHot?: {
+          addStatusHandler: (handler: (status: string) => void) => void;
+          removeStatusHandler: (handler: (status: string) => void) => void;
+        };
+      }
+    ).webpackHot;
+
+    if (!webpackHot) return;
+
+    let sawUpdate = false;
+    const onHotStatus = (status: string) => {
+      if (
+        status === "check" ||
+        status === "prepare" ||
+        status === "dispose" ||
+        status === "apply"
+      ) {
+        sawUpdate = true;
+        return;
+      }
+      if (status !== "idle" || !sawUpdate) return;
+      sawUpdate = false;
+      iframeRef.current?.contentWindow?.location.reload();
+    };
+
+    webpackHot.addStatusHandler(onHotStatus);
+    return () => {
+      webpackHot.removeStatusHandler(onHotStatus);
+    };
+  }, []);
+
+  return { iframeRef, previewSrc };
 }

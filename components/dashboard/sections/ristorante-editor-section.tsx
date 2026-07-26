@@ -16,6 +16,7 @@ import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
+import { RISTORANTE_IMAGE_OPTIONS } from "@/lib/ristorante-assets";
 
 export function RistoranteEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -110,6 +111,15 @@ export function RistoranteEditorSection() {
                       updateSectionItem(activeLanding.id, "serviceMenu", item.id, { price: value })
                     }
                     value={item.price}
+                  />
+                  <ImageField
+                    label="Imagen del plato"
+                    onChange={(value) =>
+                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, { image: value })
+                    }
+                    presets={RISTORANTE_IMAGE_OPTIONS}
+                    templateId={activeLanding.template}
+                    value={item.image ?? ""}
                   />
                   </div>
                 ))}

@@ -5,6 +5,7 @@ import type {
   LandingSectionSelections,
   TemplateId,
 } from "@/lib/dashboard-data";
+import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 export const PREVIEW_CONTENT_UPDATE = "landora:preview-content-update";
 export const PREVIEW_CHANNEL_INIT = "landora:preview-channel-init";
@@ -19,6 +20,7 @@ const PREVIEW_HIGHLIGHT_ELEMENT = "landora:preview-highlight-element";
 const editorPageTargetSchema = z.discriminatedUnion("type", [
   z.strictObject({ type: z.literal("home") }),
   z.strictObject({ type: z.literal("about") }),
+  z.strictObject({ type: z.literal("carta") }),
   z.strictObject({
     type: z.literal("project"),
     projectId: z.string().min(1).max(128),
@@ -139,12 +141,31 @@ export function isPreviewHighlightSectionMessage(
   return true;
 }
 
+export function buildPreviewContentPayload(
+  template: TemplateId,
+  content: LandingContent,
+  sectionSelections: LandingSectionSelections,
+): Omit<PreviewContentMessage, "type"> {
+  const appearance = resolveLandingAppearance(template, content.appearance);
+
+  return {
+    content: { ...content, appearance },
+    sectionSelections,
+    template,
+  };
+}
+
 export function postPreviewContent(
   target: MessagePort | null | undefined,
   payload: Omit<PreviewContentMessage, "type">
 ) {
   if (!target) return;
-  target.postMessage({ type: PREVIEW_CONTENT_UPDATE, ...payload });
+  const normalized = buildPreviewContentPayload(
+    payload.template,
+    payload.content,
+    payload.sectionSelections,
+  );
+  target.postMessage({ type: PREVIEW_CONTENT_UPDATE, ...normalized });
 }
 
 export function postPreviewScrollTo(

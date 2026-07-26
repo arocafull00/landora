@@ -17,7 +17,7 @@ export function RistoranteChefSection({ content }: { content: LandingContent }) 
     >
       <div className="mx-auto max-w-6xl">
         <h2
-          className="mb-12 max-w-xl text-balance text-[clamp(32px,5vw,56px)] font-normal leading-[1.05] text-[var(--ristorante-secondary)] md:mb-20"
+          className="mb-12 max-w-xl text-balance text-[clamp(32px,5vw,56px)] font-normal leading-[1.05] text-[var(--site-text)] md:mb-20"
           style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
         >
           {heading.title}

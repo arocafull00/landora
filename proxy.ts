@@ -33,7 +33,7 @@ const isProtectedRoute = createRouteMatcher([
   "/api(.*)",
 ]);
 const PUBLIC_LANDING_PATH =
-  /^\/(?:$|about\/?$|book\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$|sitemap\.xml$|robots\.txt$)$/;
+  /^\/(?:$|about\/?$|book\/?$|carta\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$|sitemap\.xml$|robots\.txt$)$/;
 const PROXY_CONTEXT_TIMEOUT_MS = 5_000;
 const LANDING_ROUTE_TTL_MS = 60_000;
 

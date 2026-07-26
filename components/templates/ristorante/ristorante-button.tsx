@@ -7,11 +7,11 @@ const base =
 
 const variants = {
   primary:
-    "bg-[var(--ristorante-primary)] text-[var(--ristorante-foreground)] hover:bg-[var(--ristorante-secondary)] active:bg-[var(--ristorante-secondary)]",
+    "bg-[var(--ristorante-primary)] text-[var(--site-on-primary)] hover:bg-[var(--ristorante-secondary)] active:bg-[var(--ristorante-secondary)]",
   secondary:
-    "border border-[var(--ristorante-primary)] text-[var(--ristorante-primary)] bg-transparent hover:bg-[var(--ristorante-primary)] hover:text-[var(--ristorante-foreground)]",
+    "border border-[var(--ristorante-primary)] text-[var(--ristorante-primary)] bg-transparent hover:bg-[var(--ristorante-primary)] hover:text-[var(--site-on-primary)]",
   accent:
-    "bg-[var(--ristorante-accent)] text-[var(--ristorante-secondary)] hover:bg-[var(--ristorante-accent)]/90 active:bg-[var(--ristorante-accent)]/80",
+    "bg-[var(--ristorante-accent)] text-[var(--site-on-accent)] hover:bg-[var(--ristorante-accent)]/90 active:bg-[var(--ristorante-accent)]/80",
 };
 
 const sizes = {

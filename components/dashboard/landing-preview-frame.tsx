@@ -22,8 +22,10 @@ import {
 import { resolveSectionId } from "@/lib/template-sections";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
+import { resolveLandingAppearance } from "@/lib/site-appearance";
 import { PortfolioAboutPage } from "@/components/templates/portfolio/portfolio-about-page";
 import { PortfolioProjectPage } from "@/components/templates/portfolio/portfolio-project-page";
+import { RistoranteMenuPage } from "@/components/templates/ristorante/ristorante-menu-page";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -50,7 +52,7 @@ export function LandingPreviewFrame({
   template: TemplateId;
   slug?: string;
   previewLandingId?: string;
-  sitePage?: SitePageId | "project";
+  sitePage?: SitePageId | "project" | "carta";
   previewProjectKey?: string;
   bookingEnabled?: boolean;
 }) {
@@ -60,6 +62,7 @@ export function LandingPreviewFrame({
   const activeTemplate = livePreview?.template ?? template;
   const sectionSelections =
     livePreview?.sectionSelections ?? initialSectionSelections;
+  const heroVariantId = sectionSelections.hero;
   const highlightedEditorId = previewBridge?.highlightedEditorId ?? null;
   const scrollRequest = previewBridge?.scrollRequest ?? null;
 
@@ -86,7 +89,7 @@ export function LandingPreviewFrame({
       cancelAnimationFrame(firstFrame);
       if (secondFrame !== undefined) cancelAnimationFrame(secondFrame);
     };
-  }, [content]);
+  }, [content, heroVariantId]);
 
   useEffect(() => {
     if (!scrollRequest) return;
@@ -112,6 +115,8 @@ export function LandingPreviewFrame({
   }, []);
 
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
+  const appearance = resolveLandingAppearance(activeTemplate, content.appearance);
+  const themeScopeKey = `${activeTemplate}-${appearance.paletteId}-${appearance.typographyId}`;
   const previewProject =
     sitePage === "project"
       ? content.gallery?.find(
@@ -122,7 +127,11 @@ export function LandingPreviewFrame({
       : undefined;
 
   return (
-    <SiteThemeScope appearance={content.appearance} template={activeTemplate}>
+    <SiteThemeScope
+      appearance={appearance}
+      key={themeScopeKey}
+      template={activeTemplate}
+    >
       {sitePage === "project" &&
       activeTemplate === "portfolio" &&
       previewProject ? (
@@ -136,8 +145,16 @@ export function LandingPreviewFrame({
           content={content}
           previewLandingId={previewLandingId}
         />
+      ) : sitePage === "carta" && activeTemplate === "ristorante" ? (
+        <RistoranteMenuPage
+          bookingEnabled={bookingEnabled}
+          content={content}
+          previewLandingId={previewLandingId}
+          slug={slug}
+        />
       ) : activeTemplate === "portfolio" ? (
         <PortfolioTemplate
+          key={heroVariantId}
           bookingEnabled={bookingEnabled}
           content={content}
           previewLandingId={previewLandingId}
@@ -146,6 +163,7 @@ export function LandingPreviewFrame({
         />
       ) : (
         <Component
+          key={heroVariantId}
           bookingEnabled={bookingEnabled}
           content={content}
           previewLandingId={previewLandingId}

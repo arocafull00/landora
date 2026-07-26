@@ -40,6 +40,9 @@ export function EditorToolbar() {
   const setActivePageTarget = useDashboardStore(
     (state) => state.setActivePageTarget,
   );
+  const setActiveEditorTab = useDashboardStore(
+    (state) => state.setActiveEditorTab,
+  );
   const addSitePage = useDashboardStore((state) => state.addSitePage);
   const removeSitePage = useDashboardStore((state) => state.removeSitePage);
   const isAdmin = useDashboardStore((state) => state.isAdmin);
@@ -63,7 +66,9 @@ export function EditorToolbar() {
   const activePageLabel =
     activePageTarget.type === "about"
       ? "About me"
-      : activeProject?.title || activeLanding.name;
+      : activePageTarget.type === "carta"
+        ? "Carta"
+        : activeProject?.title || activeLanding.name;
 
   const copyPreviewLink = async () => {
     let url: string;
@@ -71,6 +76,8 @@ export function EditorToolbar() {
 
     if (activePageTarget.type === "about") {
       pathname = "/about";
+    } else if (activePageTarget.type === "carta") {
+      pathname = "/carta";
     } else if (activeProject?.projectSlug) {
       pathname = `/proyectos/${activeProject.projectSlug}`;
     }
@@ -112,7 +119,15 @@ export function EditorToolbar() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
             <DropdownMenuItem
-              onClick={() => setActivePageTarget({ type: "home" })}
+              onClick={() => {
+                setActivePageTarget({ type: "home" });
+                if (
+                  activeLanding.template === "ristorante" &&
+                  activePageTarget.type === "carta"
+                ) {
+                  setActiveEditorTab("Hero");
+                }
+              }}
             >
               <HomeIcon aria-hidden />
               <span className="flex-1 truncate">Inicio</span>
@@ -127,6 +142,20 @@ export function EditorToolbar() {
                 <FileTextIcon aria-hidden />
                 <span className="flex-1 truncate">About me</span>
                 {activePageTarget.type === "about" ? (
+                  <CheckIcon className="h-4 w-4 text-primary" />
+                ) : null}
+              </DropdownMenuItem>
+            ) : null}
+            {activeLanding.template === "ristorante" ? (
+              <DropdownMenuItem
+                onClick={() => {
+                  setActivePageTarget({ type: "carta" });
+                  setActiveEditorTab("Carta");
+                }}
+              >
+                <FileTextIcon aria-hidden />
+                <span className="flex-1 truncate">Carta</span>
+                {activePageTarget.type === "carta" ? (
                   <CheckIcon className="h-4 w-4 text-primary" />
                 ) : null}
               </DropdownMenuItem>

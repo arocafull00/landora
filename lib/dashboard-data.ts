@@ -17,6 +17,7 @@ export type SitePageId = "home" | "about";
 export type EditorPageTarget =
   | { type: "home" }
   | { type: "about" }
+  | { type: "carta" }
   | { type: "project"; projectId: string };
 
 export type SectionHeading = {

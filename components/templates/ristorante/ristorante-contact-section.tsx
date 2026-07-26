@@ -25,13 +25,13 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
   return (
     <footer
       id="contacto"
-      className="scroll-mt-24 bg-[var(--ristorante-secondary)] px-6 py-[clamp(80px,12vw,140px)] md:px-10 lg:px-16"
+      className="scroll-mt-24 bg-(--ristorante-secondary) px-6 py-[clamp(80px,12vw,140px)] md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
           <div>
             <h2
-              className="mb-6 text-balance text-[clamp(40px,6vw,72px)] font-normal leading-[1.0] text-[var(--ristorante-foreground)]"
+              className="mb-6 text-balance text-[clamp(40px,6vw,72px)] font-normal leading-none text-(--ristorante-foreground)"
               style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
             >
               {heading.title}
@@ -120,8 +120,15 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
         </div>
 
         <div className="mt-16 space-y-6 border-t border-[var(--ristorante-foreground)]/15 pt-8 text-center">
-          <FooterSocialLinks contact={content.contact} />
-          <FooterCopyright brand={content.brand} contact={content.contact} />
+          <FooterSocialLinks
+            contact={content.contact}
+            linkClassName="text-[var(--ristorante-foreground)]/40 transition-colors hover:text-[var(--ristorante-foreground)]"
+          />
+          <FooterCopyright
+            brand={content.brand}
+            className="text-xs text-[var(--ristorante-foreground)]/30"
+            contact={content.contact}
+          />
         </div>
       </div>
     </footer>

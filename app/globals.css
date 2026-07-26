@@ -566,46 +566,154 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --site-on-accent: #ffffff;
 }
 
+[data-site-theme][data-template="portfolio"][data-palette="sky"] {
+  --site-primary: #0c4a6e;
+  --site-primary-hover: #0a3a57;
+  --site-accent: #0284c7;
+  --site-surface: #f3f7fb;
+  --site-surface-alt: #e1ebf3;
+  --site-text: #15202b;
+  --site-text-muted: #5a6b79;
+  --site-border: #c2d0dc;
+  --site-dark: #163042;
+  --site-on-dark: #f5fafc;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
+}
+
+[data-site-theme][data-template="portfolio"][data-palette="blush"] {
+  --site-primary: #9f1239;
+  --site-primary-hover: #7f0e2e;
+  --site-accent: #e11d48;
+  --site-surface: #fdf6f5;
+  --site-surface-alt: #f0e0df;
+  --site-text: #2a171b;
+  --site-text-muted: #6e5258;
+  --site-border: #d9c0c4;
+  --site-dark: #3a1c24;
+  --site-on-dark: #fff7f8;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
+}
+
 [data-site-theme][data-template="ristorante"][data-palette="default"] {
-  --site-primary: #6b1a0a;
-  --site-primary-hover: #511407;
-  --site-accent: #c4a574;
-  --site-surface: #f4f2ef;
-  --site-surface-alt: #e7e1d9;
-  --site-text: #2d201c;
-  --site-text-muted: #665650;
-  --site-border: #cbbfb4;
-  --site-dark: #140c0a;
-  --site-on-dark: #f4f2ef;
+  --site-primary: #0f766e;
+  --site-primary-hover: #115e59;
+  --site-accent: #2dd4bf;
+  --site-surface: #0a0a0a;
+  --site-surface-alt: #1f1f1f;
+  --site-text: #ffffff;
+  --site-text-muted: #b8b8b8;
+  --site-border: #3d3d3d;
+  --site-dark: #141414;
+  --site-on-dark: #ffffff;
   --site-on-primary: #ffffff;
+  --site-on-accent: #141414;
 }
 
-[data-site-theme][data-template="ristorante"][data-palette="olive"] {
-  --site-primary: #4c5a2a;
-  --site-primary-hover: #39451f;
-  --site-accent: #806d3d;
-  --site-surface: #f5f1e7;
-  --site-surface-alt: #e4dfcf;
-  --site-text: #28271d;
-  --site-text-muted: #625f4d;
-  --site-border: #c8c0a8;
-  --site-dark: #1d2113;
-  --site-on-dark: #f8f4e9;
+[data-site-theme][data-template="ristorante"][data-palette="lime"] {
+  --site-primary: #4d7c0f;
+  --site-primary-hover: #3f6212;
+  --site-accent: #bef264;
+  --site-surface: #0d100a;
+  --site-surface-alt: #20251a;
+  --site-text: #f7fee7;
+  --site-text-muted: #c4cdb3;
+  --site-border: #455034;
+  --site-dark: #151a10;
+  --site-on-dark: #f7fee7;
   --site-on-primary: #ffffff;
+  --site-on-accent: #151a10;
 }
 
-[data-site-theme][data-template="ristorante"][data-palette="midnight"] {
-  --site-primary: #294d66;
-  --site-primary-hover: #1e3a4d;
-  --site-accent: #a4673f;
-  --site-surface: #f0f3f4;
-  --site-surface-alt: #dce4e7;
-  --site-text: #17252d;
-  --site-text-muted: #52656f;
-  --site-border: #b8c7ce;
-  --site-dark: #101d25;
-  --site-on-dark: #f3f8fa;
+[data-site-theme][data-template="ristorante"][data-palette="coral"] {
+  --site-primary: #b64238;
+  --site-primary-hover: #91342d;
+  --site-accent: #ff766b;
+  --site-surface: #100d0d;
+  --site-surface-alt: #271d1d;
+  --site-text: #fff7f5;
+  --site-text-muted: #d0b8b4;
+  --site-border: #553b38;
+  --site-dark: #1b1414;
+  --site-on-dark: #fff7f5;
   --site-on-primary: #ffffff;
+  --site-on-accent: #1b1414;
+}
+
+[data-site-theme][data-template="ristorante"][data-palette="ivory"] {
+  --site-primary: #173b8f;
+  --site-primary-hover: #123071;
+  --site-accent: #2f6bff;
+  --site-surface: #fbf8f0;
+  --site-surface-alt: #eee8dc;
+  --site-text: #1b1c20;
+  --site-text-muted: #5f6169;
+  --site-border: #d2c9ba;
+  --site-dark: #1a2238;
+  --site-on-dark: #f9faff;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
+}
+
+[data-site-theme][data-template="ristorante"][data-palette="sand"] {
+  --site-primary: #9c3f28;
+  --site-primary-hover: #7d2f1d;
+  --site-accent: #e86f4a;
+  --site-surface: #f7f0e3;
+  --site-surface-alt: #e8d8c4;
+  --site-text: #2c211b;
+  --site-text-muted: #6e5b50;
+  --site-border: #cdb9a3;
+  --site-dark: #34231e;
+  --site-on-dark: #fff8f1;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
+}
+
+[data-site-theme][data-template="ristorante"][data-palette="mist"] {
+  --site-primary: #57408f;
+  --site-primary-hover: #463374;
+  --site-accent: #7457c8;
+  --site-surface: #f4f3f8;
+  --site-surface-alt: #e5e2ed;
+  --site-text: #24212a;
+  --site-text-muted: #65606e;
+  --site-border: #cbc6d5;
+  --site-dark: #272234;
+  --site-on-dark: #fbf9ff;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
+}
+
+[data-site-theme][data-template="ristorante"][data-palette="sky"] {
+  --site-primary: #0c4a6e;
+  --site-primary-hover: #0a3a57;
+  --site-accent: #0284c7;
+  --site-surface: #f3f7fb;
+  --site-surface-alt: #e1ebf3;
+  --site-text: #15202b;
+  --site-text-muted: #5a6b79;
+  --site-border: #c2d0dc;
+  --site-dark: #163042;
+  --site-on-dark: #f5fafc;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
+}
+
+[data-site-theme][data-template="ristorante"][data-palette="blush"] {
+  --site-primary: #9f1239;
+  --site-primary-hover: #7f0e2e;
+  --site-accent: #e11d48;
+  --site-surface: #fdf6f5;
+  --site-surface-alt: #f0e0df;
+  --site-text: #2a171b;
+  --site-text-muted: #6e5258;
+  --site-border: #d9c0c4;
+  --site-dark: #3a1c24;
+  --site-on-dark: #fff7f8;
+  --site-on-primary: #ffffff;
+  --site-on-accent: #ffffff;
 }
 
 [data-site-theme][data-template="floristeria"][data-palette="default"] {

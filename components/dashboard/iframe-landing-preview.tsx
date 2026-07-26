@@ -42,7 +42,7 @@ export function IframeLandingPreview({
   showToolbar?: boolean;
   template?: TemplateId;
 }) {
-  const { iframeRef, initialSrc } = useIframePreviewBridge({
+  const { iframeRef, previewSrc } = useIframePreviewBridge({
     content,
     landingId,
     onPageTargetChange,
@@ -73,7 +73,7 @@ export function IframeLandingPreview({
             className="h-full w-full"
             ref={iframeRef}
             sandbox="allow-scripts allow-same-origin"
-            src={initialSrc}
+            src={previewSrc}
             title="Landing preview"
           />
         </div>

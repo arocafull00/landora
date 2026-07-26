@@ -29,6 +29,13 @@ export function createPublicSitemapEntries(
     });
   }
 
+  if (landing.template === "ristorante") {
+    entries.push({
+      url: getPublicLandingUrl(landing, "/carta"),
+      lastModified,
+    });
+  }
+
   for (const project of landing.content.gallery ?? []) {
     const internalProject = findInternalPortfolioProject(
       [project],

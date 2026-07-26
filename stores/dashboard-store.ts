@@ -37,6 +37,12 @@ import {
 } from "@/lib/dashboard-data";
 import { saveLandingAction } from "@/app/actions/landing-save";
 import { getDefaultContent } from "@/lib/default-content";
+import {
+  getLandingChangedScopes,
+  getLandingPublicationSnapshot,
+  getLandingSaveChanges,
+  hasLandingSaveChanges,
+} from "@/lib/landing-save-payload";
 import { getVisibleEditorTabs } from "@/lib/template-registry";
 import {
   getAboutNavHref,
@@ -79,6 +85,11 @@ export type DashboardState = {
   setActiveAssetId: (id: string) => void;
   setIsAdmin: (isAdmin: boolean) => void;
   initFromLanding: (landing: Landing) => void;
+  _recordLandingSave: (
+    landing: Landing,
+    status: Landing["status"],
+    edited: string,
+  ) => void;
   updateLandingMeta: (id: string, patch: Partial<Landing>) => void;
   updateHero: (id: string, patch: Partial<HeroContent>) => void;
   updateHeroVariant: (id: string, variantId: HeroVariantId) => void;
@@ -133,23 +144,27 @@ const markEdited = (landing: Landing): Landing => ({
 
 async function persistLanding(
   landing: Landing,
+  persistedLanding: Landing,
   mode: "draft" | "publish",
 ) {
-  const result = await saveLandingAction({
-    landingId: landing.id,
-    mode,
-    meta: {
-      name: landing.name,
-      slug: landing.slug,
-      seoTitle: landing.seoTitle,
-      seoDescription: landing.seoDescription,
-      seoFavicon: landing.seoFavicon,
-      seoSocialImage: landing.seoSocialImage,
-    },
-    content: landing.content,
-    appearance: landing.content.appearance,
-    heroVariant: landing.sectionSelections.hero,
-  });
+  const changes = getLandingSaveChanges(landing, persistedLanding);
+
+  if (mode === "draft" && !hasLandingSaveChanges(changes)) return;
+
+  const result = await saveLandingAction(
+    mode === "draft"
+      ? {
+          landingId: landing.id,
+          mode,
+          changes,
+        }
+      : {
+          landingId: landing.id,
+          mode,
+          changes: getLandingChangedScopes(changes),
+          publication: getLandingPublicationSnapshot(landing),
+        },
+  );
 
   if ("error" in result) throw new Error(result.error);
 }
@@ -173,6 +188,8 @@ function createDashboardStore(initial?: {
   bookingModuleEnabled: boolean;
 }) {
   const initialLanding = initial?.landing;
+  const persistedLandings = new Map<string, Landing>();
+  if (initialLanding) persistedLandings.set(initialLanding.id, initialLanding);
 
   return createStore<DashboardState>()((set, get) => ({
   activeWorkspaceTab: "Structure",
@@ -218,12 +235,37 @@ function createDashboardStore(initial?: {
   setActiveAssetId: (activeAssetId) => set({ activeAssetId }),
   setIsAdmin: (isAdmin) => set({ isAdmin }),
 
-  initFromLanding: (landing) =>
+  initFromLanding: (landing) => {
+    persistedLandings.clear();
+    persistedLandings.set(landing.id, landing);
     set({
       landings: [landing],
       activeLandingId: landing.id,
       activePageTarget: { type: "home" },
-    }),
+    });
+  },
+
+  _recordLandingSave: (savedLanding, status, edited) => {
+    persistedLandings.set(savedLanding.id, savedLanding);
+    set((state) => {
+      const currentLanding = state.landings.find(
+        (landing) => landing.id === savedLanding.id,
+      );
+      const hasNewerChanges = currentLanding
+        ? hasLandingSaveChanges(
+            getLandingSaveChanges(currentLanding, savedLanding),
+          )
+        : false;
+
+      return {
+        landings: state.landings.map((landing) =>
+          landing.id === savedLanding.id && !hasNewerChanges
+            ? { ...landing, status, edited }
+            : landing,
+        ),
+      };
+    });
+  },
 
   updateLandingMeta: (id, patch) =>
     set((state) => ({
@@ -728,8 +770,15 @@ function createDashboardStore(initial?: {
       ),
     }));
 
+    const savedLanding = { ...landing, content: nextContent };
+
     try {
-      await persistLanding({ ...landing, content: nextContent }, "draft");
+      await persistLanding(
+        savedLanding,
+        persistedLandings.get(landingId) ?? landing,
+        "draft",
+      );
+      get()._recordLandingSave(savedLanding, "Draft", "Saved just now");
     } catch {
       toast.error("No se pudo ocultar la sección");
     }
@@ -765,8 +814,15 @@ function createDashboardStore(initial?: {
       ),
     }));
 
+    const savedLanding = { ...landing, content: nextContent };
+
     try {
-      await persistLanding({ ...landing, content: nextContent }, "draft");
+      await persistLanding(
+        savedLanding,
+        persistedLandings.get(landingId) ?? landing,
+        "draft",
+      );
+      get()._recordLandingSave(savedLanding, "Draft", "Saved just now");
     } catch {
       toast.error("No se pudo restaurar la sección");
     }
@@ -815,8 +871,15 @@ function createDashboardStore(initial?: {
       ),
     }));
 
+    const savedLanding = { ...landing, content: nextContent };
+
     try {
-      await persistLanding({ ...landing, content: nextContent }, "draft");
+      await persistLanding(
+        savedLanding,
+        persistedLandings.get(landingId) ?? landing,
+        "draft",
+      );
+      get()._recordLandingSave(savedLanding, "Draft", "Saved just now");
     } catch {
       toast.error("No se pudo reordenar la sección");
     }
@@ -853,13 +916,17 @@ function createDashboardStore(initial?: {
     set({ saveStatus: "saving" });
 
     try {
-      await persistLanding(landing, "draft");
-      set((state) => ({
-        saveStatus: "saved",
-        landings: state.landings.map((l) =>
-          l.id === id ? { ...l, status: "Draft", edited: "Saved just now" } : l,
-        ),
-      }));
+      await persistLanding(
+        landing,
+        persistedLandings.get(id) ?? landing,
+        "draft",
+      );
+      const currentLanding = get().landings.find((item) => item.id === id);
+      const hasNewerChanges = currentLanding
+        ? hasLandingSaveChanges(getLandingSaveChanges(currentLanding, landing))
+        : false;
+      get()._recordLandingSave(landing, "Draft", "Saved just now");
+      set({ saveStatus: hasNewerChanges ? "idle" : "saved" });
       toast.success("Cambios guardados");
     } catch {
       set({ saveStatus: "error" });
@@ -874,13 +941,17 @@ function createDashboardStore(initial?: {
     set({ saveStatus: "saving" });
 
     try {
-      await persistLanding(landing, "publish");
-      set((state) => ({
-        saveStatus: "saved",
-        landings: state.landings.map((l) =>
-          l.id === id ? { ...l, status: "Published", edited: "Published just now" } : l,
-        ),
-      }));
+      await persistLanding(
+        landing,
+        persistedLandings.get(id) ?? landing,
+        "publish",
+      );
+      const currentLanding = get().landings.find((item) => item.id === id);
+      const hasNewerChanges = currentLanding
+        ? hasLandingSaveChanges(getLandingSaveChanges(currentLanding, landing))
+        : false;
+      get()._recordLandingSave(landing, "Published", "Published just now");
+      set({ saveStatus: hasNewerChanges ? "idle" : "saved" });
       toast.success("Landing publicada");
     } catch {
       set({ saveStatus: "error" });

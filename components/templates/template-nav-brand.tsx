@@ -4,6 +4,7 @@ import { m, useReducedMotion } from "motion/react";
 import type { CSSProperties } from "react";
 import type { BrandLogoType } from "@/lib/dashboard-data";
 import { AssetImage } from "@/components/ui/asset-image";
+import { cn } from "@/lib/utils";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -26,12 +27,12 @@ export function TemplateNavBrand({
 
   if (brandLogoType === "image" && brandLogoImage) {
     return (
-      <span className={`relative block h-9 w-40 ${className}`} style={style}>
+      <span className={cn("relative block h-14 w-48", className)} style={style}>
         <AssetImage
           alt={brand || "Logo"}
           className="object-contain object-left"
           fill
-          sizes="160px"
+          sizes="224px"
           src={brandLogoImage}
         />
       </span>

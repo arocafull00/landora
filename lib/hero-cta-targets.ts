@@ -21,6 +21,7 @@ function getFirstVisibleSectionHref(
     (item) =>
       item.anchor !== "hero" &&
       item.editorTabId !== "Footer" &&
+      !item.separatePage &&
       !hidden.has(item.anchor),
   );
   return section ? getSectionScrollHref(section) : getContactHref(template);

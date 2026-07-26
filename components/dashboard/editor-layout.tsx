@@ -33,7 +33,7 @@ export function EditorLayout({
   if (!activeLanding) return null;
 
   const resolvedScrollTarget =
-    activePageTarget.type === "home"
+    activePageTarget.type === "home" || activePageTarget.type === "carta"
       ? scrollTarget ??
         getEditorScrollTarget(activeLanding.template, activeEditorTab)
       : undefined;

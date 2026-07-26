@@ -16,7 +16,7 @@ export function RistoranteStorySection({ content }: { content: LandingContent })
       <div className="mx-auto max-w-6xl">
         {statement ? (
           <p
-            className="max-w-[22ch] text-pretty text-[clamp(28px,4vw,56px)] font-light leading-[1.2] text-[var(--ristorante-foreground)]"
+            className="max-w-[22ch] text-pretty text-[clamp(28px,4vw,40px)] font-light leading-[1.2] text-[var(--ristorante-foreground)]"
             style={{
               fontFamily: "var(--font-ristorante-display)",
               letterSpacing: "-0.03em",

@@ -73,5 +73,5 @@ export function HeroRenderer({
   ...props
 }: HeroVariantProps & { variantId: HeroVariantId }) {
   const Component = HERO_COMPONENTS[variantId] ?? VelarHeroVariant;
-  return <Component {...props} />;
+  return <Component key={variantId} {...props} />;
 }

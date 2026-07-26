@@ -9,6 +9,7 @@ import type {
 } from "@/components/dashboard/preview-bridge-context";
 import type { EditorPageTarget } from "@/lib/dashboard-data";
 import {
+  buildPreviewContentPayload,
   isPreviewChannelInitMessage,
   isPreviewContentMessage,
   isPreviewHighlightElementMessage,
@@ -90,10 +91,15 @@ export function usePreviewBridgeProvider(
         const data = messageEvent.data;
 
         if (isPreviewContentMessage(data)) {
-          const nextPreview = {
-            content: data.content,
-            sectionSelections: data.sectionSelections,
-            template: data.template,
+          const synced = buildPreviewContentPayload(
+            data.template,
+            data.content,
+            data.sectionSelections,
+          );
+          const nextPreview: PreviewLiveContent = {
+            content: synced.content,
+            sectionSelections: { hero: synced.sectionSelections.hero },
+            template: synced.template,
           };
           livePreviewRef.current = nextPreview;
           setLivePreview(nextPreview);

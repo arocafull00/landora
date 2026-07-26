@@ -1,6 +1,6 @@
-import { Link } from "lucide-react";
 import type { SocialLink } from "@/lib/dashboard-data";
 import { SOCIAL_PLATFORM_LABELS } from "@/lib/footer-content";
+import { SocialPlatformIcon } from "@/components/templates/shared/social-platform-icon";
 
 type FooterSocialLinkProps = {
   link: SocialLink;
@@ -17,7 +17,7 @@ export function FooterSocialLink({ link, className }: FooterSocialLinkProps) {
       target="_blank"
       title={SOCIAL_PLATFORM_LABELS[link.platform]}
     >
-      <Link className="h-4 w-4" />
+      <SocialPlatformIcon platform={link.platform} />
     </a>
   );
 }

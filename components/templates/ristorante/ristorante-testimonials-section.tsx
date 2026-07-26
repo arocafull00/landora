@@ -2,6 +2,7 @@
 
 import { Star } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
+import { RistoranteTestimonialCard } from "@/components/templates/ristorante/ristorante-testimonial-card";
 
 export function RistoranteTestimonialsSection({ content }: { content: LandingContent }) {
   if (content.testimonials.length === 0) return null;
@@ -11,12 +12,19 @@ export function RistoranteTestimonialsSection({ content }: { content: LandingCon
   return (
     <section
       id="testimonios"
-      className="scroll-mt-24 bg-[var(--ristorante-surface)] px-6 py-[clamp(80px,12vw,140px)] md:px-10 lg:px-16"
+      className="scroll-mt-24 bg-[var(--ristorante-secondary)] px-6 py-[clamp(80px,12vw,140px)] md:px-10 lg:px-16"
     >
-      <div className="mx-auto max-w-4xl">
-        <div className="flex min-h-[60vh] flex-col justify-center">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-16 border-b border-[var(--ristorante-foreground)]/10 pb-12" data-aos="fade-up">
+          <span
+            aria-hidden
+            className="mb-6 block text-[clamp(64px,10vw,96px)] leading-none text-[var(--ristorante-foreground)]/20"
+            style={{ fontFamily: "var(--font-ristorante-display)", fontWeight: 700 }}
+          >
+            &ldquo;
+          </span>
           <blockquote
-            className="mb-8 max-w-3xl text-pretty text-[clamp(22px,3vw,36px)] font-light leading-relaxed text-[var(--ristorante-secondary)]"
+            className="mb-8 max-w-4xl text-pretty text-xl font-light leading-relaxed text-[var(--ristorante-foreground)] sm:text-2xl md:text-[clamp(22px,2.8vw,32px)]"
             style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.02em" }}
           >
             {featured.comment}
@@ -24,18 +32,21 @@ export function RistoranteTestimonialsSection({ content }: { content: LandingCon
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex gap-0.5">
               {Array.from({ length: featured.rating }).map((_, i) => (
-                <Star className="h-4 w-4 fill-[var(--ristorante-primary)] text-[var(--ristorante-primary)]" key={i} />
+                <Star
+                  className="h-4 w-4 fill-[var(--ristorante-foreground)]/80 text-[var(--ristorante-foreground)]/80"
+                  key={i}
+                />
               ))}
             </div>
             <p
-              className="text-sm font-semibold text-[var(--ristorante-secondary)]"
+              className="text-sm font-semibold text-[var(--ristorante-foreground)]"
               style={{ fontFamily: "var(--font-ristorante-body)" }}
             >
               {featured.author}
             </p>
             {featured.verified ? (
               <span
-                className="text-xs text-[var(--ristorante-primary)]"
+                className="text-xs text-[var(--ristorante-foreground)]/50"
                 style={{ fontFamily: "var(--font-ristorante-body)" }}
               >
                 Verificado
@@ -45,40 +56,13 @@ export function RistoranteTestimonialsSection({ content }: { content: LandingCon
         </div>
 
         {rest.length > 0 ? (
-          <div className="mx-auto mt-20 max-w-xl space-y-10 border-t border-[var(--ristorante-secondary)]/10 pt-12">
+          <div
+            className="grid grid-cols-1 gap-8 md:grid-cols-2"
+            data-aos="fade-up"
+            data-aos-delay="120"
+          >
             {rest.map((testimonial) => (
-              <div key={testimonial.id}>
-                <div className="mb-3 flex gap-0.5">
-                  {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <Star
-                      className="h-3.5 w-3.5 fill-[var(--ristorante-primary)] text-[var(--ristorante-primary)]"
-                      key={i}
-                    />
-                  ))}
-                </div>
-                <p
-                  className="mb-4 text-sm leading-relaxed text-[var(--ristorante-secondary)]/80"
-                  style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
-                >
-                  {testimonial.comment}
-                </p>
-                <div className="flex items-center justify-between">
-                  <p
-                    className="text-sm font-semibold text-[var(--ristorante-secondary)]"
-                    style={{ fontFamily: "var(--font-ristorante-body)" }}
-                  >
-                    {testimonial.author}
-                  </p>
-                  {testimonial.verified ? (
-                    <span
-                      className="text-xs text-[var(--ristorante-primary)]"
-                      style={{ fontFamily: "var(--font-ristorante-body)" }}
-                    >
-                      Verificado
-                    </span>
-                  ) : null}
-                </div>
-              </div>
+              <RistoranteTestimonialCard key={testimonial.id} testimonial={testimonial} />
             ))}
           </div>
         ) : null}
