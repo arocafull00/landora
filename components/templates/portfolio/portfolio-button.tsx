@@ -1,5 +1,3 @@
-"use client";
-
 import { ArrowRight } from "lucide-react";
 
 const base =
@@ -25,7 +23,7 @@ export function PortfolioButton({
   size = "md",
   icon,
   className = "",
-  onClick,
+  ...analyticsProps
 }: {
   children: React.ReactNode;
   href?: string;
@@ -33,7 +31,7 @@ export function PortfolioButton({
   size?: "sm" | "md" | "lg";
   icon?: React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  "data-analytics-event"?: string;
 }) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
@@ -41,8 +39,7 @@ export function PortfolioButton({
     return (
       <a
         className={classes}
-        href={href}
-        onClick={onClick}
+        href={href} {...analyticsProps}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -54,7 +51,7 @@ export function PortfolioButton({
 
   if (href) {
     return (
-      <a className={classes} href={href} onClick={onClick}>
+      <a className={classes} href={href} {...analyticsProps}>
         {children}
         {icon ?? <ArrowRight aria-hidden className="h-4 w-4" />}
       </a>
@@ -62,7 +59,7 @@ export function PortfolioButton({
   }
 
   return (
-    <button className={classes} type="button">
+    <button className={classes} {...analyticsProps} type="button">
       {children}
       {icon}
     </button>

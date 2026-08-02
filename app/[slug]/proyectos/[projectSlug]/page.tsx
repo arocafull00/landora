@@ -11,8 +11,12 @@ type ProjectPageProps = {
   params: Promise<{ slug: string; projectSlug: string }>;
 };
 
-export function generateStaticParams() {
-  return getPublishedPortfolioProjectParams();
+export function generateStaticParams({
+  params: { slug },
+}: {
+  params: { slug: string };
+}) {
+  return getPublishedPortfolioProjectParams(slug);
 }
 
 export async function generateMetadata({

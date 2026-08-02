@@ -878,6 +878,12 @@ textarea {
   width: 6px;
 }
 
+::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import { GalleryMedia } from "@/components/templates/shared/gallery-media";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
@@ -64,21 +62,17 @@ export function GalleryItem({
   index,
   total,
   featured = false,
-  aosDelay = 0,
 }: {
   item: GalleryItem;
   index: number;
   total: number;
   featured?: boolean;
-  aosDelay?: number;
 }) {
   const layoutClass = getLayoutClass(index, total);
 
   return (
     <div
       className={`group relative min-h-0 overflow-hidden bg-[var(--site-surface-alt)] ${featured ? "rounded-xl" : "rounded-lg"} ${layoutClass}`}
-      data-aos="fade-up"
-      data-aos-delay={aosDelay}
     >
       <GalleryMedia item={item} />
     </div>

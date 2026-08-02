@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@clerk/nextjs";
 import type {
   LandingContent,
   LandingSectionSelections,
@@ -42,6 +43,8 @@ export function IframeLandingPreview({
   showToolbar?: boolean;
   template?: TemplateId;
 }) {
+  const { isLoaded, isSignedIn } = useAuth();
+  const previewReady = isLoaded && isSignedIn;
   const { iframeRef, previewSrc } = useIframePreviewBridge({
     content,
     landingId,
@@ -69,13 +72,18 @@ export function IframeLandingPreview({
           className="h-full overflow-hidden rounded-lg border border-outline-variant"
           style={{ maxWidth: "100%", width: frameWidth }}
         >
-          <iframe
-            className="h-full w-full"
-            ref={iframeRef}
-            sandbox="allow-scripts allow-same-origin"
-            src={previewSrc}
-            title="Landing preview"
-          />
+          {previewReady ? (
+            <iframe
+              className="h-full w-full"
+              key={previewSrc}
+              ref={iframeRef}
+              sandbox="allow-scripts allow-same-origin"
+              src={previewSrc}
+              title="Landing preview"
+            />
+          ) : (
+            <div className="h-full w-full bg-surface-bg" />
+          )}
         </div>
       </div>
     </div>

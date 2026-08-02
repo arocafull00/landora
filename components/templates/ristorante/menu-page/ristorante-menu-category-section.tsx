@@ -38,9 +38,8 @@ export function RistoranteMenuCategorySection({
       </div>
 
       <div className="grid gap-5 xl:grid-cols-2">
-        {group.items.map((service, index) => (
+        {group.items.map((service) => (
           <RistoranteMenuCard
-            index={index}
             key={service.id}
             service={service}
           />

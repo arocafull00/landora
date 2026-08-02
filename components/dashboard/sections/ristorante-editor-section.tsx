@@ -17,6 +17,7 @@ import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-pane
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
 import { RistoranteMenuEditorPanel } from "@/components/dashboard/ristorante-menu-editor/ristorante-menu-editor-panel";
+import { GalleryVariantSelector } from "@/components/dashboard/gallery-editor/components/gallery-variant-selector";
 
 export function RistoranteEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -26,6 +27,7 @@ export function RistoranteEditorSection() {
     isAdmin,
     landings,
     updateSectionItem,
+    updateGalleryVariant,
   } = useDashboardStore(
     useShallow((state) => ({
       activeEditorTab: state.activeEditorTab,
@@ -33,6 +35,7 @@ export function RistoranteEditorSection() {
       isAdmin: state.isAdmin,
       landings: state.landings,
       updateSectionItem: state.updateSectionItem,
+      updateGalleryVariant: state.updateGalleryVariant,
     })),
   );
 
@@ -76,6 +79,12 @@ export function RistoranteEditorSection() {
           {activeEditorTab === "Galeria" ? (
             <section className="space-y-5 py-unit-lg">
               <SectionTitle title="Galería" description="Edita las imágenes de la galería." />
+              <GalleryVariantSelector
+                onChange={(variantId) =>
+                  updateGalleryVariant(activeLanding.id, variantId)
+                }
+                value={activeLanding.sectionSelections.gallery}
+              />
               <SectionHeadingFields
                 activeLanding={activeLanding}
                 anchor="galeria"
@@ -97,6 +106,20 @@ export function RistoranteEditorSection() {
                       }
                       templateId={activeLanding.template}
                       value={item.image ?? ""}
+                    />
+                    <TextField
+                      label="Título"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, { title: value })
+                      }
+                      value={item.title ?? ""}
+                    />
+                    <TextArea
+                      label="Descripción"
+                      onChange={(value) =>
+                        updateSectionItem(activeLanding.id, "gallery", item.id, { description: value })
+                      }
+                      value={item.description ?? ""}
                     />
                   </div>
                 ))}

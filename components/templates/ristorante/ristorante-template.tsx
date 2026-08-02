@@ -1,7 +1,7 @@
-"use client";
-
-import { Fragment, useRef } from "react";
-import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
+import type {
+  LandingContent,
+  LandingSectionSelections,
+} from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import {
   getOrderedVisibleBodySections,
@@ -13,30 +13,18 @@ import {
   getPreviewLandingPath,
   getPublicLandingPath,
 } from "@/lib/public-site-url";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
-import { RistoranteAosInit } from "@/components/templates/ristorante/ristorante-aos-init";
 import { RistoranteNav } from "@/components/templates/ristorante/ristorante-nav";
-import { RistoranteStorySection } from "@/components/templates/ristorante/ristorante-story-section";
-import { GallerySection } from "@/components/templates/shared/gallery-section";
-import { RistoranteChefSection } from "@/components/templates/ristorante/ristorante-chef-section";
-import { RistoranteHoursSection } from "@/components/templates/ristorante/ristorante-hours-section";
-import { RistoranteTestimonialsSection } from "@/components/templates/ristorante/ristorante-testimonials-section";
 import { RistoranteContactSection } from "@/components/templates/ristorante/ristorante-contact-section";
+import { RistoranteBodySection } from "@/components/templates/ristorante/ristorante-body-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
-
-function renderRistoranteBodySection(anchor: string, content: LandingContent) {
-  if (anchor === "story") return <RistoranteStorySection content={content} />;
-  if (anchor === "galeria") return <GallerySection content={content} templateId="ristorante" />;
-  if (anchor === "equipo") return <RistoranteChefSection content={content} />;
-  if (anchor === "horarios") return <RistoranteHoursSection content={content} />;
-  if (anchor === "testimonios") return <RistoranteTestimonialsSection content={content} />;
-  return null;
-}
+import { TemplateAos } from "@/components/templates/shared/template-aos";
 
 export function RistoranteTemplate({
   content,
+  copyrightYear,
+  renderedAt,
   topOffset = 0,
   slug,
   previewLandingId,
@@ -44,15 +32,16 @@ export function RistoranteTemplate({
   sectionSelections,
 }: {
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   topOffset?: number;
   slug?: string;
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
   const heroVariantId = sectionSelections?.hero ?? "ristorante";
+  const galleryVariantId = sectionSelections?.gallery ?? "grid";
   const heroNavTone =
     getHeroVariant(heroVariantId)?.navTone ??
     getHeroVariant("ristorante").navTone;
@@ -84,13 +73,10 @@ export function RistoranteTemplate({
   });
 
   return (
-    <TemplateLazyMotion>
-      <div
-        ref={rootRef}
+    <TemplateAos
         className="relative bg-[var(--site-surface)]"
         style={{ overflowX: "clip" }}
-      >
-        <RistoranteAosInit rootRef={rootRef} />
+    >
 
         <RistoranteNav
           brand={content.brand || "Osteria da Luca."}
@@ -104,28 +90,28 @@ export function RistoranteTemplate({
           homeHref={homeHref}
           homePageTarget={previewLandingId ? { type: "home" } : undefined}
           navLinks={navLinks}
-          scrollRootRef={rootRef}
           topOffset={topOffset}
         />
 
         <HeroRenderer
           content={content}
-          heroRef={heroRef}
           primaryCtaHref={primaryCtaHref}
           secondaryCtaHref={secondaryCtaHref}
           variantId={heroVariantId}
         />
 
-        <ActiveOffersRenderer content={content} />
+        <ActiveOffersRenderer content={content} renderedAt={renderedAt} />
 
         {getOrderedVisibleBodySections("ristorante", content).map((section) => (
-          <Fragment key={section.anchor}>
-            {renderRistoranteBodySection(section.anchor, content)}
-          </Fragment>
+          <RistoranteBodySection
+            anchor={section.anchor}
+            content={content}
+            galleryVariantId={galleryVariantId}
+            key={section.anchor}
+          />
         ))}
 
-        <RistoranteContactSection content={content} />
-      </div>
-    </TemplateLazyMotion>
+        <RistoranteContactSection content={content} copyrightYear={copyrightYear} />
+    </TemplateAos>
   );
 }

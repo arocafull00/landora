@@ -1,30 +1,18 @@
-"use client";
-
-import { m, useReducedMotion } from "motion/react";
 import type { ServiceMenuItem } from "@/lib/dashboard-data";
 import { AssetImage } from "@/components/ui/asset-image";
 
 export function RistoranteMenuCard({
-  index,
   service,
 }: {
-  index: number;
   service: ServiceMenuItem;
 }) {
   const hasImage = Boolean(service.image);
-  const reduce = useReducedMotion();
 
   return (
-    <m.article
-      animate={{ opacity: 1, y: 0 }}
+    <article
       className={`group grid min-h-64 overflow-hidden rounded-[1.75rem] border border-[var(--site-border)] bg-[var(--ristorante-surface)] shadow-md transition-[box-shadow,transform] hover:-translate-y-1 hover:shadow-xl motion-reduce:transform-none ${
         hasImage ? "sm:grid-cols-[42%_minmax(0,1fr)]" : ""
       }`}
-      initial={reduce ? false : { opacity: 0, y: 16 }}
-      transition={{
-        delay: reduce ? 0 : Math.min(index * 0.06, 0.24),
-        duration: 0.45,
-      }}
     >
       {service.image ? (
         <div className="relative min-h-56 overflow-hidden bg-[var(--ristorante-muted)] sm:min-h-64">
@@ -76,6 +64,6 @@ export function RistoranteMenuCard({
           </div>
         ) : null}
       </div>
-    </m.article>
+    </article>
   );
 }

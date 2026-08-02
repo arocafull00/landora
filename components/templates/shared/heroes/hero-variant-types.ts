@@ -7,7 +7,7 @@ export type HeroSpecificField = "houseImage" | "fanImages";
 
 export type HeroVariantProps = {
   content: LandingContent;
-  heroRef: RefObject<HTMLElement | null>;
+  heroRef?: RefObject<HTMLElement | null>;
   primaryCtaHref: string;
   secondaryCtaHref: string;
 };

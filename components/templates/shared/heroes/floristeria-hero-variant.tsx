@@ -1,5 +1,3 @@
-"use client";
-
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
 import { FloristeriaHero } from "@/components/templates/floristeria/floristeria-hero";
 

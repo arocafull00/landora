@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioProjectCard } from "@/components/templates/portfolio/portfolio-project-card";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -41,16 +39,16 @@ export function PortfolioProjectsSection({
       <div className="relative mx-auto max-w-7xl">
         <h2
           className="mb-12 max-w-xl text-balance text-3xl font-extrabold text-[var(--site-text)] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
-          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
+          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
         >
           {heading.title}
         </h2>
 
         <div
           className="flex gap-4 overflow-x-auto pb-4 [-ms-overflow-style:none] scrollbar-none md:hidden [&::-webkit-scrollbar]:hidden"
-          style={{ scrollSnapType: "x mandatory" }}
           data-aos="fade-up"
+          style={{ scrollSnapType: "x mandatory" }}
         >
           {gallery.map((item) => (
             <div

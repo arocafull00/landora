@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 
 export function RistoranteStorySection({ content }: { content: LandingContent }) {
@@ -13,7 +11,7 @@ export function RistoranteStorySection({ content }: { content: LandingContent })
       id="story"
       className="scroll-mt-24 bg-[var(--ristorante-secondary)] px-6 py-[clamp(80px,12vw,160px)] md:px-10 lg:px-16"
     >
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl" data-aos="fade-up">
         {statement ? (
           <p
             className="max-w-[22ch] text-pretty text-[clamp(28px,4vw,40px)] font-light leading-[1.2] text-[var(--ristorante-foreground)]"

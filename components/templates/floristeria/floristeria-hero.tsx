@@ -1,6 +1,3 @@
-"use client";
-
-import { m, useReducedMotion, type Variants } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { isBackgroundPreset } from "@/lib/background-assets";
 import { resolveFloristeriaFanImages } from "@/lib/floristeria-assets";
@@ -8,56 +5,6 @@ import { FloristeriaButton } from "@/components/templates/floristeria/floristeri
 import { FloristeriaHeroFan } from "@/components/templates/floristeria/floristeria-hero-fan";
 import { FloristeriaHeroFanBackdrop } from "@/components/templates/floristeria/floristeria-hero-fan-backdrop";
 import { HeroBackground } from "@/components/ui/hero-background";
-import { useAnalytics } from "@/hooks/use-analytics";
-
-const easeOutExpo = [0.16, 1, 0.3, 1] as const;
-
-const bloomContainerVariants: Variants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const bloomEyebrowVariants: Variants = {
-  hidden: { opacity: 0, letterSpacing: "0.3em" },
-  visible: {
-    opacity: 1,
-    letterSpacing: "0.15em",
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
-
-const bloomTitleVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.92, y: 12 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: easeOutExpo },
-  },
-};
-
-const bloomSubtitleVariants: Variants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
-};
-
-const bloomButtonsVariants: Variants = {
-  hidden: { opacity: 0, y: 6 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
-};
 
 export function FloristeriaHero({
   content,
@@ -66,12 +13,10 @@ export function FloristeriaHero({
   secondaryCtaHref = "#galeria",
 }: {
   content: LandingContent;
-  heroRef: React.RefObject<HTMLElement | null>;
+  heroRef?: React.RefObject<HTMLElement | null>;
   ctaHref: string;
   secondaryCtaHref?: string;
 }) {
-  const reduce = useReducedMotion();
-  const { trackCtaClick } = useAnalytics();
   const fanImages = resolveFloristeriaFanImages(content.hero);
 
   return (
@@ -94,24 +39,19 @@ export function FloristeriaHero({
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center">
         <FloristeriaHeroFan centerImageAlt={content.hero.title} images={fanImages} />
 
-        <m.div
+        <div
           className="relative z-20 mt-5 max-w-3xl text-center sm:mt-6 md:mt-8"
-          variants={bloomContainerVariants}
-          initial={reduce ? false : "hidden"}
-          animate="visible"
         >
           {content.hero.eyebrow ? (
-            <m.p
-              variants={bloomEyebrowVariants}
+            <p
               className="mb-2 text-sm font-light italic text-[var(--site-primary)]/80"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
               {content.hero.eyebrow}
-            </m.p>
+            </p>
           ) : null}
 
-          <m.h1
-            variants={bloomTitleVariants}
+          <h1
             className="text-balance text-[clamp(40px,7vw,72px)] font-bold leading-[1.08] tracking-tight text-[var(--site-text)] md:text-[clamp(48px,6vw,80px)]"
             style={{
               fontFamily: "var(--font-cormorant)",
@@ -119,32 +59,29 @@ export function FloristeriaHero({
             }}
           >
             {content.hero.title}
-          </m.h1>
+          </h1>
 
           {content.hero.subtitle ? (
-            <m.p
-              variants={bloomSubtitleVariants}
+            <p
               className="mx-auto mt-3 max-w-xl text-pretty text-base leading-relaxed text-[var(--site-text)]/60 md:mt-4 md:text-lg"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {content.hero.subtitle}
-            </m.p>
+            </p>
           ) : null}
 
           {content.hero.description ? (
-            <m.p
-              variants={bloomSubtitleVariants}
+            <p
               className="mx-auto mt-2 max-w-xl text-pretty text-sm leading-relaxed text-[var(--site-text)]/55 md:text-base"
             >
               {content.hero.description}
-            </m.p>
+            </p>
           ) : null}
 
-          <m.div
-            variants={bloomButtonsVariants}
+          <div
             className="mx-auto mt-6 flex w-full max-w-xs flex-col items-center gap-3 sm:mt-7 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4"
           >
-            <FloristeriaButton href={ctaHref} size="lg" className="w-full sm:w-auto" onClick={() => trackCtaClick()}>
+            <FloristeriaButton href={ctaHref} size="lg" className="w-full sm:w-auto" data-analytics-event="cta_click">
               {content.hero.ctaLabel || "Hacer pedido"}
             </FloristeriaButton>
             <FloristeriaButton
@@ -156,8 +93,8 @@ export function FloristeriaHero({
             >
               Ver galería
             </FloristeriaButton>
-          </m.div>
-        </m.div>
+          </div>
+        </div>
         </div>
       </div>
     </section>

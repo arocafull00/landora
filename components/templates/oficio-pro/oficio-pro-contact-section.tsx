@@ -1,11 +1,8 @@
-"use client";
-
 import { Calendar, Camera, Mail, MapPin, Phone } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useAnalytics } from "@/hooks/use-analytics";
 import { OficioProContactItem } from "@/components/templates/oficio-pro/oficio-pro-contact-item";
 import { OficioProSectionHeader } from "@/components/templates/oficio-pro/oficio-pro-section-header";
 
@@ -18,8 +15,13 @@ function getInstagram(content: LandingContent) {
   return content.contact.socialLinks?.find((item) => item.platform === "instagram")?.url ?? "";
 }
 
-export function OficioProContactSection({ content }: { content: LandingContent }) {
-  const { trackWhatsAppClick, trackLeadGenerated } = useAnalytics();
+export function OficioProContactSection({
+  content,
+  copyrightYear,
+}: {
+  content: LandingContent;
+  copyrightYear: number;
+}) {
   const heading = getSectionHeading(
     content,
     "contacto",
@@ -36,17 +38,14 @@ export function OficioProContactSection({ content }: { content: LandingContent }
         <OficioProSectionHeader className="text-center" subtitle={heading.subtitle}>
           {heading.title}
         </OficioProSectionHeader>
-        <aside className="mx-auto mt-10 grid w-full max-w-4xl gap-4 md:grid-cols-2">
+        <aside className="mx-auto mt-10 grid w-full max-w-4xl gap-4 md:grid-cols-2" data-aos="fade-up">
           {content.contact.phone ? (
             <OficioProContactItem
               href={getWhatsAppLink(content.contact.phone)}
               icon={Phone}
               label="WhatsApp y teléfono"
               value={content.contact.phone}
-              onClick={() => {
-                trackWhatsAppClick();
-                trackLeadGenerated();
-              }}
+              data-analytics-event="whatsapp_click lead_generated"
             />
           ) : null}
           {instagram ? (
@@ -78,7 +77,7 @@ export function OficioProContactSection({ content }: { content: LandingContent }
             />
           ) : null}
         </aside>
-        <div className="mt-14 space-y-6 rounded-2xl border border-[var(--site-primary)]/10 bg-[var(--site-surface)]/80 p-6 text-center shadow-[0_10px_28px_rgba(31,78,121,0.08)]">
+        <div className="mt-14 space-y-6 rounded-2xl border border-[var(--site-primary)]/10 bg-[var(--site-surface)]/80 p-6 text-center shadow-[0_10px_28px_rgba(31,78,121,0.08)]" data-aos="fade-up" data-aos-delay="100">
           <FooterSocialLinks
             contact={content.contact}
             linkClassName="text-[var(--site-primary)] transition-colors hover:text-[var(--site-accent-bright)]"
@@ -87,6 +86,7 @@ export function OficioProContactSection({ content }: { content: LandingContent }
             brand={content.brand}
             className="text-xs text-[var(--site-text-muted)]"
             contact={content.contact}
+            year={copyrightYear}
           />
         </div>
       </div>

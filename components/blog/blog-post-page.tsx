@@ -4,7 +4,6 @@ import {
 } from "@/components/blog/blog-post-article";
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import type { LandingContent } from "@/lib/dashboard-data";
 import {
   getPreviewLandingPath,
@@ -15,12 +14,14 @@ export type { PublicBlogPost };
 
 type BlogPostPageProps = {
   content: LandingContent;
+  copyrightYear: number;
   previewLandingId?: string;
   post: PublicBlogPost;
 };
 
 export function BlogPostPage({
   content,
+  copyrightYear,
   previewLandingId,
   post,
 }: BlogPostPageProps) {
@@ -33,7 +34,7 @@ export function BlogPostPage({
 
   return (
     <div className="min-h-screen bg-portfolio-canvas text-portfolio-ink">
-      <TemplateLazyMotion>
+      <>
         <PortfolioNav
           activePage="blog"
           brand={content.brand || "Mora."}
@@ -48,9 +49,9 @@ export function BlogPostPage({
           navLinks={[]}
           overHero={false}
         />
-      </TemplateLazyMotion>
+      </>
       <BlogPostArticle blogHref={blogHref} post={post} />
-      <PortfolioContactSection content={content} />
+      <PortfolioContactSection content={content} copyrightYear={copyrightYear} />
     </div>
   );
 }

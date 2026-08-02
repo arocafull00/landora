@@ -1,30 +1,15 @@
-"use client";
-
 import { AssetImage } from "@/components/ui/asset-image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 export function VelarGalleryItem({
   item,
-  isHovered,
-  onHover,
-  onLeave,
 }: {
   item: GalleryItem;
-  isHovered: boolean;
-  onHover: () => void;
-  onLeave: () => void;
 }) {
   return (
     <div
       aria-label={item.title || "Gallery item"}
-      className="gallery-expand-item relative h-full overflow-hidden rounded-xl cursor-pointer"
-      style={{
-        flex: isHovered ? "4" : "1",
-        transition: "flex 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-        minWidth: 0,
-      }}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
+      className="gallery-expand-item relative h-full min-w-[82vw] snap-center overflow-hidden rounded-xl sm:min-w-[48%] lg:min-w-[32%]"
     >
       {item.image ? (
         <AssetImage

@@ -1,16 +1,14 @@
-"use client";
-
 import { ArrowRight } from "lucide-react";
-import { m, useReducedMotion } from "motion/react";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 
 const base =
   "inline-flex items-center justify-center gap-2 font-semibold tracking-wide transition-[color,background-color,border-color,box-shadow,transform] duration-300";
 
 const variants = {
-  primary: "bg-[var(--site-primary)] text-white hover:bg-[var(--site-primary-hover)] active:bg-[var(--site-primary-hover)]",
+  primary:
+    "bg-[var(--site-primary)] text-[var(--site-on-primary)] hover:bg-[var(--site-primary-hover)]",
   secondary:
-    "border border-[var(--site-primary)] text-[var(--site-primary)] bg-transparent hover:bg-[var(--site-primary)] hover:text-white",
+    "border border-[var(--site-primary)] text-[var(--site-primary)] hover:bg-[var(--site-primary)] hover:text-[var(--site-on-primary)]",
 };
 
 const sizes = {
@@ -26,7 +24,7 @@ export function FloristeriaButton({
   size = "md",
   icon,
   className = "",
-  onClick,
+  ...analyticsProps
 }: {
   children: React.ReactNode;
   href?: string;
@@ -34,21 +32,12 @@ export function FloristeriaButton({
   size?: "sm" | "md" | "lg";
   icon?: React.ReactNode | null;
   className?: string;
-  onClick?: () => void;
+  "data-analytics-event"?: string;
 }) {
-  const reduce = useReducedMotion();
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
   const trailingIcon =
     icon === null ? null : icon ?? <ArrowRight className="h-4 w-4" />;
-
-  const spring = reduce
-    ? {}
-    : {
-        whileHover: { scale: 1.03 },
-        whileTap: { scale: 0.97 },
-        transition: { type: "spring" as const, stiffness: 400, damping: 20 },
-      };
 
   const content = (
     <>
@@ -62,16 +51,14 @@ export function FloristeriaButton({
 
     if (isExternal) {
       return (
-        <m.a
+        <a
           className={classes}
-          href={href}
-          onClick={onClick}
+          href={href} {...analyticsProps}
           rel="noopener noreferrer"
           target="_blank"
-          {...spring}
         >
           {content}
-        </m.a>
+        </a>
       );
     }
 
@@ -80,17 +67,17 @@ export function FloristeriaButton({
       : "inline-flex";
 
     return (
-      <m.div className={wrapperClassName} {...spring}>
-        <TemplateNavAnchor className={classes} href={href} onClick={onClick}>
+      <div className={wrapperClassName}>
+        <TemplateNavAnchor className={classes} href={href} {...analyticsProps}>
           {content}
         </TemplateNavAnchor>
-      </m.div>
+      </div>
     );
   }
 
   return (
-    <m.button className={classes} type="button" {...spring}>
+    <button className={classes} {...analyticsProps} type="button">
       {content}
-    </m.button>
+    </button>
   );
 }

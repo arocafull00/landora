@@ -1,9 +1,9 @@
-import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 import { BlogPostPage } from "@/components/blog/blog-post-page";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogPostBySlug } from "@/data/blog";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
+import { getCopyrightYear } from "@/lib/copyright-year";
 
 export async function BlogPostPageContent({
   postSlug,
@@ -12,14 +12,13 @@ export async function BlogPostPageContent({
   postSlug: string;
   slug: string;
 }) {
-  "use cache";
-
-  cacheLife("max");
-
   const landing = await getPublishedLandingBySlug(slug);
   if (!landing) notFound();
 
-  const post = await getBlogPostBySlug(landing.id, postSlug);
+  const [post, copyrightYear] = await Promise.all([
+    getBlogPostBySlug(landing.id, postSlug),
+    getCopyrightYear(),
+  ]);
   if (!post) notFound();
 
   const content = landing.content;
@@ -28,6 +27,7 @@ export async function BlogPostPageContent({
     <SiteThemeScope appearance={content.appearance} template={landing.template}>
       <BlogPostPage
         content={content}
+        copyrightYear={copyrightYear}
         post={{
           slug: post.slug,
           title: post.title,

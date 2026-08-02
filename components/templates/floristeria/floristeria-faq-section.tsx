@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { FloristeriaFaqItem } from "@/components/templates/floristeria/floristeria-faq-item";

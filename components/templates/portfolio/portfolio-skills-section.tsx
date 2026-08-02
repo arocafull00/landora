@@ -1,5 +1,3 @@
-"use client";
-
 import { Target, Users, TrendingUp, Clock } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -25,8 +23,8 @@ export function PortfolioSkillsSection({ content }: { content: LandingContent })
       <div className="mx-auto max-w-5xl">
         <h2
           className="mb-12 text-balance text-3xl font-extrabold text-[var(--site-on-dark)] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
-          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           data-aos="fade-up"
+          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
         >
           {heading.title}
         </h2>

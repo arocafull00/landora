@@ -1,5 +1,3 @@
-"use client";
-
 import { Star } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 
@@ -12,7 +10,7 @@ export function CoffeeShopTestimonialsSection({ content }: { content: LandingCon
       className="scroll-mt-24 bg-[var(--coffee-surface)] px-6 py-[clamp(72px,10vw,120px)] md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3" data-aos="fade-up">
           {content.testimonials.map((testimonial) => (
             <blockquote
               className="flex h-full flex-col rounded-2xl bg-[var(--coffee-muted)] p-6"

@@ -15,6 +15,7 @@ import {
   ContactContent,
   ContentGroup,
   EditorPageTarget,
+  GalleryVariantId,
   HeroContent,
   HeroVariantId,
   initialAssets,
@@ -93,6 +94,7 @@ export type DashboardState = {
   updateLandingMeta: (id: string, patch: Partial<Landing>) => void;
   updateHero: (id: string, patch: Partial<HeroContent>) => void;
   updateHeroVariant: (id: string, variantId: HeroVariantId) => void;
+  updateGalleryVariant: (id: string, variantId: GalleryVariantId) => void;
   updateStory: (id: string, patch: Partial<StoryContent>) => void;
   updatePortfolioAbout: (
     id: string,
@@ -313,6 +315,21 @@ function createDashboardStore(initial?: {
               content: {
                 ...landing.content,
                 hero: migrateHeroContent(landing.content.hero),
+              },
+            })
+          : landing,
+      ),
+    })),
+
+  updateGalleryVariant: (id, variantId) =>
+    set((state) => ({
+      landings: state.landings.map((landing) =>
+        landing.id === id
+          ? markEdited({
+              ...landing,
+              sectionSelections: {
+                ...landing.sectionSelections,
+                gallery: variantId,
               },
             })
           : landing,

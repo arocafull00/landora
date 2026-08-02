@@ -1,12 +1,8 @@
-"use client";
-
-import { m, useReducedMotion } from "motion/react";
 import type { CSSProperties } from "react";
 import type { BrandLogoType } from "@/lib/dashboard-data";
 import { AssetImage } from "@/components/ui/asset-image";
 import { cn } from "@/lib/utils";
 
-const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function TemplateNavBrand({
   animated = false,
@@ -23,7 +19,6 @@ export function TemplateNavBrand({
   className?: string;
   style?: CSSProperties;
 }) {
-  const reduce = useReducedMotion();
 
   if (brandLogoType === "image" && brandLogoImage) {
     return (
@@ -50,15 +45,12 @@ export function TemplateNavBrand({
   return (
     <span className={className} style={style}>
       {brand.split("").map((char, i) => (
-        <m.span
+        <span
           key={`${char}-${i}`}
           style={{ fontWeight: char === "." ? 800 : 700 }}
-          initial={reduce ? false : { opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.12 + i * 0.035, ease: easeOut }}
         >
           {char}
-        </m.span>
+        </span>
       ))}
     </span>
   );

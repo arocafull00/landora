@@ -23,7 +23,7 @@ export function OficioProTestimonialsSection({ content }: { content: LandingCont
         <OficioProSectionHeader subtitle={heading.subtitle}>
           {heading.title}
         </OficioProSectionHeader>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12" data-aos="fade-up">
           <OficioProTestimonialCard featured item={featured} />
           {rest.slice(0, 2).map((item) => (
             <div className="md:col-span-4" key={item.id}>

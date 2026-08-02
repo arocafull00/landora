@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { RistoranteChefCard } from "@/components/templates/ristorante/ristorante-chef-card";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -18,6 +16,7 @@ export function RistoranteChefSection({ content }: { content: LandingContent }) 
       <div className="mx-auto max-w-6xl">
         <h2
           className="mb-12 max-w-xl text-balance text-[clamp(32px,5vw,56px)] font-normal leading-[1.05] text-[var(--site-text)] md:mb-20"
+          data-aos="fade-up"
           style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
         >
           {heading.title}
@@ -25,6 +24,8 @@ export function RistoranteChefSection({ content }: { content: LandingContent }) 
 
         <div
           className="flex items-end gap-6 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] md:justify-center md:gap-10 md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden"
+          data-aos="fade-up"
+          data-aos-delay="100"
           style={{ scrollSnapType: "x mandatory" }}
         >
           {team.map((member, index) => (

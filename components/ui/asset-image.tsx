@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import { isAnimatedImageAsset } from "@/lib/is-animated-image";
 import { isSvgAsset } from "@/lib/is-svg-url";

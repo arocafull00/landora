@@ -1,5 +1,3 @@
-"use client";
-
 import type { ServiceMenuItem } from "@/lib/dashboard-data";
 
 export function CoffeeShopMenuItem({ service }: { service: ServiceMenuItem }) {

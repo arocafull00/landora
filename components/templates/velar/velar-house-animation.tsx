@@ -2,15 +2,15 @@
 
 import {
   useCallback,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
   type RefObject,
 } from "react";
 import Image from "next/image";
-import { m, useReducedMotion } from "motion/react";
 
-const easeOut = [0.16, 1, 0.3, 1] as const;
+const ENTRY_EASING = "cubic-bezier(0.16, 1, 0.3, 1)";
 
 const smoothstep = (t: number) => t * t * (3 - 2 * t);
 
@@ -28,7 +28,7 @@ export function VelarHouseAnimation({
   heroRef,
   darkRef,
 }: VelarHouseAnimationProps) {
-  const reduce = useReducedMotion();
+  const entryRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [scrollTransform, setScrollTransform] = useState("");
@@ -78,7 +78,7 @@ export function VelarHouseAnimation({
 
     setIsScrolling(true);
     setScrollTransform(
-      `translate(${currentX}px, ${currentY}px) scale(${currentScale})`
+      `translate(${currentX}px, ${currentY}px) scale(${currentScale})`,
     );
   }, [darkRef, heroRef]);
 
@@ -107,13 +107,38 @@ export function VelarHouseAnimation({
     };
   }, [updatePosition]);
 
+  useEffect(() => {
+    const entry = entryRef.current;
+    if (!entry) return;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) return;
+
+    const animation = entry.animate(
+      [
+        { opacity: 0, transform: "translate3d(0, 140px, 0)" },
+        { opacity: 1, transform: "translate3d(0, 0, 0)" },
+      ],
+      {
+        delay: 500,
+        duration: 1050,
+        easing: ENTRY_EASING,
+        fill: "both",
+      },
+    );
+
+    return () => {
+      animation.cancel();
+    };
+  }, []);
+
   const handleImgRef = useCallback(
     (node: HTMLImageElement | null) => {
       imgRef.current = node;
       if (!node) return;
       if (node.complete) updatePosition();
     },
-    [updatePosition]
+    [updatePosition],
   );
 
   let wrapperStyle: React.CSSProperties = {
@@ -146,14 +171,7 @@ export function VelarHouseAnimation({
       className="pointer-events-none fixed z-[22] w-full min-w-0 max-lg:w-screen lg:min-w-[1400px]"
       style={wrapperStyle}
     >
-      <m.div
-        initial={reduce ? false : { opacity: 0, y: 140 }}
-        animate={{ opacity: visible ? 1 : 0, y: 0 }}
-        transition={{
-          opacity: { duration: visible ? 1.05 : 0.4, delay: visible ? 0.5 : 0 },
-          y: { duration: 1.05, delay: 0.5, ease: easeOut },
-        }}
-      >
+      <div ref={entryRef}>
         <Image
           ref={handleImgRef}
           src={houseImage}
@@ -166,7 +184,7 @@ export function VelarHouseAnimation({
           onLoad={updatePosition}
           unoptimized={houseImage.startsWith("/")}
         />
-      </m.div>
+      </div>
     </div>
   );
 }

@@ -1,10 +1,6 @@
-"use client";
-
 import { BlogPostCard, type PublicBlogPostSummary } from "@/components/blog/blog-post-card";
-import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos-init";
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import type { LandingContent } from "@/lib/dashboard-data";
 import {
   getPreviewLandingPath,
@@ -13,6 +9,7 @@ import {
 
 type BlogListPageProps = {
   content: LandingContent;
+  copyrightYear: number;
   previewLandingId?: string;
   title: string;
   description: string;
@@ -21,6 +18,7 @@ type BlogListPageProps = {
 
 export function BlogListPage({
   content,
+  copyrightYear,
   previewLandingId,
   title,
   description,
@@ -31,9 +29,8 @@ export function BlogListPage({
     : getPublicLandingPath();
 
   return (
-    <TemplateLazyMotion>
+    <>
       <div className="min-h-screen bg-portfolio-canvas text-portfolio-ink">
-        <PortfolioAosInit />
         <PortfolioNav
           activePage="blog"
           brand={content.brand || "Mora."}
@@ -76,8 +73,8 @@ export function BlogListPage({
             </section>
           )}
         </main>
-        <PortfolioContactSection content={content} />
+      <PortfolioContactSection content={content} copyrightYear={copyrightYear} />
       </div>
-    </TemplateLazyMotion>
+    </>
   );
 }

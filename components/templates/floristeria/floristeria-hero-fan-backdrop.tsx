@@ -1,5 +1,3 @@
-"use client";
-
 import { FLORISTERIA_ASSETS } from "@/lib/floristeria-assets";
 import { FloristeriaHeroFanBackdropImage } from "@/components/templates/floristeria/floristeria-hero-fan-backdrop-image";
 

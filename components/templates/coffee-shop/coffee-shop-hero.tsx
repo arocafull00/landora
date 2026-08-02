@@ -1,12 +1,7 @@
-"use client";
-
-import { m, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { CoffeeShopButton } from "@/components/templates/coffee-shop/coffee-shop-button";
 import { HeroBackground } from "@/components/ui/hero-background";
-import { useAnalytics } from "@/hooks/use-analytics";
 
-const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function CoffeeShopHero({
   content,
@@ -14,11 +9,9 @@ export function CoffeeShopHero({
   ctaHref,
 }: {
   content: LandingContent;
-  heroRef: React.RefObject<HTMLElement | null>;
+  heroRef?: React.RefObject<HTMLElement | null>;
   ctaHref: string;
 }) {
-  const reduce = useReducedMotion();
-  const { trackCtaClick } = useAnalytics();
 
   return (
     <section
@@ -27,10 +20,7 @@ export function CoffeeShopHero({
       className="relative min-h-[100dvh] scroll-mt-24 bg-[var(--coffee-surface)] pt-24 lg:grid lg:min-h-[92dvh] lg:grid-cols-2 lg:items-stretch lg:pt-0"
     >
       <div className="flex flex-col justify-center px-6 py-16 md:px-10 lg:px-16 lg:py-24">
-        <m.div
-          initial={reduce ? false : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: easeOut }}
+        <div
         >
           {content.hero.eyebrow ? (
             <p
@@ -66,18 +56,15 @@ export function CoffeeShopHero({
             </p>
           ) : null}
           <div className="mt-10">
-            <CoffeeShopButton href={ctaHref} size="lg" variant="accent" onClick={() => trackCtaClick()}>
+            <CoffeeShopButton href={ctaHref} size="lg" variant="accent" data-analytics-event="cta_click">
               {content.hero.ctaLabel || "Ver carta"}
             </CoffeeShopButton>
           </div>
-        </m.div>
+        </div>
       </div>
 
-      <m.div
+      <div
         className="relative min-h-[42vh] lg:min-h-0"
-        initial={reduce ? false : { opacity: 0, scale: 1.03 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, delay: 0.15, ease: easeOut }}
       >
         {content.hero.image ? (
           <HeroBackground
@@ -89,7 +76,7 @@ export function CoffeeShopHero({
           <div className="h-full w-full bg-[var(--coffee-primary)]/20" />
         )}
         <div className="absolute inset-0 bg-[var(--coffee-secondary)]/10 lg:hidden" />
-      </m.div>
+      </div>
     </section>
   );
 }

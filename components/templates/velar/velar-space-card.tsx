@@ -1,14 +1,12 @@
-"use client";
-
 import { AssetImage } from "@/components/ui/asset-image";
 import type { SpaceContent } from "@/lib/dashboard-data";
 
 export function VelarSpaceCard({
-  space,
   index,
+  space,
 }: {
-  space: SpaceContent;
   index: number;
+  space: SpaceContent;
 }) {
   return (
     <div

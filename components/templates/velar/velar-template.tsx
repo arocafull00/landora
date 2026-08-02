@@ -1,14 +1,9 @@
-"use client";
-
-import { Fragment, useCallback, useLayoutEffect, useRef, useState, type RefObject } from "react";
+import { Fragment } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
-import { getScrollTargets } from "@/lib/scroll-parent";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
-import { VelarAosInit } from "@/components/templates/velar/velar-aos-init";
 import { VelarNav } from "@/components/templates/velar/velar-nav";
 import { VelarStatementSection } from "@/components/templates/velar/velar-statement-section";
 import { VelarGallerySection } from "@/components/templates/velar/velar-gallery-section";
@@ -18,40 +13,22 @@ import { VelarWorkflowSection } from "@/components/templates/velar/velar-workflo
 import { VelarTestimonialsSection } from "@/components/templates/velar/velar-testimonials-section";
 import { VelarContactSection } from "@/components/templates/velar/velar-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
-
-function isOverlappingTop(el: HTMLElement | null) {
-  if (!el) return false;
-  const rect = el.getBoundingClientRect();
-  return rect.top <= 0 && rect.bottom > 0;
-}
+import { VelarMotion } from "@/components/templates/velar/velar-motion";
 
 function renderVelarBodySection(
   anchor: string,
   content: LandingContent,
-  refs: {
-    darkRef: RefObject<HTMLDivElement | null>;
-    galleryRef: RefObject<HTMLDivElement | null>;
-    workflowRef: RefObject<HTMLDivElement | null>;
-  },
 ) {
   if (anchor === "story") {
-    return <VelarStatementSection content={content} sectionRef={refs.darkRef} />;
+    return <VelarStatementSection content={content} />;
   }
   if (anchor === "listings") {
-    return (
-      <div ref={refs.galleryRef}>
-        <VelarGallerySection content={content} />
-      </div>
-    );
+    return <VelarGallerySection content={content} />;
   }
   if (anchor === "residences") return <VelarSpacesSection content={content} />;
   if (anchor === "servicios") return <VelarServicesSection content={content} />;
   if (anchor === "proceso") {
-    return (
-      <div ref={refs.workflowRef}>
-        <VelarWorkflowSection content={content} />
-      </div>
-    );
+    return <VelarWorkflowSection content={content} />;
   }
   if (anchor === "testimonios") return <VelarTestimonialsSection content={content} />;
   return null;
@@ -59,6 +36,8 @@ function renderVelarBodySection(
 
 export function VelarTemplate({
   content,
+  copyrightYear,
+  renderedAt,
   topOffset = 0,
   slug,
   previewLandingId,
@@ -66,21 +45,14 @@ export function VelarTemplate({
   sectionSelections,
 }: {
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   topOffset?: number;
   slug?: string;
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
-  const [navColor, setNavColor] = useState("var(--site-primary)");
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const rootRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
-  const darkRef = useRef<HTMLDivElement>(null);
-  const galleryRef = useRef<HTMLDivElement>(null);
-  const workflowRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
   const heroVariantId = sectionSelections?.hero ?? "velar";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
@@ -91,88 +63,33 @@ export function VelarTemplate({
     template: "velar",
   });
 
-  const updateNavColor = useCallback(() => {
-    if (isOverlappingTop(heroRef.current)) {
-      setNavColor(
-        heroNavTone === "light"
-          ? "var(--site-on-dark)"
-          : "var(--site-primary)",
-      );
-      return;
-    }
-
-    const onDark =
-      isOverlappingTop(darkRef.current) ||
-      isOverlappingTop(galleryRef.current) ||
-      isOverlappingTop(workflowRef.current) ||
-      isOverlappingTop(footerRef.current);
-    setNavColor(onDark ? "var(--site-on-dark)" : "var(--site-primary)");
-  }, [heroNavTone]);
-
-  useLayoutEffect(() => {
-    updateNavColor();
-
-    const handleUpdate = () => updateNavColor();
-    const scrollTargets = getScrollTargets(rootRef.current, null);
-
-    for (const target of scrollTargets) {
-      target.addEventListener("scroll", handleUpdate, { passive: true });
-    }
-
-    window.addEventListener("resize", handleUpdate);
-
-    return () => {
-      for (const target of scrollTargets) {
-        target.removeEventListener("scroll", handleUpdate);
-      }
-      window.removeEventListener("resize", handleUpdate);
-    };
-  }, [updateNavColor]);
-
   return (
-    <TemplateLazyMotion>
-      <div
-        ref={rootRef}
-        className="relative bg-[var(--site-surface)]"
-        style={{ overflowX: "clip" }}
-      >
-      <VelarAosInit rootRef={rootRef} />
-
+    <VelarMotion>
       <VelarNav
         brand={content.brand || "Velar."}
         brandLogoType={content.brandLogoType ?? "text"}
         brandLogoImage={content.brandLogoImage ?? ""}
-        navColor={navColor}
-        menuOpen={menuOpen}
-        onToggleMenu={() => setMenuOpen((v) => !v)}
+        navColor={heroNavTone === "light" ? "var(--site-on-dark)" : "var(--site-primary)"}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "velar")}
         topOffset={topOffset}
       />
 
       <HeroRenderer
         content={content}
-        heroRef={heroRef}
         primaryCtaHref={primaryCtaHref}
         secondaryCtaHref={secondaryCtaHref}
         variantId={heroVariantId}
       />
 
-      <ActiveOffersRenderer content={content} />
+      <ActiveOffersRenderer content={content} renderedAt={renderedAt} />
 
       {getOrderedVisibleBodySections("velar", content).map((section) => (
         <Fragment key={section.anchor}>
-          {renderVelarBodySection(section.anchor, content, {
-            darkRef,
-            galleryRef,
-            workflowRef,
-          })}
+          {renderVelarBodySection(section.anchor, content)}
         </Fragment>
       ))}
 
-      <div ref={footerRef}>
-        <VelarContactSection content={content} />
-      </div>
-    </div>
-    </TemplateLazyMotion>
+      <VelarContactSection content={content} copyrightYear={copyrightYear} />
+    </VelarMotion>
   );
 }

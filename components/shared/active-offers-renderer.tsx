@@ -1,5 +1,3 @@
-"use client";
-
 import { OfferHeroBanner } from "@/components/shared/offer-hero-banner";
 import { OfferPromotionCards } from "@/components/shared/offer-promotion-cards";
 import type { LandingContent } from "@/lib/dashboard-data";
@@ -7,11 +5,12 @@ import { isOfferActive } from "@/lib/offer-utils";
 
 type ActiveOffersRendererProps = {
   content: LandingContent;
+  renderedAt: Date;
 };
 
-export function ActiveOffersRenderer({ content }: ActiveOffersRendererProps) {
+export function ActiveOffersRenderer({ content, renderedAt }: ActiveOffersRendererProps) {
   const offers = content.offers ?? [];
-  const activeOffers = offers.filter((offer) => isOfferActive(offer));
+  const activeOffers = offers.filter((offer) => isOfferActive(offer, renderedAt));
 
   if (activeOffers.length === 0) return null;
 
@@ -29,10 +28,11 @@ export function ActiveOffersRenderer({ content }: ActiveOffersRendererProps) {
         }
 
         return (
-          <OfferPromotionCards
-            key={offer.id}
-            offer={offer}
-            phone={content.contact.phone}
+            <OfferPromotionCards
+              key={offer.id}
+              offer={offer}
+              phone={content.contact.phone}
+              renderedAt={renderedAt}
           />
         );
       })}

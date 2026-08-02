@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 
 export function CoffeeShopStorySection({ content }: { content: LandingContent }) {
@@ -17,6 +15,7 @@ export function CoffeeShopStorySection({ content }: { content: LandingContent })
         {statement ? (
           <p
             className="max-w-[24ch] text-pretty text-[clamp(26px,3.5vw,48px)] font-medium leading-[1.15] text-[var(--coffee-foreground)]"
+            data-aos="fade-right"
             style={{
               fontFamily: "var(--font-coffee-display)",
               letterSpacing: "-0.03em",
@@ -27,7 +26,7 @@ export function CoffeeShopStorySection({ content }: { content: LandingContent })
         ) : null}
 
         {stats.length > 0 ? (
-          <dl className={`grid gap-8 sm:grid-cols-3 lg:grid-cols-1 ${statement ? "mt-12 lg:mt-0" : ""}`}>
+          <dl className={`grid gap-8 sm:grid-cols-3 lg:grid-cols-1 ${statement ? "mt-12 lg:mt-0" : ""}`} data-aos="fade-left" data-aos-delay="100">
             {stats.map((stat) => (
               <div key={stat.id}>
                 <dt

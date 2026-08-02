@@ -1,12 +1,7 @@
-"use client";
-
 import { CalendarCheck, Tent, Sofa } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useEditorHighlight } from "@/lib/use-editor-highlight";
-import { cn } from "@/lib/utils";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 const WORKFLOW_ICONS = [
   <CalendarCheck key="calendario" className="h-16 w-16 text-[var(--site-on-dark)]" />,
@@ -20,8 +15,6 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function VelarWorkflowSection({ content }: { content: LandingContent }) {
-  const { trackWhatsAppClick } = useAnalytics();
-  const isHighlighted = useEditorHighlight("proceso");
 
   if (!content.workflow || content.workflow.length === 0) return null;
 
@@ -33,10 +26,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
       data-section="proceso"
       data-section-label="Proceso"
       id="proceso"
-      className={cn(
-        "relative z-[25] scroll-mt-24 bg-[var(--site-dark)] px-6 py-20 md:px-10 lg:px-16",
-        isHighlighted && "template-section--highlighted",
-      )}
+      className="relative z-[25] scroll-mt-24 bg-[var(--site-dark)] px-6 py-20 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16" data-aos="fade-up">
@@ -75,7 +65,7 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
                   variant="secondary"
                   size="sm"
                   className="uppercase !border-[var(--site-on-dark)] !text-[var(--site-on-dark)] hover:!bg-[var(--site-surface-alt)] hover:!text-[var(--site-text)]"
-                  onClick={() => trackWhatsAppClick()}
+                  data-analytics-event="whatsapp_click"
                 >
                   CONTÁCTANOS
                 </VelarButton>

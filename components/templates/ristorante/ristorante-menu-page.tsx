@@ -1,11 +1,8 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { RistoranteMenuFooter } from "@/components/templates/ristorante/menu-page/ristorante-menu-footer";
 import { RistoranteMenuHero } from "@/components/templates/ristorante/menu-page/ristorante-menu-hero";
 import { RistoranteMenuSection } from "@/components/templates/ristorante/ristorante-menu-section";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import {
   getPreviewLandingPath,
   getPublicLandingPath,
@@ -18,11 +15,13 @@ import {
 export function RistoranteMenuPage({
   bookingEnabled = false,
   content,
+  copyrightYear,
   previewLandingId,
   slug,
 }: {
   bookingEnabled?: boolean;
   content: LandingContent;
+  copyrightYear: number;
   previewLandingId?: string;
   slug?: string;
 }) {
@@ -44,7 +43,7 @@ export function RistoranteMenuPage({
   const brand = content.brand || "Osteria da Luca.";
 
   return (
-    <TemplateLazyMotion>
+    <>
       <div
         className="relative min-h-screen overflow-x-clip bg-[var(--ristorante-muted)]"
       >
@@ -65,10 +64,14 @@ export function RistoranteMenuPage({
           />
         </div>
         <main>
-          <RistoranteMenuSection content={content} />
+          <RistoranteMenuSection items={content.serviceMenu ?? []} />
         </main>
-        <RistoranteMenuFooter brand={brand} contact={content.contact} />
+        <RistoranteMenuFooter
+          brand={brand}
+          contact={content.contact}
+          copyrightYear={copyrightYear}
+        />
       </div>
-    </TemplateLazyMotion>
+    </>
   );
 }

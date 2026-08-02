@@ -1,20 +1,22 @@
-"use client";
-
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioButton } from "@/components/templates/portfolio/portfolio-button";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
   return `https://wa.me/${digits}?text=${encodeURIComponent("Hola, me gustaría hablar sobre un proyecto.")}`;
 }
 
-export function PortfolioContactSection({ content }: { content: LandingContent }) {
-  const { trackWhatsAppClick, trackPhoneClick, trackLeadGenerated } = useAnalytics();
+export function PortfolioContactSection({
+  content,
+  copyrightYear,
+}: {
+  content: LandingContent;
+  copyrightYear: number;
+}) {
   const whatsappLink = getWhatsAppLink(content.contact.phone);
   const heading = getSectionHeading(content, "contacto", SECTION_HEADING_DEFAULTS.portfolio.contacto);
 
@@ -40,10 +42,7 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
             href={whatsappLink}
             variant="primary"
             size="lg"
-            onClick={() => {
-              trackWhatsAppClick();
-              trackLeadGenerated();
-            }}
+            data-analytics-event="whatsapp_click lead_generated"
           >
             {content.contact.ctaLabel ?? "Contactar por WhatsApp"}
           </PortfolioButton>
@@ -62,7 +61,7 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
                 <a
                   className="text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                  onClick={() => trackPhoneClick()}
+                  data-analytics-event="phone_click"
                 >
                   {content.contact.phone}
                 </a>
@@ -103,6 +102,7 @@ export function PortfolioContactSection({ content }: { content: LandingContent }
             brand={content.brand}
             className="text-xs text-[var(--site-on-dark)]/30"
             contact={content.contact}
+            year={copyrightYear}
           />
         </div>
       </div>

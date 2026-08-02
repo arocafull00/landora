@@ -1,18 +1,13 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarStatItem } from "@/components/templates/velar/velar-stat-item";
-import { useEditorHighlight } from "@/lib/use-editor-highlight";
-import { cn } from "@/lib/utils";
 
 export function VelarStatementSection({
   content,
   sectionRef,
 }: {
   content: LandingContent;
-  sectionRef: React.RefObject<HTMLDivElement | null>;
+  sectionRef?: React.RefObject<HTMLDivElement | null>;
 }) {
-  const isHighlighted = useEditorHighlight("story");
 
   return (
     <div
@@ -20,10 +15,7 @@ export function VelarStatementSection({
       data-section="story"
       data-section-label="Historia"
       id="story"
-      className={cn(
-        "relative z-20 h-[80vh] md:h-[200vh]",
-        isHighlighted && "template-section--highlighted",
-      )}
+      className="relative z-20 h-[80vh] md:h-[200vh]"
     >
       <div className="h-[4vh] bg-[var(--site-dark)]" />
       <div className="s2-section sticky top-0 h-screen scroll-mt-24 overflow-hidden bg-[var(--site-dark)]">

@@ -1,17 +1,12 @@
-"use client";
-
 import { ArrowUpRight } from "lucide-react";
-import { m, useReducedMotion } from "motion/react";
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
 import { HeroVariantMedia } from "@/components/templates/shared/heroes/hero-variant-media";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 const MOSAICO_COPY = {
   primaryCtaFallback: "Más información",
   secondaryCta: "Descubrir",
 } as const;
 
-const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
 export function MosaicoHeroVariant({
   content,
@@ -19,8 +14,6 @@ export function MosaicoHeroVariant({
   primaryCtaHref,
   secondaryCtaHref,
 }: HeroVariantProps) {
-  const reduceMotion = useReducedMotion();
-  const { trackCtaClick } = useAnalytics();
   const { hero } = content;
   const secondaryImage = hero.houseImage || hero.image;
 
@@ -35,11 +28,8 @@ export function MosaicoHeroVariant({
         className="absolute -left-24 top-1/3 size-64 rounded-full border border-[var(--site-accent)] opacity-20 sm:size-96"
       />
       <div className="mx-auto grid min-h-[calc(100dvh-9rem)] w-full max-w-7xl items-center gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
-        <m.div
-          animate={{ opacity: 1, y: 0 }}
+        <div
           className="relative z-10"
-          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-          transition={{ duration: 0.75, ease: EASE_OUT }}
         >
           {hero.eyebrow ? (
             <p className="mb-6 font-body text-xs font-semibold uppercase tracking-[0.26em] text-[var(--site-accent)] sm:text-sm">
@@ -63,7 +53,7 @@ export function MosaicoHeroVariant({
             <a
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--site-primary)] px-6 py-3 font-body text-sm font-semibold text-[var(--site-on-primary)] transition-[background-color,transform,box-shadow] hover:-translate-y-0.5 hover:bg-[var(--site-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)]"
               href={primaryCtaHref}
-              onClick={() => trackCtaClick()}
+              data-analytics-event="cta_click"
             >
               {hero.ctaLabel || MOSAICO_COPY.primaryCtaFallback}
               <ArrowUpRight aria-hidden className="size-4" />
@@ -75,13 +65,10 @@ export function MosaicoHeroVariant({
               {MOSAICO_COPY.secondaryCta}
             </a>
           </div>
-        </m.div>
+        </div>
 
-        <m.div
-          animate={{ opacity: 1, scale: 1 }}
+        <div
           className="relative mx-auto h-[min(72vh,44rem)] w-full max-w-2xl"
-          initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
-          transition={{ delay: 0.12, duration: 0.9, ease: EASE_OUT }}
         >
           <div className="absolute inset-y-0 right-0 w-[76%] rotate-2 overflow-hidden rounded-[2rem] border border-[var(--site-accent)] bg-[var(--site-surface-alt)]">
             {hero.image ? (
@@ -113,7 +100,7 @@ export function MosaicoHeroVariant({
           >
             <ArrowUpRight className="size-6" />
           </div>
-        </m.div>
+        </div>
       </div>
     </section>
   );

@@ -1,12 +1,14 @@
-import { ClerkProvider } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-import { isAdmin } from "@/lib/is-admin";
+import { Suspense } from "react";
+import { AdminLayoutContent } from "@/components/admin/admin-layout-content";
 
-export default async function AdminLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  if (!(await isAdmin())) redirect("/");
-  return <ClerkProvider>{children}</ClerkProvider>;
+  return (
+    <Suspense fallback={null}>
+      <AdminLayoutContent>{children}</AdminLayoutContent>
+    </Suspense>
+  );
 }

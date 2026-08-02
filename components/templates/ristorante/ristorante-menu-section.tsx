@@ -1,13 +1,12 @@
 "use client";
 
-import type { LandingContent } from "@/lib/dashboard-data";
+import type { ServiceMenuItem } from "@/lib/dashboard-data";
 import { RistoranteMenuCategorySection } from "@/components/templates/ristorante/menu-page/ristorante-menu-category-section";
 import { RistoranteMenuEmptyState } from "@/components/templates/ristorante/menu-page/ristorante-menu-empty-state";
 import { RistoranteMenuToolbar } from "@/components/templates/ristorante/menu-page/ristorante-menu-toolbar";
 import { useRistoranteMenu } from "@/components/templates/ristorante/menu-page/hooks/use-ristorante-menu";
 
-export function RistoranteMenuSection({ content }: { content: LandingContent }) {
-  const items = content.serviceMenu ?? [];
+export function RistoranteMenuSection({ items }: { items: ServiceMenuItem[] }) {
   const {
     activeCategory,
     categories,
@@ -34,7 +33,7 @@ export function RistoranteMenuSection({ content }: { content: LandingContent }) 
         className="pointer-events-none absolute -right-24 top-[38rem] h-80 w-80 rounded-full bg-[var(--ristorante-primary)]/10 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-[1240px]">
+      <div className="relative mx-auto max-w-[1240px]" data-aos="fade-up">
         <RistoranteMenuToolbar
           activeCategory={activeCategory}
           categories={categories}
@@ -43,7 +42,7 @@ export function RistoranteMenuSection({ content }: { content: LandingContent }) 
           search={search}
         />
 
-        <div className="space-y-16 pt-16 sm:space-y-20 sm:pt-20">
+        <div className="space-y-16 pt-16 sm:space-y-20 sm:pt-20" data-aos="fade-up" data-aos-delay="100">
           {hasResults ? (
             visibleGroups.map((group) => (
               <RistoranteMenuCategorySection

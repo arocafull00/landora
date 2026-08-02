@@ -4,6 +4,7 @@ import { getCopyrightLine } from "@/lib/footer-content";
 type FooterCopyrightProps = {
   brand: string;
   contact: ContactContent;
+  year: number;
   className?: string;
   extraClassName?: string;
 };
@@ -11,6 +12,7 @@ type FooterCopyrightProps = {
 export function FooterCopyright({
   brand,
   contact,
+  year,
   className = "text-xs text-white/30",
   extraClassName,
 }: FooterCopyrightProps) {
@@ -18,7 +20,7 @@ export function FooterCopyright({
 
   return (
     <div className="space-y-2">
-      <p className={className}>{getCopyrightLine(brand, contact)}</p>
+      <p className={className}>{getCopyrightLine(brand, contact, year)}</p>
       {extra ? <p className={extraClassName ?? className}>{extra}</p> : null}
     </div>
   );

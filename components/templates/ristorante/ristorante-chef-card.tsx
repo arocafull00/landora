@@ -1,5 +1,3 @@
-"use client";
-
 import { AssetImage } from "@/components/ui/asset-image";
 import type { TeamMember } from "@/lib/dashboard-data";
 
@@ -18,7 +16,6 @@ export function RistoranteChefCard({
     <article
       className={`group shrink-0 snap-start ${offset ? "md:-mt-16" : ""}`}
       style={{ width }}
-      tabIndex={member.bio ? 0 : undefined}
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md bg-[var(--ristorante-primary)]/20">
         {member.image ? (

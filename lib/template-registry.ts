@@ -73,6 +73,8 @@ const SEO_EDITOR_TAB: EditorTab = {
 export type TemplateComponent = React.ComponentType<{
   bookingEnabled?: boolean;
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   sectionSelections?: LandingSectionSelections;
   slug?: string;
   topOffset?: number;

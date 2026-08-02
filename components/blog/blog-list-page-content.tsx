@@ -1,21 +1,18 @@
-import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 import { BlogListPage } from "@/components/blog/blog-list-page";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getBlogConfig, getBlogPostsByLandingId } from "@/data/blog";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
+import { getCopyrightYear } from "@/lib/copyright-year";
 
 export async function BlogListPageContent({ slug }: { slug: string }) {
-  "use cache";
-
-  cacheLife("max");
-
   const landing = await getPublishedLandingBySlug(slug);
   if (!landing) notFound();
 
-  const [config, posts] = await Promise.all([
+  const [config, posts, copyrightYear] = await Promise.all([
     getBlogConfig(landing.id),
     getBlogPostsByLandingId(landing.id, true),
+    getCopyrightYear(),
   ]);
 
   const content = landing.content;
@@ -25,6 +22,7 @@ export async function BlogListPageContent({ slug }: { slug: string }) {
     <SiteThemeScope appearance={content.appearance} template={landing.template}>
       <BlogListPage
         content={content}
+        copyrightYear={copyrightYear}
         description={config?.description || ""}
         posts={posts.map((post) => ({
           slug: post.slug,

@@ -551,13 +551,13 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
     statement: "Desde 2008 traemos los sabores auténticos de Italia a Madrid. Cada plato se prepara con ingredientes frescos importados directamente de nuestras regiones: la pasta hecha a mano cada mañana, el aceite de oliva de Puglia y los quesos de Emilia-Romagna.",
   },
   gallery: [
-    { id: "g1", image: RISTORANTE_ASSETS.gallery1 },
-    { id: "g2", image: RISTORANTE_ASSETS.gallery2 },
-    { id: "g3", image: RISTORANTE_ASSETS.gallery3 },
-    { id: "g4", image: RISTORANTE_ASSETS.gallery4 },
-    { id: "g5", image: RISTORANTE_ASSETS.gallery5 },
-    { id: "g6", image: RISTORANTE_ASSETS.gallery6 },
-    { id: "g7", image: RISTORANTE_ASSETS.gallery7 },
+    { id: "g1", image: RISTORANTE_ASSETS.gallery1, title: "Viernes por la noche", description: "El comedor cobra vida alrededor de cada mesa." },
+    { id: "g2", image: RISTORANTE_ASSETS.gallery2, title: "El equipo de cocina", description: "Cada servicio empieza mucho antes de abrir las puertas." },
+    { id: "g3", image: RISTORANTE_ASSETS.gallery3, title: "Producto de temporada", description: "Ingredientes escogidos por su origen, sabor y momento." },
+    { id: "g4", image: RISTORANTE_ASSETS.gallery4, title: "El plato que nos representa", description: "Receta propia, producto local y elaboración diaria." },
+    { id: "g5", image: RISTORANTE_ASSETS.gallery5, title: "Celebraciones en casa", description: "Un espacio preparado para compartir cada ocasión." },
+    { id: "g6", image: RISTORANTE_ASSETS.gallery6, title: "Una mesa para quedarse", description: "Sobremesas largas y una hospitalidad que se recuerda." },
+    { id: "g7", image: RISTORANTE_ASSETS.gallery7, title: "El último bocado", description: "El cierre dulce de una experiencia pensada al detalle." },
   ],
   team: [
     {

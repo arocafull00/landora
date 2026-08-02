@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 
 export function PortfolioAbout({ content }: { content: LandingContent }) {
@@ -12,12 +10,12 @@ export function PortfolioAbout({ content }: { content: LandingContent }) {
       <div className="mx-auto max-w-6xl">
         <p
           className="text-pretty text-2xl font-light leading-relaxed text-(--site-text) sm:text-3xl md:text-[clamp(26px,3.2vw,40px)]"
+          data-aos="fade-right"
           style={{
             fontFamily: "var(--font-syne)",
             letterSpacing: "-0.02em",
             textWrap: "balance",
           }}
-          data-aos="fade-right"
         >
           {statement}
         </p>

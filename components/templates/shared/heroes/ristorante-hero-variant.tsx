@@ -1,5 +1,3 @@
-"use client";
-
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
 import { RistoranteHero } from "@/components/templates/ristorante/ristorante-hero";
 

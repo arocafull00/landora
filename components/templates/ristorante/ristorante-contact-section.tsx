@@ -1,20 +1,22 @@
-"use client";
-
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { RistoranteButton } from "@/components/templates/ristorante/ristorante-button";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
   return `https://wa.me/${digits}?text=${encodeURIComponent("Hola, me gustaría reservar una mesa.")}`;
 }
 
-export function RistoranteContactSection({ content }: { content: LandingContent }) {
-  const { trackWhatsAppClick, trackPhoneClick, trackLeadGenerated } = useAnalytics();
+export function RistoranteContactSection({
+  content,
+  copyrightYear,
+}: {
+  content: LandingContent;
+  copyrightYear: number;
+}) {
   const whatsappLink = getWhatsAppLink(content.contact.phone);
   const heading = getSectionHeading(
     content,
@@ -29,7 +31,7 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
     >
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
-          <div>
+          <div data-aos="fade-right">
             <h2
               className="mb-6 text-balance text-[clamp(40px,6vw,72px)] font-normal leading-none text-(--ristorante-foreground)"
               style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
@@ -48,16 +50,13 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
               href={whatsappLink}
               size="lg"
               variant="accent"
-              onClick={() => {
-                trackWhatsAppClick();
-                trackLeadGenerated();
-              }}
+              data-analytics-event="whatsapp_click lead_generated"
             >
               {content.contact.ctaLabel ?? "Reservar por WhatsApp"}
             </RistoranteButton>
           </div>
 
-          <div className="flex flex-col justify-end gap-8 border-t border-[var(--ristorante-foreground)]/15 pt-10 lg:border-t-0 lg:pt-0">
+          <div className="flex flex-col justify-end gap-8 border-t border-[var(--ristorante-foreground)]/15 pt-10 lg:border-t-0 lg:pt-0" data-aos="fade-left" data-aos-delay="100">
             {content.contact.phone ? (
               <div className="flex items-start gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ristorante-accent)]" />
@@ -71,7 +70,7 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
                   <a
                     className="text-sm text-[var(--ristorante-foreground)]/90 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)]"
                     href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                    onClick={() => trackPhoneClick()}
+                    data-analytics-event="phone_click"
                   >
                     {content.contact.phone}
                   </a>
@@ -128,6 +127,7 @@ export function RistoranteContactSection({ content }: { content: LandingContent 
             brand={content.brand}
             className="text-xs text-[var(--ristorante-foreground)]/30"
             contact={content.contact}
+            year={copyrightYear}
           />
         </div>
       </div>

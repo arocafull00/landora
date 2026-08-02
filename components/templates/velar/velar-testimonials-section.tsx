@@ -1,20 +1,10 @@
-"use client";
-
 import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import { Star } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarGoogleReview } from "@/components/templates/velar/velar-google-review";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useEditorHighlight } from "@/lib/use-editor-highlight";
-import { cn } from "@/lib/utils";
 
 export function VelarTestimonialsSection({ content }: { content: LandingContent }) {
-  const isHighlighted = useEditorHighlight("testimonios");
-
   if (content.testimonials.length === 0) return null;
 
   const heading = getSectionHeading(
@@ -28,17 +18,11 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
       data-section="testimonios"
       data-section-label="Testimonios"
       id="testimonios"
-      className={cn(
-        "relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16",
-        isHighlighted && "template-section--highlighted",
-      )}
+      className="relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
-          <p
-            className="mb-6 text-xs uppercase tracking-widest text-[var(--site-accent)]"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
+          <p className="mb-6 text-xs uppercase tracking-widest text-[var(--site-accent)]">
             testimonios
           </p>
           <h2
@@ -53,91 +37,45 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
             {heading.title}
           </h2>
           <div className="mb-4 flex items-center justify-center gap-4">
-            <span
-              className="text-2xl font-bold text-[var(--site-text)]"
-              style={{ fontFamily: "var(--font-syne)" }}
-            >
+            <span className="text-2xl font-bold text-[var(--site-text)]">
               EXCELENTE
             </span>
-            <div className="flex text-xl text-yellow-400">★★★★★</div>
+            <span className="flex gap-0.5 text-warning" aria-label="5 de 5 estrellas">
+              {Array.from({ length: 5 }, (_, index) => (
+                <Star aria-hidden className="size-5 fill-current" key={index} />
+              ))}
+            </span>
           </div>
-          <p
-            className="mb-2 text-[var(--site-text)]/70"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            En base a{" "}
-            <strong className="font-semibold text-[var(--site-text)]">194 reseñas</strong>
+          <p className="mb-2 text-[var(--site-text)]/70">
+            En base a <strong className="font-semibold text-[var(--site-text)]">194 reseñas</strong>
           </p>
           <div className="flex justify-center">
             <div className="relative h-6 w-20">
               <Image
-                src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
                 alt="Google"
+                className="object-contain"
                 fill
                 sizes="80px"
-                className="object-contain"
+                src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
                 unoptimized
               />
             </div>
           </div>
         </div>
 
-        <div className="relative px-2 sm:px-8 lg:px-12" data-aos="fade-up" data-aos-delay="100">
-          <Swiper
-            modules={[Navigation, Pagination]}
-            spaceBetween={24}
-            slidesPerView={1}
-            breakpoints={{
-              640: { slidesPerView: 2 },
-              1024: { slidesPerView: 3 },
-            }}
-            navigation={{
-              nextEl: ".swiper-button-next-testimonios",
-              prevEl: ".swiper-button-prev-testimonios",
-            }}
-            pagination={{
-              clickable: true,
-              el: ".swiper-pagination-testimonios",
-            }}
-            className="testimonios-swiper"
-          >
-            {content.testimonials.map((testimonial) => (
-              <SwiperSlide key={testimonial.id}>
-                <VelarGoogleReview testimonial={testimonial} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          <button
-            type="button"
-            className="swiper-button-prev-testimonios absolute left-0 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-[var(--site-primary)]/20 bg-[var(--site-surface)] transition-colors hover:bg-[var(--site-primary)] hover:text-[var(--site-on-dark)] group sm:flex"
-            aria-label="Anterior"
-          >
-            <svg
-              className="h-6 w-6 text-[var(--site-primary)] group-hover:text-[var(--site-on-dark)]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <div
+          className="flex snap-x snap-mandatory gap-6 overflow-x-auto px-2 pb-4 sm:px-8 lg:px-12"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          {content.testimonials.map((testimonial) => (
+            <div
+              className="min-w-[min(86vw,24rem)] snap-start sm:min-w-[calc(50%-0.75rem)] lg:min-w-[calc(33.333%-1rem)]"
+              key={testimonial.id}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            className="swiper-button-next-testimonios absolute right-0 top-1/2 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center border border-[var(--site-primary)]/20 bg-[var(--site-surface)] transition-colors hover:bg-[var(--site-primary)] hover:text-[var(--site-on-dark)] group sm:flex"
-            aria-label="Siguiente"
-          >
-            <svg
-              className="h-6 w-6 text-[var(--site-primary)] group-hover:text-[var(--site-on-dark)]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-
-          <div className="swiper-pagination-testimonios mt-8 flex justify-center" />
+              <VelarGoogleReview testimonial={testimonial} />
+            </div>
+          ))}
         </div>
       </div>
     </section>

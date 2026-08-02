@@ -12,6 +12,8 @@ export function VelarHeroVariant({
   primaryCtaHref,
 }: HeroVariantProps) {
   const transitionRef = useRef<HTMLDivElement>(null);
+  const localHeroRef = useRef<HTMLElement>(null);
+  const resolvedHeroRef = heroRef ?? localHeroRef;
   const { backgroundImage, houseImage } = resolveVelarHeroImages(content.hero);
   const resolvedContent = {
     ...content,
@@ -26,7 +28,7 @@ export function VelarHeroVariant({
       <VelarHero
         content={resolvedContent}
         ctaHref={primaryCtaHref}
-        heroRef={heroRef}
+        heroRef={resolvedHeroRef}
         heroVisible
       />
       <div
@@ -37,7 +39,7 @@ export function VelarHeroVariant({
       {houseImage ? (
         <VelarHouseAnimation
           darkRef={transitionRef}
-          heroRef={heroRef}
+          heroRef={resolvedHeroRef}
           houseImage={houseImage}
         />
       ) : null}

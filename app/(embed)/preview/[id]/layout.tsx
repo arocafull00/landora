@@ -1,17 +1,16 @@
-import { PreviewBridgeProvider } from "@/components/dashboard/preview-bridge-provider";
+import { Suspense } from "react";
+import { PreviewLayoutContent } from "@/components/dashboard/preview-layout-content";
 
-export default async function PreviewLayout({
+export default function PreviewLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params;
-
   return (
-    <PreviewBridgeProvider landingId={id}>
-      {children}
-    </PreviewBridgeProvider>
+    <Suspense fallback={null}>
+      <PreviewLayoutContent params={params}>{children}</PreviewLayoutContent>
+    </Suspense>
   );
 }

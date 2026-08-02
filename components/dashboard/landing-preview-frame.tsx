@@ -50,11 +50,11 @@ export function LandingPreviewFrame({
   initialContent: LandingContent;
   initialSectionSelections: LandingSectionSelections;
   template: TemplateId;
-  slug?: string;
-  previewLandingId?: string;
+  slug: string;
+  previewLandingId: string;
   sitePage?: SitePageId | "project" | "carta";
   previewProjectKey?: string;
-  bookingEnabled?: boolean;
+  bookingEnabled: boolean;
 }) {
   const previewBridge = usePreviewBridge();
   const livePreview = previewBridge?.livePreview;
@@ -64,7 +64,10 @@ export function LandingPreviewFrame({
     livePreview?.sectionSelections ?? initialSectionSelections;
   const heroVariantId = sectionSelections.hero;
   const highlightedEditorId = previewBridge?.highlightedEditorId ?? null;
+  const highlightedSectionId = previewBridge?.highlightedSectionId ?? null;
   const scrollRequest = previewBridge?.scrollRequest ?? null;
+  const copyrightYear = new Date().getFullYear();
+  const renderedAt = new Date();
 
   useLayoutEffect(() => {
     for (const el of document.querySelectorAll(".template-element--highlighted")) {
@@ -77,6 +80,18 @@ export function LandingPreviewFrame({
       el.classList.add("template-element--highlighted");
     }
   }, [content, highlightedEditorId]);
+
+  useLayoutEffect(() => {
+    for (const el of document.querySelectorAll(".template-section--highlighted")) {
+      el.classList.remove("template-section--highlighted");
+    }
+    if (!highlightedSectionId) return;
+    for (const el of document.querySelectorAll(
+      `[data-section="${CSS.escape(highlightedSectionId)}"]`,
+    )) {
+      el.classList.add("template-section--highlighted");
+    }
+  }, [content, highlightedSectionId]);
 
   useEffect(() => {
     let secondFrame: number | undefined;
@@ -137,18 +152,21 @@ export function LandingPreviewFrame({
       previewProject ? (
         <PortfolioProjectPage
           content={content}
+          copyrightYear={copyrightYear}
           previewLandingId={previewLandingId}
           project={previewProject}
         />
       ) : sitePage === "about" && activeTemplate === "portfolio" ? (
         <PortfolioAboutPage
           content={content}
+          copyrightYear={copyrightYear}
           previewLandingId={previewLandingId}
         />
       ) : sitePage === "carta" && activeTemplate === "ristorante" ? (
         <RistoranteMenuPage
           bookingEnabled={bookingEnabled}
           content={content}
+          copyrightYear={copyrightYear}
           previewLandingId={previewLandingId}
           slug={slug}
         />
@@ -157,6 +175,8 @@ export function LandingPreviewFrame({
           key={heroVariantId}
           bookingEnabled={bookingEnabled}
           content={content}
+          copyrightYear={copyrightYear}
+          renderedAt={renderedAt}
           previewLandingId={previewLandingId}
           sectionSelections={sectionSelections}
           slug={slug}
@@ -166,6 +186,8 @@ export function LandingPreviewFrame({
           key={heroVariantId}
           bookingEnabled={bookingEnabled}
           content={content}
+          copyrightYear={copyrightYear}
+          renderedAt={renderedAt}
           previewLandingId={previewLandingId}
           sectionSelections={sectionSelections}
           slug={slug}

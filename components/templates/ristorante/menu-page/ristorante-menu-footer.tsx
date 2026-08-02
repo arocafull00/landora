@@ -1,19 +1,17 @@
-"use client";
-
 import { Mail, MapPin, Phone, UtensilsCrossed } from "lucide-react";
 import type { ContactContent } from "@/lib/dashboard-data";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 export function RistoranteMenuFooter({
   brand,
   contact,
+  copyrightYear,
 }: {
   brand: string;
   contact: ContactContent;
+  copyrightYear: number;
 }) {
-  const { trackPhoneClick } = useAnalytics();
 
   return (
     <footer
@@ -45,7 +43,7 @@ export function RistoranteMenuFooter({
             <a
               className="inline-flex items-center gap-2 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)]"
               href={`tel:${contact.phone.replace(/\s/g, "")}`}
-              onClick={() => trackPhoneClick()}
+              data-analytics-event="phone_click"
             >
               <Phone aria-hidden className="h-4 w-4 text-[var(--ristorante-accent)]" />
               {contact.phone}
@@ -79,6 +77,7 @@ export function RistoranteMenuFooter({
             brand={brand}
             className="text-xs text-[var(--ristorante-foreground)]/35"
             contact={contact}
+            year={copyrightYear}
           />
         </div>
       </div>

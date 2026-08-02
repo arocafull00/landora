@@ -1,5 +1,3 @@
-"use client";
-
 import { ArrowRight, Flame } from "lucide-react";
 import { OfferHeroBannerFeature } from "@/components/shared/offer-hero-banner-feature";
 import { AssetImage } from "@/components/ui/asset-image";

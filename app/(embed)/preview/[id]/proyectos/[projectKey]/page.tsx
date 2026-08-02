@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { LandingPreviewFrame } from "@/components/dashboard/landing-preview-frame";
-import { getAuthorizedLanding } from "@/lib/api/landing-auth";
-import { getEffectiveClientId } from "@/lib/auth";
+import { getPreviewLanding } from "@/lib/api/landing-auth";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { resolveSectionSelections } from "@/lib/section-selections";
 
@@ -15,12 +14,10 @@ export default async function ProjectPreviewPage({
 }: {
   params: Promise<{ id: string; projectKey: string }>;
 }) {
-  const clientId = await getEffectiveClientId();
-  if (!clientId) redirect("/sign-in");
-
   const { id, projectKey } = await params;
-  const landing = await getAuthorizedLanding(id);
-  if (!landing || landing.template !== "portfolio") notFound();
+  const landing = await getPreviewLanding(id);
+
+  if (landing.template !== "portfolio") notFound();
 
   return (
     <LandingPreviewFrame
@@ -29,6 +26,7 @@ export default async function ProjectPreviewPage({
         landing.template,
         landing.sectionSelections ?? [],
       )}
+      bookingEnabled={false}
       previewLandingId={landing.id}
       previewProjectKey={projectKey}
       sitePage="project"

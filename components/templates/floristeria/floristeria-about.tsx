@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { FLORISTERIA_ASSETS } from "@/lib/floristeria-assets";
 
@@ -34,13 +32,13 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
         {statement && (
           <p
             className="text-pretty text-2xl font-normal leading-relaxed text-[var(--site-text)] sm:text-3xl md:text-[clamp(26px,3.2vw,40px)]"
+            data-aos="fade-right"
             style={{
               fontFamily: "var(--font-cormorant)",
               letterSpacing: "-0.02em",
               textShadow: textHalo,
               textWrap: "balance",
             }}
-            data-aos="fade-right"
           >
             {statement}
           </p>

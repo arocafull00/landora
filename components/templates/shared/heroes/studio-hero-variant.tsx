@@ -1,5 +1,3 @@
-"use client";
-
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
 import { StudioHero } from "@/components/templates/studio/studio-hero";
 

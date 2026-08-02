@@ -1,15 +1,13 @@
-"use client";
-
 import type { WorkExperienceItem } from "@/lib/dashboard-data";
 
 const ACCENT = "var(--site-accent)";
 
 export function PortfolioWorkHistoryCard({
-  item,
   index,
+  item,
 }: {
-  item: WorkExperienceItem;
   index: number;
+  item: WorkExperienceItem;
 }) {
   return (
     <article

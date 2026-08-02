@@ -1,8 +1,15 @@
 import type {
+  GalleryVariantId,
   HeroVariantId,
   LandingSectionSelections,
   TemplateId,
 } from "@/lib/dashboard-data";
+
+const GALLERY_VARIANT_IDS = [
+  "grid",
+  "polaroid",
+  "cinematic",
+] as const satisfies readonly GalleryVariantId[];
 
 const HERO_VARIANT_IDS = [
   "velar",
@@ -15,10 +22,19 @@ const HERO_VARIANT_IDS = [
   "lumen",
   "offset",
   "mosaico",
+  "editorial",
+  "bento",
+  "brutal",
+  "immersive",
+  "futuristic",
 ] as const satisfies readonly HeroVariantId[];
 
 export function isHeroVariantId(value: string): value is HeroVariantId {
   return HERO_VARIANT_IDS.some((id) => id === value);
+}
+
+export function isGalleryVariantId(value: string): value is GalleryVariantId {
+  return GALLERY_VARIANT_IDS.some((id) => id === value);
 }
 
 export function getDefaultHeroVariantId(template: TemplateId): HeroVariantId {
@@ -30,6 +46,7 @@ export function getDefaultSectionSelections(
 ): LandingSectionSelections {
   return {
     hero: getDefaultHeroVariantId(template),
+    gallery: "grid",
   };
 }
 
@@ -40,8 +57,14 @@ export function resolveSectionSelections(
   const selections = getDefaultSectionSelections(template);
 
   for (const row of rows) {
-    if (row.sectionKey !== "hero" || !isHeroVariantId(row.variantId)) continue;
-    selections.hero = row.variantId;
+    if (row.sectionKey === "hero" && isHeroVariantId(row.variantId)) {
+      selections.hero = row.variantId;
+      continue;
+    }
+
+    if (row.sectionKey === "gallery" && isGalleryVariantId(row.variantId)) {
+      selections.gallery = row.variantId;
+    }
   }
 
   return selections;

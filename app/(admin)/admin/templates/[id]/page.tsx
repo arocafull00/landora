@@ -12,6 +12,8 @@ import {
   TemplateDemoBar,
   TEMPLATE_DEMO_BAR_HEIGHT,
 } from "@/components/admin/template-demo-bar";
+import { getCopyrightYear } from "@/lib/copyright-year";
+import { getPublicRenderTime } from "@/lib/public-render-time";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -34,7 +36,12 @@ export default async function TemplateDemoPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ embed?: string }>;
 }) {
-  const [{ id }, { embed }] = await Promise.all([params, searchParams]);
+  const [{ id }, { embed }, copyrightYear, renderedAt] = await Promise.all([
+    params,
+    searchParams,
+    getCopyrightYear(),
+    getPublicRenderTime(),
+  ]);
 
   if (!isValidTemplateId(id)) notFound();
 
@@ -49,6 +56,8 @@ export default async function TemplateDemoPage({
       {!isEmbed && <TemplateDemoBar label={template.label} />}
       <Component
         content={template.demoContent}
+        copyrightYear={copyrightYear}
+        renderedAt={renderedAt}
         topOffset={isEmbed ? 0 : TEMPLATE_DEMO_BAR_HEIGHT}
       />
     </div>

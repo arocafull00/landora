@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { StudioStatItem } from "@/components/templates/studio/studio-stat-item";
 
@@ -15,12 +13,12 @@ export function StudioAbout({ content }: { content: LandingContent }) {
         {statement && (
           <p
             className="text-pretty text-2xl font-light leading-relaxed text-[var(--site-text)] sm:text-3xl md:text-[clamp(26px,3.2vw,40px)]"
+            data-aos="fade-right"
             style={{
               fontFamily: "var(--font-syne)",
               letterSpacing: "-0.02em",
               textWrap: "balance",
             }}
-            data-aos="fade-right"
           >
             {statement}
           </p>

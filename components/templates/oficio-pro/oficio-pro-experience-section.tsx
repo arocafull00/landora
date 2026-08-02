@@ -15,7 +15,7 @@ export function OficioProExperienceSection({ content }: { content: LandingConten
       id="experiencia"
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-12 md:flex-row md:items-start md:justify-between lg:gap-20">
-        <header className="flex w-full max-w-xl flex-col items-center gap-5 text-center md:w-[40%] md:max-w-none md:items-start md:text-left">
+        <header className="flex w-full max-w-xl flex-col items-center gap-5 text-center md:w-[40%] md:max-w-none md:items-start md:text-left" data-aos="fade-right">
           <span className="inline-flex rounded-full bg-[var(--site-accent-bright)]/20 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-[var(--site-primary)]">
             Desde 1990
           </span>
@@ -27,7 +27,7 @@ export function OficioProExperienceSection({ content }: { content: LandingConten
           </p>
           <span className="mt-1 h-0.5 w-14 rounded-full bg-[var(--site-accent-bright)]" aria-hidden="true" />
         </header>
-        <div className="grid w-full grid-cols-2 gap-4 md:w-[55%] md:max-w-2xl md:gap-5">
+        <div className="grid w-full grid-cols-2 gap-4 md:w-[55%] md:max-w-2xl md:gap-5" data-aos="fade-left" data-aos-delay="100">
           {content.stats.map((stat, index) => (
             <OficioProStatCard index={index} key={stat.id} stat={stat} />
           ))}

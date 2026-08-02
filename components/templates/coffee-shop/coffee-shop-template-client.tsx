@@ -1,10 +1,7 @@
-"use client";
-
-import { Fragment, useRef } from "react";
+import { Fragment } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
 import { CoffeeShopNav } from "@/components/templates/coffee-shop/coffee-shop-nav";
@@ -16,6 +13,7 @@ import { CoffeeShopTestimonialsSection } from "@/components/templates/coffee-sho
 import { CoffeeShopFaqSection } from "@/components/templates/coffee-shop/coffee-shop-faq-section";
 import { CoffeeShopContactSection } from "@/components/templates/coffee-shop/coffee-shop-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
+import { TemplateAos } from "@/components/templates/shared/template-aos";
 
 function renderCoffeeShopBodySection(anchor: string, content: LandingContent) {
   if (anchor === "story") return <CoffeeShopStorySection content={content} />;
@@ -29,6 +27,8 @@ function renderCoffeeShopBodySection(anchor: string, content: LandingContent) {
 
 export function CoffeeShopTemplateClient({
   content,
+  copyrightYear,
+  renderedAt,
   topOffset = 0,
   slug,
   previewLandingId,
@@ -36,14 +36,14 @@ export function CoffeeShopTemplateClient({
   sectionSelections,
 }: {
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   topOffset?: number;
   slug?: string;
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
   const heroVariantId = sectionSelections?.hero ?? "coffee-shop";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
@@ -55,12 +55,10 @@ export function CoffeeShopTemplateClient({
   });
 
   return (
-    <TemplateLazyMotion>
-      <div
-        ref={rootRef}
+    <TemplateAos
         className="relative bg-[var(--site-surface)]"
         style={{ overflowX: "clip" }}
-      >
+    >
         <CoffeeShopNav
           brand={content.brand || "Grano & Taza."}
           brandLogoType={content.brandLogoType ?? "text"}
@@ -70,18 +68,16 @@ export function CoffeeShopTemplateClient({
           ctaHref={primaryCtaHref}
           heroNavTone={heroNavTone}
           topOffset={topOffset}
-          scrollRootRef={rootRef}
         />
 
         <HeroRenderer
           content={content}
-          heroRef={heroRef}
           primaryCtaHref={primaryCtaHref}
           secondaryCtaHref={secondaryCtaHref}
           variantId={heroVariantId}
         />
 
-        <ActiveOffersRenderer content={content} />
+        <ActiveOffersRenderer content={content} renderedAt={renderedAt} />
 
         {getOrderedVisibleBodySections("coffee-shop", content).map((section) => (
           <Fragment key={section.anchor}>
@@ -89,8 +85,7 @@ export function CoffeeShopTemplateClient({
           </Fragment>
         ))}
 
-        <CoffeeShopContactSection content={content} />
-      </div>
-    </TemplateLazyMotion>
+        <CoffeeShopContactSection content={content} copyrightYear={copyrightYear} />
+    </TemplateAos>
   );
 }

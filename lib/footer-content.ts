@@ -43,9 +43,13 @@ function getCopyrightSuffix(contact: ContactContent): string {
   return contact.copyrightSuffix?.trim() || DEFAULT_COPYRIGHT_SUFFIX;
 }
 
-export function getCopyrightLine(brand: string, contact: ContactContent): string {
+export function getCopyrightLine(
+  brand: string,
+  contact: ContactContent,
+  year: number,
+): string {
   const normalizedBrand = brand.replace(".", "");
-  return `Copyright © ${new Date().getFullYear()} ${normalizedBrand} ${getCopyrightSuffix(contact)}`;
+  return `Copyright © ${year} ${normalizedBrand} ${getCopyrightSuffix(contact)}`;
 }
 
 export function getFooterAnchor(templateId: string): string {

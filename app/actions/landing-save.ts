@@ -57,6 +57,9 @@ function getPublishedChanges(
     ...(input.changes.heroVariant
       ? { heroVariant: publication.heroVariant }
       : {}),
+    ...(input.changes.galleryVariant
+      ? { galleryVariant: publication.galleryVariant }
+      : {}),
     ...(Object.keys(sections).length > 0 ? { sections } : {}),
   };
 }
@@ -155,6 +158,15 @@ export async function saveLandingAction(
               ),
             ]
           : []),
+        ...(changes.galleryVariant
+          ? [
+              upsertLandingSectionSelection(
+                landing.id,
+                "gallery",
+                changes.galleryVariant,
+              ),
+            ]
+          : []),
         ...sectionWrites,
       ]);
     }
@@ -176,6 +188,7 @@ export async function saveLandingAction(
         seo: snapshot.seo,
         sectionSelections: {
           hero: snapshot.heroVariant,
+          gallery: snapshot.galleryVariant,
         },
       });
 

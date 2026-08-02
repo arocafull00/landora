@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -26,7 +24,7 @@ export function VelarButton({
   icon,
   children,
   className = "",
-  onClick,
+  ...analyticsProps
 }: {
   href: string;
   variant?: "primary" | "secondary";
@@ -34,7 +32,7 @@ export function VelarButton({
   icon?: ReactNode;
   children: ReactNode;
   className?: string;
-  onClick?: () => void;
+  "data-analytics-event"?: string;
 }) {
   const classes = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
 
@@ -48,8 +46,7 @@ export function VelarButton({
     return (
       <a
         href={href}
-        className={classes}
-        onClick={onClick}
+        className={classes} {...analyticsProps}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -60,7 +57,7 @@ export function VelarButton({
   }
 
   return (
-    <Link href={href} className={classes} onClick={onClick}>
+    <Link href={href} className={classes} {...analyticsProps}>
       {icon}
       {children}
     </Link>

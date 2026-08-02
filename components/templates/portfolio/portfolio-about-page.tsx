@@ -1,9 +1,7 @@
 import { PortfolioAboutHero } from "@/components/templates/portfolio/portfolio-about-hero";
 import { PortfolioAboutStorySection } from "@/components/templates/portfolio/portfolio-about-story-section";
-import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos-init";
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { resolvePortfolioAboutPageContent } from "@/lib/portfolio-about-content";
 import { isPortfolioAboutNavHref } from "@/lib/template-sections";
@@ -14,9 +12,11 @@ import {
 
 export function PortfolioAboutPage({
   content,
+  copyrightYear,
   previewLandingId,
 }: {
   content: LandingContent;
+  copyrightYear: number;
   previewLandingId?: string;
 }) {
   const publicBaseHref = getPublicLandingPath();
@@ -39,9 +39,8 @@ export function PortfolioAboutPage({
   });
 
   return (
-    <TemplateLazyMotion>
+    <>
       <div className="min-h-screen bg-portfolio-canvas text-portfolio-ink">
-        <PortfolioAosInit />
         <PortfolioNav
           activePage="about"
           brand={content.brand || "Mora."}
@@ -60,8 +59,8 @@ export function PortfolioAboutPage({
           <PortfolioAboutHero about={about} />
           <PortfolioAboutStorySection about={about} />
         </main>
-        <PortfolioContactSection content={content} />
+        <PortfolioContactSection content={content} copyrightYear={copyrightYear} />
       </div>
-    </TemplateLazyMotion>
+    </>
   );
 }

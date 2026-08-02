@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingAppearance } from "@/lib/dashboard-data";
 import { isLottieAsset } from "@/lib/background-assets";
 import { AssetImage } from "@/components/ui/asset-image";

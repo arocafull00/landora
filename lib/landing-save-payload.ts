@@ -1,4 +1,5 @@
 import type {
+  GalleryVariantId,
   HeroVariantId,
   Landing,
   LandingAppearance,
@@ -54,6 +55,7 @@ export type LandingSaveChanges = {
   meta?: LandingMetaPayload;
   seo?: LandingSeoPayload;
   appearance?: LandingAppearance;
+  galleryVariant?: GalleryVariantId;
   heroVariant?: HeroVariantId;
   sections?: LandingSectionPayloads;
 };
@@ -62,6 +64,7 @@ export type LandingChangedScopes = {
   meta?: true;
   seo?: true;
   appearance?: true;
+  galleryVariant?: true;
   heroVariant?: true;
   sections?: LandingSectionKey[];
 };
@@ -71,6 +74,7 @@ export type LandingPublicationSnapshot = {
   seo: LandingSeoPayload;
   content: LandingContent;
   appearance: LandingAppearance;
+  galleryVariant: GalleryVariantId;
   heroVariant: HeroVariantId;
 };
 
@@ -142,6 +146,7 @@ export function getLandingPublicationSnapshot(
     },
     content: landing.content,
     appearance: landing.content.appearance,
+    galleryVariant: landing.sectionSelections.gallery,
     heroVariant: landing.sectionSelections.hero,
   };
 }
@@ -180,6 +185,9 @@ export function getLandingSaveChanges(
     ...(current.heroVariant !== persisted.heroVariant
       ? { heroVariant: current.heroVariant }
       : {}),
+    ...(current.galleryVariant !== persisted.galleryVariant
+      ? { galleryVariant: current.galleryVariant }
+      : {}),
     ...(Object.keys(sections).length > 0 ? { sections } : {}),
   };
 }
@@ -196,6 +204,7 @@ export function getLandingChangedScopes(
     ...(changes.seo ? { seo: true as const } : {}),
     ...(changes.appearance ? { appearance: true as const } : {}),
     ...(changes.heroVariant ? { heroVariant: true as const } : {}),
+    ...(changes.galleryVariant ? { galleryVariant: true as const } : {}),
     ...(sectionKeys.length > 0 ? { sections: sectionKeys } : {}),
   };
 }
@@ -206,6 +215,7 @@ export function hasLandingSaveChanges(changes: LandingSaveChanges) {
     Boolean(changes.seo) ||
     Boolean(changes.appearance) ||
     Boolean(changes.heroVariant) ||
+    Boolean(changes.galleryVariant) ||
     Object.keys(changes.sections ?? {}).length > 0
   );
 }

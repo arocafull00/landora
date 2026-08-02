@@ -1,20 +1,22 @@
-"use client";
-
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { FloristeriaButton } from "@/components/templates/floristeria/floristeria-button";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
   return `https://wa.me/${digits}?text=${encodeURIComponent("Hola, me gustaría hacer un pedido de flores.")}`;
 }
 
-export function FloristeriaContactSection({ content }: { content: LandingContent }) {
-  const { trackWhatsAppClick, trackPhoneClick, trackLeadGenerated } = useAnalytics();
+export function FloristeriaContactSection({
+  content,
+  copyrightYear,
+}: {
+  content: LandingContent;
+  copyrightYear: number;
+}) {
   const whatsappLink = getWhatsAppLink(content.contact.phone);
   const heading = getSectionHeading(
     content,
@@ -45,10 +47,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
             variant="primary"
             size="lg"
             className="!bg-[var(--site-primary)] hover:!bg-[var(--site-primary-hover)]"
-            onClick={() => {
-              trackWhatsAppClick();
-              trackLeadGenerated();
-            }}
+            data-analytics-event="whatsapp_click lead_generated"
           >
             {content.contact.ctaLabel ?? "Pedir por WhatsApp"}
           </FloristeriaButton>
@@ -67,7 +66,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
                 <a
                   className="text-sm text-white/70 transition-colors hover:text-white"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                  onClick={() => trackPhoneClick()}
+                  data-analytics-event="phone_click"
                 >
                   {content.contact.phone}
                 </a>
@@ -104,7 +103,7 @@ export function FloristeriaContactSection({ content }: { content: LandingContent
             contact={content.contact}
             linkClassName="text-[var(--site-primary)] transition-colors hover:text-white"
           />
-          <FooterCopyright brand={content.brand} contact={content.contact} />
+          <FooterCopyright brand={content.brand} contact={content.contact} year={copyrightYear} />
         </div>
       </div>
     </footer>

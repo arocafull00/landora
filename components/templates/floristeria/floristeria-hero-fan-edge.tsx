@@ -1,5 +1,3 @@
-"use client";
-
 import { AssetImage } from "@/components/ui/asset-image";
 
 export function FloristeriaHeroFanEdge({

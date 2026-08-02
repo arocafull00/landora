@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { CoffeeShopFaqItem } from "@/components/templates/coffee-shop/coffee-shop-faq-item";
@@ -16,7 +14,7 @@ export function CoffeeShopFaqSection({ content }: { content: LandingContent }) {
       className="scroll-mt-24 bg-[var(--coffee-surface)] px-6 py-[clamp(72px,10vw,120px)] md:px-10 lg:px-16"
     >
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
-        <div>
+        <div data-aos="fade-right">
           <h2
             className="text-balance text-[clamp(32px,5vw,48px)] font-semibold leading-[1.05] text-[var(--coffee-secondary)]"
             style={{ fontFamily: "var(--font-coffee-display)", letterSpacing: "-0.03em" }}
@@ -33,7 +31,7 @@ export function CoffeeShopFaqSection({ content }: { content: LandingContent }) {
           ) : null}
         </div>
 
-        <div>
+        <div data-aos="fade-left" data-aos-delay="100">
           {faq.map((item, index) => (
             <CoffeeShopFaqItem item={item} key={item.id} defaultOpen={index === 0} />
           ))}

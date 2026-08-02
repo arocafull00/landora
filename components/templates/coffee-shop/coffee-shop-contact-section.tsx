@@ -1,20 +1,22 @@
-"use client";
-
 import { Phone, Mail, MapPin } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { CoffeeShopButton } from "@/components/templates/coffee-shop/coffee-shop-button";
 import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
 import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
   return `https://wa.me/${digits}?text=${encodeURIComponent("Hola, me gustaría hacer un pedido.")}`;
 }
 
-export function CoffeeShopContactSection({ content }: { content: LandingContent }) {
-  const { trackWhatsAppClick, trackPhoneClick, trackLeadGenerated } = useAnalytics();
+export function CoffeeShopContactSection({
+  content,
+  copyrightYear,
+}: {
+  content: LandingContent;
+  copyrightYear: number;
+}) {
   const whatsappLink = getWhatsAppLink(content.contact.phone);
   const heading = getSectionHeading(
     content,
@@ -29,7 +31,7 @@ export function CoffeeShopContactSection({ content }: { content: LandingContent 
     >
       <div className="mx-auto max-w-6xl">
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
-          <div>
+          <div data-aos="fade-right">
             <h2
               className="mb-6 text-balance text-[clamp(36px,6vw,72px)] font-semibold leading-[1.02] text-[var(--coffee-foreground)]"
               style={{ fontFamily: "var(--font-coffee-display)", letterSpacing: "-0.03em" }}
@@ -48,16 +50,13 @@ export function CoffeeShopContactSection({ content }: { content: LandingContent 
               href={whatsappLink}
               size="lg"
               variant="accent"
-              onClick={() => {
-                trackWhatsAppClick();
-                trackLeadGenerated();
-              }}
+              data-analytics-event="whatsapp_click lead_generated"
             >
               {content.contact.ctaLabel ?? "Escribir por WhatsApp"}
             </CoffeeShopButton>
           </div>
 
-          <div className="flex flex-col justify-end gap-8 border-t border-[var(--coffee-foreground)]/15 pt-10 lg:border-t-0 lg:pt-0">
+          <div className="flex flex-col justify-end gap-8 border-t border-[var(--coffee-foreground)]/15 pt-10 lg:border-t-0 lg:pt-0" data-aos="fade-left" data-aos-delay="100">
             {content.contact.phone ? (
               <div className="flex items-start gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--coffee-accent)]" />
@@ -71,7 +70,7 @@ export function CoffeeShopContactSection({ content }: { content: LandingContent 
                   <a
                     className="text-sm text-[var(--coffee-foreground)]/90 transition-colors hover:text-[var(--coffee-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)]"
                     href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                    onClick={() => trackPhoneClick()}
+                    data-analytics-event="phone_click"
                   >
                     {content.contact.phone}
                   </a>
@@ -121,7 +120,7 @@ export function CoffeeShopContactSection({ content }: { content: LandingContent 
 
         <div className="mt-16 space-y-6 border-t border-[var(--coffee-foreground)]/15 pt-8 text-center">
           <FooterSocialLinks contact={content.contact} />
-          <FooterCopyright brand={content.brand} contact={content.contact} />
+          <FooterCopyright brand={content.brand} contact={content.contact} year={copyrightYear} />
         </div>
       </div>
     </footer>

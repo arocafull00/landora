@@ -3,6 +3,8 @@ import { FloristeriaTemplateClient } from "@/components/templates/floristeria/fl
 
 export function FloristeriaTemplate({
   content,
+  copyrightYear,
+  renderedAt,
   topOffset = 0,
   slug,
   previewLandingId,
@@ -10,6 +12,8 @@ export function FloristeriaTemplate({
   sectionSelections,
 }: {
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   topOffset?: number;
   slug?: string;
   previewLandingId?: string;
@@ -19,6 +23,8 @@ export function FloristeriaTemplate({
   return (
     <FloristeriaTemplateClient
       content={content}
+      copyrightYear={copyrightYear}
+      renderedAt={renderedAt}
       topOffset={topOffset}
       slug={slug}
       previewLandingId={previewLandingId}

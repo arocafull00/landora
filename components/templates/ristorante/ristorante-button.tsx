@@ -1,5 +1,3 @@
-"use client";
-
 import { ArrowRight } from "lucide-react";
 
 const base =
@@ -27,7 +25,7 @@ export function RistoranteButton({
   size = "md",
   icon,
   className = "",
-  onClick,
+  ...analyticsProps
 }: {
   children: React.ReactNode;
   href?: string;
@@ -35,7 +33,7 @@ export function RistoranteButton({
   size?: "sm" | "md" | "lg";
   icon?: React.ReactNode;
   className?: string;
-  onClick?: () => void;
+  "data-analytics-event"?: string;
 }) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
 
@@ -43,8 +41,7 @@ export function RistoranteButton({
     return (
       <a
         className={classes}
-        href={href}
-        onClick={onClick}
+        href={href} {...analyticsProps}
         target="_blank"
         rel="noopener noreferrer"
         style={{ fontFamily: "var(--font-ristorante-body)" }}
@@ -59,8 +56,7 @@ export function RistoranteButton({
     return (
       <a
         className={classes}
-        href={href}
-        onClick={onClick}
+        href={href} {...analyticsProps}
         style={{ fontFamily: "var(--font-ristorante-body)" }}
       >
         {children}
@@ -70,7 +66,7 @@ export function RistoranteButton({
   }
 
   return (
-    <button className={classes} type="button" style={{ fontFamily: "var(--font-ristorante-body)" }}>
+    <button className={classes} {...analyticsProps} type="button" style={{ fontFamily: "var(--font-ristorante-body)" }}>
       {children}
       {icon}
     </button>

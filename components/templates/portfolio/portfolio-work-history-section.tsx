@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { PortfolioWorkHistoryCard } from "@/components/templates/portfolio/portfolio-work-history-card";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -21,8 +19,8 @@ export function PortfolioWorkHistorySection({ content }: { content: LandingConte
       <div className="mx-auto max-w-6xl">
         <h2
           className="mb-12 text-balance text-3xl font-extrabold sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
-          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em", color: ACCENT }}
           data-aos="fade-up"
+          style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em", color: ACCENT }}
         >
           <span className="relative inline-block">
             {heading.title}
@@ -35,7 +33,7 @@ export function PortfolioWorkHistorySection({ content }: { content: LandingConte
 
         <div className="space-y-5 md:space-y-6">
           {items.map((item, index) => (
-            <PortfolioWorkHistoryCard item={item} index={index} key={item.id} />
+            <PortfolioWorkHistoryCard index={index} item={item} key={item.id} />
           ))}
         </div>
       </div>

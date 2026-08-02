@@ -4,15 +4,10 @@ import { PublicLandingContent } from "@/components/templates/public-landing-cont
 import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
-import { getPublishedLandingParams } from "@/lib/public-static-params";
 
 type PublicLandingPageProps = {
   params: Promise<{ slug: string }>;
 };
-
-export function generateStaticParams() {
-  return getPublishedLandingParams();
-}
 
 export async function generateMetadata({
   params,

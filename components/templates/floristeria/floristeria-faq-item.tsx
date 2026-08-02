@@ -1,6 +1,3 @@
-"use client";
-
-import { useId, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 export function FloristeriaFaqItem({
@@ -10,36 +7,17 @@ export function FloristeriaFaqItem({
   item: { id: string; question: string; answer: string };
   defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(defaultOpen);
-  const contentId = useId();
-
   return (
-    <div className="border-b border-[var(--site-primary)]/10">
-      <button
-        className="flex w-full items-center justify-between py-5 text-left"
-        onClick={() => setOpen((v) => !v)}
-        type="button"
-        aria-controls={contentId}
-        aria-expanded={open}
-      >
-        <span
-          className="pr-4 text-base font-semibold text-[var(--site-text)]"
-          style={{ fontFamily: "var(--font-body)" }}
-        >
+    <details className="group border-b border-[var(--site-primary)]/10" open={defaultOpen}>
+      <summary className="flex cursor-pointer list-none items-center justify-between py-5 text-left">
+        <span className="pr-4 text-base font-semibold text-[var(--site-text)]">
           {item.question}
         </span>
-        <ChevronDown
-          aria-hidden
-          className={`h-5 w-5 shrink-0 text-[var(--site-primary)] transition-transform duration-300 ${open ? "rotate-180" : ""}`}
-        />
-      </button>
-      {open ? (
-          <div id={contentId}>
-            <p className="pb-5 text-sm leading-relaxed text-[var(--site-text)]/60">
-              {item.answer}
-            </p>
-          </div>
-      ) : null}
-    </div>
+        <ChevronDown aria-hidden className="size-5 shrink-0 text-[var(--site-primary)] transition-transform group-open:rotate-180" />
+      </summary>
+      <p className="pb-5 text-sm leading-relaxed text-[var(--site-text)]/60">
+        {item.answer}
+      </p>
+    </details>
   );
 }

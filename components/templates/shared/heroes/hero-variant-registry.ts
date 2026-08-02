@@ -101,6 +101,46 @@ const HERO_VARIANTS: Record<HeroVariantId, HeroVariantDefinition> = {
     navTone: "light",
     specificFields: ["houseImage"],
   },
+  editorial: {
+    id: "editorial",
+    label: "Editorial",
+    description: "Arquitectura visual, retícula sutil y titular monumental.",
+    thumbnail: VELAR_ASSETS.hero,
+    navTone: "light",
+    specificFields: [],
+  },
+  bento: {
+    id: "bento",
+    label: "Bento",
+    description: "Portada SaaS clara con imagen, métricas y paneles modulares.",
+    thumbnail: STUDIO_ASSETS.salon1,
+    navTone: "dark",
+    specificFields: [],
+  },
+  brutal: {
+    id: "brutal",
+    label: "Brutal",
+    description: "Tipografía cruda, contraste rotundo y marquesina gráfica.",
+    thumbnail: PORTFOLIO_ASSETS.project1,
+    navTone: "dark",
+    specificFields: [],
+  },
+  immersive: {
+    id: "immersive",
+    label: "Inmersivo",
+    description: "Imagen cinematográfica, atmósfera oscura y gesto premium.",
+    thumbnail: RISTORANTE_ASSETS.hero,
+    navTone: "light",
+    specificFields: [],
+  },
+  futuristic: {
+    id: "futuristic",
+    label: "Futurista",
+    description: "Producto digital, profundidad luminosa y mockup de panel.",
+    thumbnail: OFICIO_PRO_ASSETS.hero,
+    navTone: "light",
+    specificFields: [],
+  },
 };
 
 export function getHeroVariants(): HeroVariantDefinition[] {

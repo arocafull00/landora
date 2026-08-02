@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { heroVariantSchema } from "@/lib/schemas/landing-save";
+import {
+  galleryVariantSchema,
+  heroVariantSchema,
+} from "@/lib/schemas/landing-save";
 
 export const publishedLandingContentSchema = z
   .record(z.string().trim().min(1).max(80), z.unknown())
@@ -31,6 +34,7 @@ export const publishedLandingSeoSchema = z.strictObject({
 
 export const publishedLandingSectionSelectionsSchema = z.strictObject({
   hero: heroVariantSchema,
+  gallery: galleryVariantSchema.default("grid"),
 });
 
 export const publishLandingVersionSchema = z.strictObject({

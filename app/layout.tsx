@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
-import { ToastContainer } from 'react-toastify';
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { siteFontVariables } from "@/lib/site-fonts";
@@ -44,14 +42,9 @@ export default function RootLayout({
         </a>
         <Analytics />
         <SpeedInsights />
-        <TooltipProvider>
-          <Suspense fallback={null}>
-            <div id="main-content" tabIndex={-1}>
-              {children}
-            </div>
-          </Suspense>
-          <ToastContainer />
-        </TooltipProvider>
+        <div id="main-content" tabIndex={-1}>
+          <Suspense fallback={null}>{children}</Suspense>
+        </div>
       </body>
     </html>
   );

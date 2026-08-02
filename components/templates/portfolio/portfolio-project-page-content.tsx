@@ -1,9 +1,9 @@
-import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 import { PortfolioProjectPage } from "@/components/templates/portfolio/portfolio-project-page";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { findInternalPortfolioProject } from "@/lib/portfolio-projects";
+import { getCopyrightYear } from "@/lib/copyright-year";
 
 export async function PortfolioProjectPageContent({
   projectSlug,
@@ -12,11 +12,10 @@ export async function PortfolioProjectPageContent({
   projectSlug: string;
   slug: string;
 }) {
-  "use cache";
-
-  cacheLife("max");
-
-  const landing = await getPublishedLandingBySlug(slug);
+  const [landing, copyrightYear] = await Promise.all([
+    getPublishedLandingBySlug(slug),
+    getCopyrightYear(),
+  ]);
   if (!landing || landing.template !== "portfolio") notFound();
 
   const content = landing.content;
@@ -28,7 +27,11 @@ export async function PortfolioProjectPageContent({
 
   return (
     <SiteThemeScope appearance={content.appearance} template="portfolio">
-      <PortfolioProjectPage content={content} project={project} />
+      <PortfolioProjectPage
+        content={content}
+        copyrightYear={copyrightYear}
+        project={project}
+      />
     </SiteThemeScope>
   );
 }

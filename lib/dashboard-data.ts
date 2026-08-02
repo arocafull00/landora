@@ -137,12 +137,20 @@ export type HeroVariantId =
   | "coffee-shop"
   | "lumen"
   | "offset"
-  | "mosaico";
+  | "mosaico"
+  | "editorial"
+  | "bento"
+  | "brutal"
+  | "immersive"
+  | "futuristic";
 
-export type SectionKey = "hero";
+export type GalleryVariantId = "grid" | "polaroid" | "cinematic";
+
+export type SectionKey = "hero" | "gallery";
 
 export type LandingSectionSelections = {
   hero: HeroVariantId;
+  gallery: GalleryVariantId;
 };
 
 export type LandingContent = BaseContent &

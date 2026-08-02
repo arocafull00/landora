@@ -98,7 +98,10 @@ export function usePreviewBridgeProvider(
           );
           const nextPreview: PreviewLiveContent = {
             content: synced.content,
-            sectionSelections: { hero: synced.sectionSelections.hero },
+            sectionSelections: {
+              gallery: synced.sectionSelections.gallery,
+              hero: synced.sectionSelections.hero,
+            },
             template: synced.template,
           };
           livePreviewRef.current = nextPreview;

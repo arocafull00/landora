@@ -1,13 +1,9 @@
-"use client";
-
-import { Fragment, useRef } from "react";
+import { Fragment } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
-import { FloristeriaAosInit } from "@/components/templates/floristeria/floristeria-aos-init";
 import { FloristeriaNav } from "@/components/templates/floristeria/floristeria-nav";
 import { FloristeriaAbout } from "@/components/templates/floristeria/floristeria-about";
 import { FloristeriaCtaSection } from "@/components/templates/floristeria/floristeria-cta-section";
@@ -16,6 +12,7 @@ import { FloristeriaTestimonialsSection } from "@/components/templates/florister
 import { FloristeriaFaqSection } from "@/components/templates/floristeria/floristeria-faq-section";
 import { FloristeriaContactSection } from "@/components/templates/floristeria/floristeria-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
+import { TemplateAos } from "@/components/templates/shared/template-aos";
 
 function renderFloristeriaBodySection(anchor: string, content: LandingContent) {
   if (anchor === "galeria") return <GallerySection content={content} templateId="floristeria" />;
@@ -28,6 +25,8 @@ function renderFloristeriaBodySection(anchor: string, content: LandingContent) {
 
 export function FloristeriaTemplateClient({
   content,
+  copyrightYear,
+  renderedAt,
   topOffset = 0,
   slug,
   previewLandingId,
@@ -35,14 +34,14 @@ export function FloristeriaTemplateClient({
   sectionSelections,
 }: {
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   topOffset?: number;
   slug?: string;
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
   const heroVariantId = sectionSelections?.hero ?? "floristeria";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
@@ -54,13 +53,10 @@ export function FloristeriaTemplateClient({
   });
 
   return (
-    <TemplateLazyMotion>
-      <div
-        ref={rootRef}
+    <TemplateAos
         className="relative bg-[var(--site-surface)]"
         style={{ overflowX: "clip" }}
-      >
-        <FloristeriaAosInit rootRef={rootRef} />
+    >
 
         <FloristeriaNav
           brand={content.brand || "Jardín Secreto."}
@@ -75,20 +71,18 @@ export function FloristeriaTemplateClient({
 
         <HeroRenderer
           content={content}
-          heroRef={heroRef}
           primaryCtaHref={primaryCtaHref}
           secondaryCtaHref={secondaryCtaHref}
           variantId={heroVariantId}
         />
-        <ActiveOffersRenderer content={content} />
+        <ActiveOffersRenderer content={content} renderedAt={renderedAt} />
         {getOrderedVisibleBodySections("floristeria", content).map((section) => (
           <Fragment key={section.anchor}>
             {renderFloristeriaBodySection(section.anchor, content)}
           </Fragment>
         ))}
 
-        <FloristeriaContactSection content={content} />
-      </div>
-    </TemplateLazyMotion>
+        <FloristeriaContactSection content={content} copyrightYear={copyrightYear} />
+    </TemplateAos>
   );
 }

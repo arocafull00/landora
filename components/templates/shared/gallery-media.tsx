@@ -1,14 +1,9 @@
-"use client";
-
-import { useReducedMotion } from "motion/react";
 import { AssetImage } from "@/components/ui/asset-image";
 import type { GalleryItem } from "@/lib/dashboard-data";
 
 export function GalleryMedia({ item }: { item: GalleryItem }) {
-  const reduce = useReducedMotion();
-  const motionClass = reduce
-    ? "object-cover"
-    : "object-cover transition-transform duration-500 group-hover:scale-[1.03]";
+  const motionClass =
+    "object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100";
 
   if (item.image) {
     return (

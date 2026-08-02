@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent, TemplateId } from "@/lib/dashboard-data";
 import { GalleryItem } from "@/components/templates/shared/gallery-item";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -42,11 +40,12 @@ export function GallerySection({
 
         <div
           className="grid grid-flow-dense grid-cols-2 gap-3 md:grid-cols-4 md:gap-4"
+          data-aos="fade-up"
+          data-aos-delay="100"
           aria-label="Galería de creaciones"
         >
           {gallery.map((item, index) => (
             <GalleryItem
-              aosDelay={Math.min(index * 60, 300)}
               featured={index === 0}
               index={index}
               item={item}

@@ -1,5 +1,3 @@
-"use client";
-
 import { Star } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { RistoranteTestimonialCard } from "@/components/templates/ristorante/ristorante-testimonial-card";

@@ -1,59 +1,13 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import type { StatContent } from "@/lib/dashboard-data";
 
-function easeOutCubic(t: number) {
-  return 1 - Math.pow(1 - t, 3);
-}
-
-function parseCountValue(value: string): { end: number; suffix: string } | null {
-  const match = value.match(/^(\d+)(.*)$/);
-  if (!match) return null;
-  return { end: parseInt(match[1], 10), suffix: match[2] };
-}
-
 export function VelarStatItem({ stat }: { stat: StatContent }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const triggered = useRef(false);
-
-  const countTo = stat.countTo ?? parseCountValue(stat.value)?.end;
-  const suffix = stat.suffix ?? parseCountValue(stat.value)?.suffix ?? "";
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || countTo === undefined) return;
-
-    triggered.current = false;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting || triggered.current) return;
-        triggered.current = true;
-        const end = countTo;
-        const duration = 2000;
-        const start = performance.now();
-        const tick = (now: number) => {
-          const elapsed = now - start;
-          const t = Math.min(elapsed / duration, 1);
-          setCount(Math.round(easeOutCubic(t) * end));
-          if (t < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [countTo]);
-
   const displayValue =
-    countTo !== undefined ? `${count}${suffix}` : stat.value;
+    stat.countTo !== undefined
+      ? `${stat.countTo}${stat.suffix ?? ""}`
+      : stat.value;
 
   return (
-    <div ref={ref}>
+    <div>
       <div
         data-editor-id={`story:stat:${stat.id}:value`}
         className="text-white leading-[1.1]"

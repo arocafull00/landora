@@ -1,5 +1,3 @@
-"use client";
-
 import { AssetImage } from "@/components/ui/asset-image";
 import type { ServiceContent } from "@/lib/dashboard-data";
 

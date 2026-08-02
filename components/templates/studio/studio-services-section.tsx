@@ -1,5 +1,3 @@
-"use client";
-
 import { Clock } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";

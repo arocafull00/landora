@@ -1,33 +1,28 @@
-"use client";
-
-import { useRef } from "react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { AssetImage } from "@/components/ui/asset-image";
-import { PortfolioAosInit } from "@/components/templates/portfolio/portfolio-aos-init";
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
 import { PortfolioProjectCarousel } from "@/components/templates/portfolio/portfolio-project-carousel";
 import { PortfolioProjectPageTag } from "@/components/templates/portfolio/portfolio-project-page-tag";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
-import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
 import type { GalleryItem, LandingContent } from "@/lib/dashboard-data";
 import {
   getPreviewLandingPath,
   getPublicLandingPath,
 } from "@/lib/public-site-url";
+import { getPreviewTargetAttributes } from "@/lib/preview-target-attributes";
 
 export function PortfolioProjectPage({
   content,
+  copyrightYear,
   previewLandingId,
   project,
 }: {
   content: LandingContent;
+  copyrightYear: number;
   previewLandingId?: string;
   project: GalleryItem;
 }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const previewBridge = usePreviewBridge();
   const homeHref = previewLandingId
     ? getPreviewLandingPath(previewLandingId)
     : getPublicLandingPath();
@@ -36,12 +31,8 @@ export function PortfolioProjectPage({
   const gallery = project.projectGallery ?? [];
 
   return (
-    <TemplateLazyMotion>
-      <div
-        ref={rootRef}
-        className="min-h-screen bg-portfolio-canvas text-portfolio-ink"
-      >
-        <PortfolioAosInit rootRef={rootRef} />
+    <>
+      <div className="min-h-screen bg-portfolio-canvas text-portfolio-ink">
         <PortfolioNav
           activePage="project"
           brand={content.brand || "Mora."}
@@ -62,12 +53,10 @@ export function PortfolioProjectPage({
               <Link
                 className="mb-12 inline-flex items-center gap-2 text-sm font-semibold text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
                 href={projectsHref}
-                onNavigate={() => {
-                  if (previewLandingId) {
-                    previewBridge?.announcePageTarget({ type: "home" });
-                  }
-                }}
                 prefetch={previewLandingId ? true : undefined}
+                {...getPreviewTargetAttributes(
+                  previewLandingId ? { type: "home" } : undefined,
+                )}
               >
                 <ArrowLeft aria-hidden className="size-4" />
                 Volver a proyectos
@@ -134,8 +123,8 @@ export function PortfolioProjectPage({
 
           <PortfolioProjectCarousel alt={title} images={gallery} />
         </main>
-        <PortfolioContactSection content={content} />
+        <PortfolioContactSection content={content} copyrightYear={copyrightYear} />
       </div>
-    </TemplateLazyMotion>
+    </>
   );
 }

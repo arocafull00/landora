@@ -1,13 +1,8 @@
-"use client";
-
 import { CalendarCheck, ArrowRight } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarServicePanel } from "@/components/templates/velar/velar-service-panel";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useEditorHighlight } from "@/lib/use-editor-highlight";
-import { cn } from "@/lib/utils";
-import { useAnalytics } from "@/hooks/use-analytics";
 
 function getWhatsAppLink(phone: string) {
   const digits = phone.replace(/\D/g, "");
@@ -15,8 +10,6 @@ function getWhatsAppLink(phone: string) {
 }
 
 export function VelarServicesSection({ content }: { content: LandingContent }) {
-  const { trackWhatsAppClick } = useAnalytics();
-  const isHighlighted = useEditorHighlight("servicios");
 
   if (!content.services || content.services.length === 0) return null;
 
@@ -32,10 +25,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
       data-section="servicios"
       data-section-label="Servicios"
       id="servicios"
-      className={cn(
-        "relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16",
-        isHighlighted && "template-section--highlighted",
-      )}
+      className="relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
@@ -71,7 +61,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
             style={{ fontFamily: "var(--font-syne)" }}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => trackWhatsAppClick()}
+            data-analytics-event="whatsapp_click"
           >
             <CalendarCheck className="h-5 w-5" />
             CONSULTA DISPONIBILIDAD Y EMPIEZA A PLANEAR TU EVENTO
@@ -100,7 +90,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
             size="md"
             icon={<CalendarCheck className="h-5 w-5" />}
             className="uppercase"
-            onClick={() => trackWhatsAppClick()}
+            data-analytics-event="whatsapp_click"
           >
             consulta disponibilidad
           </VelarButton>

@@ -3,6 +3,8 @@ import { CoffeeShopTemplateClient } from "@/components/templates/coffee-shop/cof
 
 export function CoffeeShopTemplate({
   content,
+  copyrightYear,
+  renderedAt,
   topOffset = 0,
   slug,
   previewLandingId,
@@ -10,6 +12,8 @@ export function CoffeeShopTemplate({
   sectionSelections,
 }: {
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   topOffset?: number;
   slug?: string;
   previewLandingId?: string;
@@ -19,6 +23,8 @@ export function CoffeeShopTemplate({
   return (
     <CoffeeShopTemplateClient
       content={content}
+      copyrightYear={copyrightYear}
+      renderedAt={renderedAt}
       topOffset={topOffset}
       slug={slug}
       previewLandingId={previewLandingId}

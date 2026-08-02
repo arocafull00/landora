@@ -1,5 +1,3 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { CoffeeShopMenuItem } from "@/components/templates/coffee-shop/coffee-shop-menu-item";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -27,7 +25,7 @@ export function CoffeeShopMenuSection({ content }: { content: LandingContent }) 
       className="scroll-mt-24 bg-[var(--coffee-surface)] px-6 py-[clamp(72px,10vw,120px)] md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="mb-14 max-w-2xl">
+        <div className="mb-14 max-w-2xl" data-aos="fade-up">
           <h2
             className="text-balance text-[clamp(32px,5vw,56px)] font-semibold leading-[1.05] text-[var(--coffee-secondary)]"
             style={{ fontFamily: "var(--font-coffee-display)", letterSpacing: "-0.03em" }}
@@ -45,7 +43,7 @@ export function CoffeeShopMenuSection({ content }: { content: LandingContent }) 
         </div>
 
         {categories.length > 0 ? (
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-x-16">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-x-16" data-aos="fade-up" data-aos-delay="100">
             {categories.map((category) => (
               <div key={category}>
                 <h3
@@ -63,7 +61,7 @@ export function CoffeeShopMenuSection({ content }: { content: LandingContent }) 
             ))}
           </div>
         ) : (
-          <div>
+          <div data-aos="fade-up" data-aos-delay="100">
             {items.map((service) => (
               <CoffeeShopMenuItem service={service} key={service.id} />
             ))}

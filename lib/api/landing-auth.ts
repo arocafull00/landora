@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { getEffectiveClientId } from "@/lib/auth";
 import {
   getLandingPageById,
@@ -33,4 +34,14 @@ export async function getAuthorizedLanding(id: string): Promise<LandingWithSecti
   if (!(await isAdmin())) return null;
 
   return (await getLandingPageById(id)) ?? null;
+}
+
+export async function getPreviewLanding(id: string): Promise<LandingWithSections> {
+  const clientId = await getEffectiveClientId();
+  if (!clientId) notFound();
+
+  const landing = await getAuthorizedLanding(id);
+  if (!landing) notFound();
+
+  return landing;
 }

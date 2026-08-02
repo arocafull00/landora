@@ -1,14 +1,9 @@
-"use client";
-
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
-import { m, useReducedMotion } from "motion/react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 import { HeroVariantMedia } from "@/components/templates/shared/heroes/hero-variant-media";
 import { PortfolioHeroGridLines } from "@/components/templates/portfolio/portfolio-hero-grid-lines";
-import { useAnalytics } from "@/hooks/use-analytics";
 
-const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export function PortfolioHero({
   content,
@@ -16,11 +11,9 @@ export function PortfolioHero({
   ctaHref,
 }: {
   content: LandingContent;
-  heroRef: React.RefObject<HTMLElement | null>;
+  heroRef?: React.RefObject<HTMLElement | null>;
   ctaHref: string;
 }) {
-  const { trackCtaClick } = useAnalytics();
-  const reduceMotion = useReducedMotion() ?? false;
   const heroImage = content.hero.image;
   const secondaryImage = content.hero.houseImage || heroImage;
 
@@ -32,21 +25,14 @@ export function PortfolioHero({
     >
       <div className="relative mx-auto grid max-w-375 grid-cols-1 border-l border-t border-transparent md:min-h-[calc(100dvh-9rem)] md:grid-cols-12">
         <PortfolioHeroGridLines
-          delay={0}
           left
-          reduceMotion={reduceMotion}
           top
         />
-        <m.div
-          animate={{ opacity: 1, y: 0 }}
+        <div
           className="relative flex min-h-64 flex-col justify-between border-b border-r border-transparent p-5 sm:min-h-72 sm:p-6 md:col-span-7 md:min-h-[52dvh] md:p-10 lg:p-14"
-          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.7, ease: easeOut }}
         >
           <PortfolioHeroGridLines
             bottom
-            delay={0.12}
-            reduceMotion={reduceMotion}
             right
           />
           {content.hero.eyebrow ? (
@@ -62,18 +48,13 @@ export function PortfolioHero({
           >
             {content.hero.title}
           </h1>
-        </m.div>
+        </div>
 
-        <m.div
-          animate={{ opacity: 1, scale: 1 }}
+        <div
           className="relative aspect-[4/3] overflow-hidden border-b border-r border-transparent sm:aspect-[16/10] md:col-span-5 md:aspect-auto md:min-h-0"
-          initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
-          transition={{ delay: 0.08, duration: 0.8, ease: easeOut }}
         >
           <PortfolioHeroGridLines
             bottom
-            delay={0.2}
-            reduceMotion={reduceMotion}
             right
           />
           {heroImage ? (
@@ -91,13 +72,11 @@ export function PortfolioHero({
               {content.hero.description || content.hero.subtitle}
             </div>
           )}
-        </m.div>
+        </div>
 
         <div className="relative flex min-h-28 items-end justify-between gap-6 border-b border-r border-transparent p-5 sm:p-6 md:col-span-4 md:min-h-60 md:flex-col md:items-start md:p-8">
           <PortfolioHeroGridLines
             bottom
-            delay={0.28}
-            reduceMotion={reduceMotion}
             right
           />
           <span className="max-w-[30ch] text-pretty text-sm leading-6 text-portfolio-ink-muted">
@@ -113,8 +92,6 @@ export function PortfolioHero({
         <div className="relative hidden min-h-64 overflow-hidden border-b border-r border-transparent md:col-span-4 md:block md:min-h-60">
           <PortfolioHeroGridLines
             bottom
-            delay={0.36}
-            reduceMotion={reduceMotion}
             right
           />
           {secondaryImage ? (
@@ -132,8 +109,6 @@ export function PortfolioHero({
         <div className="relative flex min-h-44 flex-col justify-between border-b border-r border-transparent bg-portfolio-accent p-5 text-portfolio-accent-ink transition-colors hover:bg-[var(--portfolio-accent-hover)] focus-within:bg-[var(--portfolio-accent-hover)] sm:p-6 md:col-span-4 md:min-h-60 md:p-8">
           <PortfolioHeroGridLines
             bottom
-            delay={0.44}
-            reduceMotion={reduceMotion}
             right
           />
           <p className="max-w-[28ch] text-pretty text-sm leading-6 sm:text-base sm:leading-7">
@@ -142,7 +117,7 @@ export function PortfolioHero({
           <TemplateNavAnchor
             className="group flex min-h-11 items-center justify-between gap-6 text-lg font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-accent-ink"
             href={ctaHref}
-            onClick={() => trackCtaClick()}
+            data-analytics-event="cta_click"
           >
             {content.hero.ctaLabel || "Ver proyectos"}
             <ArrowUpRight

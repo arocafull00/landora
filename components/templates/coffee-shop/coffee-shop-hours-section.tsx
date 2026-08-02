@@ -1,5 +1,3 @@
-"use client";
-
 import { Clock } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -20,7 +18,7 @@ export function CoffeeShopHoursSection({ content }: { content: LandingContent })
       className="scroll-mt-24 bg-[var(--coffee-primary)] px-6 py-[clamp(72px,10vw,120px)] md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-3xl">
-        <div className="mb-10 text-center">
+        <div className="mb-10 text-center" data-aos="fade-up">
           <Clock className="mx-auto mb-4 h-7 w-7 text-[var(--coffee-accent)]" />
           <h2
             className="text-balance text-[clamp(32px,5vw,56px)] font-semibold leading-[1.05] text-[var(--coffee-foreground)]"
@@ -30,7 +28,7 @@ export function CoffeeShopHoursSection({ content }: { content: LandingContent })
           </h2>
         </div>
 
-        <div>
+        <div data-aos="fade-up" data-aos-delay="100">
           {hours.map((item) => (
             <div
               className="flex items-start justify-between gap-6 border-b border-[var(--coffee-foreground)]/15 py-5 last:border-b-0"

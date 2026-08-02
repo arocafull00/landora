@@ -1,14 +1,9 @@
-"use client";
-
-import { Fragment, useCallback, useLayoutEffect, useRef, useState } from "react";
+import { Fragment } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
-import { getScrollTargets } from "@/lib/scroll-parent";
-import { TemplateLazyMotion } from "@/components/templates/template-lazy-motion";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
-import { StudioAosInit } from "@/components/templates/studio/studio-aos-init";
 import { StudioNav } from "@/components/templates/studio/studio-nav";
 import { StudioAbout } from "@/components/templates/studio/studio-about";
 import { StudioServicesSection } from "@/components/templates/studio/studio-services-section";
@@ -18,12 +13,7 @@ import { StudioTestimonialsSection } from "@/components/templates/studio/studio-
 import { StudioFaqSection } from "@/components/templates/studio/studio-faq-section";
 import { StudioContactSection } from "@/components/templates/studio/studio-contact-section";
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
-
-function isOverlappingTop(el: HTMLElement | null) {
-  if (!el) return false;
-  const rect = el.getBoundingClientRect();
-  return rect.top <= 0 && rect.bottom > 0;
-}
+import { TemplateAos } from "@/components/templates/shared/template-aos";
 
 function renderStudioBodySection(anchor: string, content: LandingContent) {
   if (anchor === "galeria") return <GallerySection content={content} templateId="studio" />;
@@ -37,6 +27,8 @@ function renderStudioBodySection(anchor: string, content: LandingContent) {
 
 export function StudioTemplate({
   content,
+  copyrightYear,
+  renderedAt,
   topOffset = 0,
   slug,
   previewLandingId,
@@ -44,40 +36,14 @@ export function StudioTemplate({
   sectionSelections,
 }: {
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   topOffset?: number;
   slug?: string;
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
-  const [overHero, setOverHero] = useState(true);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
-
-  const updateNavState = useCallback(() => {
-    setOverHero(isOverlappingTop(heroRef.current));
-  }, []);
-
-  useLayoutEffect(() => {
-    updateNavState();
-
-    const handleUpdate = () => updateNavState();
-    const scrollTargets = getScrollTargets(rootRef.current, null);
-
-    for (const target of scrollTargets) {
-      target.addEventListener("scroll", handleUpdate, { passive: true });
-    }
-
-    window.addEventListener("resize", handleUpdate);
-
-    return () => {
-      for (const target of scrollTargets) {
-        target.removeEventListener("scroll", handleUpdate);
-      }
-      window.removeEventListener("resize", handleUpdate);
-    };
-  }, [updateNavState]);
-
   const heroVariantId = sectionSelections?.hero ?? "studio";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
@@ -89,13 +55,10 @@ export function StudioTemplate({
   });
 
   return (
-    <TemplateLazyMotion>
-      <div
-        ref={rootRef}
+    <TemplateAos
         className="relative bg-[var(--site-surface)]"
         style={{ overflowX: "clip" }}
-      >
-      <StudioAosInit rootRef={rootRef} />
+    >
 
       <StudioNav
         brand={content.brand || "Studio"}
@@ -105,19 +68,18 @@ export function StudioTemplate({
         ctaLabel={content.hero.ctaLabel ?? ""}
         ctaHref={primaryCtaHref}
         heroNavTone={heroNavTone}
-        overHero={overHero}
+        overHero
         topOffset={topOffset}
       />
 
       <HeroRenderer
         content={content}
-        heroRef={heroRef}
         primaryCtaHref={primaryCtaHref}
         secondaryCtaHref={secondaryCtaHref}
         variantId={heroVariantId}
       />
 
-      <ActiveOffersRenderer content={content} />
+      <ActiveOffersRenderer content={content} renderedAt={renderedAt} />
 
       {getOrderedVisibleBodySections("studio", content).map((section) => (
         <Fragment key={section.anchor}>
@@ -125,8 +87,7 @@ export function StudioTemplate({
         </Fragment>
       ))}
 
-      <StudioContactSection content={content} />
-    </div>
-    </TemplateLazyMotion>
+      <StudioContactSection content={content} copyrightYear={copyrightYear} />
+    </TemplateAos>
   );
 }

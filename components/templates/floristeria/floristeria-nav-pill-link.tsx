@@ -1,5 +1,3 @@
-"use client";
-
 import type { NavLink } from "@/lib/dashboard-data";
 import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
 

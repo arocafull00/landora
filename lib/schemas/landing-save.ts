@@ -32,6 +32,17 @@ export const heroVariantSchema = z.enum([
   "lumen",
   "offset",
   "mosaico",
+  "editorial",
+  "bento",
+  "brutal",
+  "immersive",
+  "futuristic",
+]);
+
+export const galleryVariantSchema = z.enum([
+  "grid",
+  "polaroid",
+  "cinematic",
 ]);
 
 const metaSchema = z.strictObject({
@@ -67,6 +78,7 @@ const changesSchema = z.strictObject({
   meta: metaSchema.optional(),
   seo: seoSchema.optional(),
   appearance: appearanceSchema.optional(),
+  galleryVariant: galleryVariantSchema.optional(),
   heroVariant: heroVariantSchema.optional(),
   sections: sectionPayloadsSchema.optional(),
 });
@@ -75,6 +87,7 @@ const changedScopesSchema = z.strictObject({
   meta: z.literal(true).optional(),
   seo: z.literal(true).optional(),
   appearance: z.literal(true).optional(),
+  galleryVariant: z.literal(true).optional(),
   heroVariant: z.literal(true).optional(),
   sections: z
     .array(sectionKeySchema)
@@ -91,6 +104,7 @@ const publicationSchema = z.strictObject({
   seo: seoSchema,
   content: contentSchema,
   appearance: appearanceSchema,
+  galleryVariant: galleryVariantSchema,
   heroVariant: heroVariantSchema,
 });
 

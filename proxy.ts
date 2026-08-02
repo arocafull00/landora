@@ -22,6 +22,18 @@ const isInternalProxyRoute = createRouteMatcher([
 ]);
 const isSentryTunnelRoute = createRouteMatcher(["/monitoring(.*)"]);
 const isSentryExampleApiRoute = createRouteMatcher(["/api/sentry-example-api"]);
+const isDashboardShellRoute = createRouteMatcher([
+  "/editor(.*)",
+  "/assets(.*)",
+  "/domain(.*)",
+  "/blog(.*)",
+  "/analytics(.*)",
+  "/settings(.*)",
+  "/bookings(.*)",
+  "/employees(.*)",
+  "/services(.*)",
+  "/booking-upgrade(.*)",
+]);
 const isProtectedRoute = createRouteMatcher([
   "/editor(.*)",
   "/assets(.*)",
@@ -29,6 +41,11 @@ const isProtectedRoute = createRouteMatcher([
   "/blog(.*)",
   "/analytics(.*)",
   "/settings(.*)",
+  "/bookings(.*)",
+  "/employees(.*)",
+  "/services(.*)",
+  "/booking-upgrade(.*)",
+  "/preview(.*)",
   "/admin(.*)",
   "/api(.*)",
 ]);
@@ -58,6 +75,12 @@ function isPublicLandingPath(pathname: string) {
 
 function isDocumentRequest(req: NextRequest) {
   return !req.headers.has("rsc") && !req.headers.has("next-router-prefetch");
+}
+
+function isIframeDocumentRequest(req: NextRequest) {
+  return (
+    isDocumentRequest(req) && req.headers.get("sec-fetch-dest") === "iframe"
+  );
 }
 
 function getInternalLandingPath(slug: string, pathname: string) {
@@ -219,8 +242,25 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return rewriteLandingRequest(req, resolution.landing.slug);
   }
 
+  if (isAppHost(host) && isIframeDocumentRequest(req) && isDashboardShellRoute(req)) {
+    return new NextResponse("Not Found", { status: 404 });
+  }
+
+  if (isSignInRoute(req)) {
+    const { isAuthenticated } = await auth();
+    if (isAuthenticated) {
+      if (isIframeDocumentRequest(req)) {
+        return new NextResponse("Not Found", { status: 404 });
+      }
+      const redirectUrl = req.nextUrl.clone();
+      redirectUrl.pathname = "/";
+      return NextResponse.redirect(redirectUrl);
+    }
+
+    return NextResponse.next();
+  }
+
   if (
-    isSignInRoute(req) ||
     isWebhookRoute(req) ||
     isCronRoute(req) ||
     isSentryTunnelRoute(req) ||
@@ -254,6 +294,9 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   }
 
   if (pathname === "/") {
+    if (isIframeDocumentRequest(req)) {
+      return new NextResponse("Not Found", { status: 404 });
+    }
     const { isAuthenticated } = await auth();
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = isAuthenticated ? "/editor" : "/sign-in";

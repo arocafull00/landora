@@ -1,14 +1,9 @@
-"use client";
-
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarSpaceCard } from "@/components/templates/velar/velar-space-card";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { useEditorHighlight } from "@/lib/use-editor-highlight";
-import { cn } from "@/lib/utils";
 
 export function VelarSpacesSection({ content }: { content: LandingContent }) {
-  const isHighlighted = useEditorHighlight("residences");
 
   if (!content.spaces || content.spaces.length === 0) return null;
 
@@ -23,10 +18,7 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
       data-section="residences"
       data-section-label="Espacios"
       id="residences"
-      className={cn(
-        "relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16",
-        isHighlighted && "template-section--highlighted",
-      )}
+      className="relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16" data-aos="fade-up">
@@ -76,7 +68,7 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {(content.spaces ?? []).map((space, index) => (
-            <VelarSpaceCard key={space.id} space={space} index={index} />
+            <VelarSpaceCard index={index} key={space.id} space={space} />
           ))}
         </div>
       </div>

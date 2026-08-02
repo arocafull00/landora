@@ -1,6 +1,4 @@
-"use client";
-
-import { Fragment, useRef } from "react";
+import { Fragment } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
 import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
 import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
@@ -12,6 +10,7 @@ import { OficioProTestimonialsSection } from "@/components/templates/oficio-pro/
 import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
+import { TemplateAos } from "@/components/templates/shared/template-aos";
 
 function renderOficioProBodySection(anchor: string, content: LandingContent) {
   if (anchor === "servicios") {
@@ -36,6 +35,8 @@ function renderOficioProBodySection(anchor: string, content: LandingContent) {
 
 export function OficioProTemplate({
   content,
+  copyrightYear,
+  renderedAt,
   topOffset = 0,
   slug,
   previewLandingId,
@@ -43,13 +44,14 @@ export function OficioProTemplate({
   sectionSelections,
 }: {
   content: LandingContent;
+  copyrightYear: number;
+  renderedAt: Date;
   topOffset?: number;
   slug?: string;
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
-  const heroRef = useRef<HTMLElement>(null);
   const heroVariantId = sectionSelections?.hero ?? "oficio-pro";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
   const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
@@ -61,7 +63,7 @@ export function OficioProTemplate({
   });
 
   return (
-    <div
+    <TemplateAos
       className="relative bg-[var(--site-surface)] text-[var(--site-text-muted)]"
       style={{
         overflowX: "clip",
@@ -81,18 +83,17 @@ export function OficioProTemplate({
       />
       <HeroRenderer
         content={content}
-        heroRef={heroRef}
         primaryCtaHref={primaryCtaHref}
         secondaryCtaHref={secondaryCtaHref}
         variantId={heroVariantId}
       />
-      <ActiveOffersRenderer content={content} />
+      <ActiveOffersRenderer content={content} renderedAt={renderedAt} />
       {getOrderedVisibleBodySections("oficio-pro", content).map((section) => (
         <Fragment key={section.anchor}>
           {renderOficioProBodySection(section.anchor, content)}
         </Fragment>
       ))}
-      <OficioProContactSection content={content} />
-    </div>
+      <OficioProContactSection content={content} copyrightYear={copyrightYear} />
+    </TemplateAos>
   );
 }
