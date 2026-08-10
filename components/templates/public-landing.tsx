@@ -35,6 +35,14 @@ async function renderPublicTemplate(
     const { CoffeeShopTemplate } = await import("@/components/templates/coffee-shop/coffee-shop-template");
     return <CoffeeShopTemplate {...props} />;
   }
+  if (template === "signal") {
+    const { SignalTemplate } = await import("@/components/templates/signal/signal-template");
+    return <SignalTemplate {...props} />;
+  }
+  if (template === "pallet-ross") {
+    const { PalletRossTemplate } = await import("@/components/templates/pallet-ross/pallet-ross-template");
+    return <PalletRossTemplate {...props} />;
+  }
 
   const { VelarTemplate } = await import("@/components/templates/velar/velar-template");
   return <VelarTemplate {...props} />;

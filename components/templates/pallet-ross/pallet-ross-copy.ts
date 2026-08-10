@@ -1,0 +1,35 @@
+export const PALLET_ROSS_COPY = {
+  brand: "Pallet Ross",
+  nav: {
+    getStarted: "Get Started",
+    createStrategy: "Create strategy",
+    pricing: "Pricing",
+    contact: "Contact",
+    solution: "Solution",
+    ecommerce: "E-Commerce",
+  },
+  hero: {
+    line1: ["A", "place", "to", "display"],
+    line2: ["your", "masterpiece."],
+    body: "Artists can display their masterpieces, and buyers can discover and purchase works that resonate with them.",
+    primaryCta: "Join for $9.99/m",
+    secondaryCta: "Read more",
+    coplin: "@coplin",
+    andrea: "@andrea",
+  },
+  ecommerce: {
+    eyebrow: "E-COMMERCE",
+    line1: ["Showcase,", "Sell"],
+    line2: ["&", "acquire", "arts", "to"],
+    line3: ["our", "marketplace."],
+    body: "Dynamic community where artists and buyers seamlessly merge. ArtFusion brings together creators and enthusiasts to share creativity.",
+    howard: "@howard",
+    robin: "@robin",
+  },
+  class: {
+    eyebrow: "CLASS BY REATHA C. PHELAN",
+    words: ["Gateway", "to", "artist", "people."],
+    reatha: "@reatha",
+    watch: "Watch",
+  },
+} as const;

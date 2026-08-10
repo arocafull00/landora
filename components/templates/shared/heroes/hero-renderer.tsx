@@ -7,6 +7,7 @@ import { RistoranteHeroVariant } from "@/components/templates/shared/heroes/rist
 import { FloristeriaHeroVariant } from "@/components/templates/shared/heroes/floristeria-hero-variant";
 import { OficioProHeroVariant } from "@/components/templates/shared/heroes/oficio-pro-hero-variant";
 import { CoffeeShopHeroVariant } from "@/components/templates/shared/heroes/coffee-shop-hero-variant";
+import { SignalHeroVariant } from "@/components/templates/shared/heroes/signal-hero-variant";
 import { LumenHeroVariant } from "@/components/templates/shared/heroes/lumen-hero-variant";
 import { OffsetHeroVariant } from "@/components/templates/shared/heroes/offset-hero-variant";
 import { MosaicoHeroVariant } from "@/components/templates/shared/heroes/mosaico-hero-variant";
@@ -24,6 +25,7 @@ const HERO_COMPONENTS = {
   floristeria: FloristeriaHeroVariant,
   "oficio-pro": OficioProHeroVariant,
   "coffee-shop": CoffeeShopHeroVariant,
+  signal: SignalHeroVariant,
   lumen: LumenHeroVariant,
   offset: OffsetHeroVariant,
   mosaico: MosaicoHeroVariant,

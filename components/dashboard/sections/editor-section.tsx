@@ -8,6 +8,7 @@ import { RistoranteEditorSection } from "@/components/dashboard/sections/ristora
 import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
 import { OficioProEditorSection } from "@/components/dashboard/sections/oficio-pro-editor-section";
 import { CoffeeShopEditorSection } from "@/components/dashboard/sections/coffee-shop-editor-section";
+import { SignalEditorSection } from "@/components/dashboard/sections/signal-editor-section";
 import { VelarEditorSection } from "@/components/dashboard/sections/velar-editor-section";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { PortfolioAboutPageEditor } from "@/components/dashboard/portfolio-about-page-editor";
@@ -90,6 +91,10 @@ export function EditorSection() {
 
   if (activeLanding.template === "coffee-shop") {
     return <CoffeeShopEditorSection />;
+  }
+
+  if (activeLanding.template === "signal") {
+    return <SignalEditorSection />;
   }
 
   return <VelarEditorSection />;

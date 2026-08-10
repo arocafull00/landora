@@ -123,6 +123,8 @@ export type TemplateContentMap = {
   floristeria: BaseContent & FloristeriaExtensions;
   "oficio-pro": BaseContent & StudioExtensions;
   "coffee-shop": BaseContent & RistoranteExtensions;
+  signal: BaseContent & StudioExtensions;
+  "pallet-ross": BaseContent & StudioExtensions;
 };
 
 export type TemplateId = keyof TemplateContentMap;
@@ -135,6 +137,7 @@ export type HeroVariantId =
   | "floristeria"
   | "oficio-pro"
   | "coffee-shop"
+  | "signal"
   | "lumen"
   | "offset"
   | "mosaico"

@@ -86,6 +86,14 @@ export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption
     { id: "coffee-green", label: "Verde café", description: "Verde bosque y crema." },
     { id: "burgundy", label: "Borgoña", description: "Borgoña y rosa tostado." },
   ],
+  signal: [
+    { id: "default", label: "Original", description: "Tinta, papel cálido y señal lima." },
+    { id: "graphite", label: "Grafito", description: "Carbón y ámbar técnico." },
+    { id: "noir", label: "Noir", description: "Negro profundo y blanco frío." },
+  ],
+  "pallet-ross": [
+    { id: "default", label: "Original", description: "Off-white, teal y rojo editorial." },
+  ],
 };
 
 export const DEFAULT_LANDING_APPEARANCE: LandingAppearance = {

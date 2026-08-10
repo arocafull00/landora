@@ -24,6 +24,8 @@ export const templateEnum = pgEnum("template", [
   "floristeria",
   "oficio-pro",
   "coffee-shop",
+  "signal",
+  "pallet-ross",
 ]);
 
 export const subscriptionStatusEnum = pgEnum("subscription_status", [

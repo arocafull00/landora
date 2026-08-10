@@ -6,6 +6,13 @@ import { RISTORANTE_IMAGE_OPTIONS } from "@/lib/ristorante-assets";
 import { FLORISTERIA_IMAGE_OPTIONS } from "@/lib/floristeria-assets";
 import { OFICIO_PRO_IMAGE_OPTIONS } from "@/lib/oficio-pro-assets";
 import { COFFEE_SHOP_IMAGE_OPTIONS } from "@/lib/coffee-shop-assets";
+import { SIGNAL_IMAGE_OPTIONS } from "@/lib/signal-assets";
+import { PALLET_ROSS_CARD_IMAGES } from "@/lib/pallet-ross-assets";
+
+const PALLET_ROSS_IMAGE_OPTIONS = PALLET_ROSS_CARD_IMAGES.map((value, index) => ({
+  value,
+  label: `Card ${index + 1}`,
+}));
 
 const TEMPLATE_IMAGE_OPTIONS: Record<TemplateId, readonly { value: string; label: string }[]> = {
   velar: VELAR_IMAGE_OPTIONS,
@@ -15,6 +22,8 @@ const TEMPLATE_IMAGE_OPTIONS: Record<TemplateId, readonly { value: string; label
   floristeria: FLORISTERIA_IMAGE_OPTIONS,
   "oficio-pro": OFICIO_PRO_IMAGE_OPTIONS,
   "coffee-shop": COFFEE_SHOP_IMAGE_OPTIONS,
+  signal: SIGNAL_IMAGE_OPTIONS,
+  "pallet-ross": PALLET_ROSS_IMAGE_OPTIONS,
 };
 
 export function getTemplateImageOptions(

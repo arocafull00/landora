@@ -216,6 +216,20 @@ const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = 
     reviews: "testimonios",
     contact: "contacto",
   },
+  signal: {
+    home: "hero",
+    studio: "portal",
+    capabilities: "capacidades",
+    scale: "escala",
+    access: "indice",
+    contact: "contacto",
+  },
+  "pallet-ross": {
+    home: "hero",
+    ecommerce: "ecommerce",
+    class: "class",
+    contact: "contacto",
+  },
 };
 
 export function normalizeNavHref(templateId: TemplateId, href: string): string {
@@ -342,6 +356,25 @@ const COFFEE_SHOP_SECTIONS: TemplateSectionDef[] = [
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
+const PALLET_ROSS_SECTIONS: TemplateSectionDef[] = [
+  { anchor: "hero", label: "Hero", required: true },
+  { anchor: "ecommerce", label: "E-Commerce", navHref: "#ecommerce" },
+  { anchor: "class", label: "Class", navHref: "#class" },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
+];
+
+const SIGNAL_SECTIONS: TemplateSectionDef[] = [
+  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
+  { anchor: "portal", label: "Portal", editorTabId: "Portal", navHref: "#portal", contentKeys: ["story"] },
+  { anchor: "escala", label: "Escala", editorTabId: "Escala", navHref: "#escala", contentKeys: ["stats"] },
+  { anchor: "capacidades", label: "Capacidades", editorTabId: "Capacidades", navHref: "#capacidades", contentKeys: ["serviceMenu"] },
+  { anchor: "indice", label: "Índice", editorTabId: "Índice", navHref: "#indice", contentKeys: ["benefits"] },
+  { anchor: "climax", label: "Clímax", editorTabId: "Clímax", navHref: "#climax" },
+  { anchor: "cta", label: "CTA", editorTabId: "CTA", navHref: "#cta" },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
+];
+
 const TEMPLATE_SECTIONS: Record<TemplateId, TemplateSectionDef[]> = {
   velar: VELAR_SECTIONS,
   studio: STUDIO_SECTIONS,
@@ -350,6 +383,8 @@ const TEMPLATE_SECTIONS: Record<TemplateId, TemplateSectionDef[]> = {
   floristeria: FLORISTERIA_SECTIONS,
   "oficio-pro": OFICIO_PRO_SECTIONS,
   "coffee-shop": COFFEE_SHOP_SECTIONS,
+  signal: SIGNAL_SECTIONS,
+  "pallet-ross": PALLET_ROSS_SECTIONS,
 };
 
 export function getTemplateSections(templateId: TemplateId): TemplateSectionDef[] {

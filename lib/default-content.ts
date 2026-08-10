@@ -8,6 +8,8 @@ import { RISTORANTE_ASSETS } from "@/lib/ristorante-assets";
 import { FLORISTERIA_ASSETS, FLORISTERIA_HERO_FAN_DEFAULT_IMAGES } from "@/lib/floristeria-assets";
 import { OFICIO_PRO_ASSETS } from "@/lib/oficio-pro-assets";
 import { COFFEE_SHOP_ASSETS } from "@/lib/coffee-shop-assets";
+import { PALLET_ROSS_ASSETS } from "@/lib/pallet-ross-assets";
+import { SIGNAL_ASSETS } from "@/lib/signal-assets";
 
 const BG_IMG =
   "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260603_073200_7082add5-f1f8-4873-8696-d6f78a44089b.png&w=1920&q=85";
@@ -963,6 +965,167 @@ export const OFICIO_PRO_DEFAULT_CONTENT: TemplateContentMap["oficio-pro"] = {
   ],
 };
 
+export const SIGNAL_DEFAULT_CONTENT: TemplateContentMap["signal"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
+  brand: "Nova.",
+  brandLogoType: "text",
+  brandLogoImage: "",
+  hero: {
+    eyebrow: "ESTUDIO CREATIVO / VALENCIA",
+    title: "NOVA",
+    subtitle: "UNA NUEVA ESCALA DE MARCA",
+    description: "Dirección creativa, sistemas visuales y producto digital.",
+    image: SIGNAL_ASSETS.hero,
+    ctaLabel: "Empezar proyecto",
+  },
+  nav: [
+    { id: "nav-portal", label: "01 Estudio", href: "#portal" },
+    { id: "nav-capacidades", label: "02 Capacidades", href: "#capacidades" },
+    { id: "nav-escala", label: "03 Escala", href: "#escala" },
+    { id: "nav-indice", label: "04 Acceso", href: "#indice" },
+    { id: "nav-contacto", label: "Contacto", href: "#contacto" },
+  ],
+  sectionHeadings: SECTION_HEADING_DEFAULTS.signal,
+  contact: {
+    phone: "+34 612 00 00 00",
+    email: "hola@novastudio.es",
+    address: "Valencia, España",
+    ctaLabel: "Escribir por WhatsApp",
+    copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
+    socialLinks: [],
+  },
+  stats: [
+    { id: "stat-1", value: "1", label: "Visión completa" },
+    { id: "stat-2", value: "12", label: "Sistemas entregados" },
+    { id: "stat-3", value: "48", label: "Marcas acompañadas" },
+    { id: "stat-4", value: "120", label: "Proyectos cerrados" },
+  ],
+  testimonials: [
+    {
+      id: "review-1",
+      author: "Clara Vives",
+      date: "2025-04-02",
+      rating: 5,
+      comment:
+        "Nova convirtió una idea difusa en un sistema de marca que el equipo usa cada día. Precisión y criterio.",
+      verified: true,
+    },
+    {
+      id: "review-2",
+      author: "Hugo Serra",
+      date: "2025-02-18",
+      rating: 5,
+      comment:
+        "El proceso es editorial y muy claro. Pasamos de piezas sueltas a una identidad coherente en producto y comunicación.",
+      verified: true,
+    },
+  ],
+  about: {
+    statement: "PENSAR\nEL PROYECTO\nENTEROS\nSIN ATALAJOS",
+  },
+  gallery: [
+    { id: "g1", image: SIGNAL_ASSETS.fragment1, title: "Sistema tipográfico" },
+    { id: "g2", image: SIGNAL_ASSETS.fragment2, title: "Dirección de arte" },
+    { id: "g3", image: SIGNAL_ASSETS.fragment3, title: "Producto digital" },
+    { id: "g4", image: SIGNAL_ASSETS.fragment4, title: "Identidad en movimiento" },
+    { id: "g5", image: SIGNAL_ASSETS.fragment5, title: "Espacio de estudio" },
+  ],
+  team: [],
+  serviceMenu: [
+    {
+      id: "sm-1",
+      category: "01",
+      name: "ESTRATEGIA",
+      description: "Seguir el problema más allá de la primera respuesta.",
+      price: "",
+      duration: "",
+      image: SIGNAL_ASSETS.fragment1,
+    },
+    {
+      id: "sm-2",
+      category: "02",
+      name: "DISEÑO",
+      description: "Pasar de la intención a sistemas que funcionan.",
+      price: "",
+      duration: "",
+      image: SIGNAL_ASSETS.fragment2,
+    },
+    {
+      id: "sm-3",
+      category: "03",
+      name: "SISTEMA",
+      description: "Planificar. Ejecutar. Verificar. Iterar.",
+      price: "",
+      duration: "",
+      image: SIGNAL_ASSETS.fragment4,
+    },
+  ],
+  benefits: [
+    { id: "b1", title: "ESTUDIO", description: "NOVA", icon: "" },
+    { id: "b2", title: "DISCIPLINA", description: "MARCA / PRODUCTO", icon: "" },
+    { id: "b3", title: "SEDE", description: "VALENCIA", icon: "" },
+    { id: "b4", title: "CONTACTO", description: "hola@novastudio.es", icon: "" },
+    { id: "b5", title: "ESTADO", description: "ACEPTANDO PROYECTOS", icon: "" },
+  ],
+  faq: [
+    {
+      id: "faq-1",
+      question: "¿Con qué tipo de clientes trabajáis?",
+      answer:
+        "Marcas y equipos de producto que necesitan dirección creativa con criterio editorial y sistemas duraderos.",
+    },
+    {
+      id: "faq-2",
+      question: "¿Cómo empezamos?",
+      answer:
+        "Una primera llamada para acotar alcance, calendario y resultado esperado. Después proponemos una fase de diagnóstico.",
+    },
+  ],
+};
+
+export const PALLET_ROSS_DEFAULT_CONTENT: TemplateContentMap["pallet-ross"] = {
+  appearance: { paletteId: "default", typographyId: "default" },
+  enabledPages: [],
+  brand: "Pallet Ross",
+  brandLogoType: "text",
+  brandLogoImage: "",
+  hero: {
+    eyebrow: "ARTIST MARKETPLACE",
+    title: "Pallet Ross",
+    subtitle: "A place to display your masterpiece.",
+    description:
+      "Artists can display their masterpieces, and buyers can discover and purchase works that resonate with them.",
+    image: PALLET_ROSS_ASSETS.card1,
+    ctaLabel: "Join for $9.99/m",
+  },
+  nav: [
+    { id: "nav-start", label: "Get Started", href: "#hero" },
+    { id: "nav-ecommerce", label: "E-Commerce", href: "#ecommerce" },
+    { id: "nav-class", label: "Class", href: "#class" },
+    { id: "nav-contacto", label: "Contact", href: "#contacto" },
+  ],
+  sectionHeadings: SECTION_HEADING_DEFAULTS["pallet-ross"],
+  contact: {
+    phone: "+1 555 010 2200",
+    email: "hello@palletross.com",
+    address: "Brooklyn, NY",
+    ctaLabel: "Get in touch",
+    copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
+    socialLinks: [],
+  },
+  stats: [],
+  testimonials: [],
+  about: {
+    statement: "Dynamic community where artists and buyers seamlessly merge.",
+  },
+  gallery: [],
+  team: [],
+  serviceMenu: [],
+  benefits: [],
+  faq: [],
+};
+
 const DEFAULT_CONTENT: Record<TemplateId, TemplateContentMap[TemplateId]> = {
   velar: VELAR_DEFAULT_CONTENT,
   studio: STUDIO_DEFAULT_CONTENT,
@@ -971,6 +1134,8 @@ const DEFAULT_CONTENT: Record<TemplateId, TemplateContentMap[TemplateId]> = {
   floristeria: FLORISTERIA_DEFAULT_CONTENT,
   "oficio-pro": OFICIO_PRO_DEFAULT_CONTENT,
   "coffee-shop": COFFEE_SHOP_DEFAULT_CONTENT,
+  signal: SIGNAL_DEFAULT_CONTENT,
+  "pallet-ross": PALLET_ROSS_DEFAULT_CONTENT,
 };
 
 export function getDefaultContent<T extends TemplateId>(templateId: T): TemplateContentMap[T] {

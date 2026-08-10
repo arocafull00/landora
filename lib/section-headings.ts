@@ -195,6 +195,46 @@ export const SECTION_HEADING_DEFAULTS: Record<
       subtitle: "Elige fecha y hora para tu visita.",
     },
   },
+  signal: {
+    portal: {
+      title: "Dentro de la marca",
+      subtitle: "Un recorrido tipográfico por el estudio.",
+    },
+    escala: {
+      title: "Escala",
+      subtitle: "Números que sostienen el trabajo.",
+    },
+    capacidades: {
+      title: "Capacidades",
+      subtitle: "De la intención al sistema.",
+    },
+    indice: {
+      title: "Índice",
+      subtitle: "Datos esenciales del estudio.",
+    },
+    climax: {
+      title: "NO ES UNA WEB MÁS.",
+      subtitle: "ES UNA MARCA EN MOVIMIENTO.",
+    },
+    cta: {
+      title: "Disponible ahora",
+      subtitle: "Hablemos del siguiente proyecto.",
+    },
+    contacto: {
+      title: "Contacto",
+      subtitle: "Cuéntanos qué quieres construir.",
+    },
+    reservas: {
+      title: "Agenda una llamada",
+      subtitle: "Reserva un espacio en el calendario.",
+    },
+  },
+  "pallet-ross": {
+    contacto: {
+      title: "Get in touch",
+      subtitle: "Join the artist marketplace.",
+    },
+  },
 };
 
 export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
@@ -205,6 +245,8 @@ export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
   floristeria: [],
   "oficio-pro": [],
   "coffee-shop": [],
+  signal: [],
+  "pallet-ross": [],
 };
 
 export function getSectionHeading(

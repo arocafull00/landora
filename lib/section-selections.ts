@@ -19,6 +19,7 @@ const HERO_VARIANT_IDS = [
   "floristeria",
   "oficio-pro",
   "coffee-shop",
+  "signal",
   "lumen",
   "offset",
   "mosaico",

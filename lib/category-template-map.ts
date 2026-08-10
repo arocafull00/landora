@@ -64,6 +64,18 @@ const PORTFOLIO_CATEGORIES = new Set([
   "Car repair and maintenance service",
 ]);
 
+const SIGNAL_CATEGORIES = new Set([
+  "Marketing agency",
+  "Advertising agency",
+  "Graphic designer",
+  "Design agency",
+  "Brand consultant",
+  "Web designer",
+  "Architect",
+  "Photography studio",
+  "Film production company",
+]);
+
 export function resolveTemplateId(category: string | undefined): TemplateId | null {
   if (!category) return null;
 
@@ -73,6 +85,7 @@ export function resolveTemplateId(category: string | undefined): TemplateId | nu
   if (FLORISTERIA_CATEGORIES.has(category)) return "floristeria";
   if (OFICIO_PRO_CATEGORIES.has(category)) return "oficio-pro";
   if (PORTFOLIO_CATEGORIES.has(category)) return "portfolio";
+  if (SIGNAL_CATEGORIES.has(category)) return "signal";
 
   return "ristorante";
 }

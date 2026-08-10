@@ -10,6 +10,7 @@ import { RISTORANTE_ASSETS } from "@/lib/ristorante-assets";
 import { FLORISTERIA_ASSETS } from "@/lib/floristeria-assets";
 import { OFICIO_PRO_ASSETS } from "@/lib/oficio-pro-assets";
 import { COFFEE_SHOP_ASSETS } from "@/lib/coffee-shop-assets";
+import { SIGNAL_ASSETS } from "@/lib/signal-assets";
 
 export type HeroVariantDefinition = {
   id: HeroVariantId;
@@ -74,6 +75,14 @@ const HERO_VARIANTS: Record<HeroVariantId, HeroVariantDefinition> = {
     label: "Coffee Shop",
     description: "Diseño dividido entre contenido e imagen de producto.",
     thumbnail: COFFEE_SHOP_ASSETS.hero,
+    navTone: "dark",
+    specificFields: [],
+  },
+  signal: {
+    id: "signal",
+    label: "Signal",
+    description: "Tipografía monumental y portal de marca con scroll cinematográfico.",
+    thumbnail: SIGNAL_ASSETS.hero,
     navTone: "dark",
     specificFields: [],
   },

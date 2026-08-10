@@ -157,6 +157,19 @@ const COFFEE_SHOP_SECTIONS: LandingSectionKey[] = [
   "faq",
 ];
 
+const SIGNAL_GAP_SECTIONS: LandingSectionKey[] = [
+  "hero",
+  "branding",
+  "story",
+  "stats",
+  "nav",
+  "testimonials",
+  "cta",
+  "serviceMenu",
+  "benefits",
+  "faq",
+];
+
 function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
   if (template === "studio") return STUDIO_SECTIONS;
   if (template === "portfolio") return PORTFOLIO_SECTIONS;
@@ -164,6 +177,8 @@ function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
   if (template === "floristeria") return FLORISTERIA_SECTIONS;
   if (template === "oficio-pro") return OFICIO_PRO_SECTIONS;
   if (template === "coffee-shop") return COFFEE_SHOP_SECTIONS;
+  if (template === "signal") return SIGNAL_GAP_SECTIONS;
+  if (template === "pallet-ross") return STUDIO_SECTIONS;
   return VELAR_SECTIONS;
 }
 

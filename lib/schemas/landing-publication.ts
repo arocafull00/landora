@@ -49,6 +49,8 @@ export const publishLandingVersionSchema = z.strictObject({
     "floristeria",
     "oficio-pro",
     "coffee-shop",
+    "signal",
+    "pallet-ross",
   ]),
   name: z.string().trim().min(1).max(120),
   slug: z.string().trim().min(1).max(120),

@@ -8,12 +8,16 @@ import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
+import { SignalTemplate } from "@/components/templates/signal/signal-template";
+import { PalletRossTemplate } from "@/components/templates/pallet-ross/pallet-ross-template";
+import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import {
   TemplateDemoBar,
   TEMPLATE_DEMO_BAR_HEIGHT,
 } from "@/components/admin/template-demo-bar";
 import { getCopyrightYear } from "@/lib/copyright-year";
 import { getPublicRenderTime } from "@/lib/public-render-time";
+import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -23,6 +27,8 @@ const TEMPLATE_COMPONENTS = {
   floristeria: FloristeriaTemplate,
   "oficio-pro": OficioProTemplate,
   "coffee-shop": CoffeeShopTemplate,
+  signal: SignalTemplate,
+  "pallet-ross": PalletRossTemplate,
 } as const;
 
 export const metadata: Metadata = {
@@ -50,16 +56,19 @@ export default async function TemplateDemoPage({
 
   const isEmbed = embed === "1";
   const Component = TEMPLATE_COMPONENTS[id] ?? VelarTemplate;
+  const appearance = resolveLandingAppearance(id, template.demoContent.appearance);
 
   return (
     <div style={isEmbed ? undefined : { paddingTop: TEMPLATE_DEMO_BAR_HEIGHT }}>
       {!isEmbed && <TemplateDemoBar label={template.label} />}
-      <Component
-        content={template.demoContent}
-        copyrightYear={copyrightYear}
-        renderedAt={renderedAt}
-        topOffset={isEmbed ? 0 : TEMPLATE_DEMO_BAR_HEIGHT}
-      />
+      <SiteThemeScope appearance={appearance} template={id}>
+        <Component
+          content={template.demoContent}
+          copyrightYear={copyrightYear}
+          renderedAt={renderedAt}
+          topOffset={isEmbed ? 0 : TEMPLATE_DEMO_BAR_HEIGHT}
+        />
+      </SiteThemeScope>
     </div>
   );
 }

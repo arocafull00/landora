@@ -4,7 +4,7 @@ import type {
   LandingContent,
   LandingSectionSelections,
 } from "@/lib/dashboard-data";
-import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT } from "@/lib/default-content";
+import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT, SIGNAL_DEFAULT_CONTENT, PALLET_ROSS_DEFAULT_CONTENT } from "@/lib/default-content";
 import { getTemplateSections } from "@/lib/template-sections";
 
 export type EditorTabGroup = "section" | "config";
@@ -256,6 +256,45 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/coffee-shop/coffee-shop-template"),
+  },
+  signal: {
+    id: "signal",
+    label: "Signal",
+    description:
+      "Landing editorial cinematográfica para estudios creativos: tipografía a gran escala, scroll controlado y CTA de acceso.",
+    demoContent: SIGNAL_DEFAULT_CONTENT,
+    editorTabs: [
+      { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
+      { id: "Portal", label: "Portal" },
+      { id: "Escala", label: "Escala" },
+      { id: "Capacidades", label: "Capacidades" },
+      { id: "Índice", label: "Índice" },
+      { id: "Clímax", label: "Clímax" },
+      { id: "CTA", label: "CTA" },
+      OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
+      BLOG_EDITOR_TAB,
+      FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
+      SECTIONS_EDITOR_TAB,
+    ],
+    getComponent: () => import("@/components/templates/signal/signal-template"),
+  },
+  "pallet-ross": {
+    id: "pallet-ross",
+    label: "Pallet Ross",
+    description:
+      "Landing scroll-driven para marketplace de arte: animación de cards, e-commerce y banner de clase.",
+    demoContent: PALLET_ROSS_DEFAULT_CONTENT,
+    editorTabs: [
+      CONTACT_EDITOR_TAB,
+      FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
+      SECTIONS_EDITOR_TAB,
+    ],
+    getComponent: () => import("@/components/templates/pallet-ross/pallet-ross-template"),
   },
 };
 

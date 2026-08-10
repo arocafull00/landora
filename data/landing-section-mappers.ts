@@ -17,10 +17,18 @@ import type {
 import type { LandingContent, TemplateContentMap, TemplateId } from "@/lib/dashboard-data";
 
 function getDefaultStoryStatement(templateId: TemplateId, content: LandingContent) {
-  if (templateId === "studio" || templateId === "oficio-pro") {
+  if (
+    templateId === "studio" ||
+    templateId === "oficio-pro" ||
+    templateId === "signal"
+  ) {
     return (
-      (content as TemplateContentMap["studio"] | TemplateContentMap["oficio-pro"]).about
-        ?.statement ??
+      (
+        content as
+          | TemplateContentMap["studio"]
+          | TemplateContentMap["oficio-pro"]
+          | TemplateContentMap["signal"]
+      ).about?.statement ??
       content.story?.statement ??
       ""
     );

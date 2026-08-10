@@ -15,6 +15,8 @@ import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
+import { SignalTemplate } from "@/components/templates/signal/signal-template";
+import { PalletRossTemplate } from "@/components/templates/pallet-ross/pallet-ross-template";
 import {
   getHashSectionId,
   scrollToSectionIdWhenReady,
@@ -35,6 +37,8 @@ const TEMPLATE_COMPONENTS = {
   floristeria: FloristeriaTemplate,
   "oficio-pro": OficioProTemplate,
   "coffee-shop": CoffeeShopTemplate,
+  signal: SignalTemplate,
+  "pallet-ross": PalletRossTemplate,
 } as const;
 
 export function LandingPreviewFrame({

@@ -5,6 +5,7 @@ import {
   Gloock,
   IBM_Plex_Sans,
   Inter,
+  Inter_Tight,
   JetBrains_Mono,
   Playfair_Display,
   Source_Sans_3,
@@ -78,6 +79,13 @@ const cormorant = Cormorant_Garamond({
   preload: false,
 });
 
+const interTight = Inter_Tight({
+  variable: "--font-source-inter-tight",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  preload: false,
+});
+
 export const siteFontVariables = [
   dashboardHeadline.variable,
   inter.variable,
@@ -89,4 +97,5 @@ export const siteFontVariables = [
   fraunces.variable,
   gloock.variable,
   cormorant.variable,
+  interTight.variable,
 ].join(" ");

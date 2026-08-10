@@ -29,6 +29,7 @@ export const heroVariantSchema = z.enum([
   "floristeria",
   "oficio-pro",
   "coffee-shop",
+  "signal",
   "lumen",
   "offset",
   "mosaico",
