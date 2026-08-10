@@ -28,7 +28,7 @@ export function SignalInsideSection({ content }: { content: LandingContent }) {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-10 top-16 text-[40vw] font-bold leading-none text-[var(--site-on-dark)]/[0.06]"
+        className="pointer-events-none absolute -left-10 top-16 font-bold leading-none text-[var(--site-on-dark)]/[0.06] text-site-content"
         data-signal-portal-plane
         style={{ fontFamily: "var(--site-font-display)" }}
       >
@@ -45,7 +45,7 @@ export function SignalInsideSection({ content }: { content: LandingContent }) {
         src={planeB}
       />
       <p
-        className="relative z-10 mb-10 text-[10px] uppercase tracking-[0.24em] text-[var(--site-accent)]"
+        className="relative z-10 mb-10 uppercase tracking-[0.24em] text-[var(--site-accent)] text-site-content"
         style={{ fontFamily: "var(--site-font-body)" }}
       >
         {heading.title}
@@ -62,7 +62,7 @@ export function SignalInsideSection({ content }: { content: LandingContent }) {
       />
       {heading.subtitle ? (
         <p
-          className="relative z-10 mt-6 max-w-sm text-sm text-[var(--site-on-dark)]/60"
+          className="relative z-10 mt-6 max-w-sm text-[var(--site-on-dark)]/60 text-site-content"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {heading.subtitle}

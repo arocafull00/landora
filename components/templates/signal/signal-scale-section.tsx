@@ -42,14 +42,14 @@ export function SignalScaleSection({ content }: { content: LandingContent }) {
         />
       ))}
       <p
-        className="relative z-10 mb-8 text-[10px] uppercase tracking-[0.24em] text-[var(--site-text-muted)]"
+        className="relative z-10 mb-8 uppercase tracking-[0.24em] text-[var(--site-text-muted)] text-site-content"
         style={{ fontFamily: "var(--site-font-body)" }}
       >
         {heading.title}
       </p>
       <div className="relative z-10 flex min-h-[50vh] items-center">
         <p
-          className="text-[clamp(5rem,32vw,20rem)] font-bold leading-none tracking-[-0.08em] tabular-nums text-[var(--site-text)] will-change-transform"
+          className="font-bold leading-none tracking-[-0.08em] tabular-nums text-[var(--site-text)] will-change-transform text-site-content"
           data-signal-scale-number
           style={{ fontFamily: "var(--site-font-display)" }}
         >
@@ -63,7 +63,7 @@ export function SignalScaleSection({ content }: { content: LandingContent }) {
       </ul>
       {heading.subtitle ? (
         <p
-          className="relative z-10 mt-10 max-w-md text-sm text-[var(--site-text-muted)]"
+          className="relative z-10 mt-10 max-w-md text-[var(--site-text-muted)] text-site-content"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {heading.subtitle}

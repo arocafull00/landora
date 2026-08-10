@@ -22,7 +22,7 @@ export function PortfolioSkillsSection({ content }: { content: LandingContent })
     <section id="skills" className="scroll-mt-24 bg-[var(--site-dark)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-5xl">
         <h2
-          className="mb-12 text-balance text-3xl font-extrabold text-[var(--site-on-dark)] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
+          className="mb-12 text-balance font-extrabold text-[var(--site-on-dark)] md:mb-16 text-site-title"
           data-aos="fade-up"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
         >
@@ -46,12 +46,12 @@ export function PortfolioSkillsSection({ content }: { content: LandingContent })
                 </div>
                 <div>
                   <h3
-                    className="mb-2 text-base font-bold text-[var(--site-on-dark)]"
+                    className="mb-2 font-bold text-[var(--site-on-dark)] text-site-title"
                     style={{ fontFamily: "var(--font-syne)" }}
                   >
                     {item.title}
                   </h3>
-                  <p className="text-sm leading-relaxed text-[var(--site-on-dark)]/60">
+                  <p className="leading-relaxed text-[var(--site-on-dark)]/60 text-site-content">
                     {item.description}
                   </p>
                 </div>

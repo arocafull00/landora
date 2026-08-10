@@ -27,7 +27,7 @@ export function FloristeriaCtaSection({ content }: { content: LandingContent }) 
             data-aos="fade-up"
           >
             <h2
-              className="text-balance text-2xl font-bold text-[var(--site-text)] sm:text-3xl md:text-[clamp(28px,3.5vw,40px)]"
+              className="text-balance font-bold text-[var(--site-text)] text-site-title"
               style={{ fontFamily: "var(--font-body)", letterSpacing: "-0.02em" }}
             >
               {heading.title}
@@ -35,7 +35,7 @@ export function FloristeriaCtaSection({ content }: { content: LandingContent }) 
 
             {heading.subtitle ? (
               <p
-                className="mt-5 text-pretty text-base leading-relaxed text-[var(--site-text-muted)] sm:text-lg"
+                className="mt-5 text-pretty leading-relaxed text-[var(--site-text-muted)] text-site-subtitle"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {heading.subtitle}

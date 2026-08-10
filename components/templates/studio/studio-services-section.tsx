@@ -28,7 +28,7 @@ export function StudioServicesSection({ content }: { content: LandingContent }) 
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 border-b border-[var(--site-border)] pb-8" data-aos="fade-up">
           <h2
-            className="text-balance text-3xl font-extrabold text-[var(--site-text)] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
+            className="text-balance font-extrabold text-[var(--site-text)] text-site-title"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
             {heading.title}
@@ -44,7 +44,7 @@ export function StudioServicesSection({ content }: { content: LandingContent }) 
               key={category}
             >
               <h3
-                className="mb-8 border-b border-[var(--site-border)] pb-3 text-lg font-bold text-[var(--site-text)]"
+                className="mb-8 border-b border-[var(--site-border)] pb-3 font-bold text-[var(--site-text)] text-site-title"
                 style={{ fontFamily: "var(--font-syne)" }}
               >
                 {category}
@@ -57,26 +57,26 @@ export function StudioServicesSection({ content }: { content: LandingContent }) 
                     >
                       <div className="min-w-0 flex-1 pr-4">
                         <p
-                          className="text-base font-semibold text-[var(--site-text)]"
+                          className="font-semibold text-[var(--site-text)] text-site-content"
                           style={{ fontFamily: "var(--font-body)" }}
                         >
                           {service.name}
                         </p>
                         {service.description && (
-                          <p className="mt-0.5 text-sm text-[var(--site-text-muted)]">
+                          <p className="mt-0.5 text-[var(--site-text-muted)] text-site-content">
                             {service.description}
                           </p>
                         )}
                       </div>
                       <div className="flex shrink-0 items-center gap-4">
                         {service.duration && (
-                          <span className="flex items-center gap-1 text-xs text-[var(--site-primary)]">
+                          <span className="flex items-center gap-1 text-[var(--site-primary)] text-site-content">
                             <Clock className="h-3.5 w-3.5" />
                             {service.duration}
                           </span>
                         )}
                         <span
-                          className="text-base font-bold text-[var(--site-text)]"
+                          className="font-bold text-[var(--site-text)] text-site-content"
                           style={{ fontFamily: "var(--font-body)" }}
                         >
                           {service.price}
@@ -95,23 +95,23 @@ export function StudioServicesSection({ content }: { content: LandingContent }) 
                 key={service.id}
               >
                 <div className="min-w-0 flex-1 pr-4">
-                  <p className="text-base font-semibold text-[var(--site-text)]">
+                  <p className="font-semibold text-[var(--site-text)] text-site-content">
                     {service.name}
                   </p>
                   {service.description && (
-                    <p className="mt-0.5 text-sm text-[var(--site-text-muted)]">
+                    <p className="mt-0.5 text-[var(--site-text-muted)] text-site-content">
                       {service.description}
                     </p>
                   )}
                 </div>
                 <div className="flex shrink-0 items-center gap-4">
                   {service.duration && (
-                    <span className="flex items-center gap-1 text-xs text-[var(--site-primary)]">
+                    <span className="flex items-center gap-1 text-[var(--site-primary)] text-site-content">
                       <Clock className="h-3.5 w-3.5" />
                       {service.duration}
                     </span>
                   )}
-                  <span className="text-base font-bold text-[var(--site-text)]">
+                  <span className="font-bold text-[var(--site-text)] text-site-content">
                     {service.price}
                   </span>
                 </div>

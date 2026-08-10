@@ -18,19 +18,19 @@ export function PortfolioWorkHistoryCard({
       <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] md:gap-12 lg:gap-16">
         <div className="space-y-3">
           <p
-            className="text-sm font-medium"
+            className="font-medium text-site-content"
             style={{ color: ACCENT, fontFamily: "var(--font-body)" }}
           >
             {item.dateRange}
           </p>
           <p
-            className="text-sm font-medium"
+            className="font-medium text-site-content"
             style={{ color: ACCENT, fontFamily: "var(--font-body)" }}
           >
             {item.location}
           </p>
           <h3
-            className="pt-2 text-2xl font-extrabold text-(--site-on-dark) sm:text-3xl md:text-[clamp(28px,4vw,40px)]"
+            className="pt-2 font-extrabold text-(--site-on-dark) text-site-title"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
             {item.company}
@@ -39,14 +39,14 @@ export function PortfolioWorkHistoryCard({
 
         <div className="space-y-5">
           <h4
-            className="text-xl font-bold text-[var(--site-on-dark)] sm:text-2xl"
+            className="font-bold text-[var(--site-on-dark)] text-site-title"
             style={{ fontFamily: "var(--font-syne)" }}
           >
             {item.title}
           </h4>
 
           {item.summary ? (
-            <p className="text-sm leading-relaxed text-[var(--site-on-dark)]/55 sm:text-base">
+            <p className="leading-relaxed text-[var(--site-on-dark)]/55 text-site-subtitle">
               {item.summary}
             </p>
           ) : null}
@@ -55,7 +55,7 @@ export function PortfolioWorkHistoryCard({
             <ul className="space-y-2.5">
               {item.highlights.map((highlight, highlightIndex) => (
                 <li
-                  className="flex gap-3 text-sm leading-relaxed text-[var(--site-on-dark)]/55 sm:text-base"
+                  className="flex gap-3 leading-relaxed text-[var(--site-on-dark)]/55 text-site-subtitle"
                   key={`${item.id}-highlight-${highlightIndex}`}
                 >
                   <span
@@ -72,7 +72,7 @@ export function PortfolioWorkHistoryCard({
             <div className="flex flex-wrap gap-2 pt-2">
               {item.technologies.map((tech, techIndex) => (
                 <span
-                  className="rounded-md bg-[var(--site-on-dark)]/10 px-3 py-1.5 text-[11px] font-semibold tracking-wide text-[var(--site-on-dark)]/80"
+                  className="rounded-md bg-[var(--site-on-dark)]/10 px-3 py-1.5 font-semibold tracking-wide text-[var(--site-on-dark)]/80 text-site-content"
                   key={`${item.id}-tech-${techIndex}`}
                   style={{ fontFamily: "var(--font-body)" }}
                 >

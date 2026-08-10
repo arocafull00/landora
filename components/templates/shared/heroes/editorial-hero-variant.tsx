@@ -46,12 +46,12 @@ export function EditorialHeroVariant({
           className="max-w-5xl"
         >
           {hero.eyebrow ? (
-            <p className="mb-6 flex items-center gap-3 font-body text-xs font-semibold uppercase tracking-[0.2em] text-[var(--site-on-dark)]/70">
+            <p className="mb-6 flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[var(--site-on-dark)]/70 text-site-content">
               <span aria-hidden className="h-px w-8 bg-[var(--site-on-dark)]/70" />
               {hero.eyebrow}
             </p>
           ) : null}
-          <h1 className="max-w-5xl text-balance font-headline text-[clamp(3.5rem,8vw,7.5rem)] font-semibold leading-[0.9] tracking-[-0.065em]">
+          <h1 className="max-w-5xl text-balance font-headline font-semibold leading-[0.9] tracking-[-0.065em] text-site-title-lg">
             {hero.title}
             {hero.subtitle ? (
               <span className="block text-transparent [-webkit-text-stroke:1px_color-mix(in_srgb,var(--site-on-dark)_58%,transparent)]">
@@ -60,13 +60,13 @@ export function EditorialHeroVariant({
             ) : null}
           </h1>
           {hero.description ? (
-            <p className="mt-7 max-w-2xl text-pretty font-body text-lg leading-relaxed text-[var(--site-on-dark)]/70 sm:text-xl">
+            <p className="mt-7 max-w-2xl text-pretty font-body leading-relaxed text-[var(--site-on-dark)]/70 text-site-subtitle">
               {hero.description}
             </p>
           ) : null}
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <a
-              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-[var(--site-on-dark)] px-6 py-3 font-body text-sm font-bold text-[var(--site-dark)] transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[var(--site-surface-alt)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-on-dark)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)]"
+              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl bg-[var(--site-on-dark)] px-6 py-3 font-body font-bold text-[var(--site-dark)] transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[var(--site-surface-alt)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-on-dark)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)] text-site-button"
               href={primaryCtaHref}
               data-analytics-event="cta_click"
             >
@@ -74,7 +74,7 @@ export function EditorialHeroVariant({
               <ArrowRight aria-hidden className="size-4" />
             </a>
             <a
-              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl border border-[var(--site-on-dark)]/25 bg-[var(--site-on-dark)]/10 px-6 py-3 font-body text-sm font-bold text-[var(--site-on-dark)] backdrop-blur-sm transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[var(--site-on-dark)]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-on-dark)]"
+              className="inline-flex min-h-13 items-center justify-center gap-2 rounded-xl border border-[var(--site-on-dark)]/25 bg-[var(--site-on-dark)]/10 px-6 py-3 font-body font-bold text-[var(--site-on-dark)] backdrop-blur-sm transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[var(--site-on-dark)]/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-on-dark)] text-site-button"
               href={secondaryCtaHref}
             >
               {EDITORIAL_COPY.secondaryCta}
@@ -84,7 +84,7 @@ export function EditorialHeroVariant({
         </div>
       </div>
 
-      <p className="absolute right-7 top-1/2 hidden -translate-y-1/2 [writing-mode:vertical-rl] font-body text-[0.625rem] font-semibold uppercase tracking-[0.2em] text-[var(--site-on-dark)]/45 xl:block">
+      <p className="absolute right-7 top-1/2 hidden -translate-y-1/2 [writing-mode:vertical-rl] font-body font-semibold uppercase tracking-[0.2em] text-[var(--site-on-dark)]/45 xl:block text-site-content">
         {EDITORIAL_COPY.verticalLabel}
       </p>
     </section>

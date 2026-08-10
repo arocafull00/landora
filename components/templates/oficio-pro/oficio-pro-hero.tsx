@@ -30,16 +30,16 @@ export function OficioProHero({
       <div className="pointer-events-none absolute inset-0 z-[1] bg-black/60" />
       <div className="relative z-[2] mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 lg:pb-12 lg:pt-20">
         <div className="max-w-5xl text-left">
-          <p className="mb-5 text-sm font-bold uppercase tracking-[0.24em] text-[var(--site-accent-bright)]">
+          <p className="mb-5 font-bold uppercase tracking-[0.24em] text-[var(--site-accent-bright)] text-site-content">
             {content.hero.eyebrow}
           </p>
-          <h1 className="mb-8 max-w-5xl text-balance text-5xl font-black uppercase leading-[1.08] tracking-normal text-white md:text-7xl lg:text-[clamp(3.5rem,7vw,5.5rem)]">
+          <h1 className="mb-8 max-w-5xl text-balance font-black uppercase leading-[1.08] tracking-normal text-white text-site-title-lg">
             {content.hero.title}
           </h1>
-          <p className="mb-5 max-w-2xl text-xl font-semibold text-white md:text-2xl">
+          <p className="mb-5 max-w-2xl font-semibold text-white text-site-subtitle">
             {content.hero.subtitle}
           </p>
-          <p className="mb-12 max-w-2xl text-lg font-light leading-relaxed text-white/85 md:text-xl">
+          <p className="mb-12 max-w-2xl font-light leading-relaxed text-white/85 text-site-subtitle">
             {content.hero.description}
           </p>
           <div className="flex flex-col gap-5 sm:flex-row sm:flex-wrap">
@@ -58,7 +58,7 @@ export function OficioProHero({
         className="absolute bottom-8 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-1 text-white/50 transition-colors hover:text-white/80"
         href={secondaryCtaHref}
       >
-        <span className="text-[10px] font-bold uppercase tracking-[0.35em]">
+        <span className="font-bold uppercase tracking-[0.35em] text-site-content">
           Descubrir
         </span>
         <ChevronDown

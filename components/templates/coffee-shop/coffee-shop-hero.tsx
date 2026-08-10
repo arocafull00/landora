@@ -24,14 +24,14 @@ export function CoffeeShopHero({
         >
           {content.hero.eyebrow ? (
             <p
-              className="mb-4 text-sm font-medium text-[var(--coffee-accent)]"
+              className="mb-4 font-medium text-[var(--coffee-accent)] text-site-content"
               style={{ fontFamily: "var(--font-coffee-body)" }}
             >
               {content.hero.eyebrow}
             </p>
           ) : null}
           <h1
-            className="text-balance text-[clamp(40px,8vw,96px)] font-semibold leading-[1.02] text-[var(--coffee-secondary)]"
+            className="text-balance font-semibold leading-[1.02] text-[var(--coffee-secondary)] text-site-title-lg"
             style={{
               fontFamily: "var(--font-coffee-display)",
               letterSpacing: "-0.03em",
@@ -41,7 +41,7 @@ export function CoffeeShopHero({
           </h1>
           {content.hero.subtitle ? (
             <p
-              className="mt-6 max-w-md text-pretty text-lg leading-relaxed text-[var(--coffee-secondary)]/80"
+              className="mt-6 max-w-md text-pretty leading-relaxed text-[var(--coffee-secondary)]/80 text-site-subtitle"
               style={{ fontFamily: "var(--font-coffee-body)" }}
             >
               {content.hero.subtitle}
@@ -49,7 +49,7 @@ export function CoffeeShopHero({
           ) : null}
           {content.hero.description ? (
             <p
-              className="mt-3 max-w-md text-pretty text-sm leading-relaxed text-[var(--coffee-secondary)]/65"
+              className="mt-3 max-w-md text-pretty leading-relaxed text-[var(--coffee-secondary)]/65 text-site-content"
               style={{ fontFamily: "var(--font-coffee-body)" }}
             >
               {content.hero.description}

@@ -22,7 +22,7 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
-          <p className="mb-6 text-xs uppercase tracking-widest text-[var(--site-accent)]">
+          <p className="mb-6 uppercase tracking-widest text-[var(--site-accent)] text-site-content">
             testimonios
           </p>
           <h2
@@ -30,14 +30,13 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
             className="mb-8 font-extrabold leading-tight text-[var(--site-text)]"
             style={{
               fontFamily: "var(--font-syne)",
-              fontSize: "clamp(32px, 5vw, 56px)",
-              letterSpacing: "-0.02em",
+letterSpacing: "-0.02em",
             }}
           >
             {heading.title}
           </h2>
           <div className="mb-4 flex items-center justify-center gap-4">
-            <span className="text-2xl font-bold text-[var(--site-text)]">
+            <span className="font-bold text-[var(--site-text)] text-site-title">
               EXCELENTE
             </span>
             <span className="flex gap-0.5 text-warning" aria-label="5 de 5 estrellas">

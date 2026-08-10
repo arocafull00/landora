@@ -24,7 +24,7 @@ export function VelarServicePanel({
         {service.label && (
           <p
             data-editor-id={`servicios:service:${service.id}:label`}
-            className="mb-3 text-xs font-medium uppercase tracking-widest text-white/90"
+            className="mb-3 font-medium uppercase tracking-widest text-white/90 text-site-content"
             style={{ fontFamily: "var(--font-body)" }}
           >
             {service.label}
@@ -32,7 +32,7 @@ export function VelarServicePanel({
         )}
         <h3
           data-editor-id={`servicios:service:${service.id}:title`}
-          className="mb-2 text-2xl font-bold drop-shadow-lg sm:text-3xl"
+          className="mb-2 font-bold drop-shadow-lg text-site-title"
           style={{ fontFamily: "var(--font-syne)" }}
         >
           {service.title}
@@ -40,7 +40,7 @@ export function VelarServicePanel({
         {service.subtitle && (
           <p
             data-editor-id={`servicios:service:${service.id}:subtitle`}
-            className="text-sm font-medium uppercase tracking-wide text-white/95 drop-shadow-md"
+            className="font-medium uppercase tracking-wide text-white/95 drop-shadow-md text-site-content"
             style={{ fontFamily: "var(--font-body)" }}
           >
             {service.subtitle}

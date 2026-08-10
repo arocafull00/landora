@@ -84,7 +84,7 @@ export function OficioProContactSection({
           />
           <FooterCopyright
             brand={content.brand}
-            className="text-xs text-[var(--site-text-muted)]"
+            className="text-[var(--site-text-muted)] text-site-content"
             contact={content.contact}
             year={copyrightYear}
           />

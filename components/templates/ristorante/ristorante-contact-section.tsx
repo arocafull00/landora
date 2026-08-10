@@ -33,14 +33,14 @@ export function RistoranteContactSection({
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
           <div data-aos="fade-right">
             <h2
-              className="mb-6 text-balance text-[clamp(40px,6vw,72px)] font-normal leading-none text-(--ristorante-foreground)"
+              className="mb-6 text-balance font-normal leading-none text-(--ristorante-foreground) text-site-title"
               style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
             >
               {heading.title}
             </h2>
             {heading.subtitle ? (
               <p
-                className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-[var(--ristorante-foreground)]/80"
+                className="mb-10 max-w-lg text-pretty leading-relaxed text-[var(--ristorante-foreground)]/80 text-site-subtitle"
                 style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
               >
                 {heading.subtitle}
@@ -62,13 +62,13 @@ export function RistoranteContactSection({
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ristorante-accent)]" />
                 <div>
                   <p
-                    className="text-xs font-medium text-[var(--ristorante-foreground)]/75"
+                    className="font-medium text-[var(--ristorante-foreground)]/75 text-site-content"
                     style={{ fontFamily: "var(--font-ristorante-body)" }}
                   >
                     Teléfono
                   </p>
                   <a
-                    className="text-sm text-[var(--ristorante-foreground)]/90 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)]"
+                    className="text-[var(--ristorante-foreground)]/90 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] text-site-content"
                     href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                     data-analytics-event="phone_click"
                   >
@@ -82,13 +82,13 @@ export function RistoranteContactSection({
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ristorante-accent)]" />
                 <div>
                   <p
-                    className="text-xs font-medium text-[var(--ristorante-foreground)]/75"
+                    className="font-medium text-[var(--ristorante-foreground)]/75 text-site-content"
                     style={{ fontFamily: "var(--font-ristorante-body)" }}
                   >
                     Email
                   </p>
                   <a
-                    className="text-sm text-[var(--ristorante-foreground)]/90 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)]"
+                    className="text-[var(--ristorante-foreground)]/90 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] text-site-content"
                     href={`mailto:${content.contact.email}`}
                   >
                     {content.contact.email}
@@ -101,13 +101,13 @@ export function RistoranteContactSection({
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ristorante-accent)]" />
                 <div>
                   <p
-                    className="text-xs font-medium text-[var(--ristorante-foreground)]/75"
+                    className="font-medium text-[var(--ristorante-foreground)]/75 text-site-content"
                     style={{ fontFamily: "var(--font-ristorante-body)" }}
                   >
                     Dirección
                   </p>
                   <p
-                    className="text-sm text-[var(--ristorante-foreground)]/90"
+                    className="text-[var(--ristorante-foreground)]/90 text-site-content"
                     style={{ fontFamily: "var(--font-ristorante-body)" }}
                   >
                     {content.contact.address}
@@ -125,7 +125,7 @@ export function RistoranteContactSection({
           />
           <FooterCopyright
             brand={content.brand}
-            className="text-xs text-[var(--ristorante-foreground)]/30"
+            className="text-[var(--ristorante-foreground)]/30 text-site-content"
             contact={content.contact}
             year={copyrightYear}
           />

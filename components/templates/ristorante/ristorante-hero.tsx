@@ -34,14 +34,14 @@ export function RistoranteHero({
           <div className="max-w-[18ch] lg:max-w-[14ch]">
             {content.hero.eyebrow ? (
               <p
-                className="mb-3 text-sm font-light italic text-[var(--ristorante-foreground)]/85"
+                className="mb-3 font-light italic text-[var(--ristorante-foreground)]/85 text-site-content"
                 style={{ fontFamily: "var(--font-ristorante-display)" }}
               >
                 {content.hero.eyebrow}
               </p>
             ) : null}
             <h1
-              className="text-balance text-[clamp(48px,11vw,96px)] font-normal leading-[0.95] text-[var(--ristorante-foreground)]"
+              className="text-balance font-normal leading-[0.95] text-[var(--ristorante-foreground)] text-site-title-lg"
               style={{
                 fontFamily: "var(--font-ristorante-display)",
                 letterSpacing: "-0.03em",
@@ -51,10 +51,10 @@ export function RistoranteHero({
             </h1>
           </div>
 
-          <div className="flex max-w-md flex-col gap-8 lg:max-w-xs lg:items-end lg:text-right">
+          <div className="flex max-w-md flex-col gap-8 lg:max-w-xs lg:items-end lg:text-right text-site-content">
             {content.hero.subtitle ? (
               <p
-                className="text-pretty text-base leading-relaxed text-[var(--ristorante-foreground)]/85 lg:text-lg"
+                className="text-pretty leading-relaxed text-[var(--ristorante-foreground)]/85 text-site-subtitle"
                 style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
               >
                 {content.hero.subtitle}
@@ -62,7 +62,7 @@ export function RistoranteHero({
             ) : null}
             {content.hero.description ? (
               <p
-                className="text-pretty text-sm leading-relaxed text-[var(--ristorante-foreground)]/70"
+                className="text-pretty leading-relaxed text-[var(--ristorante-foreground)]/70 text-site-content"
                 style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
               >
                 {content.hero.description}

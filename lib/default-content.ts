@@ -10,12 +10,13 @@ import { OFICIO_PRO_ASSETS } from "@/lib/oficio-pro-assets";
 import { COFFEE_SHOP_ASSETS } from "@/lib/coffee-shop-assets";
 import { PALLET_ROSS_ASSETS } from "@/lib/pallet-ross-assets";
 import { SIGNAL_ASSETS } from "@/lib/signal-assets";
+import { DEFAULT_LANDING_APPEARANCE } from "@/lib/site-appearance";
 
 const BG_IMG =
   "https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260603_073200_7082add5-f1f8-4873-8696-d6f78a44089b.png&w=1920&q=85";
 
 export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Toll Story.",
   brandLogoType: "text",
@@ -222,7 +223,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
 };
 
 export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Lumière.",
   brandLogoType: "text",
@@ -342,7 +343,7 @@ export const STUDIO_DEFAULT_CONTENT: TemplateContentMap["studio"] = {
 };
 
 export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Mora.",
   brandLogoType: "text",
@@ -489,7 +490,7 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
 };
 
 export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Osteria da Luca.",
   brandLogoType: "text",
@@ -611,7 +612,7 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
 };
 
 export const COFFEE_SHOP_DEFAULT_CONTENT: TemplateContentMap["coffee-shop"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Grano & Taza.",
   brandLogoType: "text",
@@ -712,7 +713,7 @@ export const COFFEE_SHOP_DEFAULT_CONTENT: TemplateContentMap["coffee-shop"] = {
 };
 
 export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Jardín Secreto.",
   brandLogoType: "text",
@@ -811,7 +812,7 @@ export const FLORISTERIA_DEFAULT_CONTENT: TemplateContentMap["floristeria"] = {
 };
 
 export const OFICIO_PRO_DEFAULT_CONTENT: TemplateContentMap["oficio-pro"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Oficio Pro",
   brandLogoType: "text",
@@ -966,7 +967,7 @@ export const OFICIO_PRO_DEFAULT_CONTENT: TemplateContentMap["oficio-pro"] = {
 };
 
 export const SIGNAL_DEFAULT_CONTENT: TemplateContentMap["signal"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Nova.",
   brandLogoType: "text",
@@ -1085,7 +1086,7 @@ export const SIGNAL_DEFAULT_CONTENT: TemplateContentMap["signal"] = {
 };
 
 export const PALLET_ROSS_DEFAULT_CONTENT: TemplateContentMap["pallet-ross"] = {
-  appearance: { paletteId: "default", typographyId: "default" },
+  appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
   brand: "Pallet Ross",
   brandLogoType: "text",

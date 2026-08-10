@@ -23,22 +23,22 @@ export function StudioTeamMember({
             src={member.image}
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-4xl font-bold text-[var(--site-primary)]/30">
+          <div className="flex h-full items-center justify-center font-bold text-[var(--site-primary)]/30 text-site-title">
             {member.name.charAt(0)}
           </div>
         )}
       </div>
       <h3
-        className="text-lg font-bold text-[var(--site-text)]"
+        className="font-bold text-[var(--site-text)] text-site-title"
         style={{ fontFamily: "var(--font-syne)" }}
       >
         {member.name}
       </h3>
       {member.role && (
-        <p className="mt-1 text-sm font-medium text-[var(--site-primary)]">{member.role}</p>
+        <p className="mt-1 font-medium text-[var(--site-primary)] text-site-content">{member.role}</p>
       )}
       {member.bio && (
-        <p className="mt-3 text-sm leading-relaxed text-[var(--site-text-muted)]">{member.bio}</p>
+        <p className="mt-3 leading-relaxed text-[var(--site-text-muted)] text-site-content">{member.bio}</p>
       )}
     </article>
   );

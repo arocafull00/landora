@@ -19,7 +19,7 @@ export function StudioTestimonialsSection({ content }: { content: LandingContent
             &ldquo;
           </span>
           <blockquote
-            className="mb-8 max-w-4xl text-pretty text-xl font-light leading-relaxed text-white sm:text-2xl md:text-[clamp(22px,2.8vw,32px)]"
+            className="mb-8 max-w-4xl text-pretty font-light leading-relaxed text-white text-site-subtitle"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
             {featured.comment}
@@ -30,9 +30,9 @@ export function StudioTestimonialsSection({ content }: { content: LandingContent
                 <Star className="h-4 w-4 fill-[var(--site-primary)] text-[var(--site-primary)]" key={i} />
               ))}
             </div>
-            <p className="text-sm font-semibold text-white">{featured.author}</p>
+            <p className="font-semibold text-white text-site-content">{featured.author}</p>
             {featured.verified && (
-              <span className="text-xs text-[var(--site-primary)]">Verificado</span>
+              <span className="text-[var(--site-primary)] text-site-content">Verificado</span>
             )}
           </div>
         </div>

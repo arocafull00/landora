@@ -20,7 +20,7 @@ export function ChatBubble({
 }) {
   return (
     <motion.div
-      className="absolute z-20 font-heading text-[15px] font-semibold text-white"
+      className="absolute z-20 font-heading font-semibold text-white text-site-content"
       style={{
         ...positionStyle,
         background,

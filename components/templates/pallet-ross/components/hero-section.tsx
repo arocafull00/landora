@@ -35,7 +35,7 @@ export function HeroSection() {
         style={{ paddingTop: 140 }}
       >
         <h1
-          className="max-w-[1100px] font-heading text-[96px] font-extrabold leading-none text-[var(--site-text)]"
+          className="max-w-[1100px] font-heading font-extrabold leading-none text-[var(--site-text)] text-site-title-lg"
           style={{ letterSpacing: "-3px" }}
         >
           <span className="block">
@@ -87,7 +87,7 @@ export function HeroSection() {
         </div>
 
         <motion.p
-          className="max-w-[480px] font-body text-base font-normal leading-relaxed text-[var(--site-text-muted)]"
+          className="max-w-[480px] font-body font-normal leading-relaxed text-[var(--site-text-muted)] text-site-content"
           style={{ marginTop: 48 }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

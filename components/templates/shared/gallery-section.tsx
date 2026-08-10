@@ -23,14 +23,14 @@ export function GallerySection({
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 border-b border-[var(--site-primary)]/10 pb-8" data-aos="fade-up">
           <h2
-            className="text-balance text-3xl font-extrabold text-[var(--site-text)] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
+            className="text-balance font-extrabold text-[var(--site-text)] text-site-title"
             style={{ fontFamily: "var(--font-cormorant)", letterSpacing: "-0.02em" }}
           >
             {heading.title}
           </h2>
           {heading.subtitle ? (
             <p
-              className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-[var(--site-text)]/60"
+              className="mt-4 max-w-lg text-pretty leading-relaxed text-[var(--site-text)]/60 text-site-content"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heading.subtitle}

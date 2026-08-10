@@ -10,22 +10,20 @@ export function VelarStatItem({ stat }: { stat: StatContent }) {
     <div>
       <div
         data-editor-id={`story:stat:${stat.id}:value`}
-        className="text-white leading-[1.1]"
+        className="text-white leading-[1.1] text-site-title"
         style={{
           fontFamily: "var(--font-body)",
           fontWeight: 300,
-          fontSize: "clamp(36px, 4.5vw, 72px)",
         }}
       >
         {displayValue}
       </div>
       <div
         data-editor-id={`story:stat:${stat.id}:label`}
-        className="mt-[clamp(4px,0.5vw,8px)] text-white/60"
+        className="mt-[clamp(4px,0.5vw,8px)] text-white/60 text-site-content"
         style={{
           fontFamily: "var(--font-body)",
           fontWeight: 400,
-          fontSize: "clamp(12px, 1.1vw, 16px)",
           letterSpacing: "0.01em",
         }}
       >

@@ -16,7 +16,7 @@ export function PalletRossContactSection({
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-10 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 className="font-heading text-3xl font-bold text-white">
+          <h2 className="font-heading font-bold text-white text-site-title">
             {content.contact.ctaLabel ?? "Get in touch"}
           </h2>
           {content.contact.phone ? (

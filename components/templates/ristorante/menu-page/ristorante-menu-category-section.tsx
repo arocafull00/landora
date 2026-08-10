@@ -13,13 +13,13 @@ export function RistoranteMenuCategorySection({
       <div className="mb-7 flex items-end justify-between gap-6 border-b border-[var(--site-border)] pb-5">
         <div>
           <p
-            className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--ristorante-accent)]"
+            className="mb-2 font-bold uppercase tracking-[0.16em] text-[var(--ristorante-accent)] text-site-content"
             style={{ fontFamily: "var(--font-ristorante-body)" }}
           >
             Selección de la casa
           </p>
           <h2
-            className="text-balance text-[clamp(38px,5vw,58px)] font-normal leading-none text-[var(--site-text)]"
+            className="text-balance font-normal leading-none text-[var(--site-text)] text-site-title"
             id={headingId}
             style={{
               fontFamily: "var(--font-ristorante-display)",
@@ -30,7 +30,7 @@ export function RistoranteMenuCategorySection({
           </h2>
         </div>
         <p
-          className="hidden text-sm text-[var(--site-text-muted)] sm:block"
+          className="hidden text-[var(--site-text-muted)] sm:block text-site-content"
           style={{ fontFamily: "var(--font-ristorante-body)" }}
         >
           {group.items.length} {group.items.length === 1 ? "plato" : "platos"}

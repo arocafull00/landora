@@ -29,7 +29,7 @@ export function RistoranteMenuCard({
       <div className="flex min-w-0 flex-col p-6">
         <div className="flex items-start justify-between gap-5">
           <h3
-            className="text-balance text-2xl font-normal leading-tight text-[var(--site-text)]"
+            className="text-balance font-normal leading-tight text-[var(--site-text)] text-site-title"
             style={{
               fontFamily: "var(--font-ristorante-display)",
               letterSpacing: "-0.025em",
@@ -38,7 +38,7 @@ export function RistoranteMenuCard({
             {service.name}
           </h3>
           <p
-            className="shrink-0 text-lg font-bold text-[var(--ristorante-accent)]"
+            className="shrink-0 font-bold text-[var(--ristorante-accent)] text-site-subtitle"
             style={{ fontFamily: "var(--font-ristorante-body)" }}
           >
             {service.price}
@@ -46,7 +46,7 @@ export function RistoranteMenuCard({
         </div>
         {service.description ? (
           <p
-            className="mt-4 text-sm leading-7 text-[var(--site-text-muted)]"
+            className="mt-4 leading-7 text-[var(--site-text-muted)] text-site-content"
             style={{
               fontFamily: "var(--font-ristorante-body)",
               fontWeight: 300,

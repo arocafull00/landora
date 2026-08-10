@@ -27,14 +27,14 @@ export function CoffeeShopMenuSection({ content }: { content: LandingContent }) 
       <div className="mx-auto max-w-6xl">
         <div className="mb-14 max-w-2xl" data-aos="fade-up">
           <h2
-            className="text-balance text-[clamp(32px,5vw,56px)] font-semibold leading-[1.05] text-[var(--coffee-secondary)]"
+            className="text-balance font-semibold leading-[1.05] text-[var(--coffee-secondary)] text-site-title"
             style={{ fontFamily: "var(--font-coffee-display)", letterSpacing: "-0.03em" }}
           >
             {heading.title}
           </h2>
           {heading.subtitle ? (
             <p
-              className="mt-4 max-w-lg text-pretty text-base leading-relaxed text-[var(--coffee-secondary)]/75"
+              className="mt-4 max-w-lg text-pretty leading-relaxed text-[var(--coffee-secondary)]/75 text-site-content"
               style={{ fontFamily: "var(--font-coffee-body)" }}
             >
               {heading.subtitle}
@@ -47,7 +47,7 @@ export function CoffeeShopMenuSection({ content }: { content: LandingContent }) 
             {categories.map((category) => (
               <div key={category}>
                 <h3
-                  className="mb-4 text-xl font-semibold text-[var(--coffee-primary)]"
+                  className="mb-4 font-semibold text-[var(--coffee-primary)] text-site-title"
                   style={{ fontFamily: "var(--font-coffee-display)" }}
                 >
                   {category}

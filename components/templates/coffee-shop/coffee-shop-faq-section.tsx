@@ -16,14 +16,14 @@ export function CoffeeShopFaqSection({ content }: { content: LandingContent }) {
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
         <div data-aos="fade-right">
           <h2
-            className="text-balance text-[clamp(32px,5vw,48px)] font-semibold leading-[1.05] text-[var(--coffee-secondary)]"
+            className="text-balance font-semibold leading-[1.05] text-[var(--coffee-secondary)] text-site-title"
             style={{ fontFamily: "var(--font-coffee-display)", letterSpacing: "-0.03em" }}
           >
             {heading.title}
           </h2>
           {heading.subtitle ? (
             <p
-              className="mt-4 max-w-sm text-pretty text-base leading-relaxed text-[var(--coffee-secondary)]/75"
+              className="mt-4 max-w-sm text-pretty leading-relaxed text-[var(--coffee-secondary)]/75 text-site-content"
               style={{ fontFamily: "var(--font-coffee-body)" }}
             >
               {heading.subtitle}

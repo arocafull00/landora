@@ -33,14 +33,14 @@ export function CoffeeShopContactSection({
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
           <div data-aos="fade-right">
             <h2
-              className="mb-6 text-balance text-[clamp(36px,6vw,72px)] font-semibold leading-[1.02] text-[var(--coffee-foreground)]"
+              className="mb-6 text-balance font-semibold leading-[1.02] text-[var(--coffee-foreground)] text-site-title"
               style={{ fontFamily: "var(--font-coffee-display)", letterSpacing: "-0.03em" }}
             >
               {heading.title}
             </h2>
             {heading.subtitle ? (
               <p
-                className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-[var(--coffee-foreground)]/80"
+                className="mb-10 max-w-lg text-pretty leading-relaxed text-[var(--coffee-foreground)]/80 text-site-subtitle"
                 style={{ fontFamily: "var(--font-coffee-body)" }}
               >
                 {heading.subtitle}
@@ -62,13 +62,13 @@ export function CoffeeShopContactSection({
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--coffee-accent)]" />
                 <div>
                   <p
-                    className="text-xs font-medium text-[var(--coffee-foreground)]/75"
+                    className="font-medium text-[var(--coffee-foreground)]/75 text-site-content"
                     style={{ fontFamily: "var(--font-coffee-body)" }}
                   >
                     Teléfono
                   </p>
                   <a
-                    className="text-sm text-[var(--coffee-foreground)]/90 transition-colors hover:text-[var(--coffee-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)]"
+                    className="text-[var(--coffee-foreground)]/90 transition-colors hover:text-[var(--coffee-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] text-site-content"
                     href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                     data-analytics-event="phone_click"
                   >
@@ -82,13 +82,13 @@ export function CoffeeShopContactSection({
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--coffee-accent)]" />
                 <div>
                   <p
-                    className="text-xs font-medium text-[var(--coffee-foreground)]/75"
+                    className="font-medium text-[var(--coffee-foreground)]/75 text-site-content"
                     style={{ fontFamily: "var(--font-coffee-body)" }}
                   >
                     Email
                   </p>
                   <a
-                    className="text-sm text-[var(--coffee-foreground)]/90 transition-colors hover:text-[var(--coffee-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)]"
+                    className="text-[var(--coffee-foreground)]/90 transition-colors hover:text-[var(--coffee-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--coffee-accent)] text-site-content"
                     href={`mailto:${content.contact.email}`}
                   >
                     {content.contact.email}
@@ -101,13 +101,13 @@ export function CoffeeShopContactSection({
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--coffee-accent)]" />
                 <div>
                   <p
-                    className="text-xs font-medium text-[var(--coffee-foreground)]/75"
+                    className="font-medium text-[var(--coffee-foreground)]/75 text-site-content"
                     style={{ fontFamily: "var(--font-coffee-body)" }}
                   >
                     Dirección
                   </p>
                   <p
-                    className="text-sm text-[var(--coffee-foreground)]/90"
+                    className="text-[var(--coffee-foreground)]/90 text-site-content"
                     style={{ fontFamily: "var(--font-coffee-body)" }}
                   >
                     {content.contact.address}

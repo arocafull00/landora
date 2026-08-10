@@ -23,11 +23,11 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
   const categories = [...servicesByCategory.keys()];
 
   return (
-    <section id="servicios" className="scroll-mt-24 bg-[var(--site-surface)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-16 border-b border-[var(--site-border)] pb-8" data-aos="fade-up">
+    <section id="servicios" className="scroll-mt-24 bg-(--site-surface) px-6 py-24 md:px-10 md:py-32 lg:px-16">
+      <div className="max-w-5xl mx-auto">
+        <div className="mb-16 border-b border-(--site-border) pb-8" data-aos="fade-up">
           <h2
-            className="text-balance text-3xl font-extrabold text-[var(--site-text)] sm:text-4xl md:text-[clamp(32px,5vw,48px)]"
+            className="text-balance font-extrabold text-(--site-text) text-site-title"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.02em" }}
           >
             {heading.title}
@@ -43,7 +43,7 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
               key={category}
             >
               <h3
-                className="mb-8 border-b border-[var(--site-border)] pb-3 text-lg font-bold text-[var(--site-text)]"
+                className="mb-8 border-b border-[var(--site-border)] pb-3 font-bold text-[var(--site-text)] text-site-title"
                 style={{ fontFamily: "var(--font-syne)" }}
               >
                 {category}
@@ -56,19 +56,19 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
                     >
                       <div className="min-w-0 flex-1 pr-4">
                         <p
-                          className="text-base font-semibold text-[var(--site-text)]"
+                          className="font-semibold text-[var(--site-text)] text-site-content"
                           style={{ fontFamily: "var(--font-body)" }}
                         >
                           {service.name}
                         </p>
                         {service.description && (
-                          <p className="mt-0.5 text-sm text-[var(--site-text-muted)]">
+                          <p className="mt-0.5 text-[var(--site-text-muted)] text-site-content">
                             {service.description}
                           </p>
                         )}
                       </div>
                       <span
-                        className="shrink-0 text-base font-bold text-[var(--site-text)]"
+                        className="shrink-0 font-bold text-[var(--site-text)] text-site-content"
                         style={{ fontFamily: "var(--font-body)" }}
                       >
                         {service.price}
@@ -86,16 +86,16 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
                 key={service.id}
               >
                 <div className="min-w-0 flex-1 pr-4">
-                  <p className="text-base font-semibold text-[var(--site-text)]">
+                  <p className="font-semibold text-[var(--site-text)] text-site-content">
                     {service.name}
                   </p>
                   {service.description && (
-                    <p className="mt-0.5 text-sm text-[var(--site-text-muted)]">
+                    <p className="mt-0.5 text-[var(--site-text-muted)] text-site-content">
                       {service.description}
                     </p>
                   )}
                 </div>
-                <span className="shrink-0 text-base font-bold text-[var(--site-text)]">
+                <span className="shrink-0 font-bold text-[var(--site-text)] text-site-content">
                   {service.price}
                 </span>
               </div>

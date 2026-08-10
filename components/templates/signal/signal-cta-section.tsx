@@ -46,25 +46,25 @@ export function SignalCtaSection({
       ) : null}
       <div className="relative z-10">
         <p
-          className="text-[10px] uppercase tracking-[0.24em] text-[var(--site-accent)]"
+          className="uppercase tracking-[0.24em] text-[var(--site-accent)] text-site-content"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {SIGNAL_CHROME.availableNow}
         </p>
         <h2
-          className="mt-6 max-w-3xl text-[clamp(2.8rem,10vw,7rem)] font-bold uppercase leading-[0.9] tracking-[-0.05em]"
+          className="mt-6 max-w-3xl font-bold uppercase leading-[0.9] tracking-[-0.05em] text-site-title"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
           {brand.replace(/\.+$/, "")}
         </h2>
         <p
-          className="mt-4 text-sm uppercase tracking-[0.18em] text-[var(--site-on-dark)]/70"
+          className="mt-4 uppercase tracking-[0.18em] text-[var(--site-on-dark)]/70 text-site-content"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {heading.title}
         </p>
         <p
-          className="mt-3 max-w-md text-base text-[var(--site-on-dark)]/65"
+          className="mt-3 max-w-md text-[var(--site-on-dark)]/65 text-site-content"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {heading.subtitle || content.hero.subtitle}
@@ -76,7 +76,7 @@ export function SignalCtaSection({
           />
         </div>
         <p
-          className="mt-6 text-[11px] uppercase tracking-[0.18em] text-[var(--site-on-dark)]/40"
+          className="mt-6 uppercase tracking-[0.18em] text-[var(--site-on-dark)]/40 text-site-content"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {content.contact.email}

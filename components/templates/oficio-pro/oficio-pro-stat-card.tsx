@@ -15,10 +15,10 @@ export function OficioProStatCard({
   return (
     <article className="rounded-2xl border border-[var(--site-primary)]/10 bg-[var(--site-surface)] p-5 shadow-[0_10px_28px_rgba(31,78,121,0.08)]">
       <Icon className="mb-6 size-8 text-[var(--site-primary)]" />
-      <p className="text-4xl font-black uppercase leading-none tracking-normal text-[var(--site-text)]">
+      <p className="font-black uppercase leading-none tracking-normal text-[var(--site-text)] text-site-subtitle">
         {stat.value}
       </p>
-      <p className="mt-3 text-sm font-semibold text-[var(--site-text-muted)]">{stat.label}</p>
+      <p className="mt-3 font-semibold text-[var(--site-text-muted)] text-site-content">{stat.label}</p>
     </article>
   );
 }

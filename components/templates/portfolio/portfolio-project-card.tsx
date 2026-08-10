@@ -78,12 +78,12 @@ export function PortfolioProjectCard({
       {showText ? (
         <div className="pointer-events-none absolute bottom-0 left-0 z-10 w-full p-5 opacity-100 transition-[opacity,transform] duration-500 ease-out group-hover:translate-y-2 group-hover:opacity-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 md:p-6">
           {item.title ? (
-            <h3 className="mb-1 text-lg font-bold text-white md:text-xl">
+            <h3 className="mb-1 font-bold text-white text-site-title">
               {item.title}
             </h3>
           ) : null}
           {item.description ? (
-            <p className="mb-3 text-sm text-white/70 line-clamp-2">
+            <p className="mb-3 text-white/70 line-clamp-2 text-site-content">
               {item.description}
             </p>
           ) : null}
@@ -91,7 +91,7 @@ export function PortfolioProjectCard({
             <div className="flex flex-wrap gap-1.5">
               {item.tags.map((tag) => (
                 <span
-                  className="inline-flex items-center rounded-full border border-white/10 bg-black/30 px-2.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-widest text-white/90 backdrop-blur-md"
+                  className="inline-flex items-center rounded-full border border-white/10 bg-black/30 px-2.5 py-0.5 font-bold uppercase tracking-widest text-white/90 backdrop-blur-md text-site-content"
                   key={tag}
                 >
                   {tag}
@@ -106,7 +106,7 @@ export function PortfolioProjectCard({
 
       {tour ? (
         <a
-          className="absolute bottom-4 right-4 z-20 inline-flex items-center gap-2 rounded-full bg-portfolio-accent px-4 py-2 text-xs font-bold text-portfolio-accent-ink shadow-lg transition-[background-color,transform] duration-300 hover:bg-[var(--portfolio-accent-hover)] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-accent focus-visible:ring-offset-2 md:bottom-6 md:right-6"
+          className="absolute bottom-4 right-4 z-20 inline-flex items-center gap-2 rounded-full bg-portfolio-accent px-4 py-2 font-bold text-portfolio-accent-ink shadow-lg transition-[background-color,transform] duration-300 hover:bg-[var(--portfolio-accent-hover)] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-accent focus-visible:ring-offset-2 md:bottom-6 md:right-6 text-site-button"
           href={tour.href}
           rel="noopener noreferrer"
           target="_blank"

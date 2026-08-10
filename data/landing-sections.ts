@@ -99,6 +99,10 @@ export async function upsertLandingBranding(
     brandLogoImage?: string;
     paletteId?: string;
     typographyId?: string;
+    buttonTextSize?: string;
+    titleTextSize?: string;
+    subtitleTextSize?: string;
+    contentTextSize?: string;
     sectionHeadings?: Record<string, { title: string; subtitle: string }>;
     hiddenSections?: string[];
     sectionOrder?: string[];
@@ -112,6 +116,10 @@ export async function upsertLandingBranding(
       brandLogoImage?: string;
       paletteId?: string;
       typographyId?: string;
+      buttonTextSize?: string;
+      titleTextSize?: string;
+      subtitleTextSize?: string;
+      contentTextSize?: string;
       sectionHeadings?: Record<string, { title: string; subtitle: string }>;
       hiddenSections?: string[];
       sectionOrder?: string[];
@@ -130,6 +138,18 @@ export async function upsertLandingBranding(
     }
     if (data.typographyId !== undefined) {
       set.typographyId = data.typographyId;
+    }
+    if (data.buttonTextSize !== undefined) {
+      set.buttonTextSize = data.buttonTextSize;
+    }
+    if (data.titleTextSize !== undefined) {
+      set.titleTextSize = data.titleTextSize;
+    }
+    if (data.subtitleTextSize !== undefined) {
+      set.subtitleTextSize = data.subtitleTextSize;
+    }
+    if (data.contentTextSize !== undefined) {
+      set.contentTextSize = data.contentTextSize;
     }
     if (data.sectionHeadings !== undefined) {
       set.sectionHeadings = data.sectionHeadings;
@@ -152,6 +172,10 @@ export async function upsertLandingBranding(
         brandLogoImage: data.brandLogoImage ?? "",
         paletteId: data.paletteId ?? "default",
         typographyId: data.typographyId ?? "default",
+        buttonTextSize: data.buttonTextSize ?? "default",
+        titleTextSize: data.titleTextSize ?? "default",
+        subtitleTextSize: data.subtitleTextSize ?? "default",
+        contentTextSize: data.contentTextSize ?? "default",
         sectionHeadings: data.sectionHeadings ?? {},
         hiddenSections: data.hiddenSections ?? [],
         sectionOrder: data.sectionOrder ?? [],
@@ -168,6 +192,10 @@ export async function updateLandingAppearance(
   data: {
     paletteId: string;
     typographyId: string;
+    buttonTextSize: string;
+    titleTextSize: string;
+    subtitleTextSize: string;
+    contentTextSize: string;
   },
 ) {
   try {
@@ -178,6 +206,10 @@ export async function updateLandingAppearance(
         brand: "",
         paletteId: data.paletteId,
         typographyId: data.typographyId,
+        buttonTextSize: data.buttonTextSize,
+        titleTextSize: data.titleTextSize,
+        subtitleTextSize: data.subtitleTextSize,
+        contentTextSize: data.contentTextSize,
       })
       .onConflictDoUpdate({
         target: landingBranding.landingId,

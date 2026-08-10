@@ -19,10 +19,10 @@ export function OficioProContactItem({
         <Icon className="size-5" />
       </div>
       <div className="min-w-0">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--site-primary)]">
+        <p className="font-bold uppercase tracking-[0.16em] text-[var(--site-primary)] text-site-content">
           {label}
         </p>
-        <p className="mt-1 break-words text-sm font-semibold text-[var(--site-text)]">
+        <p className="mt-1 break-words font-semibold text-[var(--site-text)] text-site-content">
           {value}
         </p>
       </div>

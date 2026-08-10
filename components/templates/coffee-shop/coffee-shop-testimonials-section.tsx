@@ -25,21 +25,21 @@ export function CoffeeShopTestimonialsSection({ content }: { content: LandingCon
                 ))}
               </div>
               <p
-                className="flex-1 text-pretty text-sm leading-relaxed text-[var(--coffee-secondary)]/85"
+                className="flex-1 text-pretty leading-relaxed text-[var(--coffee-secondary)]/85 text-site-content"
                 style={{ fontFamily: "var(--font-coffee-body)" }}
               >
                 {testimonial.comment}
               </p>
               <footer className="mt-6 flex items-center justify-between gap-3">
                 <cite
-                  className="text-sm font-semibold not-italic text-[var(--coffee-secondary)]"
+                  className="font-semibold not-italic text-[var(--coffee-secondary)] text-site-content"
                   style={{ fontFamily: "var(--font-coffee-body)" }}
                 >
                   {testimonial.author}
                 </cite>
                 {testimonial.verified ? (
                   <span
-                    className="text-xs text-[var(--coffee-accent)]"
+                    className="text-[var(--coffee-accent)] text-site-content"
                     style={{ fontFamily: "var(--font-coffee-body)" }}
                   >
                     Verificado

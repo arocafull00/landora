@@ -23,7 +23,7 @@ export function TagBubble({
   if (animateJelly) {
     return (
       <motion.div
-        className="absolute z-20 font-heading text-[15px] font-semibold text-white"
+        className="absolute z-20 font-heading font-semibold text-white text-site-content"
         style={{
           ...positionStyle,
           background,
@@ -43,7 +43,7 @@ export function TagBubble({
 
   return (
     <motion.div
-      className="absolute z-20 font-heading text-[15px] font-semibold text-white"
+      className="absolute z-20 font-heading font-semibold text-white text-site-content"
       style={{
         ...positionStyle,
         background,

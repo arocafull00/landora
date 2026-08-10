@@ -36,7 +36,7 @@ export function EcommerceSection() {
     >
       <div style={{ width: 520, paddingTop: 32 }}>
         <motion.div
-          className="mb-5 font-heading text-[11px] font-medium tracking-[2.5px] text-[var(--site-text-subtle)]"
+          className="mb-5 font-heading font-medium tracking-[2.5px] text-[var(--site-text-subtle)] text-site-content"
           initial={{ opacity: 0, filter: "blur(8px)", y: 16 }}
           whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -45,7 +45,7 @@ export function EcommerceSection() {
           {ecommerce.eyebrow}
         </motion.div>
 
-        <h2 className="m-0 font-heading text-[60px] font-extrabold leading-[1.05] tracking-[-1.5px]">
+        <h2 className="m-0 font-heading font-extrabold leading-[1.05] tracking-[-1.5px] text-site-title">
           {[0, 1, 2].map((lineIndex) => (
             <span
               key={lineIndex}
@@ -79,7 +79,7 @@ export function EcommerceSection() {
         </h2>
 
         <motion.p
-          className="mt-7 max-w-[340px] font-body text-[15px] font-normal leading-[1.65] text-[var(--site-text-muted)]"
+          className="mt-7 max-w-[340px] font-body font-normal leading-[1.65] text-[var(--site-text-muted)] text-site-content"
           initial={{ opacity: 0, filter: "blur(8px)", y: 16 }}
           whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           viewport={{ once: true, margin: "-80px" }}

@@ -24,12 +24,12 @@ export function OficioProTestimonialCard({
           />
         ))}
       </div>
-      <p className={`text-pretty leading-relaxed ${featured ? "text-lg text-white/90" : "text-sm text-[var(--site-text-muted)]"}`}>
+      <p className={`text-pretty leading-relaxed ${featured ? " text-white/90" : " text-[var(--site-text-muted)]"} text-site-subtitle`}>
         {item.comment}
       </p>
       <div className="mt-6">
         <p className="font-bold">{item.author}</p>
-        <p className={`text-xs ${featured ? "text-white/65" : "text-[var(--site-primary)]"}`}>
+        <p className={`${featured ? "text-white/65" : "text-[var(--site-primary)]"} text-site-content`}>
           {item.verified ? "Cliente verificado" : item.date}
         </p>
       </div>

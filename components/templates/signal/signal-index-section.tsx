@@ -41,14 +41,14 @@ export function SignalIndexSection({ content }: { content: LandingContent }) {
         </div>
       ) : null}
       <p
-        className="relative z-10 mb-10 text-[10px] uppercase tracking-[0.24em] text-[var(--site-accent)]"
+        className="relative z-10 mb-10 uppercase tracking-[0.24em] text-[var(--site-accent)] text-site-content"
         style={{ fontFamily: "var(--site-font-body)" }}
       >
         {heading.title}
       </p>
       <div className="relative z-10 grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <p
-          className="text-[clamp(6rem,28vw,16rem)] font-bold leading-none tracking-[-0.08em] text-[var(--site-on-dark)]"
+          className="font-bold leading-none tracking-[-0.08em] text-[var(--site-on-dark)] text-site-content"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
           {mark}

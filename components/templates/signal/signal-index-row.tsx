@@ -11,13 +11,13 @@ export function SignalIndexRow({
       data-signal-index-row
     >
       <span
-        className="text-[11px] uppercase tracking-[0.2em] text-[var(--site-on-dark)]/55"
+        className="uppercase tracking-[0.2em] text-[var(--site-on-dark)]/55 text-site-content"
         style={{ fontFamily: "var(--site-font-body)" }}
       >
         {item.title}
       </span>
       <span
-        className="text-right text-sm font-semibold uppercase tracking-[0.08em] tabular-nums md:text-base"
+        className="text-right font-semibold uppercase tracking-[0.08em] tabular-nums text-site-content"
         style={{ fontFamily: "var(--site-font-display)" }}
       >
         {item.description}

@@ -36,14 +36,14 @@ export function PortfolioHero({
             right
           />
           {content.hero.eyebrow ? (
-            <p className="max-w-sm text-sm leading-6 text-portfolio-ink-muted">
+            <p className="max-w-sm leading-6 text-portfolio-ink-muted text-site-content">
               {content.hero.eyebrow}
             </p>
           ) : (
             <span />
           )}
           <h1
-            className="max-w-[12ch] text-balance text-[clamp(2rem,14vw,3.5rem)] font-bold leading-[0.92] tracking-[-0.035em] wrap-anywhere md:text-[clamp(3rem,7.5vw,5rem)] md:leading-[0.9]"
+            className="max-w-[12ch] text-balance font-bold leading-[0.92] tracking-[-0.035em] wrap-anywhere md:leading-[0.9] text-site-title-lg"
             style={{ fontFamily: "var(--font-syne)" }}
           >
             {content.hero.title}
@@ -68,7 +68,7 @@ export function PortfolioHero({
               src={heroImage}
             />
           ) : (
-            <div className="flex h-full items-end p-5 text-sm leading-6 text-portfolio-ink-muted sm:p-6 md:p-8 md:text-base">
+            <div className="flex h-full items-end p-5 leading-6 text-portfolio-ink-muted sm:p-6 md:p-8 text-site-subtitle">
               {content.hero.description || content.hero.subtitle}
             </div>
           )}
@@ -79,7 +79,7 @@ export function PortfolioHero({
             bottom
             right
           />
-          <span className="max-w-[30ch] text-pretty text-sm leading-6 text-portfolio-ink-muted">
+          <span className="max-w-[30ch] text-pretty leading-6 text-portfolio-ink-muted text-site-content">
             {content.hero.description}
           </span>
           <ArrowDownRight
@@ -111,11 +111,11 @@ export function PortfolioHero({
             bottom
             right
           />
-          <p className="max-w-[28ch] text-pretty text-sm leading-6 sm:text-base sm:leading-7">
+          <p className="max-w-[28ch] text-pretty leading-6 sm:leading-7 text-site-subtitle">
             {content.hero.subtitle}
           </p>
           <TemplateNavAnchor
-            className="group flex min-h-11 items-center justify-between gap-6 text-lg font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-accent-ink"
+            className="group flex min-h-11 items-center justify-between gap-6 font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-accent-ink text-site-button"
             href={ctaHref}
             data-analytics-event="cta_click"
           >

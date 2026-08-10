@@ -1,6 +1,6 @@
 "use client";
 
-import type { Landing } from "@/lib/dashboard-data";
+import type { Landing, TextSizePreset } from "@/lib/dashboard-data";
 import {
   TEMPLATE_PALETTE_OPTIONS,
   TYPOGRAPHY_OPTIONS,
@@ -20,6 +20,18 @@ export function useAppearanceEditor(landing: Landing) {
     },
     selectTypography: (typographyId: string) => {
       updateAppearance(landing.id, { typographyId });
+    },
+    selectButtonTextSize: (buttonTextSize: TextSizePreset) => {
+      updateAppearance(landing.id, { buttonTextSize });
+    },
+    selectTitleTextSize: (titleTextSize: TextSizePreset) => {
+      updateAppearance(landing.id, { titleTextSize });
+    },
+    selectSubtitleTextSize: (subtitleTextSize: TextSizePreset) => {
+      updateAppearance(landing.id, { subtitleTextSize });
+    },
+    selectContentTextSize: (contentTextSize: TextSizePreset) => {
+      updateAppearance(landing.id, { contentTextSize });
     },
   };
 }

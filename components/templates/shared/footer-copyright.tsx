@@ -13,7 +13,7 @@ export function FooterCopyright({
   brand,
   contact,
   year,
-  className = "text-xs text-white/30",
+  className = "text-white/30 text-site-content",
   extraClassName,
 }: FooterCopyrightProps) {
   const extra = contact.copyrightExtra?.trim();

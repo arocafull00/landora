@@ -32,28 +32,28 @@ export function StudioHero({
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1360px] flex-col px-6 pb-10 pt-24 md:px-10 lg:px-12 lg:pb-14 lg:pt-28">
         <p
-          className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--site-accent-bright)] sm:text-sm"
+          className="mb-6 font-semibold uppercase tracking-[0.2em] text-[var(--site-accent-bright)] text-site-content"
           style={{ fontFamily: "var(--font-syne)" }}
         >
           {content.hero.eyebrow}
         </p>
 
         <h1
-          className="max-w-4xl text-[clamp(44px,2vw,110px)] font-black uppercase leading-[0.92] text-white"
+          className="max-w-4xl font-black uppercase leading-[0.92] text-white text-site-title-lg"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.035em" }}
         >
           {content.hero.title}
         </h1>
 
         <p
-          className="mt-2 max-w-4xl text-[clamp(36px,2vw,92px)] font-black uppercase leading-[0.9] text-[var(--site-accent-bright)]"
+          className="mt-2 max-w-4xl font-black uppercase leading-[0.9] text-[var(--site-accent-bright)] text-site-title-lg"
           style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
         >
           {content.hero.subtitle}
         </p>
 
         <p
-          className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:text-xl"
+          className="mt-6 max-w-2xl leading-relaxed text-white/85 text-site-subtitle"
           style={{ fontFamily: "var(--font-body)" }}
         >
           {description}
@@ -63,7 +63,7 @@ export function StudioHero({
           className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
         >
           <a
-            className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--site-accent-bright)] px-7 py-3.5 text-sm font-bold uppercase tracking-[0.08em] text-black transition hover:bg-[var(--site-accent-bright)]"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-[var(--site-accent-bright)] px-7 py-3.5 font-bold uppercase tracking-[0.08em] text-black transition hover:bg-[var(--site-accent-bright)] text-site-button"
             href={ctaHref}
             style={{ fontFamily: "var(--font-syne)" }}
             data-analytics-event="cta_click"
@@ -73,7 +73,7 @@ export function StudioHero({
           </a>
 
           <a
-            className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--site-accent-bright)]/60 bg-black/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-[var(--site-accent-soft)] transition hover:bg-[var(--site-accent-bright)]/10"
+            className="inline-flex items-center justify-center gap-2 rounded-md border border-[var(--site-accent-bright)]/60 bg-black/25 px-7 py-3.5 font-semibold uppercase tracking-[0.08em] text-[var(--site-accent-soft)] transition hover:bg-[var(--site-accent-bright)]/10 text-site-button"
             href={secondaryCtaHref}
             style={{ fontFamily: "var(--font-syne)" }}
           >
@@ -83,7 +83,7 @@ export function StudioHero({
         </div>
 
         <div
-          className="mt-10 flex flex-wrap items-center gap-5 border-t border-white/20 pt-5 text-sm text-white/75 sm:text-base"
+          className="mt-10 flex flex-wrap items-center gap-5 border-t border-white/20 pt-5 text-white/75 text-site-content"
           style={{ fontFamily: "var(--font-body)" }}
         >
           <div className="inline-flex items-center gap-2">

@@ -22,7 +22,7 @@ export function ClassSection() {
         className="relative z-10 mb-10 max-w-[520px]"
       >
         <motion.div
-          className="mb-5 font-heading text-[11px] font-medium tracking-[2.5px] text-[var(--site-text-subtle)]"
+          className="mb-5 font-heading font-medium tracking-[2.5px] text-[var(--site-text-subtle)] text-site-content"
           initial={{ opacity: 0, filter: "blur(8px)", y: 12 }}
           whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
           viewport={{ once: true }}
@@ -32,7 +32,7 @@ export function ClassSection() {
         </motion.div>
 
         <h2
-          className="m-0 font-heading text-[80px] font-extrabold leading-none tracking-[-2.5px] text-[var(--site-text)]"
+          className="m-0 font-heading font-extrabold leading-none tracking-[-2.5px] text-[var(--site-text)] text-site-title"
         >
           {classCopy.words.map((word, index) => (
             <motion.span

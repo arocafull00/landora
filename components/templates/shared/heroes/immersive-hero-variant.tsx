@@ -34,23 +34,23 @@ export function ImmersiveHeroVariant({
           className="max-w-6xl"
         >
           {hero.eyebrow ? (
-            <p className="mb-6 flex items-center gap-3 font-body text-xs font-semibold uppercase tracking-[0.2em] text-[var(--site-accent)]">
+            <p className="mb-6 flex items-center gap-3 font-body font-semibold uppercase tracking-[0.2em] text-[var(--site-accent)] text-site-content">
               <span aria-hidden className="h-px w-8 bg-[var(--site-accent)]" />
               {hero.eyebrow}
             </p>
           ) : null}
-          <h1 className="max-w-6xl text-balance font-headline text-[clamp(3.75rem,8.5vw,8rem)] font-medium leading-[0.9] tracking-[-0.065em]">
+          <h1 className="max-w-6xl text-balance font-headline font-medium leading-[0.9] tracking-[-0.065em] text-site-title-lg">
             {hero.title}
             {hero.subtitle ? <em className="block font-normal">{hero.subtitle}</em> : null}
           </h1>
           <div className="mt-8 flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
             {hero.description ? (
-              <p className="max-w-2xl text-pretty font-body text-lg leading-relaxed text-[var(--site-on-dark)]/70">
+              <p className="max-w-2xl text-pretty font-body leading-relaxed text-[var(--site-on-dark)]/70 text-site-subtitle">
                 {hero.description}
               </p>
             ) : <span />}
             <a
-              className="flex size-28 shrink-0 items-center justify-center gap-1 rounded-full border border-[var(--site-on-dark)]/45 bg-[var(--site-on-dark)]/10 p-4 text-center font-body text-xs font-bold text-[var(--site-on-dark)] backdrop-blur-md transition-[transform,background-color,border-color,color] hover:-rotate-6 hover:scale-105 hover:border-[var(--site-accent)] hover:bg-[var(--site-accent)] hover:text-[var(--site-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] motion-reduce:transform-none sm:size-30"
+              className="flex size-28 shrink-0 items-center justify-center gap-1 rounded-full border border-[var(--site-on-dark)]/45 bg-[var(--site-on-dark)]/10 p-4 text-center font-body font-bold text-[var(--site-on-dark)] backdrop-blur-md transition-[transform,background-color,border-color,color] hover:-rotate-6 hover:scale-105 hover:border-[var(--site-accent)] hover:bg-[var(--site-accent)] hover:text-[var(--site-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] motion-reduce:transform-none sm:size-30 text-site-content"
               href={primaryCtaHref}
               data-analytics-event="cta_click"
             >
@@ -61,7 +61,7 @@ export function ImmersiveHeroVariant({
         </div>
       </div>
 
-      <span className="absolute right-8 top-28 hidden font-body text-xs font-medium tracking-[0.14em] text-[var(--site-on-dark)]/60 lg:block">
+      <span className="absolute right-8 top-28 hidden font-body font-medium tracking-[0.14em] text-[var(--site-on-dark)]/60 lg:block text-site-content">
         {IMMERSIVE_COPY.counter}
       </span>
     </section>

@@ -54,7 +54,7 @@ export function PortfolioProjectPage({
           <section className="px-6 pb-16 pt-32 md:px-10 md:pb-24 md:pt-40 lg:px-16">
             <div className="mx-auto max-w-7xl">
               <Link
-                className="mb-12 inline-flex items-center gap-2 text-sm font-semibold text-portfolio-ink-muted transition-colors hover:text-portfolio-ink"
+                className="mb-12 inline-flex items-center gap-2 font-semibold text-portfolio-ink-muted transition-colors hover:text-portfolio-ink text-site-content"
                 href={projectsHref}
                 prefetch={previewLandingId ? true : undefined}
                 {...getPreviewTargetAttributes(
@@ -77,7 +77,7 @@ export function PortfolioProjectPage({
                     </ul>
                   ) : null}
                   <h1
-                    className="text-balance text-4xl font-extrabold leading-[0.95] tracking-[-0.04em] text-portfolio-ink sm:text-5xl md:text-7xl"
+                    className="text-balance font-extrabold leading-[0.95] tracking-[-0.04em] text-portfolio-ink text-site-title-lg"
                     data-editor-id="project-title"
                     style={{ fontFamily: "var(--font-syne)" }}
                   >
@@ -85,7 +85,7 @@ export function PortfolioProjectPage({
                   </h1>
                   {project.description ? (
                     <p
-                      className="mt-7 max-w-2xl text-balance text-lg leading-relaxed text-portfolio-ink-muted md:text-xl"
+                      className="mt-7 max-w-2xl text-balance leading-relaxed text-portfolio-ink-muted text-site-subtitle"
                       data-editor-id="project-summary"
                     >
                       {project.description}
@@ -121,11 +121,11 @@ export function PortfolioProjectPage({
           {project.projectBody ? (
             <section className="border-y border-portfolio-line px-6 py-20 md:px-10 md:py-28 lg:px-16">
               <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.35fr_0.65fr]">
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-portfolio-accent">
+                <p className="font-bold uppercase tracking-[0.24em] text-portfolio-accent text-site-content">
                   El proyecto
                 </p>
                 <div
-                  className="max-w-3xl whitespace-pre-line text-pretty text-lg leading-8 text-portfolio-ink-muted md:text-xl md:leading-9"
+                  className="max-w-3xl whitespace-pre-line text-pretty leading-8 text-portfolio-ink-muted md:leading-9 text-site-subtitle"
                   data-editor-id="project-body"
                 >
                   {project.projectBody}

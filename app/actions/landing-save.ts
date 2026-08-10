@@ -25,6 +25,7 @@ import {
 } from "@/lib/schemas/landing-save";
 import {
   isValidPaletteId,
+  isValidTextSizePreset,
   isValidTypographyId,
 } from "@/lib/site-appearance";
 import { warmPublicLanding } from "@/lib/warm-public-landing";
@@ -112,6 +113,18 @@ export async function saveLandingAction(
   }
   if (appearance && !isValidTypographyId(appearance.typographyId)) {
     return { error: "La tipografía seleccionada no está disponible" };
+  }
+  if (appearance && !isValidTextSizePreset(appearance.buttonTextSize)) {
+    return { error: "El tamaño de botones seleccionado no está disponible" };
+  }
+  if (appearance && !isValidTextSizePreset(appearance.titleTextSize)) {
+    return { error: "El tamaño de títulos seleccionado no está disponible" };
+  }
+  if (appearance && !isValidTextSizePreset(appearance.subtitleTextSize)) {
+    return { error: "El tamaño de subtítulos seleccionado no está disponible" };
+  }
+  if (appearance && !isValidTextSizePreset(appearance.contentTextSize)) {
+    return { error: "El tamaño de contenido seleccionado no está disponible" };
   }
 
   try {

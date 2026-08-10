@@ -44,7 +44,7 @@ export function FloristeriaHero({
         >
           {content.hero.eyebrow ? (
             <p
-              className="mb-2 text-sm font-light italic text-[var(--site-primary)]/80"
+              className="mb-2 font-light italic text-[var(--site-primary)]/80 text-site-content"
               style={{ fontFamily: "var(--font-cormorant)" }}
             >
               {content.hero.eyebrow}
@@ -52,7 +52,7 @@ export function FloristeriaHero({
           ) : null}
 
           <h1
-            className="text-balance text-[clamp(40px,7vw,72px)] font-bold leading-[1.08] tracking-tight text-[var(--site-text)] md:text-[clamp(48px,6vw,80px)]"
+            className="text-balance font-bold leading-[1.08] tracking-tight text-[var(--site-text)] text-site-title-lg"
             style={{
               fontFamily: "var(--font-cormorant)",
               letterSpacing: "-0.03em",
@@ -63,7 +63,7 @@ export function FloristeriaHero({
 
           {content.hero.subtitle ? (
             <p
-              className="mx-auto mt-3 max-w-xl text-pretty text-base leading-relaxed text-[var(--site-text)]/60 md:mt-4 md:text-lg"
+              className="mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--site-text)]/60 md:mt-4 text-site-subtitle"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {content.hero.subtitle}
@@ -72,7 +72,7 @@ export function FloristeriaHero({
 
           {content.hero.description ? (
             <p
-              className="mx-auto mt-2 max-w-xl text-pretty text-sm leading-relaxed text-[var(--site-text)]/55 md:text-base"
+              className="mx-auto mt-2 max-w-xl text-pretty leading-relaxed text-[var(--site-text)]/55 text-site-content"
             >
               {content.hero.description}
             </p>

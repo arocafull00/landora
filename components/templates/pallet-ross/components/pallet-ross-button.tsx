@@ -8,7 +8,7 @@ export function PalletRossPrimaryButton({
   return (
     <button
       type="button"
-      className={`cursor-pointer border-none font-heading text-[15px] font-semibold text-white transition-colors hover:bg-[var(--site-primary-hover)] ${className}`}
+      className={`cursor-pointer border-none font-heading font-semibold text-white transition-colors hover:bg-[var(--site-primary-hover)] ${className} text-site-button`}
       style={{
         background: "var(--site-text)",
         padding: "14px 28px",
@@ -32,7 +32,7 @@ export function PalletRossSecondaryButton({
   return (
     <button
       type="button"
-      className={`cursor-pointer bg-transparent font-heading text-[15px] font-medium text-[var(--site-text)] transition-colors hover:bg-[rgba(0,0,0,0.06)] ${className}`}
+      className={`cursor-pointer bg-transparent font-heading font-medium text-[var(--site-text)] transition-colors hover:bg-[rgba(0,0,0,0.06)] ${className} text-site-button`}
       style={{
         padding: outlined ? "14px 20px" : "14px 20px",
         borderRadius: 9999,

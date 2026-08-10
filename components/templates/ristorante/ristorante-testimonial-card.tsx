@@ -13,21 +13,21 @@ export function RistoranteTestimonialCard({ testimonial }: { testimonial: Testim
         ))}
       </div>
       <p
-        className="mb-4 text-sm leading-relaxed text-[var(--ristorante-foreground)]/70"
+        className="mb-4 leading-relaxed text-[var(--ristorante-foreground)]/70 text-site-content"
         style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
       >
         {testimonial.comment}
       </p>
       <div className="flex items-center justify-between">
         <p
-          className="text-sm font-semibold text-[var(--ristorante-foreground)]"
+          className="font-semibold text-[var(--ristorante-foreground)] text-site-content"
           style={{ fontFamily: "var(--font-ristorante-body)" }}
         >
           {testimonial.author}
         </p>
         {testimonial.verified ? (
           <span
-            className="text-xs text-[var(--ristorante-foreground)]/50"
+            className="text-[var(--ristorante-foreground)]/50 text-site-content"
             style={{ fontFamily: "var(--font-ristorante-body)" }}
           >
             Verificado

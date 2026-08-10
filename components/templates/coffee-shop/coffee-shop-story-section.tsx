@@ -14,7 +14,7 @@ export function CoffeeShopStorySection({ content }: { content: LandingContent })
       <div className="mx-auto max-w-6xl lg:grid lg:grid-cols-[1.2fr_0.8fr] lg:gap-16">
         {statement ? (
           <p
-            className="max-w-[24ch] text-pretty text-[clamp(26px,3.5vw,48px)] font-medium leading-[1.15] text-[var(--coffee-foreground)]"
+            className="max-w-[24ch] text-pretty font-medium leading-[1.15] text-[var(--coffee-foreground)] text-site-subtitle"
             data-aos="fade-right"
             style={{
               fontFamily: "var(--font-coffee-display)",
@@ -30,13 +30,13 @@ export function CoffeeShopStorySection({ content }: { content: LandingContent })
             {stats.map((stat) => (
               <div key={stat.id}>
                 <dt
-                  className="text-3xl font-semibold text-[var(--coffee-accent)]"
+                  className="font-semibold text-[var(--coffee-accent)] text-site-title"
                   style={{ fontFamily: "var(--font-coffee-display)" }}
                 >
                   {stat.value}
                 </dt>
                 <dd
-                  className="mt-1 text-sm text-[var(--coffee-foreground)]/80"
+                  className="mt-1 text-[var(--coffee-foreground)]/80 text-site-content"
                   style={{ fontFamily: "var(--font-coffee-body)" }}
                 >
                   {stat.label}

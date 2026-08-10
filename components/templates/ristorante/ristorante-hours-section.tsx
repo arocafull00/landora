@@ -21,7 +21,7 @@ export function RistoranteHoursSection({ content }: { content: LandingContent })
         <div className="mb-12 text-center" data-aos="fade-up">
           <Clock className="mx-auto mb-4 h-8 w-8 text-[var(--ristorante-accent)]" />
           <h2
-            className="text-balance text-[clamp(32px,5vw,56px)] font-normal leading-[1.05] text-[var(--ristorante-foreground)]"
+            className="text-balance font-normal leading-[1.05] text-[var(--ristorante-foreground)] text-site-title"
             style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
           >
             {heading.title}
@@ -35,21 +35,21 @@ export function RistoranteHoursSection({ content }: { content: LandingContent })
               key={item.id}
             >
               <span
-                className="text-base font-semibold text-[var(--ristorante-foreground)]"
+                className="font-semibold text-[var(--ristorante-foreground)] text-site-content"
                 style={{ fontFamily: "var(--font-ristorante-body)" }}
               >
                 {item.number}
               </span>
               <div className="text-right">
                 <p
-                  className="text-base font-semibold text-[var(--ristorante-foreground)]"
+                  className="font-semibold text-[var(--ristorante-foreground)] text-site-content"
                   style={{ fontFamily: "var(--font-ristorante-body)" }}
                 >
                   {item.title}
                 </p>
                 {item.description ? (
                   <p
-                    className="mt-0.5 text-sm text-[var(--ristorante-foreground)]/80"
+                    className="mt-0.5 text-[var(--ristorante-foreground)]/80 text-site-content"
                     style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
                   >
                     {item.description}

@@ -42,14 +42,14 @@ export function SignalHero({
 
       <div className="relative z-10 flex items-start justify-between gap-6">
         <p
-          className="max-w-[16rem] overflow-hidden text-[10px] uppercase tracking-[0.22em] text-[var(--site-on-dark)]/70"
+          className="max-w-[16rem] overflow-hidden uppercase tracking-[0.22em] text-[var(--site-on-dark)]/70 text-site-content"
           data-signal-hero-meta
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {content.hero.eyebrow}
         </p>
         <p
-          className="overflow-hidden text-right text-[10px] uppercase tracking-[0.22em] text-[var(--site-on-dark)]/70"
+          className="overflow-hidden text-right uppercase tracking-[0.22em] text-[var(--site-on-dark)]/70 text-site-content"
           data-signal-hero-meta
           style={{ fontFamily: "var(--site-font-body)" }}
         >
@@ -59,7 +59,7 @@ export function SignalHero({
 
       <div className="relative z-10 flex min-h-[50vh] items-end gap-6">
         <h1
-          className="flex flex-wrap items-end gap-x-2 text-[clamp(4.5rem,28vw,18rem)] font-bold uppercase leading-[0.78] tracking-[-0.06em]"
+          className="flex flex-wrap items-end gap-x-2 font-bold uppercase leading-[0.78] tracking-[-0.06em] text-site-title-lg"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
           <span
@@ -108,7 +108,7 @@ export function SignalHero({
       <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <p
-            className="max-w-md text-sm uppercase tracking-[0.16em] text-[var(--site-on-dark)]/80 md:text-base"
+            className="max-w-md uppercase tracking-[0.16em] text-[var(--site-on-dark)]/80 text-site-content"
             data-signal-hero-meta
             style={{ fontFamily: "var(--site-font-body)" }}
           >
@@ -116,7 +116,7 @@ export function SignalHero({
           </p>
         </div>
         <p
-          className="text-[11px] uppercase tracking-[0.24em] text-[var(--site-accent)]"
+          className="uppercase tracking-[0.24em] text-[var(--site-accent)] text-site-content"
           data-signal-scroll-cue
           style={{ fontFamily: "var(--site-font-body)" }}
         >

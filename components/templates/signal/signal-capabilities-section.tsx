@@ -22,7 +22,7 @@ export function SignalCapabilitiesSection({ content }: { content: LandingContent
       className="relative min-h-[100svh] overflow-hidden bg-[var(--site-dark)]"
     >
       <p
-        className="absolute left-4 top-24 z-20 text-[10px] uppercase tracking-[0.24em] text-[var(--site-accent)] md:left-8"
+        className="absolute left-4 top-24 z-20 uppercase tracking-[0.24em] text-[var(--site-accent)] md:left-8 text-site-content"
         style={{ fontFamily: "var(--site-font-body)" }}
       >
         {heading.title}

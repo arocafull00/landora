@@ -23,11 +23,10 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
           {[0, 1].map((copy) => (
             <span
               key={copy}
-              className="whitespace-nowrap text-white"
+              className="whitespace-nowrap text-white text-site-title-lg"
               style={{
                 fontFamily: "var(--font-syne)",
                 fontWeight: 800,
-                fontSize: "clamp(100px, 14vw, 220px)",
                 letterSpacing: "-0.02em",
                 paddingRight: "0.3em",
                 userSelect: "none",

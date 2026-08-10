@@ -51,7 +51,7 @@ export function VelarHero({
         >
           <h1
             data-editor-id="hero:eyebrow"
-            className="text-[7.5vw] font-extrabold uppercase text-black sm:text-[5.5vw] lg:text-left lg:text-[3vw]"
+            className="font-extrabold uppercase text-black lg:text-left text-site-title-lg"
             style={{
               fontFamily: "var(--font-syne)",
               letterSpacing: "-0.03em",
@@ -65,8 +65,7 @@ export function VelarHero({
             className="hidden max-w-75 text-right font-bold opacity-70 lg:block"
             style={{
               fontFamily: "var(--font-syne)",
-              fontSize: "clamp(10px, 0.95vw, 14px)",
-              lineHeight: 1.6,
+lineHeight: 1.6,
               marginBottom: "0.2em",
               letterSpacing: "0.02em",
             }}
@@ -79,7 +78,7 @@ export function VelarHero({
           <h2
             data-editor-id="hero:title"
             data-velar-hero-reveal
-            className="max-w-full wrap-break-word px-6 text-[12.5vw] font-extrabold uppercase leading-[0.9] text-black sm:text-[10.5vw] md:px-10 lg:px-16 lg:text-left lg:text-[clamp(52px,6.5vw,9vw)] lg:leading-[0.88] lg:whitespace-nowrap"
+            className="max-w-full wrap-break-word px-6 font-extrabold uppercase leading-[0.9] text-black md:px-10 lg:px-16 lg:text-left lg:leading-[0.88] lg:whitespace-nowrap text-site-title"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           >
             {content.hero.title}
@@ -92,8 +91,7 @@ export function VelarHero({
           className="px-6 font-semibold text-(--site-text)/85 max-lg:[text-shadow:0_1px_12px_rgba(255,255,255,0.6)] lg:hidden"
           style={{
             fontFamily: "var(--font-syne)",
-            fontSize: "clamp(12px, 3vw, 15px)",
-            marginTop: "0.9em",
+marginTop: "0.9em",
           }}
         >
           {content.hero.subtitle}
@@ -103,7 +101,7 @@ export function VelarHero({
           <p
             data-editor-id="hero:description"
             data-velar-hero-reveal
-            className="mt-4 max-w-xl px-6 text-sm font-medium leading-relaxed text-(--site-text)/75 md:px-10 lg:px-16 lg:text-base"
+            className="mt-4 max-w-xl px-6 font-medium leading-relaxed text-(--site-text)/75 md:px-10 lg:px-16 text-site-content"
           >
             {content.hero.description}
           </p>
@@ -115,7 +113,7 @@ export function VelarHero({
             data-velar-hero-reveal
           >
             <TemplateNavAnchor
-              className="inline-flex items-center gap-2 bg-[var(--site-primary)] px-6 py-3 text-sm font-bold uppercase tracking-wide text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)]"
+              className="inline-flex items-center gap-2 bg-[var(--site-primary)] px-6 py-3 font-bold uppercase tracking-wide text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)] text-site-button"
               href={ctaHref}
               data-analytics-event="cta_click"
             >

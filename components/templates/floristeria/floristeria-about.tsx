@@ -31,7 +31,7 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
       <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-start gap-16 lg:grid-cols-[1.4fr_1fr] lg:gap-24">
         {statement && (
           <p
-            className="text-pretty text-2xl font-normal leading-relaxed text-[var(--site-text)] sm:text-3xl md:text-[clamp(26px,3.2vw,40px)]"
+            className="text-pretty font-normal leading-relaxed text-[var(--site-text)] text-site-subtitle"
             data-aos="fade-right"
             style={{
               fontFamily: "var(--font-cormorant)",
@@ -53,11 +53,10 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
             {stats.map((stat) => (
               <div key={stat.id}>
                 <div
-                  className="leading-[1.05] text-[var(--site-dark)]"
+                  className="leading-[1.05] text-[var(--site-dark)] text-site-title"
                   style={{
                     fontFamily: "var(--font-cormorant)",
                     fontWeight: 700,
-                    fontSize: "clamp(40px, 5vw, 64px)",
                     letterSpacing: "-0.02em",
                     textShadow: textHalo,
                   }}
@@ -65,10 +64,9 @@ export function FloristeriaAbout({ content }: { content: LandingContent }) {
                   {stat.value}
                 </div>
                 <div
-                  className="mt-2 font-medium text-[var(--site-text-muted)]"
+                  className="mt-2 font-medium text-[var(--site-text-muted)] text-site-content"
                   style={{
                     fontFamily: "var(--font-body)",
-                    fontSize: "clamp(13px, 1.1vw, 15px)",
                     textShadow: textHalo,
                   }}
                 >

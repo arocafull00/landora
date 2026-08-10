@@ -1,4 +1,4 @@
-import type { LandingAppearance, TemplateId } from "@/lib/dashboard-data";
+import type { LandingAppearance, TemplateId, TextSizePreset } from "@/lib/dashboard-data";
 
 export const TYPOGRAPHY_OPTIONS = [
   {
@@ -99,10 +99,34 @@ export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption
   ],
 };
 
+export const TEXT_SIZE_PRESET_OPTIONS = [
+  { id: "small", label: "Pequeño" },
+  { id: "default", label: "Normal" },
+  { id: "large", label: "Grande" },
+] as const satisfies ReadonlyArray<{ id: TextSizePreset; label: string }>;
+
 export const DEFAULT_LANDING_APPEARANCE: LandingAppearance = {
   paletteId: "default",
   typographyId: "default",
+  buttonTextSize: "default",
+  titleTextSize: "default",
+  subtitleTextSize: "default",
+  contentTextSize: "default",
 };
+
+export function isValidTextSizePreset(value: string): value is TextSizePreset {
+  return TEXT_SIZE_PRESET_OPTIONS.some((option) => option.id === value);
+}
+
+function resolveTextSizePreset(
+  value: string | null | undefined,
+  fallback: TextSizePreset,
+): TextSizePreset {
+  if (typeof value === "string" && isValidTextSizePreset(value)) {
+    return value;
+  }
+  return fallback;
+}
 
 export function isValidTypographyId(value: string): value is TypographyId {
   return TYPOGRAPHY_OPTIONS.some((option) => option.id === value);
@@ -137,5 +161,24 @@ export function resolveLandingAppearance(
       ? appearance.typographyId
       : DEFAULT_LANDING_APPEARANCE.typographyId;
 
-  return { paletteId, typographyId };
+  return {
+    paletteId,
+    typographyId,
+    buttonTextSize: resolveTextSizePreset(
+      appearance?.buttonTextSize,
+      DEFAULT_LANDING_APPEARANCE.buttonTextSize,
+    ),
+    titleTextSize: resolveTextSizePreset(
+      appearance?.titleTextSize,
+      DEFAULT_LANDING_APPEARANCE.titleTextSize,
+    ),
+    subtitleTextSize: resolveTextSizePreset(
+      appearance?.subtitleTextSize,
+      DEFAULT_LANDING_APPEARANCE.subtitleTextSize,
+    ),
+    contentTextSize: resolveTextSizePreset(
+      appearance?.contentTextSize,
+      DEFAULT_LANDING_APPEARANCE.contentTextSize,
+    ),
+  };
 }

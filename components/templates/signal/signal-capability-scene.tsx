@@ -30,19 +30,19 @@ export function SignalCapabilityScene({
       ) : null}
       <div className="relative z-10">
         <p
-          className="mb-4 text-[11px] uppercase tracking-[0.24em] text-[var(--site-accent)]"
+          className="mb-4 uppercase tracking-[0.24em] text-[var(--site-accent)] text-site-content"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {item.category || String(index + 1).padStart(2, "0")}
         </p>
         <h3
-          className="max-w-[12ch] text-[clamp(3.5rem,14vw,10rem)] font-bold uppercase leading-[0.85] tracking-[-0.05em] text-[var(--site-on-dark)]"
+          className="max-w-[12ch] font-bold uppercase leading-[0.85] tracking-[-0.05em] text-[var(--site-on-dark)] text-site-title"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
           {item.name}
         </h3>
         <p
-          className="mt-6 max-w-md text-base text-[var(--site-on-dark)]/75 md:text-lg"
+          className="mt-6 max-w-md text-[var(--site-on-dark)]/75 text-site-subtitle"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
           {item.description}

@@ -27,7 +27,7 @@ export function VelarContactSection({
         <div className="space-y-4 text-center">
           <div className="space-y-2">
             <p
-              className="text-sm font-bold uppercase tracking-widest text-[var(--site-accent)]"
+              className="font-bold uppercase tracking-widest text-[var(--site-accent)] text-site-content"
               style={{ fontFamily: "var(--font-syne)" }}
             >
               {heading.title}
@@ -36,7 +36,7 @@ export function VelarContactSection({
               <a
                 data-editor-id="inquire:phone"
                 href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                className="block text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
+                className="block text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)] text-site-content"
                 data-analytics-event="phone_click lead_generated"
                 style={{ fontFamily: "var(--font-body)" }}
               >
@@ -47,7 +47,7 @@ export function VelarContactSection({
               <a
                 data-editor-id="inquire:email"
                 href={`mailto:${content.contact.email}`}
-                className="block text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
+                className="block text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)] text-site-content"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {content.contact.email}
@@ -56,7 +56,7 @@ export function VelarContactSection({
             {content.contact.address && (
               <p
                 data-editor-id="inquire:address"
-                className="text-sm text-[var(--site-on-dark)]/70"
+                className="text-[var(--site-on-dark)]/70 text-site-content"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {content.contact.address}
@@ -69,7 +69,7 @@ export function VelarContactSection({
           />
           <FooterCopyright
             brand={content.brand}
-            className="text-xs text-[var(--site-accent)]"
+            className="text-[var(--site-accent)] text-site-content"
             contact={content.contact}
             year={copyrightYear}
           />

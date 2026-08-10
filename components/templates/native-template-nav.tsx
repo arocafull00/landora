@@ -40,7 +40,7 @@ export function NativeTemplateNav({
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6">
         <a
-          className="min-w-0 text-xl font-bold tracking-tight"
+          className="min-w-0 font-bold tracking-tight text-site-content"
           href={homeHref}
           {...getPreviewTargetAttributes(homePageTarget)}
         >
@@ -54,7 +54,7 @@ export function NativeTemplateNav({
         <div className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => (
             <a
-              className="text-sm font-medium text-[var(--site-text-muted)] transition-colors hover:text-[var(--site-text)]"
+              className="font-medium text-[var(--site-text-muted)] transition-colors hover:text-[var(--site-text)] text-site-content"
               href={link.href}
               key={link.id}
               {...getPreviewTargetAttributes(link.pageTarget)}
@@ -63,7 +63,7 @@ export function NativeTemplateNav({
             </a>
           ))}
           <a
-            className="rounded-full bg-[var(--site-primary)] px-5 py-2.5 text-xs font-semibold text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)]"
+            className="rounded-full bg-[var(--site-primary)] px-5 py-2.5 font-semibold text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)] text-site-button"
             data-analytics-event="cta_click"
             href={ctaHref}
           >
@@ -80,7 +80,7 @@ export function NativeTemplateNav({
           <div className="absolute right-0 top-14 flex min-w-64 flex-col gap-1 rounded-2xl border border-[var(--site-border)] bg-[var(--site-surface)] p-3 shadow-xl">
             {navLinks.map((link) => (
               <a
-                className="rounded-xl px-4 py-3 text-base font-semibold transition-colors hover:bg-[var(--site-primary)]/10"
+                className="rounded-xl px-4 py-3 font-semibold transition-colors hover:bg-[var(--site-primary)]/10 text-site-content"
                 href={link.href}
                 key={link.id}
                 {...getPreviewTargetAttributes(link.pageTarget)}
@@ -89,7 +89,7 @@ export function NativeTemplateNav({
               </a>
             ))}
             <a
-              className="mt-2 rounded-xl bg-[var(--site-primary)] px-4 py-3 text-center text-sm font-semibold text-[var(--site-on-primary)]"
+              className="mt-2 rounded-xl bg-[var(--site-primary)] px-4 py-3 text-center font-semibold text-[var(--site-on-primary)] text-site-button"
               data-analytics-event="cta_click"
               href={ctaHref}
             >

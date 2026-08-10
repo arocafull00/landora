@@ -14,7 +14,7 @@ export function PortfolioAboutStorySection({
     <section className="bg-[var(--site-surface)] px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-6xl">
         <h2
-          className="mb-12 text-balance text-3xl font-extrabold text-[var(--site-accent)] sm:text-4xl md:mb-16 md:text-[clamp(32px,5vw,48px)]"
+          className="mb-12 text-balance font-extrabold text-[var(--site-accent)] md:mb-16 text-site-title"
           data-editor-id="about-story-title"
           style={{
             fontFamily: "var(--font-syne)",

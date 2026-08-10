@@ -21,7 +21,7 @@ export function PolaroidGalleryItem({
       <span className="relative block aspect-[4/3] overflow-hidden bg-[var(--site-surface-alt)]">
         <GalleryMedia item={item} />
       </span>
-      <span className="absolute inset-x-5 bottom-4 truncate font-mono text-xs text-[var(--site-text-muted)] sm:text-sm">
+      <span className="absolute inset-x-5 bottom-4 truncate font-mono text-[var(--site-text-muted)] text-site-content">
         {item.title || `Momento ${String(index + 1).padStart(2, "0")}`}
       </span>
     </article>

@@ -25,14 +25,14 @@ export function OficioProServiceCard({
         {getIconElement(item.category, index)}
       </div>
       <div className="min-w-0">
-        <h3 className="text-lg font-black uppercase leading-tight tracking-normal text-[var(--site-text)]">
+        <h3 className="font-black uppercase leading-tight tracking-normal text-[var(--site-text)] text-site-title">
           {item.name}
         </h3>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--site-text-muted)]">
+        <p className="mt-2 leading-relaxed text-[var(--site-text-muted)] text-site-content">
           {item.description}
         </p>
         {item.price ? (
-          <p className="mt-3 text-xs font-bold uppercase tracking-[0.16em] text-[var(--site-primary)]">
+          <p className="mt-3 font-bold uppercase tracking-[0.16em] text-[var(--site-primary)] text-site-content">
             {item.price}
           </p>
         ) : null}

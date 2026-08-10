@@ -55,6 +55,10 @@ export function mapDefaultBranding(
     brandLogoImage: content.brandLogoImage,
     paletteId: content.appearance.paletteId,
     typographyId: content.appearance.typographyId,
+    buttonTextSize: content.appearance.buttonTextSize,
+    titleTextSize: content.appearance.titleTextSize,
+    subtitleTextSize: content.appearance.subtitleTextSize,
+    contentTextSize: content.appearance.contentTextSize,
     sectionHeadings: (content.sectionHeadings ?? {}) as Record<
       string,
       { title: string; subtitle: string }

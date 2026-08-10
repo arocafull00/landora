@@ -65,13 +65,13 @@ export function RistoranteMenuHero({
             brand={brand}
             brandLogoImage={brandLogoImage}
             brandLogoType={brandLogoType}
-            className="max-w-40 truncate text-xl sm:max-w-xs sm:text-2xl"
+            className="max-w-40 truncate text-site-content sm:max-w-xs"
             style={{ fontFamily: "var(--font-ristorante-display)" }}
           />
         </Link>
 
         <TemplateNavAnchor
-          className="shrink-0 rounded-full border border-[var(--ristorante-foreground)]/40 bg-[var(--ristorante-foreground)]/10 px-4 py-2.5 text-xs font-semibold text-[var(--ristorante-foreground)] backdrop-blur-md transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[var(--ristorante-foreground)]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ristorante-secondary)] motion-reduce:transform-none sm:px-5 sm:text-sm"
+          className="shrink-0 rounded-full border border-[var(--ristorante-foreground)]/40 bg-[var(--ristorante-foreground)]/10 px-4 py-2.5 font-semibold text-[var(--ristorante-foreground)] backdrop-blur-md transition-[background-color,transform] hover:-translate-y-0.5 hover:bg-[var(--ristorante-foreground)]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--ristorante-secondary)] motion-reduce:transform-none sm:px-5 text-site-button"
           href={ctaHref}
           data-analytics-event="cta_click"
           style={{ fontFamily: "var(--font-ristorante-body)" }}
@@ -85,7 +85,7 @@ export function RistoranteMenuHero({
       >
         {eyebrow ? (
           <p
-            className="mb-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--ristorante-accent)]"
+            className="mb-5 flex items-center gap-3 font-semibold uppercase tracking-[0.18em] text-[var(--ristorante-accent)] text-site-content"
             style={{ fontFamily: "var(--font-ristorante-body)" }}
           >
             <span
@@ -96,7 +96,7 @@ export function RistoranteMenuHero({
           </p>
         ) : null}
         <h1
-          className="max-w-[9ch] text-balance text-[clamp(56px,10vw,104px)] font-normal leading-[0.9] text-[var(--ristorante-foreground)]"
+          className="max-w-[9ch] text-balance font-normal leading-[0.9] text-[var(--ristorante-foreground)] text-site-title-lg"
           style={{
             fontFamily: "var(--font-ristorante-display)",
             letterSpacing: "-0.055em",
@@ -106,7 +106,7 @@ export function RistoranteMenuHero({
         </h1>
         {subtitle ? (
           <p
-            className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-[var(--ristorante-foreground)]/78 sm:text-lg"
+            className="mt-6 max-w-xl text-pretty leading-relaxed text-[var(--ristorante-foreground)]/78 text-site-subtitle"
             style={{
               fontFamily: "var(--font-ristorante-body)",
               fontWeight: 300,

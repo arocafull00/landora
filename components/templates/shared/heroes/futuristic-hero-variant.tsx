@@ -26,13 +26,13 @@ export function FuturisticHeroVariant({
 
       <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-8rem)] w-full max-w-7xl flex-col items-center pt-12 text-center sm:pt-16">
         <p
-          className="inline-flex items-center gap-2 rounded-full border border-[var(--site-accent)]/30 bg-[var(--site-on-dark)]/5 px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.14em] text-[var(--site-accent)] backdrop-blur-md"
+          className="inline-flex items-center gap-2 rounded-full border border-[var(--site-accent)]/30 bg-[var(--site-on-dark)]/5 px-4 py-2 font-body font-semibold uppercase tracking-[0.14em] text-[var(--site-accent)] backdrop-blur-md text-site-content"
         >
           <Sparkles aria-hidden className="size-3.5" />
           {hero.eyebrow}
         </p>
         <h1
-          className="mt-6 max-w-6xl text-balance font-headline text-[clamp(3.25rem,7.5vw,7rem)] font-bold leading-[0.94] tracking-[-0.065em]"
+          className="mt-6 max-w-6xl text-balance font-headline font-bold leading-[0.94] tracking-[-0.065em] text-site-title-lg"
         >
           {hero.title}
           {hero.subtitle ? (
@@ -43,7 +43,7 @@ export function FuturisticHeroVariant({
         </h1>
         {hero.description ? (
           <p
-            className="mt-6 max-w-2xl text-pretty font-body text-lg leading-relaxed text-[var(--site-on-dark)]/65"
+            className="mt-6 max-w-2xl text-pretty font-body leading-relaxed text-[var(--site-on-dark)]/65 text-site-subtitle"
           >
             {hero.description}
           </p>
@@ -52,7 +52,7 @@ export function FuturisticHeroVariant({
           className="mt-8 flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row"
         >
           <a
-            className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[var(--site-on-dark)] px-6 py-3 font-body text-sm font-bold text-[var(--site-dark)] shadow-[0_0_45px_color-mix(in_srgb,var(--site-primary)_28%,transparent)] transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-on-dark)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)]"
+            className="inline-flex min-h-13 items-center justify-center gap-2 rounded-full bg-[var(--site-on-dark)] px-6 py-3 font-body font-bold text-[var(--site-dark)] shadow-[0_0_45px_color-mix(in_srgb,var(--site-primary)_28%,transparent)] transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-on-dark)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)] text-site-button"
             href={primaryCtaHref}
             data-analytics-event="cta_click"
           >
@@ -60,7 +60,7 @@ export function FuturisticHeroVariant({
             <ArrowRight aria-hidden className="size-4" />
           </a>
           <a
-            className="inline-flex min-h-13 items-center justify-center rounded-full border border-[var(--site-accent)]/30 bg-[var(--site-on-dark)]/5 px-6 py-3 font-body text-sm font-bold text-[var(--site-on-dark)] backdrop-blur-md transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[var(--site-on-dark)]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)]"
+            className="inline-flex min-h-13 items-center justify-center rounded-full border border-[var(--site-accent)]/30 bg-[var(--site-on-dark)]/5 px-6 py-3 font-body font-bold text-[var(--site-on-dark)] backdrop-blur-md transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[var(--site-on-dark)]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] text-site-button"
             href={secondaryCtaHref}
           >
             {FUTURISTIC_COPY.secondaryCta}
@@ -88,9 +88,9 @@ export function FuturisticHeroVariant({
               <div className="p-4 sm:p-6">
                 <span className="block h-4 w-1/3 rounded bg-[var(--site-on-dark)]/75" />
                 <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  <div className="h-20 rounded-xl border border-[var(--site-on-dark)]/10 bg-[var(--site-on-dark)]/5 p-3"><span className="block h-2 w-1/2 rounded bg-[var(--site-on-dark)]/15" /><strong className="mt-3 block text-sm text-[var(--site-accent)]">{stats[0]?.value || "24K"}</strong></div>
-                  <div className="h-20 rounded-xl border border-[var(--site-on-dark)]/10 bg-[var(--site-on-dark)]/5 p-3"><span className="block h-2 w-1/2 rounded bg-[var(--site-on-dark)]/15" /><strong className="mt-3 block text-sm text-[var(--site-accent)]">{stats[1]?.value || "+18%"}</strong></div>
-                  <div className="hidden h-20 rounded-xl border border-[var(--site-on-dark)]/10 bg-[var(--site-on-dark)]/5 p-3 sm:block"><span className="block h-2 w-1/2 rounded bg-[var(--site-on-dark)]/15" /><strong className="mt-3 block text-sm text-[var(--site-accent)]">{stats[2]?.value || "99.9%"}</strong></div>
+                  <div className="h-20 rounded-xl border border-[var(--site-on-dark)]/10 bg-[var(--site-on-dark)]/5 p-3"><span className="block h-2 w-1/2 rounded bg-[var(--site-on-dark)]/15" /><strong className="mt-3 block text-[var(--site-accent)] text-site-content">{stats[0]?.value || "24K"}</strong></div>
+                  <div className="h-20 rounded-xl border border-[var(--site-on-dark)]/10 bg-[var(--site-on-dark)]/5 p-3"><span className="block h-2 w-1/2 rounded bg-[var(--site-on-dark)]/15" /><strong className="mt-3 block text-[var(--site-accent)] text-site-content">{stats[1]?.value || "+18%"}</strong></div>
+                  <div className="hidden h-20 rounded-xl border border-[var(--site-on-dark)]/10 bg-[var(--site-on-dark)]/5 p-3 sm:block"><span className="block h-2 w-1/2 rounded bg-[var(--site-on-dark)]/15" /><strong className="mt-3 block text-[var(--site-accent)] text-site-content">{stats[2]?.value || "99.9%"}</strong></div>
                 </div>
                 <div className="relative mt-3 h-28 overflow-hidden rounded-xl border border-[var(--site-on-dark)]/10 bg-gradient-to-b from-[var(--site-primary)]/15 to-transparent">
                   <svg aria-hidden className="absolute inset-4 size-[calc(100%-2rem)]" preserveAspectRatio="none" viewBox="0 0 600 100">

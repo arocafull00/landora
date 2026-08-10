@@ -14,7 +14,7 @@ export function RistoranteStorySection({ content }: { content: LandingContent })
       <div className="mx-auto max-w-6xl" data-aos="fade-up">
         {statement ? (
           <p
-            className="max-w-[22ch] text-pretty text-[clamp(28px,4vw,40px)] font-light leading-[1.2] text-[var(--ristorante-foreground)]"
+            className="max-w-[22ch] text-pretty font-light leading-[1.2] text-[var(--ristorante-foreground)] text-site-subtitle"
             style={{
               fontFamily: "var(--font-ristorante-display)",
               letterSpacing: "-0.03em",
@@ -27,7 +27,7 @@ export function RistoranteStorySection({ content }: { content: LandingContent })
 
         {stats.length > 0 ? (
           <p
-            className={`${statement ? "mt-16" : ""} text-sm font-semibold tracking-wide text-[var(--ristorante-accent)] md:text-base`}
+            className={`${statement ? "mt-16" : ""} font-semibold tracking-wide text-[var(--ristorante-accent)] text-site-content`}
             style={{ fontFamily: "var(--font-ristorante-body)" }}
           >
             {stats.map((stat, index) => (

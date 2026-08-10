@@ -5,7 +5,7 @@ export function SignalScaleLabel({
 }) {
   return (
     <li
-      className="text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--site-text-muted)]"
+      className="font-medium uppercase tracking-[0.2em] text-[var(--site-text-muted)] text-site-content"
       data-signal-scale-label
       style={{ fontFamily: "var(--site-font-body)" }}
     >

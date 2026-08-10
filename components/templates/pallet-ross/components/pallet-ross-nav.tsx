@@ -19,7 +19,7 @@ export function PalletRossNav({ topOffset = 0 }: { topOffset?: number }) {
       <div className="flex items-center" style={{ gap: 10 }}>
         <PalletRossLogo />
         <span
-          className="font-heading text-[18px] font-semibold text-[var(--site-text)]"
+          className="font-heading font-semibold text-[var(--site-text)] text-site-content"
         >
           {brand}
         </span>
@@ -29,7 +29,7 @@ export function PalletRossNav({ topOffset = 0 }: { topOffset?: number }) {
         <NavTextButton label={nav.getStarted} />
         <button
           type="button"
-          className="flex cursor-pointer items-center border-none bg-transparent font-heading text-sm text-[var(--site-text)]"
+          className="flex cursor-pointer items-center border-none bg-transparent font-heading text-[var(--site-text)] text-site-content"
           style={{ padding: "8px 14px" }}
         >
           <span
@@ -61,7 +61,7 @@ function NavTextButton({ label }: { label: string }) {
   return (
     <button
       type="button"
-      className="cursor-pointer border-none bg-transparent font-heading text-sm text-[var(--site-text)]"
+      className="cursor-pointer border-none bg-transparent font-heading text-[var(--site-text)] text-site-content"
       style={{ padding: "8px 14px" }}
     >
       {label}

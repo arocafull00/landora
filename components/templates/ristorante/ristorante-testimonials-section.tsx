@@ -22,7 +22,7 @@ export function RistoranteTestimonialsSection({ content }: { content: LandingCon
             &ldquo;
           </span>
           <blockquote
-            className="mb-8 max-w-4xl text-pretty text-xl font-light leading-relaxed text-[var(--ristorante-foreground)] sm:text-2xl md:text-[clamp(22px,2.8vw,32px)]"
+            className="mb-8 max-w-4xl text-pretty font-light leading-relaxed text-[var(--ristorante-foreground)] text-site-subtitle"
             style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.02em" }}
           >
             {featured.comment}
@@ -37,14 +37,14 @@ export function RistoranteTestimonialsSection({ content }: { content: LandingCon
               ))}
             </div>
             <p
-              className="text-sm font-semibold text-[var(--ristorante-foreground)]"
+              className="font-semibold text-[var(--ristorante-foreground)] text-site-content"
               style={{ fontFamily: "var(--font-ristorante-body)" }}
             >
               {featured.author}
             </p>
             {featured.verified ? (
               <span
-                className="text-xs text-[var(--ristorante-foreground)]/50"
+                className="text-[var(--ristorante-foreground)]/50 text-site-content"
                 style={{ fontFamily: "var(--font-ristorante-body)" }}
               >
                 Verificado

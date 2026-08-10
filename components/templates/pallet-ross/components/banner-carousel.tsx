@@ -71,7 +71,7 @@ export function BannerCarousel() {
         <PulsingRing inset={-4} borderColor="rgba(255,255,255,0.25)" delay={0.5} />
         <motion.button
           type="button"
-          className="relative z-[2] flex cursor-pointer items-center border-none bg-white font-heading text-[15px] font-semibold text-[var(--site-text)]"
+          className="relative z-[2] flex cursor-pointer items-center border-none bg-white font-heading font-semibold text-[var(--site-text)] text-site-button"
           style={{
             padding: "12px 28px",
             borderRadius: 9999,

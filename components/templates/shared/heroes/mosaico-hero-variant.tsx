@@ -32,26 +32,26 @@ export function MosaicoHeroVariant({
           className="relative z-10"
         >
           {hero.eyebrow ? (
-            <p className="mb-6 font-body text-xs font-semibold uppercase tracking-[0.26em] text-[var(--site-accent)] sm:text-sm">
+            <p className="mb-6 font-body font-semibold uppercase tracking-[0.26em] text-[var(--site-accent)] text-site-content">
               {hero.eyebrow}
             </p>
           ) : null}
-          <h1 className="text-balance font-headline text-[clamp(3.5rem,7vw,7.5rem)] font-medium leading-[0.9] tracking-[-0.055em]">
+          <h1 className="text-balance font-headline font-medium leading-[0.9] tracking-[-0.055em] text-site-title-lg">
             {hero.title}
           </h1>
           {hero.subtitle ? (
-            <p className="mt-7 max-w-lg text-pretty font-body text-lg leading-relaxed sm:text-xl">
+            <p className="mt-7 max-w-lg text-pretty font-body leading-relaxed text-site-subtitle">
               {hero.subtitle}
             </p>
           ) : null}
           {hero.description ? (
-            <p className="mt-3 max-w-md text-pretty font-body text-sm leading-relaxed text-[var(--site-on-dark)] opacity-70 sm:text-base">
+            <p className="mt-3 max-w-md text-pretty font-body leading-relaxed text-[var(--site-on-dark)] opacity-70 text-site-content">
               {hero.description}
             </p>
           ) : null}
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
             <a
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--site-primary)] px-6 py-3 font-body text-sm font-semibold text-[var(--site-on-primary)] transition-[background-color,transform,box-shadow] hover:-translate-y-0.5 hover:bg-[var(--site-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)]"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--site-primary)] px-6 py-3 font-body font-semibold text-[var(--site-on-primary)] transition-[background-color,transform,box-shadow] hover:-translate-y-0.5 hover:bg-[var(--site-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)] text-site-button"
               href={primaryCtaHref}
               data-analytics-event="cta_click"
             >
@@ -59,7 +59,7 @@ export function MosaicoHeroVariant({
               <ArrowUpRight aria-hidden className="size-4" />
             </a>
             <a
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--site-on-dark)] px-6 py-3 font-body text-sm font-semibold text-[var(--site-on-dark)] opacity-80 transition-[background-color,opacity,transform] hover:-translate-y-0.5 hover:bg-[var(--site-surface-alt)] hover:text-[var(--site-text)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)]"
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-[var(--site-on-dark)] px-6 py-3 font-body font-semibold text-[var(--site-on-dark)] opacity-80 transition-[background-color,opacity,transform] hover:-translate-y-0.5 hover:bg-[var(--site-surface-alt)] hover:text-[var(--site-text)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)] text-site-button"
               href={secondaryCtaHref}
             >
               {MOSAICO_COPY.secondaryCta}

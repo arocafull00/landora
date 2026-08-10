@@ -29,7 +29,7 @@ export function SignalNav({
     >
       <div className="pointer-events-auto flex items-center justify-between gap-4 px-4 py-4 md:px-8">
         <a
-          className="text-sm font-bold uppercase tracking-[0.22em] text-[var(--site-on-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)]"
+          className="font-bold uppercase tracking-[0.22em] text-[var(--site-on-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] text-site-content"
           href="#hero"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
@@ -49,7 +49,7 @@ export function SignalNav({
           ))}
         </nav>
         <a
-          className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--site-on-dark)] underline decoration-transparent underline-offset-4 transition-[text-decoration-color] hover:decoration-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)]"
+          className="font-semibold uppercase tracking-[0.18em] text-[var(--site-on-dark)] underline decoration-transparent underline-offset-4 transition-[text-decoration-color] hover:decoration-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] text-site-content"
           href={ctaHref}
           style={{ fontFamily: "var(--site-font-body)" }}
         >

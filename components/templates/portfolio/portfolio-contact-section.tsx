@@ -25,14 +25,14 @@ export function PortfolioContactSection({
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 max-w-2xl" data-aos="fade-up">
           <h2
-            className="mb-6 text-balance text-4xl font-extrabold text-[var(--site-on-dark)] sm:text-5xl md:text-[clamp(40px,6vw,72px)]"
+            className="mb-6 text-balance font-extrabold text-[var(--site-on-dark)] text-site-title"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           >
             {heading.title}
           </h2>
           {heading.subtitle ? (
             <p
-              className="mb-10 max-w-lg text-pretty text-lg leading-relaxed text-[var(--site-on-dark)]/60"
+              className="mb-10 max-w-lg text-pretty leading-relaxed text-[var(--site-on-dark)]/60 text-site-subtitle"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heading.subtitle}
@@ -57,9 +57,9 @@ export function PortfolioContactSection({
             <div className="flex items-start gap-3">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="text-xs font-medium text-[var(--site-on-dark)]/40">WhatsApp</p>
+                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content">WhatsApp</p>
                 <a
-                  className="text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
+                  className="text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)] text-site-content"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                   data-analytics-event="phone_click"
                 >
@@ -72,9 +72,9 @@ export function PortfolioContactSection({
             <div className="flex items-start gap-3">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="text-xs font-medium text-[var(--site-on-dark)]/40">Email</p>
+                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content">Email</p>
                 <a
-                  className="text-sm text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)]"
+                  className="text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)] text-site-content"
                   href={`mailto:${content.contact.email}`}
                 >
                   {content.contact.email}
@@ -86,8 +86,8 @@ export function PortfolioContactSection({
             <div className="flex items-start gap-3">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="text-xs font-medium text-[var(--site-on-dark)]/40">Location</p>
-                <p className="text-sm text-[var(--site-on-dark)]/70">{content.contact.address}</p>
+                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content">Location</p>
+                <p className="text-[var(--site-on-dark)]/70 text-site-content">{content.contact.address}</p>
               </div>
             </div>
           )}
@@ -100,7 +100,7 @@ export function PortfolioContactSection({
           />
           <FooterCopyright
             brand={content.brand}
-            className="text-xs text-[var(--site-on-dark)]/30"
+            className="text-[var(--site-on-dark)]/30 text-site-content"
             contact={content.contact}
             year={copyrightYear}
           />

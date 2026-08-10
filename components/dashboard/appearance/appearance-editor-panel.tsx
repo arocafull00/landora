@@ -5,6 +5,7 @@ import { EditorSectionTitle } from "@/components/dashboard/editor-section-title"
 import { RadioGroup } from "@/components/ui/radio-group";
 import { PaletteOptionCard } from "@/components/dashboard/appearance/components/palette-option-card";
 import { TypographyOptionCard } from "@/components/dashboard/appearance/components/typography-option-card";
+import { TextSizePresetControl } from "@/components/dashboard/appearance/components/text-size-preset-control";
 import { useAppearanceEditor } from "@/components/dashboard/appearance/hooks/use-appearance-editor";
 
 const COPY = {
@@ -12,13 +13,22 @@ const COPY = {
   description: "Elige una identidad visual preparada para tu plantilla.",
   palettes: "Paleta de colores",
   typography: "Tipografía",
+  textSizes: "Tamaños de texto",
+  buttons: "Botones",
+  titles: "Títulos",
+  subtitles: "Subtítulos",
+  content: "Contenido",
 } as const;
 
 export function AppearanceEditorPanel({ landing }: { landing: Landing }) {
   const {
     appearance,
     paletteOptions,
+    selectButtonTextSize,
+    selectContentTextSize,
     selectPalette,
+    selectSubtitleTextSize,
+    selectTitleTextSize,
     selectTypography,
     typographyOptions,
   } = useAppearanceEditor(landing);
@@ -73,6 +83,38 @@ export function AppearanceEditorPanel({ landing }: { landing: Landing }) {
           ))}
         </RadioGroup>
       </fieldset>
+
+      <div className="space-y-4">
+        <h3 className="font-label text-label-md text-on-surface-variant">{COPY.textSizes}</h3>
+        <TextSizePresetControl
+          label={COPY.buttons}
+          onChange={selectButtonTextSize}
+          previewRole="button"
+          template={landing.template}
+          value={appearance.buttonTextSize}
+        />
+        <TextSizePresetControl
+          label={COPY.titles}
+          onChange={selectTitleTextSize}
+          previewRole="title"
+          template={landing.template}
+          value={appearance.titleTextSize}
+        />
+        <TextSizePresetControl
+          label={COPY.subtitles}
+          onChange={selectSubtitleTextSize}
+          previewRole="subtitle"
+          template={landing.template}
+          value={appearance.subtitleTextSize}
+        />
+        <TextSizePresetControl
+          label={COPY.content}
+          onChange={selectContentTextSize}
+          previewRole="content"
+          template={landing.template}
+          value={appearance.contentTextSize}
+        />
+      </div>
     </section>
   );
 }

@@ -20,7 +20,7 @@ export function SignalClimaxSection({ content }: { content: LandingContent }) {
         data-signal-climax-type
       >
         <h2
-          className="text-[clamp(2.4rem,8vw,6.5rem)] font-bold uppercase leading-[0.92] tracking-[-0.05em]"
+          className="font-bold uppercase leading-[0.92] tracking-[-0.05em] text-site-title"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
           {heading.title}
@@ -28,7 +28,7 @@ export function SignalClimaxSection({ content }: { content: LandingContent }) {
         </h2>
       </div>
       <p
-        className="pointer-events-none absolute text-[clamp(3rem,12vw,8rem)] font-bold uppercase tracking-[-0.06em] opacity-0 [[data-signal-motion=reduced]_&]:hidden"
+        className="pointer-events-none absolute font-bold uppercase tracking-[-0.06em] opacity-0 [[data-signal-motion=reduced]_&]:hidden text-site-content"
         data-signal-climax-brand
         style={{ fontFamily: "var(--site-font-display)" }}
       >

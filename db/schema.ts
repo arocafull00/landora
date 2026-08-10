@@ -192,6 +192,10 @@ export const landingBranding = pgTable("landing_branding", {
   brandLogoImage: text("brand_logo_image").notNull().default(""),
   paletteId: text("palette_id").notNull().default("default"),
   typographyId: text("typography_id").notNull().default("default"),
+  buttonTextSize: text("button_text_size").notNull().default("default"),
+  titleTextSize: text("title_text_size").notNull().default("default"),
+  subtitleTextSize: text("subtitle_text_size").notNull().default("default"),
+  contentTextSize: text("content_text_size").notNull().default("default"),
   sectionHeadings: jsonb("section_headings")
     .$type<Record<string, { title: string; subtitle: string }>>()
     .notNull()

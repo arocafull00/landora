@@ -7,7 +7,7 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
       <div className="mb-4 flex items-start gap-4">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--site-primary)]/10">
           <span
-            className="text-lg font-bold text-[var(--site-primary)]"
+            className="font-bold text-[var(--site-primary)] text-site-title"
             style={{ fontFamily: "var(--font-syne)" }}
           >
             {testimonial.author.charAt(0).toUpperCase()}
@@ -34,7 +34,7 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
             </div>
           </div>
           <p
-            className="text-xs text-[var(--site-accent)]"
+            className="text-[var(--site-accent)] text-site-content"
             style={{ fontFamily: "var(--font-body)" }}
           >
             {testimonial.date}
@@ -42,7 +42,7 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
         </div>
       </div>
       <div className="mb-4 flex items-center gap-2">
-        <div className="flex text-sm text-yellow-400">★★★★★</div>
+        <div className="flex text-yellow-400 text-site-content">★★★★★</div>
         <svg className="h-4 w-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
           <path
             fillRule="evenodd"
@@ -53,7 +53,7 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
       </div>
       {testimonial.verified && (
         <p
-          className="mb-3 text-xs text-[var(--site-accent)]"
+          className="mb-3 text-[var(--site-accent)] text-site-content"
           style={{ fontFamily: "var(--font-body)" }}
         >
           Trustindex verifica que la fuente original de la reseña sea Google.
@@ -62,14 +62,14 @@ export function VelarGoogleReview({ testimonial }: { testimonial: TestimonialCon
       <div className="flex flex-1 flex-col">
         <p
           data-editor-id={`testimonios:${testimonial.id}:comment`}
-          className="mb-4 line-clamp-4 flex-1 text-sm leading-relaxed text-[var(--site-text)]/80"
+          className="mb-4 line-clamp-4 flex-1 leading-relaxed text-[var(--site-text)]/80 text-site-content"
           style={{ fontFamily: "var(--font-body)" }}
         >
           {testimonial.comment}
         </p>
         <button
           type="button"
-          className="mt-auto text-left text-sm font-medium text-[var(--site-primary)] hover:underline"
+          className="mt-auto text-left font-medium text-[var(--site-primary)] hover:underline text-site-content"
           style={{ fontFamily: "var(--font-body)" }}
         >
           Leer más

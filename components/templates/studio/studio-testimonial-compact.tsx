@@ -13,13 +13,13 @@ export function StudioTestimonialCompact({
           <Star className="h-3.5 w-3.5 fill-[var(--site-primary)] text-[var(--site-primary)]" key={i} />
         ))}
       </div>
-      <p className="mb-4 text-sm leading-relaxed text-white/75">
+      <p className="mb-4 leading-relaxed text-white/75 text-site-content">
         {testimonial.comment}
       </p>
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-white">{testimonial.author}</p>
+        <p className="font-semibold text-white text-site-content">{testimonial.author}</p>
         {testimonial.verified && (
-          <span className="text-xs text-[var(--site-primary)]">Verificado</span>
+          <span className="text-[var(--site-primary)] text-site-content">Verificado</span>
         )}
       </div>
     </div>

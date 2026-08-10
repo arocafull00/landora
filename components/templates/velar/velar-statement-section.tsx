@@ -23,7 +23,7 @@ export function VelarStatementSection({
           <div className="mx-auto w-full max-w-[1200px] md:pl-[15%] lg:pl-[25%]">
             <p
               data-editor-id="story:statement"
-              className="max-w-[36ch] text-[clamp(18px,4.5vw,42px)] font-light leading-[1.35] tracking-[-0.02em] text-[var(--site-on-dark)] md:max-w-none md:text-[clamp(22px,2.6vw,42px)] lg:max-w-[28ch]"
+              className="max-w-[36ch] font-light leading-[1.35] tracking-[-0.02em] text-[var(--site-on-dark)] md:max-w-none lg:max-w-[28ch] text-site-subtitle"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {content.story?.statement ?? ""}

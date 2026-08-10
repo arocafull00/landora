@@ -23,14 +23,14 @@ export function RistoranteMenuFooter({
           <UtensilsCrossed aria-hidden className="h-5 w-5" />
         </span>
         <h2
-          className="mt-5 text-balance text-[clamp(34px,5vw,50px)] font-normal"
+          className="mt-5 text-balance font-normal text-site-title"
           style={{ fontFamily: "var(--font-ristorante-display)" }}
         >
           {brand}
         </h2>
 
         <div
-          className="mt-7 flex flex-col items-center justify-center gap-4 text-sm text-[var(--ristorante-foreground)]/72 md:flex-row md:flex-wrap md:gap-x-7"
+          className="mt-7 flex flex-col items-center justify-center gap-4 text-[var(--ristorante-foreground)]/72 md:flex-row md:flex-wrap md:gap-x-7 text-site-content"
           style={{ fontFamily: "var(--font-ristorante-body)" }}
         >
           {contact.address ? (
@@ -61,7 +61,7 @@ export function RistoranteMenuFooter({
         </div>
 
         <p
-          className="mt-8 text-xs leading-relaxed text-[var(--ristorante-foreground)]/50"
+          className="mt-8 leading-relaxed text-[var(--ristorante-foreground)]/50 text-site-content"
           style={{ fontFamily: "var(--font-ristorante-body)" }}
         >
           Consulta al equipo sobre alérgenos e intolerancias antes de realizar
@@ -75,7 +75,7 @@ export function RistoranteMenuFooter({
           />
           <FooterCopyright
             brand={brand}
-            className="text-xs text-[var(--ristorante-foreground)]/35"
+            className="text-[var(--ristorante-foreground)]/35 text-site-content"
             contact={contact}
             year={copyrightYear}
           />

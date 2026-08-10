@@ -135,7 +135,7 @@ export function LandingPreviewFrame({
 
   const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
   const appearance = resolveLandingAppearance(activeTemplate, content.appearance);
-  const themeScopeKey = `${activeTemplate}-${appearance.paletteId}-${appearance.typographyId}`;
+  const themeScopeKey = `${activeTemplate}-${appearance.paletteId}-${appearance.typographyId}-${appearance.buttonTextSize}-${appearance.titleTextSize}-${appearance.subtitleTextSize}-${appearance.contentTextSize}`;
   const previewProject =
     sitePage === "project"
       ? content.gallery?.find(

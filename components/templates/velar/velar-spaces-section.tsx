@@ -23,30 +23,29 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
       <div className="mx-auto max-w-7xl">
         <div className="mb-16" data-aos="fade-up">
           <p
-            className="mb-6 text-center text-xs uppercase tracking-widest text-[var(--site-accent)]"
+            className="mb-6 text-center uppercase tracking-widest text-[var(--site-accent)] text-site-content"
             style={{ fontFamily: "var(--font-body)" }}
           >
             ESPACIOS ÚNICOS PARA MOMENTOS ESPECIALES
           </p>
           <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2">
-            <div className="text-center lg:text-left">
+            <div className="text-center lg:text-left text-site-content">
               <h2
                 data-editor-id="residences:heading:title"
                 className="mb-6 font-extrabold leading-tight text-[var(--site-text)]"
                 style={{
                   fontFamily: "var(--font-syne)",
-                  fontSize: "clamp(32px, 5vw, 56px)",
-                  letterSpacing: "-0.02em",
+letterSpacing: "-0.02em",
                 }}
               >
                 {heading.title}
               </h2>
             </div>
-            <div className="text-center lg:text-left">
+            <div className="text-center lg:text-left text-site-content">
               {heading.subtitle ? (
                 <p
                   data-editor-id="residences:heading:subtitle"
-                  className="mb-6 text-lg leading-relaxed text-[var(--site-text)]/80"
+                  className="mb-6 leading-relaxed text-[var(--site-text)]/80 text-site-subtitle"
                   style={{ fontFamily: "var(--font-body)" }}
                 >
                   {heading.subtitle}

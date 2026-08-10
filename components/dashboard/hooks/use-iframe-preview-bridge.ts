@@ -49,8 +49,14 @@ export function useIframePreviewBridge({
   const portRef = useRef<MessagePort | null>(null);
   const heroVariantId = sectionSelections.hero;
   const resolvedAppearance = resolveLandingAppearance(template, content.appearance);
-  const paletteId = resolvedAppearance.paletteId;
-  const typographyId = resolvedAppearance.typographyId;
+  const {
+    buttonTextSize,
+    contentTextSize,
+    paletteId,
+    subtitleTextSize,
+    titleTextSize,
+    typographyId,
+  } = resolvedAppearance;
   const previewSrc = `${getPreviewPageHref(landingId, pageTarget)}?embed=1`;
   const latestRef = useRef({
     content,
@@ -64,7 +70,14 @@ export function useIframePreviewBridge({
   useLayoutEffect(() => {
     const syncedContent = {
       ...content,
-      appearance: { paletteId, typographyId },
+      appearance: {
+        buttonTextSize,
+        contentTextSize,
+        paletteId,
+        subtitleTextSize,
+        titleTextSize,
+        typographyId,
+      },
     };
     latestRef.current = {
       content: syncedContent,
@@ -84,10 +97,14 @@ export function useIframePreviewBridge({
     heroVariantId,
     onPageTargetChange,
     pageTarget,
+    buttonTextSize,
+    contentTextSize,
     paletteId,
     scrollTarget,
     sectionSelections,
+    subtitleTextSize,
     template,
+    titleTextSize,
     typographyId,
   ]);
 

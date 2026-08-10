@@ -34,7 +34,7 @@ export function FloristeriaTestimonialsSection({ content }: { content: LandingCo
             &ldquo;
           </span>
           <blockquote
-            className="mb-8 max-w-4xl text-pretty text-xl font-light leading-relaxed text-[var(--site-text)] sm:text-2xl md:text-[clamp(22px,2.8vw,32px)]"
+            className="mb-8 max-w-4xl text-pretty font-light leading-relaxed text-[var(--site-text)] text-site-subtitle"
             style={{
               fontFamily: "var(--font-cormorant)",
               letterSpacing: "-0.02em",
@@ -50,13 +50,13 @@ export function FloristeriaTestimonialsSection({ content }: { content: LandingCo
               ))}
             </div>
             <p
-              className="text-sm font-semibold text-[var(--site-text)]"
+              className="font-semibold text-[var(--site-text)] text-site-content"
               style={{ textShadow: textHalo }}
             >
               {featured.author}
             </p>
             {featured.verified && (
-              <span className="text-xs text-[var(--site-text-muted)]" style={{ textShadow: textHalo }}>
+              <span className="text-[var(--site-text-muted)] text-site-content" style={{ textShadow: textHalo }}>
                 Verificado
               </span>
             )}
@@ -77,20 +77,20 @@ export function FloristeriaTestimonialsSection({ content }: { content: LandingCo
                   ))}
                 </div>
                 <p
-                  className="mb-4 text-sm leading-relaxed text-[var(--site-text-muted)]"
+                  className="mb-4 leading-relaxed text-[var(--site-text-muted)] text-site-content"
                   style={{ textShadow: textHalo }}
                 >
                   {testimonial.comment}
                 </p>
                 <div className="flex items-center justify-between">
                   <p
-                    className="text-sm font-semibold text-[var(--site-text)]"
+                    className="font-semibold text-[var(--site-text)] text-site-content"
                     style={{ textShadow: textHalo }}
                   >
                     {testimonial.author}
                   </p>
                   {testimonial.verified && (
-                    <span className="text-xs text-[var(--site-text-muted)]" style={{ textShadow: textHalo }}>
+                    <span className="text-[var(--site-text-muted)] text-site-content" style={{ textShadow: textHalo }}>
                       Verificado
                     </span>
                   )}

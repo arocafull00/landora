@@ -28,7 +28,7 @@ export function RistoranteChefCard({
           />
         ) : (
           <div
-            className="flex h-full items-center justify-center text-4xl font-normal text-[var(--ristorante-accent)]/40"
+            className="flex h-full items-center justify-center font-normal text-[var(--ristorante-accent)]/40 text-site-content"
             style={{ fontFamily: "var(--font-ristorante-display)" }}
           >
             {member.name.charAt(0)}
@@ -36,14 +36,14 @@ export function RistoranteChefCard({
         )}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--ristorante-secondary)]/95 via-[var(--ristorante-secondary)]/60 to-transparent px-4 pb-4 pt-20 transition-opacity duration-300 group-hover:opacity-0 group-focus-within:opacity-0 [@media(hover:none)]:opacity-100">
           <h3
-            className="text-lg font-normal text-[var(--ristorante-foreground)]"
+            className="font-normal text-[var(--ristorante-foreground)] text-site-title"
             style={{ fontFamily: "var(--font-ristorante-display)" }}
           >
             {member.name}
           </h3>
           {member.role ? (
             <p
-              className="mt-1 text-sm font-medium text-[var(--ristorante-accent)]"
+              className="mt-1 font-medium text-[var(--ristorante-accent)] text-site-content"
               style={{ fontFamily: "var(--font-ristorante-body)" }}
             >
               {member.role}
@@ -53,7 +53,7 @@ export function RistoranteChefCard({
         {member.bio ? (
           <div className="absolute inset-0 flex items-end bg-[var(--ristorante-secondary)]/90 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:hidden">
             <p
-              className="text-sm leading-relaxed text-[var(--ristorante-foreground)]/90"
+              className="leading-relaxed text-[var(--ristorante-foreground)]/90 text-site-content"
               style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
             >
               {member.bio}
@@ -63,7 +63,7 @@ export function RistoranteChefCard({
       </div>
       {member.bio ? (
         <p
-          className="mt-3 text-sm leading-relaxed text-[var(--site-text-muted)] [@media(hover:hover)]:hidden"
+          className="mt-3 leading-relaxed text-[var(--site-text-muted)] [@media(hover:hover)]:hidden text-site-content"
           style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
         >
           {member.bio}

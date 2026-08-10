@@ -12,7 +12,7 @@ export function StudioAbout({ content }: { content: LandingContent }) {
       <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-16 lg:grid-cols-[1.4fr_1fr] lg:gap-24">
         {statement && (
           <p
-            className="text-pretty text-2xl font-light leading-relaxed text-[var(--site-text)] sm:text-3xl md:text-[clamp(26px,3.2vw,40px)]"
+            className="text-pretty font-light leading-relaxed text-[var(--site-text)] text-site-subtitle"
             data-aos="fade-right"
             style={{
               fontFamily: "var(--font-syne)",

@@ -7,11 +7,11 @@ export function OficioProTrustCta() {
         <div className="flex size-12 items-center justify-center rounded-2xl bg-[var(--site-accent-bright)]/20 text-[var(--site-text)]">
           <ShieldCheck className="size-6" />
         </div>
-        <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--site-primary)]">
+        <p className="font-bold uppercase tracking-[0.18em] text-[var(--site-primary)] text-site-content">
           Atención profesional
         </p>
       </div>
-      <p className="mt-8 max-w-2xl text-2xl font-black uppercase leading-tight tracking-normal text-[var(--site-text)]">
+      <p className="mt-8 max-w-2xl font-black uppercase leading-tight tracking-normal text-[var(--site-text)] text-site-subtitle">
         Diagnóstico claro, presupuesto transparente y trabajo ejecutado con oficio.
       </p>
     </aside>

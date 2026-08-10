@@ -21,7 +21,7 @@ export function CoffeeShopHoursSection({ content }: { content: LandingContent })
         <div className="mb-10 text-center" data-aos="fade-up">
           <Clock className="mx-auto mb-4 h-7 w-7 text-[var(--coffee-accent)]" />
           <h2
-            className="text-balance text-[clamp(32px,5vw,56px)] font-semibold leading-[1.05] text-[var(--coffee-foreground)]"
+            className="text-balance font-semibold leading-[1.05] text-[var(--coffee-foreground)] text-site-title"
             style={{ fontFamily: "var(--font-coffee-display)", letterSpacing: "-0.03em" }}
           >
             {heading.title}
@@ -35,21 +35,21 @@ export function CoffeeShopHoursSection({ content }: { content: LandingContent })
               key={item.id}
             >
               <span
-                className="text-base font-semibold text-[var(--coffee-foreground)]"
+                className="font-semibold text-[var(--coffee-foreground)] text-site-content"
                 style={{ fontFamily: "var(--font-coffee-body)" }}
               >
                 {item.number}
               </span>
               <div className="text-right">
                 <p
-                  className="text-base font-semibold text-[var(--coffee-foreground)]"
+                  className="font-semibold text-[var(--coffee-foreground)] text-site-content"
                   style={{ fontFamily: "var(--font-coffee-body)" }}
                 >
                   {item.title}
                 </p>
                 {item.description ? (
                   <p
-                    className="mt-0.5 text-sm text-[var(--coffee-foreground)]/75"
+                    className="mt-0.5 text-[var(--coffee-foreground)]/75 text-site-content"
                     style={{ fontFamily: "var(--font-coffee-body)" }}
                   >
                     {item.description}

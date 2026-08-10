@@ -7,7 +7,7 @@ export function SignalPortalLine({
 }) {
   return (
     <p
-      className="overflow-hidden text-[clamp(2.5rem,10vw,8rem)] font-bold uppercase leading-[0.9] tracking-[-0.04em] text-[var(--site-on-dark)]"
+      className="overflow-hidden font-bold uppercase leading-[0.9] tracking-[-0.04em] text-[var(--site-on-dark)] text-site-content"
       data-signal-portal-line
       style={{
         fontFamily: "var(--site-font-display)",

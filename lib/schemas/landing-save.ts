@@ -58,9 +58,15 @@ const seoSchema = z.strictObject({
   socialImage: z.union([z.url().max(2048), z.literal("")]),
 });
 
+const textSizePresetSchema = z.enum(["small", "default", "large"]);
+
 const appearanceSchema = z.strictObject({
   paletteId: z.string().trim().min(1).max(40),
   typographyId: z.string().trim().min(1).max(40),
+  buttonTextSize: textSizePresetSchema,
+  titleTextSize: textSizePresetSchema,
+  subtitleTextSize: textSizePresetSchema,
+  contentTextSize: textSizePresetSchema,
 });
 
 const sectionKeySchema = z.enum(LANDING_SECTION_KEYS);

@@ -30,7 +30,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
           <p
-            className="mb-6 text-xs uppercase tracking-widest text-[var(--site-accent)]"
+            className="mb-6 uppercase tracking-widest text-[var(--site-accent)] text-site-content"
             style={{ fontFamily: "var(--font-body)" }}
           >
             SERVICIOS GENERALES INCLUIDOS
@@ -40,8 +40,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
             className="mx-auto mb-6 max-w-4xl font-extrabold leading-tight text-[var(--site-text)]"
             style={{
               fontFamily: "var(--font-syne)",
-              fontSize: "clamp(32px, 5vw, 56px)",
-              letterSpacing: "-0.02em",
+letterSpacing: "-0.02em",
             }}
           >
             {heading.title}
@@ -49,7 +48,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
           {heading.subtitle ? (
             <p
               data-editor-id="servicios:heading:subtitle"
-              className="mb-6 text-lg text-[var(--site-text)]/80"
+              className="mb-6 text-[var(--site-text)]/80 text-site-subtitle"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heading.subtitle}
@@ -57,7 +56,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
           ) : null}
           <a
             href={whatsappLink}
-            className="mx-auto inline-flex max-w-[280px] cursor-pointer flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-xs font-semibold uppercase tracking-wide text-[var(--site-primary)] hover:underline sm:max-w-sm sm:text-sm"
+            className="mx-auto inline-flex max-w-[280px] cursor-pointer flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center font-semibold uppercase tracking-wide text-[var(--site-primary)] hover:underline sm:max-w-sm text-site-content"
             style={{ fontFamily: "var(--font-syne)" }}
             target="_blank"
             rel="noopener noreferrer"

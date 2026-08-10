@@ -33,14 +33,14 @@ export function SignalContactSection({
       <div className="grid gap-12 lg:grid-cols-2">
         <div>
           <h2
-            className="max-w-md text-[clamp(2rem,6vw,4rem)] font-bold uppercase leading-[0.95] tracking-[-0.04em]"
+            className="max-w-md font-bold uppercase leading-[0.95] tracking-[-0.04em] text-site-title"
             style={{ fontFamily: "var(--site-font-display)" }}
           >
             {heading.title}
           </h2>
           {heading.subtitle ? (
             <p
-              className="mt-4 max-w-md text-base text-[var(--site-on-dark)]/65"
+              className="mt-4 max-w-md text-[var(--site-on-dark)]/65 text-site-content"
               style={{ fontFamily: "var(--site-font-body)" }}
             >
               {heading.subtitle}
@@ -58,7 +58,7 @@ export function SignalContactSection({
             <div className="flex items-start gap-3">
               <Phone aria-hidden className="mt-0.5 h-4 w-4 text-[var(--site-accent)]" />
               <a
-                className="text-sm text-[var(--site-on-dark)]/85 transition-colors hover:text-[var(--site-on-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)]"
+                className="text-[var(--site-on-dark)]/85 transition-colors hover:text-[var(--site-on-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] text-site-content"
                 href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
                 data-analytics-event="phone_click"
               >
@@ -70,7 +70,7 @@ export function SignalContactSection({
             <div className="flex items-start gap-3">
               <Mail aria-hidden className="mt-0.5 h-4 w-4 text-[var(--site-accent)]" />
               <a
-                className="text-sm text-[var(--site-on-dark)]/85 transition-colors hover:text-[var(--site-on-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)]"
+                className="text-[var(--site-on-dark)]/85 transition-colors hover:text-[var(--site-on-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] text-site-content"
                 href={`mailto:${content.contact.email}`}
               >
                 {content.contact.email}
@@ -80,7 +80,7 @@ export function SignalContactSection({
           {content.contact.address ? (
             <div className="flex items-start gap-3">
               <MapPin aria-hidden className="mt-0.5 h-4 w-4 text-[var(--site-accent)]" />
-              <p className="text-sm text-[var(--site-on-dark)]/85">{content.contact.address}</p>
+              <p className="text-[var(--site-on-dark)]/85 text-site-content">{content.contact.address}</p>
             </div>
           ) : null}
           <FooterSocialLinks
@@ -95,7 +95,7 @@ export function SignalContactSection({
           brand={content.brand}
           contact={content.contact}
           year={copyrightYear}
-          className="text-xs text-[var(--site-on-dark)]/35"
+          className="text-[var(--site-on-dark)]/35 text-site-content"
         />
       </div>
     </footer>
