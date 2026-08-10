@@ -71,6 +71,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       paletteId: row.branding?.paletteId,
       typographyId: row.branding?.typographyId,
       buttonTextSize: row.branding?.buttonTextSize as LandingContent["appearance"]["buttonTextSize"] | undefined,
+      chipTextSize: row.branding?.chipTextSize as LandingContent["appearance"]["chipTextSize"] | undefined,
       titleTextSize: row.branding?.titleTextSize as LandingContent["appearance"]["titleTextSize"] | undefined,
       subtitleTextSize: row.branding?.subtitleTextSize as LandingContent["appearance"]["subtitleTextSize"] | undefined,
       contentTextSize: row.branding?.contentTextSize as LandingContent["appearance"]["contentTextSize"] | undefined,

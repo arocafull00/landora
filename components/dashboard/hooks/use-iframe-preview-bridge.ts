@@ -6,8 +6,13 @@ import type {
   LandingContent,
   LandingSectionSelections,
   TemplateId,
+  TextSizePreset,
 } from "@/lib/dashboard-data";
 import { addEditorFocusElementListener } from "@/lib/editor-element-focus";
+import {
+  addPreviewTextSizeListener,
+  type PreviewTextSizeProperty,
+} from "@/lib/preview-text-size";
 import {
   isPreviewChannelReadyMessage,
   isPreviewPageIntentMessage,
@@ -16,6 +21,7 @@ import {
   postPreviewHighlightSection,
   postPreviewNavigateTo,
   postPreviewScrollTo,
+  postPreviewTextSize,
   PREVIEW_CHANNEL_INIT,
 } from "@/lib/preview-messaging";
 import {
@@ -36,6 +42,17 @@ type IframePreviewBridgeParams = {
   template: TemplateId;
 };
 
+function syncIframeTextSize(
+  iframe: HTMLIFrameElement | null,
+  property: PreviewTextSizeProperty,
+  value: TextSizePreset,
+) {
+  const themeScope =
+    iframe?.contentDocument?.querySelector<HTMLElement>("[data-site-theme]");
+  if (!themeScope) return;
+  themeScope.dataset[property] = value;
+}
+
 export function useIframePreviewBridge({
   content,
   landingId,
@@ -51,6 +68,7 @@ export function useIframePreviewBridge({
   const resolvedAppearance = resolveLandingAppearance(template, content.appearance);
   const {
     buttonTextSize,
+    chipTextSize,
     contentTextSize,
     paletteId,
     subtitleTextSize,
@@ -72,6 +90,7 @@ export function useIframePreviewBridge({
       ...content,
       appearance: {
         buttonTextSize,
+        chipTextSize,
         contentTextSize,
         paletteId,
         subtitleTextSize,
@@ -98,6 +117,7 @@ export function useIframePreviewBridge({
     onPageTargetChange,
     pageTarget,
     buttonTextSize,
+    chipTextSize,
     contentTextSize,
     paletteId,
     scrollTarget,
@@ -160,6 +180,16 @@ export function useIframePreviewBridge({
       postPreviewHighlightElement(portRef.current, editorId);
     });
   }, []);
+
+  useEffect(() => {
+    return addPreviewTextSizeListener(
+      ({ landingId: updatedLandingId, property, value }) => {
+        if (updatedLandingId !== landingId) return;
+        syncIframeTextSize(iframeRef.current, property, value);
+        postPreviewTextSize(portRef.current, property, value);
+      },
+    );
+  }, [landingId]);
 
   useEffect(() => {
     const iframe = iframeRef.current;

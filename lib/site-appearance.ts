@@ -100,15 +100,18 @@ export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption
 };
 
 export const TEXT_SIZE_PRESET_OPTIONS = [
+  { id: "xsmall", label: "Muy pequeño" },
   { id: "small", label: "Pequeño" },
   { id: "default", label: "Normal" },
   { id: "large", label: "Grande" },
+  { id: "xlarge", label: "Muy grande" },
 ] as const satisfies ReadonlyArray<{ id: TextSizePreset; label: string }>;
 
 export const DEFAULT_LANDING_APPEARANCE: LandingAppearance = {
   paletteId: "default",
   typographyId: "default",
   buttonTextSize: "default",
+  chipTextSize: "default",
   titleTextSize: "default",
   subtitleTextSize: "default",
   contentTextSize: "default",
@@ -167,6 +170,10 @@ export function resolveLandingAppearance(
     buttonTextSize: resolveTextSizePreset(
       appearance?.buttonTextSize,
       DEFAULT_LANDING_APPEARANCE.buttonTextSize,
+    ),
+    chipTextSize: resolveTextSizePreset(
+      appearance?.chipTextSize,
+      DEFAULT_LANDING_APPEARANCE.chipTextSize,
     ),
     titleTextSize: resolveTextSizePreset(
       appearance?.titleTextSize,

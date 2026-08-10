@@ -16,9 +16,11 @@ import {
   isPreviewHighlightSectionMessage,
   isPreviewNavigateToMessage,
   isPreviewScrollToMessage,
+  isPreviewTextSizeMessage,
   postPreviewPageChanged,
   postPreviewPageIntent,
   PREVIEW_CHANNEL_READY,
+  type PreviewTextSizeMessage,
 } from "@/lib/preview-messaging";
 import {
   getPreviewPageHref,
@@ -26,6 +28,12 @@ import {
   isSameEditorPageTarget,
   resolvePreviewPageTarget,
 } from "@/lib/preview-page-target";
+
+function syncPreviewTextSize(message: PreviewTextSizeMessage) {
+  const themeScope = document.querySelector<HTMLElement>("[data-site-theme]");
+  if (!themeScope) return;
+  themeScope.dataset[message.property] = message.value;
+}
 
 export function usePreviewBridgeProvider(
   landingId: string,
@@ -89,6 +97,25 @@ export function usePreviewBridgeProvider(
       portRef.current = port;
       port.onmessage = (messageEvent) => {
         const data = messageEvent.data;
+
+        if (isPreviewTextSizeMessage(data)) {
+          syncPreviewTextSize(data);
+          const preview = livePreviewRef.current;
+          if (!preview) return;
+          const nextPreview: PreviewLiveContent = {
+            ...preview,
+            content: {
+              ...preview.content,
+              appearance: {
+                ...preview.content.appearance,
+                [data.property]: data.value,
+              },
+            },
+          };
+          livePreviewRef.current = nextPreview;
+          setLivePreview(nextPreview);
+          return;
+        }
 
         if (isPreviewContentMessage(data)) {
           const synced = buildPreviewContentPayload(

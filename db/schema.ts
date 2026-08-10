@@ -193,6 +193,7 @@ export const landingBranding = pgTable("landing_branding", {
   paletteId: text("palette_id").notNull().default("default"),
   typographyId: text("typography_id").notNull().default("default"),
   buttonTextSize: text("button_text_size").notNull().default("default"),
+  chipTextSize: text("chip_text_size").notNull().default("default"),
   titleTextSize: text("title_text_size").notNull().default("default"),
   subtitleTextSize: text("subtitle_text_size").notNull().default("default"),
   contentTextSize: text("content_text_size").notNull().default("default"),

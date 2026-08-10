@@ -46,7 +46,7 @@ export function PortfolioSkillsSection({ content }: { content: LandingContent })
                 </div>
                 <div>
                   <h3
-                    className="mb-2 font-bold text-[var(--site-on-dark)] text-site-title"
+                    className="mb-2 font-bold text-[var(--site-on-dark)] text-site-title-sm"
                     style={{ fontFamily: "var(--font-syne)" }}
                   >
                     {item.title}

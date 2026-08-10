@@ -20,7 +20,7 @@ export function PortfolioFaqSection({ content }: { content: LandingContent }) {
           </h2>
           {heading.subtitle ? (
             <p
-              className="max-w-sm text-pretty leading-relaxed text-[var(--site-text-muted)] text-site-subtitle"
+              className="max-w-sm text-pretty leading-relaxed text-[var(--site-text-muted)] text-site-subtitle-sm"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {heading.subtitle}

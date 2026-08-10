@@ -4,7 +4,9 @@ import type {
   LandingContent,
   LandingSectionSelections,
   TemplateId,
+  TextSizePreset,
 } from "@/lib/dashboard-data";
+import type { PreviewTextSizeProperty } from "@/lib/preview-text-size";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 export const PREVIEW_CONTENT_UPDATE = "landora:preview-content-update";
@@ -16,6 +18,7 @@ export const PREVIEW_NAVIGATE_TO = "landora:preview-navigate-to";
 const PREVIEW_SCROLL_TO = "landora:preview-scroll-to";
 const PREVIEW_HIGHLIGHT_SECTION = "landora:preview-highlight-section";
 const PREVIEW_HIGHLIGHT_ELEMENT = "landora:preview-highlight-element";
+const PREVIEW_TEXT_SIZE_UPDATE = "landora:preview-text-size-update";
 
 const editorPageTargetSchema = z.discriminatedUnion("type", [
   z.strictObject({ type: z.literal("home") }),
@@ -48,6 +51,18 @@ const previewPageChangedSchema = z.strictObject({
 const previewNavigateToSchema = z.strictObject({
   type: z.literal(PREVIEW_NAVIGATE_TO),
   target: editorPageTargetSchema,
+});
+
+const previewTextSizeSchema = z.strictObject({
+  type: z.literal(PREVIEW_TEXT_SIZE_UPDATE),
+  property: z.enum([
+    "buttonTextSize",
+    "chipTextSize",
+    "contentTextSize",
+    "subtitleTextSize",
+    "titleTextSize",
+  ]),
+  value: z.enum(["xsmall", "small", "default", "large", "xlarge"]),
 });
 
 export type PreviewContentMessage = {
@@ -83,6 +98,12 @@ export type PreviewNavigateToMessage = {
   target: EditorPageTarget;
 };
 
+export type PreviewTextSizeMessage = {
+  type: typeof PREVIEW_TEXT_SIZE_UPDATE;
+  property: PreviewTextSizeProperty;
+  value: TextSizePreset;
+};
+
 export function isPreviewChannelInitMessage(
   data: unknown,
 ): data is { type: typeof PREVIEW_CHANNEL_INIT } {
@@ -111,6 +132,12 @@ export function isPreviewNavigateToMessage(
   data: unknown,
 ): data is PreviewNavigateToMessage {
   return previewNavigateToSchema.safeParse(data).success;
+}
+
+export function isPreviewTextSizeMessage(
+  data: unknown,
+): data is PreviewTextSizeMessage {
+  return previewTextSizeSchema.safeParse(data).success;
 }
 
 export function isPreviewContentMessage(data: unknown): data is PreviewContentMessage {
@@ -230,4 +257,13 @@ export function postPreviewNavigateTo(
 ) {
   if (!target) return;
   target.postMessage({ type: PREVIEW_NAVIGATE_TO, target: pageTarget });
+}
+
+export function postPreviewTextSize(
+  target: MessagePort | null | undefined,
+  property: PreviewTextSizeProperty,
+  value: TextSizePreset,
+) {
+  if (!target) return;
+  target.postMessage({ type: PREVIEW_TEXT_SIZE_UPDATE, property, value });
 }

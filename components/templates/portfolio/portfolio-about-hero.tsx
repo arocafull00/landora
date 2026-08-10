@@ -18,11 +18,11 @@ export function PortfolioAboutHero({
         )}
       >
         <div className="max-w-3xl">
-          <p className="font-semibold uppercase tracking-[0.24em] text-portfolio-accent text-site-content">
+          <p className="font-semibold uppercase tracking-[0.24em] text-portfolio-accent text-site-content-sm">
             About me
           </p>
           <h1
-            className="mt-5 text-balance font-bold leading-[0.96] tracking-[-0.05em] text-portfolio-ink text-site-title-lg"
+            className="mt-5 text-balance font-bold leading-[0.96] tracking-[-0.05em] text-portfolio-ink text-site-title-xl"
             data-editor-id="about-title"
             style={{ fontFamily: "var(--font-syne)" }}
           >

@@ -25,7 +25,7 @@ export function PortfolioContactSection({
       <div className="mx-auto max-w-5xl">
         <div className="mb-16 max-w-2xl" data-aos="fade-up">
           <h2
-            className="mb-6 text-balance font-extrabold text-[var(--site-on-dark)] text-site-title"
+            className="mb-6 text-balance font-extrabold text-[var(--site-on-dark)] text-site-title-lg"
             style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
           >
             {heading.title}
@@ -57,7 +57,7 @@ export function PortfolioContactSection({
             <div className="flex items-start gap-3">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content">WhatsApp</p>
+                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content-sm">WhatsApp</p>
                 <a
                   className="text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)] text-site-content"
                   href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
@@ -72,7 +72,7 @@ export function PortfolioContactSection({
             <div className="flex items-start gap-3">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content">Email</p>
+                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content-sm">Email</p>
                 <a
                   className="text-[var(--site-on-dark)]/70 transition-colors hover:text-[var(--site-on-dark)] text-site-content"
                   href={`mailto:${content.contact.email}`}
@@ -86,7 +86,7 @@ export function PortfolioContactSection({
             <div className="flex items-start gap-3">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--site-on-dark)]/40" />
               <div>
-                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content">Location</p>
+                <p className="font-medium text-[var(--site-on-dark)]/40 text-site-content-sm">Location</p>
                 <p className="text-[var(--site-on-dark)]/70 text-site-content">{content.contact.address}</p>
               </div>
             </div>
@@ -100,7 +100,7 @@ export function PortfolioContactSection({
           />
           <FooterCopyright
             brand={content.brand}
-            className="text-[var(--site-on-dark)]/30 text-site-content"
+            className="text-[var(--site-on-dark)]/30 text-site-content-sm"
             contact={content.contact}
             year={copyrightYear}
           />

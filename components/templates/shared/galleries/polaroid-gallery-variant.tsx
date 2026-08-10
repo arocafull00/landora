@@ -35,7 +35,7 @@ export function PolaroidGalleryVariant({
     >
       <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-[var(--site-border)] bg-[var(--site-surface-muted)] p-5 shadow-[0_24px_70px_color-mix(in_srgb,var(--site-dark)_9%,transparent)] [background-image:repeating-linear-gradient(0deg,transparent,transparent_38px,color-mix(in_srgb,var(--site-text)_8%,transparent)_39px)] sm:p-8 lg:p-10">
         <div className="max-w-4xl">
-          <span className="inline-flex rounded-full bg-[var(--site-primary)]/10 px-3 py-2 font-mono font-medium uppercase tracking-[0.08em] text-[var(--site-primary)] text-site-content">
+          <span className="inline-flex rounded-full bg-[var(--site-primary)]/10 px-3 py-2 font-mono font-medium uppercase tracking-[0.08em] text-[var(--site-primary)] text-site-chip">
             Polaroid storytelling
           </span>
           <h2 className="mt-4 max-w-3xl text-balance font-heading font-bold leading-[0.98] tracking-[-0.04em] text-[var(--site-text)] text-site-title">

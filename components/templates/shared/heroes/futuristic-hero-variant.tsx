@@ -26,7 +26,7 @@ export function FuturisticHeroVariant({
 
       <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-8rem)] w-full max-w-7xl flex-col items-center pt-12 text-center sm:pt-16">
         <p
-          className="inline-flex items-center gap-2 rounded-full border border-[var(--site-accent)]/30 bg-[var(--site-on-dark)]/5 px-4 py-2 font-body font-semibold uppercase tracking-[0.14em] text-[var(--site-accent)] backdrop-blur-md text-site-content"
+          className="inline-flex items-center gap-2 rounded-full border border-[var(--site-accent)]/30 bg-[var(--site-on-dark)]/5 px-4 py-2 font-body font-semibold uppercase tracking-[0.14em] text-[var(--site-accent)] backdrop-blur-md text-site-chip"
         >
           <Sparkles aria-hidden className="size-3.5" />
           {hero.eyebrow}

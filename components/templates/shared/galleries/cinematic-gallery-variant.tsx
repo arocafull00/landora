@@ -25,7 +25,7 @@ export function CinematicGalleryVariant({
       <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[var(--site-dark)] py-8 text-[var(--site-on-dark)] shadow-[0_24px_70px_color-mix(in_srgb,var(--site-dark)_18%,transparent)] sm:py-10">
         <div className="flex flex-col items-start justify-between gap-7 px-5 sm:px-8 lg:flex-row lg:items-end lg:px-10">
           <div className="max-w-4xl">
-            <span className="inline-flex rounded-full bg-[var(--site-on-dark)]/10 px-3 py-2 font-mono font-medium uppercase tracking-[0.08em] text-[var(--site-accent)] text-site-content">
+            <span className="inline-flex rounded-full bg-[var(--site-on-dark)]/10 px-3 py-2 font-mono font-medium uppercase tracking-[0.08em] text-[var(--site-accent)] text-site-chip">
               Cinematic scroll
             </span>
             <h2 className="mt-4 max-w-3xl text-balance font-heading font-bold leading-[0.98] tracking-[-0.04em] text-site-title">

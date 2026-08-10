@@ -77,7 +77,7 @@ export function PortfolioProjectPage({
                     </ul>
                   ) : null}
                   <h1
-                    className="text-balance font-extrabold leading-[0.95] tracking-[-0.04em] text-portfolio-ink text-site-title-lg"
+                    className="text-balance font-extrabold leading-[0.95] tracking-[-0.04em] text-portfolio-ink text-site-title-xl"
                     data-editor-id="project-title"
                     style={{ fontFamily: "var(--font-syne)" }}
                   >
@@ -121,7 +121,7 @@ export function PortfolioProjectPage({
           {project.projectBody ? (
             <section className="border-y border-portfolio-line px-6 py-20 md:px-10 md:py-28 lg:px-16">
               <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.35fr_0.65fr]">
-                <p className="font-bold uppercase tracking-[0.24em] text-portfolio-accent text-site-content">
+                <p className="font-bold uppercase tracking-[0.24em] text-portfolio-accent text-site-content-sm">
                   El proyecto
                 </p>
                 <div

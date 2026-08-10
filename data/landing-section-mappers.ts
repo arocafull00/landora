@@ -56,6 +56,7 @@ export function mapDefaultBranding(
     paletteId: content.appearance.paletteId,
     typographyId: content.appearance.typographyId,
     buttonTextSize: content.appearance.buttonTextSize,
+    chipTextSize: content.appearance.chipTextSize,
     titleTextSize: content.appearance.titleTextSize,
     subtitleTextSize: content.appearance.subtitleTextSize,
     contentTextSize: content.appearance.contentTextSize,

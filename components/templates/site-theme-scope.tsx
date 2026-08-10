@@ -24,6 +24,7 @@ export function SiteThemeScope({
     <div
       className={cn("site-theme min-h-full", className)}
       data-button-text-size={resolved.buttonTextSize}
+      data-chip-text-size={resolved.chipTextSize}
       data-color-scheme={colorScheme}
       data-content-text-size={resolved.contentTextSize}
       data-palette={resolved.paletteId}

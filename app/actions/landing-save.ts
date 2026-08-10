@@ -117,6 +117,9 @@ export async function saveLandingAction(
   if (appearance && !isValidTextSizePreset(appearance.buttonTextSize)) {
     return { error: "El tamaño de botones seleccionado no está disponible" };
   }
+  if (appearance && !isValidTextSizePreset(appearance.chipTextSize)) {
+    return { error: "El tamaño de chips seleccionado no está disponible" };
+  }
   if (appearance && !isValidTextSizePreset(appearance.titleTextSize)) {
     return { error: "El tamaño de títulos seleccionado no está disponible" };
   }

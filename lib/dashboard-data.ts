@@ -27,12 +27,18 @@ export type SectionHeading = {
 
 export type BrandLogoType = "text" | "image";
 
-export type TextSizePreset = "small" | "default" | "large";
+export type TextSizePreset =
+  | "xsmall"
+  | "small"
+  | "default"
+  | "large"
+  | "xlarge";
 
 export type LandingAppearance = {
   paletteId: string;
   typographyId: string;
   buttonTextSize: TextSizePreset;
+  chipTextSize: TextSizePreset;
   titleTextSize: TextSizePreset;
   subtitleTextSize: TextSizePreset;
   contentTextSize: TextSizePreset;

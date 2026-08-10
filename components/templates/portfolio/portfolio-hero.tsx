@@ -68,7 +68,7 @@ export function PortfolioHero({
               src={heroImage}
             />
           ) : (
-            <div className="flex h-full items-end p-5 leading-6 text-portfolio-ink-muted sm:p-6 md:p-8 text-site-subtitle">
+            <div className="flex h-full items-end p-5 leading-6 text-portfolio-ink-muted sm:p-6 md:p-8 text-site-content">
               {content.hero.description || content.hero.subtitle}
             </div>
           )}
@@ -111,7 +111,7 @@ export function PortfolioHero({
             bottom
             right
           />
-          <p className="max-w-[28ch] text-pretty leading-6 sm:leading-7 text-site-subtitle">
+          <p className="max-w-[28ch] text-pretty leading-6 sm:leading-7 text-site-subtitle-sm">
             {content.hero.subtitle}
           </p>
           <TemplateNavAnchor

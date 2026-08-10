@@ -9,7 +9,7 @@ export function PortfolioAbout({ content }: { content: LandingContent }) {
     <section id="story" className="scroll-mt-24 bg-(--site-surface) px-6 py-24 md:px-10 md:py-32 lg:px-16">
       <div className="mx-auto max-w-6xl">
         <p
-          className="text-pretty font-light leading-relaxed text-(--site-text) text-site-subtitle"
+          className="text-pretty font-light leading-relaxed text-(--site-text) text-site-subtitle-lg"
           data-aos="fade-right"
           style={{
             fontFamily: "var(--font-syne)",

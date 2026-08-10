@@ -100,6 +100,7 @@ export async function upsertLandingBranding(
     paletteId?: string;
     typographyId?: string;
     buttonTextSize?: string;
+    chipTextSize?: string;
     titleTextSize?: string;
     subtitleTextSize?: string;
     contentTextSize?: string;
@@ -117,6 +118,7 @@ export async function upsertLandingBranding(
       paletteId?: string;
       typographyId?: string;
       buttonTextSize?: string;
+      chipTextSize?: string;
       titleTextSize?: string;
       subtitleTextSize?: string;
       contentTextSize?: string;
@@ -141,6 +143,9 @@ export async function upsertLandingBranding(
     }
     if (data.buttonTextSize !== undefined) {
       set.buttonTextSize = data.buttonTextSize;
+    }
+    if (data.chipTextSize !== undefined) {
+      set.chipTextSize = data.chipTextSize;
     }
     if (data.titleTextSize !== undefined) {
       set.titleTextSize = data.titleTextSize;
@@ -173,6 +178,7 @@ export async function upsertLandingBranding(
         paletteId: data.paletteId ?? "default",
         typographyId: data.typographyId ?? "default",
         buttonTextSize: data.buttonTextSize ?? "default",
+        chipTextSize: data.chipTextSize ?? "default",
         titleTextSize: data.titleTextSize ?? "default",
         subtitleTextSize: data.subtitleTextSize ?? "default",
         contentTextSize: data.contentTextSize ?? "default",
@@ -193,6 +199,7 @@ export async function updateLandingAppearance(
     paletteId: string;
     typographyId: string;
     buttonTextSize: string;
+    chipTextSize: string;
     titleTextSize: string;
     subtitleTextSize: string;
     contentTextSize: string;
@@ -207,6 +214,7 @@ export async function updateLandingAppearance(
         paletteId: data.paletteId,
         typographyId: data.typographyId,
         buttonTextSize: data.buttonTextSize,
+        chipTextSize: data.chipTextSize,
         titleTextSize: data.titleTextSize,
         subtitleTextSize: data.subtitleTextSize,
         contentTextSize: data.contentTextSize,

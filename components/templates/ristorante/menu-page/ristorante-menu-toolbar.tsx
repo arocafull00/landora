@@ -34,7 +34,7 @@ export function RistoranteMenuToolbar({
           return (
             <button
               aria-pressed={active}
-              className={`shrink-0 rounded-full px-4 py-2.5 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] ${ active ? "bg-[var(--ristorante-secondary)] text-[var(--ristorante-foreground)]" : "text-[var(--site-text-muted)] hover:bg-[var(--ristorante-muted)] hover:text-[var(--site-text)]" } text-site-content`}
+              className={`shrink-0 rounded-full px-4 py-2.5 font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] ${ active ? "bg-[var(--ristorante-secondary)] text-[var(--ristorante-foreground)]" : "text-[var(--site-text-muted)] hover:bg-[var(--ristorante-muted)] hover:text-[var(--site-text)]" } text-site-chip`}
               key={category.value}
               onClick={() => onCategoryChange(category.value)}
               style={{ fontFamily: "var(--font-ristorante-body)" }}

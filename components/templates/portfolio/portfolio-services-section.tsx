@@ -43,7 +43,7 @@ export function PortfolioServicesSection({ content }: { content: LandingContent 
               key={category}
             >
               <h3
-                className="mb-8 border-b border-[var(--site-border)] pb-3 font-bold text-[var(--site-text)] text-site-title"
+                className="mb-8 border-b border-[var(--site-border)] pb-3 font-bold text-[var(--site-text)] text-site-title-sm"
                 style={{ fontFamily: "var(--font-syne)" }}
               >
                 {category}

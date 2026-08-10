@@ -16,7 +16,7 @@ export function OficioProExperienceSection({ content }: { content: LandingConten
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-12 md:flex-row md:items-start md:justify-between lg:gap-20">
         <header className="flex w-full max-w-xl flex-col items-center gap-5 text-center md:w-[40%] md:max-w-none md:items-start md:text-left" data-aos="fade-right">
-          <span className="inline-flex rounded-full bg-[var(--site-accent-bright)]/20 px-4 py-1.5 font-bold uppercase tracking-[0.14em] text-[var(--site-primary)] text-site-content">
+          <span className="inline-flex rounded-full bg-[var(--site-accent-bright)]/20 px-4 py-1.5 font-bold uppercase tracking-[0.14em] text-[var(--site-primary)] text-site-chip">
             Desde 1990
           </span>
           <h2 className="text-balance font-black uppercase leading-[1.05] tracking-normal text-[var(--site-text)] text-site-title">

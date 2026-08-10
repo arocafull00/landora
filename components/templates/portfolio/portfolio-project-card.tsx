@@ -70,20 +70,20 @@ export function PortfolioProjectCard({
       ) : null}
 
       {showText ? (
-        <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent opacity-100 transition-opacity duration-500 ease-out group-hover:opacity-0 motion-reduce:transition-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:transition-none" />
       ) : (
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none" />
       )}
 
       {showText ? (
-        <div className="pointer-events-none absolute bottom-0 left-0 z-10 w-full p-5 opacity-100 transition-[opacity,transform] duration-500 ease-out group-hover:translate-y-2 group-hover:opacity-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 md:p-6">
+        <div className="pointer-events-none absolute bottom-0 left-0 z-10 w-full translate-y-2 p-5 opacity-0 transition-[opacity,transform] duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 md:p-6">
           {item.title ? (
-            <h3 className="mb-1 font-bold text-white text-site-title">
+            <h3 className="mb-1 font-bold text-white text-site-title-sm">
               {item.title}
             </h3>
           ) : null}
           {item.description ? (
-            <p className="mb-3 text-white/70 line-clamp-2 text-site-content">
+            <p className="mb-3 text-white/70 line-clamp-2 text-site-content-sm">
               {item.description}
             </p>
           ) : null}
@@ -91,7 +91,7 @@ export function PortfolioProjectCard({
             <div className="flex flex-wrap gap-1.5">
               {item.tags.map((tag) => (
                 <span
-                  className="inline-flex items-center rounded-full border border-white/10 bg-black/30 px-2.5 py-0.5 font-bold uppercase tracking-widest text-white/90 backdrop-blur-md text-site-content"
+                  className="inline-flex items-center rounded-full border border-white/10 bg-black/30 px-2.5 py-0.5 font-bold uppercase tracking-widest text-white/90 backdrop-blur-md text-site-chip"
                   key={tag}
                 >
                   {tag}

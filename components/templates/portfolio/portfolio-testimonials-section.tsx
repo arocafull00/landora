@@ -29,9 +29,9 @@ export function PortfolioTestimonialsSection({ content }: { content: LandingCont
                 <Star className="h-4 w-4 fill-[var(--site-on-dark)]/80 text-[var(--site-on-dark)]/80" key={i} />
               ))}
             </div>
-            <p className="font-semibold text-[var(--site-on-dark)] text-site-content">{featured.author}</p>
+            <p className="font-semibold text-[var(--site-on-dark)] text-site-content-sm">{featured.author}</p>
             {featured.verified && (
-              <span className="text-[var(--site-on-dark)]/50 text-site-content">Verificado</span>
+              <span className="text-[var(--site-on-dark)]/50 text-site-content-sm">Verificado</span>
             )}
           </div>
         </div>
@@ -53,9 +53,9 @@ export function PortfolioTestimonialsSection({ content }: { content: LandingCont
                   {testimonial.comment}
                 </p>
                 <div className="flex items-center justify-between">
-                  <p className="font-semibold text-[var(--site-on-dark)] text-site-content">{testimonial.author}</p>
+                  <p className="font-semibold text-[var(--site-on-dark)] text-site-content-sm">{testimonial.author}</p>
                   {testimonial.verified && (
-                    <span className="text-[var(--site-on-dark)]/50 text-site-content">Verificado</span>
+                    <span className="text-[var(--site-on-dark)]/50 text-site-content-sm">Verificado</span>
                   )}
                 </div>
               </div>

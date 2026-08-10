@@ -11,7 +11,7 @@ const variants = {
 };
 
 const sizes = {
-  sm: "px-5 py-2.5 text-site-button",
+  sm: "px-5 py-2.5 text-site-button-sm",
   md: "px-7 py-3 text-site-button",
   lg: "px-9 py-4 text-site-button",
 };
