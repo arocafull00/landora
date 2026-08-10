@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import posthog from "posthog-js";
+import { runAfterActivation } from "@/lib/analytics/prerender-activation";
 import { useConsentStore } from "@/stores/consent-store";
 import { isPublicAnalyticsEvent } from "@/lib/public-render-contracts";
 
@@ -17,11 +18,13 @@ export function LandingAnalyticsInit({
   useEffect(() => {
     if (status !== "accepted") return;
 
-    posthog.opt_in_capturing();
-    posthog.startSessionRecording();
-    posthog.register({ landingId, clientId });
-    posthog.capture("$pageview");
-    posthog.capture("page_view");
+    return runAfterActivation(() => {
+      posthog.opt_in_capturing();
+      posthog.startSessionRecording();
+      posthog.register({ landingId, clientId });
+      posthog.capture("$pageview");
+      posthog.capture("page_view");
+    });
   }, [landingId, clientId, status]);
 
   useEffect(() => {

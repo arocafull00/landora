@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import posthog from "posthog-js";
 import { Button } from "@/components/ui/button";
+import { runAfterActivation } from "@/lib/analytics/prerender-activation";
 import { useConsentStore } from "@/stores/consent-store";
 
 export function CookieConsentBanner() {
@@ -15,7 +16,9 @@ export function CookieConsentBanner() {
       return;
     }
 
-    posthog.opt_in_capturing();
+    return runAfterActivation(() => {
+      posthog.opt_in_capturing();
+    });
   }, [status]);
 
   if (status !== null) {

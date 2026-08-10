@@ -1,4 +1,5 @@
 import { CookieConsentBanner } from "@/components/analytics/cookie-consent-banner";
+import { LandingSpeculationRules } from "@/components/templates/landing-speculation-rules";
 import { getPublishedLandingParams } from "@/lib/public-static-params";
 
 export function generateStaticParams() {
@@ -12,6 +13,7 @@ export default function PublicLandingLayout({
 }) {
   return (
     <>
+      <LandingSpeculationRules />
       {children}
       <CookieConsentBanner />
     </>

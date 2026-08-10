@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 
 type PortfolioGalleryTagsFieldProps = {
   maxItems?: number;
@@ -33,34 +33,35 @@ export function PortfolioGalleryTagsField({
   return (
     <div>
       <label
-        className="mb-2 block font-label text-label-md text-on-surface-variant"
+        className="mb-1.5 block font-label text-[0.6875rem] font-medium uppercase tracking-wide text-on-surface-variant"
         htmlFor={inputId}
       >
         Etiquetas
       </label>
-      {value.length > 0 ? (
-        <ul className="mb-3 flex flex-wrap gap-2" aria-label="Etiquetas añadidas">
-          {value.map((tag, index) => (
-            <li
-              className="inline-flex items-center gap-1 rounded-full bg-primary-fixed px-3 py-1 font-label text-label-sm text-primary-fixed-variant"
-              key={`${tag}-${index}`}
-            >
-              <span>{tag}</span>
-              <button
-                aria-label={`Eliminar etiqueta ${tag}`}
-                className="rounded-full p-0.5 transition-colors hover:bg-primary-fixed-dim focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                onClick={() => onChange(value.filter((item) => item !== tag))}
-                type="button"
-              >
-                <X aria-hidden="true" className="size-3.5" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-      <div className="flex gap-2">
+      <div className="rounded-lg border border-outline-variant bg-surface p-2">
+        {value.length > 0 ? (
+          <ul
+            aria-label="Etiquetas añadidas"
+            className="mb-2 flex flex-wrap gap-1.5"
+          >
+            {value.map((tag) => (
+              <li key={tag}>
+                <button
+                  aria-label={`Eliminar etiqueta ${tag}`}
+                  className="inline-flex items-center gap-1 rounded-full bg-primary-fixed px-2 py-1 font-label text-[0.6875rem] font-medium text-primary-fixed-variant transition-colors hover:bg-primary-fixed-dim focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  onClick={() => onChange(value.filter((item) => item !== tag))}
+                  type="button"
+                >
+                  <span>{tag}</span>
+                  <X aria-hidden className="size-3 text-primary-fixed-variant/70" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <input
-          className="min-w-0 flex-1 rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow placeholder:text-on-surface-variant focus:border-primary focus:ring-1 focus:ring-primary"
+          className="h-7 w-full border-none bg-transparent px-1 text-body-md text-on-surface outline-none placeholder:text-on-surface-variant"
+          disabled={isAtLimit}
           id={inputId}
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={(event) => {
@@ -69,20 +70,11 @@ export function PortfolioGalleryTagsField({
             event.preventDefault();
             addTag();
           }}
-          placeholder="Escribe una etiqueta"
+          placeholder="Añadir etiqueta..."
           maxLength={40}
           type="text"
           value={draft}
         />
-        <button
-          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2 font-label text-label-md text-on-primary transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={!canAdd}
-          onClick={addTag}
-          type="button"
-        >
-          <Plus aria-hidden="true" className="size-4" />
-          Añadir
-        </button>
       </div>
       {isAtLimit ? (
         <p className="mt-1.5 text-body-sm text-danger">
@@ -92,11 +84,7 @@ export function PortfolioGalleryTagsField({
         <p className="mt-1.5 text-body-sm text-danger">
           Esta etiqueta ya está añadida.
         </p>
-      ) : (
-        <p className="mt-1.5 text-body-sm text-on-surface-variant">
-          Pulsa Enter o usa el botón para añadirla.
-        </p>
-      )}
+      ) : null}
     </div>
   );
 }
