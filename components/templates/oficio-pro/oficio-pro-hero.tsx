@@ -2,7 +2,7 @@ import { ArrowRight, ChevronDown } from "lucide-react";
 import type { RefObject } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { OficioProButton } from "@/components/templates/oficio-pro/oficio-pro-button";
-import { HeroBackground } from "@/components/ui/hero-background";
+import { HeroVariantMedia } from "@/components/templates/shared/heroes/hero-variant-media";
 
 export function OficioProHero({
   content,
@@ -22,9 +22,12 @@ export function OficioProHero({
       id="hero"
       ref={heroRef}
     >
-      <HeroBackground
+      <HeroVariantMedia
+        alt=""
         appearance={content.appearance}
-        className="pointer-events-none z-0 bg-center"
+        className="pointer-events-none z-0 object-cover object-center"
+        priority
+        sizes="100vw"
         src={content.hero.image}
       />
       <div className="pointer-events-none absolute inset-0 z-[1] bg-black/60" />

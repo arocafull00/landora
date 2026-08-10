@@ -35,7 +35,7 @@ export function FloristeriaHeroFan({
             alt={index === 2 ? centerImageAlt : slot.alt}
             index={index}
             key={`${images[index]}-${slot.x}-${slot.y}`}
-            priority={index === 2}
+            priority
             reduceMotion
             rotate={slot.rotate}
             scale={1}
