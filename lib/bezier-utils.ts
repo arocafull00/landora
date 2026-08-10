@@ -1,6 +1,6 @@
 type BezierTuple = [number, number, number, number];
 
-function cubicBezierPoint(t: number, [p1, p2, p3, p4]: BezierTuple): number {
+function cubicBezierPoint(t: number, [, p2, p3]: BezierTuple): number {
   const u = 1 - t;
   return 3 * u * u * t * p2 + 3 * u * t * t * p3 + t * t * t;
 }

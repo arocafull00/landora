@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { createStore, useStore } from "zustand";
 import {
   createBlogPostAction,

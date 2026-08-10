@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { createStore, useStore } from "zustand";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import {
   Asset,
   BrandLogoType,

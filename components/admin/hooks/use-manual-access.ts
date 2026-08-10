@@ -2,7 +2,7 @@
 
 import type { FormEvent } from "react";
 import { useState, useTransition } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { configureManualAccess } from "@/app/actions/admin";
 
 export function useManualAccess({

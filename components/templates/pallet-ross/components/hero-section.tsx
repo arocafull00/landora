@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { AnimatedWord } from "@/components/templates/pallet-ross/components/animated-word";
 import { ChatBubble } from "@/components/templates/pallet-ross/components/chat-bubble";
@@ -11,8 +12,18 @@ import { PALLET_ROSS_COPY } from "@/components/templates/pallet-ross/pallet-ross
 
 export function HeroSection() {
   const { hero } = PALLET_ROSS_COPY;
-  const words = [...hero.line1, ...hero.line2];
-  let wordIndex = 0;
+  const line1Words = useMemo(
+    () => hero.line1.map((word, index) => ({ word, index })),
+    [hero.line1],
+  );
+  const line2Words = useMemo(
+    () =>
+      hero.line2.map((word, index) => ({
+        word,
+        index: hero.line1.length + index,
+      })),
+    [hero.line1.length, hero.line2],
+  );
 
   return (
     <section
@@ -28,22 +39,14 @@ export function HeroSection() {
           style={{ letterSpacing: "-3px" }}
         >
           <span className="block">
-            {hero.line1.map((word) => {
-              const index = wordIndex;
-              wordIndex += 1;
-              return (
-                <AnimatedWord key={word} word={word} index={index} />
-              );
-            })}
+            {line1Words.map(({ word, index }) => (
+              <AnimatedWord key={word} word={word} index={index} />
+            ))}
           </span>
           <span className="block">
-            {hero.line2.map((word) => {
-              const index = wordIndex;
-              wordIndex += 1;
-              return (
-                <AnimatedWord key={word} word={word} index={index} />
-              );
-            })}
+            {line2Words.map(({ word, index }) => (
+              <AnimatedWord key={word} word={word} index={index} />
+            ))}
           </span>
         </h1>
 

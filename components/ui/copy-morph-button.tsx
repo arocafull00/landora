@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, Copy } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 const RESET_MS = 2000;

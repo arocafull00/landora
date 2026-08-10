@@ -1,7 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { Button } from "@/components/ui/button";
 import { Panel } from "@/components/ui/primitives";

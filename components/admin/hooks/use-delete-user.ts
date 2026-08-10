@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { deleteUser } from "@/app/actions/admin";
 
 export function useDeleteUser({

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { deleteAssetAction } from "@/app/actions/assets";
 import { cn } from "@/lib/utils";
 import { AssetImage } from "@/components/ui/asset-image";

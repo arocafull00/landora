@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import type { Booking, BookingStatus } from "@/lib/domain/dtos";
 import { Panel } from "@/components/ui/primitives";
 import { Button } from "@/components/ui/button";

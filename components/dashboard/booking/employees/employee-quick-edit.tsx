@@ -2,7 +2,7 @@
 
 import { useTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { CalendarDays } from "lucide-react";
 import type { BookingService, Employee } from "@/lib/domain/dtos";
 import { Input } from "@/components/ui/input";

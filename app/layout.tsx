@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
+import { AppToaster } from "@/components/shared/app-toaster";
 import { VercelAnalytics } from "@/components/analytics/vercel-analytics";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { siteFontVariables } from "@/lib/site-fonts";
@@ -40,6 +41,7 @@ export default function RootLayout({
         >
           Saltar al contenido
         </a>
+        <AppToaster />
         <VercelAnalytics />
         <SpeedInsights />
         <div id="main-content" tabIndex={-1}>

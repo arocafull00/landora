@@ -1,6 +1,5 @@
 "use client";
 
-import { ToastContainer } from "react-toastify";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 export function AppInteractionProviders({
@@ -8,10 +7,5 @@ export function AppInteractionProviders({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <TooltipProvider>
-      {children}
-      <ToastContainer />
-    </TooltipProvider>
-  );
+  return <TooltipProvider>{children}</TooltipProvider>;
 }

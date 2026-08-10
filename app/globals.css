@@ -258,6 +258,14 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   color: var(--sidebar-active-foreground);
 }
 
+[data-site-theme][data-color-scheme="light"] {
+  color-scheme: only light;
+}
+
+[data-site-theme][data-color-scheme="dark"] {
+  color-scheme: only dark;
+}
+
 [data-site-theme] {
   --site-accent-bright: var(--site-accent);
   --site-accent-soft: var(--site-accent);

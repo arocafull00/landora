@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { ChevronLeft } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { VisuallyHidden } from "radix-ui";
 import { usePublicBookingStore } from "@/stores/public-booking-store";
 import { BookingSummary } from "@/components/booking/booking-summary";

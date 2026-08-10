@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArtworkCard, getHoverTransition } from "@/components/templates/pallet-ross/components/artwork-card";
+import { ArtworkCard } from "@/components/templates/pallet-ross/components/artwork-card";
 import {
   FAN_SLOTS,
   HERO_ROW_Y,

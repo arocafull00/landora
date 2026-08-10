@@ -34,65 +34,68 @@ export type SitePalette = {
   foreground: string;
 };
 
+export type PaletteColorScheme = "light" | "dark";
+
 export type PaletteOption = {
   id: string;
   label: string;
   description: string;
+  colorScheme: PaletteColorScheme;
 };
 
 export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption[]> = {
   velar: [
-    { id: "default", label: "Original", description: "Verde mineral y arena." },
-    { id: "terracotta", label: "Terracota", description: "Arcilla cálida y crema." },
-    { id: "slate", label: "Pizarra", description: "Azul grisáceo y piedra." },
+    { id: "default", label: "Original", description: "Verde mineral y arena.", colorScheme: "light" },
+    { id: "terracotta", label: "Terracota", description: "Arcilla cálida y crema.", colorScheme: "light" },
+    { id: "slate", label: "Pizarra", description: "Azul grisáceo y piedra.", colorScheme: "light" },
   ],
   studio: [
-    { id: "default", label: "Original", description: "Bronce suave y marfil." },
-    { id: "smoked-rose", label: "Rosa humo", description: "Rosa profundo y porcelana." },
-    { id: "sage", label: "Salvia", description: "Verde sereno y lino." },
+    { id: "default", label: "Original", description: "Bronce suave y marfil.", colorScheme: "light" },
+    { id: "smoked-rose", label: "Rosa humo", description: "Rosa profundo y porcelana.", colorScheme: "light" },
+    { id: "sage", label: "Salvia", description: "Verde sereno y lino.", colorScheme: "light" },
   ],
   portfolio: [
-    { id: "default", label: "Original", description: "Negro tinta y turquesa." },
-    { id: "lime", label: "Lima", description: "Carbón y verde eléctrico." },
-    { id: "coral", label: "Coral", description: "Grafito y coral vivo." },
-    { id: "ivory", label: "Marfil", description: "Marfil cálido y azul cobalto." },
-    { id: "sand", label: "Arena", description: "Arena suave y terracota." },
-    { id: "mist", label: "Niebla", description: "Gris niebla y violeta." },
-    { id: "sky", label: "Cielo", description: "Azul cielo y océano." },
-    { id: "blush", label: "Rubor", description: "Rosa claro y borgoña." },
+    { id: "default", label: "Original", description: "Negro tinta y turquesa.", colorScheme: "dark" },
+    { id: "lime", label: "Lima", description: "Carbón y verde eléctrico.", colorScheme: "dark" },
+    { id: "coral", label: "Coral", description: "Grafito y coral vivo.", colorScheme: "dark" },
+    { id: "ivory", label: "Marfil", description: "Marfil cálido y azul cobalto.", colorScheme: "light" },
+    { id: "sand", label: "Arena", description: "Arena suave y terracota.", colorScheme: "light" },
+    { id: "mist", label: "Niebla", description: "Gris niebla y violeta.", colorScheme: "light" },
+    { id: "sky", label: "Cielo", description: "Azul cielo y océano.", colorScheme: "light" },
+    { id: "blush", label: "Rubor", description: "Rosa claro y borgoña.", colorScheme: "light" },
   ],
   ristorante: [
-    { id: "default", label: "Original", description: "Negro tinta y turquesa." },
-    { id: "lime", label: "Lima", description: "Carbón y verde eléctrico." },
-    { id: "coral", label: "Coral", description: "Grafito y coral vivo." },
-    { id: "ivory", label: "Marfil", description: "Marfil cálido y azul cobalto." },
-    { id: "sand", label: "Arena", description: "Arena suave y terracota." },
-    { id: "mist", label: "Niebla", description: "Gris niebla y violeta." },
-    { id: "sky", label: "Cielo", description: "Azul cielo y océano." },
-    { id: "blush", label: "Rubor", description: "Rosa claro y borgoña." },
+    { id: "default", label: "Original", description: "Negro tinta y turquesa.", colorScheme: "dark" },
+    { id: "lime", label: "Lima", description: "Carbón y verde eléctrico.", colorScheme: "dark" },
+    { id: "coral", label: "Coral", description: "Grafito y coral vivo.", colorScheme: "dark" },
+    { id: "ivory", label: "Marfil", description: "Marfil cálido y azul cobalto.", colorScheme: "light" },
+    { id: "sand", label: "Arena", description: "Arena suave y terracota.", colorScheme: "light" },
+    { id: "mist", label: "Niebla", description: "Gris niebla y violeta.", colorScheme: "light" },
+    { id: "sky", label: "Cielo", description: "Azul cielo y océano.", colorScheme: "light" },
+    { id: "blush", label: "Rubor", description: "Rosa claro y borgoña.", colorScheme: "light" },
   ],
   floristeria: [
-    { id: "default", label: "Original", description: "Verde hoja y blanco cálido." },
-    { id: "clay", label: "Arcilla", description: "Terracota, salvia y crema." },
-    { id: "lavender", label: "Lavanda", description: "Ciruela suave y lavanda." },
+    { id: "default", label: "Original", description: "Verde hoja y blanco cálido.", colorScheme: "light" },
+    { id: "clay", label: "Arcilla", description: "Terracota, salvia y crema.", colorScheme: "light" },
+    { id: "lavender", label: "Lavanda", description: "Ciruela suave y lavanda.", colorScheme: "light" },
   ],
   "oficio-pro": [
-    { id: "default", label: "Original", description: "Azul técnico y ámbar." },
-    { id: "industrial", label: "Industrial", description: "Azul acero y naranja." },
-    { id: "graphite", label: "Grafito", description: "Carbón y amarillo señal." },
+    { id: "default", label: "Original", description: "Azul técnico y ámbar.", colorScheme: "light" },
+    { id: "industrial", label: "Industrial", description: "Azul acero y naranja.", colorScheme: "light" },
+    { id: "graphite", label: "Grafito", description: "Carbón y amarillo señal.", colorScheme: "light" },
   ],
   "coffee-shop": [
-    { id: "default", label: "Original", description: "Café tostado y cobre." },
-    { id: "coffee-green", label: "Verde café", description: "Verde bosque y crema." },
-    { id: "burgundy", label: "Borgoña", description: "Borgoña y rosa tostado." },
+    { id: "default", label: "Original", description: "Café tostado y cobre.", colorScheme: "light" },
+    { id: "coffee-green", label: "Verde café", description: "Verde bosque y crema.", colorScheme: "light" },
+    { id: "burgundy", label: "Borgoña", description: "Borgoña y rosa tostado.", colorScheme: "light" },
   ],
   signal: [
-    { id: "default", label: "Original", description: "Tinta, papel cálido y señal lima." },
-    { id: "graphite", label: "Grafito", description: "Carbón y ámbar técnico." },
-    { id: "noir", label: "Noir", description: "Negro profundo y blanco frío." },
+    { id: "default", label: "Original", description: "Tinta, papel cálido y señal lima.", colorScheme: "light" },
+    { id: "graphite", label: "Grafito", description: "Carbón y ámbar técnico.", colorScheme: "light" },
+    { id: "noir", label: "Noir", description: "Negro profundo y blanco frío.", colorScheme: "light" },
   ],
   "pallet-ross": [
-    { id: "default", label: "Original", description: "Off-white, teal y rojo editorial." },
+    { id: "default", label: "Original", description: "Off-white, teal y rojo editorial.", colorScheme: "light" },
   ],
 };
 
@@ -107,6 +110,16 @@ export function isValidTypographyId(value: string): value is TypographyId {
 
 export function isValidPaletteId(template: TemplateId, value: string) {
   return TEMPLATE_PALETTE_OPTIONS[template].some((option) => option.id === value);
+}
+
+export function resolvePaletteColorScheme(
+  template: TemplateId,
+  paletteId: string,
+): PaletteColorScheme {
+  const palette = TEMPLATE_PALETTE_OPTIONS[template].find(
+    (option) => option.id === paletteId,
+  );
+  return palette?.colorScheme ?? "light";
 }
 
 export function resolveLandingAppearance(

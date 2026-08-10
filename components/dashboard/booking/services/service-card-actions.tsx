@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import type { BookingService } from "@/lib/domain/dtos";
 import { Button } from "@/components/ui/button";
 import {

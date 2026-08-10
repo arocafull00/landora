@@ -2,7 +2,7 @@
 
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { ActionButton } from "@/components/ui/primitives";
 import { PasswordInput } from "@/components/ui/password-input";
 import { createUser } from "@/app/actions/admin";

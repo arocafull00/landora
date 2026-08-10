@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { MoreHorizontal, Pencil } from "lucide-react";
 import { unstable_isUnrecognizedActionError } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import {
   publishUserLandings,
   revokeManualAccess,

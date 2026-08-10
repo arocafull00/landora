@@ -2,7 +2,7 @@
 
 import { SignOutButton } from "@clerk/nextjs";
 import { CreditCard } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { SUBSCRIBE_COPY } from "@/components/dashboard/subscribe/subscribe-copy";
 import { Button } from "@/components/ui/button";

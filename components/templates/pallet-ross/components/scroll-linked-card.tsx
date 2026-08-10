@@ -26,21 +26,18 @@ export function ScrollLinkedCard({
   lockProgress: number;
 }) {
   const [hovered, setHovered] = useState(false);
-  const [revealed, setRevealed] = useState(true);
-
   const slot = FAN_SLOTS[cardIndex];
   const cascade = CASCADE_LAYOUT[cardIndex];
   const lp = Math.max(lockProgress, 0.05);
   const p1 = lp * 0.33;
   const p2 = lp * 0.66;
+  const viewportWidth = viewport.w || 1;
 
-  if (viewport.w === 0) return null;
-
-  const s1Cx = viewport.w / 2 + slot.x;
+  const s1Cx = viewportWidth / 2 + slot.x;
   const s1Cy = HERO_ROW_Y + slot.y;
-  const stackCx = viewport.w / 2;
-  const stackCy = viewport.h / 2;
-  const cascadeLeftRef = viewport.w * 0.4;
+  const stackCx = viewportWidth / 2;
+  const stackCy = (viewport.h || 1) / 2;
+  const cascadeLeftRef = viewportWidth * 0.4;
   const s2Cx = cascadeLeftRef + cascade.left + CARD_SIZE / 2;
   const s2Cy = cascade.top + CARD_SIZE / 2;
 
@@ -49,6 +46,8 @@ export function ScrollLinkedCard({
   const rotate = useTransform(clampedProgress, [0, p1, lp], [slot.rotate, 0, cascade.rotate]);
   const scaleX = useTransform(clampedProgress, [0, p1, lp], [slot.scale, 1, 1]);
   const scaleY = useTransform(clampedProgress, [0, p1, lp], [slot.scale, 1, 1]);
+
+  if (viewport.w === 0) return null;
 
   const zIndex = hovered ? 30 : cascade.z;
 
@@ -67,12 +66,8 @@ export function ScrollLinkedCard({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      whileHover={
-        revealed
-          ? { transition: { duration: 0.2, ease: hoverEase } }
-          : undefined
-      }
-      transition={getHoverTransition(revealed)}
+      whileHover={{ transition: { duration: 0.2, ease: hoverEase } }}
+      transition={getHoverTransition(true)}
     />
   );
 }

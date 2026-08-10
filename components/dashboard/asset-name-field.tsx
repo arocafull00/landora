@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { renameAssetAction } from "@/app/actions/assets";
 import { useAssetsStore } from "@/stores/assets-store";
 
