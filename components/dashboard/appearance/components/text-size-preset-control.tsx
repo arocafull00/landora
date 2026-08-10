@@ -11,10 +11,25 @@ import { Slider } from "@/components/ui/slider";
 const PREVIEW_COPY = {
   button: "Contactar",
   chip: "Etiqueta",
-  title: "Título principal",
+  titleLine1: "Título",
+  titleLine2: "principal",
   subtitle: "Subtítulo de sección",
   content: "Texto de contenido y descripciones.",
 } as const;
+
+function getSliderRangeLabels(selectedIndex: number) {
+  const lastIndex = TEXT_SIZE_PRESET_OPTIONS.length - 1;
+  const safeIndex = Math.max(0, Math.min(selectedIndex, lastIndex));
+  const leftIndex =
+    safeIndex <= 0 ? 0 : safeIndex >= 3 ? safeIndex - 2 : safeIndex - 1;
+
+  return {
+    left: TEXT_SIZE_PRESET_OPTIONS[leftIndex]?.label ?? TEXT_SIZE_PRESET_OPTIONS[0].label,
+    center:
+      TEXT_SIZE_PRESET_OPTIONS[safeIndex]?.label ?? TEXT_SIZE_PRESET_OPTIONS[2].label,
+    right: TEXT_SIZE_PRESET_OPTIONS[lastIndex]?.label ?? TEXT_SIZE_PRESET_OPTIONS[2].label,
+  };
+}
 
 export function TextSizePresetControl({
   label,
@@ -41,9 +56,11 @@ export function TextSizePresetControl({
   const selectedIndex = TEXT_SIZE_PRESET_OPTIONS.findIndex(
     (option) => option.id === value,
   );
+  const safeSelectedIndex = Math.max(selectedIndex, 0);
   const selectedOption =
-    TEXT_SIZE_PRESET_OPTIONS[selectedIndex] ??
-    TEXT_SIZE_PRESET_OPTIONS[2];
+    TEXT_SIZE_PRESET_OPTIONS[safeSelectedIndex] ?? TEXT_SIZE_PRESET_OPTIONS[2];
+  const sliderLabels = getSliderRangeLabels(safeSelectedIndex);
+  const isCompactPreview = previewRole === "button" || previewRole === "chip";
 
   const handleValueChange = ([nextIndex]: number[]) => {
     const option = TEXT_SIZE_PRESET_OPTIONS[nextIndex];
@@ -52,67 +69,69 @@ export function TextSizePresetControl({
   };
 
   return (
-    <fieldset className="min-w-0 space-y-3 rounded-xl border border-outline-variant/60 p-4">
-      <legend className="px-1 font-label text-label-md text-on-surface-variant">
-        {label}
-      </legend>
+    <section className="min-w-0 px-4 py-5">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <span className="font-label text-label-sm tracking-wide text-on-surface">
+          {label}
+        </span>
+        <span className="shrink-0 font-body text-body-sm text-primary">
+          {selectedOption.label}
+        </span>
+      </div>
+
       <SiteThemeScope appearance={previewAppearance} className="min-w-0" template={template}>
-        <div className="min-w-0 w-full overflow-x-auto rounded-lg border border-outline-variant/40 bg-surface-container-low px-4 py-3">
+        <div
+          className={
+            isCompactPreview
+              ? "flex min-h-14 min-w-0 items-center overflow-x-auto rounded-lg bg-inverse-surface px-4"
+              : "min-w-0 overflow-x-auto rounded-lg bg-inverse-surface px-4 py-5"
+          }
+        >
           {previewRole === "button" ? (
             <span className="inline-flex max-w-none rounded-full bg-primary px-4 py-2 font-semibold text-on-primary text-site-button">
               {PREVIEW_COPY.button}
             </span>
           ) : null}
           {previewRole === "chip" ? (
-            <span className="inline-flex max-w-none rounded-full border border-outline-variant px-3 py-1 font-semibold uppercase tracking-wider text-on-surface text-site-chip">
+            <span className="inline-flex max-w-none rounded-full border border-inverse-on-surface/20 px-3 py-1 font-semibold uppercase tracking-wider text-inverse-on-surface text-site-chip">
               {PREVIEW_COPY.chip}
             </span>
           ) : null}
           {previewRole === "title" ? (
-            <p className="max-w-none wrap-anywhere font-headline font-semibold text-on-surface text-site-title">
-              {PREVIEW_COPY.title}
+            <p className="max-w-none font-headline font-semibold leading-[0.95] tracking-tight text-inverse-on-surface text-site-title">
+              {PREVIEW_COPY.titleLine1}
+              <br />
+              {PREVIEW_COPY.titleLine2}
             </p>
           ) : null}
           {previewRole === "subtitle" ? (
-            <p className="max-w-none wrap-anywhere font-body text-on-surface-variant text-site-subtitle">
+            <p className="max-w-none wrap-anywhere font-body text-inverse-on-surface/80 text-site-subtitle">
               {PREVIEW_COPY.subtitle}
             </p>
           ) : null}
           {previewRole === "content" ? (
-            <p className="max-w-none wrap-anywhere font-body text-on-surface-variant text-site-content">
+            <p className="max-w-none wrap-anywhere font-body text-inverse-on-surface/80 text-site-content">
               {PREVIEW_COPY.content}
             </p>
           ) : null}
         </div>
       </SiteThemeScope>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between font-body text-body-sm text-on-surface-variant">
-          <span>Muy pequeño</span>
-          <span className="font-medium text-primary">{selectedOption.label}</span>
-          <span>Muy grande</span>
+
+      <div className="mt-4">
+        <div className="mb-2 grid grid-cols-3 gap-2 font-body text-body-sm text-on-surface-variant">
+          <span>{sliderLabels.left}</span>
+          <span className="text-center font-medium text-primary">{sliderLabels.center}</span>
+          <span className="text-right">{sliderLabels.right}</span>
         </div>
-        <div className="relative px-1">
-          <Slider
-            aria-label={label}
-            max={TEXT_SIZE_PRESET_OPTIONS.length - 1}
-            min={0}
-            onValueChange={handleValueChange}
-            step={1}
-            value={[Math.max(selectedIndex, 0)]}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-1 top-1/2 z-0 flex -translate-y-1/2 justify-between px-0.5"
-          >
-            {TEXT_SIZE_PRESET_OPTIONS.map((option) => (
-              <span
-                className="size-1.5 rounded-full bg-surface-container-lowest ring-1 ring-outline"
-                key={option.id}
-              />
-            ))}
-          </div>
-        </div>
+        <Slider
+          aria-label={label}
+          max={TEXT_SIZE_PRESET_OPTIONS.length - 1}
+          min={0}
+          onValueChange={handleValueChange}
+          step={1}
+          value={[safeSelectedIndex]}
+        />
       </div>
-    </fieldset>
+    </section>
   );
 }

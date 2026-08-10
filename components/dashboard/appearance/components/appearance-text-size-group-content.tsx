@@ -4,6 +4,34 @@ import type { Landing, LandingAppearance } from "@/lib/dashboard-data";
 import { APPEARANCE_EDITOR_COPY } from "@/components/dashboard/appearance/appearance-editor-copy";
 import { TextSizePresetControl } from "@/components/dashboard/appearance/components/text-size-preset-control";
 
+const TEXT_SIZE_SECTIONS = [
+  {
+    label: APPEARANCE_EDITOR_COPY.buttons,
+    previewRole: "button",
+    valueKey: "buttonTextSize",
+  },
+  {
+    label: APPEARANCE_EDITOR_COPY.chips,
+    previewRole: "chip",
+    valueKey: "chipTextSize",
+  },
+  {
+    label: APPEARANCE_EDITOR_COPY.titles,
+    previewRole: "title",
+    valueKey: "titleTextSize",
+  },
+  {
+    label: APPEARANCE_EDITOR_COPY.subtitles,
+    previewRole: "subtitle",
+    valueKey: "subtitleTextSize",
+  },
+  {
+    label: APPEARANCE_EDITOR_COPY.content,
+    previewRole: "content",
+    valueKey: "contentTextSize",
+  },
+] as const;
+
 export function AppearanceTextSizeGroupContent({
   appearance,
   landing,
@@ -21,43 +49,30 @@ export function AppearanceTextSizeGroupContent({
   onSelectSubtitleTextSize: (value: LandingAppearance["subtitleTextSize"]) => void;
   onSelectTitleTextSize: (value: LandingAppearance["titleTextSize"]) => void;
 }) {
+  const handlers = {
+    buttonTextSize: onSelectButtonTextSize,
+    chipTextSize: onSelectChipTextSize,
+    titleTextSize: onSelectTitleTextSize,
+    subtitleTextSize: onSelectSubtitleTextSize,
+    contentTextSize: onSelectContentTextSize,
+  };
+
   return (
-    <div className="min-w-0 space-y-4 border-t border-outline-variant bg-surface-container-lowest p-4">
-      <TextSizePresetControl
-        label={APPEARANCE_EDITOR_COPY.buttons}
-        onChange={onSelectButtonTextSize}
-        previewRole="button"
-        template={landing.template}
-        value={appearance.buttonTextSize}
-      />
-      <TextSizePresetControl
-        label={APPEARANCE_EDITOR_COPY.chips}
-        onChange={onSelectChipTextSize}
-        previewRole="chip"
-        template={landing.template}
-        value={appearance.chipTextSize}
-      />
-      <TextSizePresetControl
-        label={APPEARANCE_EDITOR_COPY.titles}
-        onChange={onSelectTitleTextSize}
-        previewRole="title"
-        template={landing.template}
-        value={appearance.titleTextSize}
-      />
-      <TextSizePresetControl
-        label={APPEARANCE_EDITOR_COPY.subtitles}
-        onChange={onSelectSubtitleTextSize}
-        previewRole="subtitle"
-        template={landing.template}
-        value={appearance.subtitleTextSize}
-      />
-      <TextSizePresetControl
-        label={APPEARANCE_EDITOR_COPY.content}
-        onChange={onSelectContentTextSize}
-        previewRole="content"
-        template={landing.template}
-        value={appearance.contentTextSize}
-      />
+    <div className="min-w-0 border-t border-outline-variant">
+      {TEXT_SIZE_SECTIONS.map((section, index) => (
+        <div key={section.valueKey}>
+          {index > 0 ? (
+            <div aria-hidden className="mx-4 border-t border-border-subtle" />
+          ) : null}
+          <TextSizePresetControl
+            label={section.label}
+            onChange={handlers[section.valueKey]}
+            previewRole={section.previewRole}
+            template={landing.template}
+            value={appearance[section.valueKey]}
+          />
+        </div>
+      ))}
     </div>
   );
 }

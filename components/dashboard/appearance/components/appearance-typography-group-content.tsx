@@ -18,10 +18,10 @@ export function AppearanceTypographyGroupContent({
   typographyId: string;
 }) {
   return (
-    <div className="space-y-3 border-t border-outline-variant bg-surface-container-lowest p-4">
+    <div className="border-t border-outline-variant px-4 py-5">
       <RadioGroup
         aria-label={APPEARANCE_EDITOR_COPY.typography}
-        className="grid gap-3"
+        className="grid gap-2"
         onValueChange={onSelectTypography}
         value={typographyId}
       >
