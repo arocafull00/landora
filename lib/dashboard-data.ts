@@ -208,6 +208,8 @@ export type GalleryItem = {
   description?: string;
   tags?: string[];
   link?: string;
+  virtualTourUrl?: string;
+  virtualTourLabel?: string;
   linkType?: ProjectLinkType;
   projectSlug?: string;
   projectBody?: string;

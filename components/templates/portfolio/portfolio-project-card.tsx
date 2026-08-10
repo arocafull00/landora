@@ -1,7 +1,11 @@
 import { AssetImage } from "@/components/ui/asset-image";
+import { View } from "lucide-react";
 import Link from "next/link";
 import type { EditorPageTarget, GalleryItem } from "@/lib/dashboard-data";
-import { resolveProjectLinkType } from "@/lib/portfolio-projects";
+import {
+  resolveProjectLinkType,
+  resolveVirtualTour,
+} from "@/lib/portfolio-projects";
 import { getPreviewTargetAttributes } from "@/lib/preview-target-attributes";
 
 const hasText = (item: GalleryItem) =>
@@ -20,12 +24,33 @@ export function PortfolioProjectCard({
 }) {
   const isLarge = index % 3 === 0;
   const showText = hasText(item);
+  const linkType = resolveProjectLinkType(item);
+  const tour = resolveVirtualTour(item);
   const cardClassName = `group relative aspect-4/5 overflow-hidden rounded-lg bg-[var(--site-surface-alt)] md:aspect-auto md:h-full ${
     isLarge ? "md:col-span-2 md:row-span-2" : ""
   }`;
 
-  const content = (
-    <>
+  const linkOverlay =
+    linkType === "internal" && internalHref ? (
+      <Link
+        aria-label={item.title || "Ver proyecto"}
+        className="absolute inset-0 z-10"
+        href={internalHref}
+        prefetch={pageTarget ? true : undefined}
+        {...getPreviewTargetAttributes(pageTarget)}
+      />
+    ) : linkType === "external" && item.link ? (
+      <a
+        aria-label={item.title || "Ver proyecto"}
+        className="absolute inset-0 z-10"
+        href={item.link}
+        rel="noopener noreferrer"
+        target="_blank"
+      />
+    ) : null;
+
+  return (
+    <div className={cardClassName}>
       {item.image ? (
         <AssetImage
           alt={item.title ?? ""}
@@ -50,19 +75,19 @@ export function PortfolioProjectCard({
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none" />
       )}
 
-      {showText && (
-        <div className="absolute bottom-0 left-0 w-full p-5 opacity-100 transition-[opacity,transform] duration-500 ease-out group-hover:translate-y-2 group-hover:opacity-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 md:p-6">
-          {item.title && (
+      {showText ? (
+        <div className="pointer-events-none absolute bottom-0 left-0 z-10 w-full p-5 opacity-100 transition-[opacity,transform] duration-500 ease-out group-hover:translate-y-2 group-hover:opacity-0 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 md:p-6">
+          {item.title ? (
             <h3 className="mb-1 text-lg font-bold text-white md:text-xl">
               {item.title}
             </h3>
-          )}
-          {item.description && (
+          ) : null}
+          {item.description ? (
             <p className="mb-3 text-sm text-white/70 line-clamp-2">
               {item.description}
             </p>
-          )}
-          {item.tags && item.tags.length > 0 && (
+          ) : null}
+          {item.tags && item.tags.length > 0 ? (
             <div className="flex flex-wrap gap-1.5">
               {item.tags.map((tag) => (
                 <span
@@ -73,41 +98,23 @@ export function PortfolioProjectCard({
                 </span>
               ))}
             </div>
-          )}
+          ) : null}
         </div>
-      )}
-    </>
+      ) : null}
+
+      {linkOverlay}
+
+      {tour ? (
+        <a
+          className="absolute bottom-4 right-4 z-20 inline-flex items-center gap-2 rounded-full bg-portfolio-accent px-4 py-2 text-xs font-bold text-portfolio-accent-ink shadow-lg transition-[background-color,transform] duration-300 hover:bg-[var(--portfolio-accent-hover)] hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-portfolio-accent focus-visible:ring-offset-2 md:bottom-6 md:right-6"
+          href={tour.href}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <View aria-hidden className="size-4" />
+          {tour.label}
+        </a>
+      ) : null}
+    </div>
   );
-
-  const linkType = resolveProjectLinkType(item);
-
-  if (linkType === "internal" && internalHref) {
-    return (
-      <Link
-        aria-label={item.title || "Ver proyecto"}
-        className={`${cardClassName} block cursor-pointer`}
-        href={internalHref}
-        prefetch={pageTarget ? true : undefined}
-        {...getPreviewTargetAttributes(pageTarget)}
-      >
-        {content}
-      </Link>
-    );
-  }
-
-  if (linkType === "external" && item.link) {
-    return (
-      <a
-        aria-label={item.title || "Ver proyecto"}
-        className={`${cardClassName} block cursor-pointer`}
-        href={item.link}
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        {content}
-      </a>
-    );
-  }
-
-  return <div className={cardClassName}>{content}</div>;
 }

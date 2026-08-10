@@ -6,7 +6,9 @@ import { UserAccessBadge } from "@/components/admin/user-access-badge";
 import { UserActionsMenu } from "@/components/admin/user-actions-menu";
 import { UserPlanBadge } from "@/components/admin/user-plan-badge";
 import { UserStatusBadge } from "@/components/admin/user-status-badge";
+import { UserTemplateBadge } from "@/components/admin/user-template-badge";
 import {
+  getLandingTemplateLabel,
   getRelativePeriodEndLabel,
   getUserDisplayPlan,
   getUserDisplayStatus,
@@ -76,6 +78,13 @@ export function UserTableRow({ user }: { user: AdminUserWithLanding }) {
               </p>
             ) : null}
           </div>
+        )}
+      </td>
+      <td className="px-4 py-3 align-top">
+        {user.landing ? (
+          <UserTemplateBadge label={getLandingTemplateLabel(user.landing.template)} />
+        ) : (
+          <span className="font-body text-body-sm text-on-surface-variant">—</span>
         )}
       </td>
       <td className="px-4 py-3 align-top">

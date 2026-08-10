@@ -336,6 +336,8 @@ export async function replaceLandingGallery(
     | "description"
     | "tags"
     | "link"
+    | "virtualTourUrl"
+    | "virtualTourLabel"
     | "linkType"
     | "projectSlug"
     | "projectBody"

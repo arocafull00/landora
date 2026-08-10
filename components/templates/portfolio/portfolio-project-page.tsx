@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { AssetImage } from "@/components/ui/asset-image";
 import { PortfolioContactSection } from "@/components/templates/portfolio/portfolio-contact-section";
+import { PortfolioButton } from "@/components/templates/portfolio/portfolio-button";
 import { PortfolioNav } from "@/components/templates/portfolio/portfolio-nav";
 import { PortfolioProjectCarousel } from "@/components/templates/portfolio/portfolio-project-carousel";
 import { PortfolioProjectPageTag } from "@/components/templates/portfolio/portfolio-project-page-tag";
@@ -10,6 +11,7 @@ import {
   getPreviewLandingPath,
   getPublicLandingPath,
 } from "@/lib/public-site-url";
+import { resolveVirtualTour } from "@/lib/portfolio-projects";
 import { getPreviewTargetAttributes } from "@/lib/preview-target-attributes";
 
 export function PortfolioProjectPage({
@@ -29,6 +31,7 @@ export function PortfolioProjectPage({
   const projectsHref = `${homeHref}#proyectos`;
   const title = project.title || "Proyecto";
   const gallery = project.projectGallery ?? [];
+  const tour = resolveVirtualTour(project);
 
   return (
     <>
@@ -87,6 +90,16 @@ export function PortfolioProjectPage({
                     >
                       {project.description}
                     </p>
+                  ) : null}
+                  {tour ? (
+                    <PortfolioButton
+                      className="mt-8"
+                      href={tour.href}
+                      size="lg"
+                      variant="primary"
+                    >
+                      {tour.label}
+                    </PortfolioButton>
                   ) : null}
                 </div>
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-portfolio-surface">

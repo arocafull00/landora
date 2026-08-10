@@ -6,6 +6,7 @@ const TABLE_HEADERS = [
   "Plan",
   "Estado",
   "Próximo pago",
+  "Template",
   "Sitio web",
   "Acceso",
   "Acciones",

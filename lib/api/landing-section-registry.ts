@@ -269,6 +269,8 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
         description: item.description,
         tags: item.tags.join(", "),
         link: item.link,
+        virtualTourUrl: item.virtualTourUrl,
+        virtualTourLabel: item.virtualTourLabel,
         linkType: item.linkType,
         projectSlug: item.projectSlug,
         projectBody: item.projectBody,

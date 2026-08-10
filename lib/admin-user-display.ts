@@ -5,6 +5,8 @@ import type {
   User,
   UserAddonManualAccess,
 } from "@/lib/domain/dtos";
+import type { TemplateId } from "@/lib/dashboard-data";
+import { getTemplate } from "@/lib/template-registry";
 import { hasActiveSubscription } from "@/lib/subscription-access";
 import { getPublicLandingUrl } from "@/lib/public-site-url";
 
@@ -132,6 +134,10 @@ export function filterAdminUsers(
 
     return true;
   });
+}
+
+export function getLandingTemplateLabel(template: TemplateId): string {
+  return getTemplate(template)?.label ?? template;
 }
 
 export function getLandingPublicUrl(landing: LandingPage | null) {

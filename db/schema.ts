@@ -385,6 +385,8 @@ export const landingGallery = pgTable("landing_gallery", {
   description: text("description").notNull().default(""),
   tags: text("tags").notNull().default(""),
   link: text("link").notNull().default(""),
+  virtualTourUrl: text("virtual_tour_url").notNull().default(""),
+  virtualTourLabel: text("virtual_tour_label").notNull().default(""),
   linkType: text("link_type").notNull().default("none"),
   projectSlug: text("project_slug").notNull().default(""),
   projectBody: text("project_body").notNull().default(""),

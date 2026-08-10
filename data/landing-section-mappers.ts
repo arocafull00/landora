@@ -118,6 +118,8 @@ export function mapDefaultGallery(content: LandingContent) {
       | "description"
       | "tags"
       | "link"
+      | "virtualTourUrl"
+      | "virtualTourLabel"
       | "linkType"
       | "projectSlug"
       | "projectBody"
@@ -129,6 +131,8 @@ export function mapDefaultGallery(content: LandingContent) {
       description: g.description ?? "",
       tags: (g.tags ?? []).join(", "),
       link: g.link ?? "",
+      virtualTourUrl: g.virtualTourUrl ?? "",
+      virtualTourLabel: g.virtualTourLabel ?? "",
       linkType: g.linkType ?? (g.link ? "external" : "none"),
       projectSlug: g.projectSlug ?? "",
       projectBody: g.projectBody ?? "",

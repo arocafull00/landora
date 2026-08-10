@@ -79,6 +79,8 @@ const portfolioGalleryItemSchema = z
     description: z.string().trim().max(500).optional().default(""),
     tags: z.array(z.string().trim().min(1).max(40)).max(10).optional().default([]),
     link: externalLinkSchema.optional().default(""),
+    virtualTourUrl: externalLinkSchema.optional().default(""),
+    virtualTourLabel: z.string().trim().max(60).optional().default(""),
     linkType: projectLinkTypeSchema.optional(),
     projectSlug: projectSlugSchema.optional().default(""),
     projectBody: z.string().trim().max(10_000).optional().default(""),

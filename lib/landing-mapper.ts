@@ -108,6 +108,8 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
         description: g.description || undefined,
         tags: parseCommaList(g.tags),
         link: g.link || undefined,
+        virtualTourUrl: g.virtualTourUrl || undefined,
+        virtualTourLabel: g.virtualTourLabel || undefined,
         linkType:
           g.linkType === "internal" || g.linkType === "external"
             ? g.linkType

@@ -3,6 +3,7 @@
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { useShallow } from "zustand/react/shallow";
 import type { Landing } from "@/lib/dashboard-data";
+import { getTemplate } from "@/lib/template-registry";
 import { LockIcon } from "lucide-react";
 
 type AdminEditorPanelProps = {
@@ -13,6 +14,8 @@ export function AdminEditorPanel({ activeLanding }: AdminEditorPanelProps) {
   const { updateLandingMeta } = useDashboardStore(
     useShallow((state) => ({ updateLandingMeta: state.updateLandingMeta })),
   );
+  const templateLabel =
+    getTemplate(activeLanding.template)?.label ?? activeLanding.template;
 
   return (
     <section className="space-y-4 py-unit-lg">
@@ -20,6 +23,14 @@ export function AdminEditorPanel({ activeLanding }: AdminEditorPanelProps) {
         <LockIcon className="h-3.5 w-3.5" />
         <span className="font-label text-label-sm uppercase tracking-wide">
           Solo admin
+        </span>
+      </div>
+      <div>
+        <span className="mb-2 block font-label text-label-md text-on-surface-variant">
+          Template asignada
+        </span>
+        <span className="inline-flex rounded-lg border border-outline-variant bg-surface px-3 py-2 font-body text-body-md text-on-surface">
+          {templateLabel}
         </span>
       </div>
       <div className="grid gap-4 md:grid-cols-2">

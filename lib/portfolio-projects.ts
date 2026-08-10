@@ -6,6 +6,17 @@ import type {
 export const DEFAULT_PROJECT_BODY =
   "Este proyecto nació con un objetivo claro: resolver un problema concreto con una solución sencilla, reconocible y útil.\n\nTrabajé en la estrategia, el diseño y la implementación para construir una experiencia coherente de principio a fin, cuidando tanto el detalle visual como el resultado de negocio.";
 
+export const DEFAULT_VIRTUAL_TOUR_LABEL = "Ver tour virtual";
+
+export function resolveVirtualTour(item: GalleryItem) {
+  if (!item.virtualTourUrl) return null;
+
+  return {
+    href: item.virtualTourUrl,
+    label: item.virtualTourLabel?.trim() || DEFAULT_VIRTUAL_TOUR_LABEL,
+  };
+}
+
 export function resolveProjectLinkType(item: GalleryItem): ProjectLinkType {
   if (item.linkType) return item.linkType;
   return item.link ? "external" : "none";

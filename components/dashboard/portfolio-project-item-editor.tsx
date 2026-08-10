@@ -15,6 +15,7 @@ import type { GalleryItem, TemplateId } from "@/lib/dashboard-data";
 import {
   createUniqueProjectSlug,
   DEFAULT_PROJECT_BODY,
+  DEFAULT_VIRTUAL_TOUR_LABEL,
   resolveProjectLinkType,
 } from "@/lib/portfolio-projects";
 
@@ -87,6 +88,32 @@ export function PortfolioProjectItemEditor({
         onChange={(value) => onChange({ tags: value })}
         value={item.tags ?? []}
       />
+      <label className="block">
+        <span className="mb-2 block font-label text-label-md text-on-surface-variant">
+          URL del tour virtual (opcional)
+        </span>
+        <input
+          className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+          onChange={(event) => onChange({ virtualTourUrl: event.target.value })}
+          placeholder="https://..."
+          type="url"
+          value={item.virtualTourUrl ?? ""}
+        />
+      </label>
+      {item.virtualTourUrl ? (
+        <label className="block">
+          <span className="mb-2 block font-label text-label-md text-on-surface-variant">
+            Texto del botón
+          </span>
+          <input
+            className="w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 text-body-md text-on-surface outline-none transition-shadow focus:border-primary focus:ring-1 focus:ring-primary"
+            onChange={(event) => onChange({ virtualTourLabel: event.target.value })}
+            placeholder={DEFAULT_VIRTUAL_TOUR_LABEL}
+            type="text"
+            value={item.virtualTourLabel ?? ""}
+          />
+        </label>
+      ) : null}
       <div className="space-y-2">
         <span className="block font-label text-label-md text-on-surface-variant">
           Acción al pulsar

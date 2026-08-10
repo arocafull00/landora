@@ -8,6 +8,8 @@ export function createEmptyGalleryItem(): GalleryItem {
     description: "",
     tags: [],
     link: "",
+    virtualTourUrl: "",
+    virtualTourLabel: "",
     linkType: "none",
     projectSlug: "",
     projectBody: "",

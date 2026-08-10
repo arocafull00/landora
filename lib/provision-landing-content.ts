@@ -80,6 +80,8 @@ async function provisionProspectLandingContent(
         description: "",
         tags: "",
         link: "",
+        virtualTourUrl: "",
+        virtualTourLabel: "",
         linkType: "none",
         projectSlug: "",
         projectBody: "",
