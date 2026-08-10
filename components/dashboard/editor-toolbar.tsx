@@ -8,7 +8,6 @@ import {
   PlusIcon,
   Trash2Icon,
 } from "lucide-react";
-import { toast } from "react-toastify";
 import { DashboardTutorialButton } from "@/components/dashboard/dashboard-tutorial";
 import {
   DropdownMenu,
@@ -20,8 +19,9 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CopyMorphButton } from "@/components/ui/copy-morph-button";
 import { Icon } from "@/components/ui/icon";
-import { ActionButton, IconButton, StatusBadge } from "@/components/ui/primitives";
+import { ActionButton, StatusBadge } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 import { resolveProjectLinkType } from "@/lib/portfolio-projects";
 import {
@@ -70,8 +70,7 @@ export function EditorToolbar() {
         ? "Carta"
         : activeProject?.title || activeLanding.name;
 
-  const copyPreviewLink = async () => {
-    let url: string;
+  const getPreviewLink = () => {
     let pathname = "";
 
     if (activePageTarget.type === "about") {
@@ -83,20 +82,13 @@ export function EditorToolbar() {
     }
 
     if (activeLanding.status === "Published") {
-      url = getPublicLandingUrl(activeLanding, pathname);
-    } else {
-      url = `${window.location.origin}${getPreviewLandingPath(
-        activeLanding.id,
-        pathname,
-      )}`;
+      return getPublicLandingUrl(activeLanding, pathname);
     }
 
-    try {
-      await navigator.clipboard.writeText(url);
-      toast.success("Enlace copiado");
-    } catch {
-      toast.error("No se pudo copiar el enlace");
-    }
+    return `${window.location.origin}${getPreviewLandingPath(
+      activeLanding.id,
+      pathname,
+    )}`;
   };
 
   return (
@@ -226,11 +218,14 @@ export function EditorToolbar() {
       </div>
       <div className="flex shrink-0 items-center gap-3">
         <DashboardTutorialButton />
-        <IconButton
+        <CopyMorphButton
+          className="rounded-md"
+          errorMessage="No se pudo copiar el enlace"
           id="tutorial-copy-link"
-          icon="link"
           label="Copiar enlace"
-          onClick={copyPreviewLink}
+          showLabel={false}
+          successMessage="Enlace copiado"
+          value={getPreviewLink}
         />
         <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
         <ActionButton
