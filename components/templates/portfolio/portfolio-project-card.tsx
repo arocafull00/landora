@@ -76,7 +76,7 @@ export function PortfolioProjectCard({
       )}
 
       {showText ? (
-        <div className="pointer-events-none absolute bottom-0 left-0 z-10 w-full translate-y-2 p-5 opacity-0 transition-[opacity,transform] duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0 md:p-6">
+        <div className="pointer-events-none absolute bottom-0 left-0 z-10 w-full p-5 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:transition-none md:p-6">
           {item.title ? (
             <h3 className="mb-1 font-bold text-white text-site-title-sm">
               {item.title}

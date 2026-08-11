@@ -64,8 +64,8 @@ export function PortfolioProjectPage({
                 <ArrowLeft aria-hidden className="size-4" />
                 Volver a proyectos
               </Link>
-              <div className="grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-end lg:gap-20 xl:gap-28">
-                <div>
+              <div className="grid gap-12 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] xl:items-end xl:gap-28">
+                <div className="min-w-0">
                   {project.tags?.length ? (
                     <ul
                       aria-label="Etiquetas del proyecto"
@@ -77,7 +77,7 @@ export function PortfolioProjectPage({
                     </ul>
                   ) : null}
                   <h1
-                    className="text-balance font-extrabold leading-[0.95] tracking-[-0.04em] text-portfolio-ink text-site-title-xl"
+                    className="wrap-anywhere text-balance font-extrabold leading-[0.95] tracking-[-0.04em] text-portfolio-ink text-[min(var(--site-text-title-xl),clamp(2.5rem,6vw,4rem))]"
                     data-editor-id="project-title"
                     style={{ fontFamily: "var(--font-syne)" }}
                   >
