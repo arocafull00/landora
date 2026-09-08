@@ -6,7 +6,7 @@ import { SignInForm } from "@/components/auth/sign-in-form";
 
 export default async function SignInPage() {
   const { isAuthenticated } = await auth();
-  if (isAuthenticated) redirect("/");
+  if (isAuthenticated) redirect("/editor");
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-8">
       <SignInBackground />

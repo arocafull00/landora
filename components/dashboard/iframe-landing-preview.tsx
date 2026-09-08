@@ -47,6 +47,7 @@ export function IframeLandingPreview({
   const previewReady = isLoaded && isSignedIn;
   const { iframeRef, previewSrc } = useIframePreviewBridge({
     content,
+    enabled: previewReady,
     landingId,
     onPageTargetChange,
     pageTarget,

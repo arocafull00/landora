@@ -1151,9 +1151,12 @@ textarea {
     height: auto;
     width: 100%;
     max-width: 700px;
+    overflow: hidden;
   }
   .gallery-expand-item {
     flex: none !important;
+    min-width: 0;
+    width: auto;
     height: auto;
     aspect-ratio: 4/5;
     border-radius: 10px;

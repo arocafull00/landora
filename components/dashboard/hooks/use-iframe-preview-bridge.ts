@@ -34,6 +34,7 @@ import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 type IframePreviewBridgeParams = {
   content: LandingContent;
+  enabled: boolean;
   landingId: string;
   onPageTargetChange?: (target: EditorPageTarget) => void;
   pageTarget: EditorPageTarget;
@@ -55,6 +56,7 @@ function syncIframeTextSize(
 
 export function useIframePreviewBridge({
   content,
+  enabled,
   landingId,
   onPageTargetChange,
   pageTarget,
@@ -192,6 +194,8 @@ export function useIframePreviewBridge({
   }, [landingId]);
 
   useEffect(() => {
+    if (!enabled) return;
+
     const iframe = iframeRef.current;
     if (!iframe) return;
     let activePort: MessagePort | null = null;
@@ -248,7 +252,7 @@ export function useIframePreviewBridge({
         portRef.current = null;
       }
     };
-  }, [landingId, sendContent, sendPageTarget, sendSectionFocus]);
+  }, [enabled, landingId, sendContent, sendPageTarget, sendSectionFocus]);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "development") return;

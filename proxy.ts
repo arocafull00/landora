@@ -253,7 +253,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
         return new NextResponse("Not Found", { status: 404 });
       }
       const redirectUrl = req.nextUrl.clone();
-      redirectUrl.pathname = "/";
+      redirectUrl.pathname = "/editor";
       return NextResponse.redirect(redirectUrl);
     }
 

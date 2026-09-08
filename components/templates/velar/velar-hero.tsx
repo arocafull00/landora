@@ -51,11 +51,12 @@ export function VelarHero({
         >
           <h1
             data-editor-id="hero:eyebrow"
-            className="font-extrabold uppercase text-black lg:text-left text-site-title-lg"
+            className="font-extrabold uppercase text-black lg:text-left"
             style={{
               fontFamily: "var(--font-syne)",
               letterSpacing: "-0.03em",
               lineHeight: 1,
+              fontSize: "calc(var(--site-text-title) * 0.7)",
             }}
           >
             {content.hero.eyebrow}
@@ -78,8 +79,12 @@ lineHeight: 1.6,
           <h2
             data-editor-id="hero:title"
             data-velar-hero-reveal
-            className="max-w-full wrap-break-word px-6 font-extrabold uppercase leading-[0.9] text-black md:px-10 lg:px-16 lg:text-left lg:leading-[0.88] lg:whitespace-nowrap text-site-title"
-            style={{ fontFamily: "var(--font-syne)", letterSpacing: "-0.03em" }}
+            className="max-w-full wrap-break-word px-6 font-extrabold uppercase leading-[0.9] text-black md:px-10 lg:px-16 lg:text-left lg:leading-[0.88] lg:whitespace-nowrap"
+            style={{
+              fontFamily: "var(--font-syne)",
+              letterSpacing: "-0.03em",
+              fontSize: "calc(var(--site-text-title) * 0.85)",
+            }}
           >
             {content.hero.title}
           </h2>

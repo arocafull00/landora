@@ -9,7 +9,7 @@ export function VelarGalleryItem({
   return (
     <div
       aria-label={item.title || "Gallery item"}
-      className="gallery-expand-item group relative h-full min-w-[82vw] snap-center overflow-hidden rounded-xl sm:min-w-[48%] lg:min-w-0 lg:flex-1 lg:transition-[flex-grow] lg:duration-500 lg:ease-out lg:hover:flex-[1.8] motion-reduce:transition-none"
+      className="gallery-expand-item group relative h-auto min-w-0 w-full aspect-[4/5] overflow-hidden rounded-xl lg:h-full lg:aspect-auto lg:flex-1 lg:transition-[flex-grow] lg:duration-500 lg:ease-out lg:hover:flex-[1.8] motion-reduce:transition-none"
     >
       {item.image ? (
         <AssetImage

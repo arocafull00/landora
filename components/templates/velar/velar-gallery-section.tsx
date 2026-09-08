@@ -39,7 +39,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
       </div>
 
       <div className="s3-gallery-content relative z-[1] flex h-full items-center justify-center lg:p-[clamp(24px,4vw,60px)]">
-        <div className="gallery-expand-row flex h-[70%] w-full max-w-[1200px] snap-x snap-mandatory gap-2 overflow-x-auto lg:overflow-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="gallery-expand-row grid h-auto w-full max-w-[700px] grid-cols-2 gap-2 overflow-hidden lg:flex lg:h-[70%] lg:max-w-[1200px]">
           {(content.gallery ?? []).map((item) => (
             <VelarGalleryItem key={item.id} item={item} />
           ))}
