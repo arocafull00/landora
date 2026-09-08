@@ -25,14 +25,14 @@ export function VelarSpaceCard({
       <div className="absolute inset-0 flex flex-col justify-end p-8 text-white opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
         <h3
           data-editor-id={`residences:space:${space.id}:name`}
-          className="mb-3 font-bold text-site-title"
+          className="mb-3 font-bold text-site-title-sm"
           style={{ fontFamily: "var(--font-syne)" }}
         >
           {space.name}
         </h3>
         <p
           data-editor-id={`residences:space:${space.id}:description`}
-          className="mb-4 opacity-90 text-site-subtitle"
+          className="mb-4 opacity-90 text-site-content"
           style={{ fontFamily: "var(--font-body)" }}
         >
           {space.description}

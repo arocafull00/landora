@@ -29,8 +29,8 @@ export function VelarTestimonialsSection({ content }: { content: LandingContent 
             data-editor-id="testimonios:heading:title"
             className="mb-8 font-extrabold leading-tight text-[var(--site-text)]"
             style={{
-              fontFamily: "var(--font-syne)",
-letterSpacing: "-0.02em",
+              fontFamily: "var(--font-marcellus)",
+              letterSpacing: "-0.02em",
             }}
           >
             {heading.title}

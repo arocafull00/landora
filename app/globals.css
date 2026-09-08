@@ -11,6 +11,7 @@ button {
   --font-label: var(--font-source-label);
   --font-syne: var(--font-source-syne);
   --font-playfair: var(--font-source-playfair);
+  --font-marcellus: var(--font-source-marcellus);
   --foreground: var(--on-background);
   --popover: var(--surface-container-lowest);
   --popover-foreground: var(--on-surface);

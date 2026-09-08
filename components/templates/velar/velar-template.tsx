@@ -69,7 +69,7 @@ export function VelarTemplate({
         brand={content.brand || "Velar."}
         brandLogoType={content.brandLogoType ?? "text"}
         brandLogoImage={content.brandLogoImage ?? ""}
-        navColor={heroNavTone === "light" ? "var(--site-on-dark)" : "var(--site-primary)"}
+        heroNavTone={heroNavTone}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "velar")}
         topOffset={topOffset}
       />

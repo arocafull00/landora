@@ -1,7 +1,9 @@
-import { CalendarCheck, ArrowRight } from "lucide-react";
+import type { CSSProperties } from "react";
+import { CalendarCheck } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarServicePanel } from "@/components/templates/velar/velar-service-panel";
+import { VelarServicesCta } from "@/components/templates/velar/velar-services-cta";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 
 function getWhatsAppLink(phone: string) {
@@ -39,8 +41,8 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
             data-editor-id="servicios:heading:title"
             className="mx-auto mb-6 max-w-4xl font-extrabold leading-tight text-[var(--site-text)]"
             style={{
-              fontFamily: "var(--font-syne)",
-letterSpacing: "-0.02em",
+              fontFamily: "var(--font-marcellus)",
+              letterSpacing: "-0.02em",
             }}
           >
             {heading.title}
@@ -54,24 +56,18 @@ letterSpacing: "-0.02em",
               {heading.subtitle}
             </p>
           ) : null}
-          <a
-            href={whatsappLink}
-            className="mx-auto inline-flex max-w-[280px] cursor-pointer flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center font-semibold uppercase tracking-wide text-[var(--site-primary)] hover:underline sm:max-w-sm text-site-content"
-            style={{ fontFamily: "var(--font-syne)" }}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-analytics-event="whatsapp_click"
-          >
-            <CalendarCheck className="h-5 w-5" />
-            CONSULTA DISPONIBILIDAD Y EMPIEZA A PLANEAR TU EVENTO
-            <ArrowRight className="h-5 w-5" />
-          </a>
+          <VelarServicesCta href={whatsappLink} />
         </div>
 
         <div
-          className="grid grid-cols-1 gap-0 md:grid-cols-5"
+          className="[container-type:inline-size] flex flex-col md:flex-row"
           data-aos="fade-up"
           data-aos-delay="100"
+          style={
+            {
+              "--service-copy-width": `${100 / content.services.length}cqw`,
+            } as CSSProperties
+          }
         >
           {(content.services ?? []).map((service, index) => (
             <VelarServicePanel

@@ -7,6 +7,7 @@ import {
   Inter,
   Inter_Tight,
   JetBrains_Mono,
+  Marcellus,
   Playfair_Display,
   Source_Sans_3,
   Syne,
@@ -34,6 +35,13 @@ const syne = Syne({
   variable: "--font-source-syne",
   subsets: ["latin"],
   weight: ["400", "700", "800"],
+  preload: false,
+});
+
+const marcellus = Marcellus({
+  variable: "--font-source-marcellus",
+  subsets: ["latin"],
+  weight: "400",
   preload: false,
 });
 
@@ -91,6 +99,7 @@ export const siteFontVariables = [
   inter.variable,
   dashboardLabel.variable,
   syne.variable,
+  marcellus.variable,
   playfairDisplay.variable,
   sourceSans.variable,
   dmSans.variable,

@@ -8,29 +8,27 @@ export function VelarStatementSection({
   content: LandingContent;
   sectionRef?: React.RefObject<HTMLDivElement | null>;
 }) {
-
   return (
     <div
       ref={sectionRef}
       data-section="story"
       data-section-label="Historia"
       id="story"
-      className="relative z-20 h-[80vh] md:h-[200vh]"
+      className="relative z-20 bg-[var(--site-dark)]"
     >
-      <div className="h-[4vh] bg-[var(--site-dark)]" />
-      <div className="s2-section sticky top-0 h-screen scroll-mt-24 overflow-hidden bg-[var(--site-dark)]">
-        <div className="flex h-full flex-col justify-center gap-8 px-6 py-10 md:justify-between md:gap-0 md:px-10 md:py-0 md:pb-[clamp(60px,8vw,120px)] md:pt-[clamp(30px,4vw,60px)] lg:px-16">
-          <div className="mx-auto w-full max-w-[1200px] md:pl-[15%] lg:pl-[25%]">
+      <div className="s2-section scroll-mt-24 bg-[var(--site-dark)]">
+        <div className="mx-auto flex min-h-[65svh] w-full max-w-[960px] flex-col justify-center gap-[clamp(48px,6vw,80px)] px-6 py-[clamp(64px,8vw,96px)] md:px-10 lg:px-0">
+          <div className="mx-auto w-full max-w-[36rem]">
             <p
               data-editor-id="story:statement"
-              className="max-w-[36ch] font-light leading-[1.35] tracking-[-0.02em] text-[var(--site-on-dark)] md:max-w-none lg:max-w-[28ch] text-site-subtitle"
+              className="mx-auto max-w-[36ch] text-center font-light leading-[1.35] tracking-[-0.02em] text-[var(--site-on-dark)] text-site-subtitle"
               style={{ fontFamily: "var(--font-body)" }}
             >
               {content.story?.statement ?? ""}
             </p>
           </div>
 
-          <div className="mx-auto w-full max-w-[1200px] md:mt-[clamp(48px,6vw,80px)] md:pl-[15%] lg:pl-[25%]">
+          <div className="mx-auto w-full max-w-[720px]">
             <div className="flex gap-0">
               {content.stats.map((stat, i) => (
                 <div

@@ -6,6 +6,8 @@ import type {
 } from "@/lib/dashboard-data";
 import { getPreviewTargetAttributes } from "@/lib/preview-target-attributes";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
+import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
+import { cn } from "@/lib/utils";
 
 export type NativeTemplateNavLink = NavLink & {
   pageTarget?: EditorPageTarget;
@@ -20,6 +22,8 @@ export function NativeTemplateNav({
   homeHref = "#hero",
   homePageTarget,
   navLinks,
+  overlay = false,
+  tone = "dark",
   topOffset = 0,
 }: {
   brand: string;
@@ -30,12 +34,23 @@ export function NativeTemplateNav({
   homeHref?: string;
   homePageTarget?: EditorPageTarget;
   navLinks: NativeTemplateNavLink[];
+  overlay?: boolean;
+  tone?: HeroNavTone;
   topOffset?: number;
 }) {
   return (
     <nav
       aria-label="Principal"
-      className="fixed inset-x-0 z-50 border-b border-[var(--site-border)]/40 bg-[var(--site-surface)]/90 px-5 py-3 text-[var(--site-text)] backdrop-blur-md md:px-10 lg:px-16"
+      className={cn(
+        "fixed inset-x-0 z-50 px-5 py-3 md:px-10 lg:px-16",
+        overlay
+          ? "border-b border-transparent bg-transparent"
+          : "border-b border-[var(--site-border)]/40 bg-[var(--site-surface)]/90 text-[var(--site-text)] backdrop-blur-md",
+        overlay &&
+          (tone === "light"
+            ? "text-[var(--site-on-dark)]"
+            : "text-[var(--site-primary)]"),
+      )}
       style={{ top: topOffset }}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6">
@@ -54,7 +69,14 @@ export function NativeTemplateNav({
         <div className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => (
             <a
-              className="font-medium text-[var(--site-text-muted)] transition-colors hover:text-[var(--site-text)] text-site-content"
+              className={cn(
+                "font-medium transition-colors text-site-content",
+                overlay && tone === "light"
+                  ? "text-[var(--site-on-dark)]/80 hover:text-[var(--site-on-dark)]"
+                  : overlay
+                    ? "text-[var(--site-primary)]/75 hover:text-[var(--site-primary)]"
+                    : "text-[var(--site-text-muted)] hover:text-[var(--site-text)]",
+              )}
               href={link.href}
               key={link.id}
               {...getPreviewTargetAttributes(link.pageTarget)}

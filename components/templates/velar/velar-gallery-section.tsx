@@ -16,7 +16,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
       data-section="listings"
       data-section-label="Galería"
       id="listings"
-      className="s3-gallery-section relative z-25 mt-0 md:h-screen scroll-mt-24 overflow-hidden bg-[var(--site-dark)] lg:mt-[-100vh]"
+      className="s3-gallery-section relative z-25 mt-0 scroll-mt-24 overflow-hidden bg-[var(--site-dark)] md:h-screen"
     >
       <div className="s3-ticker-wrap absolute inset-0 z-0 flex items-center overflow-hidden pointer-events-none select-none">
         <div className="ticker-track flex">
@@ -39,7 +39,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
       </div>
 
       <div className="s3-gallery-content relative z-[1] flex h-full items-center justify-center lg:p-[clamp(24px,4vw,60px)]">
-        <div className="gallery-expand-row flex h-[70%] w-full max-w-[1200px] snap-x snap-mandatory gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="gallery-expand-row flex h-[70%] w-full max-w-[1200px] snap-x snap-mandatory gap-2 overflow-x-auto lg:overflow-hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {(content.gallery ?? []).map((item) => (
             <VelarGalleryItem key={item.id} item={item} />
           ))}

@@ -1,5 +1,6 @@
 import { AssetImage } from "@/components/ui/asset-image";
 import type { ServiceContent } from "@/lib/dashboard-data";
+import { VelarServicePanelCopy } from "@/components/templates/velar/velar-service-panel-copy";
 
 export function VelarServicePanel({
   service,
@@ -9,10 +10,10 @@ export function VelarServicePanel({
   priority?: boolean;
 }) {
   return (
-    <div className="group relative h-[400px] overflow-hidden md:h-[500px]">
+    <div className="group relative h-[400px] overflow-hidden md:h-[500px] md:min-w-0 md:flex-1 md:transition-[flex-grow] md:duration-500 md:ease-out md:hover:flex-[1.8] motion-reduce:transition-none">
       <AssetImage
         alt={service.title}
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        className="object-cover"
         fill
         priority={priority}
         quality={95}
@@ -20,33 +21,7 @@ export function VelarServicePanel({
         src={service.image}
       />
       <div className="absolute inset-0 bg-black/35 transition-colors group-hover:bg-black/45" />
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 text-center text-white">
-        {service.label && (
-          <p
-            data-editor-id={`servicios:service:${service.id}:label`}
-            className="mb-3 font-medium uppercase tracking-widest text-white/90 text-site-content"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            {service.label}
-          </p>
-        )}
-        <h3
-          data-editor-id={`servicios:service:${service.id}:title`}
-          className="mb-2 font-bold drop-shadow-lg text-site-title"
-          style={{ fontFamily: "var(--font-syne)" }}
-        >
-          {service.title}
-        </h3>
-        {service.subtitle && (
-          <p
-            data-editor-id={`servicios:service:${service.id}:subtitle`}
-            className="font-medium uppercase tracking-wide text-white/95 drop-shadow-md text-site-content"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            {service.subtitle}
-          </p>
-        )}
-      </div>
+      <VelarServicePanelCopy service={service} />
     </div>
   );
 }
