@@ -3,7 +3,7 @@ import type { ServiceContent } from "@/lib/dashboard-data";
 export function VelarServicePanelCopy({ service }: { service: ServiceContent }) {
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center">
-      <div className="flex w-full flex-col items-center px-6 py-6 text-center text-[var(--site-on-dark)]">
+      <div className="flex w-full shrink-0 flex-col items-center px-6 py-6 text-center text-[var(--site-on-dark)] md:w-(--service-copy-width)">
         {service.label ? (
           <p
             data-editor-id={`servicios:service:${service.id}:label`}

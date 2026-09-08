@@ -60,7 +60,6 @@ export function VelarHero({
             style={{
               fontFamily: "var(--font-syne)",
               letterSpacing: "-0.03em",
-              lineHeight: 1,
               fontSize: "calc(var(--site-text-title) * 0.7)",
             }}
           >
@@ -88,7 +87,7 @@ lineHeight: 1.6,
             style={{
               fontFamily: "var(--font-syne)",
               letterSpacing: "-0.03em",
-              fontSize: "calc(var(--site-text-title) * 0.85)",
+              fontSize: "calc(var(--site-text-title) * 0.95)",
             }}
           >
             {content.hero.title}

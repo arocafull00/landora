@@ -1,8 +1,8 @@
+import type { CSSProperties } from "react";
 import { CalendarCheck } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarServicePanel } from "@/components/templates/velar/velar-service-panel";
-import { VelarServicesCta } from "@/components/templates/velar/velar-services-cta";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { VELAR_CTA_LABEL, getVelarWhatsAppLink } from "@/lib/velar-links";
 
@@ -25,19 +25,10 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
     >
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center" data-aos="fade-up">
-          <p
-            className="mb-6 uppercase tracking-widest text-[var(--site-accent)] text-site-content"
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            SERVICIOS GENERALES INCLUIDOS
-          </p>
           <h2
             data-editor-id="servicios:heading:title"
-            className="mx-auto mb-6 max-w-4xl font-extrabold leading-tight text-[var(--site-text)]"
-            style={{
-              fontFamily: "var(--font-marcellus)",
-              letterSpacing: "-0.02em",
-            }}
+            className="mb-6 uppercase tracking-widest text-[var(--site-accent)] text-site-content"
+            style={{ fontFamily: "var(--font-body)" }}
           >
             {heading.title}
           </h2>
@@ -50,13 +41,17 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
               {heading.subtitle}
             </p>
           ) : null}
-          {whatsappLink ? <VelarServicesCta href={whatsappLink} /> : null}
         </div>
 
         <div
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="[container-type:inline-size] flex flex-col md:flex-row"
           data-aos="fade-up"
           data-aos-delay="100"
+          style={
+            {
+              "--service-copy-width": `${100 / content.services.length}cqw`,
+            } as CSSProperties
+          }
         >
           {(content.services ?? []).map((service, index) => (
             <VelarServicePanel

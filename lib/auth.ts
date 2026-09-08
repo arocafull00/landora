@@ -1,7 +1,10 @@
 import { cache } from "react";
 import { auth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { getSubscriptionStatus } from "@/data/subscriptions";
 import { getCurrentUser, getUserByIdForImpersonation } from "@/data/users";
+import { hasDashboardAccess } from "@/lib/subscription-access";
 
 export const IMPERSONATION_COOKIE = "impersonating";
 
@@ -61,3 +64,39 @@ export const getEffectiveClientId = cache(async (): Promise<string | null> => {
   const currentUser = await getCurrentUser();
   return currentUser?.id ?? null;
 });
+
+export const resolveAuthenticatedDestination = cache(async (): Promise<string> => {
+  const { userId } = await auth();
+  if (!userId) return "/sign-in";
+
+  const currentUser = await getCurrentUser();
+  if (!currentUser) return "/account-pending";
+
+  if (currentUser.type === "admin") {
+    const impersonating = await isImpersonating();
+    if (!impersonating) return "/admin";
+  }
+
+  const subscription = await getSubscriptionStatus(userId);
+
+  if (
+    !hasDashboardAccess({
+      type: currentUser.type,
+      accessType: currentUser.accessType,
+      suspended: currentUser.suspended,
+      subscriptionStatus: subscription?.subscriptionStatus ?? null,
+    })
+  ) {
+    return "/subscribe";
+  }
+
+  return "/editor";
+});
+
+export async function requireEffectiveClientId(): Promise<string> {
+  const { userId } = await auth();
+  const clientId = await getEffectiveClientId();
+  if (clientId) return clientId;
+
+  redirect(userId ? "/account-pending" : "/sign-in");
+}

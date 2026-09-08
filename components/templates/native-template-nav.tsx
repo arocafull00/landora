@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Menu, X } from "lucide-react";
 import type {
   BrandLogoType,
@@ -6,7 +7,6 @@ import type {
 } from "@/lib/dashboard-data";
 import { getPreviewTargetAttributes } from "@/lib/preview-target-attributes";
 import { NativeTemplateNavCta } from "@/components/templates/native-template-nav-cta";
-import { NativeTemplateNavInstagram } from "@/components/templates/native-template-nav-instagram";
 import { NativeTemplateNavLink } from "@/components/templates/native-template-nav-link";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
@@ -21,11 +21,13 @@ export function NativeTemplateNav({
   brandLogoImage,
   brandLogoType,
   ctaAnalyticsEvent = "cta_click",
+  ctaClassName,
   ctaHref,
+  ctaIcon,
   ctaLabel,
+  ctaLabelClassName,
   homeHref = "#hero",
   homePageTarget,
-  instagramHref,
   navLinks,
   overlay = false,
   tone = "dark",
@@ -35,11 +37,13 @@ export function NativeTemplateNav({
   brandLogoImage: string;
   brandLogoType: BrandLogoType;
   ctaAnalyticsEvent?: string;
+  ctaClassName?: string;
   ctaHref: string;
+  ctaIcon?: ReactNode;
   ctaLabel: string;
+  ctaLabelClassName?: string;
   homeHref?: string;
   homePageTarget?: EditorPageTarget;
-  instagramHref?: string;
   navLinks: NativeTemplateNavLinkItem[];
   overlay?: boolean;
   tone?: HeroNavTone;
@@ -93,18 +97,16 @@ export function NativeTemplateNav({
               {link.label}
             </NativeTemplateNavLink>
           ))}
-          {instagramHref ? (
-            <NativeTemplateNavInstagram
-              href={instagramHref}
-              overlay={overlay}
-              tone={tone}
-            />
-          ) : null}
           <NativeTemplateNavCta
             analyticsEvent={ctaAnalyticsEvent}
-            className="rounded-full bg-[var(--site-primary)] px-5 py-2.5 font-semibold text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)] text-site-button"
+            className={cn(
+              "inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[var(--site-primary)] px-5 py-2.5 font-semibold text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)]",
+              ctaClassName,
+            )}
             href={ctaHref}
+            icon={ctaIcon}
             label={ctaLabel}
+            labelClassName={cn("text-site-button", ctaLabelClassName)}
           />
         </div>
 
@@ -125,20 +127,16 @@ export function NativeTemplateNav({
                 {link.label}
               </NativeTemplateNavLink>
             ))}
-            {instagramHref ? (
-              <NativeTemplateNavInstagram
-                className="rounded-xl px-4 py-3"
-                href={instagramHref}
-                overlay={false}
-                showLabel
-                tone={tone}
-              />
-            ) : null}
             <NativeTemplateNavCta
               analyticsEvent={ctaAnalyticsEvent}
-              className="mt-2 rounded-xl bg-[var(--site-primary)] px-4 py-3 text-center font-semibold text-[var(--site-on-primary)] text-site-button"
+              className={cn(
+                "mt-2 inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-[var(--site-primary)] px-4 py-3 text-center font-semibold text-[var(--site-on-primary)]",
+                ctaClassName,
+              )}
               href={ctaHref}
+              icon={ctaIcon}
               label={ctaLabel}
+              labelClassName={cn("text-site-button", ctaLabelClassName)}
             />
           </div>
         </details>

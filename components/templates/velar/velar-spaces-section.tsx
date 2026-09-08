@@ -1,8 +1,6 @@
 import type { LandingContent } from "@/lib/dashboard-data";
-import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarSpaceCard } from "@/components/templates/velar/velar-space-card";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-import { getVelarMapsHref } from "@/lib/velar-links";
 
 export function VelarSpacesSection({ content }: { content: LandingContent }) {
 
@@ -39,20 +37,6 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
                 {heading.subtitle}
               </p>
             ) : null}
-            <div className="flex justify-center lg:justify-start">
-              <VelarButton
-                href={getVelarMapsHref(
-                  content.mapsUrl,
-                  content.brand,
-                  content.contact.address,
-                )}
-                variant="secondary"
-                size="sm"
-                className="uppercase"
-              >
-                DESCUBRE NUESTROS ESPACIOS
-              </VelarButton>
-            </div>
           </div>
         </div>
 

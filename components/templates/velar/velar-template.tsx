@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
-import { getSocialUrl } from "@/lib/footer-content";
 import {
   VELAR_CTA_LABEL,
   getVelarWhatsAppLink,
@@ -60,7 +59,6 @@ export function VelarTemplate({
   const ctaHref = whatsappLink || "#inquire";
   const ctaLabel = content.hero.ctaLabel.trim() || VELAR_CTA_LABEL;
   const ctaAnalyticsEvent = whatsappLink ? "whatsapp_click" : "cta_click";
-  const instagramHref = getSocialUrl(content.contact, "instagram");
 
   return (
     <VelarMotion>
@@ -72,7 +70,6 @@ export function VelarTemplate({
         ctaHref={ctaHref}
         ctaLabel={ctaLabel}
         heroNavTone={heroNavTone}
-        instagramHref={instagramHref}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "velar")}
         topOffset={topOffset}
       />

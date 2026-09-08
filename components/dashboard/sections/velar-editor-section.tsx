@@ -11,6 +11,7 @@ import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-pane
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { BlogConfigEditorPanel } from "@/components/dashboard/blog-config-editor-panel";
 import { VelarContactEditorPanel } from "@/components/dashboard/velar-contact-editor-panel";
+import { VelarTestimonialsEditorPanel } from "@/components/dashboard/velar-testimonials-editor/velar-testimonials-editor-panel";
 import { OffersEditorPanel } from "@/components/dashboard/offers-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -35,7 +36,6 @@ export function VelarEditorSection() {
     updateSpace,
     updateStat,
     updateStory,
-    updateTestimonial,
     updateWorkflowStep,
   } = useDashboardStore(
     useShallow((state) => ({
@@ -49,7 +49,6 @@ export function VelarEditorSection() {
       updateSpace: state.updateSpace,
       updateStat: state.updateStat,
       updateStory: state.updateStory,
-      updateTestimonial: state.updateTestimonial,
       updateWorkflowStep: state.updateWorkflowStep,
     })),
   );
@@ -328,47 +327,7 @@ export function VelarEditorSection() {
           ) : null}
 
           {activeEditorTab === "Testimonios" ? (
-            <section className="space-y-5 py-unit-lg">
-              <EditorSectionTitle
-                description="Las reseñas mostradas en la landing."
-                title="Testimonios"
-              />
-              <SectionHeadingFields
-                activeLanding={activeLanding}
-                anchor="testimonios"
-                fallback={SECTION_HEADING_DEFAULTS.velar.testimonios}
-              />
-              <div className="space-y-6">
-                {activeLanding.content.testimonials.map((item) => (
-                  <div
-                    className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0"
-                    key={item.id}
-                  >
-                    <EditorTextField
-                      editorId={`testimonios:${item.id}:author`}
-                      label="Autor de la reseña"
-                      onChange={(value) =>
-                        updateTestimonial(activeLanding.id, item.id, {
-                          author: value,
-                        })
-                      }
-                      value={item.author}
-                    />
-                    <EditorTextArea
-                      editorId={`testimonios:${item.id}:comment`}
-                      label="Reseña"
-                      onChange={(value) =>
-                        updateTestimonial(activeLanding.id, item.id, {
-                          comment: value,
-                        })
-                      }
-                      rows={4}
-                      value={item.comment}
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
+            <VelarTestimonialsEditorPanel landing={activeLanding} />
           ) : null}
 
           {activeEditorTab === "Contacto" ? (

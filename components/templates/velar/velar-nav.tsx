@@ -1,5 +1,6 @@
 "use client";
 
+import { CalendarCheck } from "lucide-react";
 import type { BrandLogoType, NavLink } from "@/lib/dashboard-data";
 import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 import { NativeTemplateNav } from "@/components/templates/native-template-nav";
@@ -13,7 +14,6 @@ export function VelarNav({
   ctaHref,
   ctaLabel,
   heroNavTone,
-  instagramHref,
   navLinks,
   topOffset = 0,
 }: {
@@ -24,7 +24,6 @@ export function VelarNav({
   ctaHref: string;
   ctaLabel: string;
   heroNavTone: HeroNavTone;
-  instagramHref: string;
   navLinks: NavLink[];
   topOffset?: number;
 }) {
@@ -36,9 +35,15 @@ export function VelarNav({
       brandLogoImage={brandLogoImage}
       brandLogoType={brandLogoType}
       ctaAnalyticsEvent={ctaAnalyticsEvent}
+      ctaClassName="font-[family-name:var(--font-syne)] font-medium uppercase tracking-widest text-[var(--site-on-dark)] hover:bg-[var(--site-dark)]"
       ctaHref={ctaHref}
+      ctaIcon={
+        <CalendarCheck
+          aria-hidden
+          className="size-4 shrink-0"
+        />
+      }
       ctaLabel={ctaLabel}
-      instagramHref={instagramHref || undefined}
       navLinks={navLinks}
       overlay={overHero}
       tone={heroNavTone}

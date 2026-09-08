@@ -11,6 +11,7 @@ import {
   isPublicSlugPath,
   normalizeHost,
 } from "@/lib/app-host";
+import { resolveAuthenticatedDestination } from "@/lib/auth";
 import { getPublicLandingHost } from "@/lib/public-site-url";
 import { proxyLandingResponseSchema } from "@/lib/schemas/proxy-context";
 
@@ -248,13 +249,8 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
 
   if (isSignInRoute(req)) {
     const { isAuthenticated } = await auth();
-    if (isAuthenticated) {
-      if (isIframeDocumentRequest(req)) {
-        return new NextResponse("Not Found", { status: 404 });
-      }
-      const redirectUrl = req.nextUrl.clone();
-      redirectUrl.pathname = "/editor";
-      return NextResponse.redirect(redirectUrl);
+    if (isAuthenticated && isIframeDocumentRequest(req)) {
+      return new NextResponse("Not Found", { status: 404 });
     }
 
     return NextResponse.next();
@@ -297,9 +293,8 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     if (isIframeDocumentRequest(req)) {
       return new NextResponse("Not Found", { status: 404 });
     }
-    const { isAuthenticated } = await auth();
     const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = isAuthenticated ? "/editor" : "/sign-in";
+    redirectUrl.pathname = await resolveAuthenticatedDestination();
     return NextResponse.redirect(redirectUrl);
   }
 

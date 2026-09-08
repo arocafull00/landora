@@ -1,12 +1,12 @@
-import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { SignInBackground } from "@/components/auth/sign-in-background";
 import { SignInForm } from "@/components/auth/sign-in-form";
+import { resolveAuthenticatedDestination } from "@/lib/auth";
 
 export default async function SignInPage() {
-  const { isAuthenticated } = await auth();
-  if (isAuthenticated) redirect("/editor");
+  const destination = await resolveAuthenticatedDestination();
+  if (destination !== "/sign-in") redirect(destination);
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-8">
       <SignInBackground />
