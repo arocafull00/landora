@@ -495,7 +495,16 @@ function createDashboardStore(initial?: {
               content: {
                 ...landing.content,
                 stats: landing.content.stats.map((stat) =>
-                  stat.id === statId ? { ...stat, ...patch } : stat,
+                  stat.id === statId
+                    ? patch.value === undefined
+                      ? { ...stat, ...patch }
+                      : {
+                          ...stat,
+                          ...patch,
+                          countTo: undefined,
+                          suffix: undefined,
+                        }
+                    : stat,
                 ),
               },
             })

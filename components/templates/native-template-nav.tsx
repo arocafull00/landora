@@ -42,7 +42,7 @@ export function NativeTemplateNav({
     <nav
       aria-label="Principal"
       className={cn(
-        "fixed inset-x-0 z-50 px-5 py-3 md:px-10 lg:px-16",
+        "fixed inset-x-0 z-50 px-5 py-3 transition-colors duration-300 md:px-10 lg:px-16",
         overlay
           ? "border-b border-transparent bg-transparent"
           : "border-b border-[var(--site-border)]/40 bg-[var(--site-surface)]/90 text-[var(--site-text)] backdrop-blur-md",
