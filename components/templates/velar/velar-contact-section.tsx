@@ -83,6 +83,7 @@ export function VelarContactSection({
           <VelarMapsEmbed href={mapsHref} src={mapsEmbedSrc} />
           <FooterSocialLinks
             contact={content.contact}
+            excludePlatforms={instagramHref ? ["instagram"] : []}
             linkClassName="text-[var(--site-accent)] transition-colors hover:text-[var(--site-on-dark)]"
           />
           <FooterCopyright

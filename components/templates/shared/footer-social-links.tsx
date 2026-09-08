@@ -1,18 +1,21 @@
-import type { ContactContent } from "@/lib/dashboard-data";
+import type { ContactContent, SocialPlatform } from "@/lib/dashboard-data";
 import { FooterSocialLink } from "@/components/templates/shared/footer-social-link";
 
 type FooterSocialLinksProps = {
   contact: ContactContent;
   className?: string;
   linkClassName?: string;
+  excludePlatforms?: SocialPlatform[];
 };
 
 export function FooterSocialLinks({
   contact,
   className = "flex flex-wrap items-center justify-center gap-4",
   linkClassName = "text-white/40 transition-colors hover:text-white",
+  excludePlatforms = [],
 }: FooterSocialLinksProps) {
-  const links = contact.socialLinks ?? [];
+  const excluded = new Set(excludePlatforms);
+  const links = (contact.socialLinks ?? []).filter((link) => !excluded.has(link.platform));
   if (links.length === 0) return null;
 
   return (

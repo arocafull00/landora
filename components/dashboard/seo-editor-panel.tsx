@@ -24,11 +24,13 @@ export function SeoEditorPanel({ activeLanding }: SeoEditorPanelProps) {
       />
       <EditorTextField
         label="Título de la página"
+        maxLength={200}
         onChange={(value) => updateLandingMeta(activeLanding.id, { seoTitle: value })}
         value={activeLanding.seoTitle}
       />
       <EditorTextArea
         label="Descripción"
+        maxLength={500}
         onChange={(value) => updateLandingMeta(activeLanding.id, { seoDescription: value })}
         rows={4}
         value={activeLanding.seoDescription}

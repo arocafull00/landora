@@ -23,6 +23,21 @@ import {
   saveLandingSchema,
   type SaveLandingInput,
 } from "@/lib/schemas/landing-save";
+import type { ZodError } from "zod";
+
+function getSaveLandingValidationError(error: ZodError) {
+  for (const issue of error.issues) {
+    const field = issue.path.at(-1);
+    if (field === "description" && issue.code === "too_big") {
+      return "La descripción SEO no puede superar 500 caracteres";
+    }
+    if (field === "title" && issue.code === "too_big") {
+      return "El título SEO no puede superar 200 caracteres";
+    }
+  }
+
+  return "Los datos de la landing no son válidos";
+}
 import {
   isValidPaletteId,
   isValidTextSizePreset,
@@ -93,7 +108,9 @@ export async function saveLandingAction(
   input: unknown,
 ): Promise<{ success: true } | { error: string }> {
   const parsed = saveLandingSchema.safeParse(input);
-  if (!parsed.success) return { error: "Los datos de la landing no son válidos" };
+  if (!parsed.success) {
+    return { error: getSaveLandingValidationError(parsed.error) };
+  }
 
   const landing = await assertLandingAccess(parsed.data.landingId);
   if (!landing) return { error: "No tienes acceso a esta web" };
