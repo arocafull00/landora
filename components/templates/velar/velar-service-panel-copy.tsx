@@ -3,11 +3,11 @@ import type { ServiceContent } from "@/lib/dashboard-data";
 export function VelarServicePanelCopy({ service }: { service: ServiceContent }) {
   return (
     <div className="absolute inset-0 z-10 flex items-center justify-center">
-      <div className="flex w-full shrink-0 flex-col items-center px-6 py-6 text-center text-white md:w-(--service-copy-width)">
+      <div className="flex w-full flex-col items-center px-6 py-6 text-center text-[var(--site-on-dark)]">
         {service.label ? (
           <p
             data-editor-id={`servicios:service:${service.id}:label`}
-            className="mb-3 font-medium uppercase tracking-widest text-white/90 text-site-content"
+            className="mb-3 font-medium uppercase tracking-widest text-[var(--site-on-dark)]/90 text-site-content"
             style={{ fontFamily: "var(--font-body)" }}
           >
             {service.label}
@@ -23,7 +23,7 @@ export function VelarServicePanelCopy({ service }: { service: ServiceContent }) 
         {service.subtitle ? (
           <p
             data-editor-id={`servicios:service:${service.id}:subtitle`}
-            className="font-medium uppercase tracking-wide text-white/95 drop-shadow-md text-site-content"
+            className="font-medium uppercase tracking-wide text-[var(--site-on-dark)]/95 drop-shadow-md text-site-content"
             style={{ fontFamily: "var(--font-body)" }}
           >
             {service.subtitle}

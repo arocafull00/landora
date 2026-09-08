@@ -4,6 +4,7 @@ import { resolveGalleryItems } from "@/lib/gallery-content";
 import { parseSocialLinks } from "@/lib/footer-content";
 import { shortDateTimeFormatter } from "@/lib/intl-formatters";
 import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
+import { VELAR_INSTAGRAM_URL } from "@/lib/velar-links";
 import type { User } from "@/lib/domain/dtos";
 import { resolveSectionSelections } from "@/lib/section-selections";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
@@ -174,7 +175,12 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       ctaLabel: row.cta?.ctaLabel ?? "",
       copyrightSuffix: row.cta?.copyrightSuffix ?? "",
       copyrightExtra: row.cta?.copyrightExtra ?? "",
-      socialLinks: parseSocialLinks(row.cta?.socialLinks),
+      socialLinks: (() => {
+        const links = parseSocialLinks(row.cta?.socialLinks);
+        if (row.template !== "velar") return links;
+        if (links.some((link) => link.platform === "instagram")) return links;
+        return [...links, { platform: "instagram", url: VELAR_INSTAGRAM_URL }];
+      })(),
       whatsappEnabled: row.cta?.whatsappEnabled ?? false,
     },
     about: row.story ? { statement: row.story.statement } : undefined,

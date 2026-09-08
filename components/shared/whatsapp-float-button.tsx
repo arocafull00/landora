@@ -1,13 +1,14 @@
 import { MessageCircle } from "lucide-react";
+import { getWhatsAppLink } from "@/lib/whatsapp-link";
 
-function getWhatsAppLink(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  if (!digits) return null;
-  return `https://wa.me/${digits}?text=${encodeURIComponent("Hola, me gustaría contactar.")}`;
-}
-
-export function WhatsappFloatButton({ phone }: { phone: string }) {
-  const href = getWhatsAppLink(phone);
+export function WhatsappFloatButton({
+  phone,
+  message = "Hola, me gustaría contactar.",
+}: {
+  phone: string;
+  message?: string;
+}) {
+  const href = getWhatsAppLink(phone, message);
 
   if (!href) return null;
 

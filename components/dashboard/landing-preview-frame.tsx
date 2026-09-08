@@ -25,6 +25,7 @@ import { resolveSectionId } from "@/lib/template-sections";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
+import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
 import { PortfolioAboutPage } from "@/components/templates/portfolio/portfolio-about-page";
 import { PortfolioProjectPage } from "@/components/templates/portfolio/portfolio-project-page";
 import { RistoranteMenuPage } from "@/components/templates/ristorante/ristorante-menu-page";
@@ -196,7 +197,12 @@ export function LandingPreviewFrame({
         />
       )}
       {sitePage === "home" && content.contact.whatsappEnabled ? (
-        <WhatsappFloatButton phone={content.contact.phone} />
+        <WhatsappFloatButton
+          message={
+            activeTemplate === "velar" ? VELAR_WHATSAPP_MESSAGE : undefined
+          }
+          phone={content.contact.phone}
+        />
       ) : null}
     </SiteThemeScope>
   );

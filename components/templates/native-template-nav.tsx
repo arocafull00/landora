@@ -5,11 +5,14 @@ import type {
   NavLink,
 } from "@/lib/dashboard-data";
 import { getPreviewTargetAttributes } from "@/lib/preview-target-attributes";
+import { NativeTemplateNavCta } from "@/components/templates/native-template-nav-cta";
+import { NativeTemplateNavInstagram } from "@/components/templates/native-template-nav-instagram";
+import { NativeTemplateNavLink } from "@/components/templates/native-template-nav-link";
 import { TemplateNavBrand } from "@/components/templates/template-nav-brand";
 import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
 import { cn } from "@/lib/utils";
 
-export type NativeTemplateNavLink = NavLink & {
+export type NativeTemplateNavLinkItem = NavLink & {
   pageTarget?: EditorPageTarget;
 };
 
@@ -17,10 +20,12 @@ export function NativeTemplateNav({
   brand,
   brandLogoImage,
   brandLogoType,
+  ctaAnalyticsEvent = "cta_click",
   ctaHref,
   ctaLabel,
   homeHref = "#hero",
   homePageTarget,
+  instagramHref,
   navLinks,
   overlay = false,
   tone = "dark",
@@ -29,15 +34,26 @@ export function NativeTemplateNav({
   brand: string;
   brandLogoImage: string;
   brandLogoType: BrandLogoType;
+  ctaAnalyticsEvent?: string;
   ctaHref: string;
   ctaLabel: string;
   homeHref?: string;
   homePageTarget?: EditorPageTarget;
-  navLinks: NativeTemplateNavLink[];
+  instagramHref?: string;
+  navLinks: NativeTemplateNavLinkItem[];
   overlay?: boolean;
   tone?: HeroNavTone;
   topOffset?: number;
 }) {
+  const linkClassName = cn(
+    "font-medium transition-colors text-site-content",
+    overlay && tone === "light"
+      ? "text-[var(--site-on-dark)]/80 hover:text-[var(--site-on-dark)]"
+      : overlay
+        ? "text-[var(--site-primary)]/75 hover:text-[var(--site-primary)]"
+        : "text-[var(--site-text-muted)] hover:text-[var(--site-text)]",
+  );
+
   return (
     <nav
       aria-label="Principal"
@@ -68,29 +84,28 @@ export function NativeTemplateNav({
 
         <div className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => (
-            <a
-              className={cn(
-                "font-medium transition-colors text-site-content",
-                overlay && tone === "light"
-                  ? "text-[var(--site-on-dark)]/80 hover:text-[var(--site-on-dark)]"
-                  : overlay
-                    ? "text-[var(--site-primary)]/75 hover:text-[var(--site-primary)]"
-                    : "text-[var(--site-text-muted)] hover:text-[var(--site-text)]",
-              )}
+            <NativeTemplateNavLink
+              className={linkClassName}
               href={link.href}
               key={link.id}
-              {...getPreviewTargetAttributes(link.pageTarget)}
+              pageTarget={link.pageTarget}
             >
               {link.label}
-            </a>
+            </NativeTemplateNavLink>
           ))}
-          <a
+          {instagramHref ? (
+            <NativeTemplateNavInstagram
+              href={instagramHref}
+              overlay={overlay}
+              tone={tone}
+            />
+          ) : null}
+          <NativeTemplateNavCta
+            analyticsEvent={ctaAnalyticsEvent}
             className="rounded-full bg-[var(--site-primary)] px-5 py-2.5 font-semibold text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)] text-site-button"
-            data-analytics-event="cta_click"
             href={ctaHref}
-          >
-            {ctaLabel}
-          </a>
+            label={ctaLabel}
+          />
         </div>
 
         <details className="group relative md:hidden">
@@ -101,22 +116,30 @@ export function NativeTemplateNav({
           </summary>
           <div className="absolute right-0 top-14 flex min-w-64 flex-col gap-1 rounded-2xl border border-[var(--site-border)] bg-[var(--site-surface)] p-3 shadow-xl">
             {navLinks.map((link) => (
-              <a
+              <NativeTemplateNavLink
                 className="rounded-xl px-4 py-3 font-semibold transition-colors hover:bg-[var(--site-primary)]/10 text-site-content"
                 href={link.href}
                 key={link.id}
-                {...getPreviewTargetAttributes(link.pageTarget)}
+                pageTarget={link.pageTarget}
               >
                 {link.label}
-              </a>
+              </NativeTemplateNavLink>
             ))}
-            <a
+            {instagramHref ? (
+              <NativeTemplateNavInstagram
+                className="rounded-xl px-4 py-3"
+                href={instagramHref}
+                overlay={false}
+                showLabel
+                tone={tone}
+              />
+            ) : null}
+            <NativeTemplateNavCta
+              analyticsEvent={ctaAnalyticsEvent}
               className="mt-2 rounded-xl bg-[var(--site-primary)] px-4 py-3 text-center font-semibold text-[var(--site-on-primary)] text-site-button"
-              data-analytics-event="cta_click"
               href={ctaHref}
-            >
-              {ctaLabel}
-            </a>
+              label={ctaLabel}
+            />
           </div>
         </details>
       </div>

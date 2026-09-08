@@ -10,17 +10,17 @@ export function VelarServicePanel({
   priority?: boolean;
 }) {
   return (
-    <div className="group relative h-[400px] overflow-hidden md:h-[500px] md:min-w-0 md:flex-1 md:transition-[flex-grow] md:duration-500 md:ease-out md:hover:flex-[1.8] motion-reduce:transition-none">
+    <div className="group relative aspect-[4/5] overflow-hidden rounded-xl">
       <AssetImage
         alt={service.title}
-        className="object-cover"
+        className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.025] motion-reduce:transform-none motion-reduce:transition-none"
         fill
         priority={priority}
         quality={95}
-        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 20vw"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         src={service.image}
       />
-      <div className="absolute inset-0 bg-black/35 transition-colors group-hover:bg-black/45" />
+      <div className="absolute inset-0 bg-[var(--site-dark)]/40 transition-colors group-hover:bg-[var(--site-dark)]/50" />
       <VelarServicePanelCopy service={service} />
     </div>
   );

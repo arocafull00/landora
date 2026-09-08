@@ -2,6 +2,7 @@ import type { TemplateContentMap, TemplateId } from "@/lib/dashboard-data";
 import { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { VELAR_ASSETS } from "@/lib/velar-assets";
+import { VELAR_INSTAGRAM_URL, VELAR_MAPS_URL } from "@/lib/velar-links";
 import { STUDIO_ASSETS } from "@/lib/studio-assets";
 import { PORTFOLIO_ASSETS } from "@/lib/portfolio-assets";
 import { RISTORANTE_ASSETS } from "@/lib/ristorante-assets";
@@ -29,7 +30,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
       "Espacio diseñado para la celebración de eventos privados y de empresa en Valencia y área metropolitana.",
     image: BG_IMG,
     houseImage: VELAR_ASSETS.hero,
-    ctaLabel: "",
+    ctaLabel: "Consulta disponibilidad",
   },
   story: {
     statement:
@@ -53,7 +54,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
     { id: "nav-inquire", label: "Contacto", href: "#inquire" },
   ],
   sectionHeadings: SECTION_HEADING_DEFAULTS.velar,
-  mapsUrl: "",
+  mapsUrl: VELAR_MAPS_URL,
   spaces: [
     {
       id: "space-1",
@@ -218,7 +219,7 @@ export const VELAR_DEFAULT_CONTENT: TemplateContentMap["velar"] = {
     email: "tollstory-reservas@gmail.com",
     address: "Valencia y área metropolitana",
     copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
-    socialLinks: [],
+    socialLinks: [{ platform: "instagram", url: VELAR_INSTAGRAM_URL }],
   },
 };
 

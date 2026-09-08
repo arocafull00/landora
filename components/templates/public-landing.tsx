@@ -6,6 +6,7 @@ import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
 import type { PublicTemplateRenderProps } from "@/lib/public-render-contracts";
 import { getCopyrightYear } from "@/lib/copyright-year";
 import { getPublicRenderTime } from "@/lib/public-render-time";
+import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
 
 async function renderPublicTemplate(
   template: PublishedLanding["template"],
@@ -76,7 +77,12 @@ export async function PublicLanding({
       >
         {template}
         {landing.content.contact.whatsappEnabled ? (
-          <WhatsappFloatButton phone={landing.content.contact.phone} />
+          <WhatsappFloatButton
+            message={
+              landing.template === "velar" ? VELAR_WHATSAPP_MESSAGE : undefined
+            }
+            phone={landing.content.contact.phone}
+          />
         ) : null}
       </SiteThemeScope>
     </>

@@ -2,6 +2,7 @@ import { CalendarCheck, Tent, Sofa } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { getVelarWhatsAppLink } from "@/lib/velar-links";
 
 const WORKFLOW_ICONS = [
   <CalendarCheck key="calendario" className="h-16 w-16 text-[var(--site-on-dark)]" />,
@@ -9,17 +10,12 @@ const WORKFLOW_ICONS = [
   <Sofa key="tumbona" className="h-16 w-16 text-[var(--site-on-dark)]" />,
 ];
 
-function getWhatsAppLink(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  return `https://wa.me/${digits}?text=${encodeURIComponent("Hola, me gustaría contactar para un evento.")}`;
-}
-
 export function VelarWorkflowSection({ content }: { content: LandingContent }) {
 
   if (!content.workflow || content.workflow.length === 0) return null;
 
   const heading = getSectionHeading(content, "proceso", SECTION_HEADING_DEFAULTS.velar.proceso);
-  const whatsappLink = getWhatsAppLink(content.contact.phone);
+  const whatsappLink = getVelarWhatsAppLink(content.contact.phone);
 
   return (
     <section
@@ -58,17 +54,19 @@ export function VelarWorkflowSection({ content }: { content: LandingContent }) {
                   {heading.subtitle}
                 </p>
               ) : null}
-              <div className="flex justify-center lg:justify-start">
-                <VelarButton
-                  href={whatsappLink}
-                  variant="secondary"
-                  size="sm"
-                  className="uppercase !border-[var(--site-on-dark)] !text-[var(--site-on-dark)] hover:!bg-[var(--site-surface-alt)] hover:!text-[var(--site-text)]"
-                  data-analytics-event="whatsapp_click"
-                >
-                  CONTÁCTANOS
-                </VelarButton>
-              </div>
+              {whatsappLink ? (
+                <div className="flex justify-center lg:justify-start">
+                  <VelarButton
+                    href={whatsappLink}
+                    variant="secondary"
+                    size="sm"
+                    className="uppercase !border-[var(--site-on-dark)] !text-[var(--site-on-dark)] hover:!bg-[var(--site-surface-alt)] hover:!text-[var(--site-text)]"
+                    data-analytics-event="whatsapp_click"
+                  >
+                    CONTÁCTANOS
+                  </VelarButton>
+                </div>
+              ) : null}
             </div>
           </div>
         </div>

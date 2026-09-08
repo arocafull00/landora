@@ -9,14 +9,22 @@ export function VelarNav({
   brand,
   brandLogoImage,
   brandLogoType,
+  ctaAnalyticsEvent,
+  ctaHref,
+  ctaLabel,
   heroNavTone,
+  instagramHref,
   navLinks,
   topOffset = 0,
 }: {
   brand: string;
   brandLogoImage: string;
   brandLogoType: BrandLogoType;
+  ctaAnalyticsEvent: string;
+  ctaHref: string;
+  ctaLabel: string;
   heroNavTone: HeroNavTone;
+  instagramHref: string;
   navLinks: NavLink[];
   topOffset?: number;
 }) {
@@ -27,8 +35,10 @@ export function VelarNav({
       brand={brand}
       brandLogoImage={brandLogoImage}
       brandLogoType={brandLogoType}
-      ctaHref={navLinks[0]?.href ?? "#hero"}
-      ctaLabel={navLinks[0]?.label ?? "Explorar"}
+      ctaAnalyticsEvent={ctaAnalyticsEvent}
+      ctaHref={ctaHref}
+      ctaLabel={ctaLabel}
+      instagramHref={instagramHref || undefined}
       navLinks={navLinks}
       overlay={overHero}
       tone={heroNavTone}

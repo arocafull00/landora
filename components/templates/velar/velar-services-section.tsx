@@ -1,18 +1,12 @@
-import type { CSSProperties } from "react";
 import { CalendarCheck } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { VelarButton } from "@/components/templates/velar/velar-button";
 import { VelarServicePanel } from "@/components/templates/velar/velar-service-panel";
 import { VelarServicesCta } from "@/components/templates/velar/velar-services-cta";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
-
-function getWhatsAppLink(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  return `https://wa.me/${digits}?text=${encodeURIComponent("Hola, me gustaría consultar disponibilidad para un evento.")}`;
-}
+import { VELAR_CTA_LABEL, getVelarWhatsAppLink } from "@/lib/velar-links";
 
 export function VelarServicesSection({ content }: { content: LandingContent }) {
-
   if (!content.services || content.services.length === 0) return null;
 
   const heading = getSectionHeading(
@@ -20,7 +14,7 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
     "servicios",
     SECTION_HEADING_DEFAULTS.velar.servicios,
   );
-  const whatsappLink = getWhatsAppLink(content.contact.phone);
+  const whatsappLink = getVelarWhatsAppLink(content.contact.phone);
 
   return (
     <section
@@ -56,18 +50,13 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
               {heading.subtitle}
             </p>
           ) : null}
-          <VelarServicesCta href={whatsappLink} />
+          {whatsappLink ? <VelarServicesCta href={whatsappLink} /> : null}
         </div>
 
         <div
-          className="[container-type:inline-size] flex flex-col md:flex-row"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
           data-aos="fade-up"
           data-aos-delay="100"
-          style={
-            {
-              "--service-copy-width": `${100 / content.services.length}cqw`,
-            } as CSSProperties
-          }
         >
           {(content.services ?? []).map((service, index) => (
             <VelarServicePanel
@@ -78,18 +67,20 @@ export function VelarServicesSection({ content }: { content: LandingContent }) {
           ))}
         </div>
 
-        <div className="mt-12 text-center" data-aos="fade-up">
-          <VelarButton
-            href={whatsappLink}
-            variant="secondary"
-            size="md"
-            icon={<CalendarCheck className="h-5 w-5" />}
-            className="uppercase"
-            data-analytics-event="whatsapp_click"
-          >
-            consulta disponibilidad
-          </VelarButton>
-        </div>
+        {whatsappLink ? (
+          <div className="mt-12 text-center" data-aos="fade-up">
+            <VelarButton
+              href={whatsappLink}
+              variant="secondary"
+              size="md"
+              icon={<CalendarCheck className="h-5 w-5" />}
+              className="uppercase"
+              data-analytics-event="whatsapp_click"
+            >
+              {VELAR_CTA_LABEL}
+            </VelarButton>
+          </div>
+        ) : null}
       </div>
     </section>
   );

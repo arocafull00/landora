@@ -1,6 +1,10 @@
 import { Fragment } from "react";
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
-import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
+import { getSocialUrl } from "@/lib/footer-content";
+import {
+  VELAR_CTA_LABEL,
+  getVelarWhatsAppLink,
+} from "@/lib/velar-links";
 import { getOrderedVisibleBodySections, getVisibleNav } from "@/lib/template-sections";
 import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
 import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
@@ -39,9 +43,6 @@ export function VelarTemplate({
   copyrightYear,
   renderedAt,
   topOffset = 0,
-  slug,
-  previewLandingId,
-  bookingEnabled = false,
   sectionSelections,
 }: {
   content: LandingContent;
@@ -55,13 +56,11 @@ export function VelarTemplate({
 }) {
   const heroVariantId = sectionSelections?.hero ?? "velar";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
-  const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
-    bookingEnabled,
-    content,
-    previewLandingId,
-    slug: slug ?? "",
-    template: "velar",
-  });
+  const whatsappLink = getVelarWhatsAppLink(content.contact.phone);
+  const ctaHref = whatsappLink || "#inquire";
+  const ctaLabel = content.hero.ctaLabel.trim() || VELAR_CTA_LABEL;
+  const ctaAnalyticsEvent = whatsappLink ? "whatsapp_click" : "cta_click";
+  const instagramHref = getSocialUrl(content.contact, "instagram");
 
   return (
     <VelarMotion>
@@ -69,15 +68,19 @@ export function VelarTemplate({
         brand={content.brand || "Velar."}
         brandLogoType={content.brandLogoType ?? "text"}
         brandLogoImage={content.brandLogoImage ?? ""}
+        ctaAnalyticsEvent={ctaAnalyticsEvent}
+        ctaHref={ctaHref}
+        ctaLabel={ctaLabel}
         heroNavTone={heroNavTone}
+        instagramHref={instagramHref}
         navLinks={getVisibleNav(content.nav, content.hiddenSections, "velar")}
         topOffset={topOffset}
       />
 
       <HeroRenderer
         content={content}
-        primaryCtaHref={primaryCtaHref}
-        secondaryCtaHref={secondaryCtaHref}
+        primaryCtaHref={ctaHref}
+        secondaryCtaHref={ctaHref}
         variantId={heroVariantId}
       />
 

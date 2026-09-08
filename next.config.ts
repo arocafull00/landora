@@ -9,7 +9,7 @@ const contentSecurityPolicy = `
   img-src 'self' data: blob: https://res.cloudinary.com https://images.higgs.ai https://d8j0ntlcm91z4.cloudfront.net https://images.unsplash.com https://img.clerk.com;
   font-src 'self' data:;
   connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://api.stripe.com https://challenges.cloudflare.com https://eu.i.posthog.com https://eu.posthog.com https://*.sentry.io;
-  frame-src 'self' https://challenges.cloudflare.com https://*.clerk.accounts.dev https://*.clerk.com https://js.stripe.com;
+  frame-src 'self' https://challenges.cloudflare.com https://*.clerk.accounts.dev https://*.clerk.com https://js.stripe.com https://www.google.com https://maps.google.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self' https://*.clerk.accounts.dev https://*.clerk.com;

@@ -1,7 +1,9 @@
+import type { RefObject } from "react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { HeroBackground } from "@/components/ui/hero-background";
-import { ArrowRight } from "lucide-react";
-import { TemplateNavAnchor } from "@/components/templates/template-nav-anchor";
+import { CalendarCheck } from "lucide-react";
+import { VelarButton } from "@/components/templates/velar/velar-button";
+import { VELAR_CTA_LABEL } from "@/lib/velar-links";
 
 export function VelarHero({
   content,
@@ -11,9 +13,12 @@ export function VelarHero({
 }: {
   content: LandingContent;
   ctaHref?: string;
-  heroRef?: React.RefObject<HTMLElement | null>;
+  heroRef?: RefObject<HTMLElement | null>;
   heroVisible: boolean;
 }) {
+  const ctaLabel = content.hero.ctaLabel.trim() || VELAR_CTA_LABEL;
+  const isWhatsAppCta = Boolean(ctaHref?.includes("wa.me"));
+
   if (!heroVisible) {
     return (
       <section
@@ -112,19 +117,21 @@ marginTop: "0.9em",
           </p>
         ) : null}
 
-        {ctaHref && content.hero.ctaLabel ? (
+        {ctaHref ? (
           <div
             className="mt-6 px-6 md:px-10 lg:px-16"
             data-velar-hero-reveal
           >
-            <TemplateNavAnchor
-              className="inline-flex items-center gap-2 bg-[var(--site-primary)] px-6 py-3 font-bold uppercase tracking-wide text-[var(--site-on-primary)] transition-colors hover:bg-[var(--site-primary-hover)] text-site-button"
+            <VelarButton
+              className="uppercase"
+              data-analytics-event={isWhatsAppCta ? "whatsapp_click" : "cta_click"}
               href={ctaHref}
-              data-analytics-event="cta_click"
+              icon={<CalendarCheck className="h-5 w-5" />}
+              size="md"
+              variant="primary"
             >
-              {content.hero.ctaLabel}
-              <ArrowRight className="size-4" />
-            </TemplateNavAnchor>
+              {ctaLabel}
+            </VelarButton>
           </div>
         ) : null}
       </div>

@@ -1,7 +1,8 @@
 import { ArrowRight, CalendarCheck } from "lucide-react";
+import { VELAR_CTA_LABEL } from "@/lib/velar-links";
 
 const VELAR_SERVICES_CTA_COPY = {
-  title: "Consulta disponibilidad",
+  title: VELAR_CTA_LABEL,
   subtitle: "y empieza a planear tu evento",
 } as const;
 
