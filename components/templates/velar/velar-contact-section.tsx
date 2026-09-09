@@ -31,7 +31,7 @@ export function VelarContactSection({
     <footer
       data-section="inquire"
       data-section-label="Pie de página"
-      id="inquire"
+      id="contacto"
       className="relative z-[25] scroll-mt-24 bg-[var(--site-dark)] px-6 py-12 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-6xl">

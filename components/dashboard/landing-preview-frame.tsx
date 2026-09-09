@@ -113,13 +113,14 @@ export function LandingPreviewFrame({
 
   useEffect(() => {
     if (!scrollRequest) return;
-    scrollToSectionIdWhenReady(scrollRequest.sectionId);
+    const sectionId = resolveSectionId(activeTemplate, scrollRequest.sectionId);
+    scrollToSectionIdWhenReady(sectionId);
     window.history.replaceState(
       null,
       "",
-      `${window.location.pathname}${window.location.search}#${scrollRequest.sectionId}`,
+      `${window.location.pathname}${window.location.search}#${sectionId}`,
     );
-  }, [scrollRequest]);
+  }, [scrollRequest, activeTemplate]);
 
   const scrollToResolvedHash = useEffectEvent(() => {
     const sectionId = getHashSectionId();

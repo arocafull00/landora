@@ -11,7 +11,10 @@ import {
   isPublicSlugPath,
   normalizeHost,
 } from "@/lib/app-host";
-import { resolveAuthenticatedDestination } from "@/lib/auth";
+import {
+  IMPERSONATION_COOKIE,
+  resolveAuthenticatedDestination,
+} from "@/lib/auth";
 import { getPublicLandingHost } from "@/lib/public-site-url";
 import { proxyLandingResponseSchema } from "@/lib/schemas/proxy-context";
 
@@ -293,8 +296,12 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     if (isIframeDocumentRequest(req)) {
       return new NextResponse("Not Found", { status: 404 });
     }
+    const { userId } = await auth();
     const redirectUrl = req.nextUrl.clone();
-    redirectUrl.pathname = await resolveAuthenticatedDestination();
+    redirectUrl.pathname = await resolveAuthenticatedDestination(
+      userId,
+      req.cookies.get(IMPERSONATION_COOKIE)?.value ?? null,
+    );
     return NextResponse.redirect(redirectUrl);
   }
 

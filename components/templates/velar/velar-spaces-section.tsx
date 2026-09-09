@@ -16,7 +16,7 @@ export function VelarSpacesSection({ content }: { content: LandingContent }) {
     <section
       data-section="residences"
       data-section-label="Espacios"
-      id="residences"
+      id="espacios"
       className="relative z-[25] scroll-mt-24 bg-[var(--site-surface)] px-6 py-20 md:px-10 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">

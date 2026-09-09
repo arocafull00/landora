@@ -13,7 +13,7 @@ export function VelarStatementSection({
       ref={sectionRef}
       data-section="story"
       data-section-label="Historia"
-      id="story"
+      id="historia"
       className="relative z-20 bg-[var(--site-dark)]"
     >
       <div className="s2-section scroll-mt-24 bg-[var(--site-dark)]">

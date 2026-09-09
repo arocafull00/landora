@@ -56,7 +56,7 @@ export function VelarTemplate({
   const heroVariantId = sectionSelections?.hero ?? "velar";
   const heroNavTone = getHeroVariant(heroVariantId).navTone;
   const whatsappLink = getVelarWhatsAppLink(content.contact.phone);
-  const ctaHref = whatsappLink || "#inquire";
+  const ctaHref = whatsappLink || "#contacto";
   const ctaLabel = content.hero.ctaLabel.trim() || VELAR_CTA_LABEL;
   const ctaAnalyticsEvent = whatsappLink ? "whatsapp_click" : "cta_click";
 

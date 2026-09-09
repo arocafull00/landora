@@ -15,7 +15,7 @@ export function VelarGallerySection({ content }: { content: LandingContent }) {
     <section
       data-section="listings"
       data-section-label="Galería"
-      id="listings"
+      id="galeria"
       className="s3-gallery-section relative z-25 mt-0 scroll-mt-24 overflow-hidden bg-[var(--site-dark)] md:h-screen"
     >
       <div className="s3-ticker-wrap absolute inset-0 z-0 flex items-center overflow-hidden pointer-events-none select-none">

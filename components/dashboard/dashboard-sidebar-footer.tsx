@@ -6,7 +6,7 @@ import { DashboardAccountActions } from "@/components/dashboard/dashboard-accoun
 export function DashboardSidebarFooter() {
   return (
     <SidebarFooter>
-      <DashboardAccountActions className="px-1" />
+      <DashboardAccountActions />
     </SidebarFooter>
   );
 }

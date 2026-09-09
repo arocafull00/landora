@@ -65,7 +65,7 @@ export async function deleteUserAccount(
     ),
   ];
 
-  if (snapshot.hasAssets || isCloudinaryConfigured()) {
+  if (snapshot.hasAssets) {
     cleanupOperations.push(
       runDeletionStage(
         "cloudinary",

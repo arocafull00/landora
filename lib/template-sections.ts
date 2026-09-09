@@ -268,14 +268,14 @@ export function resolveSectionId(templateId: TemplateId, sectionIdOrHref: string
 
 const VELAR_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", editorTabId: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
-  { anchor: "listings", label: "Galería", editorTabId: "Galería", navHref: "#listings", contentKeys: ["gallery"] },
-  { anchor: "residences", label: "Espacios", editorTabId: "Espacios", navHref: "#residences", contentKeys: ["spaces"] },
+  { anchor: "story", label: "Historia", editorTabId: "Historia", navHref: "#historia", contentKeys: ["story", "stats"] },
+  { anchor: "listings", label: "Galería", editorTabId: "Galería", navHref: "#galeria", contentKeys: ["gallery"] },
+  { anchor: "residences", label: "Espacios", editorTabId: "Espacios", navHref: "#espacios", contentKeys: ["spaces"] },
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["services"] },
   { anchor: "proceso", label: "Proceso", editorTabId: "Proceso", navHref: "#proceso", contentKeys: ["workflow"] },
   { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "inquire", label: "Pie de página", editorTabId: "Footer", navHref: "#inquire", required: true },
+  { anchor: "inquire", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
 const STUDIO_SECTIONS: TemplateSectionDef[] = [

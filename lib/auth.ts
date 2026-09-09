@@ -3,7 +3,11 @@ import { auth } from "@clerk/nextjs/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSubscriptionStatus } from "@/data/subscriptions";
-import { getCurrentUser, getUserByIdForImpersonation } from "@/data/users";
+import {
+  getCurrentUser,
+  getUserByClerkUserId,
+  getUserByIdForImpersonation,
+} from "@/data/users";
 import { hasDashboardAccess } from "@/lib/subscription-access";
 
 export const IMPERSONATION_COOKIE = "impersonating";
@@ -65,16 +69,20 @@ export const getEffectiveClientId = cache(async (): Promise<string | null> => {
   return currentUser?.id ?? null;
 });
 
-export const resolveAuthenticatedDestination = cache(async (): Promise<string> => {
-  const { userId } = await auth();
+export const resolveAuthenticatedDestination = cache(async (
+  userId: string | null,
+  impersonatingId: string | null,
+): Promise<string> => {
   if (!userId) return "/sign-in";
 
-  const currentUser = await getCurrentUser();
+  const currentUser = await getUserByClerkUserId(userId);
   if (!currentUser) return "/account-pending";
 
   if (currentUser.type === "admin") {
-    const impersonating = await isImpersonating();
-    if (!impersonating) return "/admin";
+    const impersonatedUser = impersonatingId
+      ? await getUserByIdForImpersonation(impersonatingId)
+      : null;
+    if (!impersonatedUser) return "/admin";
   }
 
   const subscription = await getSubscriptionStatus(userId);
