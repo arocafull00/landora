@@ -14,7 +14,7 @@ export function PortfolioProjectCarouselPaginationDot({
       className={`size-2.5 rounded-full transition-colors ${
         active
           ? "bg-portfolio-accent"
-          : "bg-portfolio-ink/45 hover:bg-portfolio-ink/70"
+          : "bg-[var(--site-on-dark)]/45 hover:bg-[var(--site-on-dark)]/70"
       }`}
       onClick={() => onSelect(index)}
       role="tab"

@@ -30,26 +30,26 @@ export function PortfolioProjectCarouselControls({
     <>
       <button
         aria-label={portfolioProjectCarouselControlsCopy.previousLabel}
-        className="group absolute left-4 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center border border-portfolio-line bg-portfolio-surface transition-colors hover:border-portfolio-accent disabled:pointer-events-none disabled:opacity-40 sm:left-6 md:left-10"
+        className="group absolute left-4 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center border border-[var(--site-on-dark)]/30 bg-[var(--site-dark)]/80 backdrop-blur-sm transition-colors hover:border-portfolio-accent disabled:pointer-events-none disabled:opacity-40 sm:left-6 md:left-10"
         disabled={!canScrollPrev}
         onClick={onPrevious}
         type="button"
       >
         <ChevronLeft
           aria-hidden
-          className="size-5 text-portfolio-ink transition-colors group-hover:text-portfolio-accent"
+          className="size-5 text-[var(--site-on-dark)] transition-colors group-hover:text-portfolio-accent"
         />
       </button>
       <button
         aria-label={portfolioProjectCarouselControlsCopy.nextLabel}
-        className="group absolute right-4 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center border border-portfolio-line bg-portfolio-surface transition-colors hover:border-portfolio-accent disabled:pointer-events-none disabled:opacity-40 sm:right-6 md:right-10"
+        className="group absolute right-4 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center border border-[var(--site-on-dark)]/30 bg-[var(--site-dark)]/80 backdrop-blur-sm transition-colors hover:border-portfolio-accent disabled:pointer-events-none disabled:opacity-40 sm:right-6 md:right-10"
         disabled={!canScrollNext}
         onClick={onNext}
         type="button"
       >
         <ChevronRight
           aria-hidden
-          className="size-5 text-portfolio-ink transition-colors group-hover:text-portfolio-accent"
+          className="size-5 text-[var(--site-on-dark)] transition-colors group-hover:text-portfolio-accent"
         />
       </button>
 
