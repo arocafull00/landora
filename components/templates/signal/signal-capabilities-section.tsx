@@ -1,14 +1,16 @@
-import type { GalleryItem, LandingContent } from "@/lib/dashboard-data";
+import type { LandingContent } from "@/lib/dashboard-data";
 import { SIGNAL_CHROME } from "@/components/templates/signal/signal-copy";
 import { getSignalCaseContent } from "@/components/templates/signal/signal-case-content";
 import { SignalCaseCard } from "@/components/templates/signal/signal-case-card";
 
 export function SignalCapabilitiesSection({
   content,
-  onOpenCase,
+  previewLandingId,
+  demoMode = false,
 }: {
   content: LandingContent;
-  onOpenCase: (item: GalleryItem, trigger: HTMLElement) => void;
+  previewLandingId?: string;
+  demoMode?: boolean;
 }) {
   const { cases, clients, heading } = getSignalCaseContent(content);
 
@@ -45,11 +47,11 @@ export function SignalCapabilitiesSection({
             <p className="text-[0.65rem] uppercase tracking-[0.22em] text-[var(--site-on-dark)]/55">
               {SIGNAL_CHROME.casesClients}
             </p>
-            <ul className="mt-5 grid grid-cols-2 gap-y-4 sm:grid-cols-4 lg:mt-7">
+            <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 xl:grid-cols-4 lg:mt-7">
               {clients.map((name) => (
                 <li
                   key={name}
-                  className="flex min-h-10 items-center border-l border-[var(--site-on-dark)]/20 px-4 text-sm font-medium tracking-[-0.03em] text-[var(--site-on-dark)]/75 first:border-l-0 first:pl-0 sm:text-base lg:justify-center lg:px-3 lg:text-lg"
+                  className="flex min-h-10 items-center text-sm font-medium tracking-[-0.03em] text-[var(--site-on-dark)]/75 sm:text-base xl:justify-center xl:border-l xl:border-[var(--site-on-dark)]/20 xl:px-3 xl:first:border-l-0 xl:first:pl-0"
                 >
                   {name}
                 </li>
@@ -60,7 +62,7 @@ export function SignalCapabilitiesSection({
 
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:mt-12 lg:grid-cols-12">
           {cases.map((item, index) => (
-            <SignalCaseCard item={item} index={index} key={item.id} onOpenCase={onOpenCase} />
+            <SignalCaseCard item={item} index={index} key={item.id} previewLandingId={previewLandingId} demoMode={demoMode} />
           ))}
         </div>
 

@@ -19,6 +19,9 @@ export function SignalHeroArt() {
       <div className="absolute -inset-4" data-signal-hero-layer="statue">
         <AssetImage alt="" className="object-cover object-right" fill priority sizes="100vw" src={SIGNAL_HERO_ASSETS.statue} />
       </div>
+      <div className="absolute -inset-4" data-signal-hero-layer="flowers-front">
+        <AssetImage alt="" className="object-cover object-right" fill sizes="100vw" src={SIGNAL_HERO_ASSETS.flowersFront} />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-r from-[var(--site-dark)] via-[var(--site-dark)]/80 to-transparent lg:via-[var(--site-dark)]/45" />
       <div className="absolute inset-0 bg-[var(--site-dark)] opacity-0" data-signal-hero-shade />
       <div className="signal-hero-light absolute inset-0" data-signal-hero-light />

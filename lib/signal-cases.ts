@@ -20,13 +20,16 @@ export function findSignalCaseBySlug(
 export function getSignalCaseHref({
   previewLandingId,
   projectSlug,
+  demoMode = false,
 }: {
   previewLandingId?: string;
   projectSlug: string;
+  demoMode?: boolean;
 }) {
   if (previewLandingId) {
     return `/preview/${previewLandingId}/casos/${projectSlug}`;
   }
+  if (demoMode) return `/admin/templates/signal/casos/${projectSlug}`;
   return `/casos/${projectSlug}`;
 }
 

@@ -11,7 +11,7 @@ export function SignalTemplate({
   previewLandingId,
   bookingEnabled = false,
   sectionSelections,
-  initialCaseSlug,
+  demoMode = false,
 }: {
   content: LandingContent;
   copyrightYear: number;
@@ -21,7 +21,7 @@ export function SignalTemplate({
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
-  initialCaseSlug?: string;
+  demoMode?: boolean;
 }) {
   const { gallery, heading } = getSignalCaseContent(content);
   const resolvedContent = {
@@ -40,7 +40,7 @@ export function SignalTemplate({
       previewLandingId={previewLandingId}
       bookingEnabled={bookingEnabled}
       sectionSelections={sectionSelections}
-      initialCaseSlug={initialCaseSlug}
+      demoMode={demoMode}
     />
   );
 }

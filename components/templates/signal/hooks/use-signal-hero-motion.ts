@@ -21,9 +21,9 @@ export function useSignalHeroMotion(rootRef: RefObject<HTMLElement | null>) {
 
       const ctx = gsap.context(() => {
         gsap.timeline()
-          .fromTo(statue, { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 1.6, ease: "power2.out" }, 0)
-          .fromTo(back, { opacity: 0 }, { opacity: 1, duration: 1.5, ease: "power2.out" }, 0.2)
-          .fromTo(front, { opacity: 0 }, { opacity: 1, duration: 1.5, ease: "power2.out" }, 0.45)
+          .fromTo(back, { xPercent: 3, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 1.5, ease: "power2.out" }, 0)
+          .fromTo(statue, { xPercent: 6, scale: 0.96, opacity: 0, filter: "blur(10px)" }, { xPercent: 0, scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.6, ease: "power2.out" }, 0.15)
+          .fromTo(front, { xPercent: 8, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 1.5, ease: "power2.out" }, 0.4)
           .fromTo(hero.querySelectorAll("[data-signal-hero-line]"), { y: 24, opacity: 0, filter: "blur(4px)" }, {
             y: 0,
             opacity: 1,

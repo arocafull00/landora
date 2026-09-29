@@ -10,29 +10,24 @@ import { SIGNAL_CHROME } from "@/components/templates/signal/signal-copy";
 import { SignalNav } from "@/components/templates/signal/signal-nav";
 import { SignalCapabilitiesSection } from "@/components/templates/signal/signal-capabilities-section";
 import { SignalIndexSection } from "@/components/templates/signal/signal-index-section";
-import { SignalClimaxSection } from "@/components/templates/signal/signal-climax-section";
 import { SignalCtaSection } from "@/components/templates/signal/signal-cta-section";
 import { SignalContactSection } from "@/components/templates/signal/signal-contact-section";
 import { useSignalScroll } from "@/components/templates/signal/hooks/use-signal-scroll";
 import { useSignalHeroMotion } from "@/components/templates/signal/hooks/use-signal-hero-motion";
-import { useSignalCaseOverlay } from "@/components/templates/signal/hooks/use-signal-case-overlay";
-import { getSignalCaseContent } from "@/components/templates/signal/signal-case-content";
-import { SignalCaseStudy } from "@/components/templates/signal/signal-case-study";
-import type { GalleryItem } from "@/lib/dashboard-data";
 
 function renderSignalBodySection(
   anchor: string,
   content: LandingContent,
   ctaHref: string,
-  onOpenCase: (item: GalleryItem, trigger: HTMLElement) => void,
+  previewLandingId?: string,
+  demoMode = false,
 ) {
   if (anchor === "capacidades") {
     return (
-      <SignalCapabilitiesSection content={content} onOpenCase={onOpenCase} />
+      <SignalCapabilitiesSection content={content} previewLandingId={previewLandingId} demoMode={demoMode} />
     );
   }
   if (anchor === "indice") return <SignalIndexSection content={content} />;
-  if (anchor === "climax") return <SignalClimaxSection content={content} />;
   if (anchor === "cta") return <SignalCtaSection content={content} ctaHref={ctaHref} />;
   return null;
 }
@@ -46,7 +41,7 @@ export function SignalTemplateClient({
   previewLandingId,
   bookingEnabled = false,
   sectionSelections,
-  initialCaseSlug,
+  demoMode = false,
 }: {
   content: LandingContent;
   copyrightYear: number;
@@ -56,7 +51,7 @@ export function SignalTemplateClient({
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
-  initialCaseSlug?: string;
+  demoMode?: boolean;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroVariantId = sectionSelections?.hero ?? "signal";
@@ -68,7 +63,7 @@ export function SignalTemplateClient({
     template: "signal",
   });
   const navLinks = getVisibleNav(content.nav, content.hiddenSections, "signal").filter(
-    (link) => link.href !== "#escala" && link.href !== "#portal" && link.href !== "#studio",
+    (link) => link.href !== "#escala" && link.href !== "#portal" && link.href !== "#studio" && link.href !== "#climax",
   );
 
   useSignalScroll(rootRef, {
@@ -77,12 +72,6 @@ export function SignalTemplateClient({
     content,
   });
   useSignalHeroMotion(rootRef);
-  const { cases } = getSignalCaseContent(content);
-  const { activeCase, closeCase, goToContact, openCase } = useSignalCaseOverlay({
-    cases,
-    initialCaseSlug,
-    previewLandingId,
-  });
 
   return (
     <div
@@ -116,7 +105,7 @@ export function SignalTemplateClient({
 
       {getOrderedVisibleBodySections("signal", content).map((section) => (
         <div key={section.anchor}>
-          {renderSignalBodySection(section.anchor, content, primaryCtaHref, openCase)}
+          {renderSignalBodySection(section.anchor, content, primaryCtaHref, previewLandingId, demoMode)}
         </div>
       ))}
 
@@ -127,13 +116,6 @@ export function SignalTemplateClient({
         previewMode={Boolean(previewLandingId)}
       />
 
-      {activeCase ? (
-        <SignalCaseStudy
-          item={activeCase}
-          onClose={closeCase}
-          onContact={goToContact}
-        />
-      ) : null}
     </div>
   );
 }

@@ -365,7 +365,6 @@ const SIGNAL_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
   { anchor: "capacidades", label: "Casos", editorTabId: "Capacidades", navHref: "#capacidades", contentKeys: ["serviceMenu"] },
   { anchor: "indice", label: "Método", editorTabId: "Índice", navHref: "#indice", contentKeys: ["benefits"] },
-  { anchor: "climax", label: "Clímax", editorTabId: "Clímax", navHref: "#climax" },
   { anchor: "cta", label: "Sobre mí", editorTabId: "CTA", navHref: "#cta" },
   { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },

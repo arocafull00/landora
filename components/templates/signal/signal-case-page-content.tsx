@@ -1,8 +1,12 @@
 import { notFound } from "next/navigation";
-import { PublicLanding } from "@/components/templates/public-landing";
+import { LandingAnalyticsInit } from "@/components/analytics/landing-analytics-init";
+import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
+import { SignalCasePage } from "@/components/templates/signal/signal-case-page";
+import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { findSignalCaseBySlug } from "@/lib/signal-cases";
 import { resolveGalleryItems } from "@/lib/gallery-content";
+import { getCopyrightYear } from "@/lib/copyright-year";
 
 export async function SignalCasePageContent({
   caseSlug,
@@ -18,5 +22,23 @@ export async function SignalCasePageContent({
   const signalCase = findSignalCaseBySlug(gallery, caseSlug);
   if (!signalCase) notFound();
 
-  return <PublicLanding initialCaseSlug={caseSlug} landing={landing} />;
+  const copyrightYear = await getCopyrightYear();
+
+  return (
+    <>
+      <LandingAnalyticsInit landingId={landing.id} clientId={landing.userId} />
+      <SiteThemeScope appearance={landing.content.appearance} template="signal">
+        <SignalCasePage
+          content={landing.content}
+          copyrightYear={copyrightYear}
+          homeHref="/"
+          item={signalCase}
+          slug={landing.slug}
+        />
+        {landing.content.contact.whatsappEnabled ? (
+          <WhatsappFloatButton phone={landing.content.contact.phone} />
+        ) : null}
+      </SiteThemeScope>
+    </>
+  );
 }

@@ -269,7 +269,6 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       DESIGN_EDITOR_TAB,
       { id: "Capacidades", label: "Casos" },
       { id: "Índice", label: "Método" },
-      { id: "Clímax", label: "Clímax" },
       { id: "CTA", label: "Cierre" },
       OFFERS_EDITOR_TAB,
       RESERVAS_EDITOR_TAB,

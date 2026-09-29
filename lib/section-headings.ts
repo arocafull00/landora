@@ -204,10 +204,6 @@ export const SECTION_HEADING_DEFAULTS: Record<
       title: "Cómo trabajo",
       subtitle: "No parto de una tecnología. Parto de un problema.",
     },
-    climax: {
-      title: "NO PARTO DE UNA TECNOLOGÍA.",
-      subtitle: "PARTO DE UN PROBLEMA.",
-    },
     cta: {
       title: "Sobre mí",
       subtitle: "¿Qué proceso de tu empresa te gustaría no volver a hacer manualmente?",

@@ -67,6 +67,7 @@ export default async function TemplateDemoPage({
           copyrightYear={copyrightYear}
           renderedAt={renderedAt}
           topOffset={isEmbed ? 0 : TEMPLATE_DEMO_BAR_HEIGHT}
+          {...(id === "signal" ? { demoMode: true } : {})}
         />
       </SiteThemeScope>
     </div>

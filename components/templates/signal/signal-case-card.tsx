@@ -1,8 +1,7 @@
-"use client";
-
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { GalleryItem } from "@/lib/dashboard-data";
-import { hasSignalCaseStudy } from "@/lib/signal-cases";
+import { getSignalCaseHref, hasSignalCaseStudy } from "@/lib/signal-cases";
 import { SignalMedia } from "@/components/templates/signal/signal-media";
 import { SIGNAL_CHROME } from "@/components/templates/signal/signal-copy";
 
@@ -18,22 +17,26 @@ const CARD_SPANS = [
 export function SignalCaseCard({
   item,
   index,
-  onOpenCase,
+  previewLandingId,
+  demoMode = false,
 }: {
   item: GalleryItem;
   index: number;
-  onOpenCase: (item: GalleryItem, trigger: HTMLElement) => void;
+  previewLandingId?: string;
+  demoMode?: boolean;
 }) {
-  const showCaseAction = hasSignalCaseStudy(item) && Boolean(item.projectSlug);
+  const caseHref = item.projectSlug && hasSignalCaseStudy(item)
+    ? getSignalCaseHref({ previewLandingId, projectSlug: item.projectSlug, demoMode })
+    : null;
   const highlight = item.tags?.[1]?.trim();
   const hasLargeResult = index === 2 && Boolean(highlight);
 
   return (
     <article
-      className={`relative isolate flex min-h-[23rem] flex-col justify-between overflow-hidden border border-[var(--site-on-dark)]/20 bg-[var(--site-dark)] p-6 transition-[border-color,transform] duration-300 hover:border-[var(--site-on-dark)]/45 motion-safe:hover:-translate-y-1 motion-reduce:transition-none sm:p-8 lg:p-9 ${CARD_SPANS[index] ?? "lg:col-span-6"} ${hasLargeResult ? "lg:min-h-[27rem]" : ""}`}
+      className={`group relative isolate flex min-h-[23rem] flex-col justify-between overflow-hidden border border-[var(--site-on-dark)]/20 bg-[var(--site-dark)] p-6 transition-[border-color,transform] duration-300 hover:border-[var(--site-on-dark)]/45 motion-safe:hover:-translate-y-1 motion-reduce:transition-none sm:p-8 lg:p-9 ${CARD_SPANS[index] ?? "lg:col-span-6"} ${hasLargeResult ? "lg:min-h-[27rem]" : ""}`}
     >
       {item.image ? (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 opacity-60">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 opacity-60 transition-[opacity,transform] duration-500 ease-out group-hover:opacity-80 motion-safe:group-hover:scale-105 motion-reduce:transition-none">
           <SignalMedia
             alt=""
             className="object-cover object-right grayscale"
@@ -43,7 +46,7 @@ export function SignalCaseCard({
         </div>
       ) : null}
       {!item.image && index === 1 ? (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden transition-transform duration-500 ease-out motion-safe:group-hover:scale-105 motion-reduce:transition-none">
           {[0, 1, 2, 3, 4].map((ring) => (
             <span
               key={ring}
@@ -54,7 +57,7 @@ export function SignalCaseCard({
         </div>
       ) : null}
       {!item.image && index === 2 ? (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden bg-gradient-to-l from-[var(--site-on-dark)]/35 via-[var(--site-on-dark)]/5 to-transparent">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden bg-gradient-to-l from-[var(--site-on-dark)]/35 via-[var(--site-on-dark)]/5 to-transparent transition-transform duration-500 ease-out motion-safe:group-hover:scale-105 motion-reduce:transition-none">
           <span className="absolute -bottom-28 right-[10%] size-72 rounded-full bg-[var(--site-on-dark)]/80" />
           <span className="absolute right-[40%] top-10 size-5 rounded-full bg-[var(--site-on-dark)]/70" />
         </div>
@@ -64,7 +67,7 @@ export function SignalCaseCard({
       <div className="relative max-w-[28rem]">
         <p className="flex items-center gap-5 text-xs font-semibold tracking-[0.08em] text-[var(--site-accent)]">
           {String(index + 1).padStart(2, "0")}
-          <span aria-hidden className="h-px w-9 bg-[var(--site-on-dark)]/35" />
+          <span aria-hidden className="h-px w-9 bg-[var(--site-on-dark)]/35 transition-[width,background-color] duration-300 group-hover:w-14 group-hover:bg-[var(--site-accent)] motion-reduce:transition-none" />
         </p>
         {item.title ? (
           <p className="mt-5 text-[0.65rem] uppercase tracking-[0.2em] text-[var(--site-on-dark)]/55">
@@ -97,15 +100,14 @@ export function SignalCaseCard({
         ) : null}
       </div>
 
-      {showCaseAction ? (
-        <button
+      {caseHref ? (
+        <Link
           className="relative mt-8 flex w-fit items-center gap-3 text-[0.7rem] uppercase tracking-[0.2em] text-[var(--site-on-dark)] underline decoration-[var(--site-on-dark)]/60 underline-offset-[6px] transition-colors hover:text-[var(--site-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)]"
-          onClick={(event) => onOpenCase(item, event.currentTarget)}
-          type="button"
+          href={caseHref}
         >
           {SIGNAL_CHROME.caseAction}
-          <ArrowRight aria-hidden className="size-4" />
-        </button>
+          <ArrowRight aria-hidden className="size-4 transition-transform duration-300 motion-safe:group-hover:translate-x-1 motion-reduce:transition-none" />
+        </Link>
       ) : null}
     </article>
   );

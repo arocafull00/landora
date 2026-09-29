@@ -970,7 +970,7 @@ export const OFICIO_PRO_DEFAULT_CONTENT: TemplateContentMap["oficio-pro"] = {
 export const SIGNAL_DEFAULT_CONTENT: TemplateContentMap["signal"] = {
   appearance: DEFAULT_LANDING_APPEARANCE,
   enabledPages: [],
-  sectionOrder: ["capacidades", "indice", "climax", "cta"],
+  sectionOrder: ["capacidades", "indice", "cta"],
   brand: "Adrián Rocafull",
   brandLogoType: "text",
   brandLogoImage: "",
@@ -992,7 +992,6 @@ export const SIGNAL_DEFAULT_CONTENT: TemplateContentMap["signal"] = {
     ...SECTION_HEADING_DEFAULTS.signal,
     capacidades: { title: "Software que ya está resolviendo problemas reales.", subtitle: "He trabajado desarrollando productos digitales, automatizaciones e integraciones para empresas de salud, tecnología, construcción y entretenimiento." },
     indice: { title: "Cómo trabajo", subtitle: "No parto de una tecnología. Parto de un problema." },
-    climax: { title: "NO PARTO DE UNA TECNOLOGÍA.", subtitle: "PARTO DE UN PROBLEMA." },
     cta: { title: "Sobre mí", subtitle: "¿Qué proceso de tu empresa te gustaría no volver a hacer manualmente?" },
     contacto: { title: "Cuéntame tu caso", subtitle: "No necesitas tener definida la solución. Empecemos por el problema." },
   },

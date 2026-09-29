@@ -66,8 +66,6 @@ export function SignalEditorSection() {
   };
   const profile = activeLanding.content.team?.[0];
   const benefits = activeLanding.content.benefits ?? [];
-  const climax = activeLanding.content.sectionHeadings?.climax ??
-    SECTION_HEADING_DEFAULTS.signal.climax;
   const ctaHeading = activeLanding.content.sectionHeadings?.cta ??
     SECTION_HEADING_DEFAULTS.signal.cta;
 
@@ -195,31 +193,6 @@ export function SignalEditorSection() {
                   Añadir posibilidad
                 </button>
               </div>
-            </section>
-          ) : null}
-
-          {activeEditorTab === "Clímax" ? (
-            <section className="space-y-5 py-unit-lg">
-              <EditorSectionTitle
-                title="Clímax"
-                description="Declaración a color señal que cierra el relato."
-              />
-              <EditorTextField
-                label="Línea 1"
-                onChange={(value) =>
-                  updateSectionHeading(activeLanding.id, "climax", { title: value })
-                }
-                value={climax.title}
-              />
-              <EditorTextField
-                label="Línea 2"
-                onChange={(value) =>
-                  updateSectionHeading(activeLanding.id, "climax", {
-                    subtitle: value,
-                  })
-                }
-                value={climax.subtitle}
-              />
             </section>
           ) : null}
 

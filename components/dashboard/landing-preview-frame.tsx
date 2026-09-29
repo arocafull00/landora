@@ -16,6 +16,7 @@ import { FloristeriaTemplate } from "@/components/templates/floristeria/floriste
 import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
 import { SignalTemplate } from "@/components/templates/signal/signal-template";
+import { SignalCasePage } from "@/components/templates/signal/signal-case-page";
 import { PalletRossTemplate } from "@/components/templates/pallet-ross/pallet-ross-template";
 import {
   getHashSectionId,
@@ -29,6 +30,9 @@ import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
 import { PortfolioAboutPage } from "@/components/templates/portfolio/portfolio-about-page";
 import { PortfolioProjectPage } from "@/components/templates/portfolio/portfolio-project-page";
 import { RistoranteMenuPage } from "@/components/templates/ristorante/ristorante-menu-page";
+import { resolveGalleryItems } from "@/lib/gallery-content";
+import { findSignalCaseBySlug } from "@/lib/signal-cases";
+import { getPreviewLandingPath } from "@/lib/public-site-url";
 
 const TEMPLATE_COMPONENTS = {
   velar: VelarTemplate,
@@ -147,13 +151,25 @@ export function LandingPreviewFrame({
             item.projectSlug === previewProjectKey,
         )
       : undefined;
+  const previewSignalCase = initialCaseSlug && activeTemplate === "signal"
+    ? findSignalCaseBySlug(resolveGalleryItems("signal", content.gallery ?? []), initialCaseSlug)
+    : undefined;
 
   return (
     <SiteThemeScope
       appearance={appearance}
       template={activeTemplate}
     >
-      {sitePage === "project" &&
+      {previewSignalCase ? (
+        <SignalCasePage
+          content={content}
+          copyrightYear={copyrightYear}
+          homeHref={getPreviewLandingPath(previewLandingId)}
+          item={previewSignalCase}
+          previewMode
+          slug={slug}
+        />
+      ) : sitePage === "project" &&
       activeTemplate === "portfolio" &&
       previewProject ? (
         <PortfolioProjectPage
@@ -197,7 +213,6 @@ export function LandingPreviewFrame({
           previewLandingId={previewLandingId}
           sectionSelections={sectionSelections}
           slug={slug}
-          {...(activeTemplate === "signal" ? { initialCaseSlug } : {})}
         />
       )}
       {sitePage === "home" && content.contact.whatsappEnabled ? (

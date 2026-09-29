@@ -88,7 +88,6 @@ export function useSignalScroll(
         const hero = root.querySelector<HTMLElement>("[data-signal-scene='hero']");
         const capabilities = root.querySelector<HTMLElement>("[data-signal-scene='capacidades']");
         const index = root.querySelector<HTMLElement>("[data-signal-scene='indice']");
-        const climax = root.querySelector<HTMLElement>("[data-signal-scene='climax']");
         const cta = root.querySelector<HTMLElement>("[data-signal-scene='cta']");
 
         if (hero) {
@@ -98,9 +97,19 @@ export function useSignalScroll(
             stagger: 0.05,
             scrollTrigger: { trigger: hero, start: "top top", end: "bottom center", ...common },
           });
-          gsap.to(hero.querySelector("[data-signal-hero-art]"), {
-            y: -36,
-            scrollTrigger: { trigger: hero, start: "top top", end: "bottom center", ...common },
+          const artLayers = [
+            { selector: "[data-signal-hero-layer='flowers-back']", yPercent: -2 },
+            { selector: "[data-signal-hero-layer='statue']", yPercent: -5 },
+            { selector: "[data-signal-hero-layer='flowers-front']", yPercent: -8 },
+          ];
+          artLayers.forEach(({ selector, yPercent }) => {
+            const layer = hero.querySelector(selector);
+            if (!layer) return;
+            gsap.to(layer, {
+              yPercent,
+              ease: "none",
+              scrollTrigger: { trigger: hero, start: "top top", end: "bottom center", ...common },
+            });
           });
           gsap.to(hero.querySelector("[data-signal-hero-shade]"), {
             opacity: 0.45,
@@ -140,17 +149,6 @@ export function useSignalScroll(
             stagger: 0.08,
             scrollTrigger: { trigger: index, start: "top 80%", end: "center 30%", ...common },
           });
-        }
-
-        if (climax) {
-          const type = climax.querySelector<HTMLElement>("[data-signal-climax-type]");
-          const brand = climax.querySelector<HTMLElement>("[data-signal-climax-brand]");
-          gsap.timeline({
-            scrollTrigger: { trigger: climax, start: "top top", end: "+=150%", pin: true, ...common },
-          })
-            .fromTo(type, { scale: 2.3 }, { scale: 1, duration: 1 }, 0)
-            .to(type, { opacity: 0, scale: 0.85, duration: 0.35 }, 1)
-            .fromTo(brand, { opacity: 0, scale: 1.35 }, { opacity: 1, scale: 1, duration: 0.4 }, 1.05);
         }
 
         if (cta) {
