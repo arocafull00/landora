@@ -50,6 +50,7 @@ export function LandingPreviewFrame({
   previewLandingId,
   sitePage = "home",
   previewProjectKey,
+  initialCaseSlug,
   bookingEnabled = false,
 }: {
   initialContent: LandingContent;
@@ -59,6 +60,7 @@ export function LandingPreviewFrame({
   previewLandingId: string;
   sitePage?: SitePageId | "project" | "carta";
   previewProjectKey?: string;
+  initialCaseSlug?: string;
   bookingEnabled: boolean;
 }) {
   const previewBridge = usePreviewBridge();
@@ -195,6 +197,7 @@ export function LandingPreviewFrame({
           previewLandingId={previewLandingId}
           sectionSelections={sectionSelections}
           slug={slug}
+          {...(activeTemplate === "signal" ? { initialCaseSlug } : {})}
         />
       )}
       {sitePage === "home" && content.contact.whatsappEnabled ? (

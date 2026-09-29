@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getTemplate, isValidTemplateId } from "@/lib/template-registry";
+import { getTemplate, isAvailableTemplateId } from "@/lib/template-registry";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
@@ -49,7 +49,7 @@ export default async function TemplateDemoPage({
     getPublicRenderTime(),
   ]);
 
-  if (!isValidTemplateId(id)) notFound();
+  if (!isAvailableTemplateId(id)) notFound();
 
   const template = getTemplate(id);
   if (!template) notFound();

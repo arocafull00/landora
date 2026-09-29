@@ -79,13 +79,15 @@ const SIGNAL_CATEGORIES = new Set([
 export function resolveTemplateId(category: string | undefined): TemplateId | null {
   if (!category) return null;
 
-  if (STUDIO_CATEGORIES.has(category)) return "studio";
-  if (COFFEE_SHOP_CATEGORIES.has(category)) return "coffee-shop";
-  if (RISTORANTE_CATEGORIES.has(category)) return "ristorante";
+  if (
+    STUDIO_CATEGORIES.has(category) ||
+    COFFEE_SHOP_CATEGORIES.has(category) ||
+    RISTORANTE_CATEGORIES.has(category)
+  ) return null;
   if (FLORISTERIA_CATEGORIES.has(category)) return "floristeria";
   if (OFICIO_PRO_CATEGORIES.has(category)) return "oficio-pro";
   if (PORTFOLIO_CATEGORIES.has(category)) return "portfolio";
   if (SIGNAL_CATEGORIES.has(category)) return "signal";
 
-  return "ristorante";
+  return null;
 }

@@ -160,8 +160,6 @@ const COFFEE_SHOP_SECTIONS: LandingSectionKey[] = [
 const SIGNAL_GAP_SECTIONS: LandingSectionKey[] = [
   "hero",
   "branding",
-  "story",
-  "stats",
   "nav",
   "testimonials",
   "cta",

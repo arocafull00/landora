@@ -261,18 +261,16 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     id: "signal",
     label: "Signal",
     description:
-      "Landing editorial cinematográfica para estudios creativos: tipografía a gran escala, scroll controlado y CTA de acceso.",
+      "Landing editorial de Adrián Rocafull: software a medida, automatización e inteligencia artificial para resolver problemas reales.",
     demoContent: SIGNAL_DEFAULT_CONTENT,
     editorTabs: [
       { id: "Hero", label: "Hero" },
       NAV_EDITOR_TAB,
       DESIGN_EDITOR_TAB,
-      { id: "Portal", label: "Portal" },
-      { id: "Escala", label: "Escala" },
-      { id: "Capacidades", label: "Capacidades" },
-      { id: "Índice", label: "Índice" },
+      { id: "Capacidades", label: "Casos" },
+      { id: "Índice", label: "Método" },
       { id: "Clímax", label: "Clímax" },
-      { id: "CTA", label: "CTA" },
+      { id: "CTA", label: "Cierre" },
       OFFERS_EDITOR_TAB,
       RESERVAS_EDITOR_TAB,
       BLOG_EDITOR_TAB,
@@ -298,8 +296,16 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
   },
 };
 
+const RETIRED_TEMPLATE_IDS = new Set<TemplateId>([
+  "studio",
+  "ristorante",
+  "coffee-shop",
+]);
+
 export function getAllTemplates() {
-  return Object.values(TEMPLATE_REGISTRY);
+  return Object.values(TEMPLATE_REGISTRY).filter(
+    (template) => isAvailableTemplateId(template.id),
+  );
 }
 
 export function getTemplate(id: string): TemplateDefinition | undefined {
@@ -336,4 +342,8 @@ export function getVisibleEditorTabs(
 
 export function isValidTemplateId(id: string): id is TemplateId {
   return id in TEMPLATE_REGISTRY;
+}
+
+export function isAvailableTemplateId(id: string): id is TemplateId {
+  return isValidTemplateId(id) && !RETIRED_TEMPLATE_IDS.has(id);
 }

@@ -397,6 +397,9 @@ export const landingGallery = pgTable("landing_gallery", {
   linkType: text("link_type").notNull().default("none"),
   projectSlug: text("project_slug").notNull().default(""),
   projectBody: text("project_body").notNull().default(""),
+  caseProblem: text("case_problem").notNull().default(""),
+  caseImpact: text("case_impact").notNull().default(""),
+  caseMethod: text("case_method").notNull().default(""),
   projectGallery: jsonb("project_gallery")
     .$type<string[]>()
     .notNull()

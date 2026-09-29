@@ -12,7 +12,10 @@ import { OffersEditorPanel } from "@/components/dashboard/offers-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
 import { SectionHeadingFields } from "@/components/dashboard/section-heading-fields";
 import { createEmptyServiceMenuItem } from "@/components/dashboard/create-empty-service-menu-item";
+import { createEmptyGalleryItem } from "@/components/dashboard/create-empty-gallery-item";
 import { StudioServiceMenuItemEditor } from "@/components/dashboard/studio-service-menu-item-editor";
+import { SignalCaseItemEditor } from "@/components/dashboard/signal-case-item-editor";
+import { SignalProfileFields } from "@/components/dashboard/signal-profile-fields";
 import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
 import { ReservasEditorPanel } from "@/components/dashboard/reservas-editor-panel";
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
@@ -20,6 +23,7 @@ import { EditorSectionTitle } from "@/components/dashboard/editor-section-title"
 import { EditorTextField } from "@/components/dashboard/editor-text-field";
 import { EditorTextArea } from "@/components/dashboard/editor-text-area";
 import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
+import { getSignalCaseContent } from "@/components/templates/signal/signal-case-content";
 
 export function SignalEditorSection() {
   const { bookingEnabled } = useDashboardChrome();
@@ -30,9 +34,7 @@ export function SignalEditorSection() {
     landings,
     updateSection,
     updateSectionItem,
-    updateStat,
     updateSectionHeading,
-    updateStory,
   } = useDashboardStore(
     useShallow((state) => ({
       activeEditorTab: state.activeEditorTab,
@@ -41,9 +43,7 @@ export function SignalEditorSection() {
       landings: state.landings,
       updateSection: state.updateSection,
       updateSectionItem: state.updateSectionItem,
-      updateStat: state.updateStat,
       updateSectionHeading: state.updateSectionHeading,
-      updateStory: state.updateStory,
     })),
   );
 
@@ -53,6 +53,18 @@ export function SignalEditorSection() {
   if (!activeLanding) return null;
 
   const serviceMenu = activeLanding.content.serviceMenu ?? [];
+  const { cases: gallery, heading: casesHeading } = getSignalCaseContent(activeLanding.content);
+  const casesLanding = {
+    ...activeLanding,
+    content: {
+      ...activeLanding.content,
+      sectionHeadings: {
+        ...activeLanding.content.sectionHeadings,
+        capacidades: casesHeading,
+      },
+    },
+  };
+  const profile = activeLanding.content.team?.[0];
   const benefits = activeLanding.content.benefits ?? [];
   const climax = activeLanding.content.sectionHeadings?.climax ??
     SECTION_HEADING_DEFAULTS.signal.climax;
@@ -83,91 +95,29 @@ export function SignalEditorSection() {
             <HeroEditorPanel landing={activeLanding} />
           ) : null}
 
-          {activeEditorTab === "Portal" ? (
-            <section className="space-y-5 py-unit-lg">
-              <EditorSectionTitle
-                title="Portal"
-                description="Líneas tipográficas del manifiesto. Una línea por renglón."
-              />
-              <SectionHeadingFields
-                activeLanding={activeLanding}
-                anchor="portal"
-                fallback={SECTION_HEADING_DEFAULTS.signal.portal}
-              />
-              <EditorTextArea
-                label="Manifiesto"
-                onChange={(value) =>
-                  updateStory(activeLanding.id, { statement: value })
-                }
-                rows={6}
-                value={
-                  activeLanding.content.about?.statement ??
-                  activeLanding.content.story?.statement ??
-                  ""
-                }
-              />
-            </section>
-          ) : null}
-
-          {activeEditorTab === "Escala" ? (
-            <section className="space-y-5 py-unit-lg">
-              <EditorSectionTitle
-                title="Escala"
-                description="Números que estructuran la escena de impacto."
-              />
-              <SectionHeadingFields
-                activeLanding={activeLanding}
-                anchor="escala"
-                fallback={SECTION_HEADING_DEFAULTS.signal.escala}
-              />
-              <div className="grid gap-4 md:grid-cols-2">
-                {activeLanding.content.stats.map((stat) => (
-                  <div className="space-y-3" key={stat.id}>
-                    <EditorTextField
-                      label="Valor"
-                      onChange={(value) =>
-                        updateStat(activeLanding.id, stat.id, { value })
-                      }
-                      value={stat.value}
-                    />
-                    <EditorTextField
-                      label="Etiqueta"
-                      onChange={(value) =>
-                        updateStat(activeLanding.id, stat.id, { label: value })
-                      }
-                      value={stat.label}
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          ) : null}
-
           {activeEditorTab === "Capacidades" ? (
             <section className="space-y-5 py-unit-lg">
               <EditorSectionTitle
-                title="Capacidades"
-                description="Tres transformaciones tipográficas a pantalla completa."
+                title="Casos"
+                description="Proyectos reales mostrados en tarjetas de casos de éxito."
               />
               <SectionHeadingFields
-                activeLanding={activeLanding}
+                activeLanding={casesLanding}
                 anchor="capacidades"
                 fallback={SECTION_HEADING_DEFAULTS.signal.capacidades}
               />
               <div className="space-y-6">
-                {serviceMenu.map((item, index) => (
-                  <StudioServiceMenuItemEditor
+                {gallery.map((item, index) => (
+                  <SignalCaseItemEditor
                     index={index}
                     item={item}
                     key={item.id}
-                    onChange={(patch) =>
-                      updateSectionItem(activeLanding.id, "serviceMenu", item.id, patch)
-                    }
+                    onChange={(patch) => updateSection(activeLanding.id, "gallery", gallery.map((entry) => entry.id === item.id ? { ...entry, ...patch } : entry))}
                     onRemove={() =>
                       updateSection(
                         activeLanding.id,
-                        "serviceMenu",
-                        serviceMenu.filter((entry) => entry.id !== item.id),
+                        "gallery",
+                        gallery.filter((entry) => entry.id !== item.id),
                       )
                     }
                   />
@@ -176,14 +126,14 @@ export function SignalEditorSection() {
               <button
                 className="w-full rounded-lg border border-dashed border-outline-variant px-4 py-3 font-label text-label-md text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
                 onClick={() =>
-                  updateSection(activeLanding.id, "serviceMenu", [
-                    ...serviceMenu,
-                    createEmptyServiceMenuItem(),
+                  updateSection(activeLanding.id, "gallery", [
+                    ...gallery,
+                    createEmptyGalleryItem(),
                   ])
                 }
                 type="button"
               >
-                Añadir capacidad
+                Añadir caso
               </button>
             </section>
           ) : null}
@@ -191,8 +141,8 @@ export function SignalEditorSection() {
           {activeEditorTab === "Índice" ? (
             <section className="space-y-5 py-unit-lg">
               <EditorSectionTitle
-                title="Índice"
-                description="Filas de especificación alineadas con la marca."
+                title="Método y posibilidades"
+                description="Pasos de trabajo y soluciones posibles."
               />
               <SectionHeadingFields
                 activeLanding={activeLanding}
@@ -225,6 +175,25 @@ export function SignalEditorSection() {
                     />
                   </div>
                 ))}
+              </div>
+              <div className="space-y-6 border-t border-outline-variant pt-6">
+                <p className="font-label text-label-md text-on-surface-variant">Posibilidades</p>
+                {serviceMenu.map((item, index) => (
+                  <StudioServiceMenuItemEditor
+                    index={index}
+                    item={item}
+                    key={item.id}
+                    onChange={(patch) => updateSectionItem(activeLanding.id, "serviceMenu", item.id, patch)}
+                    onRemove={() => updateSection(activeLanding.id, "serviceMenu", serviceMenu.filter((entry) => entry.id !== item.id))}
+                  />
+                ))}
+                <button
+                  className="w-full rounded-lg border border-dashed border-outline-variant px-4 py-3 font-label text-label-md text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+                  onClick={() => updateSection(activeLanding.id, "serviceMenu", [...serviceMenu, createEmptyServiceMenuItem()])}
+                  type="button"
+                >
+                  Añadir posibilidad
+                </button>
               </div>
             </section>
           ) : null}
@@ -277,6 +246,12 @@ export function SignalEditorSection() {
                 rows={3}
                 value={ctaHeading.subtitle}
               />
+              {profile ? (
+                <SignalProfileFields
+                  profile={profile}
+                  onChange={(patch) => updateSectionItem(activeLanding.id, "team", profile.id, patch)}
+                />
+              ) : null}
             </section>
           ) : null}
 

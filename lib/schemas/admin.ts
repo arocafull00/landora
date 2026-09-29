@@ -17,6 +17,33 @@ export const createUserSchema = z.object({
 
 export type CreateUserValues = z.infer<typeof createUserSchema>;
 
+export const createUserLandingFormSchema = z.strictObject({
+  name: z.string().trim().min(1, "El nombre es requerido").max(100),
+  slug: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .min(1, "El subdominio es requerido")
+    .max(100)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Usa letras minúsculas, números y guiones"),
+  template: z.enum([
+    "velar",
+    "portfolio",
+    "floristeria",
+    "oficio-pro",
+    "signal",
+    "pallet-ross",
+  ]),
+});
+
+export type CreateUserLandingFormValues = z.infer<typeof createUserLandingFormSchema>;
+
+export const createUserLandingSchema = createUserLandingFormSchema.extend({
+  userId: z.uuid("ID de usuario inválido"),
+});
+
+export type CreateUserLandingValues = z.infer<typeof createUserLandingSchema>;
+
 export const updateUserNameSchema = z.strictObject({
   userId: z.uuid("ID de usuario inválido"),
   name: z.string().trim().min(1, "El nombre es requerido").max(80),

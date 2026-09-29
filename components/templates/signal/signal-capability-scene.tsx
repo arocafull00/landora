@@ -12,7 +12,7 @@ export function SignalCapabilityScene({
 }) {
   return (
     <article
-      className="absolute inset-0 flex flex-col justify-end bg-[var(--site-dark)] px-6 pb-16 pt-28 md:px-12"
+      className="relative flex min-h-[85svh] flex-col justify-end bg-[var(--site-dark)] px-6 pb-16 pt-28 md:absolute md:inset-0 md:min-h-0 md:px-12"
       data-signal-capability
       style={{ zIndex: index + 1 }}
     >
@@ -36,7 +36,7 @@ export function SignalCapabilityScene({
           {item.category || String(index + 1).padStart(2, "0")}
         </p>
         <h3
-          className="max-w-[12ch] font-bold uppercase leading-[0.85] tracking-[-0.05em] text-[var(--site-on-dark)] text-site-title"
+          className="max-w-[12ch] font-bold uppercase leading-[0.9] tracking-[-0.04em] text-[var(--site-on-dark)] text-[clamp(2.75rem,7vw,6.5rem)]"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
           {item.name}

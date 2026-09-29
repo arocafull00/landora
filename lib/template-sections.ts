@@ -218,9 +218,7 @@ const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = 
   },
   signal: {
     home: "hero",
-    studio: "portal",
     capabilities: "capacidades",
-    scale: "escala",
     access: "indice",
     contact: "contacto",
   },
@@ -365,12 +363,10 @@ const PALLET_ROSS_SECTIONS: TemplateSectionDef[] = [
 
 const SIGNAL_SECTIONS: TemplateSectionDef[] = [
   { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "portal", label: "Portal", editorTabId: "Portal", navHref: "#portal", contentKeys: ["story"] },
-  { anchor: "escala", label: "Escala", editorTabId: "Escala", navHref: "#escala", contentKeys: ["stats"] },
-  { anchor: "capacidades", label: "Capacidades", editorTabId: "Capacidades", navHref: "#capacidades", contentKeys: ["serviceMenu"] },
-  { anchor: "indice", label: "Índice", editorTabId: "Índice", navHref: "#indice", contentKeys: ["benefits"] },
+  { anchor: "capacidades", label: "Casos", editorTabId: "Capacidades", navHref: "#capacidades", contentKeys: ["serviceMenu"] },
+  { anchor: "indice", label: "Método", editorTabId: "Índice", navHref: "#indice", contentKeys: ["benefits"] },
   { anchor: "climax", label: "Clímax", editorTabId: "Clímax", navHref: "#climax" },
-  { anchor: "cta", label: "CTA", editorTabId: "CTA", navHref: "#cta" },
+  { anchor: "cta", label: "Sobre mí", editorTabId: "CTA", navHref: "#cta" },
   { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];

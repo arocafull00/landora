@@ -21,6 +21,10 @@ const serverEnvSchema = z.object({
   TURNSTILE_SECRET_KEY: optionalString,
   TURNSTILE_EXPECTED_HOSTNAME: optionalString,
   TURNSTILE_EXPECTED_ACTION: optionalString,
+  RESEND_API_KEY: optionalString,
+  RESEND_FROM_EMAIL: optionalString,
+  UPSTASH_REDIS_REST_URL: optionalString,
+  UPSTASH_REDIS_REST_TOKEN: optionalString,
 });
 
 const parsedServerEnv = serverEnvSchema.safeParse({
@@ -43,6 +47,10 @@ const parsedServerEnv = serverEnvSchema.safeParse({
   TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
   TURNSTILE_EXPECTED_HOSTNAME: process.env.TURNSTILE_EXPECTED_HOSTNAME,
   TURNSTILE_EXPECTED_ACTION: process.env.TURNSTILE_EXPECTED_ACTION,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
+  UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+  UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
 if (!parsedServerEnv.success) {

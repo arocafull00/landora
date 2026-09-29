@@ -243,8 +243,8 @@ export async function insertLandingPage(data: {
 
       return landing;
     });
-  } catch {
-    throw new Error("Failed to insert landing page");
+  } catch (error) {
+    throw new Error("Failed to insert landing page", { cause: error });
   }
 }
 

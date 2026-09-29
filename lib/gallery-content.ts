@@ -1,5 +1,6 @@
 import type { GalleryItem, TemplateId } from "@/lib/dashboard-data";
 import { getDefaultContent } from "@/lib/default-content";
+import { enrichSignalGallery } from "@/lib/signal-case-defaults";
 
 const GALLERY_SECTION_ITEM_COUNT = 7;
 
@@ -14,7 +15,35 @@ function usesFixedGallerySection(templateId: TemplateId) {
   return GALLERY_SECTION_TEMPLATES.has(templateId);
 }
 
+export function isLegacySignalGallery(gallery: GalleryItem[]) {
+  if (gallery.length !== 4 && gallery.length !== 5) return false;
+
+  const descriptions = new Set(gallery.map((item) => item.description));
+  const original = [
+    "Elaborar informes requería procesar tests y consolidar resultados manualmente.",
+    "Revisar licitaciones y analizar su documentación consumía tiempo cada día.",
+    "Una presencia digital que necesitaba facilitar las reservas.",
+    "Integrar inteligencia artificial en productos digitales reales, a escala.",
+  ].every((description) => descriptions.has(description));
+  const interim = [
+    "Integración de inteligencia artificial en productos digitales reales, a escala.",
+    "Automatización de informes clínicos y seguimiento del estado emocional de pacientes.",
+    "Plataforma OTT para distribución de contenido en múltiples dispositivos.",
+    "Búsqueda y análisis de licitaciones y evaluación de su viabilidad.",
+  ].every((description) => descriptions.has(description));
+
+  return original || interim;
+}
+
 export function resolveGalleryItems(templateId: TemplateId, gallery: GalleryItem[]) {
+  if (templateId === "signal" && isLegacySignalGallery(gallery)) {
+    return enrichSignalGallery(getDefaultContent("signal").gallery ?? []);
+  }
+
+  if (templateId === "signal") {
+    return enrichSignalGallery(gallery);
+  }
+
   if (!usesFixedGallerySection(templateId)) return gallery;
 
   if (gallery.length >= GALLERY_SECTION_ITEM_COUNT) {

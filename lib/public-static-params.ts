@@ -4,7 +4,9 @@ import {
   getPublishedLandingSlugs,
 } from "@/data/landing-publications";
 import { logger } from "@/lib/logger";
+import { resolveGalleryItems } from "@/lib/gallery-content";
 import { resolveProjectLinkType } from "@/lib/portfolio-projects";
+import { hasSignalCaseStudy } from "@/lib/signal-cases";
 
 const STATIC_PARAM_PLACEHOLDERS = {
   landing: "__placeholder__",
@@ -52,6 +54,32 @@ export async function getPublishedPortfolioProjectParams(slug: string) {
       action: "static-params-projects",
     });
     return [{ projectSlug: STATIC_PARAM_PLACEHOLDERS.project }];
+  }
+}
+
+export async function getPublishedSignalCaseParams(slug: string) {
+  try {
+    const landing = await getPublishedLandingBySlug(slug);
+    if (!landing || landing.template !== "signal") {
+      return [{ caseSlug: STATIC_PARAM_PLACEHOLDERS.project }];
+    }
+
+    const cases = resolveGalleryItems("signal", landing.content.gallery ?? []).flatMap(
+      (item) => {
+        if (!hasSignalCaseStudy(item) || !item.projectSlug) return [];
+        return { caseSlug: item.projectSlug };
+      },
+    );
+    if (cases.length === 0) {
+      return [{ caseSlug: STATIC_PARAM_PLACEHOLDERS.project }];
+    }
+
+    return cases;
+  } catch (error) {
+    logger.captureException(error, {
+      action: "static-params-signal-cases",
+    });
+    return [{ caseSlug: STATIC_PARAM_PLACEHOLDERS.project }];
   }
 }
 

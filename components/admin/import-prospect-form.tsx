@@ -68,7 +68,7 @@ type FormAction =
 const initialFormState: FormState = {
   jsonContent: null,
   preview: null,
-  selectedTemplate: "ristorante",
+  selectedTemplate: "velar",
   error: null,
   steps: initialSteps,
   isImporting: false,

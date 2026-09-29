@@ -1,6 +1,5 @@
 import type { NavLink } from "@/lib/dashboard-data";
 import { SignalNavItem } from "@/components/templates/signal/signal-nav-item";
-import { getSignalMark } from "@/components/templates/signal/signal-copy";
 
 function sceneFromHref(href: string) {
   if (!href.startsWith("#")) return "";
@@ -10,34 +9,28 @@ function sceneFromHref(href: string) {
 export function SignalNav({
   brand,
   navLinks,
-  ctaLabel,
-  ctaHref,
   topOffset = 0,
 }: {
   brand: string;
   navLinks: NavLink[];
-  ctaLabel: string;
-  ctaHref: string;
   topOffset?: number;
 }) {
-  const mark = getSignalMark(brand);
-
   return (
     <header
-      className="pointer-events-none fixed inset-x-0 z-40"
+      className="pointer-events-none fixed inset-x-0 z-40 bg-[var(--site-dark)]/95 backdrop-blur-sm"
       style={{ top: topOffset }}
     >
-      <div className="pointer-events-auto flex items-center justify-between gap-4 px-4 py-4 md:px-8">
+      <div className="pointer-events-auto mx-auto flex max-w-[100rem] flex-col gap-4 px-5 py-4 sm:px-8 md:flex-row md:items-center md:justify-between md:gap-8 lg:px-12">
         <a
-          className="font-bold uppercase tracking-[0.22em] text-[var(--site-on-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] text-site-content"
+          className="shrink-0 font-bold uppercase tracking-[0.12em] text-[var(--site-on-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)]"
           href="#hero"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
-          {mark}
+          {brand}
         </a>
         <nav
           aria-label="Secciones"
-          className="hidden items-center gap-5 lg:flex"
+          className="flex max-w-full items-center gap-5 overflow-x-auto whitespace-nowrap md:gap-7"
         >
           {navLinks.map((link) => (
             <SignalNavItem
@@ -48,17 +41,10 @@ export function SignalNav({
             />
           ))}
         </nav>
-        <a
-          className="font-semibold uppercase tracking-[0.18em] text-[var(--site-on-dark)] underline decoration-transparent underline-offset-4 transition-[text-decoration-color] hover:decoration-current focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-accent)] text-site-content"
-          href={ctaHref}
-          style={{ fontFamily: "var(--site-font-body)" }}
-        >
-          {ctaLabel || "Proyecto"} ↗
-        </a>
       </div>
       <div
         aria-hidden
-        className="mx-4 h-px origin-left bg-[var(--site-on-dark)]/25 md:mx-8"
+        className="h-px origin-left bg-[var(--site-on-dark)]/15"
       >
         <div
           className="h-full origin-left scale-x-0 bg-[var(--site-accent)] transition-transform duration-300"

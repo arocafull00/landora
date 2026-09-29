@@ -85,6 +85,9 @@ async function provisionProspectLandingContent(
         linkType: "none",
         projectSlug: "",
         projectBody: "",
+        caseProblem: "",
+        caseImpact: "",
+        caseMethod: "",
         projectGallery: [],
       }))
     ),

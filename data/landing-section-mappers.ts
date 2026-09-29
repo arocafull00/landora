@@ -136,6 +136,9 @@ export function mapDefaultGallery(content: LandingContent) {
       | "linkType"
       | "projectSlug"
       | "projectBody"
+      | "caseProblem"
+      | "caseImpact"
+      | "caseMethod"
       | "projectGallery"
     > => ({
       image: g.image ?? "",
@@ -149,6 +152,9 @@ export function mapDefaultGallery(content: LandingContent) {
       linkType: g.linkType ?? (g.link ? "external" : "none"),
       projectSlug: g.projectSlug ?? "",
       projectBody: g.projectBody ?? "",
+      caseProblem: g.caseProblem ?? "",
+      caseImpact: g.caseImpact ?? "",
+      caseMethod: g.caseMethod ?? "",
       projectGallery: g.projectGallery ?? [],
     })
   );

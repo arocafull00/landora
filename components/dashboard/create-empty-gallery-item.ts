@@ -13,6 +13,9 @@ export function createEmptyGalleryItem(): GalleryItem {
     linkType: "none",
     projectSlug: "",
     projectBody: "",
+    caseProblem: "",
+    caseImpact: "",
+    caseMethod: "",
     projectGallery: [],
   };
 }

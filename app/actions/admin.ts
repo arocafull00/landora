@@ -10,19 +10,26 @@ import {
   updateUserFields,
 } from "@/data/admin";
 import {
+  deleteLandingPageById,
   getLandingPageById,
+  getLandingPageByUserId,
   getLandingsByUserId,
+  insertLandingPage,
 } from "@/data/landing-pages";
+import { getLandingBySlug } from "@/data/admin";
 import {
   publishLandingVersion,
   unpublishLandingPage,
 } from "@/data/landing-publications";
 import { getUserByInternalId, insertUser } from "@/data/users";
-import { ensureLandingHasDefaultContent } from "@/lib/seed-landing-content";
+import { ensureLandingHasDefaultContent, seedLandingSections } from "@/lib/seed-landing-content";
+import { isReservedSlug } from "@/lib/app-host";
 import { checkAuth } from "@/lib/auth";
 import {
   createUserSchema,
   type CreateUserValues,
+  createUserLandingSchema,
+  type CreateUserLandingValues,
   configureManualAccessSchema,
   type ConfigureManualAccessValues,
   deleteUserSchema,
@@ -87,6 +94,57 @@ export async function createUser(input: CreateUserValues): Promise<ActionResult>
   } catch {
     await clerk.users.deleteUser(clerkUser.id).catch(() => null);
     return { error: "Error al guardar el usuario en la base de datos" };
+  }
+
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+export async function createUserLanding(
+  input: CreateUserLandingValues,
+): Promise<ActionResult> {
+  const authError = await checkAuth();
+  if (authError) return authError;
+
+  const parsed = createUserLandingSchema.safeParse(input);
+  if (!parsed.success) return { error: "Datos de la landing inválidos" };
+
+  const { userId, name, slug, template } = parsed.data;
+  if (isReservedSlug(slug)) return { error: "Ese subdominio está reservado" };
+
+  try {
+    const user = await getUserByInternalId(userId);
+    if (!user || user.type !== "user") return { error: "Usuario no encontrado" };
+    if (await getLandingPageByUserId(userId)) {
+      return { error: "El usuario ya tiene una landing asignada" };
+    }
+    if (await getLandingBySlug(slug)) {
+      return { error: "Ese subdominio ya está en uso" };
+    }
+  } catch (error) {
+    logger.captureException(error, { action: "check-user-landing", userId });
+    return { error: "No se pudo comprobar la disponibilidad de la landing" };
+  }
+
+  let landingId: string;
+  try {
+    const landing = await insertLandingPage({ userId, name, slug, template });
+    landingId = landing.id;
+  } catch (error) {
+    logger.captureException(error, { action: "create-user-landing", userId });
+    return { error: "No se pudo crear la landing. Comprueba el subdominio e inténtalo de nuevo" };
+  }
+
+  try {
+    await seedLandingSections(landingId, template);
+  } catch (error) {
+    logger.captureException(error, { action: "seed-user-landing", userId, landingId });
+    try {
+      await deleteLandingPageById(landingId);
+    } catch (cleanupError) {
+      logger.captureException(cleanupError, { action: "cleanup-user-landing", userId, landingId });
+    }
+    return { error: "No se pudo preparar la landing. Inténtalo de nuevo" };
   }
 
   revalidatePath("/admin");

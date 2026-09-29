@@ -26,12 +26,9 @@ type PreviewSuccess = {
 
 const templateIdSchema = z.enum([
   "velar",
-  "studio",
   "portfolio",
-  "ristorante",
   "floristeria",
   "oficio-pro",
-  "coffee-shop",
   "signal",
 ]);
 

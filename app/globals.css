@@ -1046,6 +1046,40 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --site-on-accent: #050505;
 }
 
+.signal-hero-light {
+  background: radial-gradient(
+    500px at var(--signal-pointer-x, 50%) var(--signal-pointer-y, 50%),
+    color-mix(in srgb, var(--site-accent) 3.5%, transparent),
+    transparent 70%
+  );
+}
+
+@keyframes signal-statue-breathe {
+  50% { transform: scale(1.025); }
+}
+
+@keyframes signal-flowers-sway {
+  50% { transform: rotate(1.2deg); }
+}
+
+[data-signal-hero-layer="statue"] img {
+  animation: signal-statue-breathe 13s ease-in-out infinite;
+}
+
+[data-signal-hero-layer="flowers-front"] img {
+  transform-origin: 85% 80%;
+  animation: signal-flowers-sway 16s ease-in-out infinite;
+}
+
+[data-signal-hero-layer="flowers-back"] img {
+  transform-origin: 80% 35%;
+  animation: signal-flowers-sway 20s ease-in-out infinite reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-signal-hero-layer] img { animation: none; }
+}
+
 [data-site-theme][data-template="pallet-ross"][data-palette="default"] {
   --site-primary: #111111;
   --site-primary-hover: #333333;

@@ -27,12 +27,21 @@ export function HeroCommonFields({
         value={hero.eyebrow}
       />
       <div id="tutorial-hero-title">
-        <EditorTextField
-          editorId="hero:title"
-          label="Título"
-          onChange={(title) => onChange({ title })}
-          value={hero.title}
-        />
+        {templateId === "signal" ? (
+          <EditorTextArea
+            editorId="hero:title"
+            label="Título"
+            onChange={(title) => onChange({ title })}
+            value={hero.title}
+          />
+        ) : (
+          <EditorTextField
+            editorId="hero:title"
+            label="Título"
+            onChange={(title) => onChange({ title })}
+            value={hero.title}
+          />
+        )}
       </div>
       <EditorTextArea
         editorId="hero:subtitle"

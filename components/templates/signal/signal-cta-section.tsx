@@ -3,6 +3,7 @@ import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headi
 import { SIGNAL_CHROME, getSignalMark } from "@/components/templates/signal/signal-copy";
 import { SignalCtaButton } from "@/components/templates/signal/signal-cta-button";
 import { SignalMedia } from "@/components/templates/signal/signal-media";
+import { SignalProfile } from "@/components/templates/signal/signal-profile";
 
 export function SignalCtaSection({
   content,
@@ -18,6 +19,7 @@ export function SignalCtaSection({
   );
   const brand = content.brand || content.hero.title;
   const mark = getSignalMark(brand);
+  const person = content.team?.[0];
   const ctaImage =
     content.gallery?.[4]?.image ||
     content.gallery?.[2]?.image ||
@@ -49,30 +51,25 @@ export function SignalCtaSection({
           className="uppercase tracking-[0.24em] text-[var(--site-accent)] text-site-content"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
-          {SIGNAL_CHROME.availableNow}
+          {heading.title || SIGNAL_CHROME.availableNow}
         </p>
         <h2
-          className="mt-6 max-w-3xl font-bold uppercase leading-[0.9] tracking-[-0.05em] text-site-title"
+          className="mt-6 max-w-4xl font-bold uppercase leading-[0.92] tracking-[-0.04em] text-[clamp(3rem,8vw,7rem)]"
           style={{ fontFamily: "var(--site-font-display)" }}
         >
           {brand.replace(/\.+$/, "")}
         </h2>
+        {person ? <div className="mt-10"><SignalProfile person={person} /></div> : null}
         <p
-          className="mt-4 uppercase tracking-[0.18em] text-[var(--site-on-dark)]/70 text-site-content"
+          className="mt-10 max-w-4xl font-bold uppercase leading-tight tracking-[-0.03em] text-[var(--site-on-dark)] text-[clamp(1.5rem,3vw,3rem)]"
           style={{ fontFamily: "var(--site-font-body)" }}
         >
-          {heading.title}
-        </p>
-        <p
-          className="mt-3 max-w-md text-[var(--site-on-dark)]/65 text-site-content"
-          style={{ fontFamily: "var(--site-font-body)" }}
-        >
-          {heading.subtitle || content.hero.subtitle}
+          {heading.subtitle}
         </p>
         <div className="mt-10">
           <SignalCtaButton
             href={ctaHref}
-            label={content.hero.ctaLabel || "Empezar proyecto"}
+            label={content.hero.ctaLabel || "Cuéntame cómo trabajáis"}
           />
         </div>
         <p

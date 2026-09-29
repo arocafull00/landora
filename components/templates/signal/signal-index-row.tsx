@@ -7,17 +7,17 @@ export function SignalIndexRow({
 }) {
   return (
     <li
-      className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-4 border-t border-[var(--site-on-dark)]/20 py-4 text-[var(--site-on-dark)]"
+      className="grid gap-2 border-t border-[var(--site-on-dark)]/20 py-5 text-[var(--site-on-dark)] sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.4fr)] sm:gap-4"
       data-signal-index-row
     >
       <span
-        className="uppercase tracking-[0.2em] text-[var(--site-on-dark)]/55 text-site-content"
+        className="uppercase tracking-[0.12em] text-[var(--site-accent)] text-site-content"
         style={{ fontFamily: "var(--site-font-body)" }}
       >
         {item.title}
       </span>
       <span
-        className="text-right font-semibold uppercase tracking-[0.08em] tabular-nums text-site-content"
+        className="font-semibold leading-snug tracking-[-0.02em] tabular-nums text-[clamp(1rem,1.6vw,1.5rem)] sm:text-right"
         style={{ fontFamily: "var(--site-font-display)" }}
       >
         {item.description}

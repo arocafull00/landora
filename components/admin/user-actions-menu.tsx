@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { MoreHorizontal, Pencil } from "lucide-react";
+import { MoreHorizontal, Pencil, Plus } from "lucide-react";
 import { unstable_isUnrecognizedActionError } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -26,11 +26,13 @@ import { logger } from "@/lib/logger";
 import { EditUserNameDialog } from "@/components/admin/edit-user-name-dialog";
 import { DeleteUserDialog } from "@/components/admin/delete-user-dialog";
 import { ManualAccessDialog } from "@/components/admin/manual-access-dialog";
+import { CreateUserLandingDialog } from "@/components/admin/create-user-landing-dialog";
 
 export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
   const [showDelete, setShowDelete] = useState(false);
   const [showEditName, setShowEditName] = useState(false);
   const [showManualAccess, setShowManualAccess] = useState(false);
+  const [showCreateLanding, setShowCreateLanding] = useState(false);
   const [isPending, startTransition] = useTransition();
   const landingUrl = getLandingPublicUrl(user.landing);
   const hasLanding = Boolean(user.landing);
@@ -102,7 +104,10 @@ export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
               </a>
             </DropdownMenuItem>
           ) : (
-            <DropdownMenuItem disabled>Sin landing</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => setShowCreateLanding(true)}>
+              <Plus aria-hidden className="size-4" />
+              Añadir landing
+            </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -189,6 +194,14 @@ export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
         open={showEditName}
         userId={user.id}
       />
+      {showCreateLanding ? (
+        <CreateUserLandingDialog
+          name={user.name}
+          onOpenChange={setShowCreateLanding}
+          open={showCreateLanding}
+          userId={user.id}
+        />
+      ) : null}
       {showManualAccess ? (
         <ManualAccessDialog
           bookingManualAccess={user.bookingManualAccess}

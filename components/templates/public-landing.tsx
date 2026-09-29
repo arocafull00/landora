@@ -11,6 +11,7 @@ import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
 async function renderPublicTemplate(
   template: PublishedLanding["template"],
   props: PublicTemplateRenderProps,
+  initialCaseSlug?: string,
 ) {
   if (template === "studio") {
     const { StudioTemplate } = await import("@/components/templates/studio/studio-template");
@@ -38,7 +39,7 @@ async function renderPublicTemplate(
   }
   if (template === "signal") {
     const { SignalTemplate } = await import("@/components/templates/signal/signal-template");
-    return <SignalTemplate {...props} />;
+    return <SignalTemplate {...props} initialCaseSlug={initialCaseSlug} />;
   }
   if (template === "pallet-ross") {
     const { PalletRossTemplate } = await import("@/components/templates/pallet-ross/pallet-ross-template");
@@ -51,8 +52,10 @@ async function renderPublicTemplate(
 
 export async function PublicLanding({
   landing,
+  initialCaseSlug,
 }: {
   landing: PublishedLanding;
+  initialCaseSlug?: string;
 }) {
   const [tenant, copyrightYear, renderedAt] = await Promise.all([
     resolveTenantBySlug(landing.slug),
@@ -66,7 +69,7 @@ export async function PublicLanding({
     renderedAt,
     sectionSelections: landing.sectionSelections,
     slug: landing.slug,
-  });
+  }, initialCaseSlug);
 
   return (
     <>

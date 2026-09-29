@@ -1,4 +1,5 @@
 import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
+import { getSignalCaseContent } from "@/components/templates/signal/signal-case-content";
 import { SignalTemplateClient } from "@/components/templates/signal/signal-template-client";
 
 export function SignalTemplate({
@@ -10,6 +11,7 @@ export function SignalTemplate({
   previewLandingId,
   bookingEnabled = false,
   sectionSelections,
+  initialCaseSlug,
 }: {
   content: LandingContent;
   copyrightYear: number;
@@ -19,10 +21,18 @@ export function SignalTemplate({
   previewLandingId?: string;
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
+  initialCaseSlug?: string;
 }) {
+  const { gallery, heading } = getSignalCaseContent(content);
+  const resolvedContent = {
+    ...content,
+    gallery,
+    sectionHeadings: { ...content.sectionHeadings, capacidades: heading },
+  };
+
   return (
     <SignalTemplateClient
-      content={content}
+      content={resolvedContent}
       copyrightYear={copyrightYear}
       renderedAt={renderedAt}
       topOffset={topOffset}
@@ -30,6 +40,7 @@ export function SignalTemplate({
       previewLandingId={previewLandingId}
       bookingEnabled={bookingEnabled}
       sectionSelections={sectionSelections}
+      initialCaseSlug={initialCaseSlug}
     />
   );
 }

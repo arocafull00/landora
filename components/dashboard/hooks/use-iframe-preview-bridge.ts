@@ -199,6 +199,13 @@ export function useIframePreviewBridge({
     const iframe = iframeRef.current;
     if (!iframe) return;
     let activePort: MessagePort | null = null;
+    let retryId: ReturnType<typeof setInterval> | null = null;
+
+    const stopRetrying = () => {
+      if (retryId === null) return;
+      clearInterval(retryId);
+      retryId = null;
+    };
 
     const connectChannel = () => {
       const target = iframe.contentWindow;
@@ -212,6 +219,7 @@ export function useIframePreviewBridge({
         const data = event.data;
 
         if (isPreviewChannelReadyMessage(data)) {
+          stopRetrying();
           sendContent(channel.port1);
           sendSectionFocus(channel.port1);
           sendPageTarget(channel.port1);
@@ -242,17 +250,24 @@ export function useIframePreviewBridge({
       );
     };
 
-    iframe.addEventListener("load", connectChannel);
-    connectChannel();
+    const startConnection = () => {
+      stopRetrying();
+      connectChannel();
+      retryId = setInterval(connectChannel, 500);
+    };
+
+    iframe.addEventListener("load", startConnection);
+    startConnection();
 
     return () => {
-      iframe.removeEventListener("load", connectChannel);
+      iframe.removeEventListener("load", startConnection);
+      stopRetrying();
       activePort?.close();
       if (portRef.current === activePort) {
         portRef.current = null;
       }
     };
-  }, [enabled, landingId, sendContent, sendPageTarget, sendSectionFocus]);
+  }, [enabled, landingId, previewSrc, sendContent, sendPageTarget, sendSectionFocus]);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "development") return;

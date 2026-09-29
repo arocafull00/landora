@@ -1,128 +1,68 @@
 import type { RefObject } from "react";
+import { ArrowRight } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
-import { SIGNAL_CHROME, getSignalMark } from "@/components/templates/signal/signal-copy";
-import { SignalMedia } from "@/components/templates/signal/signal-media";
+import { SignalHeroArt } from "@/components/templates/signal/signal-hero-art";
+import { SignalHeroNote } from "@/components/templates/signal/signal-hero-note";
 
 export function SignalHero({
   content,
   heroRef,
+  primaryCtaHref,
 }: {
   content: LandingContent;
   heroRef?: RefObject<HTMLElement | null>;
+  primaryCtaHref: string;
 }) {
-  const brand = content.brand || content.hero.title || "Nova";
-  const mark = getSignalMark(brand);
-  const rest =
-    brand.replace(/\.+$/, "").slice(mark.length) ||
-    content.hero.title.slice(mark.length);
-  const heroImage = content.hero.image;
+  const description = content.hero.description || content.hero.subtitle;
+  const titleLines = content.hero.title.split(/\r?\n/);
 
   return (
-    <section
-      ref={heroRef}
-      id="hero"
-      data-signal-scene="hero"
-      className="relative flex min-h-[100svh] flex-col justify-between overflow-hidden bg-[var(--site-dark)] px-4 pb-8 pt-24 text-[var(--site-on-dark)] md:px-8"
-    >
-      {heroImage ? (
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.28] grayscale"
-        >
-          <SignalMedia
-            alt=""
-            className="object-cover object-center"
-            priority
-            sizes="100vw"
-            src={heroImage}
-          />
-          <div className="absolute inset-0 bg-[var(--site-dark)]/55" />
-        </div>
-      ) : null}
+    <>
+      <section
+        ref={heroRef}
+        id="hero"
+        data-signal-scene="hero"
+        className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-[var(--site-dark)] px-5 pb-16 pt-36 text-[var(--site-on-dark)] sm:px-8 md:pb-20 md:pt-28 lg:px-12"
+      >
+        <SignalHeroArt />
+        <div className="relative z-10 mx-auto w-full max-w-[100rem]" data-signal-hero-content>
+          <div className="flex max-w-xl flex-col items-start lg:max-w-[40rem]">
+            <h1
+              className="whitespace-pre-line break-words text-[clamp(2.15rem,3.6vw,3.35rem)] font-bold leading-[1.08] tracking-[-0.04em]"
+              data-signal-hero-heading
+              style={{ fontFamily: "var(--site-font-display)" }}
+            >
+              {titleLines.map((line, index) => (
+                <span key={index} className="block" data-signal-hero-line>
+                  {line}
+                </span>
+              ))}
+            </h1>
 
-      <div className="relative z-10 flex items-start justify-between gap-6">
-        <p
-          className="max-w-[16rem] overflow-hidden uppercase tracking-[0.22em] text-[var(--site-on-dark)]/70 text-site-content"
-          data-signal-hero-meta
-          style={{ fontFamily: "var(--site-font-body)" }}
-        >
-          {content.hero.eyebrow}
-        </p>
-        <p
-          className="overflow-hidden text-right uppercase tracking-[0.22em] text-[var(--site-on-dark)]/70 text-site-content"
-          data-signal-hero-meta
-          style={{ fontFamily: "var(--site-font-body)" }}
-        >
-          {content.hero.description}
-        </p>
-      </div>
-
-      <div className="relative z-10 flex min-h-[50vh] items-end gap-6">
-        <h1
-          className="flex flex-wrap items-end gap-x-2 font-bold uppercase leading-[0.78] tracking-[-0.06em] text-site-title-lg"
-          style={{ fontFamily: "var(--site-font-display)" }}
-        >
-          <span
-            data-signal-hero-mark
-            className="relative inline-block will-change-transform"
-          >
-            <span className="relative z-10 text-[var(--site-on-dark)]">{mark}</span>
-            {heroImage ? (
-              <span
-                aria-hidden
-                className="absolute inset-0 z-0 overflow-hidden opacity-40 mix-blend-soft-light"
+            {description ? (
+              <p
+                className="mt-7 max-w-xl text-base leading-relaxed text-[var(--site-on-dark)]/70 sm:text-lg md:mt-9"
+                data-signal-hero-detail
+                style={{ fontFamily: "var(--site-font-body)" }}
               >
-                <SignalMedia
-                  alt=""
-                  className="scale-150 object-cover"
-                  sizes="40vw"
-                  src={heroImage}
-                />
-              </span>
+                {description}
+              </p>
             ) : null}
-          </span>
-          <span
-            data-signal-hero-rest
-            className="inline-block text-[var(--site-on-dark)] will-change-transform"
-          >
-            {rest}
-          </span>
-        </h1>
-        {heroImage ? (
-          <div
-            aria-hidden
-            className="relative mb-4 hidden h-[42vh] w-[22vw] min-w-36 max-w-64 overflow-hidden border border-[var(--site-on-dark)]/25 lg:block"
-            data-signal-hero-meta
-          >
-            <SignalMedia
-              alt=""
-              className="object-cover grayscale"
-              sizes="22vw"
-              src={heroImage}
-            />
-            <div className="absolute inset-0 bg-[var(--site-accent)]/10" />
-          </div>
-        ) : null}
-      </div>
 
-      <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p
-            className="max-w-md uppercase tracking-[0.16em] text-[var(--site-on-dark)]/80 text-site-content"
-            data-signal-hero-meta
-            style={{ fontFamily: "var(--site-font-body)" }}
-          >
-            {content.hero.subtitle}
-          </p>
+            <a
+              className="group mt-8 inline-flex min-h-14 items-center gap-8 bg-[var(--site-accent)] px-6 py-4 font-semibold text-[var(--site-on-accent)] transition-colors hover:bg-[var(--site-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--site-on-dark)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--site-dark)] md:mt-10"
+              data-signal-hero-detail
+              data-analytics-event="cta_click lead_generated"
+              href={primaryCtaHref}
+              style={{ fontFamily: "var(--site-font-body)" }}
+            >
+              <span>{content.hero.ctaLabel || "Cuéntame cómo trabajáis"}</span>
+              <ArrowRight aria-hidden className="size-5 transition-transform group-hover:translate-x-1" />
+            </a>
+          </div>
         </div>
-        <p
-          className="uppercase tracking-[0.24em] text-[var(--site-accent)] text-site-content"
-          data-signal-scroll-cue
-          style={{ fontFamily: "var(--site-font-body)" }}
-        >
-          {SIGNAL_CHROME.scrollCue}
-        </p>
-      </div>
-    </section>
+      </section>
+      <SignalHeroNote />
+    </>
   );
 }

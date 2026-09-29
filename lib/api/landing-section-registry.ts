@@ -274,6 +274,9 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
         linkType: item.linkType,
         projectSlug: item.projectSlug,
         projectBody: item.projectBody,
+        caseProblem: item.caseProblem,
+        caseImpact: item.caseImpact,
+        caseMethod: item.caseMethod,
         projectGallery: item.projectGallery,
       }));
     },

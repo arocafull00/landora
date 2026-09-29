@@ -228,6 +228,9 @@ export type GalleryItem = {
   linkType?: ProjectLinkType;
   projectSlug?: string;
   projectBody?: string;
+  caseProblem?: string;
+  caseImpact?: string;
+  caseMethod?: string;
   projectGallery?: string[];
 };
 

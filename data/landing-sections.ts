@@ -381,6 +381,9 @@ export async function replaceLandingGallery(
     | "linkType"
     | "projectSlug"
     | "projectBody"
+    | "caseProblem"
+    | "caseImpact"
+    | "caseMethod"
     | "projectGallery"
   >[]
 ) {

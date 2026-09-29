@@ -196,33 +196,25 @@ export const SECTION_HEADING_DEFAULTS: Record<
     },
   },
   signal: {
-    portal: {
-      title: "Dentro de la marca",
-      subtitle: "Un recorrido tipográfico por el estudio.",
-    },
-    escala: {
-      title: "Escala",
-      subtitle: "Números que sostienen el trabajo.",
-    },
     capacidades: {
-      title: "Capacidades",
-      subtitle: "De la intención al sistema.",
+      title: "Software que ya está resolviendo problemas reales.",
+      subtitle: "He trabajado desarrollando productos digitales, automatizaciones e integraciones para empresas de salud, tecnología, construcción y entretenimiento.",
     },
     indice: {
-      title: "Índice",
-      subtitle: "Datos esenciales del estudio.",
+      title: "Cómo trabajo",
+      subtitle: "No parto de una tecnología. Parto de un problema.",
     },
     climax: {
-      title: "NO ES UNA WEB MÁS.",
-      subtitle: "ES UNA MARCA EN MOVIMIENTO.",
+      title: "NO PARTO DE UNA TECNOLOGÍA.",
+      subtitle: "PARTO DE UN PROBLEMA.",
     },
     cta: {
-      title: "Disponible ahora",
-      subtitle: "Hablemos del siguiente proyecto.",
+      title: "Sobre mí",
+      subtitle: "¿Qué proceso de tu empresa te gustaría no volver a hacer manualmente?",
     },
     contacto: {
-      title: "Contacto",
-      subtitle: "Cuéntanos qué quieres construir.",
+      title: "Cuéntame tu caso",
+      subtitle: "Empecemos por el problema.",
     },
     reservas: {
       title: "Agenda una llamada",
