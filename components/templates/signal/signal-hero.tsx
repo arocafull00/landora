@@ -2,7 +2,6 @@ import type { RefObject } from "react";
 import { ArrowRight } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
 import { SignalHeroArt } from "@/components/templates/signal/signal-hero-art";
-import { SignalHeroNote } from "@/components/templates/signal/signal-hero-note";
 
 export function SignalHero({
   content,
@@ -62,7 +61,6 @@ export function SignalHero({
           </div>
         </div>
       </section>
-      <SignalHeroNote />
     </>
   );
 }

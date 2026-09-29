@@ -248,6 +248,7 @@ export function useIframePreviewBridge({
         window.location.origin,
         [channel.port2],
       );
+      sendContent(channel.port1);
     };
 
     const startConnection = () => {

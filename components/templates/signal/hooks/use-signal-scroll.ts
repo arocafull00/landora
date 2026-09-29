@@ -186,5 +186,10 @@ export function useSignalScroll(
       cancelAnimationFrame(activeFrame);
       mm.revert();
     };
-  }, [enabled, previewMode, rootRef, content]);
+  }, [enabled, previewMode, rootRef]);
+
+  useEffect(() => {
+    if (!enabled) return;
+    ScrollTrigger.refresh();
+  }, [content, enabled]);
 }

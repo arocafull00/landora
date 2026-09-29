@@ -33,20 +33,20 @@ export function SignalCaseCard({
 
   return (
     <article
-      className={`group relative isolate flex min-h-[23rem] flex-col justify-between overflow-hidden border border-[var(--site-on-dark)]/20 bg-[var(--site-dark)] p-6 transition-[border-color,transform] duration-300 hover:border-[var(--site-on-dark)]/45 motion-safe:hover:-translate-y-1 motion-reduce:transition-none sm:p-8 lg:p-9 ${CARD_SPANS[index] ?? "lg:col-span-6"} ${hasLargeResult ? "lg:min-h-[27rem]" : ""}`}
+      className={`group relative isolate flex min-h-[23rem] flex-col justify-between overflow-hidden border border-[var(--site-on-dark)]/20 bg-[var(--site-dark)] p-6 transition-colors duration-500 ease-out hover:border-[var(--site-on-dark)]/45 motion-reduce:transition-none sm:p-8 lg:p-9 ${CARD_SPANS[index] ?? "lg:col-span-6"} ${hasLargeResult ? "lg:min-h-[27rem]" : ""}`}
     >
       {item.image ? (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 opacity-60 transition-[opacity,transform] duration-500 ease-out group-hover:opacity-80 motion-safe:group-hover:scale-105 motion-reduce:transition-none">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 opacity-60 transition-opacity duration-500 ease-out group-hover:opacity-80 motion-reduce:transition-none">
           <SignalMedia
             alt=""
-            className="object-cover object-right grayscale"
+            className="object-cover object-right grayscale transform-[scale(1)] transition-transform duration-700 ease-out motion-safe:group-hover:transform-[scale(1.05)] motion-reduce:transition-none"
             sizes="(max-width: 768px) 100vw, 50vw"
             src={item.image}
           />
         </div>
       ) : null}
       {!item.image && index === 1 ? (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden transition-transform duration-500 ease-out motion-safe:group-hover:scale-105 motion-reduce:transition-none">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden transition-[scale] duration-500 ease-out motion-safe:group-hover:scale-105 motion-reduce:transition-none">
           {[0, 1, 2, 3, 4].map((ring) => (
             <span
               key={ring}
@@ -57,7 +57,7 @@ export function SignalCaseCard({
         </div>
       ) : null}
       {!item.image && index === 2 ? (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden bg-gradient-to-l from-[var(--site-on-dark)]/35 via-[var(--site-on-dark)]/5 to-transparent transition-transform duration-500 ease-out motion-safe:group-hover:scale-105 motion-reduce:transition-none">
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-20 overflow-hidden bg-gradient-to-l from-[var(--site-on-dark)]/35 via-[var(--site-on-dark)]/5 to-transparent transition-[scale] duration-500 ease-out motion-safe:group-hover:scale-105 motion-reduce:transition-none">
           <span className="absolute -bottom-28 right-[10%] size-72 rounded-full bg-[var(--site-on-dark)]/80" />
           <span className="absolute right-[40%] top-10 size-5 rounded-full bg-[var(--site-on-dark)]/70" />
         </div>
@@ -106,7 +106,7 @@ export function SignalCaseCard({
           href={caseHref}
         >
           {SIGNAL_CHROME.caseAction}
-          <ArrowRight aria-hidden className="size-4 transition-transform duration-300 motion-safe:group-hover:translate-x-1 motion-reduce:transition-none" />
+          <ArrowRight aria-hidden className="size-4 transition-[translate] duration-300 motion-safe:group-hover:translate-x-1 motion-reduce:transition-none" />
         </Link>
       ) : null}
     </article>
