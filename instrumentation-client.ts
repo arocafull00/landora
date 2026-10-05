@@ -20,13 +20,15 @@ if (projectToken) {
   });
 }
 
-Sentry.init({
-  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  enableLogs: true,
-  tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1,
-  integrations: [
-    Sentry.consoleLoggingIntegration({ levels: ["warn", "error"] }),
-  ],
-});
+if (process.env.NODE_ENV === "production") {
+  Sentry.init({
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    enableLogs: true,
+    tracesSampleRate: 0.1,
+    integrations: [
+      Sentry.consoleLoggingIntegration({ levels: ["warn", "error"] }),
+    ],
+  });
+}
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

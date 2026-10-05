@@ -4,9 +4,11 @@ import type { LucideIcon } from "lucide-react";
 export function ProductNote({ icon: Icon, title, children }: { icon: LucideIcon; title: string; children: ReactNode }) {
   return (
     <section>
-      <Icon aria-hidden className="mb-2 size-5 text-primary" />
-      <h2 className="text-sm font-semibold">{title}</h2>
-      <div className="mt-2 text-sm leading-6 text-ink/60">{children}</div>
+      <h2 className="flex items-center gap-2 text-sm font-semibold text-ink">
+        <Icon aria-hidden className="size-4 text-ink-secondary" />
+        {title}
+      </h2>
+      <div className="mt-2 max-w-prose text-pretty text-sm leading-6 text-ink-secondary">{children}</div>
     </section>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import { AppearanceEditorLoadingSkeleton } from "@/components/dashboard/appearance/components/appearance-editor-loading-skeleton";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { HeroEditorPanel } from "@/components/dashboard/hero-editor/hero-editor-panel";
-import { AppearanceEditorPanel } from "@/components/dashboard/appearance/appearance-editor-panel";
 import { NavEditorPanel } from "@/components/dashboard/nav-editor-panel";
 import { SeoEditorPanel } from "@/components/dashboard/seo-editor-panel";
 import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-panel";
@@ -12,6 +13,13 @@ import { NuvoletsSettingsForm } from "./components/nuvolets-settings-form";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useNuvoletsEditor } from "./hooks/use-nuvolets-editor";
+
+const AppearanceEditorPanel = dynamic(
+  () => import("@/components/dashboard/appearance/appearance-editor-panel").then(
+    (module) => module.AppearanceEditorPanel,
+  ),
+  { loading: AppearanceEditorLoadingSkeleton },
+);
 
 export function NuvoletsEditorSection() {
   const { landing, config, tab, update, isAdmin, productsModuleEnabled } = useNuvoletsEditor();

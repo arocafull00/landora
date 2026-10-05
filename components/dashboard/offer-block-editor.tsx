@@ -48,11 +48,7 @@ export function OfferBlockEditor({ offer, onChange, onRemove, templateId }: Offe
 
   return (
     <div
-      className={`space-y-5 rounded-xl border p-5 ${
-        expired
-          ? "border-outline-variant/70 bg-surface-container-lowest opacity-70"
-          : "border-outline-variant bg-surface"
-      }`}
+      className={`space-y-5 py-4 ${expired ? "opacity-70" : ""}`}
     >
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -73,7 +69,7 @@ export function OfferBlockEditor({ offer, onChange, onRemove, templateId }: Offe
         </button>
       </div>
 
-      <div className="flex items-start justify-between gap-4 rounded-lg border border-outline-variant bg-surface px-4 py-3">
+      <div className="flex items-start justify-between gap-4 py-3">
         <div>
           <p className="text-body-md font-medium text-on-surface">Activa</p>
           <p className="mt-1 text-body-sm text-on-surface-variant">

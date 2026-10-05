@@ -2,6 +2,7 @@
 
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 import type { ProductFormValues, ProductValues } from "@/lib/schemas/products";
+import { Separator } from "@/components/ui/separator";
 import { PRODUCT_DRAWER_COPY } from "../product-drawer-copy";
 import { productPanelId } from "../product-editor-sections";
 import { ProductEditorSection } from "./product-editor-section";
@@ -35,8 +36,11 @@ export function ProductGeneralPanel({
       active={active}
     >
       <ProductInformationGeneralForm register={register} errors={errors} generateSlug={generateSlug} />
+      <Separator />
       <ProductOrganizationCard register={register} control={control} errors={errors} categories={categories} brands={brands} />
+      <Separator />
       <ProductFeaturedCard control={control} />
+      <Separator />
       <ProductPriceCard register={register} errors={errors} />
     </ProductEditorSection>
   );

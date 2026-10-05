@@ -13,7 +13,7 @@ export function ProductEditorCard({
   className?: string;
 }) {
   return (
-    <div className={cn("space-y-4 rounded-xl border border-border-subtle bg-surface p-5", className)}>
+    <div className={cn("space-y-4", className)}>
       {title ? (
         <div>
           <h3 className="text-sm font-semibold text-ink">{title}</h3>

@@ -53,7 +53,7 @@ export function OffersEditorPanel({ activeLanding }: OffersEditorPanelProps) {
       </div>
 
       {offers.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-outline-variant px-4 py-6 text-center text-body-sm text-on-surface-variant">
+        <p className="py-6 text-center text-body-sm text-on-surface-variant">
           No hay ofertas configuradas. Añade un bloque para empezar.
         </p>
       ) : (

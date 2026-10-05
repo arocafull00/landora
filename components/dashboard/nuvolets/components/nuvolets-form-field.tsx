@@ -22,11 +22,24 @@ export function NuvoletsFormField({ definition, form, sync, layout = "stack" }: 
   if (layout === "inline") {
     return (
       <div className="min-w-0 flex-1">
-        <label className="flex min-w-0 items-center gap-3 text-ink-secondary">
-          <span className="shrink-0">{label}</span>
+        {label ? (
+          <label className="flex min-w-0 items-center gap-3 text-ink-secondary">
+            <span className="shrink-0">{label}</span>
+            <input {...form.register(name)} type="text" className={inputClass} maxLength={2048} />
+          </label>
+        ) : (
           <input {...form.register(name)} type="text" className={inputClass} maxLength={2048} />
-        </label>
+        )}
         {error ? <p className="mt-1 text-sm text-danger">{error}</p> : null}
+      </div>
+    );
+  }
+
+  if (!label) {
+    return (
+      <div className="space-y-2">
+        {type === "textarea" ? <textarea {...form.register(name)} className={inputClass} rows={4} maxLength={2000} /> : <input {...form.register(name)} type={type === "color" ? "color" : "text"} className={inputClass} maxLength={2048} />}
+        {error ? <span className="block text-sm text-danger">{error}</span> : null}
       </div>
     );
   }

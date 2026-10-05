@@ -105,7 +105,7 @@ export function PortfolioAboutPageForm({
         ) : null}
       </section>
 
-      <section className="space-y-5 border-t border-outline-variant pt-8">
+      <section className="space-y-5 pt-8">
         <div>
           <h2 className="text-body-lg font-semibold text-on-surface">
             Mi historia

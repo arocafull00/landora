@@ -20,7 +20,7 @@ export function SectionVisibilityRow({
   onHide,
 }: SectionVisibilityRowProps) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-outline-variant bg-surface px-4 py-3">
+    <div className="flex items-center justify-between gap-3 py-3">
       <span className="text-body-md text-on-surface">{label}</span>
       <div className="flex items-center gap-1">
         {canMoveUp ? (

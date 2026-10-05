@@ -96,7 +96,7 @@ export function OficioProEditorSection() {
               />
               <div className="space-y-6">
                 {serviceItems.map((item) => (
-                  <div className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0" key={item.id}>
+                  <div className="space-y-3 pb-8 last:pb-0" key={item.id}>
                     <label className="block">
                       <span className="mb-2 block font-label text-label-md text-on-surface-variant">
                         Nombre
@@ -147,7 +147,7 @@ export function OficioProEditorSection() {
               />
               <div className="space-y-6">
                 {installationItems.map((item) => (
-                  <div className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0" key={item.id}>
+                  <div className="space-y-3 pb-8 last:pb-0" key={item.id}>
                     <label className="block">
                       <span className="mb-2 block font-label text-label-md text-on-surface-variant">
                         Nombre
@@ -198,7 +198,7 @@ export function OficioProEditorSection() {
               />
               <div className="space-y-6">
                 {activeLanding.content.testimonials.map((item) => (
-                  <div className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0" key={item.id}>
+                  <div className="space-y-3 pb-8 last:pb-0" key={item.id}>
                     <label className="block">
                       <span className="mb-2 block font-label text-label-md text-on-surface-variant">
                         Autor

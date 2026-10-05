@@ -192,9 +192,9 @@ export async function importNuvoletsProducts(landingId: string, userId: string, 
   } catch (error) { throw new Error("Failed to import Nuvolets products", { cause: error }); }
 }
 
-export const getCatalogHighlights = cache(async (landingId: string) => {
+export const getCatalogHighlights = cache(async (landingId: string, preview: boolean) => {
   try {
-    const rows = await db.select().from(storeProducts).where(and(eq(storeProducts.landingId, landingId), eq(storeProducts.status, "published")))
+    const rows = await db.select().from(storeProducts).where(and(eq(storeProducts.landingId, landingId), preview ? ne(storeProducts.status, "archived") : eq(storeProducts.status, "published")))
       .orderBy(asc(storeProducts.sortOrder), desc(storeProducts.createdAt)).limit(200);
     const variants = rows.length ? await db.select().from(storeProductVariants).where(inArray(storeProductVariants.productId, rows.map((row) => row.id))).orderBy(asc(storeProductVariants.sortOrder)) : [];
     return rows.map((row) => ({ product: toPublicProduct(dto(row, variants.filter((variant) => variant.productId === row.id))), legacyId: row.legacyId, appearance: row.legacyAppearance, featured: row.featured, favoriteOrder: row.favoriteOrder }));

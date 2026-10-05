@@ -118,7 +118,7 @@ export function PortfolioProjectPageForm({
         />
       </section>
 
-      <section className="space-y-5 border-t border-outline-variant pt-8">
+      <section className="space-y-5 pt-8">
         <label className="block">
           <span className="mb-2 block font-label text-label-md text-on-surface-variant">
             URL del proyecto
@@ -158,7 +158,7 @@ export function PortfolioProjectPageForm({
         </label>
       </section>
 
-      <section className="border-t border-outline-variant pt-8">
+      <section className="pt-8">
         <Controller
           control={control}
           name="projectGallery"

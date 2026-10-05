@@ -40,7 +40,7 @@ export function PortfolioProjectItemForm({
   const linkType = resolveProjectLinkType(item);
 
   return (
-    <div className="space-y-4 border-t border-outline-variant bg-surface-container-lowest p-4">
+    <div className="space-y-4 pb-3 pt-4">
       <ImageField
         label="Imagen"
         onChange={(value) => onChange({ image: value })}

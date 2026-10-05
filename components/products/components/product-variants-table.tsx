@@ -20,7 +20,7 @@ export function ProductVariantsTable({
   error: FieldErrors<ProductFormValues>["variants"];
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-border-subtle bg-surface">
+    <div className="min-w-0">
       <Table>
         <TableHeader className="bg-surface-subtle">
           <TableRow>

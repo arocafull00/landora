@@ -22,7 +22,7 @@ export function HeroSpecificFields({
   if (fields.length === 0) return null;
 
   return (
-    <div className="space-y-5 border-t border-outline-variant pt-5">
+    <div className="space-y-5 pt-8">
       {fields.includes("houseImage") ? (
         <ImageField
           allowLottie={variantId === "portfolio"}

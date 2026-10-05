@@ -28,6 +28,9 @@ export function getPreviewPageHref(
     return `${baseHref}/proyectos/${encodeURIComponent(target.projectId)}`;
   }
 
+  if (target.type === "catalog") return `${baseHref}/productos`;
+  if (target.type === "product") return `${baseHref}/productos/${encodeURIComponent(target.productSlug)}`;
+
   return baseHref;
 }
 
@@ -36,6 +39,7 @@ export function isSameEditorPageTarget(
   right: EditorPageTarget,
 ) {
   if (left.type !== right.type) return false;
+  if (left.type === "product" && right.type === "product") return left.productSlug === right.productSlug;
   if (left.type !== "project" || right.type !== "project") return true;
   return left.projectId === right.projectId;
 }
@@ -45,6 +49,7 @@ export function isEditablePreviewPageTarget(
   preview: PreviewPageData,
 ) {
   if (target.type === "home") return true;
+  if (target.type === "catalog" || target.type === "product") return true;
 
   if (target.type === "carta") {
     return preview.template === "ristorante";
@@ -90,6 +95,14 @@ export function resolvePreviewPageTarget(
 
   if (segments.length === 2) {
     return { type: "home" };
+  }
+
+  if (segments[2] === "productos") {
+    if (segments.length === 3) return { type: "catalog" };
+    if (segments.length === 4 && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(segments[3]) && segments[3].length <= 160) {
+      return { type: "product", productSlug: segments[3] };
+    }
+    return null;
   }
 
   if (segments.length === 3 && segments[2] === "about") {

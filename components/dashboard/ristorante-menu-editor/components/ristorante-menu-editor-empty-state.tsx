@@ -6,7 +6,7 @@ export function RistoranteMenuEditorEmptyState({
   hasItems: boolean;
 }) {
   return (
-    <div className="rounded-xl border border-dashed border-outline-variant bg-surface-container-lowest px-5 py-8 text-center">
+    <div className="py-8 text-center">
       <SearchX
         aria-hidden
         className="mx-auto size-5 text-on-surface-variant"

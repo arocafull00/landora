@@ -12,6 +12,7 @@ import { AppearanceTextSizeGroupContent } from "@/components/dashboard/appearanc
 import { AppearanceTypographyGroupContent } from "@/components/dashboard/appearance/components/appearance-typography-group-content";
 import { useAppearanceEditor } from "@/components/dashboard/appearance/hooks/use-appearance-editor";
 import { EditorSectionTitle } from "@/components/dashboard/editor-section-title";
+import { siteFontVariables } from "@/lib/site-fonts";
 
 export function AppearanceEditorPanel({ landing }: { landing: Landing }) {
   const {
@@ -31,7 +32,7 @@ export function AppearanceEditorPanel({ landing }: { landing: Landing }) {
   } = useAppearanceEditor(landing);
 
   return (
-    <section className="space-y-5 py-unit-lg">
+    <section className={`${siteFontVariables} space-y-5 py-unit-lg`}>
       <EditorSectionTitle
         description={APPEARANCE_EDITOR_COPY.description}
         title={APPEARANCE_EDITOR_COPY.title}

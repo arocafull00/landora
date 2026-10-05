@@ -81,7 +81,7 @@ export function NavLabelsEditor({ activeLanding }: NavLabelsEditorProps) {
       </button>
 
       {navOnlyAnchors.length > 0 ? (
-        <div className="space-y-5 border-t border-outline-variant pt-5">
+        <div className="space-y-5 pt-8">
           {navOnlyAnchors.map((anchor) => {
             const fallback = defaults[anchor];
             if (!fallback) return null;

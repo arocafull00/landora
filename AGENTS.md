@@ -230,14 +230,8 @@ Los colores viven en `app/globals.css` como variables CSS en `:root` y se expone
 
 ## Checklist antes de entregar
 
-Ejecuta, en este orden y en proporción al cambio:
+Ejecuta únicamente `pnpm lint` como validación antes de entregar. Con lint es suficiente.
 
-1. Búsquedas estáticas con `rg` para imports prohibidos, `console.*`, endpoints obsoletos y patrones afectados.
-2. `pnpm typecheck`.
-3. `pnpm lint`.
-4. React Doctor cuando se modifique React, estado, componentes o rendimiento.
-5. `pnpm audit --prod` cuando cambien dependencias o lockfile.
-6. `pnpm build` para detectar errores de RSC, rutas, prerender y entorno.
-7. Recorridos manuales de los flujos críticos, entradas malformadas y concurrencia cuando aplique.
+No ejecutes builds (`pnpm build`, `next build` ni equivalentes) salvo petición explícita del usuario. Tampoco ejecutes typecheck, auditorías ni otras validaciones adicionales salvo petición explícita.
 
 Interpreta los diagnósticos automáticos en contexto: verifica el código completo antes de modificarlo y documenta los falsos positivos comprobados. No declares una tarea completa si quedan validaciones requeridas sin ejecutar; indica claramente qué falta y por qué.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useEffectEvent, useLayoutEffect, useMemo } from "react";
+import dynamic from "next/dynamic";
 import type {
   LandingContent,
   LandingSectionSelections,
@@ -8,17 +9,6 @@ import type {
   TemplateId,
 } from "@/lib/dashboard-data";
 import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
-import { NuvoletsTemplate } from "@/components/templates/nuvolets/nuvolets-template";
-import { VelarTemplate } from "@/components/templates/velar/velar-template";
-import { StudioTemplate } from "@/components/templates/studio/studio-template";
-import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
-import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
-import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
-import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
-import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
-import { SignalTemplate } from "@/components/templates/signal/signal-template";
-import { SignalCasePage } from "@/components/templates/signal/signal-case-page";
-import { PalletRossTemplate } from "@/components/templates/pallet-ross/pallet-ross-template";
 import {
   getHashSectionId,
   scrollToSectionIdWhenReady,
@@ -28,13 +18,53 @@ import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
-import { PortfolioAboutPage } from "@/components/templates/portfolio/portfolio-about-page";
-import { PortfolioProjectPage } from "@/components/templates/portfolio/portfolio-project-page";
-import { RistoranteMenuPage } from "@/components/templates/ristorante/ristorante-menu-page";
 import { resolveGalleryItems } from "@/lib/gallery-content";
 import { findSignalCaseBySlug } from "@/lib/signal-cases";
 import { getPreviewLandingPath } from "@/lib/public-site-url";
 import { applyCatalogPresentation, type CatalogPresentation } from "@/lib/catalog-presentation";
+
+const NuvoletsTemplate = dynamic(
+  () => import("@/components/templates/nuvolets/nuvolets-template").then((module) => module.NuvoletsTemplate),
+);
+const VelarTemplate = dynamic(
+  () => import("@/components/templates/velar/velar-template").then((module) => module.VelarTemplate),
+);
+const StudioTemplate = dynamic(
+  () => import("@/components/templates/studio/studio-template").then((module) => module.StudioTemplate),
+);
+const PortfolioTemplate = dynamic(
+  () => import("@/components/templates/portfolio/portfolio-template").then((module) => module.PortfolioTemplate),
+);
+const RistoranteTemplate = dynamic(
+  () => import("@/components/templates/ristorante/ristorante-template").then((module) => module.RistoranteTemplate),
+);
+const FloristeriaTemplate = dynamic(
+  () => import("@/components/templates/floristeria/floristeria-template").then((module) => module.FloristeriaTemplate),
+);
+const OficioProTemplate = dynamic(
+  () => import("@/components/templates/oficio-pro/oficio-pro-template").then((module) => module.OficioProTemplate),
+);
+const CoffeeShopTemplate = dynamic(
+  () => import("@/components/templates/coffee-shop/coffee-shop-template").then((module) => module.CoffeeShopTemplate),
+);
+const SignalTemplate = dynamic(
+  () => import("@/components/templates/signal/signal-template").then((module) => module.SignalTemplate),
+);
+const SignalCasePage = dynamic(
+  () => import("@/components/templates/signal/signal-case-page").then((module) => module.SignalCasePage),
+);
+const PalletRossTemplate = dynamic(
+  () => import("@/components/templates/pallet-ross/pallet-ross-template").then((module) => module.PalletRossTemplate),
+);
+const PortfolioAboutPage = dynamic(
+  () => import("@/components/templates/portfolio/portfolio-about-page").then((module) => module.PortfolioAboutPage),
+);
+const PortfolioProjectPage = dynamic(
+  () => import("@/components/templates/portfolio/portfolio-project-page").then((module) => module.PortfolioProjectPage),
+);
+const RistoranteMenuPage = dynamic(
+  () => import("@/components/templates/ristorante/ristorante-menu-page").then((module) => module.RistoranteMenuPage),
+);
 
 const TEMPLATE_COMPONENTS = {
   nuvolets: NuvoletsTemplate,

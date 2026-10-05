@@ -5,6 +5,7 @@ import {
   resolvePaletteColorScheme,
 } from "@/lib/site-appearance";
 import { cn } from "@/lib/utils";
+import { siteFontVariables } from "@/lib/site-fonts";
 
 export function SiteThemeScope({
   appearance,
@@ -24,7 +25,7 @@ export function SiteThemeScope({
 
   return (
     <div
-      className={cn("site-theme min-h-full", className)}
+      className={cn(siteFontVariables, "site-theme min-h-full", className)}
       data-button-text-size={resolved.buttonTextSize}
       data-chip-text-size={resolved.chipTextSize}
       data-color-scheme={colorScheme}

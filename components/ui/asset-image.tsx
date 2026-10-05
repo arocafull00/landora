@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { type ImageProps } from "next/image";
 import { isAnimatedImageAsset } from "@/lib/is-animated-image";
 import { isSvgAsset } from "@/lib/is-svg-url";
 
@@ -7,6 +7,7 @@ export function AssetImage({
   className,
   fill,
   mimeType,
+  onLoad,
   priority,
   quality,
   sizes,
@@ -16,6 +17,7 @@ export function AssetImage({
   className?: string;
   fill?: boolean;
   mimeType?: string;
+  onLoad?: ImageProps["onLoad"];
   priority?: boolean;
   quality?: number;
   sizes?: string;
@@ -29,6 +31,7 @@ export function AssetImage({
       alt={alt}
       className={className}
       fill={fill}
+      onLoad={onLoad}
       priority={priority}
       quality={quality}
       sizes={sizes}

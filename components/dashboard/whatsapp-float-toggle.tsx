@@ -10,7 +10,7 @@ export function WhatsappFloatToggle({ activeLanding }: { activeLanding: Landing 
   const enabled = contact.whatsappEnabled ?? false;
 
   return (
-    <div className="flex items-start justify-between gap-4 rounded-lg border border-outline-variant bg-surface px-4 py-3">
+    <div className="flex items-start justify-between gap-4 py-3">
       <div>
         <p className="text-body-md font-medium text-on-surface">Botón de WhatsApp flotante</p>
         <p className="mt-1 text-body-sm text-on-surface-variant">

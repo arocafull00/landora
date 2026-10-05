@@ -11,7 +11,7 @@ export function ProductNotes({ description, characteristics }: { description: st
   return (
     <div className="mt-10">
       <Separator />
-      <div className="grid gap-6 pt-8 sm:grid-cols-2">
+      <div className="space-y-6 pt-6">
         {description ? (
           <ProductNote icon={Cloud} title={COPY.description}>
             <p className="whitespace-pre-line">{description}</p>

@@ -5,33 +5,12 @@ import {
   DM_Sans,
   Fraunces,
   Gloock,
-  IBM_Plex_Sans,
-  Inter,
   Inter_Tight,
-  JetBrains_Mono,
   Marcellus,
   Playfair_Display,
   Source_Sans_3,
   Syne,
 } from "next/font/google";
-
-const dashboardHeadline = IBM_Plex_Sans({
-  variable: "--font-source-headline",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
-
-const inter = Inter({
-  variable: "--font-source-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const dashboardLabel = JetBrains_Mono({
-  variable: "--font-source-label",
-  subsets: ["latin"],
-  weight: ["500"],
-});
 
 const syne = Syne({
   variable: "--font-source-syne",
@@ -102,9 +81,6 @@ const nuvoletsBody = Manrope({ variable: "--font-source-manrope", subsets: ["lat
 export const siteFontVariables = [
   nuvoletsDisplay.variable,
   nuvoletsBody.variable,
-  dashboardHeadline.variable,
-  inter.variable,
-  dashboardLabel.variable,
   syne.variable,
   marcellus.variable,
   playfairDisplay.variable,

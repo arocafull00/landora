@@ -16,8 +16,7 @@
     "sync:booking-access": "tsx scripts/sync-booking-access.ts",
     "migrate:neon-data": "tsx --env-file=.env scripts/migrate-neon-to-supabase.ts",
     "backfill:landing-publications": "tsx --env-file=.env scripts/backfill-landing-publications.ts",
-    "test:publication": "tsx --test tests/landing-publication.test.ts",
-    "doctor": "react-doctor --verbose"
+    "test:publication": "tsx --test tests/landing-publication.test.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.3",
@@ -84,7 +83,6 @@
     "drizzle-kit": "^0.31.10",
     "husky": "^9.1.7",
     "oxlint": "^1.86.0",
-    "react-doctor": "^0.5.5",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",
     "typescript": "^5"

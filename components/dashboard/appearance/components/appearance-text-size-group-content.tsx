@@ -3,6 +3,7 @@
 import type { Landing, LandingAppearance } from "@/lib/dashboard-data";
 import { APPEARANCE_EDITOR_COPY } from "@/components/dashboard/appearance/appearance-editor-copy";
 import { TextSizePresetControl } from "@/components/dashboard/appearance/components/text-size-preset-control";
+import { Separator } from "@/components/ui/separator";
 
 const TEXT_SIZE_SECTIONS = [
   {
@@ -58,11 +59,11 @@ export function AppearanceTextSizeGroupContent({
   };
 
   return (
-    <div className="min-w-0 border-t border-outline-variant">
+    <div className="min-w-0">
       {TEXT_SIZE_SECTIONS.map((section, index) => (
         <div key={section.valueKey}>
           {index > 0 ? (
-            <div aria-hidden className="mx-4 border-t border-border-subtle" />
+            <Separator />
           ) : null}
           <TextSizePresetControl
             label={section.label}

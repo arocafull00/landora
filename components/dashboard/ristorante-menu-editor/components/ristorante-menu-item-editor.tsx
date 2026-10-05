@@ -32,14 +32,14 @@ export function RistoranteMenuItemEditor({
 
   return (
     <Collapsible
-      className="overflow-hidden rounded-xl border border-outline-variant bg-surface transition-[border-color,box-shadow] data-[state=open]:border-primary/40 data-[state=open]:shadow-sm"
+      className="py-3"
       onOpenChange={onToggle}
       open={open}
     >
       <div className="flex items-stretch">
         <CollapsibleTrigger asChild>
           <button
-            className="flex min-w-0 flex-1 items-center justify-between gap-3 px-4 py-3 text-left outline-none transition-colors hover:bg-surface-container-low focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+            className="flex min-w-0 flex-1 items-center justify-between gap-3 py-3 pr-3 text-left outline-none transition-colors hover:bg-surface-container-low focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
             type="button"
           >
             <span className="min-w-0">
@@ -67,7 +67,6 @@ export function RistoranteMenuItemEditor({
             />
           </button>
         </CollapsibleTrigger>
-        <div className="my-2 w-px bg-outline-variant" />
         <Button
           aria-label={`Eliminar ${itemName}`}
           className="h-auto rounded-none px-3"
@@ -80,7 +79,7 @@ export function RistoranteMenuItemEditor({
       </div>
 
       <CollapsibleContent>
-        <div className="space-y-4 border-t border-outline-variant bg-surface-container-lowest p-4">
+        <div className="space-y-4 pb-3 pt-4">
           <EditorTextField
             label="Categoría"
             onChange={(value) => onChange({ category: value })}

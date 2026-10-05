@@ -4,6 +4,7 @@ import { ListPlus } from "lucide-react";
 import type { FieldErrors, UseFieldArrayReturn, UseFormRegister } from "react-hook-form";
 import type { ProductFormValues } from "@/lib/schemas/products";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { PRODUCT_DRAWER_COPY } from "../product-drawer-copy";
 import { productPanelId } from "../product-editor-sections";
 import { ProductCharacteristicRow } from "./product-characteristic-row";
@@ -35,6 +36,7 @@ export function ProductCharacteristicsPanel({
       active={active}
     >
       <ProductDetailsCard register={register} errors={errors} />
+      <Separator />
       <ProductEditorCard title={COPY.title}>
         {characteristics.fields.map((field, index) => (
           <ProductCharacteristicRow

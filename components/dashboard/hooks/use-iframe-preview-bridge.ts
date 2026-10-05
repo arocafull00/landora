@@ -16,6 +16,7 @@ import {
 import {
   isPreviewChannelReadyMessage,
   isPreviewPageIntentMessage,
+  isPreviewPageChangedMessage,
   postPreviewContent,
   postPreviewHighlightElement,
   postPreviewHighlightSection,
@@ -28,6 +29,7 @@ import {
   getPreviewPageHref,
   isEditablePreviewPageTarget,
   isSameEditorPageTarget,
+  resolvePreviewPageTarget,
 } from "@/lib/preview-page-target";
 import { getSectionByAnchor } from "@/lib/template-sections";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
@@ -226,11 +228,15 @@ export function useIframePreviewBridge({
           return;
         }
 
-        if (!isPreviewPageIntentMessage(data)) {
+        if (!isPreviewPageIntentMessage(data) && !isPreviewPageChangedMessage(data)) {
           return;
         }
 
         const latest = latestRef.current;
+        if (isPreviewPageChangedMessage(data)) {
+          const actualTarget = resolvePreviewPageTarget(iframe.contentWindow?.location.pathname ?? "", landingId, latest);
+          if (!actualTarget || !isSameEditorPageTarget(actualTarget, data.target)) return;
+        }
         if (
           !isEditablePreviewPageTarget(data.target, {
             content: latest.content,

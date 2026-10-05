@@ -6,17 +6,17 @@ const COPY = { label: "Precio en tienda", available: "Disponible en tienda", out
 
 export function ProductPrice({ price, previousPrice, discounted, available }: { price: number | null; previousPrice: number | null; discounted: boolean; available: boolean }) {
   return (
-    <div className="mt-10">
+    <div className="mt-7">
       <Separator />
-      <div className="flex items-center justify-between gap-4 pt-8">
+      <div className="flex flex-wrap items-center justify-between gap-4 pt-6">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-ink/45">{COPY.label}</p>
-          <p className="mt-1 flex items-baseline gap-3 font-headline text-3xl">
+          <p className="text-sm text-ink-secondary">{COPY.label}</p>
+          <p className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-headline text-4xl tabular-nums">
             {formatProductPrice(price)}
-            {discounted ? <del className="font-body text-base text-ink/45">{formatProductPrice(previousPrice)}</del> : null}
+            {discounted ? <del className="font-body text-base text-ink-secondary">{formatProductPrice(previousPrice)}</del> : null}
           </p>
         </div>
-        <Badge className="bg-tone-2 px-4 py-2 text-sm font-semibold text-ink/70">{available ? COPY.available : COPY.out}</Badge>
+        <Badge className="bg-tone-2 px-3 py-1.5 text-xs font-medium text-ink">{available ? COPY.available : COPY.out}</Badge>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ export function TypographyOptionCard({
   template: TemplateId;
 }) {
   return (
-    <RadioGroupItem className="items-start gap-4 p-3" value={id}>
+    <RadioGroupItem className="items-start gap-4 rounded-none border-0 bg-transparent px-0 py-3 hover:bg-transparent data-[state=checked]:bg-transparent" value={id}>
       <span className="min-w-0 flex-1">
         <span
           aria-hidden

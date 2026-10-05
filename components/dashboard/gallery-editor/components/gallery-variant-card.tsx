@@ -2,6 +2,7 @@
 
 import { Check } from "lucide-react";
 import { AssetImage } from "@/components/ui/asset-image";
+import { Button } from "@/components/ui/button";
 import type { GalleryVariantDefinition } from "@/components/templates/shared/galleries/gallery-variant-registry";
 import type { GalleryVariantId } from "@/lib/dashboard-data";
 
@@ -15,23 +16,20 @@ export function GalleryVariantCard({
   selected: boolean;
 }) {
   return (
-    <button
+    <Button
       aria-checked={selected}
-      className={`group overflow-hidden rounded-xl border bg-surface text-left transition-[color,background-color,border-color,box-shadow,transform] duration-200 ${
-        selected
-          ? "border-primary"
-          : "border-outline-variant hover:border-primary"
-      }`}
+      className="group h-auto w-full items-start justify-start gap-3 rounded-none px-0 py-3 text-left whitespace-normal"
       onClick={() => onSelect(definition.id)}
       role="radio"
       type="button"
+      variant="ghost"
     >
-      <span className="relative block aspect-[16/10] overflow-hidden bg-surface-variant">
+      <span className="relative block size-16 shrink-0 overflow-hidden rounded-md bg-surface-variant">
         <AssetImage
           alt={`Galería ${definition.label}`}
           className="object-cover"
           fill
-          sizes="180px"
+          sizes="64px"
           src={definition.thumbnail}
         />
         {selected ? (
@@ -40,7 +38,7 @@ export function GalleryVariantCard({
           </span>
         ) : null}
       </span>
-      <span className="block space-y-1 p-3">
+      <span className="block min-w-0 space-y-1">
         <span
           className={`block text-body-md font-semibold ${
             selected ? "text-primary" : "text-on-surface"
@@ -52,6 +50,6 @@ export function GalleryVariantCard({
           {definition.description}
         </span>
       </span>
-    </button>
+    </Button>
   );
 }

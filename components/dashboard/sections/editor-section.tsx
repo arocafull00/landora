@@ -14,6 +14,7 @@ import { VelarEditorSection } from "@/components/dashboard/sections/velar-editor
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { PortfolioAboutPageEditor } from "@/components/dashboard/portfolio-about-page-editor";
 import { PortfolioProjectPageEditor } from "@/components/dashboard/portfolio-project-page-editor";
+import { CatalogPageEditor } from "@/components/dashboard/editor/components/catalog-page-editor";
 
 export function EditorSection() {
   const { activeLandingId, activePageTarget, landings } = useDashboardStore(
@@ -29,6 +30,10 @@ export function EditorSection() {
 
   if (!activeLanding) {
     return null;
+  }
+
+  if (activePageTarget.type === "catalog" || activePageTarget.type === "product") {
+    return <EditorLayout form={<CatalogPageEditor />} />;
   }
 
   if (

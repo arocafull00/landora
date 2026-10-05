@@ -16,7 +16,7 @@ export function StudioServiceMenuItemEditor({
   onRemove,
 }: StudioServiceMenuItemEditorProps) {
   return (
-    <div className="space-y-3 border-b border-outline-variant pb-6 last:border-0 last:pb-0">
+    <div className="space-y-3 pb-8 last:pb-0">
       <div className="flex items-center justify-between gap-3">
         <p className="font-label text-label-md text-on-surface-variant">
           Servicio {index + 1}

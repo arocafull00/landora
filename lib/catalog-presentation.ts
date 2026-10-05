@@ -2,7 +2,7 @@ import type { LandingContent } from "@/lib/dashboard-data";
 import type { NuvoletsProduct } from "@/lib/schemas/nuvolets";
 import type { CSSProperties } from "react";
 
-export type CatalogPresentation = { enabled: boolean; adopted: boolean; href: string; products: NuvoletsProduct[]; favoriteIds: string[] };
+export type CatalogPresentation = { enabled: boolean; href: string; products: NuvoletsProduct[]; favoriteIds: string[] };
 
 export type CatalogStore = { eyebrow: string; title: string; text: string; image: string; alt: string; primaryLabel: string; primaryHref: string; secondaryLabel: string; secondaryHref: string };
 
@@ -25,7 +25,7 @@ export function getCatalogBrandStyle(content: LandingContent): CSSProperties | u
 export function applyCatalogPresentation(content: LandingContent, catalog: CatalogPresentation): LandingContent {
   const nav = content.nav.filter((item) => !/^\/(?:preview\/[^/]+\/)?productos(?:[/?#]|$)/.test(item.href));
   if (catalog.enabled) nav.push({ id: "store-catalog", label: "Productos", href: catalog.href });
-  if (!content.nuvolets || !catalog.adopted) return { ...content, nav };
+  if (!content.nuvolets) return { ...content, nav };
   const products = catalog.enabled ? catalog.products : [];
   return { ...content, nav, nuvolets: { ...content.nuvolets, products, favorites: { ...content.nuvolets.favorites, productIds: catalog.enabled ? catalog.favoriteIds : [] } } };
 }

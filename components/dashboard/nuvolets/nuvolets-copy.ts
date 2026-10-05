@@ -9,7 +9,7 @@ export const NUVOLETS_TONES = [{ value: "blue", label: "Azul" }, { value: "pink"
 const imageFields = [{ name: "image", label: "Imagen", type: "image" }, { name: "alt", label: "Texto alternativo" }] as const;
 const textFields = [{ name: "title", label: "Título" }, { name: "text", label: "Texto", type: "textarea" }] as const;
 const links = [{ name: "label", label: "Texto" }, { name: "href", label: "Enlace" }];
-const messages = [{ name: "text", label: "Mensaje" }];
+const messages = [{ name: "text", label: "" }];
 const fields = (prefix: string, items: readonly { name: string; label: string; type?: NuvoletsField["type"] }[]): NuvoletsField[] => items.map((item) => ({ ...item, name: `${prefix}.${item.name}` as Path<NuvoletsContent> }));
 
 export const NUVOLETS_EDITOR_FIELDS: Record<string, { fields: NuvoletsField[]; lists: NuvoletsList[] }> = {

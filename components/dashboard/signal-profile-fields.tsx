@@ -10,7 +10,7 @@ export function SignalProfileFields({ profile, onChange }: {
   onChange: (patch: Partial<TeamMember>) => void;
 }) {
   return (
-    <div className="space-y-4 border-t border-outline-variant pt-5">
+    <div className="space-y-4 pt-8">
       <p className="font-label text-label-md text-on-surface-variant">Perfil</p>
       <EditorTextField label="Nombre" value={profile.name} onChange={(name) => onChange({ name })} />
       <EditorTextField label="Especialidad" value={profile.role} onChange={(role) => onChange({ role })} />

@@ -9,9 +9,9 @@ export type EditorStructureItem = {
   editable: boolean; canMoveUp: boolean; canMoveDown: boolean;
 };
 export type EditorStructureGroup = { label: string; items: EditorStructureItem[] };
-export type EditorPageOption = { id: string; label: string; target: EditorPageTarget };
+export type EditorPageOption = { id: string; label: string; target: EditorPageTarget; disabledReason?: string };
 
-export function getEditorPages(landing: Landing): EditorPageOption[] {
+export function getEditorPages(landing: Landing, catalogEnabled: boolean, productSlug: string | null): EditorPageOption[] {
   const pages: EditorPageOption[] = [{ id: "home", label: EDITOR_COPY.home, target: { type: "home" } }];
   if (landing.template === "portfolio") {
     if (landing.content.enabledPages.includes("about")) pages.push({ id: "about", label: "About me", target: { type: "about" } });
@@ -21,6 +21,12 @@ export function getEditorPages(landing: Landing): EditorPageOption[] {
     }
   }
   if (landing.template === "ristorante") pages.push({ id: "carta", label: "Carta", target: { type: "carta" } });
+  if (catalogEnabled) {
+    pages.push({ id: "catalog", label: EDITOR_COPY.catalog, target: { type: "catalog" } });
+    pages.push({ id: "product", label: EDITOR_COPY.productDetail,
+      target: productSlug ? { type: "product", productSlug } : { type: "catalog" },
+      disabledReason: productSlug ? undefined : EDITOR_COPY.noProducts });
+  }
   return pages;
 }
 
@@ -31,6 +37,9 @@ export function getEditorPageId(target: EditorPageTarget) {
 export function getEditorStructure(landing: Landing, page: EditorPageTarget, isAdmin: boolean, bookingEnabled: boolean): EditorStructureGroup[] {
   const groups: EditorStructureGroup[] = [];
   const item = (id: string, label: string): EditorStructureItem => ({ id, label, hidden: false, required: true, editable: true, canMoveUp: false, canMoveDown: false });
+  if (page.type === "catalog" || page.type === "product") {
+    return [{ label: EDITOR_COPY.content, items: [item("page-content", EDITOR_COPY.pageContent)] }];
+  }
   if (page.type === "about" || page.type === "project") {
     return [{ label: EDITOR_COPY.content, items: [item("page-content", EDITOR_COPY.pageContent)] }, { label: EDITOR_COPY.settings, items: [item("Diseño", "Diseño")] }];
   }
@@ -66,7 +75,7 @@ export function getEditorStructure(landing: Landing, page: EditorPageTarget, isA
 }
 
 export function getValidEditorTab(landing: Landing, target: EditorPageTarget, current: string, isAdmin: boolean, bookingEnabled: boolean) {
-  if (target.type === "about" || target.type === "project") return "page-content";
+  if (target.type === "about" || target.type === "project" || target.type === "catalog" || target.type === "product") return "page-content";
   if (target.type === "carta") return "Carta";
   const tabs = getVisibleEditorTabs(landing.template, landing.content.hiddenSections, isAdmin, bookingEnabled);
   return tabs.some((tab) => tab.id === current) ? current : tabs[0]?.id ?? getTemplate(landing.template)?.editorTabs[0]?.id ?? "Hero";

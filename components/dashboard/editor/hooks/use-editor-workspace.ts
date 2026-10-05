@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useDashboardStore } from "@/stores/dashboard-store";
@@ -11,6 +11,7 @@ import type { EditorPageTarget } from "@/lib/dashboard-data";
 import type { PreviewDevice } from "@/components/dashboard/preview-toolbar";
 import { getEditorPageId, getEditorPages, getEditorStructure, getValidEditorTab } from "../editor-model";
 import { EDITOR_COPY } from "../editor-copy";
+import { EditorCatalogContext } from "../editor-catalog-context";
 
 export function useEditorWorkspace(scrollTarget?: string) {
   const state = useDashboardStore(useShallow((value) => ({
@@ -22,6 +23,7 @@ export function useEditorWorkspace(scrollTarget?: string) {
     addSitePage: value.addSitePage, removeSitePage: value.removeSitePage,
   })));
   const { bookingModuleEnabled } = useDashboardChrome();
+  const catalog = use(EditorCatalogContext);
   const isMobile = useIsMobile();
   const [device, setDevice] = useState<PreviewDevice>("desktop");
   const [mode, setMode] = useState<"edit" | "preview">("preview");
@@ -30,7 +32,8 @@ export function useEditorWorkspace(scrollTarget?: string) {
   const [fullscreen, setFullscreen] = useState(false);
   const [pendingSection, setPendingSection] = useState<string | null>(null);
   const landing = state.landings.find((entry) => entry.id === state.activeLandingId) ?? state.landings[0];
-  const pages = landing ? getEditorPages(landing) : [];
+  const productSlug = state.activePageTarget.type === "product" ? state.activePageTarget.productSlug : catalog.productSlug;
+  const pages = landing ? getEditorPages(landing, catalog.enabled, productSlug) : [];
   const page = pages.find((entry) => entry.id === getEditorPageId(state.activePageTarget)) ?? pages[0];
   const groups = landing ? getEditorStructure(landing, state.activePageTarget, state.isAdmin, bookingModuleEnabled) : [];
   const title = groups.flatMap((group) => group.items).find((entry) => entry.id === state.activeEditorTab)?.label ?? EDITOR_COPY.pageContent;
@@ -41,6 +44,8 @@ export function useEditorWorkspace(scrollTarget?: string) {
     : landing?.edited === "Unsaved changes" ? EDITOR_COPY.pending : EDITOR_COPY.saved;
   const pathname = state.activePageTarget.type === "about" ? "/about"
     : state.activePageTarget.type === "carta" ? "/carta"
+    : state.activePageTarget.type === "catalog" ? "/productos"
+    : state.activePageTarget.type === "product" ? `/productos/${state.activePageTarget.productSlug}`
     : state.activePageTarget.type === "project" && landing
       ? `/proyectos/${landing.content.gallery?.find((entry) => entry.id === getEditorPageId(state.activePageTarget))?.projectSlug ?? ""}` : "";
   const previewHref = landing ? getPreviewLandingPath(landing.id, pathname) : "";

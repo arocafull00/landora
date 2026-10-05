@@ -174,7 +174,7 @@ export function SignalEditorSection() {
                   </div>
                 ))}
               </div>
-              <div className="space-y-6 border-t border-outline-variant pt-6">
+              <div className="space-y-6 pt-8">
                 <p className="font-label text-label-md text-on-surface-variant">Posibilidades</p>
                 {serviceMenu.map((item, index) => (
                   <StudioServiceMenuItemEditor

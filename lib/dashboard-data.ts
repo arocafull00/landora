@@ -21,6 +21,8 @@ export type EditorPageTarget =
   | { type: "home" }
   | { type: "about" }
   | { type: "carta" }
+  | { type: "catalog" }
+  | { type: "product"; productSlug: string }
   | { type: "project"; projectId: string };
 
 export type SectionHeading = {

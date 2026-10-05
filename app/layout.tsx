@@ -4,7 +4,7 @@ import "./globals.css";
 import { AppToaster } from "@/components/shared/app-toaster";
 import { VercelAnalytics } from "@/components/analytics/vercel-analytics";
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { siteFontVariables } from "@/lib/site-fonts";
+import { dashboardFontVariables } from "@/components/dashboard/dashboard-fonts";
 
 export const metadata: Metadata = {
   title: "Landora",
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${siteFontVariables} h-full antialiased`}
+      className={`${dashboardFontVariables} h-full antialiased`}
       suppressHydrationWarning
     >
       <body

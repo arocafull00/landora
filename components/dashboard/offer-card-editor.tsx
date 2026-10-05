@@ -24,7 +24,7 @@ function fromDateInputValue(value: string) {
 
 export function OfferCardEditor({ index, card, onChange, onRemove }: OfferCardEditorProps) {
   return (
-    <div className="space-y-3 rounded-lg border border-outline-variant bg-surface-container-lowest p-4">
+    <div className="space-y-3 py-4">
       <div className="flex items-center justify-between gap-3">
         <p className="font-label text-label-md text-on-surface-variant">Tarjeta {index + 1}</p>
         <button

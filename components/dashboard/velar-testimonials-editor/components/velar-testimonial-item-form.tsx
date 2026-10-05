@@ -16,7 +16,7 @@ export function VelarTestimonialItemForm({
   onRemove: () => void;
 }) {
   return (
-    <div className="space-y-4 border-t border-outline-variant bg-surface-container-lowest p-4">
+    <div className="space-y-4 pb-3 pt-4">
       <EditorTextField
         editorId={`testimonios:${item.id}:author`}
         label="Autor de la reseña"

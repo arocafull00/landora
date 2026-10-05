@@ -1,11 +1,12 @@
 "use client";
 
 import type { ReactNode } from "react";
+import dynamic from "next/dynamic";
+import { AppearanceEditorLoadingSkeleton } from "@/components/dashboard/appearance/components/appearance-editor-loading-skeleton";
 import { ExternalLink, Maximize2 } from "lucide-react";
 import { EditorToolbar } from "@/components/dashboard/editor-toolbar";
 import { IframeLandingPreview } from "@/components/dashboard/iframe-landing-preview";
 import { PreviewFullscreenOverlay } from "@/components/dashboard/preview-fullscreen-overlay";
-import { AppearanceEditorPanel } from "@/components/dashboard/appearance/appearance-editor-panel";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useEditorWorkspace } from "./editor/hooks/use-editor-workspace";
 import { EditorStructure } from "./editor/components/editor-structure";
@@ -14,6 +15,13 @@ import { EditorPagesDialog } from "./editor/components/editor-pages-dialog";
 import { EditorDeviceControls } from "./editor/components/editor-device-controls";
 import { EDITOR_COPY } from "./editor/editor-copy";
 import { cn } from "@/lib/utils";
+
+const AppearanceEditorPanel = dynamic(
+  () => import("@/components/dashboard/appearance/appearance-editor-panel").then(
+    (module) => module.AppearanceEditorPanel,
+  ),
+  { loading: AppearanceEditorLoadingSkeleton },
+);
 
 export function EditorLayout({ form, scrollTarget }: { form: ReactNode; scrollTarget?: string }) {
   const editor = useEditorWorkspace(scrollTarget);

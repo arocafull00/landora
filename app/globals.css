@@ -2,6 +2,7 @@
 
 @theme inline {
   --color-canvas: var(--canvas);
+  --color-catalog-canvas: var(--catalog-canvas);
   --color-ink: var(--ink);
   --color-ink-secondary: var(--ink-secondary);
   --color-ink-muted: var(--ink-muted);
@@ -34,6 +35,7 @@
   --editor-border: #e3e6ef;
   --editor-text-muted: #586174;
   --canvas: var(--surface-bg);
+  --catalog-canvas: #ffffff;
   --ink: var(--on-surface);
   --ink-secondary: var(--on-surface-variant);
   --ink-muted: var(--on-surface-variant);
@@ -66,9 +68,6 @@ button {
   --font-headline: var(--font-source-headline);
   --font-body: var(--font-source-inter);
   --font-label: var(--font-source-label);
-  --font-syne: var(--font-source-syne);
-  --font-playfair: var(--font-source-playfair);
-  --font-marcellus: var(--font-source-marcellus);
   --foreground: var(--on-background);
   --popover: var(--surface-container-lowest);
   --popover-foreground: var(--on-surface);
@@ -505,6 +504,7 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --font-body: var(--site-font-body);
   --font-syne: var(--site-font-display);
   --font-playfair: var(--site-font-display);
+  --font-marcellus: var(--font-source-marcellus);
   --font-cormorant: var(--site-font-display);
   --font-coffee-display: var(--site-font-display);
   --font-coffee-body: var(--site-font-body);

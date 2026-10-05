@@ -22,8 +22,10 @@ export default async function LandingPreviewPage({
     landing.template,
     landing.sectionSelections ?? [],
   );
-  const tenant = await resolveTenantBySlug(landing.slug);
-  const catalog = await getCatalogPresentation(landing.id, landing.userId, true);
+  const [tenant, catalog] = await Promise.all([
+    resolveTenantBySlug(landing.slug),
+    getCatalogPresentation(landing.id, landing.userId, true),
+  ]);
 
   return (
     <LandingPreviewFrame

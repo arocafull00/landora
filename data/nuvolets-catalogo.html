@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo — Nuvolets</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F1',
+            surface: '#FFFDF9',
+            ink: '#3D3A36',
+            blue: '#A9C4D3',
+            'blue-light': '#DDEAF0',
+            yellow: '#F2D995',
+            'yellow-light': '#FAEFCB',
+            pink: '#EBC7C5',
+            'pink-light': '#F6E4E3',
+            sage: '#C6D2BE',
+            'sage-light': '#E5EBDD',
+            line: '#E9E2D8'
+          },
+          fontFamily: {
+            display: ['"DM Serif Display"', 'serif'],
+            sans: ['Manrope', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background:#FAF7F1; color:#3D3A36; }
+    html { scroll-behavior:smooth; }
+
+    .blob {
+      border-radius: 36% 64% 54% 46% / 46% 41% 59% 54%;
+    }
+
+    .blob-alt {
+      border-radius: 57% 43% 36% 64% / 40% 56% 44% 60%;
+    }
+
+    .cloud {
+      position:absolute;
+      border-radius:999px;
+      background:rgba(255,255,255,.72);
+    }
+
+    .cloud::before,
+    .cloud::after {
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      background:inherit;
+    }
+
+    .cloud::before {
+      width:56%;
+      height:135%;
+      left:13%;
+      bottom:10%;
+    }
+
+    .cloud::after {
+      width:42%;
+      height:105%;
+      right:8%;
+      bottom:8%;
+    }
+
+    .wave {
+      display:block;
+      width:100%;
+      height:auto;
+      margin-bottom:-1px;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar { display:none; }
+    .hide-scrollbar { scrollbar-width:none; }
+  </style>
+</head>
+
+<body class="font-sans antialiased">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-xl">
+    <div class="mx-auto flex h-[74px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <a href="#" class="flex items-center gap-2 font-display text-3xl">
+        <span class="relative inline-flex h-7 w-10 items-end">
+          <span class="absolute bottom-0 left-0 h-4 w-8 rounded-full bg-blue-light"></span>
+          <span class="absolute bottom-1 left-1.5 h-5 w-5 rounded-full bg-blue-light"></span>
+          <span class="absolute bottom-0.5 right-0 h-4 w-5 rounded-full bg-blue-light"></span>
+        </span>
+        Nuvolets
+      </a>
+
+      <nav class="hidden items-center gap-8 md:flex">
+        <a href="#" class="text-sm hover:opacity-60">Inicio</a>
+        <a href="#" class="text-sm font-semibold text-blue">Productos</a>
+      </nav>
+
+      <a href="#tienda" class="rounded-full border border-blue px-4 py-2 text-sm font-semibold transition hover:bg-blue-light">
+        Ven a vernos
+      </a>
+    </div>
+  </header>
+
+  <main>
+
+
+    <!-- Filters -->
+    <section class="px-4 py-8 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="rounded-[28px] border border-line bg-surface/70 p-4 sm:p-5">
+          <div class="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_auto]">
+            <label class="relative block">
+              <svg class="absolute left-4 top-1/2 -translate-y-1/2 text-ink/40" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                <circle cx="11" cy="11" r="7" />
+                <path d="m20 20-3.5-3.5" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Buscar por nombre o referencia"
+                class="h-12 w-full rounded-full border border-line bg-cream pl-11 pr-4 text-sm outline-none transition focus:border-blue"
+              />
+            </label>
+
+            <select class="h-12 rounded-full border border-line bg-cream px-4 text-sm outline-none focus:border-blue">
+              <option>Todas las categorías</option>
+              <option>Bebé</option>
+              <option>Niña</option>
+              <option>Niño</option>
+            </select>
+
+            <select class="h-12 rounded-full border border-line bg-cream px-4 text-sm outline-none focus:border-blue">
+              <option>Todas las marcas</option>
+            </select>
+
+            <select class="h-12 rounded-full border border-line bg-cream px-4 text-sm outline-none focus:border-blue">
+              <option>Todas las tallas</option>
+              <option>0-3 meses</option>
+              <option>3-6 meses</option>
+              <option>6-12 meses</option>
+              <option>2 años</option>
+              <option>4 años</option>
+            </select>
+
+            <button class="h-12 rounded-full bg-blue px-6 text-sm font-semibold transition hover:bg-[#9db8c8]">
+              Aplicar filtros
+            </button>
+          </div>
+
+          <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap gap-2">
+              <button class="rounded-full bg-blue-light px-3 py-1.5 text-xs font-semibold">Disponibles</button>
+              <button class="rounded-full px-3 py-1.5 text-xs text-ink/50 hover:bg-cream">Agotados</button>
+              <button class="rounded-full px-3 py-1.5 text-xs text-ink/50 hover:bg-cream">Novedades</button>
+            </div>
+
+            <button class="text-xs font-semibold text-ink/45 underline decoration-line underline-offset-4">
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product list heading -->
+    <section class="px-4 pb-4 sm:px-6 lg:px-8">
+      <div class="mx-auto flex max-w-7xl items-end justify-between gap-6">
+        <div>
+          <span class="text-xs font-bold tracking-[0.16em] text-ink/40">24 PRENDAS</span>
+          <h2 class="mt-2 font-display text-3xl sm:text-4xl">Todo lo que tenemos por aquí</h2>
+        </div>
+
+        <select class="hidden rounded-full border border-line bg-surface px-4 py-2.5 text-sm sm:block">
+          <option>Más recientes</option>
+          <option>Nombre A-Z</option>
+          <option>Precio menor</option>
+          <option>Precio mayor</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Products -->
+    <section class="px-4 pb-24 pt-6 sm:px-6 lg:px-8">
+      <div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
+
+        <!-- Product -->
+        <article class="group">
+          <a href="#" class="block">
+            <div class="relative overflow-hidden blob bg-blue-light">
+              <span class="absolute left-3 top-3 z-10 rounded-full bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur">
+                Nuevo
+              </span>
+
+              <img
+                src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=900&q=85"
+                alt="Conjunto Nube"
+                class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-display text-xl sm:text-2xl">Conjunto Nube</h3>
+                  <p class="mt-1 text-xs text-ink/45">Bebé · Azul</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-sage-light px-2.5 py-1 text-[10px] font-semibold">Disponible</span>
+              </div>
+
+              <p class="mt-3 text-sm font-semibold">30,00 €</p>
+              <p class="mt-1 text-xs text-ink/40">Precio en tienda</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Product -->
+        <article class="group">
+          <a href="#" class="block">
+            <div class="relative overflow-hidden blob-alt bg-pink-light">
+              <img
+                src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=900&q=85"
+                alt="Conjunto Brisa"
+                class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-display text-xl sm:text-2xl">Conjunto Brisa</h3>
+                  <p class="mt-1 text-xs text-ink/45">Niño · Coral</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-pink-light px-2.5 py-1 text-[10px] font-semibold text-ink/55">Agotado</span>
+              </div>
+
+              <p class="mt-3 text-sm font-semibold">32,90 €</p>
+              <p class="mt-1 text-xs text-ink/40">Precio en tienda</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Product -->
+        <article class="group">
+          <a href="#" class="block">
+            <div class="relative overflow-hidden blob bg-yellow-light">
+              <span class="absolute left-3 top-3 z-10 rounded-full bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur">
+                Últimas unidades
+              </span>
+
+              <img
+                src="https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=900&q=85"
+                alt="Gorrito Llovizna"
+                class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-display text-xl sm:text-2xl">Gorrito Llovizna</h3>
+                  <p class="mt-1 text-xs text-ink/45">Bebé · Crudo</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-sage-light px-2.5 py-1 text-[10px] font-semibold">Disponible</span>
+              </div>
+
+              <p class="mt-3 text-sm font-semibold">14,90 €</p>
+              <p class="mt-1 text-xs text-ink/40">Precio en tienda</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Product -->
+        <article class="group">
+          <a href="#" class="block">
+            <div class="relative overflow-hidden blob-alt bg-sage-light">
+              <img
+                src="https://images.unsplash.com/photo-1607453998774-d533f65dac99?auto=format&fit=crop&w=900&q=85"
+                alt="Jersey Cúmulo"
+                class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-display text-xl sm:text-2xl">Jersey Cúmulo</h3>
+                  <p class="mt-1 text-xs text-ink/45">Niño · Tierra</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-pink-light px-2.5 py-1 text-[10px] font-semibold text-ink/55">Agotado</span>
+              </div>
+
+              <p class="mt-3 text-sm font-semibold">27,90 €</p>
+              <p class="mt-1 text-xs text-ink/40">Precio en tienda</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Product -->
+        <article class="group">
+          <a href="#" class="block">
+            <div class="relative overflow-hidden blob-alt bg-yellow-light">
+              <img
+                src="https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=900&q=85"
+                alt="Vestido Alba"
+                class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-display text-xl sm:text-2xl">Vestido Alba</h3>
+                  <p class="mt-1 text-xs text-ink/45">Niña · Rosa</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-sage-light px-2.5 py-1 text-[10px] font-semibold">Disponible</span>
+              </div>
+
+              <p class="mt-3 text-sm font-semibold">34,90 €</p>
+              <p class="mt-1 text-xs text-ink/40">Precio en tienda</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Product -->
+        <article class="group">
+          <a href="#" class="block">
+            <div class="relative overflow-hidden blob bg-pink-light">
+              <span class="absolute left-3 top-3 z-10 rounded-full bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur">
+                Nuevo
+              </span>
+
+              <img
+                src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=900&q=85"
+                alt="Pelele Cielo"
+                class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-display text-xl sm:text-2xl">Pelele Cielo</h3>
+                  <p class="mt-1 text-xs text-ink/45">Bebé · Azul cielo</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-sage-light px-2.5 py-1 text-[10px] font-semibold">Disponible</span>
+              </div>
+
+              <p class="mt-3 text-sm font-semibold">28,90 €</p>
+              <p class="mt-1 text-xs text-ink/40">Precio en tienda</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Product -->
+        <article class="group">
+          <a href="#" class="block">
+            <div class="relative overflow-hidden blob-alt bg-blue-light">
+              <img
+                src="https://images.unsplash.com/photo-1599443015574-be5fe8a05783?auto=format&fit=crop&w=900&q=85"
+                alt="Jersey Algodón"
+                class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-display text-xl sm:text-2xl">Jersey Algodón</h3>
+                  <p class="mt-1 text-xs text-ink/45">Niño · Salvia</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-sage-light px-2.5 py-1 text-[10px] font-semibold">Disponible</span>
+              </div>
+
+              <p class="mt-3 text-sm font-semibold">31,90 €</p>
+              <p class="mt-1 text-xs text-ink/40">Precio en tienda</p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Product -->
+        <article class="group">
+          <a href="#" class="block">
+            <div class="relative overflow-hidden blob bg-sage-light">
+              <img
+                src="https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=900&q=85"
+                alt="Conjunto Sol"
+                class="aspect-[4/5] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+
+            <div class="pt-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h3 class="font-display text-xl sm:text-2xl">Conjunto Sol</h3>
+                  <p class="mt-1 text-xs text-ink/45">Bebé · Arena</p>
+                </div>
+                <span class="shrink-0 rounded-full bg-pink-light px-2.5 py-1 text-[10px] font-semibold text-ink/55">Agotado</span>
+              </div>
+
+              <p class="mt-3 text-sm font-semibold">29,90 €</p>
+              <p class="mt-1 text-xs text-ink/40">Precio en tienda</p>
+            </div>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Store CTA -->
+    <svg class="wave text-blue-light" viewBox="0 0 1440 100" preserveAspectRatio="none">
+      <path fill="currentColor" d="M0,56 C180,18 310,92 500,52 C690,12 820,16 1000,60 C1170,100 1300,28 1440,52 L1440,100 L0,100 Z"></path>
+    </svg>
+
+    <section id="tienda" class="relative bg-blue-light px-4 pb-20 pt-10 text-center sm:px-6 lg:px-8">
+      <div class="cloud left-[8%] top-8 h-8 w-24 opacity-55"></div>
+      <div class="cloud right-[10%] bottom-8 h-7 w-20 opacity-50"></div>
+
+      <div class="relative mx-auto max-w-3xl">
+        <span class="text-xs font-bold tracking-[0.16em] text-ink/45">¿HAS VISTO ALGO QUE TE GUSTA?</span>
+        <h2 class="mt-4 font-display text-4xl sm:text-5xl">
+          Ven a verlo en persona
+        </h2>
+
+        <p class="mx-auto mt-4 max-w-xl leading-7 text-ink/60">
+          Te esperamos en Nuvolets, Paiporta. Puedes preguntarnos por WhatsApp antes de venir para consultar talla, color o disponibilidad.
+        </p>
+
+        <div class="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+          <a href="#" class="rounded-full bg-surface px-6 py-3.5 text-sm font-semibold">Consultar por WhatsApp</a>
+          <a href="#" class="rounded-full border border-ink/15 px-6 py-3.5 text-sm font-semibold">Cómo llegar</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line px-4 py-8 text-center text-xs text-ink/40">
+    © 2026 Nuvolets · Paiporta, Valencia
+  </footer>
+
+</body>
+</html>

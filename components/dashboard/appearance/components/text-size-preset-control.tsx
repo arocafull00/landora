@@ -69,7 +69,7 @@ export function TextSizePresetControl({
   };
 
   return (
-    <section className="min-w-0 px-4 py-5">
+    <section className="min-w-0 py-5">
       <div className="mb-4 flex items-center justify-between gap-3">
         <span className="font-label text-label-sm tracking-wide text-on-surface">
           {label}

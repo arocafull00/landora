@@ -51,7 +51,7 @@ export function SectionVisibilityEditor({ activeLanding }: SectionVisibilityEdit
       <div className="space-y-3">
         {requiredSections.map((section) => (
           <div
-            className="flex items-center justify-between rounded-lg border border-outline-variant bg-surface-container-low px-4 py-3"
+            className="flex items-center justify-between gap-3 py-3"
             key={section.anchor}
           >
             <span className="text-body-md text-on-surface">{section.label}</span>
@@ -77,7 +77,7 @@ export function SectionVisibilityEditor({ activeLanding }: SectionVisibilityEdit
           <p className="font-label text-label-md text-on-surface-variant">Secciones ocultas</p>
           {hiddenRemovableSections.map((section) => (
             <div
-              className="flex items-center justify-between rounded-lg border border-dashed border-outline-variant bg-surface-container-low px-4 py-3"
+              className="flex items-center justify-between gap-3 py-3"
               key={section.anchor}
             >
               <span className="text-body-md text-on-surface-variant">{section.label}</span>

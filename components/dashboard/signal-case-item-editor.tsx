@@ -23,7 +23,7 @@ export function SignalCaseItemEditor({ item, index, onChange, onRemove }: {
   onRemove: () => void;
 }) {
   return (
-    <div className="space-y-4 border-b border-outline-variant pb-6 last:border-0">
+    <div className="space-y-4 pb-8 last:pb-0">
       <div className="flex items-center justify-between">
         <p className="font-label text-label-md text-on-surface-variant">Caso {index + 1}</p>
         <button className="font-label text-label-md text-danger transition-colors hover:text-danger/80" onClick={onRemove} type="button">Eliminar</button>

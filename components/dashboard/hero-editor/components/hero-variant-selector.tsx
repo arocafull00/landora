@@ -36,8 +36,8 @@ export function HeroVariantSelector({
     <Collapsible className="space-y-3" onOpenChange={setOpen} open={open}>
       <CollapsibleTrigger asChild>
         <Button
-          className="h-auto w-full justify-between gap-3 rounded-xl p-2 text-left"
-          variant="outline"
+          className="h-auto w-full justify-between gap-3 rounded-none px-0 py-3 text-left"
+          variant="ghost"
         >
           <span className="flex min-w-0 items-center gap-3">
             <span className="relative block size-10 shrink-0 overflow-hidden rounded-lg bg-surface-variant">
@@ -65,7 +65,7 @@ export function HeroVariantSelector({
       <CollapsibleContent>
         <div
           aria-label="Tipo de hero"
-          className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-2"
+          className="grid gap-4 pt-1"
           role="radiogroup"
         >
           {HERO_VARIANTS.map((definition) => (

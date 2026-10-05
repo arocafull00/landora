@@ -64,6 +64,10 @@ export const catalogQuerySchema = z.strictObject({
   sort: z.enum(["newest", "price-asc", "price-desc"]).default("newest"),
   page: z.coerce.number().int().min(1).max(100_000).default(1),
 });
+export const previewCatalogQuerySchema = catalogQuerySchema.extend({ embed: z.literal("1").optional() }).transform(({ embed, ...query }) => {
+  void embed;
+  return query;
+});
 export const catalogRouteSchema = z.strictObject({ slug: z.string().min(1).max(160).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), productSlug: z.string().min(1).max(160).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional() });
 export type ProductValues = z.infer<typeof productSchema>;
 export type CatalogConfigValues = z.infer<typeof catalogConfigSchema>;

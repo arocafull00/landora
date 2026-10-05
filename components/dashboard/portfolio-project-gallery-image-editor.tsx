@@ -18,7 +18,7 @@ export function PortfolioProjectGalleryImageEditor({
   value: string;
 }) {
   return (
-    <div className="space-y-2 rounded-lg border border-outline-variant bg-surface-container-low p-3">
+    <div className="space-y-3 py-4">
       <div className="flex items-center justify-between gap-3">
         <span className="font-label text-label-sm text-on-surface-variant">
           Imagen {index + 1}

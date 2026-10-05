@@ -1,16 +1,15 @@
-import { Badge } from "@/components/ui/badge";
 import { ProductTag } from "./product-tag";
 
 export function ProductHeading({ eyebrow, titleLead, titleAccent, subtitle, tags }: { eyebrow: string; titleLead: string; titleAccent: string; subtitle: string; tags: string[] }) {
   return (
     <div>
-      {eyebrow ? <Badge className="mb-4 bg-tone-4 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-ink/60">{eyebrow}</Badge> : null}
-      <h1 className="font-headline text-5xl font-normal leading-[.98] sm:text-6xl">
+      {eyebrow ? <p className="mb-3 text-sm font-medium text-ink-secondary">{eyebrow}</p> : null}
+      <h1 className="break-words text-balance font-headline text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-ink sm:text-5xl xl:text-6xl">
         {titleLead} {titleAccent ? <em className="italic">{titleAccent}</em> : null}
       </h1>
-      {subtitle ? <p className="mt-4 max-w-xl text-base leading-7 text-ink/60">{subtitle}</p> : null}
+      {subtitle ? <p className="mt-4 max-w-lg text-pretty text-base leading-7 text-ink-secondary">{subtitle}</p> : null}
       {tags.length ? (
-        <ul className="mt-7 flex flex-wrap gap-2">
+        <ul className="mt-5 flex flex-wrap gap-2">
           {tags.map((tag, index) => (
             <ProductTag key={`${tag}:${index}`} label={tag} index={index} />
           ))}
