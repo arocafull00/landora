@@ -38,9 +38,6 @@ export function ProductVariantRow({
         </TableCell>
         <TableCell className="px-3 py-3 text-sm text-ink-secondary">{row.sku}</TableCell>
         <TableCell className={cn("px-3 py-3 text-sm", row.stockTone)}>{row.stockText}</TableCell>
-        <TableCell className={cn("px-3 py-3 text-right text-sm tabular-nums", row.hasOwnPrice ? "font-medium text-ink" : "text-ink-faint")}>
-          {row.priceText}
-        </TableCell>
         <TableCell className="px-3 py-3 text-right">
           <Button
             type="button"
@@ -60,7 +57,7 @@ export function ProductVariantRow({
       </TableRow>
       {row.open ? (
         <TableRow className="bg-surface-subtle hover:bg-surface-subtle">
-          <TableCell id={detailId} colSpan={5} className="p-4 whitespace-normal">
+          <TableCell id={detailId} colSpan={4} className="p-4 whitespace-normal">
             <ProductVariantFields index={index} register={register} error={variantErrors} />
           </TableCell>
         </TableRow>

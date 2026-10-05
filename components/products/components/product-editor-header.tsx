@@ -10,10 +10,12 @@ export function ProductEditorHeader({
   title,
   description,
   status,
+  hasPendingChanges,
 }: {
   title: string;
   description: string;
   status: "draft" | "published" | "archived";
+  hasPendingChanges: boolean;
 }) {
   return (
     <DialogHeader className="shrink-0 flex-row items-center justify-between gap-3 px-6 py-4 text-left">
@@ -24,7 +26,7 @@ export function ProductEditorHeader({
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <DialogTitle className="truncate text-lg">{title}</DialogTitle>
-            <ProductStatusBadge status={status} />
+            <ProductStatusBadge status={status} hasPendingChanges={hasPendingChanges} />
           </div>
           <DialogDescription className="mt-1 text-xs text-ink-secondary">{description}</DialogDescription>
         </div>

@@ -22,6 +22,7 @@ import { resolveGalleryItems } from "@/lib/gallery-content";
 import { findSignalCaseBySlug } from "@/lib/signal-cases";
 import { getPreviewLandingPath } from "@/lib/public-site-url";
 import { applyCatalogPresentation, type CatalogPresentation } from "@/lib/catalog-presentation";
+import { syncCompanyContent } from "@/lib/company-details";
 
 const NuvoletsTemplate = dynamic(
   () => import("@/components/templates/nuvolets/nuvolets-template").then((module) => module.NuvoletsTemplate),
@@ -105,7 +106,7 @@ export function LandingPreviewFrame({
   const previewBridge = usePreviewBridge();
   const livePreview = previewBridge?.livePreview;
   const sourceContent = livePreview?.content ?? initialContent;
-  const content = useMemo(() => catalog ? applyCatalogPresentation(sourceContent, catalog) : sourceContent, [sourceContent, catalog]);
+  const content = useMemo(() => syncCompanyContent(catalog ? applyCatalogPresentation(sourceContent, catalog) : sourceContent), [sourceContent, catalog]);
   const activeTemplate = livePreview?.template ?? template;
   const sectionSelections =
     livePreview?.sectionSelections ?? initialSectionSelections;

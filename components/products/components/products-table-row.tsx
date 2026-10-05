@@ -2,7 +2,7 @@
 
 import { Package } from "lucide-react";
 import type { ProductDto } from "@/lib/domain/dtos";
-import { formatProductPrice, productMinPrice, productStockInfo, productVariantSummary } from "@/lib/products";
+import { formatProductPrice, productStockInfo, productVariantSummary } from "@/lib/products";
 import { AssetImage } from "@/components/ui/asset-image";
 import { Checkbox } from "@/components/ui/checkbox";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -34,7 +34,7 @@ export function ProductsTableRow({
   onCommand: (product: ProductDto, command: "duplicate" | "archive" | "restore" | "unpublish" | "publish") => void;
 }) {
   const stock = productStockInfo(product);
-  const price = product.priceCents === null ? formatProductPrice(null) : formatProductPrice(productMinPrice(product));
+  const price = formatProductPrice(product.priceCents);
   return (
     <TableRow data-state={selected ? "selected" : undefined} className="min-h-[68px]">
       <TableCell className="px-0 py-3 align-middle">
@@ -58,7 +58,7 @@ export function ProductsTableRow({
         </button>
       </TableCell>
       <TableCell className="px-2 py-3 align-middle">
-        <ProductStatusBadge status={product.status} />
+        <ProductStatusBadge status={product.status} hasPendingChanges={product.hasPendingChanges} />
       </TableCell>
       <TableCell className="px-2 py-3 align-middle">
         <div className="text-sm text-ink-secondary">{stock.units === null ? "—" : `${stock.units} uds.`}</div>

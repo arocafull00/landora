@@ -6,8 +6,8 @@ import { ProductEditorCard } from "./product-editor-card";
 import { ProductField } from "./product-field";
 
 const COPY = {
-  title: "Precio base",
-  description: "Se usa cuando una variante no tiene precio propio.",
+  title: "Precio del producto",
+  description: "El mismo precio para todas las tallas y colores.",
   price: "Precio (€)",
   previous: "Precio anterior (€)",
   optional: "Opcional",

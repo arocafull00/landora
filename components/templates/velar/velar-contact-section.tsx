@@ -22,7 +22,6 @@ export function VelarContactSection({
   const instagramHref = getSocialUrl(content.contact, "instagram");
   const mapsHref = getVelarMapsHref(
     content.mapsUrl,
-    content.brand,
     content.contact.address,
   );
   const mapsEmbedSrc = getVelarMapsEmbedSrc(mapsHref);

@@ -9,6 +9,7 @@ import { getPublicRenderTime } from "@/lib/public-render-time";
 import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
 import { getCatalogPresentation } from "@/data/catalog-presentation";
 import { applyCatalogPresentation } from "@/lib/catalog-presentation";
+import { syncCompanyContent } from "@/lib/company-details";
 
 async function renderPublicTemplate(
   template: PublishedLanding["template"],
@@ -66,7 +67,7 @@ export async function PublicLanding({
     getPublicRenderTime(),
     getCatalogPresentation(landing.id, landing.userId, false),
   ]);
-  const content = applyCatalogPresentation(landing.content, catalog);
+  const content = syncCompanyContent(applyCatalogPresentation(landing.content, catalog));
   const template = await renderPublicTemplate(landing.template, {
     bookingEnabled: tenant?.enabled ?? false,
     content,

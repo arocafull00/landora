@@ -38,6 +38,7 @@ import {
 } from "@/lib/dashboard-data";
 import { saveLandingAction } from "@/app/actions/landing-save";
 import { getDefaultContent } from "@/lib/default-content";
+import { updateCompanyContact } from "@/lib/company-details";
 import {
   getLandingChangedScopes,
   getLandingPublicationSnapshot,
@@ -132,7 +133,7 @@ export type DashboardState = {
   moveSection: (landingId: string, anchor: string, direction: -1 | 1) => Promise<void>;
   updatePresentation: (presentationId: string, patch: Partial<Presentation>) => void;
   updatePresentationSlide: (presentationId: string, slideId: string, patch: Partial<Presentation["slides"][number]>) => void;
-  saveLanding: (id: string) => Promise<void>;
+  saveLanding: (id: string) => Promise<boolean>;
   publishLanding: (id: string) => Promise<void>;
   savePresentation: (id: string) => void;
   publishPresentation: (id: string) => void;
@@ -453,7 +454,7 @@ function createDashboardStore(initial?: {
         landing.id === id
           ? markEdited({
               ...landing,
-              content: { ...landing.content, contact: { ...landing.content.contact, ...patch } },
+              content: updateCompanyContact(landing.content, patch),
             })
           : landing,
       ),
@@ -937,7 +938,7 @@ function createDashboardStore(initial?: {
 
   saveLanding: async (id) => {
     const landing = get().landings.find((l) => l.id === id);
-    if (!landing) return;
+    if (!landing) return false;
 
     set({ saveStatus: "saving" });
 
@@ -954,9 +955,11 @@ function createDashboardStore(initial?: {
       get()._recordLandingSave(landing, "Draft", "Saved just now");
       set({ saveStatus: hasNewerChanges ? "idle" : "saved" });
       toast.success("Cambios guardados");
+      return true;
     } catch {
       set({ saveStatus: "error" });
       toast.error("No se pudieron guardar los cambios");
+      return false;
     }
   },
 

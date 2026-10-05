@@ -46,6 +46,11 @@ export function ProductsRowActions({
           </DropdownMenuItem>
         ) : (
           <>
+            {product.status === "published" && product.hasPendingChanges ? (
+              <DropdownMenuItem disabled={pending} onSelect={() => onCommand(product, "publish")}>
+                {PRODUCTS_LIST_COPY.row.publish}
+              </DropdownMenuItem>
+            ) : null}
             <DropdownMenuItem disabled={pending} onSelect={() => onCommand(product, product.status === "published" ? "unpublish" : "publish")}>
               {product.status === "published" ? PRODUCTS_LIST_COPY.row.unpublish : PRODUCTS_LIST_COPY.row.publish}
             </DropdownMenuItem>

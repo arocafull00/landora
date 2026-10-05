@@ -7,9 +7,6 @@ const COPY = {
   color: "Color",
   sku: "SKU / referencia",
   stock: "Existencias",
-  price: "Precio propio (€)",
-  previous: "Precio anterior propio (€)",
-  inherit: "Vacío: usar precio del producto",
 } as const;
 
 export function ProductVariantFields({
@@ -27,14 +24,6 @@ export function ProductVariantFields({
       <ProductField label={COPY.color} binding={register(`variants.${index}.color`)} error={error?.color?.message} />
       <ProductField label={COPY.sku} binding={register(`variants.${index}.sku`)} error={error?.sku?.message} />
       <ProductField label={COPY.stock} binding={register(`variants.${index}.stock`)} inputMode="numeric" error={error?.stock?.message} />
-      <ProductField label={COPY.price} binding={register(`variants.${index}.priceCents`)} inputMode="decimal" placeholder={COPY.inherit} error={error?.priceCents?.message} />
-      <ProductField
-        label={COPY.previous}
-        binding={register(`variants.${index}.previousPriceCents`)}
-        inputMode="decimal"
-        placeholder={COPY.inherit}
-        error={error?.previousPriceCents?.message}
-      />
     </div>
   );
 }

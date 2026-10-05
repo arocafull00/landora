@@ -3,7 +3,7 @@
 import type { CatalogQuery } from "@/lib/schemas/products";
 import { PRODUCTS_LIST_COPY } from "../products-list-copy";
 
-type FilterKey = "q" | "category" | "brand" | "size" | "availability";
+type FilterKey = "q" | "status" | "category" | "brand" | "size" | "availability";
 
 export function ProductsActiveFilters({
   query,
@@ -16,6 +16,7 @@ export function ProductsActiveFilters({
 }) {
   const chips: { key: FilterKey; label: string }[] = [];
   if (query.q) chips.push({ key: "q", label: `${PRODUCTS_LIST_COPY.filterLabels.search}: ${query.q}` });
+  if (query.status !== "all") chips.push({ key: "status", label: `${PRODUCTS_LIST_COPY.filterLabels.status}: ${PRODUCTS_LIST_COPY.statusFilters[query.status]}` });
   if (query.category) chips.push({ key: "category", label: `${PRODUCTS_LIST_COPY.filterLabels.category}: ${query.category}` });
   if (query.brand) chips.push({ key: "brand", label: `${PRODUCTS_LIST_COPY.filterLabels.brand}: ${query.brand}` });
   if (query.size) chips.push({ key: "size", label: `${PRODUCTS_LIST_COPY.filterLabels.size}: ${query.size}` });

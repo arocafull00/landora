@@ -15,7 +15,7 @@ import { ProductEditorSidebar } from "./product-editor-sidebar";
 import { ProductGeneralPanel } from "./product-general-panel";
 import { ProductImagesPanel } from "./product-images-panel";
 import { ProductSeoPanel } from "./product-seo-panel";
-import { ProductStatusField } from "./product-status-field";
+import { ProductStatusBadge } from "./product-status-badge";
 import { ProductVariantsPanel } from "./product-variants-panel";
 
 const PRODUCT_FORM_ID = "product-form";
@@ -36,10 +36,9 @@ export function ProductDrawer({
   brands: string[];
 }) {
   const { section, setSection, showFirstInvalid } = useProductEditorSection();
-  const { form, images, variants, characteristics, submit, generateSlug, addVariant, addImage, addCharacteristic } =
+  const { form, images, variants, characteristics, submit, publish, status, hasPendingChanges, canPublish, previewHref, publishing, generateSlug, addVariant, addImage, addCharacteristic } =
     useProductForm(landingId, product, () => onOpenChange(false), showFirstInvalid);
   const title = useWatch({ control: form.control, name: "title" });
-  const status = useWatch({ control: form.control, name: "status" });
   const { errors, isSubmitting, isDirty } = form.formState;
   const isEdit = product !== null;
   const close = () => {
@@ -58,6 +57,7 @@ export function ProductDrawer({
           title={title.trim() || (isEdit ? PRODUCT_DRAWER_COPY.editTitle : PRODUCT_DRAWER_COPY.newTitle)}
           description={isEdit ? PRODUCT_DRAWER_COPY.editDescription : PRODUCT_DRAWER_COPY.newDescription}
           status={status}
+          hasPendingChanges={hasPendingChanges}
         />
         <Separator className="shrink-0" />
         <div className="flex min-h-0 flex-1 flex-col md:flex-row">
@@ -67,7 +67,7 @@ export function ProductDrawer({
             invalidSections={invalidProductSections(errors)}
             onSelect={setSection}
           >
-            <ProductStatusField control={form.control} />
+            <ProductStatusBadge status={status} hasPendingChanges={hasPendingChanges} />
           </ProductEditorSidebar>
           <Separator className="md:hidden" />
           <Separator orientation="vertical" className="hidden md:block" />
@@ -116,8 +116,12 @@ export function ProductDrawer({
           formId={PRODUCT_FORM_ID}
           dirty={isDirty}
           submitting={isSubmitting}
-          previewHref={isEdit ? `/preview/${landingId}/productos/${product.slug}` : null}
+          publishing={publishing}
+          hasPendingChanges={hasPendingChanges}
+          canPublish={canPublish}
+          previewHref={previewHref}
           onCancel={close}
+          onPublish={publish}
         />
       </DialogSheetContent>
     </Dialog>

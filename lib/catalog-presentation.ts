@@ -1,6 +1,7 @@
 import type { LandingContent } from "@/lib/dashboard-data";
 import type { NuvoletsProduct } from "@/lib/schemas/nuvolets";
 import type { CSSProperties } from "react";
+import { syncCompanyContent } from "@/lib/company-details";
 
 export type CatalogPresentation = { enabled: boolean; href: string; products: NuvoletsProduct[]; favoriteIds: string[] };
 
@@ -9,7 +10,7 @@ export type CatalogStore = { eyebrow: string; title: string; text: string; image
 const STORE_COPY = { eyebrow: "Visítanos", title: "Ven a verlo, tocarlo y probarlo en tienda", directions: "Cómo llegar" } as const;
 
 export function getCatalogStore(content: LandingContent): CatalogStore | null {
-  const store = content.nuvolets?.store;
+  const store = syncCompanyContent(content).nuvolets?.store;
   if (store) return { eyebrow: store.eyebrow, title: store.title, text: store.text, image: store.image, alt: store.alt, primaryLabel: store.ctaLabel, primaryHref: store.mapsUrl, secondaryLabel: store.secondaryLabel, secondaryHref: store.secondaryHref };
   const address = content.contact.address.trim();
   if (!address) return null;

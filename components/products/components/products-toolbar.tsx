@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { PRODUCTS_LIST_COPY } from "../products-list-copy";
 import { ProductsFiltersPopover } from "./products-filters-popover";
 import { ProductsSortMenu } from "./products-sort-menu";
-import type { CatalogQuery } from "@/lib/schemas/products";
-import type { ProductsFiltersValues } from "../hooks/use-products-filters-form";
+import type { CatalogQuery, ProductsFiltersValues } from "@/lib/schemas/products";
 
 export function ProductsToolbar({
   query,

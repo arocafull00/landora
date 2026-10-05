@@ -5,7 +5,7 @@ import { resolveGalleryItems } from "@/lib/gallery-content";
 import { parseSocialLinks } from "@/lib/footer-content";
 import { shortDateTimeFormatter } from "@/lib/intl-formatters";
 import { remapLegacyTemplateAssetUrl } from "@/lib/velar-assets";
-import { VELAR_INSTAGRAM_URL } from "@/lib/velar-links";
+import { getLegacyCompanySocialLinks } from "@/lib/company-details";
 import type { User } from "@/lib/domain/dtos";
 import { resolveSectionSelections } from "@/lib/section-selections";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
@@ -45,6 +45,7 @@ function uniqueBySortOrder<T extends { sortOrder: number }>(items: T[]) {
 }
 
 export function toLandingContent(row: LandingWithSections): LandingContent {
+  const nuvolets = row.nuvolets ? nuvoletsContentSchema.parse(row.nuvolets.content) : undefined;
   const sectionHeadings = (row.branding?.sectionHeadings ?? {}) as LandingContent["sectionHeadings"];
   const hiddenSections = (row.branding?.hiddenSections ?? []) as string[];
   const sectionOrder = (row.branding?.sectionOrder ?? []) as string[];
@@ -69,7 +70,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       : undefined;
 
   return {
-    ...(row.nuvolets ? { nuvolets: nuvoletsContentSchema.parse(row.nuvolets.content) } : {}),
+    ...(nuvolets ? { nuvolets } : {}),
     appearance: resolveLandingAppearance(row.template, {
       paletteId: row.branding?.paletteId,
       typographyId: row.branding?.typographyId,
@@ -180,12 +181,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       ctaLabel: row.cta?.ctaLabel ?? "",
       copyrightSuffix: row.cta?.copyrightSuffix ?? "",
       copyrightExtra: row.cta?.copyrightExtra ?? "",
-      socialLinks: (() => {
-        const links = parseSocialLinks(row.cta?.socialLinks);
-        if (row.template !== "velar") return links;
-        if (links.some((link) => link.platform === "instagram")) return links;
-        return [...links, { platform: "instagram", url: VELAR_INSTAGRAM_URL }];
-      })(),
+      socialLinks: getLegacyCompanySocialLinks(parseSocialLinks(row.cta?.socialLinks), nuvolets),
       whatsappEnabled: row.cta?.whatsappEnabled ?? false,
     },
     about: row.story ? { statement: row.story.statement } : undefined,

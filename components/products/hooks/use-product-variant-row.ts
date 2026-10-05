@@ -5,7 +5,7 @@ import { useWatch, type Control } from "react-hook-form";
 import type { ProductFormValues, ProductValues } from "@/lib/schemas/products";
 import { LOW_STOCK_THRESHOLD } from "@/lib/products";
 
-const COPY = { variant: "Variante", size: "Talla", empty: "—", basePrice: "Precio base" } as const;
+const COPY = { variant: "Variante", size: "Talla", empty: "—" } as const;
 
 function stockTone(units: number | null) {
   if (units === null) return "text-ink-secondary";
@@ -27,8 +27,6 @@ export function useProductVariantRow(index: number, control: Control<ProductForm
     sku: variant.sku || COPY.empty,
     stockText: units === null ? COPY.empty : String(units),
     stockTone: stockTone(units),
-    priceText: variant.priceCents ? `${variant.priceCents} €` : COPY.basePrice,
-    hasOwnPrice: Boolean(variant.priceCents),
     open: expanded || hasErrors,
     toggle: () => setExpanded((current) => !current),
   };

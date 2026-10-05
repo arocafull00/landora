@@ -14,14 +14,16 @@ type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 type WriteResult = { status: "saved"; productId?: string } | { status: "conflict" | "not_found" | "denied" | "invalid" | "duplicate" };
 type BatchWriteResult = { status: "saved"; updated: number; skipped: number } | { status: "denied" };
 type StatusCommand = "archive" | "restore" | "unpublish" | "publish";
+type SaveResult = { status: "saved"; product: Pick<ProductDto, "id" | "version" | "status" | "hasPendingChanges"> } | Exclude<WriteResult, { status: "saved" }>;
 
-function dto(row: ProductRow, variants: VariantRow[]): ProductDto {
-  const { legacyId, legacyAppearance, sortOrder, favoriteOrder, createdAt, updatedAt, ...product } = row;
+function dto(row: ProductRow, variants: VariantRow[], includeDraft: boolean): ProductDto {
+  const { legacyId, legacyAppearance, sortOrder, favoriteOrder, draftContent, createdAt, updatedAt, ...product } = row;
   void legacyId; void legacyAppearance; void sortOrder; void favoriteOrder;
-  return { ...product, createdAt: createdAt.toISOString(), updatedAt: updatedAt.toISOString(), variants: variants.map(({ productId, landingId, sortOrder: order, sku, ...variant }) => { void productId; void landingId; void order; return { ...variant, sku: sku ?? "" }; }) };
+  const draft = includeDraft && draftContent ? productSchema.parse(draftContent) : null;
+  return { ...product, ...draft, status: row.status, hasPendingChanges: includeDraft && draftContent !== null, createdAt: createdAt.toISOString(), updatedAt: updatedAt.toISOString(), variants: draft?.variants ?? variants.map(({ id, size, color, sku, stock }) => ({ id, size, color, sku: sku ?? "", stock })) };
 }
 
-function knownError(error: unknown): WriteResult | null {
+function knownError(error: unknown): Exclude<WriteResult, { status: "saved" }> | null {
   if (!(error instanceof Error)) return null;
   const details = error as Error & { code?: string; cause?: unknown };
   if (details.code === "23505") return { status: "duplicate" };
@@ -43,8 +45,8 @@ async function lockAccess(tx: Transaction, landingId: string, userId: string) {
 export const getCatalogConfig = cache(async (landingId: string): Promise<CatalogConfigDto> => {
   try {
     const [row] = await db.select().from(storeCatalogConfig).where(eq(storeCatalogConfig.landingId, landingId));
-    if (!row) return { enabled: false, adopted: false, title: "Productos", description: "", whatsappPhone: "", version: 0 };
-    return { enabled: row.enabled, adopted: row.adopted, title: row.title, description: row.description, whatsappPhone: row.whatsappPhone, version: row.version };
+    if (!row) return { enabled: false, adopted: false, title: "Productos", description: "", version: 0 };
+    return { enabled: row.enabled, adopted: row.adopted, title: row.title, description: row.description, version: row.version };
   } catch (error) { throw new Error("Failed to fetch catalog config", { cause: error }); }
 });
 
@@ -53,64 +55,84 @@ export const getProductById = cache(async (landingId: string, productId: string)
     const [row] = await db.select().from(storeProducts).where(and(eq(storeProducts.landingId, landingId), eq(storeProducts.id, productId)));
     if (!row) return null;
     const variants = await db.select().from(storeProductVariants).where(eq(storeProductVariants.productId, productId)).orderBy(asc(storeProductVariants.sortOrder));
-    return dto(row, variants);
+    return dto(row, variants, true);
   } catch (error) { throw new Error("Failed to fetch product", { cause: error }); }
 });
 
 export const getProductBySlug = cache(async (landingId: string, slug: string, preview: boolean) => {
   try {
-    const [row] = await db.select().from(storeProducts).where(and(eq(storeProducts.landingId, landingId), eq(storeProducts.slug, slug), preview ? ne(storeProducts.status, "archived") : eq(storeProducts.status, "published")));
+    const slugColumn = preview ? sql<string>`coalesce(${storeProducts.draftContent}->>'slug', ${storeProducts.slug})` : storeProducts.slug;
+    const [row] = await db.select().from(storeProducts).where(and(eq(storeProducts.landingId, landingId), eq(slugColumn, slug), preview ? ne(storeProducts.status, "archived") : eq(storeProducts.status, "published")));
     if (!row) return null;
     const variants = await db.select().from(storeProductVariants).where(eq(storeProductVariants.productId, row.id)).orderBy(asc(storeProductVariants.sortOrder));
-    return toPublicProduct(dto(row, variants));
+    return toPublicProduct(dto(row, variants, preview));
   } catch (error) { throw new Error("Failed to fetch product slug", { cause: error }); }
 });
 
 export const getProductPage = cache(async (landingId: string, query: CatalogQuery, publicOnly: boolean, preview = false): Promise<ProductPageDto<ProductDto>> => {
   try {
     const scope = and(eq(storeProducts.landingId, landingId), publicOnly ? eq(storeProducts.status, "published") : preview ? ne(storeProducts.status, "archived") : undefined);
+    const title = publicOnly ? storeProducts.title : sql<string>`coalesce(${storeProducts.draftContent}->>'title', ${storeProducts.title})`;
+    const category = publicOnly ? storeProducts.category : sql<string>`coalesce(${storeProducts.draftContent}->>'category', ${storeProducts.category})`;
+    const brand = publicOnly ? storeProducts.brand : sql<string>`coalesce(${storeProducts.draftContent}->>'brand', ${storeProducts.brand})`;
+    const price = publicOnly ? storeProducts.priceCents : sql<number>`coalesce((${storeProducts.draftContent}->>'priceCents')::integer, ${storeProducts.priceCents})`;
+    const variantSource = publicOnly ? sql`store_product_variants v` : sql`jsonb_to_recordset(coalesce(${storeProducts.draftContent}->'variants', (select jsonb_agg(jsonb_build_object('size', pv.size, 'sku', pv.sku, 'stock', pv.stock)) from store_product_variants pv where pv.product_id = ${storeProducts.id}), '[]'::jsonb)) as v(size text, sku text, stock integer)`;
+    const variantScope = publicOnly ? sql`v.product_id = ${storeProducts.id}` : sql`true`;
     const variantSize = query.size ? sql`and v.size = ${query.size}` : sql``;
-    const available = sql`exists (select 1 from store_product_variants v where v.product_id = ${storeProducts.id} and v.stock > 0 ${variantSize})`;
+    const available = sql`exists (select 1 from ${variantSource} where ${variantScope} and v.stock > 0 ${variantSize})`;
+    const pendingStock = sql`exists (select 1 from ${variantSource} where ${variantScope} and v.stock is null ${variantSize})`;
     const filters = and(scope,
       !publicOnly && query.status !== "all" ? eq(storeProducts.status, query.status) : undefined,
-      query.category ? eq(storeProducts.category, query.category) : undefined, query.brand ? eq(storeProducts.brand, query.brand) : undefined,
-      query.size ? sql`exists (select 1 from store_product_variants v where v.product_id = ${storeProducts.id} and v.size = ${query.size})` : undefined,
-      query.q ? or(sql`position(lower(${query.q}) in lower(${storeProducts.title})) > 0`, sql`exists (select 1 from store_product_variants v where v.product_id = ${storeProducts.id} and position(lower(${query.q}) in lower(coalesce(v.sku, ''))) > 0)`) : undefined,
-      query.availability === "available" ? available : query.availability === "out" ? sql`not ${available} and not exists (select 1 from store_product_variants v where v.product_id = ${storeProducts.id} and v.stock is null ${variantSize})` : query.availability === "pending" ? sql`exists (select 1 from store_product_variants v where v.product_id = ${storeProducts.id} and v.stock is null ${variantSize})` : undefined,
+      query.category ? eq(category, query.category) : undefined, query.brand ? eq(brand, query.brand) : undefined,
+      query.size ? sql`exists (select 1 from ${variantSource} where ${variantScope} and v.size = ${query.size})` : undefined,
+      query.q ? or(sql`position(lower(${query.q}) in lower(${title})) > 0`, sql`exists (select 1 from ${variantSource} where ${variantScope} and position(lower(${query.q}) in lower(coalesce(v.sku, ''))) > 0)`) : undefined,
+      query.availability === "available" ? available : query.availability === "out" ? sql`not ${available} and not ${pendingStock}` : query.availability === "pending" ? pendingStock : undefined,
     );
-    const price = sql`(select min(coalesce(v.price_cents, ${storeProducts.priceCents})) from store_product_variants v where v.product_id = ${storeProducts.id})`;
     const [{ total }] = await db.select({ total: sql<number>`count(*)::int` }).from(storeProducts).where(filters);
     const page = Math.min(query.page, Math.max(1, Math.ceil(total / PRODUCT_PAGE_SIZE)));
     const [rows, facets, sizes, categories] = await Promise.all([
       db.select().from(storeProducts).where(filters).orderBy(query.sort === "price-asc" ? asc(price) : query.sort === "price-desc" ? desc(price) : desc(storeProducts.createdAt), asc(storeProducts.id)).limit(PRODUCT_PAGE_SIZE).offset((page - 1) * PRODUCT_PAGE_SIZE),
-      db.selectDistinct({ category: storeProducts.category, brand: storeProducts.brand }).from(storeProducts).where(scope),
-      db.selectDistinct({ size: storeProductVariants.size }).from(storeProductVariants).innerJoin(storeProducts, eq(storeProductVariants.productId, storeProducts.id)).where(scope),
+      db.selectDistinct({ category, brand }).from(storeProducts).where(scope),
+      publicOnly ? db.selectDistinct({ size: storeProductVariants.size }).from(storeProductVariants).innerJoin(storeProducts, eq(storeProductVariants.productId, storeProducts.id)).where(scope) : db.execute<{ size: string }>(sql`select distinct v.size from ${storeProducts} cross join lateral ${variantSource} where ${scope}`),
       publicOnly || preview ? Promise.resolve([]) : db.select({ name: storeProductCategories.name }).from(storeProductCategories).where(eq(storeProductCategories.landingId, landingId)).orderBy(asc(storeProductCategories.name)),
     ]);
     const variants = rows.length ? await db.select().from(storeProductVariants).where(inArray(storeProductVariants.productId, rows.map((row) => row.id))).orderBy(asc(storeProductVariants.sortOrder)) : [];
-    return { products: rows.map((row) => dto(row, variants.filter((variant) => variant.productId === row.id))), total, page, categories: Array.from(new Set([...categories.map((category) => category.name), ...facets.flatMap((f) => f.category ? [f.category] : [])])).sort(), brands: Array.from(new Set(facets.flatMap((f) => f.brand ? [f.brand] : []))).sort(), sizes: sizes.flatMap((f) => f.size ? [f.size] : []).sort() };
+    return { products: rows.map((row) => dto(row, variants.filter((variant) => variant.productId === row.id), !publicOnly)), total, page, categories: Array.from(new Set([...categories.map((category) => category.name), ...facets.flatMap((f) => f.category ? [f.category] : [])])).sort(), brands: Array.from(new Set(facets.flatMap((f) => f.brand ? [f.brand] : []))).sort(), sizes: sizes.flatMap((f) => f.size ? [f.size] : []).sort() };
   } catch (error) { throw new Error("Failed to fetch product page", { cause: error }); }
 });
 
-export async function saveProduct(landingId: string, userId: string, productId: string | null, version: number, product: ProductValues): Promise<WriteResult> {
+async function normalizeProductCategory(tx: Transaction, landingId: string, product: ProductValues): Promise<ProductValues> {
+  if (!product.category) return product;
+  await tx.insert(storeProductCategories).values({ landingId, name: product.category }).onConflictDoNothing();
+  const [category] = await tx.select({ name: storeProductCategories.name }).from(storeProductCategories).where(and(eq(storeProductCategories.landingId, landingId), sql`lower(${storeProductCategories.name}) = lower(${product.category})`));
+  return { ...product, category: category.name };
+}
+
+async function writeProductVariants(tx: Transaction, landingId: string, productId: string, variants: ProductValues["variants"]) {
+  await tx.delete(storeProductVariants).where(eq(storeProductVariants.productId, productId));
+  await tx.insert(storeProductVariants).values(variants.map((variant, sortOrder) => ({ ...variant, productId, landingId, sortOrder, sku: variant.sku.trim() || null })));
+}
+
+export async function saveProduct(landingId: string, userId: string, productId: string | null, version: number, product: ProductValues): Promise<SaveResult> {
   try {
-    return await db.transaction(async (tx): Promise<WriteResult> => {
+    return await db.transaction(async (tx): Promise<SaveResult> => {
       if (!await lockAccess(tx, landingId, userId)) return { status: "denied" };
-      const { variants, ...fields } = product;
-      if (productId) {
-        const [row] = await tx.update(storeProducts).set({ ...fields, version: version + 1, updatedAt: new Date() }).where(and(eq(storeProducts.id, productId), eq(storeProducts.landingId, landingId), eq(storeProducts.version, version))).returning({ id: storeProducts.id });
-        if (!row) return { status: "conflict" };
-        await tx.delete(storeProductVariants).where(eq(storeProductVariants.productId, productId));
+      const [current] = productId ? await tx.select().from(storeProducts).where(and(eq(storeProducts.id, productId), eq(storeProducts.landingId, landingId))).for("update") : [];
+      if (productId && !current) return { status: "not_found" };
+      if (current && current.version !== version) return { status: "conflict" };
+      const content = await normalizeProductCategory(tx, landingId, product);
+      if (current?.status === "published" && content.status === "draft") {
+        const [row] = await tx.update(storeProducts).set({ draftContent: content, version: version + 1, updatedAt: new Date() }).where(eq(storeProducts.id, current.id)).returning();
+        return { status: "saved", product: { id: row.id, version: row.version, status: row.status, hasPendingChanges: true } };
       }
+      const { variants, ...fields } = content;
       const id = productId ?? crypto.randomUUID();
-      if (!productId) await tx.insert(storeProducts).values({ ...fields, id, landingId });
-      if (fields.category) {
-        await tx.insert(storeProductCategories).values({ landingId, name: fields.category }).onConflictDoNothing();
-        const [category] = await tx.select({ name: storeProductCategories.name }).from(storeProductCategories).where(and(eq(storeProductCategories.landingId, landingId), sql`lower(${storeProductCategories.name}) = lower(${fields.category})`));
-        if (category.name !== fields.category) await tx.update(storeProducts).set({ category: category.name }).where(eq(storeProducts.id, id));
-      }
-      await tx.insert(storeProductVariants).values(variants.map((variant, sortOrder) => ({ ...variant, productId: id, landingId, sortOrder, sku: variant.sku.trim() || null })));
-      return { status: "saved", productId: id };
+      const status = fields.status === "published" ? "published" : current?.status === "archived" ? "archived" : "draft";
+      const [row] = current
+        ? await tx.update(storeProducts).set({ ...fields, status, draftContent: null, version: version + 1, updatedAt: new Date() }).where(eq(storeProducts.id, id)).returning()
+        : await tx.insert(storeProducts).values({ ...fields, status, id, landingId }).returning();
+      await writeProductVariants(tx, landingId, id, variants);
+      return { status: "saved", product: { id: row.id, version: row.version, status: row.status, hasPendingChanges: false } };
     });
   } catch (error) { const known = knownError(error); if (known) return known; throw new Error("Failed to save product", { cause: error }); }
 }
@@ -126,7 +148,11 @@ export async function saveProductCategory(landingId: string, userId: string, pre
       const rows = await tx.update(storeProductCategories).set({ name }).where(and(eq(storeProductCategories.landingId, landingId), eq(storeProductCategories.name, previousName))).returning({ id: storeProductCategories.id });
       if (!rows.length) return { status: "not_found" };
       if (name !== previousName) {
-        await tx.update(storeProducts).set({ category: name, version: sql`${storeProducts.version} + 1`, updatedAt: new Date() }).where(and(eq(storeProducts.landingId, landingId), eq(storeProducts.category, previousName)));
+        await tx.update(storeProducts).set({
+          category: sql`case when ${storeProducts.category} = ${previousName} then ${name} else ${storeProducts.category} end`,
+          draftContent: sql`case when ${storeProducts.draftContent}->>'category' = ${previousName} then jsonb_set(${storeProducts.draftContent}, '{category}', to_jsonb(${name}::text)) else ${storeProducts.draftContent} end`,
+          version: sql`${storeProducts.version} + 1`, updatedAt: new Date(),
+        }).where(and(eq(storeProducts.landingId, landingId), or(eq(storeProducts.category, previousName), sql`${storeProducts.draftContent}->>'category' = ${previousName}`)));
       }
       return { status: "saved" };
     });
@@ -139,15 +165,19 @@ export async function saveProductCategory(landingId: string, userId: string, pre
 
 async function applyProductStatus(tx: Transaction, row: ProductRow, version: number, command: StatusCommand): Promise<WriteResult> {
   const status = command === "archive" ? "archived" : command === "publish" ? "published" : "draft";
-  if (row.status === status) return { status: "saved", productId: row.id };
   if (row.version !== version) return { status: "conflict" };
+  if (row.status === status && (command !== "publish" || row.draftContent === null)) return { status: "saved", productId: row.id };
   if (status === "published") {
-    await tx.update(storeProductVariants).set({ stock: 0 }).where(and(eq(storeProductVariants.productId, row.id), sql`${storeProductVariants.stock} IS NULL`));
-    const variants = await tx.select().from(storeProductVariants).where(eq(storeProductVariants.productId, row.id));
-    const product = dto(row, variants);
-    const { id, landingId: parentId, version: revision, createdAt, updatedAt, ...values } = product;
-    void id; void parentId; void revision; void createdAt; void updatedAt;
-    if (!productSchema.safeParse({ ...values, status }).success) return { status: "invalid" };
+    const variants = await tx.select().from(storeProductVariants).where(eq(storeProductVariants.productId, row.id)).orderBy(asc(storeProductVariants.sortOrder));
+    const product = dto(row, variants, true);
+    const { id, landingId: parentId, version: revision, hasPendingChanges, createdAt, updatedAt, ...values } = product;
+    void id; void parentId; void revision; void hasPendingChanges; void createdAt; void updatedAt;
+    const parsed = productSchema.safeParse({ ...values, status, variants: values.variants.map((variant) => ({ ...variant, stock: variant.stock ?? 0 })) });
+    if (!parsed.success) return { status: "invalid" };
+    const { variants: publishedVariants, ...fields } = await normalizeProductCategory(tx, row.landingId, parsed.data);
+    await tx.update(storeProducts).set({ ...fields, draftContent: null, version: version + 1, updatedAt: new Date() }).where(eq(storeProducts.id, row.id));
+    await writeProductVariants(tx, row.landingId, row.id, publishedVariants);
+    return { status: "saved", productId: row.id };
   }
   await tx.update(storeProducts).set({ status, version: version + 1, updatedAt: new Date() }).where(eq(storeProducts.id, row.id));
   return { status: "saved", productId: row.id };
@@ -162,10 +192,12 @@ export async function commandProduct(landingId: string, userId: string, productI
       if (command === "duplicate") {
         const variants = await tx.select().from(storeProductVariants).where(eq(storeProductVariants.productId, productId)).orderBy(asc(storeProductVariants.sortOrder));
         const id = crypto.randomUUID();
-        const { createdAt, updatedAt, ...fields } = row;
+        const { createdAt, updatedAt, draftContent, ...fields } = row;
         void createdAt; void updatedAt;
-        await tx.insert(storeProducts).values({ ...fields, id, slug: `${row.slug.slice(0, 145)}-${id.slice(0, 8)}`, title: `${row.title.slice(0, 152)} (copia)`, version: 1, status: "draft", legacyId: null });
-        await tx.insert(storeProductVariants).values(variants.map((variant) => ({ ...variant, id: crypto.randomUUID(), productId: id, sku: null })));
+        const content = draftContent ? productSchema.parse(draftContent) : null;
+        const { variants: copiedVariants, ...contentFields } = content ?? { variants };
+        await tx.insert(storeProducts).values({ ...fields, ...contentFields, id, draftContent: null, slug: `${(content?.slug ?? row.slug).slice(0, 145)}-${id.slice(0, 8)}`, title: `${(content?.title ?? row.title).slice(0, 152)} (copia)`, version: 1, status: "draft", legacyId: null });
+        await writeProductVariants(tx, landingId, id, copiedVariants.map((variant) => ({ id: crypto.randomUUID(), size: variant.size, color: variant.color, stock: variant.stock, sku: "" })));
         return { status: "saved", productId: id };
       }
       return applyProductStatus(tx, row, version, command);
@@ -227,7 +259,7 @@ export const getCatalogHighlights = cache(async (landingId: string, preview: boo
     const rows = await db.select().from(storeProducts).where(and(eq(storeProducts.landingId, landingId), preview ? ne(storeProducts.status, "archived") : eq(storeProducts.status, "published")))
       .orderBy(asc(storeProducts.sortOrder), desc(storeProducts.createdAt)).limit(200);
     const variants = rows.length ? await db.select().from(storeProductVariants).where(inArray(storeProductVariants.productId, rows.map((row) => row.id))).orderBy(asc(storeProductVariants.sortOrder)) : [];
-    return rows.map((row) => ({ product: toPublicProduct(dto(row, variants.filter((variant) => variant.productId === row.id))), legacyId: row.legacyId, appearance: row.legacyAppearance, featured: row.featured, favoriteOrder: row.favoriteOrder }));
+    return rows.map((row) => { const product = toPublicProduct(dto(row, variants.filter((variant) => variant.productId === row.id), preview)); return { product, legacyId: row.legacyId, appearance: row.legacyAppearance, featured: product.featured, favoriteOrder: row.favoriteOrder }; });
   } catch (error) { throw new Error("Failed to fetch catalog highlights", { cause: error }); }
 });
 

@@ -1,4 +1,5 @@
 import { getWhatsAppLink } from "@/lib/whatsapp-link";
+import { getCompanyMapsHref } from "@/lib/company-details";
 
 export const VELAR_WHATSAPP_MESSAGE =
   "Hola! Me podríais dar información sobre la disponibilidad en vuestro espacio?";
@@ -17,21 +18,13 @@ export function getVelarWhatsAppLink(phone: string) {
 
 export function getVelarMapsHref(
   mapsUrl: string | undefined,
-  brand: string,
   address: string,
 ) {
-  const configured = mapsUrl?.trim();
-  if (configured) return configured;
-
-  const query = [brand.replace(/\.$/, ""), address]
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .join(" ");
-
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query || VELAR_MAPS_QUERY)}`;
+  return getCompanyMapsHref(address) || mapsUrl?.trim() || "";
 }
 
 export function getVelarMapsEmbedSrc(mapsHref: string) {
+  if (!mapsHref) return "";
   if (mapsHref.includes("output=embed")) return mapsHref;
 
   try {

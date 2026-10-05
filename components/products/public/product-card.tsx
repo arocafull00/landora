@@ -4,16 +4,15 @@ import type { PublicProductDto } from "@/lib/domain/dtos";
 import { AssetImage } from "@/components/ui/asset-image";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
-import { formatProductPrice, productMinPrice } from "@/lib/products";
+import { formatProductPrice } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
-const COPY = { from: "Desde", available: "Disponible", out: "Agotado", price: "Precio en tienda", featured: "Destacado" } as const;
+const COPY = { available: "Disponible", out: "Agotado", price: "Precio en tienda", featured: "Destacado" } as const;
 const SHAPES = ["rounded-[36%_64%_54%_46%/46%_41%_59%_54%]", "rounded-[57%_43%_36%_64%/40%_56%_44%_60%]"] as const;
 const TONES = ["bg-tone-1", "bg-tone-3", "bg-tone-4", "bg-tone-2"] as const;
 
 export function PublicProductCard({ product, basePath, selectedSize, index }: { product: PublicProductDto; basePath: string; selectedSize: string; index: number }) {
   const variants = selectedSize ? product.variants.filter((variant) => variant.size === selectedSize) : product.variants;
-  const varied = new Set(variants.map((variant) => variant.priceCents ?? product.priceCents)).size > 1;
   const available = variants.some((variant) => variant.available);
   const image = product.images[0];
   return (
@@ -32,7 +31,7 @@ export function PublicProductCard({ product, basePath, selectedSize, index }: { 
             <Badge className={cn("px-2.5 py-1 text-[10px] font-semibold text-ink", available ? "bg-tone-2" : "bg-tone-3")}>{available ? COPY.available : COPY.out}</Badge>
           </div>
           {product.subtitle ? <p className="mt-2 text-xs leading-5 text-ink/60">{product.subtitle}</p> : null}
-          <p className="mt-3 text-sm font-semibold">{varied ? `${COPY.from} ` : ""}{product.priceCents === null ? formatProductPrice(null) : formatProductPrice(productMinPrice({ ...product, variants }))}</p>
+          <p className="mt-3 text-sm font-semibold">{formatProductPrice(product.priceCents)}</p>
           <p className="mt-1 text-xs text-ink/55">{COPY.price}</p>
         </div>
       </Link>

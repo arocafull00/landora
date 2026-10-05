@@ -10,7 +10,7 @@ export const PRODUCTS_COPY = {
   disabled: "El módulo de Productos no está habilitado para esta cuenta. Contacta con el administrador.",
   save: "Guardar", saving: "Guardando…", new: "Nuevo producto", empty: "No hay productos que coincidan con los filtros.",
   stock: "Existencias", available: "Disponible", out: "Agotado", pending: "Stock pendiente", consult: "Consultar por WhatsApp",
-  configure: "Configurar catálogo", invalidFilters: "Filtros no válidos.", resetFilters: "Restablecer filtros", skip: "Saltar al contenido", count: "productos",
+  invalidFilters: "Filtros no válidos.", resetFilters: "Restablecer filtros", skip: "Saltar al contenido", count: "productos",
 } as const;
 export const PRODUCT_STATUS_LABELS = { draft: "Borrador", published: "Publicado", archived: "Archivado" } as const;
 export function productSlug(title: string) {
@@ -25,15 +25,12 @@ export function parseLegacyPrice(value: string) {
   return Math.round(Number(normalized.replace(",", ".")) * 100);
 }
 export function newProductValues(): ProductValues {
-  return { title: "", subtitle: "", slug: "", description: "", category: "", brand: "", tags: [], featured: false, images: [], priceCents: null, previousPriceCents: null, material: "", composition: "", dimensions: "", weight: "", characteristics: [], status: "draft", variants: [{ id: crypto.randomUUID(), size: "", color: "", sku: "", stock: null, priceCents: null, previousPriceCents: null }] };
+  return { title: "", subtitle: "", slug: "", description: "", category: "", brand: "", tags: [], featured: false, images: [], priceCents: null, previousPriceCents: null, material: "", composition: "", dimensions: "", weight: "", characteristics: [], status: "draft", variants: [{ id: crypto.randomUUID(), size: "", color: "", sku: "", stock: null }] };
 }
 export function toPublicProduct(product: ProductDto): PublicProductDto {
-  const { landingId, version, status, variants, ...publicProduct } = product;
-  void landingId; void version; void status;
+  const { landingId, version, status, hasPendingChanges, variants, ...publicProduct } = product;
+  void landingId; void version; void status; void hasPendingChanges;
   return { ...publicProduct, variants: variants.map(({ stock, sku, ...variant }) => { void sku; return { ...variant, available: (stock ?? 0) > 0 }; }) };
-}
-export function productMinPrice(product: Pick<ProductDto, "priceCents"> & { variants: { priceCents: number | null }[] }) {
-  return Math.min(...product.variants.map((variant) => variant.priceCents ?? product.priceCents ?? 0));
 }
 export function productStockInfo(product: Pick<ProductDto, "variants">) {
   if (product.variants.some((variant) => variant.stock === null)) {

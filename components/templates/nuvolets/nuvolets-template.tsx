@@ -6,6 +6,7 @@ import { NuvoletsNav } from "./components/nuvolets-nav";
 import { NuvoletsSection } from "./components/nuvolets-section";
 import { NuvoletsFooter } from "./components/nuvolets-footer";
 import { NuvoletsMotion } from "./components/nuvolets-motion";
+import { syncCompanyContent } from "@/lib/company-details";
 
 export function NuvoletsTemplate({ content, copyrightYear, slug, previewLandingId, topOffset = 0, sectionSelections }: {
   content: LandingContent;
@@ -17,7 +18,7 @@ export function NuvoletsTemplate({ content, copyrightYear, slug, previewLandingI
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
-  const config = content.nuvolets;
+  const config = syncCompanyContent(content).nuvolets;
   if (!config) return null;
   const hidden = new Set(content.hiddenSections);
   const sections = getOrderedTemplateSections("nuvolets", content.sectionOrder).filter((section) => section.anchor !== "contacto" && !hidden.has(section.anchor));

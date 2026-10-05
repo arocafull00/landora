@@ -8,6 +8,7 @@ import {
   publishedLandingSectionSelectionsSchema,
   publishedLandingSeoSchema,
 } from "@/lib/schemas/landing-publication";
+import { getLegacyCompanySocialLinks } from "@/lib/company-details";
 
 export function normalizePublishedSlug(slug: string) {
   return slug.replace(/^\/+|\/+$/g, "");
@@ -30,6 +31,7 @@ export function parsePublishedLandingContent(value: unknown): LandingContent {
 
   return {
     ...content,
+    contact: { ...content.contact, socialLinks: getLegacyCompanySocialLinks(content.contact.socialLinks ?? [], content.nuvolets) },
     offers: content.offers?.map((offer) => {
       const expiresAt = parseOptionalDate(offer.expiresAt);
 

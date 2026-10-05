@@ -13,11 +13,13 @@ import { resourceIdSchema } from "@/lib/schemas/api";
 import { revalidateProductRoutes } from "@/lib/products-revalidation";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { nuvoletsContentSchema } from "@/lib/schemas/nuvolets";
+import type { ProductDto } from "@/lib/domain/dtos";
 
 type Result = { success: true; productId?: string; updated?: number; skipped?: number } | { error: string };
+type SaveResult = { success: true; product: Pick<ProductDto, "id" | "version" | "status" | "hasPendingChanges"> } | { error: string };
 const ERRORS = { conflict: "Los datos han cambiado en otra sesión. Recarga antes de guardar.", not_found: "Producto no encontrado", denied: "El módulo de Productos no está habilitado", invalid: "Revisa el precio, las imágenes y las existencias antes de publicar", duplicate: "La URL, el SKU o la combinación de talla y color ya existen" } as const;
 
-export async function saveProductAction(input: unknown): Promise<Result> {
+export async function saveProductAction(input: unknown): Promise<SaveResult> {
   const parsed = productSaveSchema.safeParse(input);
   if (!parsed.success) return { error: "Datos del producto no válidos" };
   try {
@@ -27,7 +29,7 @@ export async function saveProductAction(input: unknown): Promise<Result> {
     const result = await saveProduct(landingId, access.userId, productId, version, product);
     if (result.status !== "saved") return { error: ERRORS[result.status] };
     revalidateProductRoutes(access.landing);
-    return { success: true, productId: result.productId };
+    return { success: true, product: result.product };
   } catch (error) { logger.captureException(error, { action: "save-product", landingId: parsed.data.landingId }); return { error: "No se pudo guardar el producto" }; }
 }
 

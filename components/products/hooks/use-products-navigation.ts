@@ -24,10 +24,6 @@ export function useProductsNavigation(query: CatalogQuery) {
     (next: CatalogQuery) => router.push(buildHref(pathname, next)),
     [pathname, router]
   );
-  const setStatus = useCallback(
-    (status: CatalogQuery["status"]) => push({ ...query, status, page: 1 }),
-    [push, query]
-  );
   const setSearch = useCallback(
     (q: string) => push({ ...query, q, page: 1 }),
     [push, query]
@@ -37,22 +33,23 @@ export function useProductsNavigation(query: CatalogQuery) {
     [push, query]
   );
   const applyFilters = useCallback(
-    (values: Pick<CatalogQuery, "category" | "brand" | "size" | "availability">) =>
+    (values: Pick<CatalogQuery, "status" | "category" | "brand" | "size" | "availability">) =>
       push({ ...query, ...values, page: 1 }),
     [push, query]
   );
   const removeFilter = useCallback(
-    (key: "q" | "category" | "brand" | "size" | "availability") => {
+    (key: "q" | "status" | "category" | "brand" | "size" | "availability") => {
       if (key === "q") return push({ ...query, q: "", page: 1 });
+      if (key === "status") return push({ ...query, status: "all", page: 1 });
       if (key === "availability") return push({ ...query, availability: "all", page: 1 });
       return push({ ...query, [key]: "", page: 1 });
     },
     [push, query]
   );
   const clearFilters = useCallback(
-    () => push({ ...query, q: "", category: "", brand: "", size: "", availability: "all", page: 1 }),
+    () => push({ ...query, q: "", status: "all", category: "", brand: "", size: "", availability: "all", page: 1 }),
     [push, query]
   );
   const pageHref = useCallback((page: number) => buildHref(pathname, { ...query, page }), [pathname, query]);
-  return { setStatus, setSearch, setSort, applyFilters, removeFilter, clearFilters, pageHref };
+  return { setSearch, setSort, applyFilters, removeFilter, clearFilters, pageHref };
 }

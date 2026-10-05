@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { nuvoletsContentSchema, nuvoletsLandingContentSchema } from "@/lib/schemas/nuvolets";
 import { LANDING_SECTION_KEYS } from "@/lib/landing-save-payload";
+import { contactContentSchema } from "@/lib/schemas/company-details";
 
 const contentSchema = z
   .record(z.string().trim().min(1).max(80), z.unknown())
@@ -21,6 +22,7 @@ const contentSchema = z
     "Missing landing content",
   )
   .refine((value) => JSON.stringify(value).length <= 1_000_000, "Landing content too large")
+  .refine((value) => contactContentSchema.safeParse(value.contact).success, "Invalid company contact")
   .refine((value) => value.nuvolets === undefined || nuvoletsLandingContentSchema.safeParse(value).success, "Invalid Nuvolets content");
 
 export const heroVariantSchema = z.enum([
@@ -90,7 +92,8 @@ const sectionPayloadsSchema = z
     (value) => JSON.stringify(value).length <= 1_000_000,
     "Landing sections too large",
   )
-  .refine((value) => value.nuvolets === undefined || nuvoletsContentSchema.safeParse(value.nuvolets).success, "Invalid Nuvolets section");
+  .refine((value) => value.nuvolets === undefined || nuvoletsContentSchema.safeParse(value.nuvolets).success, "Invalid Nuvolets section")
+  .refine((value) => value.cta === undefined || contactContentSchema.safeParse(value.cta).success, "Invalid company contact");
 
 const changesSchema = z.strictObject({
   meta: metaSchema.optional(),

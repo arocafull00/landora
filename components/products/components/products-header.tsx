@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { Plus, Settings2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { PRODUCTS_COPY } from "@/lib/products";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,12 +20,6 @@ export function ProductsHeader({ total, onNew, children }: { total: number; onNe
       </div>
       <div className="flex flex-wrap items-center gap-2">
         {children}
-        <Button asChild variant="outline" className="h-10 gap-2 rounded-lg border-line bg-surface-container-lowest px-3.5 text-ink hover:bg-surface-subtle">
-          <Link href="/products/settings">
-            <Settings2 className="size-4" aria-hidden />
-            Configurar catálogo
-          </Link>
-        </Button>
         <Button type="button" className="h-10 gap-2 rounded-lg px-4 font-semibold" onClick={onNew}>
           <Plus className="size-4" aria-hidden />
           {PRODUCTS_COPY.new}

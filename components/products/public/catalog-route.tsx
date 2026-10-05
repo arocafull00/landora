@@ -29,7 +29,7 @@ export async function CatalogRoute({ identifier, preview, productSlug, searchPar
     const relatedPage = await getProductPage(landing.id, { ...catalogQuerySchema.parse({}), category: product.category }, !preview, preview);
     const related = relatedPage.products.filter((item) => item.id !== product.id).slice(0, RELATED_LIMIT).map(toPublicProduct);
     body = <>
-      <ProductDetail product={product} phone={config.whatsappPhone} publicUrl={getPublicLandingUrl(landing, `/productos/${product.slug}`)} catalogHref={catalogHref} preview={preview} hasStore={store !== null} />
+      <ProductDetail product={product} phone={landing.content.contact.phone} publicUrl={getPublicLandingUrl(landing, `/productos/${product.slug}`)} catalogHref={catalogHref} preview={preview} hasStore={store !== null} />
       {store ? <StoreVisit store={store} /> : null}
       <RelatedProducts products={related} basePath={catalogHref} />
     </>;
@@ -40,8 +40,9 @@ export async function CatalogRoute({ identifier, preview, productSlug, searchPar
     const page = await getProductPage(landing.id, query, !preview, preview);
     body = <>
       <CatalogList title={config.title} description={config.description} page={{ ...page, products: page.products.map(toPublicProduct) }} query={query} basePath={catalogHref} preview={preview} />
-      {store ? <CatalogStoreCta store={store} phone={config.whatsappPhone} /> : null}
+      {store ? <CatalogStoreCta store={store} phone={landing.content.contact.phone} /> : null}
     </>;
   }
   return <CatalogShell content={landing.content} template={landing.template} siteName={landing.name} homeHref={homeHref} catalogHref={catalogHref} hasStore={store !== null} isProductDetail={productSlug !== null}>{body}</CatalogShell>;
 }
+

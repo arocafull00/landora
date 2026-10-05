@@ -18,7 +18,7 @@ export function NuvoletsHeroVariant({ content, heroRef, primaryCtaHref, secondar
         <div data-depth=".2" className="absolute left-[24%] top-[80%] hidden w-10 md:block md:w-14"><NuvoletsCloud className="nuvolets-drift w-full text-nuvolets-surface opacity-70 [animation-delay:-3s]" /></div>
       </div> : null}
       <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 pb-24 pt-10 md:grid-cols-2 md:gap-16 md:px-8 md:pb-32 md:pt-16">
-        <div className="order-2 md:order-1">
+        <div className="relative z-20 pb-28 md:order-1 md:pb-0">
           <p data-editor-id="hero:eyebrow" className="nuvolets-intro mb-5 text-site-chip font-semibold tracking-[.2em] [--d:.05s]">{content.hero.eyebrow}</p>
           <h1 data-editor-id="hero:title" className="nuvolets-title mb-6 whitespace-pre-line text-site-title-xl leading-[1.02]">{content.hero.title.split(/(\s+)/).map((word, index) => <NuvoletsHeroWord key={index} word={word} index={index / 2} />)}</h1>
           <p data-editor-id="hero:subtitle" className="nuvolets-intro mb-9 max-w-md whitespace-pre-line text-site-subtitle leading-relaxed opacity-85 [--d:.7s]">{content.hero.subtitle}</p>
@@ -28,9 +28,9 @@ export function NuvoletsHeroVariant({ content, heroRef, primaryCtaHref, secondar
             {config?.heroDetails.secondaryLabel ? <NuvoletsLink href={secondaryCtaHref} className="nuvolets-button nuvolets-button-ghost w-full gap-2 sm:w-auto"><Cloud aria-hidden size={18} className="shrink-0" />{config.heroDetails.secondaryLabel}</NuvoletsLink> : null}
           </div>
         </div>
-        <div className="relative order-1 md:order-2">
+        <div className="absolute inset-y-10 right-0 w-3/4 md:relative md:inset-auto md:order-2 md:w-auto">
           {config?.effects.decorations ? <div className="nuvolets-intro absolute -right-6 -top-8 z-0 w-28 [--d:.9s] md:-right-12 md:-top-12 md:w-44"><NuvoletsSun /></div> : null}
-          <div className="nuvolets-photo nuvolets-blob nuvolets-hero-photo relative z-10 aspect-[4/5] md:aspect-[5/6]"><AssetImage src={content.hero.image} alt={config?.heroDetails.alt ?? content.hero.title} fill priority sizes="(min-width:768px) 45vw, 90vw" className="object-cover" /></div>
+          <div className="nuvolets-photo nuvolets-blob nuvolets-hero-photo relative z-10 h-full md:aspect-[5/6] md:h-auto"><AssetImage src={content.hero.image} alt={config?.heroDetails.alt ?? content.hero.title} fill priority sizes="(min-width:768px) 45vw, 75vw" className="object-cover object-right opacity-30 md:object-center md:opacity-100" /></div>
           {config ? <NuvoletsMascot config={config.mascot} /> : null}
         </div>
       </div>

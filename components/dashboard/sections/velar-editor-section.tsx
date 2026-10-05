@@ -30,7 +30,6 @@ export function VelarEditorSection() {
     activeLandingId,
     isAdmin,
     landings,
-    updateSection,
     updateSectionItem,
     updateService,
     updateSpace,
@@ -43,7 +42,6 @@ export function VelarEditorSection() {
       activeLandingId: state.activeLandingId,
       isAdmin: state.isAdmin,
       landings: state.landings,
-      updateSection: state.updateSection,
       updateSectionItem: state.updateSectionItem,
       updateService: state.updateService,
       updateSpace: state.updateSpace,
@@ -169,11 +167,6 @@ export function VelarEditorSection() {
               <EditorSectionTitle
                 description="Los espacios mostrados en la landing."
                 title="Espacios"
-              />
-              <EditorTextField
-                label="Enlace a Google Maps"
-                onChange={(value) => updateSection(activeLanding.id, "mapsUrl", value)}
-                value={activeLanding.content.mapsUrl ?? ""}
               />
               <SectionHeadingFields
                 activeLanding={activeLanding}

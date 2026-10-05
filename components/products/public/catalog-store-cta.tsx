@@ -1,12 +1,13 @@
 import { Cloud } from "lucide-react";
 import type { CatalogStore } from "@/lib/catalog-presentation";
+import { getWhatsAppLink } from "@/lib/whatsapp-link";
 import { CatalogWave } from "./catalog-wave";
 import { StoreAction } from "./store-action";
 
 const COPY = { eyebrow: "¿Has visto algo que te gusta?", title: "Ven a verlo en persona", whatsapp: "Consultar por WhatsApp", message: "Hola, me gustaría consultar una prenda del catálogo." } as const;
 
 export function CatalogStoreCta({ store, phone }: { store: CatalogStore; phone: string }) {
-  const whatsappHref = phone ? `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(COPY.message)}` : "";
+  const whatsappHref = getWhatsAppLink(phone, COPY.message);
   return (
     <>
       <CatalogWave />

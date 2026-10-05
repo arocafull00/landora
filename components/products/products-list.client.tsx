@@ -7,7 +7,6 @@ import { ProductsActiveFilters } from "./components/products-active-filters";
 import { ProductsBatchBar } from "./components/products-batch-bar";
 import { ProductsHeader } from "./components/products-header";
 import { ProductsPagination } from "./components/products-pagination";
-import { ProductsStatusTabs } from "./components/products-status-tabs";
 import { ProductsTable } from "./components/products-table";
 import { ProductsToolbar } from "./components/products-toolbar";
 import { useProductCommand } from "./hooks/use-product-command";
@@ -56,9 +55,6 @@ export function ProductsListClient({
       <ProductsHeader total={total} onNew={openNew}>
         <ProductCategoriesClient landingId={landingId} categories={categories} />
       </ProductsHeader>
-      <div className="border-b border-line">
-        <ProductsStatusTabs status={query.status} onStatusChange={navigation.setStatus} />
-      </div>
       <ProductsToolbar
         key={`${query.q}:${query.sort}`}
         query={query}

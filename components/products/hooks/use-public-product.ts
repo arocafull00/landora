@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import type { PublicProductDto } from "@/lib/domain/dtos";
+import { getWhatsAppLink } from "@/lib/whatsapp-link";
 
 const MAX_TAGS = 6;
 
@@ -8,12 +9,12 @@ export function usePublicProduct(product: PublicProductDto, phone: string, publi
   const [variantId, setVariantId] = useState(() => product.variants.find((variant) => variant.available)?.id ?? product.variants[0]?.id ?? "");
   const [imageIndex, setImageIndex] = useState(0);
   const variant = product.variants.find((variant) => variant.id === variantId) ?? product.variants[0];
-  const price = variant?.priceCents ?? product.priceCents;
-  const previousPrice = variant?.previousPriceCents ?? product.previousPriceCents;
+  const price = product.priceCents;
+  const previousPrice = product.previousPriceCents;
   const discounted = previousPrice !== null && price !== null && previousPrice > price;
   const variantLabel = [variant?.size, variant?.color].filter(Boolean).join(" / ");
   const text = `Hola, quiero consultar por ${product.title}${variantLabel ? ` (${variantLabel})` : ""}${variant?.available ? "" : ". Aparece como agotado"}. ${publicUrl}`;
-  const whatsappHref = /^\+[1-9]\d{7,14}$/.test(phone) ? `https://wa.me/${phone.slice(1)}?text=${encodeURIComponent(text)}` : null;
+  const whatsappHref = getWhatsAppLink(phone, text) || null;
   const eyebrow = [product.category, product.brand].filter(Boolean).join(" · ");
   const titleWords = product.title.trim().split(/\s+/);
   const titleAccent = titleWords.length > 1 ? (titleWords.pop() ?? "") : "";

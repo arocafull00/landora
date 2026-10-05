@@ -6,7 +6,6 @@ export type ProductImage = { url: string; alt: string };
 export type ProductCharacteristic = { name: string; value: string };
 export type ProductVariantDto = {
   id: string; size: string; color: string; sku: string; stock: number | null;
-  priceCents: number | null; previousPriceCents: number | null;
 };
 export type ProductDto = {
   id: string; landingId: string; version: number; title: string; subtitle: string; slug: string;
@@ -14,13 +13,13 @@ export type ProductDto = {
   images: ProductImage[]; priceCents: number | null; previousPriceCents: number | null;
   material: string; composition: string; dimensions: string; weight: string;
   characteristics: ProductCharacteristic[]; variants: ProductVariantDto[];
-  status: "draft" | "published" | "archived"; createdAt: string; updatedAt: string;
+  status: "draft" | "published" | "archived"; hasPendingChanges: boolean; createdAt: string; updatedAt: string;
 };
-export type PublicProductDto = Omit<ProductDto, "landingId" | "version" | "status" | "variants"> & {
+export type PublicProductDto = Omit<ProductDto, "landingId" | "version" | "status" | "hasPendingChanges" | "variants"> & {
   variants: (Omit<ProductVariantDto, "stock" | "sku"> & { available: boolean })[];
 };
 export type CatalogConfigDto = {
-  enabled: boolean; adopted: boolean; title: string; description: string; whatsappPhone: string; version: number;
+  enabled: boolean; adopted: boolean; title: string; description: string; version: number;
 };
 export type ProductPageDto<T> = { products: T[]; total: number; page: number; categories: string[]; brands: string[]; sizes: string[] };
 

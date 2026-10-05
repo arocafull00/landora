@@ -18,6 +18,7 @@ import {
 import { relations, sql } from "drizzle-orm";
 import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
 import type { ProductCharacteristic, ProductImage } from "@/lib/domain/dtos";
+import type { ProductValues } from "@/lib/schemas/products";
 
 export const templateEnum = pgEnum("template", [
   "nuvolets",
@@ -498,6 +499,7 @@ export const storeProducts = pgTable("store_products", {
   material: text("material").notNull().default(""), composition: text("composition").notNull().default(""), dimensions: text("dimensions").notNull().default(""), weight: text("weight").notNull().default(""),
   characteristics: jsonb("characteristics").$type<ProductCharacteristic[]>().notNull().default([]),
   status: text("status").$type<"draft" | "published" | "archived">().notNull().default("draft"),
+  draftContent: jsonb("draft_content").$type<ProductValues>(),
   legacyId: text("legacy_id"), legacyAppearance: jsonb("legacy_appearance").$type<Pick<NuvoletsContent["products"][number], "badge" | "tone" | "colors">>(),
   sortOrder: integer("sort_order").notNull().default(0), favoriteOrder: integer("favorite_order").notNull().default(0), version: integer("version").notNull().default(1),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(), updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
@@ -507,6 +509,7 @@ export const storeProducts = pgTable("store_products", {
   unique("store_products_legacy_unique").on(table.landingId, table.legacyId),
   index("store_products_landing_status_idx").on(table.landingId, table.status),
   check("store_products_status_check", sql`${table.status} IN ('draft', 'published', 'archived')`),
+  check("store_products_draft_content_check", sql`${table.draftContent} IS NULL OR (jsonb_typeof(${table.draftContent}) = 'object' AND ${table.draftContent}->>'status' = 'draft')`),
   check("store_products_price_check", sql`${table.priceCents} IS NULL OR ${table.priceCents} >= 0`),
   check("store_products_previous_price_check", sql`${table.previousPriceCents} IS NULL OR (${table.priceCents} IS NOT NULL AND ${table.previousPriceCents} > ${table.priceCents})`),
   check("store_products_published_check", sql`${table.status} <> 'published' OR (${table.priceCents} IS NOT NULL AND jsonb_array_length(${table.images}) > 0)`),

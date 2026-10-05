@@ -8,7 +8,7 @@ import { NuvoletsLink } from "./nuvolets-link";
 import { NuvoletsFooterColumn } from "./nuvolets-footer-column";
 
 export function NuvoletsFooter({ brand, config, contact, copyrightYear, hidden }: { brand: string; config: NuvoletsContent["footer"]; contact: ContactContent; copyrightYear: number; hidden: string[] }) {
-  const socialLinks = [...config.socialLinks, ...(contact.socialLinks ?? []).map((link) => ({ id: link.platform, label: SOCIAL_PLATFORM_LABELS[link.platform], href: link.url }))];
+  const socialLinks = (contact.socialLinks ?? []).map((link) => ({ id: link.platform, label: SOCIAL_PLATFORM_LABELS[link.platform], href: link.url }));
   const contactHref = contact.email ? `mailto:${contact.email}` : contact.phone ? `tel:${contact.phone}` : "";
   return <footer id="contacto" data-section="contacto" className="mx-auto grid max-w-7xl gap-10 px-5 py-14 text-site-chip md:grid-cols-4 md:px-8">
     <div><p className="nuvolets-title mb-3 text-2xl tracking-widest">{brand}</p><p className="whitespace-pre-line leading-relaxed">{config.description}</p></div>

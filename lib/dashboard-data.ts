@@ -481,6 +481,7 @@ export const dashboardNavSections: DashboardNavSection[] = [
     id: "configuracion",
     label: "Configuración",
     items: [
+      { id: "company", label: "Datos de la empresa", icon: "briefcase" },
       { id: "domain", label: "Dominio", icon: "link" },
       { id: "analytics", label: "Analíticas", icon: "chart" },
     ],

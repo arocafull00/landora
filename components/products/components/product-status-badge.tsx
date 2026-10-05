@@ -8,12 +8,13 @@ const TONES = {
   archived: { badge: "bg-warning-subtle text-warning-strong", dot: "bg-warning" },
 } as const;
 
-export function ProductStatusBadge({ status }: { status: "draft" | "published" | "archived" }) {
-  const tone = TONES[status];
+export function ProductStatusBadge({ status, hasPendingChanges }: { status: "draft" | "published" | "archived"; hasPendingChanges: boolean }) {
+  const pending = status === "published" && hasPendingChanges;
+  const tone = pending ? TONES.archived : TONES[status];
   return (
     <Badge variant="outline" className={cn("gap-1.5 border-transparent px-2.5 py-1", tone.badge)}>
       <span className={cn("size-1.5 rounded-full", tone.dot)} aria-hidden />
-      {PRODUCTS_LIST_COPY.status[status]}
+      {pending ? PRODUCTS_LIST_COPY.status.pending : PRODUCTS_LIST_COPY.status[status]}
     </Badge>
   );
 }

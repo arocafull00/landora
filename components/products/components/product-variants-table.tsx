@@ -5,7 +5,7 @@ import type { ProductFormValues, ProductValues } from "@/lib/schemas/products";
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ProductVariantRow } from "./product-variant-row";
 
-const COPY = { variant: "Variante", sku: "SKU", stock: "Stock", price: "Precio", actions: "Acciones" } as const;
+const COPY = { variant: "Variante", sku: "SKU", stock: "Stock", actions: "Acciones" } as const;
 const HEAD_CLASS = "h-10 px-3 text-[11px] font-medium tracking-wide text-ink-faint uppercase";
 
 export function ProductVariantsTable({
@@ -27,7 +27,6 @@ export function ProductVariantsTable({
             <TableHead className={`${HEAD_CLASS} px-4`}>{COPY.variant}</TableHead>
             <TableHead className={HEAD_CLASS}>{COPY.sku}</TableHead>
             <TableHead className={HEAD_CLASS}>{COPY.stock}</TableHead>
-            <TableHead className={`${HEAD_CLASS} text-right`}>{COPY.price}</TableHead>
             <TableHead className={HEAD_CLASS}>
               <span className="sr-only">{COPY.actions}</span>
             </TableHead>

@@ -1,5 +1,4 @@
 export const PRODUCTS_LIST_COPY = {
-  configure: "Configurar catálogo",
   new: "Nuevo producto",
   search: "Buscar por nombre, SKU o categoría",
   searchLabel: "Buscar productos",
@@ -10,7 +9,7 @@ export const PRODUCTS_LIST_COPY = {
   productsCount: "productos",
   clearFilters: "Limpiar",
   activeFilters: "Filtros:",
-  tabs: {
+  statusFilters: {
     all: "Todos",
     published: "Publicados",
     draft: "Borradores",
@@ -26,6 +25,7 @@ export const PRODUCTS_LIST_COPY = {
   },
   status: {
     published: "Publicado",
+    pending: "Publicado · cambios pendientes",
     draft: "Borrador",
     archived: "Archivado",
   },
@@ -47,6 +47,7 @@ export const PRODUCTS_LIST_COPY = {
     pending: "Stock pendiente",
   },
   filterLabels: {
+    status: "Estado",
     category: "Categoría",
     brand: "Marca",
     size: "Talla",

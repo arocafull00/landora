@@ -7,9 +7,9 @@ import { saveCatalogAction } from "@/app/actions/products";
 import { catalogConfigSchema, type CatalogConfigValues } from "@/lib/schemas/products";
 import type { CatalogConfigDto } from "@/lib/domain/dtos";
 
-export function useCatalogConfig(landingId: string, config: CatalogConfigDto, suggestedPhone: string) {
+export function useCatalogConfig(landingId: string, config: CatalogConfigDto) {
   const router = useRouter();
-  const form = useForm<CatalogConfigValues>({ resolver: zodResolver(catalogConfigSchema), defaultValues: { enabled: config.enabled, title: config.title, description: config.description, whatsappPhone: config.version ? config.whatsappPhone : suggestedPhone } });
+  const form = useForm<CatalogConfigValues>({ resolver: zodResolver(catalogConfigSchema), defaultValues: { enabled: config.enabled, title: config.title, description: config.description } });
   const submit = form.handleSubmit(async (values) => {
     try {
       const result = await saveCatalogAction({ landingId, version: config.version, config: values });
