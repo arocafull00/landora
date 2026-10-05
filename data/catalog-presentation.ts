@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { cacheLife, cacheTag } from "next/cache";
 import { getCatalogConfig, getCatalogHighlights } from "@/data/products";
 import { hasProductsAccess } from "@/data/product-access";
 import { formatProductPrice } from "@/lib/products";
@@ -16,3 +17,15 @@ export const getCatalogPresentation = cache(async (landingId: string, userId: st
     favoriteIds: rows.toSorted((a, b) => a.favoriteOrder - b.favoriteOrder).flatMap((row) => row.featured ? [row.legacyId ?? row.product.id] : []),
   };
 });
+
+export async function getPublicCatalogPresentation(
+  landingId: string,
+  userId: string,
+): Promise<CatalogPresentation> {
+  "use cache";
+
+  cacheLife("minutes");
+  cacheTag(`catalog:${landingId}`);
+
+  return getCatalogPresentation(landingId, userId, false);
+}

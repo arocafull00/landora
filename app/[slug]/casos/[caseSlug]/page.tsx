@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SignalCasePageContent } from "@/components/templates/signal/signal-case-page-content";
-import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
+import { PublicLandingLoading } from "@/components/templates/public-landing-loading";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { resolveGalleryItems } from "@/lib/gallery-content";
 import { findSignalCaseBySlug } from "@/lib/signal-cases";
@@ -44,7 +44,7 @@ export async function generateMetadata({
 
 export default function PublicSignalCasePage({ params }: CasePageProps) {
   return (
-    <Suspense fallback={<PublicLandingSkeleton />}>
+    <Suspense fallback={<PublicLandingLoading />}>
       {params.then(({ slug, caseSlug }) => (
         <SignalCasePageContent caseSlug={caseSlug} slug={slug} />
       ))}

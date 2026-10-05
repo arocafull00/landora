@@ -5,7 +5,7 @@ import { getProductBySlug } from "@/data/products";
 import { catalogRouteSchema } from "@/lib/schemas/products";
 import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
 import { CatalogRoute } from "@/components/products/public/catalog-route";
-import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
+import { PublicLandingLoading } from "@/components/templates/public-landing-loading";
 type Props = { params: Promise<{ slug: string; productSlug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const parsed = catalogRouteSchema.safeParse(await params);
@@ -15,4 +15,4 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(context.landing.id, parsed.data.productSlug, false);
   return product ? createPublishedSiteMetadata({ landing: context.landing, title: product.title, description: product.subtitle || product.description.slice(0, 300), pathname: `/productos/${product.slug}`, image: product.images[0]?.url }) : {};
 }
-export default function PublicProductPage({ params }: Props) { return <Suspense fallback={<PublicLandingSkeleton />}>{params.then(({ slug, productSlug }) => <CatalogRoute identifier={slug} productSlug={productSlug} preview={false} searchParams={{}} />)}</Suspense>; }
+export default function PublicProductPage({ params }: Props) { return <Suspense fallback={<PublicLandingLoading />}>{params.then(({ slug, productSlug }) => <CatalogRoute identifier={slug} productSlug={productSlug} preview={false} searchParams={{}} />)}</Suspense>; }

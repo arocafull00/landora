@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { PreviewLayoutContent } from "@/components/dashboard/preview-layout-content";
-import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
+import { PublicLandingLoading } from "@/components/templates/public-landing-loading";
 
 export default function PreviewLayout({
   children,
@@ -10,7 +10,7 @@ export default function PreviewLayout({
   params: Promise<{ id: string }>;
 }) {
   return (
-    <Suspense fallback={<PublicLandingSkeleton />}>
+    <Suspense fallback={<PublicLandingLoading />}>
       <PreviewLayoutContent params={params}>{children}</PreviewLayoutContent>
     </Suspense>
   );

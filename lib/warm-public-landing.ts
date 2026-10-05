@@ -3,7 +3,7 @@ import "server-only";
 import { logger } from "@/lib/logger";
 import { getPublicLandingUrl } from "@/lib/public-site-url";
 
-const WARMUP_TIMEOUT_MS = 5_000;
+const WARMUP_TIMEOUT_MS = 15_000;
 
 async function warmPublicPath(
   landing: {
@@ -23,6 +23,8 @@ async function warmPublicPath(
       `Landing warmup failed for ${pathname || "/"} with status ${response.status}`,
     );
   }
+
+  await response.arrayBuffer();
 }
 
 export async function warmPublicLanding(landing: {

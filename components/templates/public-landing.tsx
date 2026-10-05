@@ -7,7 +7,7 @@ import type { PublicTemplateRenderProps } from "@/lib/public-render-contracts";
 import { getCopyrightYear } from "@/lib/copyright-year";
 import { getPublicRenderTime } from "@/lib/public-render-time";
 import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
-import { getCatalogPresentation } from "@/data/catalog-presentation";
+import { getPublicCatalogPresentation } from "@/data/catalog-presentation";
 import { applyCatalogPresentation } from "@/lib/catalog-presentation";
 import { syncCompanyContent } from "@/lib/company-details";
 
@@ -65,7 +65,7 @@ export async function PublicLanding({
     resolveTenantBySlug(landing.slug),
     getCopyrightYear(),
     getPublicRenderTime(),
-    getCatalogPresentation(landing.id, landing.userId, false),
+    getPublicCatalogPresentation(landing.id, landing.userId),
   ]);
   const content = syncCompanyContent(applyCatalogPresentation(landing.content, catalog));
   const template = await renderPublicTemplate(landing.template, {

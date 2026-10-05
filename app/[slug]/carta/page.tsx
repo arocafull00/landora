@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { RistoranteMenuPageContent } from "@/components/templates/ristorante/ristorante-menu-page-content";
-import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
+import { PublicLandingLoading } from "@/components/templates/public-landing-loading";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
@@ -41,7 +41,7 @@ export async function generateMetadata({
 
 export default function PublicCartaPage({ params }: CartaPageProps) {
   return (
-    <Suspense fallback={<PublicLandingSkeleton />}>
+    <Suspense fallback={<PublicLandingLoading />}>
       {params.then(({ slug }) => (
         <RistoranteMenuPageContent slug={slug} />
       ))}

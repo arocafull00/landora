@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { BlogListPageContent } from "@/components/blog/blog-list-page-content";
-import { PublicLandingSkeleton } from "@/components/templates/public-landing-skeleton";
+import { PublicLandingLoading } from "@/components/templates/public-landing-loading";
 import { getBlogConfig } from "@/data/blog";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { createPublishedSiteMetadata } from "@/lib/public-site-metadata";
@@ -31,7 +31,7 @@ export async function generateMetadata({
 
 export default function PublicBlogListPage({ params }: BlogListPageProps) {
   return (
-    <Suspense fallback={<PublicLandingSkeleton />}>
+    <Suspense fallback={<PublicLandingLoading />}>
       {params.then(({ slug }) => (
         <BlogListPageContent slug={slug} />
       ))}
