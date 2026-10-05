@@ -4,6 +4,18 @@ import type { CSSProperties } from "react";
 
 export type CatalogPresentation = { enabled: boolean; adopted: boolean; href: string; products: NuvoletsProduct[]; favoriteIds: string[] };
 
+export type CatalogStore = { eyebrow: string; title: string; text: string; image: string; alt: string; primaryLabel: string; primaryHref: string; secondaryLabel: string; secondaryHref: string };
+
+const STORE_COPY = { eyebrow: "Visítanos", title: "Ven a verlo, tocarlo y probarlo en tienda", directions: "Cómo llegar" } as const;
+
+export function getCatalogStore(content: LandingContent): CatalogStore | null {
+  const store = content.nuvolets?.store;
+  if (store) return { eyebrow: store.eyebrow, title: store.title, text: store.text, image: store.image, alt: store.alt, primaryLabel: store.ctaLabel, primaryHref: store.mapsUrl, secondaryLabel: store.secondaryLabel, secondaryHref: store.secondaryHref };
+  const address = content.contact.address.trim();
+  if (!address) return null;
+  return { eyebrow: STORE_COPY.eyebrow, title: STORE_COPY.title, text: address, image: content.hero.image, alt: content.brand, primaryLabel: STORE_COPY.directions, primaryHref: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, secondaryLabel: "", secondaryHref: "" };
+}
+
 export function getCatalogBrandStyle(content: LandingContent): CSSProperties | undefined {
   const colors = content.nuvolets?.colors;
   if (!colors?.enabled) return undefined;

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Landora · Editor producto</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{brand:'#0050cb',brand50:'#eef4ff'}}}}</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-200 text-slate-900">
+<div class="min-h-screen bg-slate-950/15 flex justify-end">
+  <section class="w-full max-w-[980px] min-h-screen bg-white shadow-2xl flex flex-col">
+    <header class="h-[72px] border-b border-slate-200 px-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-sky-100 border border-slate-200 flex items-center justify-center"><i data-lucide="shirt" class="w-5 h-5 text-slate-400"></i></div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-semibold">Conjunto Nube</h1>
+            <span class="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600">● Borrador</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Edita contenido, imágenes y variantes</p>
+        </div>
+      </div>
+      <button class="p-2 rounded-lg hover:bg-slate-100"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </header>
+
+    <div class="flex-1 min-h-0 flex">
+      <aside class="w-[210px] border-r border-slate-200 bg-slate-50 p-3">
+        <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold px-3 py-2">Producto</div>
+        <nav class="space-y-1">
+          <button class="nav w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-brand50 text-brand text-sm font-medium" data-target="general"><i data-lucide="info" class="w-4 h-4"></i>Información</button>
+          <button class="nav w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 text-sm" data-target="images"><i data-lucide="images" class="w-4 h-4"></i>Imágenes<span class="ml-auto text-xs text-slate-400">3</span></button>
+          <button class="nav w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 text-sm" data-target="variants"><i data-lucide="boxes" class="w-4 h-4"></i>Variantes<span class="ml-auto text-xs text-slate-400">3</span></button>
+          <button class="nav w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 text-sm" data-target="attrs"><i data-lucide="list-plus" class="w-4 h-4"></i>Características</button>
+          <button class="nav w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 text-sm" data-target="seo"><i data-lucide="search" class="w-4 h-4"></i>SEO</button>
+        </nav>
+        <div class="border-t border-slate-200 my-4"></div>
+        <div class="px-3">
+          <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-2">Estado</div>
+          <select class="w-full h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm"><option>Borrador</option><option>Publicado</option><option>Archivado</option></select>
+        </div>
+      </aside>
+
+      <main class="flex-1 overflow-auto bg-[#fbfcfe]">
+        <div class="max-w-[720px] mx-auto p-7">
+
+          <section id="general" class="panel">
+            <h2 class="text-xl font-semibold">Información general</h2>
+            <p class="text-sm text-slate-500 mt-1 mb-6">La información principal que verá el cliente.</p>
+
+            <div class="space-y-5">
+              <div class="bg-white border border-slate-200 rounded-xl p-5 grid grid-cols-2 gap-4">
+                <label class="col-span-2 text-sm font-medium">Título<input value="Conjunto Nube" class="mt-1.5 w-full h-10 rounded-lg border border-slate-200 px-3 font-normal"></label>
+                <label class="col-span-2 text-sm font-medium">Subtítulo<input value="Suave, cómodo y pensado para cada aventura." class="mt-1.5 w-full h-10 rounded-lg border border-slate-200 px-3 font-normal"></label>
+                <label class="col-span-2 text-sm font-medium">Descripción<textarea rows="5" class="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2.5 font-normal resize-none">Conjunto cómodo para bebé confeccionado en tejido suave.</textarea></label>
+              </div>
+
+              <div class="bg-white border border-slate-200 rounded-xl p-5">
+                <h3 class="text-sm font-semibold mb-4">Organización</h3>
+                <div class="grid grid-cols-2 gap-4">
+                  <label class="text-sm font-medium">Categoría<select class="mt-1.5 w-full h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal"><option>Ropa bebé</option></select></label>
+                  <label class="text-sm font-medium">Marca<select class="mt-1.5 w-full h-10 rounded-lg border border-slate-200 bg-white px-3 font-normal"><option>Nuvolets</option></select></label>
+                  <label class="col-span-2 text-sm font-medium">Etiquetas<div class="mt-1.5 min-h-10 rounded-lg border border-slate-200 px-2 py-1.5 flex gap-1.5 items-center"><span class="rounded bg-slate-100 px-2 py-1 text-xs">bebé ×</span><span class="rounded bg-slate-100 px-2 py-1 text-xs">algodón ×</span><input placeholder="Añadir etiqueta…" class="flex-1 outline-none text-sm px-1"></div></label>
+                </div>
+              </div>
+
+              <div class="bg-white border border-slate-200 rounded-xl p-5">
+                <div class="flex items-center justify-between">
+                  <div><h3 class="text-sm font-semibold">Producto destacado</h3><p class="text-xs text-slate-500 mt-1">Se mostrará con prioridad en la tienda.</p></div>
+                  <button class="w-11 h-6 rounded-full bg-slate-200 relative"><span class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow"></span></button>
+                </div>
+              </div>
+
+              <div class="bg-white border border-slate-200 rounded-xl p-5">
+                <div class="mb-4"><h3 class="text-sm font-semibold">Precio base</h3><p class="text-xs text-slate-500 mt-1">Se usa cuando una variante no tiene precio propio.</p></div>
+                <div class="grid grid-cols-2 gap-4">
+                  <label class="text-sm font-medium">Precio (€)<input value="29,90" class="mt-1.5 w-full h-10 rounded-lg border border-slate-200 px-3 font-normal"></label>
+                  <label class="text-sm font-medium">Precio anterior (€)<input placeholder="Opcional" class="mt-1.5 w-full h-10 rounded-lg border border-slate-200 px-3 font-normal"></label>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="images" class="panel hidden">
+            <h2 class="text-xl font-semibold">Imágenes</h2>
+            <p class="text-sm text-slate-500 mt-1 mb-6">La primera imagen será la portada del producto.</p>
+            <div class="bg-white border border-slate-200 rounded-xl p-5">
+              <div class="grid grid-cols-3 gap-4">
+                <div>
+                  <div class="aspect-square rounded-xl border-2 border-brand bg-sky-100 flex items-center justify-center relative"><i data-lucide="shirt" class="w-9 h-9 text-slate-400"></i><span class="absolute top-2 left-2 bg-brand text-white rounded px-2 py-1 text-[11px]">Principal</span></div>
+                  <input value="Bebé con camisa de cuadros" class="mt-2 w-full h-9 rounded-lg border border-slate-200 px-2 text-xs">
+                </div>
+                <div><div class="aspect-square rounded-xl border border-slate-200 bg-slate-100 flex items-center justify-center"><i data-lucide="image" class="w-8 h-8 text-slate-300"></i></div><input placeholder="Texto alternativo" class="mt-2 w-full h-9 rounded-lg border border-slate-200 px-2 text-xs"></div>
+                <button class="aspect-square rounded-xl border border-dashed border-slate-300 bg-slate-50 hover:bg-slate-100 flex flex-col items-center justify-center gap-2 text-slate-500"><i data-lucide="plus" class="w-5 h-5"></i><span class="text-xs font-medium">Añadir imagen</span></button>
+              </div>
+              <p class="text-xs text-slate-400 mt-4">Arrastra para reordenar. JPG, PNG o WebP.</p>
+            </div>
+          </section>
+
+          <section id="variants" class="panel hidden">
+            <div class="flex items-start justify-between mb-6">
+              <div><h2 class="text-xl font-semibold">Variantes e inventario</h2><p class="text-sm text-slate-500 mt-1">Tallas, colores, SKU, stock y precios.</p></div>
+              <button class="h-9 px-3 rounded-lg bg-brand text-white text-sm font-semibold flex items-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i>Añadir variante</button>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+              <table class="w-full">
+                <thead class="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-400"><tr><th class="text-left px-4 py-3">Variante</th><th class="text-left px-3 py-3">SKU</th><th class="text-left px-3 py-3">Stock</th><th class="text-right px-3 py-3">Precio</th><th></th></tr></thead>
+                <tbody class="divide-y divide-slate-200">
+                  <tr><td class="px-4 py-3"><div class="font-medium text-sm">M · Azul</div><div class="text-xs text-slate-400">Talla M / Azul</div></td><td class="px-3 py-3 text-sm text-slate-600">NU-M-AZ</td><td class="px-3 py-3 text-sm">12</td><td class="px-3 py-3 text-sm text-right font-medium">30,00 €</td><td class="px-3"><button><i data-lucide="more-horizontal" class="w-4 h-4"></i></button></td></tr>
+                  <tr><td class="px-4 py-3"><div class="font-medium text-sm">S · Azul</div><div class="text-xs text-slate-400">Talla S / Azul</div></td><td class="px-3 py-3 text-sm text-slate-600">NU-S-AZ</td><td class="px-3 py-3 text-sm text-amber-600">3</td><td class="px-3 py-3 text-sm text-right font-medium">29,90 €</td><td class="px-3"><button><i data-lucide="more-horizontal" class="w-4 h-4"></i></button></td></tr>
+                  <tr><td class="px-4 py-3"><div class="font-medium text-sm">L · Verde</div><div class="text-xs text-slate-400">Talla L / Verde</div></td><td class="px-3 py-3 text-sm text-slate-600">NU-L-VE</td><td class="px-3 py-3 text-sm text-red-600">0</td><td class="px-3 py-3 text-sm text-right font-medium">31,90 €</td><td class="px-3"><button><i data-lucide="more-horizontal" class="w-4 h-4"></i></button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="attrs" class="panel hidden">
+            <h2 class="text-xl font-semibold">Características</h2><p class="text-sm text-slate-500 mt-1 mb-6">Información adicional del producto.</p>
+            <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+              <div class="grid grid-cols-2 gap-4"><label class="text-sm font-medium">Característica<input value="Material" class="mt-1.5 h-10 w-full rounded-lg border border-slate-200 px-3 font-normal"></label><label class="text-sm font-medium">Valor<input value="Algodón orgánico" class="mt-1.5 h-10 w-full rounded-lg border border-slate-200 px-3 font-normal"></label></div>
+              <div class="grid grid-cols-2 gap-4"><label class="text-sm font-medium">Característica<input value="Composición" class="mt-1.5 h-10 w-full rounded-lg border border-slate-200 px-3 font-normal"></label><label class="text-sm font-medium">Valor<input value="100% algodón" class="mt-1.5 h-10 w-full rounded-lg border border-slate-200 px-3 font-normal"></label></div>
+            </div>
+          </section>
+
+          <section id="seo" class="panel hidden">
+            <h2 class="text-xl font-semibold">SEO</h2><p class="text-sm text-slate-500 mt-1 mb-6">Cómo aparecerá el producto en buscadores.</p>
+            <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+              <label class="block text-sm font-medium">URL<div class="mt-1.5 flex"><span class="h-10 px-3 rounded-l-lg border border-r-0 border-slate-200 bg-slate-50 flex items-center text-sm text-slate-400">/productos/</span><input value="conjunto-nube" class="h-10 flex-1 rounded-r-lg border border-slate-200 px-3 font-normal"></div></label>
+              <label class="block text-sm font-medium">Título SEO<input value="Conjunto Nube para bebé | Nuvolets" class="mt-1.5 w-full h-10 rounded-lg border border-slate-200 px-3 font-normal"></label>
+              <label class="block text-sm font-medium">Descripción SEO<textarea rows="3" class="mt-1.5 w-full rounded-lg border border-slate-200 px-3 py-2.5 font-normal resize-none">Conjunto suave y cómodo para bebé, disponible en varias tallas y colores.</textarea></label>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <footer class="h-[68px] border-t border-slate-200 px-6 flex items-center justify-between">
+      <div class="text-xs text-slate-500 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-500"></span>Cambios guardados automáticamente</div>
+      <div class="flex gap-2">
+        <button class="h-10 px-4 rounded-lg border border-slate-200 bg-white text-sm font-medium">Cancelar</button>
+        <button class="h-10 px-4 rounded-lg border border-slate-200 bg-white text-sm font-medium flex items-center gap-2"><i data-lucide="eye" class="w-4 h-4"></i>Vista previa</button>
+        <button class="h-10 px-5 rounded-lg bg-brand text-white text-sm font-semibold">Guardar</button>
+      </div>
+    </footer>
+  </section>
+</div>
+
+<script>
+lucide.createIcons();
+const nav=document.querySelectorAll('.nav'), panels=document.querySelectorAll('.panel');
+nav.forEach(btn=>btn.onclick=()=>{
+  nav.forEach(x=>{x.classList.remove('bg-brand50','text-brand','font-medium');x.classList.add('text-slate-600')});
+  btn.classList.add('bg-brand50','text-brand','font-medium');btn.classList.remove('text-slate-600');
+  panels.forEach(x=>x.classList.add('hidden'));
+  document.getElementById(btn.dataset.target).classList.remove('hidden');
+});
+</script>
+</body></html>

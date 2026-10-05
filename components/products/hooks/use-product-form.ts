@@ -1,5 +1,5 @@
 "use client";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, type FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -14,7 +14,7 @@ function defaults(product: ProductDto | null): ProductFormValues {
   const amount = (value: number | null) => value === null ? "" : (value / 100).toFixed(2);
   return { title: values.title, subtitle: values.subtitle, slug: values.slug, description: values.description, category: values.category, brand: values.brand, tags: values.tags.join(", "), featured: values.featured, images: values.images, priceCents: amount(values.priceCents), previousPriceCents: amount(values.previousPriceCents), material: values.material, composition: values.composition, dimensions: values.dimensions, weight: values.weight, characteristics: values.characteristics, status: values.status, variants: values.variants.map((variant) => ({ ...variant, stock: variant.stock === null ? "" : String(variant.stock), priceCents: amount(variant.priceCents), previousPriceCents: amount(variant.previousPriceCents) })) };
 }
-export function useProductForm(landingId: string, product: ProductDto | null, onSaved: () => void) {
+export function useProductForm(landingId: string, product: ProductDto | null, onSaved: () => void, onInvalid?: (errors: FieldErrors<ProductFormValues>) => void) {
   const router = useRouter();
   const [defaultValues] = useState(() => defaults(product));
   const form = useForm<ProductFormValues, unknown, ProductValues>({ resolver: zodResolver(productFormSchema), defaultValues });
@@ -29,7 +29,7 @@ export function useProductForm(landingId: string, product: ProductDto | null, on
       router.refresh();
       onSaved();
     } catch { toast.error("No se pudo guardar el producto"); }
-  }, () => toast.error("Revisa los campos del producto"));
+  }, (errors) => { toast.error("Revisa los campos del producto"); onInvalid?.(errors); });
   const generateSlug = () => { if (!form.getValues("slug")) form.setValue("slug", productSlug(form.getValues("title")), { shouldDirty: true }); };
   const addVariant = () => variants.append({ id: crypto.randomUUID(), size: "", color: "", sku: "", stock: "", priceCents: "", previousPriceCents: "" });
   const addImage = () => images.append({ url: "", alt: "" });

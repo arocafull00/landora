@@ -2,12 +2,12 @@
 
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { ProductFormValues } from "@/lib/schemas/products";
+import { ProductEditorCard } from "./product-editor-card";
 import { ProductField } from "./product-field";
 
 const COPY = {
   title: "Título",
   subtitle: "Subtítulo",
-  slug: "URL de la ficha",
   description: "Descripción",
 } as const;
 
@@ -21,23 +21,21 @@ export function ProductInformationGeneralForm({
   generateSlug: () => void;
 }) {
   return (
-    <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <ProductField label={COPY.title} binding={register("title")} onBlur={generateSlug} error={errors.title?.message} />
-        <ProductField label={COPY.subtitle} binding={register("subtitle")} error={errors.subtitle?.message} />
-      </div>
-      <ProductField label={COPY.slug} binding={register("slug")} error={errors.slug?.message} />
-      <div className="space-y-2">
+    <ProductEditorCard>
+      <ProductField label={COPY.title} binding={register("title")} onBlur={generateSlug} error={errors.title?.message} />
+      <ProductField label={COPY.subtitle} binding={register("subtitle")} error={errors.subtitle?.message} />
+      <div className="space-y-1.5">
         <label htmlFor="product-description" className="text-sm font-medium">
           {COPY.description}
         </label>
         <textarea
           id="product-description"
+          rows={5}
           {...register("description")}
-          className="min-h-36 w-full rounded-md border border-border bg-surface p-3 outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="min-h-36 w-full resize-none rounded-md border border-input bg-surface p-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary"
         />
         {errors.description ? <p className="text-sm text-danger">{errors.description.message}</p> : null}
       </div>
-    </div>
+    </ProductEditorCard>
   );
 }

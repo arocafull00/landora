@@ -7,6 +7,11 @@ import { getPreviewLandingPath, getPublicLandingUrl } from "@/lib/public-site-ur
 import { CatalogShell } from "./catalog-shell";
 import { CatalogList } from "./catalog-list";
 import { ProductDetail } from "./product-detail";
+import { StoreVisit } from "./store-visit";
+import { RelatedProducts } from "./related-products";
+import { getCatalogStore } from "@/lib/catalog-presentation";
+
+const RELATED_LIMIT = 3;
 
 export async function CatalogRoute({ identifier, preview, productSlug, searchParams }: { identifier: string; preview: boolean; productSlug: string | null; searchParams: Record<string, string | string[] | undefined> }) {
   if (productSlug && !catalogRouteSchema.shape.productSlug.safeParse(productSlug).success) notFound();
@@ -19,7 +24,14 @@ export async function CatalogRoute({ identifier, preview, productSlug, searchPar
   if (productSlug) {
     const product = await getProductBySlug(landing.id, productSlug, preview);
     if (!product) notFound();
-    body = <ProductDetail product={product} phone={config.whatsappPhone} publicUrl={getPublicLandingUrl(landing, `/productos/${product.slug}`)} catalogHref={catalogHref} preview={preview} />;
+    const store = getCatalogStore(landing.content);
+    const relatedPage = await getProductPage(landing.id, { ...catalogQuerySchema.parse({}), category: product.category }, !preview, preview);
+    const related = relatedPage.products.filter((item) => item.id !== product.id).slice(0, RELATED_LIMIT).map(toPublicProduct);
+    body = <>
+      <ProductDetail product={product} phone={config.whatsappPhone} publicUrl={getPublicLandingUrl(landing, `/productos/${product.slug}`)} catalogHref={catalogHref} preview={preview} hasStore={store !== null} />
+      {store ? <StoreVisit store={store} /> : null}
+      <RelatedProducts products={related} basePath={catalogHref} />
+    </>;
   } else {
     const parsed = catalogQuerySchema.safeParse(searchParams);
     if (!parsed.success) notFound();

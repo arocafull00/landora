@@ -1,32 +1,22 @@
 "use client";
 
-import Link from "next/link";
-import { Controller } from "react-hook-form";
+import { useWatch } from "react-hook-form";
 import type { ProductDto } from "@/lib/domain/dtos";
-import {
-  Dialog,
-  DialogDescription,
-  DialogHeader,
-  DialogSheetContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Dialog, DialogSheetContent } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { useProductEditorSection } from "../hooks/use-product-editor-section";
 import { useProductForm } from "../hooks/use-product-form";
-import { OptionsSelect } from "./options-select";
 import { PRODUCT_DRAWER_COPY } from "../product-drawer-copy";
-import { ProductEditorSection } from "./product-editor-section";
-import { ProductInformationGeneralForm } from "./product-information-general-form";
-import { ProductInformationDataForm } from "./product-information-data-form";
-import { ProductImageForm } from "./product-image-form";
-import { ProductVariantForm } from "./product-variant-form";
-import { ProductCharacteristicForm } from "./product-characteristic-form";
-
-const STATES = [
-  { value: "draft", label: "Borrador" },
-  { value: "published", label: "Publicado" },
-  { value: "archived", label: "Archivado" },
-];
+import { invalidProductSections } from "../product-editor-sections";
+import { ProductCharacteristicsPanel } from "./product-characteristics-panel";
+import { ProductEditorFooter } from "./product-editor-footer";
+import { ProductEditorHeader } from "./product-editor-header";
+import { ProductEditorSidebar } from "./product-editor-sidebar";
+import { ProductGeneralPanel } from "./product-general-panel";
+import { ProductImagesPanel } from "./product-images-panel";
+import { ProductSeoPanel } from "./product-seo-panel";
+import { ProductStatusField } from "./product-status-field";
+import { ProductVariantsPanel } from "./product-variants-panel";
 
 const PRODUCT_FORM_ID = "product-form";
 
@@ -45,8 +35,13 @@ export function ProductDrawer({
   categories: string[];
   brands: string[];
 }) {
+  const { section, setSection, showFirstInvalid } = useProductEditorSection();
   const { form, images, variants, characteristics, submit, generateSlug, addVariant, addImage, addCharacteristic } =
-    useProductForm(landingId, product, () => onOpenChange(false));
+    useProductForm(landingId, product, () => onOpenChange(false), showFirstInvalid);
+  const title = useWatch({ control: form.control, name: "title" });
+  const status = useWatch({ control: form.control, name: "status" });
+  const { errors, isSubmitting, isDirty } = form.formState;
+  const isEdit = product !== null;
   const close = () => {
     form.reset();
     onOpenChange(false);
@@ -55,124 +50,75 @@ export function ProductDrawer({
     if (!next) form.reset();
     onOpenChange(next);
   };
-  const { errors, isSubmitting } = form.formState;
-  const isEdit = product !== null;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogSheetContent showCloseButton>
-        <DialogHeader className="shrink-0 px-6 py-4 text-left">
-          <DialogTitle>{isEdit ? PRODUCT_DRAWER_COPY.editTitle : PRODUCT_DRAWER_COPY.newTitle}</DialogTitle>
-          <DialogDescription>
-            {isEdit ? PRODUCT_DRAWER_COPY.editDescription : PRODUCT_DRAWER_COPY.newDescription}
-          </DialogDescription>
-        </DialogHeader>
-        <Separator className="shrink-0 bg-border-subtle" />
-        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
-          <form id={PRODUCT_FORM_ID} onSubmit={submit}>
-            <fieldset disabled={isSubmitting} className="min-w-0 border-0 p-0">
-              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionGeneral}>
-                <ProductInformationGeneralForm register={form.register} errors={errors} generateSlug={generateSlug} />
-              </ProductEditorSection>
-              <Separator className="my-8 bg-border-subtle" />
-              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionData}>
-                <ProductInformationDataForm
+      <DialogSheetContent showCloseButton={false} className="max-w-[980px]">
+        <ProductEditorHeader
+          title={title.trim() || (isEdit ? PRODUCT_DRAWER_COPY.editTitle : PRODUCT_DRAWER_COPY.newTitle)}
+          description={isEdit ? PRODUCT_DRAWER_COPY.editDescription : PRODUCT_DRAWER_COPY.newDescription}
+          status={status}
+        />
+        <Separator className="shrink-0" />
+        <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+          <ProductEditorSidebar
+            section={section}
+            counts={{ images: images.fields.length, variants: variants.fields.length }}
+            invalidSections={invalidProductSections(errors)}
+            onSelect={setSection}
+          >
+            <ProductStatusField control={form.control} />
+          </ProductEditorSidebar>
+          <Separator className="md:hidden" />
+          <Separator orientation="vertical" className="hidden md:block" />
+          <main className="min-h-0 min-w-0 flex-1 overflow-y-auto bg-canvas">
+            <form id={PRODUCT_FORM_ID} onSubmit={submit} className="mx-auto max-w-180 p-4 md:p-7">
+              <fieldset disabled={isSubmitting} className="min-w-0 border-0 p-0">
+                <ProductGeneralPanel
+                  active={section === "general"}
                   register={form.register}
                   control={form.control}
                   errors={errors}
                   categories={categories}
                   brands={brands}
+                  generateSlug={generateSlug}
                 />
-              </ProductEditorSection>
-              <Separator className="my-8 bg-border-subtle" />
-              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionImages}>
-                <div>
-                  {images.fields.map((image, index) => (
-                    <ProductImageForm
-                      key={image.id}
-                      index={index}
-                      total={images.fields.length}
-                      control={form.control}
-                      register={form.register}
-                      errors={errors.images}
-                      move={images.move}
-                      remove={() => images.remove(index)}
-                    />
-                  ))}
-                </div>
-                <Button type="button" variant="outline" className="mt-2" disabled={images.fields.length >= 20} onClick={addImage}>
-                  {PRODUCT_DRAWER_COPY.addImage}
-                </Button>
-                {errors.images?.root?.message || errors.images?.message ? (
-                  <p className="text-danger">{errors.images.root?.message ?? errors.images.message}</p>
-                ) : null}
-              </ProductEditorSection>
-              <Separator className="my-8 bg-border-subtle" />
-              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionVariants}>
-                <div className="space-y-10">
-                  {variants.fields.map((variant, index) => (
-                    <ProductVariantForm
-                      key={variant.fieldKey}
-                      index={index}
-                      register={form.register}
-                      error={errors.variants}
-                      canRemove={variants.fields.length > 1}
-                      remove={() => variants.remove(index)}
-                    />
-                  ))}
-                </div>
-                <Button type="button" variant="outline" className="mt-2" disabled={variants.fields.length >= 200} onClick={addVariant}>
-                  {PRODUCT_DRAWER_COPY.addVariant}
-                </Button>
-                {errors.variants?.root?.message || errors.variants?.message ? (
-                  <p className="text-danger">{errors.variants.root?.message ?? errors.variants.message}</p>
-                ) : null}
-              </ProductEditorSection>
-              <Separator className="my-8 bg-border-subtle" />
-              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionCharacteristics}>
-                <div className="space-y-4">
-                  {characteristics.fields.map((field, index) => (
-                    <ProductCharacteristicForm
-                      key={field.id}
-                      index={index}
-                      register={form.register}
-                      errors={errors.characteristics}
-                      remove={() => characteristics.remove(index)}
-                    />
-                  ))}
-                </div>
-                <Button type="button" variant="outline" disabled={characteristics.fields.length >= 30} onClick={addCharacteristic}>
-                  {PRODUCT_DRAWER_COPY.addCharacteristic}
-                </Button>
-              </ProductEditorSection>
-            </fieldset>
-          </form>
+                <ProductImagesPanel
+                  active={section === "images"}
+                  images={images}
+                  control={form.control}
+                  register={form.register}
+                  errors={errors.images}
+                  onAdd={addImage}
+                />
+                <ProductVariantsPanel
+                  active={section === "variants"}
+                  variants={variants}
+                  control={form.control}
+                  register={form.register}
+                  error={errors.variants}
+                  onAdd={addVariant}
+                />
+                <ProductCharacteristicsPanel
+                  active={section === "characteristics"}
+                  characteristics={characteristics}
+                  register={form.register}
+                  errors={errors}
+                  onAdd={addCharacteristic}
+                />
+                <ProductSeoPanel active={section === "seo"} register={form.register} errors={errors} />
+              </fieldset>
+            </form>
+          </main>
         </div>
-        <Separator className="shrink-0 bg-border-subtle" />
-        <footer className="flex shrink-0 flex-wrap items-center gap-3 bg-surface px-6 py-4">
-          <Controller
-            name="status"
-            control={form.control}
-            render={({ field }) => (
-              <OptionsSelect label={PRODUCT_DRAWER_COPY.state} value={field.value} onChange={field.onChange} options={STATES} />
-            )}
-          />
-          <div className="ml-auto flex flex-wrap gap-2">
-            <Button type="button" variant="outline" disabled={isSubmitting} onClick={close}>
-              {PRODUCT_DRAWER_COPY.cancel}
-            </Button>
-            {isEdit ? (
-              <Button asChild variant="outline">
-                <Link href={`/preview/${landingId}/productos/${product.slug}`} target="_blank">
-                  {PRODUCT_DRAWER_COPY.preview}
-                </Link>
-              </Button>
-            ) : null}
-            <Button type="submit" form={PRODUCT_FORM_ID} disabled={isSubmitting}>
-              {isSubmitting ? PRODUCT_DRAWER_COPY.saving : PRODUCT_DRAWER_COPY.save}
-            </Button>
-          </div>
-        </footer>
+        <Separator className="shrink-0" />
+        <ProductEditorFooter
+          formId={PRODUCT_FORM_ID}
+          dirty={isDirty}
+          submitting={isSubmitting}
+          previewHref={isEdit ? `/preview/${landingId}/productos/${product.slug}` : null}
+          onCancel={close}
+        />
       </DialogSheetContent>
     </Dialog>
   );

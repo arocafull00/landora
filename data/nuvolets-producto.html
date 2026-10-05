@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conjunto Nube — Nuvolets</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F1',
+            surface: '#FFFDF9',
+            ink: '#3D3A36',
+            blue: '#A9C4D3',
+            'blue-light': '#DDEAF0',
+            yellow: '#F2D995',
+            'yellow-light': '#FAEFCB',
+            pink: '#EBC7C5',
+            'pink-light': '#F6E4E3',
+            sage: '#C6D2BE',
+            'sage-light': '#E5EBDD',
+            line: '#E9E2D8'
+          },
+          fontFamily: {
+            display: ['"DM Serif Display"', 'serif'],
+            sans: ['Manrope', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background:#FAF7F1; color:#3D3A36; }
+    html { scroll-behavior:smooth; }
+    .blob { border-radius: 42% 58% 52% 48% / 46% 43% 57% 54%; }
+    .blob-soft { border-radius: 34% 66% 61% 39% / 45% 38% 62% 55%; }
+    .cloud { position:absolute; border-radius:999px; background:rgba(255,255,255,.72); }
+    .cloud:before,.cloud:after { content:""; position:absolute; border-radius:999px; background:inherit; }
+    .cloud:before { width:55%; height:135%; left:13%; bottom:10%; }
+    .cloud:after { width:42%; height:105%; right:8%; bottom:8%; }
+    .wave { display:block; width:100%; height:auto; }
+  </style>
+</head>
+
+<body class="font-sans antialiased">
+  <header class="sticky top-0 z-50 border-b border-line/80 bg-cream/90 backdrop-blur-xl">
+    <div class="mx-auto flex h-[74px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <a href="#" class="flex items-center gap-2 font-display text-3xl">
+        <span class="relative inline-flex h-7 w-10 items-end">
+          <span class="absolute bottom-0 left-0 h-4 w-8 rounded-full bg-blue-light"></span>
+          <span class="absolute bottom-1 left-1.5 h-5 w-5 rounded-full bg-blue-light"></span>
+          <span class="absolute bottom-0.5 right-0 h-4 w-5 rounded-full bg-blue-light"></span>
+        </span>
+        Nuvolets
+      </a>
+
+      <nav class="hidden items-center gap-8 md:flex">
+        <a href="#" class="text-sm hover:opacity-60">Inicio</a>
+        <a href="#" class="text-sm font-semibold text-blue">Colección</a>
+        <a href="#" class="text-sm hover:opacity-60">Bebé</a>
+        <a href="#" class="text-sm hover:opacity-60">Niña</a>
+        <a href="#" class="text-sm hover:opacity-60">Niño</a>
+      </nav>
+
+      <a href="#tienda" class="rounded-full border border-blue px-4 py-2 text-sm font-semibold transition hover:bg-blue-light">
+        Ven a vernos
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+      <a href="#" class="inline-flex items-center gap-2 text-sm text-ink/55 hover:text-ink">
+        <span>←</span>
+        Volver a la colección
+      </a>
+    </div>
+
+    <section class="relative overflow-hidden px-4 pb-20 pt-8 sm:px-6 lg:px-8 lg:pb-28">
+      <div class="cloud -left-10 top-24 h-10 w-28 opacity-50"></div>
+      <div class="cloud -right-12 bottom-36 h-9 w-24 opacity-45"></div>
+
+      <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.08fr_.92fr] lg:gap-16">
+        <div>
+          <div class="relative overflow-hidden rounded-[38px] bg-blue-light p-3 sm:p-4">
+            <div class="absolute left-5 top-5 z-10 rounded-full bg-white/85 px-4 py-2 text-xs font-semibold backdrop-blur">
+              ☁ Nueva colección
+            </div>
+
+            <div class="blob overflow-hidden bg-white">
+              <img
+                src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=1400&q=85"
+                alt="Conjunto Nube"
+                class="aspect-[4/3] h-full w-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div class="mt-4 grid grid-cols-3 gap-3">
+            <button class="overflow-hidden rounded-[22px] border-2 border-blue bg-surface p-1">
+              <img src="https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=500&q=80" alt="" class="aspect-square w-full rounded-[18px] object-cover" />
+            </button>
+            <button class="overflow-hidden rounded-[22px] bg-surface p-1 opacity-80 transition hover:opacity-100">
+              <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=500&q=80" alt="" class="aspect-square w-full rounded-[18px] object-cover" />
+            </button>
+            <button class="overflow-hidden rounded-[22px] bg-surface p-1 opacity-80 transition hover:opacity-100">
+              <img src="https://images.unsplash.com/photo-1602030028438-4cf153cbae9e?auto=format&fit=crop&w=500&q=80" alt="" class="aspect-square w-full rounded-[18px] object-cover" />
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center lg:py-6">
+          <span class="mb-4 inline-flex w-fit items-center gap-2 rounded-full bg-yellow-light px-4 py-2 text-[11px] font-bold tracking-[0.16em] text-ink/60">
+            COLECCIÓN NUVOLETS
+          </span>
+
+          <h1 class="font-display text-5xl leading-[.98] sm:text-6xl">
+            Conjunto <span class="italic">Nube</span>
+          </h1>
+
+          <p class="mt-4 max-w-xl text-base leading-7 text-ink/60">
+            Un conjunto suave, cómodo y fácil de combinar para acompañarles en esos días de juego, paseo y siestas inesperadas.
+          </p>
+
+          <div class="mt-7 flex flex-wrap gap-2">
+            <span class="rounded-full bg-blue-light px-4 py-2 text-xs font-semibold">Suave</span>
+            <span class="rounded-full bg-sage-light px-4 py-2 text-xs font-semibold">Cómodo</span>
+            <span class="rounded-full bg-pink-light px-4 py-2 text-xs font-semibold">Fácil de combinar</span>
+          </div>
+
+          <div class="mt-10 border-t border-line pt-8">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <p class="text-xs font-bold tracking-[0.14em] text-ink/45">PRECIO EN TIENDA</p>
+                <p class="mt-1 font-display text-3xl">30,00 €</p>
+              </div>
+              <div class="rounded-full bg-sage-light px-4 py-2 text-sm font-semibold text-ink/70">
+                Disponible en tienda
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <p class="text-sm font-semibold">Disponible en</p>
+
+            <div class="mt-4 grid gap-3 sm:grid-cols-2">
+              <div class="rounded-[20px] border border-line bg-surface px-5 py-4">
+                <span class="block text-[11px] font-bold uppercase tracking-[0.14em] text-ink/40">Talla</span>
+                <span class="mt-1 block text-sm font-semibold">M</span>
+              </div>
+
+              <div class="rounded-[20px] border border-line bg-surface px-5 py-4">
+                <span class="block text-[11px] font-bold uppercase tracking-[0.14em] text-ink/40">Color</span>
+                <span class="mt-1 flex items-center gap-2 text-sm font-semibold">
+                  <span class="h-4 w-4 rounded-full bg-blue"></span>
+                  Azul
+                </span>
+              </div>
+            </div>
+
+            <p class="mt-3 text-xs leading-5 text-ink/45">
+              La disponibilidad puede cambiar. Consúltanos antes de venir si buscas una talla o color concreto.
+            </p>
+          </div>
+
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href="#" class="inline-flex items-center justify-center gap-2 rounded-full bg-blue px-6 py-4 text-sm font-semibold transition hover:bg-[#9db8c8]">
+              Consultar por WhatsApp
+              <span>→</span>
+            </a>
+
+            <a href="#tienda" class="inline-flex items-center justify-center rounded-full border border-blue px-6 py-4 text-sm font-semibold transition hover:bg-blue-light">
+              Ver tienda en Paiporta
+            </a>
+          </div>
+
+          <div class="mt-10 grid gap-6 border-t border-line pt-8 sm:grid-cols-2">
+            <div>
+              <div class="mb-2 text-xl">☁</div>
+              <h3 class="text-sm font-semibold">Descripción</h3>
+              <p class="mt-2 text-sm leading-6 text-ink/55">
+                Tejido agradable, corte cómodo y pensado para que puedan moverse con total libertad.
+              </p>
+            </div>
+
+            <div>
+              <div class="mb-2 text-xl">✦</div>
+              <h3 class="text-sm font-semibold">Detalles</h3>
+              <ul class="mt-2 space-y-1.5 text-sm leading-6 text-ink/55">
+                <li>Algodón suave</li>
+                <li>Corte cómodo</li>
+                <li>Fácil de combinar</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <svg class="wave text-blue-light" viewBox="0 0 1440 110" preserveAspectRatio="none">
+      <path fill="currentColor" d="M0,40 C160,80 300,15 470,48 C650,83 760,107 930,72 C1100,37 1260,18 1440,58 L1440,110 L0,110 Z" />
+    </svg>
+
+    <section id="tienda" class="relative bg-blue-light px-4 pb-24 pt-12 sm:px-6 lg:px-8">
+      <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[.8fr_1.2fr]">
+        <div>
+          <span class="text-xs font-bold tracking-[0.18em] text-ink/45">SIN PRISAS, SIN CARRITOS</span>
+
+          <h2 class="mt-4 max-w-xl font-display text-4xl leading-tight sm:text-5xl">
+            Ven a verlo, tocarlo y probarlo en tienda
+          </h2>
+
+          <p class="mt-5 max-w-lg leading-7 text-ink/60">
+            En Nuvolets preferimos ayudarte en persona. Pásate por nuestra tienda en Paiporta y te ayudamos a encontrar talla, color y combinación.
+          </p>
+
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="#" class="rounded-full bg-surface px-6 py-3.5 text-sm font-semibold">Cómo llegar</a>
+            <a href="#" class="rounded-full border border-ink/15 px-6 py-3.5 text-sm font-semibold">Ver Instagram</a>
+          </div>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -left-4 -top-4 h-20 w-20 rounded-full bg-yellow/70"></div>
+          <div class="absolute -right-4 bottom-5 h-24 w-24 rounded-full bg-pink/70"></div>
+
+          <div class="blob-soft relative overflow-hidden">
+            <img
+              src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1100&q=85"
+              alt="Tienda Nuvolets"
+              class="aspect-[16/9] w-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="px-4 py-20 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="flex items-end justify-between gap-6">
+          <div>
+            <span class="text-xs font-bold tracking-[0.18em] text-ink/45">MÁS NUVOLETS</span>
+            <h2 class="mt-3 font-display text-4xl">También te pueden gustar</h2>
+          </div>
+
+          <a href="#" class="hidden text-sm font-semibold underline decoration-line underline-offset-4 sm:block">
+            Ver colección →
+          </a>
+        </div>
+
+        <div class="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3">
+          <article>
+            <div class="blob overflow-hidden bg-pink-light">
+              <img src="https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=800&q=85" alt="" class="aspect-[4/5] w-full object-cover transition duration-500 hover:scale-[1.03]" />
+            </div>
+            <h3 class="mt-4 font-semibold">Vestido Brisa</h3>
+            <p class="mt-1 text-xs text-ink/45">Disponible en tienda</p>
+          </article>
+
+          <article>
+            <div class="blob-soft overflow-hidden bg-sage-light">
+              <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=800&q=85" alt="" class="aspect-[4/5] w-full object-cover transition duration-500 hover:scale-[1.03]" />
+            </div>
+            <h3 class="mt-4 font-semibold">Pelele Cielo</h3>
+            <p class="mt-1 text-xs text-ink/45">Disponible en tienda</p>
+          </article>
+
+          <article class="hidden md:block">
+            <div class="blob overflow-hidden bg-yellow-light">
+              <img src="https://images.unsplash.com/photo-1599443015574-be5fe8a05783?auto=format&fit=crop&w=800&q=85" alt="" class="aspect-[4/5] w-full object-cover transition duration-500 hover:scale-[1.03]" />
+            </div>
+            <h3 class="mt-4 font-semibold">Jersey Algodón</h3>
+            <p class="mt-1 text-xs text-ink/45">Disponible en tienda</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-line px-4 py-8 text-center text-xs text-ink/40">
+    © 2026 Nuvolets · Paiporta, Valencia
+  </footer>
+</body>
+</html>

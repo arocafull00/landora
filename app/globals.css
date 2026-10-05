@@ -21,6 +21,10 @@
   --color-nuvolets-heart: var(--nuvolets-heart);
   --color-nuvolets-on-overlay: var(--nuvolets-on-overlay);
   --color-nuvolets-accent: var(--nuvolets-accent);
+  --color-tone-1: var(--catalog-tone-1);
+  --color-tone-2: var(--catalog-tone-2);
+  --color-tone-3: var(--catalog-tone-3);
+  --color-tone-4: var(--catalog-tone-4);
 }
 
 :root {
@@ -486,6 +490,10 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   --surface-container: var(--site-surface-alt);
   --surface-container-high: color-mix(in srgb, var(--site-border) 34%, var(--site-surface));
   --surface-container-highest: color-mix(in srgb, var(--site-border) 52%, var(--site-surface));
+  --catalog-tone-1: color-mix(in srgb, var(--site-primary) 18%, var(--site-surface));
+  --catalog-tone-2: color-mix(in srgb, var(--site-accent) 14%, var(--site-surface));
+  --catalog-tone-3: color-mix(in srgb, var(--site-text) 8%, var(--site-surface));
+  --catalog-tone-4: color-mix(in srgb, var(--site-border) 60%, var(--site-surface));
   --surface-variant: var(--site-surface-alt);
   --surface-bg: var(--site-surface);
   --on-surface: var(--site-text);
@@ -1554,6 +1562,10 @@ textarea {
   --site-accent: var(--nuvolets-blue);
   --site-dark: var(--nuvolets-text);
   --site-on-dark: var(--nuvolets-surface);
+  --catalog-tone-1: var(--nuvolets-blue-soft);
+  --catalog-tone-2: var(--nuvolets-sage-soft);
+  --catalog-tone-3: var(--nuvolets-pink-soft);
+  --catalog-tone-4: var(--nuvolets-yellow-soft);
 }
 [data-site-theme][data-template="nuvolets"][data-typography="default"] {
   --site-font-display: var(--font-source-dm-serif);
