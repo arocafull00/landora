@@ -24,6 +24,11 @@
 }
 
 :root {
+  --editor-panel: #ffffff;
+  --editor-canvas: #eef0f5;
+  --editor-muted: #f7f8fc;
+  --editor-border: #e3e6ef;
+  --editor-text-muted: #586174;
   --canvas: var(--surface-bg);
   --ink: var(--on-surface);
   --ink-secondary: var(--on-surface-variant);
@@ -112,6 +117,19 @@ button {
   --warning: #f59e0b;
   --danger: #ef4444;
   --surface-bg: #f8fafc;
+  --page: #f5f6fa;
+  --surface-subtle: #f8fafc;
+  --line: #e2e8f0;
+  --ink-subtle: #64748b;
+  --ink-faint: #94a3b8;
+  --primary-subtle: #eef4ff;
+  --primary-subtle-border: #dbeafe;
+  --on-primary-subtle: #1e3a8a;
+  --success-subtle: #ecfdf5;
+  --success-strong: #047857;
+  --warning-subtle: #fffbeb;
+  --warning-strong: #d97706;
+  --danger-strong: #dc2626;
   --sidebar: var(--inverse-surface);
   --sidebar-foreground: var(--inverse-on-surface);
   --sidebar-primary: var(--primary);
@@ -194,6 +212,20 @@ button {
   --color-warning: var(--warning);
   --color-danger: var(--danger);
   --color-surface-bg: var(--surface-bg);
+  --color-page: var(--page);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-line: var(--line);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-ink-faint: var(--ink-faint);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-subtle-border: var(--primary-subtle-border);
+  --color-on-primary-subtle: var(--on-primary-subtle);
+  --color-success-subtle: var(--success-subtle);
+  --color-success-strong: var(--success-strong);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-warning-strong: var(--warning-strong);
+  --color-danger-strong: var(--danger-strong);
+  --shadow-soft: 0 8px 30px rgb(15 23 42 / 0.06);
   --color-foreground: var(--foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
@@ -317,6 +349,88 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] {
 
 html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
   color: var(--sidebar-active-foreground);
+}
+
+.dashboard-app [data-collapsible="icon"] [data-slot="sidebar-header"] {
+  align-items: center;
+  padding-inline: 0 !important;
+}
+
+.dashboard-app [data-collapsible="icon"] [data-slot="sidebar-group"] {
+  padding: 0.5rem 0;
+  align-items: center;
+}
+
+.dashboard-app [data-collapsible="icon"] [data-slot="sidebar-menu-item"] {
+  display: flex;
+  justify-content: center;
+}
+
+.dashboard-app [data-collapsible="icon"] [data-slot="sidebar-menu"] {
+  align-items: center;
+}
+
+.dashboard-app [data-collapsible="icon"] [data-slot="sidebar-group-content"] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-app [data-collapsible="icon"] [data-slot="sidebar-menu-button"] {
+  width: 44px !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border-radius: 0.75rem;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+.dashboard-app [data-collapsible="icon"] [data-slot="sidebar-group-label"] {
+  display: none;
+}
+
+.dashboard-app [data-collapsible="icon"] [data-slot="sidebar-menu"] {
+  gap: 0.5rem;
+}
+
+.editor-workspace {
+  --canvas: var(--editor-canvas);
+  --surface: var(--editor-panel);
+  --surface-bg: var(--editor-canvas);
+  --surface-container-lowest: var(--editor-panel);
+  --surface-container-low: var(--editor-panel);
+  --surface-container: var(--editor-muted);
+  --surface-container-high: var(--editor-muted);
+  --surface-variant: var(--editor-muted);
+  --muted: var(--editor-muted);
+  --border: var(--editor-border);
+  --outline-variant: var(--editor-border);
+  --ink-muted: var(--editor-text-muted);
+  --font-label: var(--font-body);
+}
+
+.editor-workspace [hidden] {
+  display: none;
+}
+
+.editor-properties h3,
+.editor-properties h2 {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.editor-properties input,
+.editor-properties textarea {
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+}
+
+.editor-properties > section,
+.editor-properties > form {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 [data-site-theme][data-color-scheme="light"] {

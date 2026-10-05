@@ -7,15 +7,20 @@ import { configureManualAccess } from "@/app/actions/admin";
 
 export function useManualAccess({
   bookingManualAccess,
+  productsManualAccess,
   onSuccess,
   userId,
 }: {
   bookingManualAccess: boolean;
+  productsManualAccess: boolean;
   onSuccess: () => void;
   userId: string;
 }) {
   const [includeBookings, setIncludeBookings] = useState(
     () => bookingManualAccess,
+  );
+  const [includeProducts, setIncludeProducts] = useState(
+    () => productsManualAccess,
   );
   const [isPending, startTransition] = useTransition();
 
@@ -26,6 +31,7 @@ export function useManualAccess({
       const result = await configureManualAccess({
         userId,
         bookingManualAccess: includeBookings,
+        productsManualAccess: includeProducts,
       });
 
       if ("error" in result) {
@@ -40,8 +46,10 @@ export function useManualAccess({
 
   return {
     includeBookings,
+    includeProducts,
     isPending,
     setIncludeBookings,
+    setIncludeProducts,
     submit,
   };
 }

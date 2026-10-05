@@ -1,0 +1,16 @@
+export const EDITOR_COPY = {
+  structure: "Estructura", properties: "Propiedades", preview: "Vista previa",
+  edit: "Editar", pages: "Páginas", managePages: "Gestionar páginas",
+  pageDescription: "Páginas disponibles en esta plantilla.",
+  pageContent: "Contenido de la página", home: "Inicio", project: "Proyecto sin título",
+  saved: "Cambios guardados", pending: "Cambios sin guardar", saving: "Guardando cambios…",
+  error: "No se pudieron guardar los cambios", save: "Guardar", publish: "Publicar",
+  openSite: "Abrir sitio", desktop: "Vista previa de escritorio", mobile: "Vista previa móvil",
+  fullscreen: "Ampliar vista previa", closeFullscreen: "Cerrar vista previa ampliada",
+  header: "Cabecera", content: "Contenido", footer: "Pie de página", settings: "Ajustes",
+  hidden: "Secciones ocultas", hide: "Ocultar sección", restore: "Restaurar sección",
+  up: "Mover arriba", down: "Mover abajo", actions: "Acciones de sección",
+  alwaysVisible: "Siempre visible", addAbout: "Añadir About me", removeAbout: "Quitar About me",
+  previewHint: "Selecciona una sección para editarla.",
+  exitImpersonation: "Salir",
+} as const;

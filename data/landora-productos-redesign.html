@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landora · Productos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config={theme:{extend:{colors:{brand:'#0050cb',brand50:'#eef4ff'},boxShadow:{soft:'0 8px 30px rgba(15,23,42,.06)'}}}}
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  </style>
+</head>
+<body class="bg-[#f5f6fa] text-slate-900">
+  <div class="min-h-screen flex">
+
+    <aside class="w-[72px] bg-[#111827] fixed inset-y-0 left-0 flex flex-col items-center py-3">
+      <div class="w-11 h-11 rounded-xl bg-white flex items-center justify-center text-brand font-bold text-xl italic mb-5">L</div>
+      <nav class="flex-1 flex flex-col gap-2">
+        <button class="w-11 h-11 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white flex items-center justify-center"><i data-lucide="panels-top-left" class="w-5 h-5"></i></button>
+        <button class="w-11 h-11 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white flex items-center justify-center"><i data-lucide="files" class="w-5 h-5"></i></button>
+        <button class="w-11 h-11 rounded-xl bg-brand text-white flex items-center justify-center"><i data-lucide="package" class="w-5 h-5"></i></button>
+        <button class="w-11 h-11 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white flex items-center justify-center"><i data-lucide="image" class="w-5 h-5"></i></button>
+        <button class="w-11 h-11 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white flex items-center justify-center"><i data-lucide="chart-no-axes-column-increasing" class="w-5 h-5"></i></button>
+      </nav>
+      <button class="w-11 h-11 rounded-xl text-slate-400 hover:bg-white/10 hover:text-white flex items-center justify-center"><i data-lucide="settings-2" class="w-5 h-5"></i></button>
+    </aside>
+
+    <main class="ml-[72px] flex-1">
+      <div class="max-w-[1280px] mx-auto px-8 py-8">
+
+        <header class="flex items-start justify-between mb-7">
+          <div>
+            <div class="flex items-center gap-3">
+              <h1 class="text-3xl font-semibold tracking-tight">Productos</h1>
+              <span class="rounded-full bg-slate-200 px-2.5 py-1 text-xs font-medium text-slate-600">8</span>
+            </div>
+            <p class="mt-1.5 text-sm text-slate-500">Gestiona catálogo, precios, stock y publicación.</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button class="h-10 px-3.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-sm font-medium flex items-center gap-2">
+              <i data-lucide="upload" class="w-4 h-4"></i> Importar
+            </button>
+            <button class="h-10 w-10 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center">
+              <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+            </button>
+            <button class="h-10 px-4 rounded-lg bg-brand hover:bg-blue-700 text-white text-sm font-semibold flex items-center gap-2">
+              <i data-lucide="plus" class="w-4 h-4"></i> Nuevo producto
+            </button>
+          </div>
+        </header>
+
+        <div class="grid grid-cols-4 gap-3 mb-5">
+          <div class="bg-white border border-slate-200 rounded-xl p-4">
+            <div class="text-xs text-slate-500">Productos</div>
+            <div class="mt-1 flex items-end justify-between"><span class="text-xl font-semibold">8</span><span class="text-xs text-slate-400">Total</span></div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4">
+            <div class="text-xs text-slate-500">Publicados</div>
+            <div class="mt-1 flex items-end justify-between"><span class="text-xl font-semibold">5</span><span class="text-xs text-emerald-600">Visibles</span></div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4">
+            <div class="text-xs text-slate-500">Borradores</div>
+            <div class="mt-1 flex items-end justify-between"><span class="text-xl font-semibold">3</span><span class="text-xs text-slate-400">Sin publicar</span></div>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4">
+            <div class="text-xs text-slate-500">Stock bajo</div>
+            <div class="mt-1 flex items-end justify-between"><span class="text-xl font-semibold">2</span><span class="text-xs text-amber-600">Revisar</span></div>
+          </div>
+        </div>
+
+        <section class="bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
+
+          <div class="px-4 pt-4 border-b border-slate-200 flex gap-1">
+            <button class="tab px-3 py-2.5 text-sm font-medium text-brand border-b-2 border-brand" data-filter="all">Todos <span class="text-xs text-slate-400 ml-1">8</span></button>
+            <button class="tab px-3 py-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent" data-filter="published">Publicados <span class="text-xs text-slate-400 ml-1">5</span></button>
+            <button class="tab px-3 py-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent" data-filter="draft">Borradores <span class="text-xs text-slate-400 ml-1">3</span></button>
+            <button class="tab px-3 py-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent" data-filter="archived">Archivados</button>
+          </div>
+
+          <div class="p-4 border-b border-slate-200 flex items-center gap-2">
+            <div class="relative flex-1 max-w-[500px]">
+              <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input id="search" class="w-full h-10 rounded-lg border border-slate-200 pl-9 pr-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-blue-100" placeholder="Buscar por nombre, SKU o categoría">
+            </div>
+            <button id="filterButton" class="h-10 px-3 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-sm font-medium flex items-center gap-2">
+              <i data-lucide="list-filter" class="w-4 h-4"></i> Filtros
+            </button>
+            <button class="h-10 px-3 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-sm font-medium flex items-center gap-2">
+              <i data-lucide="arrow-up-down" class="w-4 h-4"></i> Ordenar
+            </button>
+            <span class="ml-auto text-xs text-slate-500">8 productos</span>
+          </div>
+
+          <div id="filterBar" class="hidden px-4 py-3 bg-slate-50 border-b border-slate-200 items-center gap-2">
+            <span class="text-xs text-slate-500">Filtros:</span>
+            <span class="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs">Categoría: Ropa</span>
+            <span class="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs">Stock: Bajo</span>
+            <button id="clearFilters" class="text-xs font-medium text-brand">Limpiar</button>
+          </div>
+
+          <div id="batchBar" class="hidden px-4 py-2.5 bg-brand50 border-b border-blue-100 items-center gap-3">
+            <span id="selectedCount" class="text-sm font-medium text-blue-900">1 seleccionado</span>
+            <button class="text-sm font-medium text-brand">Publicar</button>
+            <button class="text-sm font-medium text-brand">Archivar</button>
+            <button class="text-sm font-medium text-red-600">Eliminar</button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-slate-50 text-[11px] uppercase tracking-wide text-slate-400">
+                <tr>
+                  <th class="w-12 px-4 py-3"><input id="allChecks" type="checkbox" class="accent-[#0050cb]"></th>
+                  <th class="text-left px-2 py-3 font-semibold">Producto</th>
+                  <th class="text-left px-3 py-3 font-semibold">Estado</th>
+                  <th class="text-left px-3 py-3 font-semibold">Inventario</th>
+                  <th class="text-left px-3 py-3 font-semibold">Categoría</th>
+                  <th class="text-right px-3 py-3 font-semibold">Precio</th>
+                  <th class="w-14"></th>
+                </tr>
+              </thead>
+              <tbody id="rows" class="divide-y divide-slate-200"></tbody>
+            </table>
+          </div>
+
+          <div class="px-4 py-3 border-t border-slate-200 flex items-center justify-between">
+            <span class="text-xs text-slate-500">Mostrando 6 de 8 productos</span>
+            <div class="flex items-center gap-1">
+              <button class="w-8 h-8 rounded-lg border border-slate-200 bg-white flex items-center justify-center text-slate-400"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+              <button class="w-8 h-8 rounded-lg bg-brand50 text-brand text-sm font-semibold">1</button>
+              <button class="w-8 h-8 rounded-lg hover:bg-slate-50 text-sm">2</button>
+              <button class="w-8 h-8 rounded-lg border border-slate-200 bg-white flex items-center justify-center"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+<script>
+const products=[
+['Conjunto Nube','SKU-001 · 3 variantes','published','18 uds.','Disponible','Ropa bebé','29,90 €'],
+['Conjunto Brisa','SKU-002 · 4 variantes','draft','3 uds.','Stock bajo','Ropa bebé','32,90 €'],
+['Gorrito Llovizna','SKU-003 · 2 variantes','published','24 uds.','Disponible','Accesorios','14,90 €'],
+['Jersey Cúmulo','SKU-004 · 5 variantes','published','12 uds.','Disponible','Punto','27,90 €'],
+['Vestido Luna','SKU-005 · 3 variantes','draft','0 uds.','Sin stock','Vestidos','34,90 €'],
+['Vestido Amapola','SKU-006 · 4 variantes','published','9 uds.','Disponible','Vestidos','36,90 €']
+];
+
+const rows=document.getElementById('rows');
+
+function render(){
+  rows.innerHTML=products.map((p,i)=>{
+    const published=p[2]==='published';
+    const stockClass=p[4]==='Sin stock'?'text-red-600':p[4]==='Stock bajo'?'text-amber-600':'text-slate-400';
+    const status=published
+      ? '<span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Publicado</span>'
+      : '<span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Borrador</span>';
+
+    return `
+    <tr class="product-row hover:bg-slate-50/70" data-status="${p[2]}" data-search="${(p[0]+' '+p[1]+' '+p[5]).toLowerCase()}">
+      <td class="px-4 py-3"><input type="checkbox" class="rowCheck accent-[#0050cb]"></td>
+      <td class="px-2 py-3">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-sky-100 to-slate-200 border border-slate-200 flex items-center justify-center"><i data-lucide="shirt" class="w-5 h-5 text-slate-400"></i></div>
+          <div><div class="text-sm font-semibold">${p[0]}</div><div class="text-xs text-slate-500 mt-0.5">${p[1]}</div></div>
+        </div>
+      </td>
+      <td class="px-3 py-3">${status}</td>
+      <td class="px-3 py-3"><div class="text-sm text-slate-700">${p[3]}</div><div class="text-xs ${stockClass}">${p[4]}</div></td>
+      <td class="px-3 py-3 text-sm text-slate-600">${p[5]}</td>
+      <td class="px-3 py-3 text-sm font-medium text-right">${p[6]}</td>
+      <td class="px-4 py-3 text-right"><button class="p-2 rounded-lg hover:bg-slate-100 text-slate-500"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button></td>
+    </tr>`;
+  }).join('');
+  lucide.createIcons();
+  bindChecks();
+}
+
+function bindChecks(){
+  const checks=[...document.querySelectorAll('.rowCheck')];
+  checks.forEach(c=>c.addEventListener('change',syncBatch));
+}
+
+function syncBatch(){
+  const checks=[...document.querySelectorAll('.rowCheck')];
+  const n=checks.filter(c=>c.checked).length;
+  const bar=document.getElementById('batchBar');
+  bar.classList.toggle('hidden',n===0);
+  bar.classList.toggle('flex',n>0);
+  document.getElementById('selectedCount').textContent=n===1?'1 seleccionado':`${n} seleccionados`;
+}
+
+render();
+
+document.getElementById('search').addEventListener('input',e=>{
+  const q=e.target.value.toLowerCase();
+  document.querySelectorAll('.product-row').forEach(r=>r.classList.toggle('hidden',!r.dataset.search.includes(q)));
+});
+
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>{
+      b.classList.remove('text-brand','border-brand');
+      b.classList.add('text-slate-500','border-transparent');
+    });
+    btn.classList.add('text-brand','border-brand');
+    btn.classList.remove('text-slate-500','border-transparent');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('.product-row').forEach(r=>r.classList.toggle('hidden',f!=='all'&&r.dataset.status!==f));
+  });
+});
+
+document.getElementById('filterButton').addEventListener('click',()=>{
+  const b=document.getElementById('filterBar');
+  b.classList.toggle('hidden');
+  b.classList.toggle('flex');
+});
+
+document.getElementById('clearFilters').addEventListener('click',()=>{
+  const b=document.getElementById('filterBar');
+  b.classList.add('hidden');
+  b.classList.remove('flex');
+});
+
+document.getElementById('allChecks').addEventListener('change',e=>{
+  document.querySelectorAll('.rowCheck').forEach(c=>c.checked=e.target.checked);
+  syncBatch();
+});
+</script>
+</body>
+</html>

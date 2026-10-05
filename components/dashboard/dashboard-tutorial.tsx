@@ -31,7 +31,7 @@ function buildTutorial(
           popover: {
             title: "Panel de edición",
             description:
-              "Aquí editas el contenido de tu página. Usa las pestañas de arriba para moverte entre secciones.",
+              "Aquí editas el contenido de tu página. Usa la estructura lateral para seleccionar una sección.",
             side: "right",
           },
         },
@@ -43,7 +43,7 @@ function buildTutorial(
           popover: {
             title: "Secciones del editor",
             description:
-              "Cada pestaña corresponde a una sección de la página. Selecciona Hero para editar la portada.",
+              "Cada fila corresponde a una sección de la página. Selecciona Hero para editar la portada.",
             side: "bottom",
           },
         },
@@ -52,7 +52,7 @@ function buildTutorial(
           popover: {
             title: "Editar el título",
             description:
-              "Escribe aquí el título principal. Los cambios se reflejan al instante en la vista previa de la derecha.",
+              "Escribe aquí el título principal. Los cambios se reflejan al instante en la vista previa central.",
             side: "right",
           },
         },

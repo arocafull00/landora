@@ -55,6 +55,7 @@ export type UpdateUserNameValues = z.infer<typeof updateUserNameSchema>;
 export const configureManualAccessSchema = z.strictObject({
   userId: z.uuid("ID de usuario inválido"),
   bookingManualAccess: z.boolean(),
+  productsManualAccess: z.boolean(),
 });
 
 export type ConfigureManualAccessValues = z.infer<

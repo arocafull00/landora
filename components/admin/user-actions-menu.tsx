@@ -208,6 +208,7 @@ export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
       {showManualAccess ? (
         <ManualAccessDialog
           bookingManualAccess={user.bookingManualAccess}
+          productsManualAccess={user.productsManualAccess}
           isManualAccess={user.accessType === "manual"}
           name={user.name}
           onOpenChange={setShowManualAccess}

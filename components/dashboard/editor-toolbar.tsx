@@ -1,251 +1,42 @@
-"use client";
-
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  FileTextIcon,
-  HomeIcon,
-  PlusIcon,
-  Trash2Icon,
-} from "lucide-react";
-import { DashboardTutorialButton } from "@/components/dashboard/dashboard-tutorial";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ChevronDown, FileText, PanelLeft, Rocket, Save } from "lucide-react";
+import type { EditorPageTarget, Landing } from "@/lib/dashboard-data";
+import type { PreviewDevice } from "@/components/dashboard/preview-toolbar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CopyMorphButton } from "@/components/ui/copy-morph-button";
-import { Icon } from "@/components/ui/icon";
-import { ActionButton, StatusBadge } from "@/components/ui/primitives";
-import { cn } from "@/lib/utils";
-import { resolveProjectLinkType } from "@/lib/portfolio-projects";
-import {
-  getPreviewLandingPath,
-  getPublicLandingUrl,
-} from "@/lib/public-site-url";
-import { useDashboardStore } from "@/stores/dashboard-store";
+import { StatusBadge } from "@/components/ui/primitives";
+import { DashboardTutorialButton } from "@/components/dashboard/dashboard-tutorial";
+import { EditorPageMenuItem } from "./editor/components/editor-page-menu-item";
+import { EditorDeviceControls } from "./editor/components/editor-device-controls";
+import type { EditorPageOption } from "./editor/editor-model";
+import { EDITOR_COPY } from "./editor/editor-copy";
+import { EditorExitImpersonationButton } from "./editor/components/editor-exit-impersonation-button";
 
-export function EditorToolbar() {
-  const activeLandingId = useDashboardStore((state) => state.activeLandingId);
-  const activePageTarget = useDashboardStore((state) => state.activePageTarget);
-  const landings = useDashboardStore((state) => state.landings);
-  const saveStatus = useDashboardStore((state) => state.saveStatus);
-  const saveLanding = useDashboardStore((state) => state.saveLanding);
-  const publishLanding = useDashboardStore((state) => state.publishLanding);
-  const setActivePageTarget = useDashboardStore(
-    (state) => state.setActivePageTarget,
-  );
-  const setActiveEditorTab = useDashboardStore(
-    (state) => state.setActiveEditorTab,
-  );
-  const addSitePage = useDashboardStore((state) => state.addSitePage);
-  const removeSitePage = useDashboardStore((state) => state.removeSitePage);
-  const isAdmin = useDashboardStore((state) => state.isAdmin);
-
-  const activeLanding =
-    landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
-
-  if (!activeLanding) return null;
-
-  const disabled = saveStatus === "saving";
-  const aboutEnabled = activeLanding.content.enabledPages.includes("about");
-  const internalProjects = (activeLanding.content.gallery ?? []).filter(
-    (item) => resolveProjectLinkType(item) === "internal" && item.projectSlug,
-  );
-  const activeProject =
-    activePageTarget.type === "project"
-      ? internalProjects.find(
-          (item) => item.id === activePageTarget.projectId,
-        )
-      : undefined;
-  const activePageLabel =
-    activePageTarget.type === "about"
-      ? "About me"
-      : activePageTarget.type === "carta"
-        ? "Carta"
-        : activeProject?.title || activeLanding.name;
-
-  const getPreviewLink = () => {
-    let pathname = "";
-
-    if (activePageTarget.type === "about") {
-      pathname = "/about";
-    } else if (activePageTarget.type === "carta") {
-      pathname = "/carta";
-    } else if (activeProject?.projectSlug) {
-      pathname = `/proyectos/${activeProject.projectSlug}`;
-    }
-
-    if (activeLanding.status === "Published") {
-      return getPublicLandingUrl(activeLanding, pathname);
-    }
-
-    return `${window.location.origin}${getPreviewLandingPath(
-      activeLanding.id,
-      pathname,
-    )}`;
-  };
-
-  return (
-    <div
-      className={cn(
-        "flex items-center justify-between border-b border-outline-variant bg-surface-container-lowest px-unit-lg py-3",
-        isAdmin && "pt-12",
-      )}
-    >
-      <div className="flex min-w-0 items-center gap-3">
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors duration-150 hover:bg-surface-container-high">
-            <h1 className="truncate font-headline text-headline-md font-semibold text-on-surface">
-              {activePageLabel}
-            </h1>
-            <ChevronDownIcon
-              aria-hidden
-              className="h-4 w-4 shrink-0 text-on-surface-variant"
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuItem
-              onClick={() => {
-                setActivePageTarget({ type: "home" });
-                if (
-                  activeLanding.template === "ristorante" &&
-                  activePageTarget.type === "carta"
-                ) {
-                  setActiveEditorTab("Hero");
-                }
-              }}
-            >
-              <HomeIcon aria-hidden />
-              <span className="flex-1 truncate">Inicio</span>
-              {activePageTarget.type === "home" ? (
-                <CheckIcon className="h-4 w-4 text-primary" />
-              ) : null}
-            </DropdownMenuItem>
-            {aboutEnabled ? (
-              <DropdownMenuItem
-                onClick={() => setActivePageTarget({ type: "about" })}
-              >
-                <FileTextIcon aria-hidden />
-                <span className="flex-1 truncate">About me</span>
-                {activePageTarget.type === "about" ? (
-                  <CheckIcon className="h-4 w-4 text-primary" />
-                ) : null}
-              </DropdownMenuItem>
-            ) : null}
-            {activeLanding.template === "ristorante" ? (
-              <DropdownMenuItem
-                onClick={() => {
-                  setActivePageTarget({ type: "carta" });
-                  setActiveEditorTab("Carta");
-                }}
-              >
-                <FileTextIcon aria-hidden />
-                <span className="flex-1 truncate">Carta</span>
-                {activePageTarget.type === "carta" ? (
-                  <CheckIcon className="h-4 w-4 text-primary" />
-                ) : null}
-              </DropdownMenuItem>
-            ) : null}
-            {internalProjects.map((project) => (
-              <DropdownMenuItem
-                key={project.id}
-                onClick={() =>
-                  setActivePageTarget({
-                    type: "project",
-                    projectId: project.id,
-                  })
-                }
-              >
-                <FileTextIcon aria-hidden />
-                <span className="flex-1 truncate">
-                  {project.title || "Proyecto sin título"}
-                </span>
-                {activePageTarget.type === "project" &&
-                activePageTarget.projectId === project.id ? (
-                  <CheckIcon className="h-4 w-4 text-primary" />
-                ) : null}
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            {activeLanding.template === "portfolio" && !aboutEnabled ? (
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <PlusIcon aria-hidden />
-                  Añadir página
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem
-                    onClick={() => addSitePage(activeLanding.id, "about")}
-                  >
-                    <FileTextIcon aria-hidden />
-                    About me
-                  </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
-            ) : (
-              <DropdownMenuItem disabled>
-                <PlusIcon aria-hidden />
-                Añadir página
-              </DropdownMenuItem>
-            )}
-            {aboutEnabled ? (
-              <>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => removeSitePage(activeLanding.id, "about")}
-                  variant="destructive"
-                >
-                  <Trash2Icon aria-hidden />
-                  Quitar About me
-                </DropdownMenuItem>
-              </>
-            ) : null}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <div className="hidden items-center gap-2 sm:flex">
-          <StatusBadge status={activeLanding.status} />
-          <span className="text-outline-variant">/</span>
-          <span className="font-label text-label-md text-on-surface-variant">
-            {activeLanding.edited}
-          </span>
-        </div>
-      </div>
-      <div className="flex shrink-0 items-center gap-3">
-        <DashboardTutorialButton />
-        <CopyMorphButton
-          className="rounded-md"
-          errorMessage="No se pudo copiar el enlace"
-          id="tutorial-copy-link"
-          label="Copiar enlace"
-          showLabel={false}
-          successMessage="Enlace copiado"
-          value={getPreviewLink}
-        />
-        <div className="mx-1 hidden h-5 w-px bg-outline-variant sm:block" />
-        <ActionButton
-          disabled={disabled}
-          id="tutorial-save"
-          onClick={() => saveLanding(activeLanding.id)}
-        >
-          <Icon name="save" className="h-4 w-4" />
-          Guardar
-        </ActionButton>
-        <ActionButton
-          disabled={disabled}
-          id="tutorial-publish"
-          onClick={() => publishLanding(activeLanding.id)}
-          variant="primary"
-        >
-          <Icon name="publish" className="h-4 w-4" />
-          Publicar
-        </ActionButton>
-      </div>
+export function EditorToolbar({ landing, pages, page, device, busy, previewHref, onPageChange, onDeviceChange, onStructureOpen, onManagePages, onSave, onPublish }: {
+  landing: Landing; pages: EditorPageOption[]; page: EditorPageOption; device: PreviewDevice; busy: boolean;
+  previewHref: string; onPageChange: (target: EditorPageTarget) => void; onDeviceChange: (device: PreviewDevice) => void;
+  onStructureOpen: () => void; onManagePages: () => void; onSave: () => void; onPublish: () => void;
+}) {
+  return <header className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-surface px-3 py-2.5 lg:grid-cols-[minmax(0,1fr)_minmax(160px,220px)_minmax(0,1fr)] lg:px-4">
+    <div className="flex min-w-0 items-center gap-2">
+      <button type="button" aria-label={EDITOR_COPY.structure} aria-haspopup="dialog" onClick={onStructureOpen} className="rounded-lg p-2 text-ink-secondary hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary xl:hidden"><PanelLeft aria-hidden className="size-4" /></button>
+      <h1 className="truncate font-headline text-[15px] font-semibold text-ink">{landing.name}</h1>
+      <span className="hidden shrink-0 sm:block"><StatusBadge status={landing.status} /></span>
     </div>
-  );
+    <div className="col-span-2 row-start-2 min-w-0 lg:col-span-1 lg:col-start-2 lg:row-start-1">
+      <DropdownMenu><DropdownMenuTrigger className="flex h-9 w-full items-center gap-2 rounded-lg border border-border px-3 text-sm text-ink hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+        <FileText aria-hidden className="size-4 shrink-0 text-ink-muted" /><span className="min-w-0 flex-1 truncate text-left">{page.label}</span><ChevronDown aria-hidden className="size-4 shrink-0 text-ink-muted" />
+      </DropdownMenuTrigger><DropdownMenuContent align="center" className="max-h-[60dvh] w-64 overflow-y-auto">
+        {pages.map((entry) => <EditorPageMenuItem key={entry.id} page={entry} selected={entry.id === page.id} onSelect={onPageChange} />)}
+        <DropdownMenuSeparator /><DropdownMenuItem onSelect={onManagePages}><FileText aria-hidden />{EDITOR_COPY.managePages}</DropdownMenuItem>
+      </DropdownMenuContent></DropdownMenu>
+    </div>
+    <div className="flex shrink-0 items-center justify-end gap-1.5 lg:col-start-3">
+      <span className="hidden sm:block"><EditorDeviceControls device={device} onChange={onDeviceChange} /></span>
+      <span className="hidden lg:block"><DashboardTutorialButton /></span>
+      <span className="hidden sm:block"><CopyMorphButton id="tutorial-copy-link" label="Copiar enlace" showLabel={false} successMessage="Enlace copiado" errorMessage="No se pudo copiar el enlace" value={() => new URL(previewHref, window.location.origin).href} /></span>
+      <button type="button" id="tutorial-save" disabled={busy} onClick={onSave} className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-2.5 text-sm font-medium text-ink hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"><Save aria-hidden className="size-4 sm:hidden" /><span className="hidden sm:inline">{EDITOR_COPY.save}</span><span className="sr-only sm:hidden">{EDITOR_COPY.save}</span></button>
+      <button type="button" id="tutorial-publish" disabled={busy} onClick={onPublish} className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-3 text-sm font-semibold text-on-primary hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50"><Rocket aria-hidden className="size-4" /><span>{EDITOR_COPY.publish}</span></button>
+      <EditorExitImpersonationButton />
+    </div>
+  </header>;
 }

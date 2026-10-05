@@ -84,6 +84,7 @@ export async function updateUserFields(
 export async function setUserManualAccess(
   id: string,
   bookingManualAccess: boolean,
+  productsManualAccess: boolean,
 ) {
   try {
     await db.transaction(async (tx) => {
@@ -102,6 +103,18 @@ export async function setUserManualAccess(
         .onConflictDoUpdate({
           target: [userAddons.userId, userAddons.addonType],
           set: { manualAccess: bookingManualAccess },
+        });
+
+      await tx
+        .insert(userAddons)
+        .values({
+          userId: id,
+          addonType: "products",
+          manualAccess: productsManualAccess,
+        })
+        .onConflictDoUpdate({
+          target: [userAddons.userId, userAddons.addonType],
+          set: { manualAccess: productsManualAccess },
         });
     });
   } catch {

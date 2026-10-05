@@ -12,6 +12,8 @@ type ProductRow = typeof storeProducts.$inferSelect;
 type VariantRow = typeof storeProductVariants.$inferSelect;
 type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 type WriteResult = { status: "saved"; productId?: string } | { status: "conflict" | "not_found" | "denied" | "invalid" | "duplicate" };
+type BatchWriteResult = { status: "saved"; updated: number; skipped: number } | { status: "denied" };
+type StatusCommand = "archive" | "restore" | "unpublish" | "publish";
 
 function dto(row: ProductRow, variants: VariantRow[]): ProductDto {
   const { legacyId, legacyAppearance, sortOrder, favoriteOrder, createdAt, updatedAt, ...product } = row;
@@ -107,13 +109,26 @@ export async function saveProduct(landingId: string, userId: string, productId: 
   } catch (error) { const known = knownError(error); if (known) return known; throw new Error("Failed to save product", { cause: error }); }
 }
 
+async function applyProductStatus(tx: Transaction, row: ProductRow, version: number, command: StatusCommand): Promise<WriteResult> {
+  if (row.version !== version) return { status: "conflict" };
+  const status = command === "archive" ? "archived" : command === "publish" ? "published" : "draft";
+  if (status === "published") {
+    const variants = await tx.select().from(storeProductVariants).where(eq(storeProductVariants.productId, row.id));
+    const product = dto(row, variants);
+    const { id, landingId: parentId, version: revision, createdAt, updatedAt, ...values } = product;
+    void id; void parentId; void revision; void createdAt; void updatedAt;
+    if (!productSchema.safeParse({ ...values, status }).success) return { status: "invalid" };
+  }
+  await tx.update(storeProducts).set({ status, version: version + 1, updatedAt: new Date() }).where(eq(storeProducts.id, row.id));
+  return { status: "saved", productId: row.id };
+}
+
 export async function commandProduct(landingId: string, userId: string, productId: string, version: number, command: "duplicate" | "archive" | "restore" | "unpublish" | "publish"): Promise<WriteResult> {
   try {
     return await db.transaction(async (tx): Promise<WriteResult> => {
       if (!await lockAccess(tx, landingId, userId)) return { status: "denied" };
       const [row] = await tx.select().from(storeProducts).where(and(eq(storeProducts.id, productId), eq(storeProducts.landingId, landingId))).for("update");
       if (!row) return { status: "not_found" };
-      if (row.version !== version) return { status: "conflict" };
       if (command === "duplicate") {
         const variants = await tx.select().from(storeProductVariants).where(eq(storeProductVariants.productId, productId)).orderBy(asc(storeProductVariants.sortOrder));
         const id = crypto.randomUUID();
@@ -123,18 +138,27 @@ export async function commandProduct(landingId: string, userId: string, productI
         await tx.insert(storeProductVariants).values(variants.map((variant) => ({ ...variant, id: crypto.randomUUID(), productId: id, sku: null })));
         return { status: "saved", productId: id };
       }
-      const status = command === "archive" ? "archived" : command === "publish" ? "published" : "draft";
-      if (status === "published") {
-        const variants = await tx.select().from(storeProductVariants).where(eq(storeProductVariants.productId, productId));
-        const product = dto(row, variants);
-        const { id, landingId: parentId, version: revision, createdAt, updatedAt, ...values } = product;
-        void id; void parentId; void revision; void createdAt; void updatedAt;
-        if (!productSchema.safeParse({ ...values, status }).success) return { status: "invalid" };
-      }
-      await tx.update(storeProducts).set({ status, version: version + 1, updatedAt: new Date() }).where(eq(storeProducts.id, productId));
-      return { status: "saved", productId };
+      return applyProductStatus(tx, row, version, command);
     });
   } catch (error) { const known = knownError(error); if (known) return known; throw new Error("Failed to change product", { cause: error }); }
+}
+
+export async function batchCommandProducts(landingId: string, userId: string, items: { productId: string; version: number }[], command: "publish" | "archive"): Promise<BatchWriteResult> {
+  try {
+    return await db.transaction(async (tx): Promise<BatchWriteResult> => {
+      if (!await lockAccess(tx, landingId, userId)) return { status: "denied" };
+      let updated = 0;
+      let skipped = 0;
+      for (const item of items) {
+        const [row] = await tx.select().from(storeProducts).where(and(eq(storeProducts.id, item.productId), eq(storeProducts.landingId, landingId))).for("update");
+        if (!row) { skipped += 1; continue; }
+        const result = await applyProductStatus(tx, row, item.version, command);
+        if (result.status === "saved") { updated += 1; continue; }
+        skipped += 1;
+      }
+      return { status: "saved", updated, skipped };
+    });
+  } catch (error) { throw new Error("Failed to batch change products", { cause: error }); }
 }
 
 export async function saveCatalogConfig(landingId: string, userId: string, version: number, config: CatalogConfigValues): Promise<WriteResult> {

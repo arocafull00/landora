@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, Package } from "lucide-react";
 import { useManualAccess } from "@/components/admin/hooks/use-manual-access";
 import { ActionButton } from "@/components/ui/primitives";
 import {
@@ -16,10 +16,13 @@ const MANUAL_ACCESS_COPY = {
   createTitle: "Dar acceso manual",
   editTitle: "Editar acceso manual",
   description:
-    "El acceso general permite utilizar el dashboard. Reservas se concede de forma independiente.",
+    "El acceso general permite utilizar el dashboard. Reservas y Productos se conceden de forma independiente.",
   bookingLabel: "Incluir acceso a Reservas",
   bookingDescription:
     "Permite gestionar reservas, servicios, empleados y periodos bloqueados.",
+  productsLabel: "Incluir acceso a Productos",
+  productsDescription:
+    "Permite gestionar productos, variantes y catálogo público.",
   createAction: "Conceder acceso",
   editAction: "Guardar cambios",
   cancelAction: "Cancelar",
@@ -28,6 +31,7 @@ const MANUAL_ACCESS_COPY = {
 
 export function ManualAccessDialog({
   bookingManualAccess,
+  productsManualAccess,
   isManualAccess,
   name,
   onOpenChange,
@@ -35,6 +39,7 @@ export function ManualAccessDialog({
   userId,
 }: {
   bookingManualAccess: boolean;
+  productsManualAccess: boolean;
   isManualAccess: boolean;
   name: string;
   onOpenChange: (open: boolean) => void;
@@ -43,11 +48,14 @@ export function ManualAccessDialog({
 }) {
   const {
     includeBookings,
+    includeProducts,
     isPending,
     setIncludeBookings,
+    setIncludeProducts,
     submit,
   } = useManualAccess({
     bookingManualAccess,
+    productsManualAccess,
     onSuccess: () => onOpenChange(false),
     userId,
   });
@@ -59,6 +67,8 @@ export function ManualAccessDialog({
     : MANUAL_ACCESS_COPY.createAction;
   const bookingDescriptionId = `manual-booking-access-description-${userId}`;
   const bookingSwitchId = `manual-booking-access-${userId}`;
+  const productsDescriptionId = `manual-products-access-description-${userId}`;
+  const productsSwitchId = `manual-products-access-${userId}`;
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -99,6 +109,35 @@ export function ManualAccessDialog({
               disabled={isPending}
               id={bookingSwitchId}
               onCheckedChange={setIncludeBookings}
+            />
+          </div>
+          <div className="flex items-start justify-between gap-4 rounded-lg border border-outline-variant bg-surface-bg p-4">
+            <div className="flex gap-3">
+              <Package
+                aria-hidden
+                className="mt-0.5 size-5 shrink-0 text-primary"
+              />
+              <div>
+                <label
+                  className="font-label text-label-md text-on-surface"
+                  htmlFor={productsSwitchId}
+                >
+                  {MANUAL_ACCESS_COPY.productsLabel}
+                </label>
+                <p
+                  className="mt-1 font-body text-body-sm text-on-surface-variant"
+                  id={productsDescriptionId}
+                >
+                  {MANUAL_ACCESS_COPY.productsDescription}
+                </p>
+              </div>
+            </div>
+            <Switch
+              aria-describedby={productsDescriptionId}
+              checked={includeProducts}
+              disabled={isPending}
+              id={productsSwitchId}
+              onCheckedChange={setIncludeProducts}
             />
           </div>
           <div className="flex justify-end gap-2">

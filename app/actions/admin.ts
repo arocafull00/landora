@@ -298,7 +298,11 @@ export async function configureManualAccess(
     await setUserManualAccess(
       parsed.data.userId,
       parsed.data.bookingManualAccess,
+      parsed.data.productsManualAccess,
     );
+    const landings = await getLandingsByUserId(parsed.data.userId);
+    for (const landing of landings) revalidateProductRoutes(landing);
+    revalidatePath("/", "layout");
   } catch {
     return { error: "Error al actualizar el acceso manual" };
   }

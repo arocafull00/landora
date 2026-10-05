@@ -5,19 +5,17 @@ import { dashboardNavSections } from "@/lib/dashboard-data";
 import {
   Sidebar,
   SidebarContent,
-  SidebarRail,
+  SidebarMenu,
 } from "@/components/ui/sidebar";
 import { DashboardSidebarHeader } from "@/components/dashboard/dashboard-sidebar-header";
 import { DashboardSidebarNavSection } from "@/components/dashboard/dashboard-sidebar-nav-section";
 import { DashboardSidebarFooter } from "@/components/dashboard/dashboard-sidebar-footer";
-
+import { DashboardSidebarSettingsLink } from "@/components/dashboard/dashboard-sidebar-settings-link";
 export function DashboardSidebar({
-  impersonating,
   showAccountActions,
   bookingModuleEnabled,
   productsModuleEnabled,
 }: {
-  impersonating: boolean;
   showAccountActions: boolean;
   bookingModuleEnabled: boolean;
   productsModuleEnabled: boolean;
@@ -27,23 +25,30 @@ export function DashboardSidebar({
   const sections = bookingModuleEnabled
     ? dashboardNavSections
     : dashboardNavSections.filter((section) => section.id !== "gestion");
-  const navSections = sections.map((section) => ({ ...section, items: section.items.filter((item) => item.id !== "products" || productsModuleEnabled) }));
+  const navSections = sections.map((section) => ({
+    ...section,
+    items: section.items.filter(
+      (item) => item.id !== "products" || productsModuleEnabled,
+    ),
+  }));
 
   return (
-    <Sidebar collapsible="icon" className={impersonating ? "pt-10" : undefined}>
+    <Sidebar collapsible="icon">
       <DashboardSidebarHeader />
       <SidebarContent id="dashboard-sidebar-navigation">
         {navSections.map((section) => (
           <DashboardSidebarNavSection
             key={section.id}
             section={section}
-            showAccountActions={showAccountActions}
-            settingsActive={settingsActive}
           />
         ))}
       </SidebarContent>
-      {showAccountActions ? <DashboardSidebarFooter /> : null}
-      <SidebarRail />
+      {showAccountActions ? (
+        <div className="mt-auto pb-2 px-2 group-data-[collapsible=icon]:px-0">
+          <SidebarMenu><DashboardSidebarSettingsLink isActive={settingsActive} /></SidebarMenu>
+          <DashboardSidebarFooter />
+        </div>
+      ) : null}
     </Sidebar>
   );
 }

@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { DashboardAccountActions } from "@/components/dashboard/dashboard-account-actions";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { DashboardThemeScope } from "@/components/dashboard/dashboard-theme-scope";
-import { ImpersonationBanner } from "@/components/dashboard/impersonation-banner";
 import { AppInteractionProviders } from "@/components/shared/app-interaction-providers";
 import { getBookingSettings } from "@/data/booking-settings";
 import { getLandingPageByUserId } from "@/data/landing-pages";
@@ -83,7 +82,6 @@ export async function DashboardLayoutContent({
     <ClerkProvider>
       <AppInteractionProviders>
         <DashboardThemeScope />
-        {impersonating ? <ImpersonationBanner /> : null}
         <DashboardShell
           bookingEnabled={bookingSettings.enabled && bookingModuleEnabled}
           bookingModuleEnabled={bookingModuleEnabled}

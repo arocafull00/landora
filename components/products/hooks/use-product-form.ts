@@ -14,7 +14,7 @@ function defaults(product: ProductDto | null): ProductFormValues {
   const amount = (value: number | null) => value === null ? "" : (value / 100).toFixed(2);
   return { title: values.title, subtitle: values.subtitle, slug: values.slug, description: values.description, category: values.category, brand: values.brand, tags: values.tags.join(", "), featured: values.featured, images: values.images, priceCents: amount(values.priceCents), previousPriceCents: amount(values.previousPriceCents), material: values.material, composition: values.composition, dimensions: values.dimensions, weight: values.weight, characteristics: values.characteristics, status: values.status, variants: values.variants.map((variant) => ({ ...variant, stock: variant.stock === null ? "" : String(variant.stock), priceCents: amount(variant.priceCents), previousPriceCents: amount(variant.previousPriceCents) })) };
 }
-export function useProductForm(landingId: string, product: ProductDto | null) {
+export function useProductForm(landingId: string, product: ProductDto | null, onSaved: () => void) {
   const router = useRouter();
   const [defaultValues] = useState(() => defaults(product));
   const form = useForm<ProductFormValues, unknown, ProductValues>({ resolver: zodResolver(productFormSchema), defaultValues });
@@ -26,9 +26,8 @@ export function useProductForm(landingId: string, product: ProductDto | null) {
       const result = await saveProductAction({ landingId, productId: product?.id ?? null, version: product?.version ?? 0, product: values });
       if ("error" in result) { toast.error(result.error); return; }
       toast.success("Producto guardado");
-      form.reset(defaults({ ...values, id: result.productId ?? "", landingId, version: (product?.version ?? 0) + 1, createdAt: product?.createdAt ?? "", updatedAt: "" }));
-      router.replace(`/products/${result.productId}`);
       router.refresh();
+      onSaved();
     } catch { toast.error("No se pudo guardar el producto"); }
   }, () => toast.error("Revisa los campos del producto"));
   const generateSlug = () => { if (!form.getValues("slug")) form.setValue("slug", productSlug(form.getValues("title")), { shouldDirty: true }); };

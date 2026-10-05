@@ -3,6 +3,7 @@ import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
 import { getVisibleNav } from "@/lib/template-sections";
 import type { ContactContent } from "@/lib/dashboard-data";
 import { SOCIAL_PLATFORM_LABELS } from "@/lib/footer-content";
+import { FooterLandoraAttribution } from "@/components/templates/shared/footer-landora-attribution";
 import { NuvoletsLink } from "./nuvolets-link";
 import { NuvoletsFooterColumn } from "./nuvolets-footer-column";
 
@@ -14,6 +15,10 @@ export function NuvoletsFooter({ brand, config, contact, copyrightYear, hidden }
     <NuvoletsFooterColumn title={config.exploreTitle} links={getVisibleNav(config.exploreLinks, hidden, "nuvolets")} />
     <div><NuvoletsFooterColumn title={config.infoTitle} links={getVisibleNav(config.infoLinks, hidden, "nuvolets")} />{contact.email ? <p className="mt-3"><NuvoletsLink href={`mailto:${contact.email}`}>{contact.email}</NuvoletsLink></p> : null}{contact.phone ? <p className="mt-3"><NuvoletsLink href={`tel:${contact.phone}`}>{contact.phone}</NuvoletsLink></p> : null}{contact.ctaLabel && contactHref ? <NuvoletsLink href={contactHref} className="nuvolets-button mt-3 gap-2">{contact.email ? <Mail aria-hidden size={18} className="shrink-0" /> : <Phone aria-hidden size={18} className="shrink-0" />}{contact.ctaLabel}</NuvoletsLink> : null}</div>
     <div><NuvoletsFooterColumn title={config.socialTitle} links={getVisibleNav(socialLinks, hidden, "nuvolets")} /><p className="mt-3">{contact.address}</p></div>
-    <div className="border-t border-nuvolets-border pt-6 md:col-span-4"><p>© {copyrightYear} {brand} {contact.copyrightSuffix} · {config.copyright}</p>{contact.copyrightExtra ? <p className="mt-3 whitespace-pre-line">{contact.copyrightExtra}</p> : null}</div>
+    <div className="border-t border-nuvolets-border pt-6 md:col-span-4">
+      <p>© {copyrightYear} {brand} {contact.copyrightSuffix} · {config.copyright}</p>
+      <FooterLandoraAttribution className="mt-2 text-site-chip/70" />
+      {contact.copyrightExtra ? <p className="mt-3 whitespace-pre-line">{contact.copyrightExtra}</p> : null}
+    </div>
   </footer>;
 }

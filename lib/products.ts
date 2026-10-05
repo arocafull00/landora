@@ -2,6 +2,8 @@ import type { ProductDto, PublicProductDto } from "@/lib/domain/dtos";
 import type { ProductValues } from "@/lib/schemas/products";
 
 export const PRODUCT_PAGE_SIZE = 20;
+export const LOW_STOCK_THRESHOLD = 5;
+export type ProductStockState = "pending" | "out" | "low" | "ok";
 const EUR_FORMAT = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" });
 export const PRODUCTS_COPY = {
   title: "Productos", description: "Gestiona el catálogo, las variantes y las existencias de tu tienda.",
@@ -32,4 +34,19 @@ export function toPublicProduct(product: ProductDto): PublicProductDto {
 }
 export function productMinPrice(product: Pick<ProductDto, "priceCents"> & { variants: { priceCents: number | null }[] }) {
   return Math.min(...product.variants.map((variant) => variant.priceCents ?? product.priceCents ?? 0));
+}
+export function productStockInfo(product: Pick<ProductDto, "variants">) {
+  if (product.variants.some((variant) => variant.stock === null)) {
+    return { units: null as number | null, state: "pending" as ProductStockState };
+  }
+  const units = product.variants.reduce((sum, variant) => sum + (variant.stock ?? 0), 0);
+  if (units <= 0) return { units, state: "out" as ProductStockState };
+  if (units <= LOW_STOCK_THRESHOLD) return { units, state: "low" as ProductStockState };
+  return { units, state: "ok" as ProductStockState };
+}
+export function productVariantSummary(product: Pick<ProductDto, "variants">) {
+  const count = product.variants.length;
+  const sku = product.variants.find((variant) => variant.sku.trim())?.sku.trim();
+  if (sku) return `${sku} · ${count} variantes`;
+  return `${count} variantes`;
 }

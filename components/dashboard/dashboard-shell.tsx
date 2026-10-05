@@ -43,15 +43,16 @@ export function DashboardShell({
         productsModuleEnabled={productsModuleEnabled}
       >
         <SidebarProvider
+          defaultOpen={false}
           className="dashboard-app h-dvh overflow-hidden bg-surface-bg text-on-background"
           style={
             {
               "--sidebar-width": "14rem",
+              "--sidebar-width-icon": "72px",
             } as React.CSSProperties
           }
         >
           <DashboardSidebar
-            impersonating={impersonating}
             showAccountActions={!isAdmin}
             bookingModuleEnabled={bookingModuleEnabled}
             productsModuleEnabled={productsModuleEnabled}

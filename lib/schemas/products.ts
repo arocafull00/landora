@@ -50,6 +50,11 @@ export const catalogConfigSchema = z.strictObject({
 });
 export const productSaveSchema = z.strictObject({ landingId: z.uuid(), productId: z.uuid().nullable(), version: z.number().int().min(0), product: productSchema });
 export const productCommandSchema = z.strictObject({ landingId: z.uuid(), productId: z.uuid(), version: z.number().int().min(1), command: z.enum(["duplicate", "archive", "restore", "unpublish", "publish"]) });
+export const productBatchCommandSchema = z.strictObject({
+  landingId: z.uuid(),
+  items: z.array(z.strictObject({ productId: z.uuid(), version: z.number().int().min(1) })).min(1).max(50),
+  command: z.enum(["publish", "archive"]),
+});
 export const productsAccessSchema = z.strictObject({ userId: z.uuid(), enabled: z.boolean() });
 export const catalogSaveSchema = z.strictObject({ landingId: z.uuid(), version: z.number().int().min(0), config: catalogConfigSchema });
 export const catalogQuerySchema = z.strictObject({
