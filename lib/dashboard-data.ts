@@ -7,6 +7,7 @@ export type DashboardView =
   | "email-subscriptions"
   | "editor"
   | "assets"
+  | "company"
   | "domain"
   | "blog"
   | "products"

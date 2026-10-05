@@ -46,7 +46,7 @@ export const catalogConfigSchema = z.strictObject({
 const productSaveFields = { landingId: z.uuid(), productId: z.uuid().nullable(), version: z.number().int().min(0), intent: z.enum(["save", "publish"]) };
 export const productSaveSchema = z.strictObject({ ...productSaveFields, product: z.strictObject(productSchema.shape).omit({ status: true }) })
   .transform((input) => ({ ...input, product: { ...input.product, status: input.intent === "publish" ? "published" as const : "draft" as const } }))
-  .pipe(z.strictObject({ ...productSaveFields, product: productSchema }));
+  .pipe(z.strictObject({ ...productSaveFields, product: productSchema.safeExtend({ status: productSchema.shape.status.extract(["draft", "published"]) }) }));
 export const productCommandSchema = z.strictObject({ landingId: z.uuid(), productId: z.uuid(), version: z.number().int().min(1), command: z.enum(["duplicate", "archive", "restore", "unpublish", "publish"]) });
 export const productBatchCommandSchema = z.strictObject({
   landingId: z.uuid(),

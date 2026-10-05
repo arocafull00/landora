@@ -61,7 +61,7 @@ export const getProductById = cache(async (landingId: string, productId: string)
 
 export const getProductBySlug = cache(async (landingId: string, slug: string, preview: boolean) => {
   try {
-    const slugColumn = preview ? sql<string>`coalesce(${storeProducts.draftContent}->>'slug', ${storeProducts.slug})` : storeProducts.slug;
+    const slugColumn = preview ? sql<string>`coalesce(${storeProducts.draftContent}->>'slug', ${storeProducts.slug})` : sql<string>`${storeProducts.slug}`;
     const [row] = await db.select().from(storeProducts).where(and(eq(storeProducts.landingId, landingId), eq(slugColumn, slug), preview ? ne(storeProducts.status, "archived") : eq(storeProducts.status, "published")));
     if (!row) return null;
     const variants = await db.select().from(storeProductVariants).where(eq(storeProductVariants.productId, row.id)).orderBy(asc(storeProductVariants.sortOrder));
@@ -73,8 +73,8 @@ export const getProductPage = cache(async (landingId: string, query: CatalogQuer
   try {
     const scope = and(eq(storeProducts.landingId, landingId), publicOnly ? eq(storeProducts.status, "published") : preview ? ne(storeProducts.status, "archived") : undefined);
     const title = publicOnly ? storeProducts.title : sql<string>`coalesce(${storeProducts.draftContent}->>'title', ${storeProducts.title})`;
-    const category = publicOnly ? storeProducts.category : sql<string>`coalesce(${storeProducts.draftContent}->>'category', ${storeProducts.category})`;
-    const brand = publicOnly ? storeProducts.brand : sql<string>`coalesce(${storeProducts.draftContent}->>'brand', ${storeProducts.brand})`;
+    const category = publicOnly ? sql<string>`${storeProducts.category}` : sql<string>`coalesce(${storeProducts.draftContent}->>'category', ${storeProducts.category})`;
+    const brand = publicOnly ? sql<string>`${storeProducts.brand}` : sql<string>`coalesce(${storeProducts.draftContent}->>'brand', ${storeProducts.brand})`;
     const price = publicOnly ? storeProducts.priceCents : sql<number>`coalesce((${storeProducts.draftContent}->>'priceCents')::integer, ${storeProducts.priceCents})`;
     const variantSource = publicOnly ? sql`store_product_variants v` : sql`jsonb_to_recordset(coalesce(${storeProducts.draftContent}->'variants', (select jsonb_agg(jsonb_build_object('size', pv.size, 'sku', pv.sku, 'stock', pv.stock)) from store_product_variants pv where pv.product_id = ${storeProducts.id}), '[]'::jsonb)) as v(size text, sku text, stock integer)`;
     const variantScope = publicOnly ? sql`v.product_id = ${storeProducts.id}` : sql`true`;
