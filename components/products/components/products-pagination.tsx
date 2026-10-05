@@ -24,7 +24,7 @@ export function ProductsPagination({
   const windowEnd = Math.min(pages, windowStart + 4);
   const pageNumbers = Array.from({ length: windowEnd - windowStart + 1 }, (_, index) => windowStart + index);
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-4 py-3">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line py-3">
       <span className="text-xs text-ink-subtle">{PRODUCTS_LIST_COPY.pagination.showing(from, to, total)}</span>
       <Pagination className="mx-0 w-auto justify-end">
         <PaginationContent>

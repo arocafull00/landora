@@ -29,7 +29,7 @@ export function ProductsRowActions({
         <Button
           type="button"
           variant="ghost"
-          className="size-8 rounded-lg p-0 text-ink-subtle hover:bg-surface-container"
+          className="size-8 shrink-0 rounded-lg p-0 text-ink-subtle hover:bg-surface-container"
           aria-label={PRODUCTS_LIST_COPY.columns.actions}
         >
           <MoreHorizontal className="size-4" aria-hidden />

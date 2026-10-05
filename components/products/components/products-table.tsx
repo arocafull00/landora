@@ -32,10 +32,10 @@ export function ProductsTable({
   onCommand: (product: ProductDto, command: "duplicate" | "archive" | "restore" | "unpublish" | "publish") => void;
 }) {
   return (
-    <Table>
-      <TableHeader className="bg-surface-subtle">
-        <TableRow className="border-b-0 hover:bg-transparent">
-          <TableHead className="w-12 px-4 py-3">
+    <Table className="w-full">
+      <TableHeader>
+        <TableRow className="border-b border-line hover:bg-transparent">
+          <TableHead className="w-10 px-0 py-3">
             <Checkbox
               checked={allSelected ? true : indeterminate ? "indeterminate" : false}
               onCheckedChange={onToggleAll}
@@ -43,11 +43,11 @@ export function ProductsTable({
             />
           </TableHead>
           <TableHead className={cn(HEAD_CLASS, "px-2")}>{PRODUCTS_LIST_COPY.columns.product}</TableHead>
-          <TableHead className={cn(HEAD_CLASS, "px-3")}>{PRODUCTS_LIST_COPY.columns.status}</TableHead>
-          <TableHead className={cn(HEAD_CLASS, "px-3")}>{PRODUCTS_LIST_COPY.columns.inventory}</TableHead>
-          <TableHead className={cn(HEAD_CLASS, "px-3")}>{PRODUCTS_LIST_COPY.columns.category}</TableHead>
-          <TableHead className={cn(HEAD_CLASS, "px-3 text-right")}>{PRODUCTS_LIST_COPY.columns.price}</TableHead>
-          <TableHead className="w-14">
+          <TableHead className={cn(HEAD_CLASS, "w-[7.5rem] px-2")}>{PRODUCTS_LIST_COPY.columns.status}</TableHead>
+          <TableHead className={cn(HEAD_CLASS, "w-[8.5rem] px-2")}>{PRODUCTS_LIST_COPY.columns.inventory}</TableHead>
+          <TableHead className={cn(HEAD_CLASS, "hidden w-[9rem] px-2 lg:table-cell")}>{PRODUCTS_LIST_COPY.columns.category}</TableHead>
+          <TableHead className={cn(HEAD_CLASS, "w-[5.5rem] px-2 text-right")}>{PRODUCTS_LIST_COPY.columns.price}</TableHead>
+          <TableHead className="w-10 px-0">
             <span className="sr-only">{PRODUCTS_LIST_COPY.columns.actions}</span>
           </TableHead>
         </TableRow>

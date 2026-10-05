@@ -80,6 +80,50 @@ function DialogContent({
   )
 }
 
+function DialogSheetContent({
+  className,
+  children,
+  showCloseButton = true,
+  side = "right",
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  showCloseButton?: boolean
+  side?: "top" | "right" | "bottom" | "left"
+}) {
+  return (
+    <DialogPortal data-slot="dialog-portal">
+      <DialogPrimitive.Overlay
+        data-slot="dialog-overlay"
+        className="motion-sheet-overlay fixed inset-0 z-50 bg-black/40"
+      />
+      <DialogPrimitive.Content
+        data-slot="dialog-sheet-content"
+        data-side={side}
+        className={cn(
+          "motion-sheet fixed z-50 flex h-full max-h-dvh flex-col gap-0 overflow-hidden bg-surface p-0 shadow-lg outline-none",
+          side === "right" && "inset-y-0 right-0 w-full max-w-2xl",
+          side === "left" && "inset-y-0 left-0 w-full max-w-2xl border-0 border-r border-border-subtle",
+          side === "top" && "inset-x-0 top-0 h-auto max-h-[85dvh] border-0 border-b border-border-subtle",
+          side === "bottom" && "inset-x-0 bottom-0 h-auto max-h-[85dvh] border-0 border-t border-border-subtle",
+          className
+        )}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close
+            data-slot="dialog-close"
+            className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+          >
+            <XIcon />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  )
+}
+
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -152,6 +196,7 @@ export {
   DialogHeader,
   DialogOverlay,
   DialogPortal,
+  DialogSheetContent,
   DialogTitle,
   DialogTrigger,
 }

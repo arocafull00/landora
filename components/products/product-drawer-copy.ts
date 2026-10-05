@@ -9,4 +9,12 @@ export const PRODUCT_DRAWER_COPY = {
   state: "Estado",
   preview: "Vista previa",
   close: "Cerrar",
+  sectionGeneral: "Información general",
+  sectionData: "Datos del producto",
+  sectionImages: "Imágenes",
+  sectionVariants: "Variantes y existencias",
+  sectionCharacteristics: "Otras características",
+  addImage: "Añadir imagen",
+  addVariant: "Añadir variante",
+  addCharacteristic: "Añadir característica",
 } as const;

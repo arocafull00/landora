@@ -43,6 +43,8 @@ No asumas APIs de versiones anteriores ni de la documentación sin versionar.
 
 **UI:** No uses emojis. Usa iconos de la librería del proyecto (shadcn/ui o Lucide React).
 
+**shadcn/ui siempre:** Usa SIEMPRE los componentes de `components/ui/` (shadcn) para cualquier elemento de UI que tenga equivalente: `Separator` para divisores (nunca `divide-y`, `border-t` ni `<hr>` como separadores), `Button`, `Input`, `Label`, `Switch`, `Select`, `Dialog`, `Sheet`, `Tabs`, etc. No reimplementes con HTML nativo ni con clases sueltas lo que ya existe como componente. Si falta el componente, añádelo con la CLI de shadcn (`pnpm dlx shadcn@latest add <componente>`) antes de maquetarlo a mano.
+
 **Server vs Client Components:** Por defecto usa Server Components. Añade `"use client"` solo cuando sea estrictamente necesario (interactividad, hooks de estado, efectos).
 
 **Server Actions:** Usa Server Actions para mutaciones. Valida la entrada con Zod en el servidor.

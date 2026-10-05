@@ -24,7 +24,7 @@ export function ProductsActiveFilters({
   }
   if (!chips.length) return null;
   return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-line bg-surface-subtle px-4 py-3">
+    <div className="flex flex-wrap items-center gap-2 border-b border-line py-2.5">
       <span className="text-xs text-ink-subtle">{PRODUCTS_LIST_COPY.activeFilters}</span>
       {chips.map((chip) => (
         <button

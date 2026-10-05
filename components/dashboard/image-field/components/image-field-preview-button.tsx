@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 
 export function ImageFieldPreviewButton({
   activeAssetMimeType,
+  className,
   label,
   onOpen,
   showThemedPreview,
@@ -15,6 +16,7 @@ export function ImageFieldPreviewButton({
   value,
 }: {
   activeAssetMimeType?: string;
+  className?: string;
   label: string;
   onOpen: () => void;
   showThemedPreview: boolean;
@@ -27,6 +29,7 @@ export function ImageFieldPreviewButton({
       className={cn(
         "group relative h-28 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface-variant transition-[border-color,box-shadow] hover:border-primary focus:ring-2 focus:ring-primary focus:outline-none",
         !value && "border-dashed",
+        className,
       )}
       data-palette="default"
       data-site-theme={templateId ? "" : undefined}

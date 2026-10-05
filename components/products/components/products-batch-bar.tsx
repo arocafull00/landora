@@ -19,7 +19,7 @@ export function ProductsBatchBar({
 }) {
   if (!count) return null;
   return (
-    <div className="flex flex-wrap items-center gap-3 border-b border-primary-subtle-border bg-primary-subtle px-4 py-2.5">
+    <div className="flex flex-wrap items-center gap-3 border-b border-primary-subtle-border bg-primary-subtle py-2.5">
       <span className="text-sm font-medium text-on-primary-subtle">
         {count === 1 ? PRODUCTS_LIST_COPY.batch.selectedOne : PRODUCTS_LIST_COPY.batch.selectedMany(count)}
       </span>

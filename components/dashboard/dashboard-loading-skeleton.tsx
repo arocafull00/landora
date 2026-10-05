@@ -22,6 +22,22 @@ function DashboardSidebarSkeleton() {
   );
 }
 
+export function DashboardContentLoadingSkeleton() {
+  return (
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-unit-lg">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="mt-2 h-4 w-72" />
+        <div className="mt-unit-lg grid flex-1 gap-unit-md">
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function DashboardLoadingSkeleton() {
   return (
     <div className="dashboard-app flex h-screen overflow-hidden bg-surface-bg text-on-background">
@@ -30,15 +46,7 @@ export function DashboardLoadingSkeleton() {
         <div className="flex items-center gap-2 border-b border-outline-variant px-unit-md py-2 md:hidden">
           <Skeleton className="h-8 w-8" />
         </div>
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-unit-lg">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="mt-2 h-4 w-72" />
-          <div className="mt-unit-lg grid flex-1 gap-unit-md">
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-32 w-full" />
-          </div>
-        </div>
+        <DashboardContentLoadingSkeleton />
       </div>
     </div>
   );

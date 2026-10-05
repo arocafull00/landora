@@ -18,7 +18,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const parsed = catalogQuerySchema.safeParse(await searchParams);
   if (!parsed.success) {
     return (
-      <main id="products-main" className="p-8">
+      <main id="products-main" className="w-full max-w-[1600px] px-6 py-6 lg:px-8 lg:py-8">
         <p>{PRODUCTS_COPY.invalidFilters}</p>
         <Link href="/products">{PRODUCTS_COPY.resetFilters}</Link>
       </main>
@@ -29,8 +29,8 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     getAssetsByUserId(userId),
   ]);
   return (
-    <div className="min-h-full bg-page">
-      <main id="products-main" className="mx-auto max-w-[1280px] space-y-7 px-4 py-6 md:px-8 md:py-8">
+    <div className="min-h-full bg-surface-container-lowest">
+      <main id="products-main" className="mx-auto w-full max-w-[1600px] space-y-6 px-6 py-6 lg:px-8 lg:py-8">
         <AssetsStoreProvider initialRows={assets.map(toAssetDto)}>
           <ProductsListClient
             landingId={landing.id}

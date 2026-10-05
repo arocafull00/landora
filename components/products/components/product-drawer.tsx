@@ -5,17 +5,22 @@ import { Controller } from "react-hook-form";
 import type { ProductDto } from "@/lib/domain/dtos";
 import {
   Dialog,
-  DialogContent,
   DialogDescription,
   DialogHeader,
+  DialogSheetContent,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import { useProductForm } from "../hooks/use-product-form";
-import { ProductEditorForm } from "../product-editor-form";
 import { OptionsSelect } from "./options-select";
 import { PRODUCT_DRAWER_COPY } from "../product-drawer-copy";
+import { ProductEditorSection } from "./product-editor-section";
+import { ProductInformationGeneralForm } from "./product-information-general-form";
+import { ProductInformationDataForm } from "./product-information-data-form";
+import { ProductImageForm } from "./product-image-form";
+import { ProductVariantForm } from "./product-variant-form";
+import { ProductCharacteristicForm } from "./product-characteristic-form";
 
 const STATES = [
   { value: "draft", label: "Borrador" },
@@ -55,40 +60,96 @@ export function ProductDrawer({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent
-        showCloseButton
-        className={cn(
-          "flex h-full max-h-dvh w-full max-w-2xl flex-col gap-0 overflow-hidden rounded-none border-l p-0",
-          "inset-y-0 top-0 right-0 left-auto translate-x-0 translate-y-0",
-          "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right",
-          "data-[state=closed]:zoom-out-100 data-[state=open]:zoom-in-100"
-        )}
-      >
-        <DialogHeader className="shrink-0 border-b border-border-subtle px-6 py-4 text-left">
+      <DialogSheetContent showCloseButton>
+        <DialogHeader className="shrink-0 px-6 py-4 text-left">
           <DialogTitle>{isEdit ? PRODUCT_DRAWER_COPY.editTitle : PRODUCT_DRAWER_COPY.newTitle}</DialogTitle>
           <DialogDescription>
             {isEdit ? PRODUCT_DRAWER_COPY.editDescription : PRODUCT_DRAWER_COPY.newDescription}
           </DialogDescription>
         </DialogHeader>
+        <Separator className="shrink-0 bg-border-subtle" />
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
-          <ProductEditorForm
-            formId={PRODUCT_FORM_ID}
-            form={form}
-            images={images}
-            variants={variants}
-            characteristics={characteristics}
-            errors={errors}
-            categories={categories}
-            brands={brands}
-            generateSlug={generateSlug}
-            addVariant={addVariant}
-            addImage={addImage}
-            addCharacteristic={addCharacteristic}
-            submit={submit}
-            isSubmitting={isSubmitting}
-          />
+          <form id={PRODUCT_FORM_ID} onSubmit={submit}>
+            <fieldset disabled={isSubmitting} className="min-w-0 border-0 p-0">
+              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionGeneral}>
+                <ProductInformationGeneralForm register={form.register} errors={errors} generateSlug={generateSlug} />
+              </ProductEditorSection>
+              <Separator className="my-8 bg-border-subtle" />
+              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionData}>
+                <ProductInformationDataForm
+                  register={form.register}
+                  control={form.control}
+                  errors={errors}
+                  categories={categories}
+                  brands={brands}
+                />
+              </ProductEditorSection>
+              <Separator className="my-8 bg-border-subtle" />
+              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionImages}>
+                <div>
+                  {images.fields.map((image, index) => (
+                    <ProductImageForm
+                      key={image.id}
+                      index={index}
+                      total={images.fields.length}
+                      control={form.control}
+                      register={form.register}
+                      errors={errors.images}
+                      move={images.move}
+                      remove={() => images.remove(index)}
+                    />
+                  ))}
+                </div>
+                <Button type="button" variant="outline" className="mt-2" disabled={images.fields.length >= 20} onClick={addImage}>
+                  {PRODUCT_DRAWER_COPY.addImage}
+                </Button>
+                {errors.images?.root?.message || errors.images?.message ? (
+                  <p className="text-danger">{errors.images.root?.message ?? errors.images.message}</p>
+                ) : null}
+              </ProductEditorSection>
+              <Separator className="my-8 bg-border-subtle" />
+              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionVariants}>
+                <div className="space-y-10">
+                  {variants.fields.map((variant, index) => (
+                    <ProductVariantForm
+                      key={variant.fieldKey}
+                      index={index}
+                      register={form.register}
+                      error={errors.variants}
+                      canRemove={variants.fields.length > 1}
+                      remove={() => variants.remove(index)}
+                    />
+                  ))}
+                </div>
+                <Button type="button" variant="outline" className="mt-2" disabled={variants.fields.length >= 200} onClick={addVariant}>
+                  {PRODUCT_DRAWER_COPY.addVariant}
+                </Button>
+                {errors.variants?.root?.message || errors.variants?.message ? (
+                  <p className="text-danger">{errors.variants.root?.message ?? errors.variants.message}</p>
+                ) : null}
+              </ProductEditorSection>
+              <Separator className="my-8 bg-border-subtle" />
+              <ProductEditorSection title={PRODUCT_DRAWER_COPY.sectionCharacteristics}>
+                <div className="space-y-4">
+                  {characteristics.fields.map((field, index) => (
+                    <ProductCharacteristicForm
+                      key={field.id}
+                      index={index}
+                      register={form.register}
+                      errors={errors.characteristics}
+                      remove={() => characteristics.remove(index)}
+                    />
+                  ))}
+                </div>
+                <Button type="button" variant="outline" disabled={characteristics.fields.length >= 30} onClick={addCharacteristic}>
+                  {PRODUCT_DRAWER_COPY.addCharacteristic}
+                </Button>
+              </ProductEditorSection>
+            </fieldset>
+          </form>
         </div>
-        <footer className="flex shrink-0 flex-wrap items-center gap-3 border-t border-border-subtle bg-surface px-6 py-4">
+        <Separator className="shrink-0 bg-border-subtle" />
+        <footer className="flex shrink-0 flex-wrap items-center gap-3 bg-surface px-6 py-4">
           <Controller
             name="status"
             control={form.control}
@@ -112,7 +173,7 @@ export function ProductDrawer({
             </Button>
           </div>
         </footer>
-      </DialogContent>
+      </DialogSheetContent>
     </Dialog>
   );
 }
