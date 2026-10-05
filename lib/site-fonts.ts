@@ -1,4 +1,6 @@
 import {
+  DM_Serif_Display,
+  Manrope,
   Cormorant_Garamond,
   DM_Sans,
   Fraunces,
@@ -94,7 +96,12 @@ const interTight = Inter_Tight({
   preload: false,
 });
 
+const nuvoletsDisplay = DM_Serif_Display({ variable: "--font-source-dm-serif", subsets: ["latin"], weight: "400", preload: false });
+const nuvoletsBody = Manrope({ variable: "--font-source-manrope", subsets: ["latin"], weight: ["400", "500", "600"], preload: false });
+
 export const siteFontVariables = [
+  nuvoletsDisplay.variable,
+  nuvoletsBody.variable,
   dashboardHeadline.variable,
   inter.variable,
   dashboardLabel.variable,

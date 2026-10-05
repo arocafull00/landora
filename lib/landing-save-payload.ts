@@ -13,6 +13,7 @@ import {
 } from "@/lib/template-sections";
 
 export const LANDING_SECTION_KEYS = [
+  "nuvolets",
   "hero",
   "cta",
   "branding",
@@ -95,6 +96,7 @@ export function getLandingSectionPayloads(
   );
 
   return {
+    ...(content.nuvolets ? { nuvolets: { ...content.nuvolets } } : {}),
     hero: { ...content.hero },
     cta: { ...content.contact },
     branding: {

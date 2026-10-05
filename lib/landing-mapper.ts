@@ -1,3 +1,4 @@
+import { nuvoletsContentSchema } from "@/lib/schemas/nuvolets";
 import type { LandingWithSections } from "@/data/landing-pages";
 import type { Landing, LandingContent, HeroBannerOffer, PromotionCardsOffer } from "@/lib/dashboard-data";
 import { resolveGalleryItems } from "@/lib/gallery-content";
@@ -68,6 +69,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       : undefined;
 
   return {
+    ...(row.nuvolets ? { nuvolets: nuvoletsContentSchema.parse(row.nuvolets.content) } : {}),
     appearance: resolveLandingAppearance(row.template, {
       paletteId: row.branding?.paletteId,
       typographyId: row.branding?.typographyId,

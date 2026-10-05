@@ -4,7 +4,11 @@ function scrollToSectionId(sectionId: string) {
   const el = document.getElementById(sectionId);
   if (!el) return false;
 
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  const marginTop = Number.parseFloat(window.getComputedStyle(el).scrollMarginTop) || 0;
+  window.scrollTo({
+    top: Math.max(0, window.scrollY + el.getBoundingClientRect().top - marginTop),
+    behavior: "auto",
+  });
   return true;
 }
 

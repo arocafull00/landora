@@ -4,7 +4,7 @@ import type {
   LandingContent,
   LandingSectionSelections,
 } from "@/lib/dashboard-data";
-import { STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT, SIGNAL_DEFAULT_CONTENT, PALLET_ROSS_DEFAULT_CONTENT } from "@/lib/default-content";
+import { NUVOLETS_DEFAULT_CONTENT, STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT, SIGNAL_DEFAULT_CONTENT, PALLET_ROSS_DEFAULT_CONTENT } from "@/lib/default-content";
 import { getTemplateSections } from "@/lib/template-sections";
 
 export type EditorTabGroup = "section" | "config";
@@ -90,6 +90,18 @@ export type TemplateDefinition<T extends TemplateId = TemplateId> = {
 };
 
 const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
+  nuvolets: {
+    id: "nuvolets", label: "Nuvolets", description: "Landing de moda infantil con catálogo informativo, tienda física y newsletter.",
+    demoContent: NUVOLETS_DEFAULT_CONTENT,
+    editorTabs: [{ id: "Hero", label: "Hero" }, NAV_EDITOR_TAB, DESIGN_EDITOR_TAB,
+      { id: "Franja", label: "Franja" }, { id: "Categorías", label: "Categorías" },
+      { id: "Colección", label: "Colección" }, { id: "Productos", label: "Productos" },
+      { id: "Historia", label: "Historia" }, { id: "Favoritos", label: "Favoritos" },
+      { id: "Tienda", label: "Tienda" }, { id: "Instagram", label: "Instagram" },
+      { id: "Newsletter", label: "Newsletter" }, { id: "Mascota", label: "Mascota" },
+      FOOTER_EDITOR_TAB, SEO_EDITOR_TAB, SECTIONS_EDITOR_TAB],
+    getComponent: () => import("@/components/templates/nuvolets/nuvolets-template"),
+  },
   velar: {
     id: "velar",
     label: "Velar",

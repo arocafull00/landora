@@ -370,7 +370,21 @@ const SIGNAL_SECTIONS: TemplateSectionDef[] = [
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
 ];
 
+const NUVOLETS_SECTIONS: TemplateSectionDef[] = [
+  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
+  { anchor: "franja", label: "Franja", editorTabId: "Franja" },
+  { anchor: "categorias", label: "Categorías", editorTabId: "Categorías" },
+  { anchor: "coleccion", label: "Colección", editorTabId: "Colección" },
+  { anchor: "historia", label: "Historia", editorTabId: "Historia" },
+  { anchor: "favoritos", label: "Favoritos", editorTabId: "Favoritos" },
+  { anchor: "tienda", label: "Tienda", editorTabId: "Tienda" },
+  { anchor: "instagram", label: "Instagram", editorTabId: "Instagram" },
+  { anchor: "newsletter", label: "Newsletter", editorTabId: "Newsletter" },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", required: true },
+];
+
 const TEMPLATE_SECTIONS: Record<TemplateId, TemplateSectionDef[]> = {
+  nuvolets: NUVOLETS_SECTIONS,
   velar: VELAR_SECTIONS,
   studio: STUDIO_SECTIONS,
   portfolio: PORTFOLIO_SECTIONS,

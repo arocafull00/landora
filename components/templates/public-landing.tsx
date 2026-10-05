@@ -12,6 +12,10 @@ async function renderPublicTemplate(
   template: PublishedLanding["template"],
   props: PublicTemplateRenderProps,
 ) {
+  if (template === "nuvolets") {
+    const { NuvoletsTemplate } = await import("@/components/templates/nuvolets/nuvolets-template");
+    return <NuvoletsTemplate {...props} />;
+  }
   if (template === "studio") {
     const { StudioTemplate } = await import("@/components/templates/studio/studio-template");
     return <StudioTemplate {...props} />;

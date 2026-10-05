@@ -1,3 +1,4 @@
+import { upsertLandingNuvolets } from "@/data/nuvolets";
 import { getLandingPageById } from "@/data/landing-pages";
 import {
   upsertLandingSeo,
@@ -50,6 +51,7 @@ import {
 } from "@/data/landing-section-mappers";
 
 const FULL_SECTION_KEYS: LandingSectionKey[] = [
+  "nuvolets",
   "hero",
   "branding",
   "story",
@@ -84,6 +86,10 @@ async function applySectionDefaults(
 ) {
   const ops: Promise<unknown>[] = [];
   const { templateId, hiddenSections, includeSeo, useVisibleNav } = options;
+
+  if (templateId === "nuvolets" && sections.includes("nuvolets") && content.nuvolets) {
+    ops.push(upsertLandingNuvolets(landingId, content.nuvolets));
+  }
 
   if (includeSeo) {
     ops.push(upsertLandingSeo(landingId, mapDefaultSeo(content)));

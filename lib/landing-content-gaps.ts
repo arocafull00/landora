@@ -3,6 +3,7 @@ import type { TemplateId } from "@/lib/dashboard-data";
 import { getHiddenContentKeys } from "@/lib/template-sections";
 
 export type LandingSectionKey =
+  | "nuvolets"
   | "hero"
   | "branding"
   | "story"
@@ -124,6 +125,7 @@ function isCtaEmpty(landing: LandingWithSections) {
 }
 
 function isSectionEmpty(landing: LandingWithSections, section: LandingSectionKey) {
+  if (section === "nuvolets") return !landing.nuvolets;
   if (section === "hero") return isHeroEmpty(landing);
   if (section === "branding") return isBrandingEmpty(landing);
   if (section === "story") return isStoryEmpty(landing);
@@ -169,6 +171,7 @@ const SIGNAL_GAP_SECTIONS: LandingSectionKey[] = [
 ];
 
 function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
+  if (template === "nuvolets") return ["nuvolets", "hero", "branding", "nav", "cta"];
   if (template === "studio") return STUDIO_SECTIONS;
   if (template === "portfolio") return PORTFOLIO_SECTIONS;
   if (template === "ristorante") return RISTORANTE_SECTIONS;
@@ -181,6 +184,7 @@ function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
 }
 
 export function getMissingLandingSections(landing: LandingWithSections) {
+  if (landing.template === "nuvolets" && landing.nuvolets) return [];
   const hiddenKeys = new Set(
     getHiddenContentKeys(landing.branding?.hiddenSections ?? [], landing.template),
   );
@@ -192,6 +196,7 @@ export function getMissingLandingSections(landing: LandingWithSections) {
 }
 
 export function isLandingFullyEmpty(landing: LandingWithSections) {
+  if (landing.template === "nuvolets") return !landing.nuvolets && !landing.branding;
   return (
     isHeroEmpty(landing) &&
     landing.stats.length === 0 &&

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTemplate, isAvailableTemplateId } from "@/lib/template-registry";
+import { NuvoletsTemplate } from "@/components/templates/nuvolets/nuvolets-template";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
@@ -20,6 +21,7 @@ import { getPublicRenderTime } from "@/lib/public-render-time";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 const TEMPLATE_COMPONENTS = {
+  nuvolets: NuvoletsTemplate,
   velar: VelarTemplate,
   studio: StudioTemplate,
   portfolio: PortfolioTemplate,

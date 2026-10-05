@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { nuvoletsContentSchema, nuvoletsLandingContentSchema } from "@/lib/schemas/nuvolets";
 import { LANDING_SECTION_KEYS } from "@/lib/landing-save-payload";
 
 const contentSchema = z
@@ -19,9 +20,11 @@ const contentSchema = z
       ),
     "Missing landing content",
   )
-  .refine((value) => JSON.stringify(value).length <= 1_000_000, "Landing content too large");
+  .refine((value) => JSON.stringify(value).length <= 1_000_000, "Landing content too large")
+  .refine((value) => value.nuvolets === undefined || nuvoletsLandingContentSchema.safeParse(value).success, "Invalid Nuvolets content");
 
 export const heroVariantSchema = z.enum([
+  "nuvolets",
   "velar",
   "studio",
   "portfolio",
@@ -86,7 +89,8 @@ const sectionPayloadsSchema = z
   .refine(
     (value) => JSON.stringify(value).length <= 1_000_000,
     "Landing sections too large",
-  );
+  )
+  .refine((value) => value.nuvolets === undefined || nuvoletsContentSchema.safeParse(value.nuvolets).success, "Invalid Nuvolets section");
 
 const changesSchema = z.strictObject({
   meta: metaSchema.optional(),

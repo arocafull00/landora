@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { nuvoletsLandingContentSchema } from "@/lib/schemas/nuvolets";
 import type {
   EditorPageTarget,
   LandingContent,
@@ -147,6 +148,7 @@ export function isPreviewContentMessage(data: unknown): data is PreviewContentMe
   if (!message.content || typeof message.content !== "object") return false;
   if (!message.sectionSelections || typeof message.sectionSelections !== "object") return false;
   if (typeof message.template !== "string") return false;
+  if (message.template === "nuvolets" && !nuvoletsLandingContentSchema.safeParse(message.content).success) return false;
   return true;
 }
 

@@ -46,6 +46,7 @@ import type {
 import { getDefaultSectionSelections } from "@/lib/section-selections";
 
 export type LandingWithSections = LandingPage & {
+  nuvolets: { content: import("@/lib/schemas/nuvolets").NuvoletsContent } | null;
   sectionSelections: LandingSectionSelection[];
   seo: LandingSeo | null;
   branding: LandingBranding | null;
@@ -100,6 +101,7 @@ function buildMetaWith() {
 
 function buildWith() {
   return {
+    nuvolets: true as const,
     sectionSelections: true as const,
     seo: true as const,
     branding: true as const,

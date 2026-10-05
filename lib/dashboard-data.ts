@@ -1,8 +1,10 @@
 import { VELAR_ASSETS } from "@/lib/velar-assets";
+import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
 
 export { DEFAULT_COPYRIGHT_SUFFIX } from "@/lib/copyright-constants";
 
 export type DashboardView =
+  | "email-subscriptions"
   | "editor"
   | "assets"
   | "domain"
@@ -128,6 +130,7 @@ export type FloristeriaExtensions = {
 };
 
 export type TemplateContentMap = {
+  nuvolets: BaseContent & { nuvolets: NuvoletsContent; gallery: GalleryItem[] };
   velar: BaseContent & VelarExtensions;
   studio: BaseContent & StudioExtensions;
   portfolio: BaseContent & PortfolioExtensions;
@@ -142,6 +145,7 @@ export type TemplateContentMap = {
 export type TemplateId = keyof TemplateContentMap;
 
 export type HeroVariantId =
+  | "nuvolets"
   | "velar"
   | "studio"
   | "portfolio"
@@ -169,6 +173,7 @@ export type LandingSectionSelections = {
 };
 
 export type LandingContent = BaseContent &
+  { nuvolets?: NuvoletsContent } &
   Partial<VelarExtensions> &
   Partial<StudioExtensions> &
   Partial<PortfolioExtensions> &
@@ -410,6 +415,7 @@ export type Asset = {
 };
 
 export type IconName =
+  | "mail"
   | "web"
   | "folder"
   | "settings"
@@ -463,6 +469,7 @@ export const dashboardNavSections: DashboardNavSection[] = [
       { id: "editor", label: "Editor", icon: "document" },
       { id: "assets", label: "Imágenes", icon: "image" },
       { id: "blog", label: "Blog", icon: "document" },
+      { id: "email-subscriptions", label: "Suscripciones", icon: "mail" },
     ],
   },
   {

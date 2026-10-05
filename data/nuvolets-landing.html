@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nuvolets · Ropita para sus pequeños grandes momentos</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      bg: 'var(--background)', surface: 'var(--surface)', ink: 'var(--text)', line: 'var(--border)',
+      blue: 'var(--blue)', 'blue-l': 'var(--blue-light)', yellow: 'var(--yellow)', 'yellow-l': 'var(--yellow-light)',
+      pink: 'var(--pink)', 'pink-l': 'var(--pink-light)', sage: 'var(--sage)', 'sage-l': 'var(--sage-light)'
+    },
+    fontFamily: { serif: ['"DM Serif Display"', 'Cormorant Garamond', 'serif'], sans: ['Manrope', '"Nunito Sans"', 'sans-serif'] }
+  } }
+}
+</script>
+<style>
+:root{
+  --background:#FAF7F1; --surface:#FFFDF9; --text:#3D3A36; --border:#E9E2D8;
+  --blue:#A9C4D3; --blue-light:#DDEAF0; --yellow:#F2D995; --yellow-light:#FAEFCB;
+  --pink:#EBC7C5; --pink-light:#F6E4E3; --sage:#C6D2BE; --sage-light:#E5EBDD;
+  --on-pastel:#3D3A36; --ease-out:cubic-bezier(.2,.8,.2,1); --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px); scroll-behavior:smooth}
+body{background:var(--background); color:var(--text); font-family:Manrope,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden}
+h1,h2,h3{font-family:"DM Serif Display",serif; font-weight:400; letter-spacing:-.01em}
+
+.btn{display:inline-flex; align-items:center; justify-content:center; border-radius:999px; padding:.85rem 1.6rem; font-weight:600; font-size:.95rem; color:var(--on-pastel);
+  transition:background-color .4s ease, border-color .4s ease, transform .35s var(--ease-spring), box-shadow .35s ease}
+.btn-primary{background:var(--blue)} .btn-primary:hover{background:#98b7c8}
+.btn-ghost{border:1px solid var(--blue); color:var(--text)} .btn-ghost:hover{background:var(--blue-light)}
+@media (hover:hover){.btn:hover{transform:translateY(-2px); box-shadow:0 12px 22px -12px rgba(70,60,50,.45)}}
+.btn:active{transform:translateY(0) scale(.96); box-shadow:none}
+.link{font-weight:600; border-bottom:1px solid var(--blue); padding-bottom:1px}
+
+.nav-a{background:linear-gradient(var(--blue),var(--blue)) 0 100%/0 1.5px no-repeat; padding-bottom:2px; transition:background-size .4s var(--ease-out)}
+.nav-a:hover{background-size:100% 1.5px}
+
+header{transition:box-shadow .4s ease, background-color .4s ease}
+header > div{transition:height .4s var(--ease-out)}
+header.scrolled > div{height:3.5rem}
+header.scrolled{box-shadow:0 10px 30px -18px rgba(70,60,50,.35); background:color-mix(in srgb, var(--background) 96%, transparent) !important}
+#menuBtn path{transition:transform .35s var(--ease-out); transform-box:fill-box; transform-origin:center}
+#menuBtn[aria-expanded="true"] .l1{transform:translateY(4px) rotate(45deg)}
+#menuBtn[aria-expanded="true"] .l2{transform:translateY(-4px) rotate(-45deg)}
+#menu:not(.hidden){animation:menuIn .35s var(--ease-out)}
+#menu:not(.hidden) a{animation:rise .45s var(--ease-out) both; animation-delay:calc(var(--i,0) * 40ms)}
+@keyframes menuIn{from{opacity:0; transform:translateY(-8px)}to{opacity:1; transform:none}}
+
+.ph{position:relative; overflow:hidden; border-radius:24px; display:flex; align-items:flex-end; justify-content:flex-start; padding:1rem; font-size:.75rem; color:var(--on-pastel)}
+.ph img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:opacity .9s ease, transform 1.1s var(--ease-out)}
+.js .ph img{opacity:0} .js .ph img.ok{opacity:1}
+.zoom{overflow:hidden; border-radius:24px; isolation:isolate}
+@media (hover:hover){.zoom:hover .ph img{transform:scale(1.06)}}
+.par img{transform:translate3d(0,var(--py,0px),0) scale(1.16); transition:opacity .9s ease}
+
+.js .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .8s var(--ease-out); transition-delay:calc(var(--i,0) * 90ms)}
+.js .reveal.soft{transform:scale(.95)}
+.js .reveal.in{opacity:1; transform:none}
+
+.card .zoom{transition:transform .5s var(--ease-out), box-shadow .5s ease}
+.dot{transition:transform .35s var(--ease-spring); transition-delay:calc(var(--j,0) * 45ms)}
+@media (hover:hover){
+  .card:hover .zoom{transform:translateY(-6px); box-shadow:0 26px 40px -26px rgba(70,60,50,.5)}
+  .card:hover .dot{transform:scale(1.3)}
+  .group:hover .cat-cloud{animation:bob 1.6s ease-in-out infinite}
+  .group:hover .arrow{transform:translateX(5px)}
+}
+.arrow{display:inline-block; transition:transform .35s var(--ease-spring)}
+
+.ig-ov{position:absolute; inset:0; border-radius:38%; display:grid; place-items:center; background:color-mix(in srgb, var(--text) 28%, transparent); color:#fff; opacity:0; transition:opacity .4s ease; z-index:1}
+.ig-ov svg{transform:scale(.6); transition:transform .45s var(--ease-spring)}
+.ig:hover .ig-ov,.ig:focus-visible .ig-ov{opacity:1} .ig:hover .ig-ov svg,.ig:focus-visible .ig-ov svg{transform:none}
+
+.snap{scroll-snap-type:x mandatory; scrollbar-width:none} .snap::-webkit-scrollbar{display:none} .snap>*{scroll-snap-align:start}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--blue); outline-offset:3px}
+
+.blob{border-radius:58% 42% 52% 48% / 46% 54% 46% 54%}
+.arch{border-radius:999px 999px 28px 28px !important}
+.bumps{height:20px; margin-bottom:-1px; background:radial-gradient(circle at 50% 100%, var(--c) 19.5px, transparent 20.5px) 0 0/40px 20px repeat-x}
+
+@keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(28px)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes rise{from{opacity:0; transform:translateY(24px)}to{opacity:1; transform:none}}
+@keyframes wordUp{from{transform:translateY(110%)}to{transform:none}}
+@keyframes blobIn{from{opacity:0; transform:scale(.88) rotate(-3deg)}to{opacity:1; transform:none}}
+@keyframes morph{0%,100%{border-radius:58% 42% 52% 48% / 46% 54% 46% 54%}33%{border-radius:46% 54% 42% 58% / 54% 44% 56% 46%}66%{border-radius:54% 46% 58% 42% / 42% 58% 44% 56%}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes pop{0%{opacity:0; transform:scale(.5)}60%{opacity:1; transform:scale(1.06)}100%{opacity:1; transform:none}}
+@keyframes squish{0%{transform:none}25%{transform:scale(1.18,.82)}50%{transform:scale(.9,1.12) translateY(-10px)}75%{transform:scale(1.04,.96)}100%{transform:none}}
+@keyframes floatUp{0%{opacity:0; transform:translate(0,0) scale(.6)}20%{opacity:1}100%{opacity:0; transform:translate(var(--dx,0px),-90px) scale(1.1)}}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes shake{0%,100%{transform:none}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+
+.drift{animation:drift 16s ease-in-out infinite} .bob{animation:bob 5s ease-in-out infinite}
+.spin{animation:spin 60s linear infinite}
+
+.js .intro{animation:rise .9s var(--ease-out) both; animation-delay:var(--d,0s)}
+.wm{display:inline-block; overflow:hidden; padding-bottom:.12em; margin-bottom:-.12em; vertical-align:top}
+.js .w{display:inline-block; animation:wordUp 1s var(--ease-out) both; animation-delay:calc(.15s + var(--i) * 80ms)}
+.js .hero-img{animation:blobIn 1.3s var(--ease-out) .25s both}
+@media (min-width:768px){.js .hero-img{animation:blobIn 1.3s var(--ease-out) .25s both, morph 18s ease-in-out 1.6s infinite}}
+
+.marquee-track{animation:marquee 38s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+
+.squish{animation:squish .7s var(--ease-out)}
+.bubble{transform-origin:12px 100%}
+.js .bubble{animation:pop .6s var(--ease-spring) 1.3s both}
+.bubble.pop{animation:pop .5s var(--ease-spring) both}
+.eye{transform-box:fill-box; transform-origin:center; animation:blink 4.5s infinite}
+.heart{position:absolute; left:50%; top:20%; pointer-events:none; color:#E3A6A3; font-size:1.1rem; animation:floatUp 1.2s var(--ease-out) forwards}
+
+.shake{animation:shake .45s ease}
+#nl{transition:opacity .4s ease, transform .4s ease}
+#nl.gone{opacity:0; transform:translateY(-10px) scale(.97)}
+.ok-cloud{animation:pop .7s var(--ease-spring) both}
+.ok-cloud .check{stroke-dasharray:40; stroke-dashoffset:40; animation:draw .6s ease .45s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+.carr-btn{width:44px; height:44px; border-radius:999px; border:1px solid var(--border); background:var(--surface); display:grid; place-items:center; transition:transform .35s var(--ease-spring), background-color .3s ease, opacity .3s ease}
+.carr-btn:hover:not(:disabled){background:var(--blue-light); transform:scale(1.08)}
+.carr-btn:disabled{opacity:.35; cursor:default}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important; animation-delay:0ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; transition-delay:0ms !important}
+  .marquee-track,.drift,.bob,.spin,.eye{animation:none !important}
+  .js .reveal{opacity:1; transform:none}
+  .par img{transform:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="cloud" viewBox="0 0 120 70"><rect x="14" y="36" width="92" height="28" rx="14"/><circle cx="42" cy="34" r="20"/><circle cx="72" cy="28" r="26"/><circle cx="94" cy="42" r="16"/></symbol>
+</defs></svg>
+
+<!-- HEADER -->
+<header id="hdr" class="sticky z-40 border-b border-line backdrop-blur" style="top:env(safe-area-inset-top,0px); background:color-mix(in srgb, var(--background) 88%, transparent)">
+  <div class="mx-auto max-w-7xl px-5 md:px-8 h-16 flex items-center justify-between">
+    <button id="menuBtn" class="md:hidden p-2 -ml-2" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path class="l1" d="M3 7h16"/><path class="l2" d="M3 15h16"/></svg>
+    </button>
+    <nav class="hidden md:flex gap-8 text-sm font-medium flex-1" aria-label="Principal">
+      <a href="#inicio" class="nav-a">Inicio</a><a href="#coleccion" class="nav-a">Colección</a>
+      <a href="#categorias" class="nav-a">Bebé</a><a href="#categorias" class="nav-a">Niña</a><a href="#categorias" class="nav-a">Niño</a><a href="#tienda" class="nav-a">Tienda</a>
+    </nav>
+    <a href="#inicio" class="group font-serif text-2xl tracking-[.12em] md:flex-1 md:text-center"><svg class="cat-cloud inline w-8 -mt-1 mr-1 text-blue" viewBox="0 0 120 70" fill="currentColor" aria-hidden="true"><use href="#cloud"/></svg>NUVOLETS</a>
+    <div class="flex gap-6 md:flex-1 md:justify-end items-center text-sm font-medium">
+      <a href="#instagram" class="hidden md:inline nav-a">Instagram</a>
+      <a href="#tienda" class="btn btn-primary !py-2 !px-4 !text-sm">Cómo llegar</a>
+    </div>
+  </div>
+  <nav id="menu" class="hidden md:hidden border-t border-line px-5 py-4 flex flex-col gap-4 text-base" aria-label="Móvil">
+    <a href="#inicio" style="--i:0">Inicio</a><a href="#coleccion" style="--i:1">Colección</a><a href="#categorias" style="--i:2">Bebé</a><a href="#categorias" style="--i:3">Niña</a><a href="#categorias" style="--i:4">Niño</a><a href="#tienda" style="--i:5">Tienda</a><a href="#instagram" style="--i:6">Instagram</a>
+  </nav>
+</header>
+
+<main id="inicio">
+
+<!-- HERO -->
+<section id="hero" class="relative overflow-hidden" style="background:linear-gradient(180deg,var(--blue-light) 0%,var(--background) 100%)">
+  <div data-depth=".5" class="absolute top-8 left-[3%] w-20 md:w-32" aria-hidden="true"><svg class="drift w-full text-surface opacity-90" viewBox="0 0 120 70" fill="currentColor"><use href="#cloud"/></svg></div>
+  <div data-depth=".3" class="absolute top-28 right-[5%] w-16 md:w-28" aria-hidden="true"><svg class="drift w-full text-surface opacity-80" style="animation-delay:-6s" viewBox="0 0 120 70" fill="currentColor"><use href="#cloud"/></svg></div>
+  <div data-depth=".8" class="absolute bottom-10 left-[42%] w-14 md:w-20" aria-hidden="true"><svg class="drift w-full text-pink-l" style="animation-delay:-10s" viewBox="0 0 120 70" fill="currentColor"><use href="#cloud"/></svg></div>
+  <div data-depth=".2" class="absolute top-[80%] left-[24%] w-10 md:w-14 hidden md:block" aria-hidden="true"><svg class="drift w-full text-surface opacity-70" style="animation-delay:-3s" viewBox="0 0 120 70" fill="currentColor"><use href="#cloud"/></svg></div>
+  <div class="relative mx-auto max-w-7xl px-5 md:px-8 pt-10 md:pt-16 pb-24 md:pb-32 grid md:grid-cols-2 gap-14 md:gap-16 items-center">
+    <div class="order-2 md:order-1">
+      <p class="intro text-xs tracking-[.2em] font-semibold mb-5" style="--d:.05s">NUEVA COLECCIÓN</p>
+      <h1 class="text-5xl md:text-7xl leading-[1.02] mb-6"><span class="wm"><span class="w" style="--i:0">Ropita</span></span> <span class="wm"><span class="w" style="--i:1">para</span></span> <span class="wm"><span class="w" style="--i:2">sus</span></span> <span class="wm"><span class="w" style="--i:3">pequeños</span></span> <span class="wm"><span class="w" style="--i:4">grandes</span></span> <span class="wm"><span class="w" style="--i:5">momentos</span></span></h1>
+      <p class="intro text-lg leading-relaxed max-w-md mb-9 opacity-85" style="--d:.7s">Prendas suaves, bonitas y cómodas para acompañarles mientras crecen. Más blanditas que una nube, y sin tormentas.</p>
+      <div class="intro flex flex-wrap gap-3" style="--d:.85s">
+        <a href="#coleccion" class="btn btn-primary w-full sm:w-auto">Ver colección</a>
+        <a href="#tienda" class="btn btn-ghost w-full sm:w-auto">Descubrir Nuvolets</a>
+      </div>
+    </div>
+    <div class="order-1 md:order-2 relative">
+      <div class="intro absolute -top-8 -right-6 md:-top-12 md:-right-12 w-28 md:w-44 z-0" style="--d:.9s" aria-hidden="true">
+        <svg class="spin w-full" viewBox="0 0 100 100"><g stroke="var(--yellow)" stroke-width="4" stroke-linecap="round"><path d="M50 4v12M50 84v12M4 50h12M84 50h12M17.5 17.5l8.5 8.5M74 74l8.5 8.5M17.5 82.5l8.5-8.5M74 26l8.5-8.5"/></g><circle cx="50" cy="50" r="24" fill="var(--yellow)"/></svg>
+      </div>
+      <div class="hero-img ph blob relative z-10 aspect-[4/5] md:aspect-[5/6]" style="background:linear-gradient(165deg,var(--surface) 0%,var(--pink-light) 55%,var(--yellow-light) 100%)">
+        <img src="https://images.unsplash.com/photo-1484665754804-74b091211472?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1484665754804-74b091211472?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1484665754804-74b091211472?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1484665754804-74b091211472?auto=format&fit=crop&w=1400&q=72 1400w" sizes="(min-width:768px) 45vw, 90vw" alt="Peque riendo con un conjunto de rayas mientras su madre la levanta en brazos" fetchpriority="high" decoding="async">
+      </div>
+      <button id="nuvi" type="button" class="absolute z-20 -bottom-8 -left-1 md:-left-10 w-28 md:w-40 text-left" aria-label="Hablar con Nuvi, la nube">
+        <span id="nuviSay" role="status" class="bubble absolute bottom-full left-8 mb-1 w-44 bg-surface border border-line rounded-2xl rounded-bl-sm px-3 py-2 text-xs leading-snug">¡Hola! Soy Nuvi ☁️ Toca mi barriguita.</span>
+        <span id="nuviBody" class="block">
+          <svg class="bob" viewBox="0 0 120 70" style="filter:drop-shadow(0 8px 14px rgba(70,60,50,.1))" aria-hidden="true"><use href="#cloud" fill="var(--surface)"/><circle class="eye" cx="54" cy="40" r="3" fill="#3D3A36"/><circle class="eye" cx="78" cy="40" r="3" fill="#3D3A36"/><ellipse cx="45" cy="48" rx="6" ry="3.5" fill="#EBC7C5"/><ellipse cx="87" cy="48" rx="6" ry="3.5" fill="#EBC7C5"/><path d="M60 46q6 6 12 0" fill="none" stroke="#3D3A36" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<div class="marquee overflow-hidden border-y border-line bg-surface py-4 md:py-5">
+  <div class="marquee-track flex w-max">
+    <ul id="mq" class="flex shrink-0 items-center gap-8 md:gap-12 pr-8 md:pr-12 font-serif text-2xl md:text-3xl whitespace-nowrap"></ul>
+  </div>
+</div>
+
+<!-- CATEGORÍAS -->
+<section id="categorias" class="mx-auto max-w-7xl px-5 md:px-8 pt-16 md:pt-24 pb-20 md:pb-28">
+  <div class="snap flex md:grid md:grid-cols-3 gap-5 md:gap-8 overflow-x-auto -mx-5 px-5 md:mx-0 md:px-0" id="cats"></div>
+</section>
+
+<!-- NUEVA COLECCIÓN -->
+<section id="coleccion" class="mx-auto max-w-7xl px-5 md:px-8 pb-20 md:pb-28">
+  <div class="reveal mb-10 max-w-xl">
+    <h2 class="text-4xl md:text-5xl mb-3">Recién llegado a Nuvolets</h2>
+    <p class="opacity-75">Nuevas prendas para llenar el armario de cosas bonitas. Pronóstico de hoy: 100% de probabilidad de monadas.</p>
+  </div>
+  <div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-6"></div>
+  <p class="reveal mt-12 text-center opacity-80">¿Te ha gustado algo? Pásate por la tienda o escríbenos por <a href="https://www.instagram.com/nuvolets.paiporta" target="_blank" rel="noopener" class="link">Instagram</a>.</p>
+</section>
+
+<!-- BLOQUE EDITORIAL -->
+<div class="bumps" style="--c:var(--blue-light)"></div>
+<section class="bg-blue-l">
+  <div class="mx-auto max-w-7xl px-5 md:px-8 py-16 md:py-24 grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+    <div class="reveal soft ph blob par aspect-[4/3]" style="background:linear-gradient(150deg,var(--surface),var(--blue) 140%)">
+      <img src="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=1000&q=72" srcset="https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=1000&q=72 1000w, https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=1400&q=72 1400w" sizes="(min-width:768px) 45vw, 90vw" alt="Camiseta blanca de niño junto a un gorro de punto y un peluche sobre fondo rosa" loading="lazy" decoding="async">
+    </div>
+    <div class="reveal" style="--i:1">
+      <h2 class="text-4xl md:text-6xl leading-[1.05] mb-6">Pequeñas prendas.<br>Grandes recuerdos.</h2>
+      <p class="text-lg leading-relaxed max-w-md mb-8 opacity-85">Elegimos cada pieza pensando en comodidad, calidad y esos momentos que pasan demasiado rápido.</p>
+      <p class="leading-relaxed max-w-md mb-8 opacity-85">Nuvolets significa «nubecitas» en valenciano, y así queremos que se sienta cada prenda: ligera, suave y con la cabeza en las nubes.</p>
+      <a href="#tienda" class="btn btn-primary">Conócenos</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAVORITOS -->
+<section class="py-20 md:py-28">
+  <div class="mx-auto max-w-7xl px-5 md:px-8">
+    <div class="reveal mb-10 flex items-end justify-between gap-6">
+      <div class="max-w-xl">
+        <h2 class="text-4xl md:text-5xl mb-3">Nuestros favoritos</h2>
+        <p class="opacity-75">Esas prendas que siempre terminan enamorando. Nuestras nubes preferidas.</p>
+      </div>
+      <div class="hidden md:flex gap-2 shrink-0">
+        <button type="button" class="carr-btn" data-dir="-1" aria-label="Ver favoritos anteriores" aria-controls="fav"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4 6 9l5 5"/></svg></button>
+        <button type="button" class="carr-btn" data-dir="1" aria-label="Ver más favoritos" aria-controls="fav"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 4 5 5-5 5"/></svg></button>
+      </div>
+    </div>
+    <div id="fav" class="snap flex gap-4 md:gap-6 overflow-x-auto pt-2 pb-8 -mx-5 px-5 md:mx-0 md:px-0"></div>
+  </div>
+</section>
+
+<!-- TIENDA FÍSICA -->
+<section id="tienda" class="mx-auto max-w-7xl px-5 md:px-8 pb-20 md:pb-28">
+  <div class="reveal soft rounded-[24px] bg-yellow-l grid md:grid-cols-2 overflow-hidden">
+    <div class="p-8 md:p-14 flex flex-col justify-center">
+      <p class="text-xs tracking-[.2em] font-semibold mb-5">NOS ENCONTRAMOS EN PAIPORTA</p>
+      <h2 class="text-4xl md:text-5xl mb-5">Ven a conocernos</h2>
+      <p class="text-lg leading-relaxed mb-8 opacity-85">Pásate por Nuvolets, descubre las prendas en persona y déjate aconsejar para encontrar justo lo que buscas. Aquí casi siempre sale el sol.</p>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a href="https://www.google.com/maps/search/?api=1&query=Nuvolets+Paiporta" target="_blank" rel="noopener" class="btn btn-primary">Cómo llegar</a>
+        <a href="#instagram" class="link">Ver Instagram</a>
+      </div>
+    </div>
+    <div class="ph par !rounded-none min-h-[280px] md:min-h-[420px]" style="background:linear-gradient(160deg,var(--pink-light),var(--yellow) 160%)">
+      <img src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1000&q=72" srcset="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1000&q=72 1000w, https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1400&q=72 1400w" sizes="(min-width:768px) 45vw, 90vw" alt="Interior de una tienda con ropa colgada y estanterías llenas de prendas" loading="lazy" decoding="async">
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section id="instagram" class="mx-auto max-w-7xl px-5 md:px-8 pb-20 md:pb-28">
+  <div class="reveal text-center mb-10">
+    <h2 class="text-4xl md:text-5xl mb-3">@nuvolets.paiporta</h2>
+    <p class="opacity-75">Nuevas colecciones, ideas y pequeñas sorpresas. Aquí tenemos la cabeza en las nubes.</p>
+  </div>
+  <div id="ig" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-10"></div>
+  <div class="text-center"><a href="https://www.instagram.com/nuvolets.paiporta" target="_blank" rel="noopener" class="btn btn-ghost">Síguenos en Instagram</a></div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="bumps" style="--c:var(--pink-light)"></div>
+<section class="bg-pink-l">
+  <div class="reveal mx-auto max-w-2xl px-5 py-16 md:py-24 text-center">
+    <h2 class="text-4xl md:text-5xl mb-4">Cositas bonitas, directamente en tu correo</h2>
+    <p class="mb-8 opacity-80">Nuevas colecciones, novedades y alguna sorpresa de vez en cuando. Prometemos cero tormentas de spam.</p>
+    <form id="nl" class="flex flex-col sm:flex-row gap-3" novalidate>
+      <label for="email" class="sr-only">Tu email</label>
+      <input id="email" type="email" placeholder="Tu email" autocomplete="email" aria-describedby="nlMsg" class="flex-1 rounded-full border border-line bg-surface px-6 py-3.5 text-base placeholder:opacity-50 transition-colors focus:border-blue">
+      <button type="submit" class="btn btn-primary">Quiero apuntarme</button>
+    </form>
+    <div id="nlOk" class="hidden justify-center" aria-hidden="true">
+      <svg class="ok-cloud w-28" viewBox="0 0 120 70"><g class="bob" style="transform-box:fill-box"><use href="#cloud" fill="var(--surface)"/><path class="check" d="M48 42l8 8 16-16" fill="none" stroke="var(--blue)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+    </div>
+    <p id="nlMsg" class="mt-4 text-sm min-h-[1.25rem]" role="status"></p>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="mx-auto max-w-7xl px-5 md:px-8 py-14 grid gap-10 md:grid-cols-4 text-sm">
+  <div>
+    <p class="font-serif text-2xl tracking-[.12em] mb-3">NUVOLETS</p>
+    <p class="opacity-75 leading-relaxed">Ropita dulce para bebés<br>y peques de 0 a 10 años.</p>
+  </div>
+  <div><p class="font-semibold mb-3">Explora</p><ul class="space-y-2 opacity-80"><li><a class="nav-a" href="#coleccion">Colección</a></li><li><a class="nav-a" href="#categorias">Bebé</a></li><li><a class="nav-a" href="#categorias">Niña</a></li><li><a class="nav-a" href="#categorias">Niño</a></li></ul></div>
+  <div><p class="font-semibold mb-3">Información</p><ul class="space-y-2 opacity-80"><li><a class="nav-a" href="#tienda">Cómo llegar</a></li><li><a class="nav-a" href="#tienda">Visítanos en Paiporta</a></li><li><a class="nav-a" href="#">Contacto</a></li></ul></div>
+  <div><p class="font-semibold mb-3">Síguenos</p><ul class="space-y-2 opacity-80"><li><a class="nav-a" href="https://www.instagram.com/nuvolets.paiporta" target="_blank" rel="noopener">Instagram</a></li><li>Paiporta, Valencia</li></ul></div>
+  <p class="md:col-span-4 border-t border-line pt-6 opacity-60">© Nuvolets · «Nuvolets» significa «nubecitas» en valenciano. Hecho con cariño en Paiporta. Fotos de <a href="https://unsplash.com" target="_blank" rel="noopener" class="underline">Unsplash</a>.</p>
+</footer>
+
+<script>
+const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pal = { blue:['--blue-light','--blue'], pink:['--pink-light','--pink'], yellow:['--yellow-light','--yellow'], sage:['--sage-light','--sage'] };
+const bg = (c, a=165) => `linear-gradient(${a}deg,var(${pal[c][0]}),var(${pal[c][1]}) 160%)`;
+const U = (id, w) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=70`;
+const img = (id, alt, sizes='(min-width:1024px) 25vw, (min-width:768px) 33vw, 50vw') => `<img src="${U(id,600)}" srcset="${U(id,400)} 400w, ${U(id,600)} 600w, ${U(id,900)} 900w" sizes="${sizes}" alt="${alt}" loading="lazy" decoding="async">`;
+
+const mqItems = ['Ropita de 0 a 10 años','Más blandita que una nube','Tienda en Paiporta','Hecho con cariño','Pronóstico: 100% monadas'];
+const mqCols = ['--blue','--pink','--yellow','--sage','--blue'];
+const mq = document.getElementById('mq');
+mq.innerHTML = mqItems.map((t,i) => `<li>${t}</li><li aria-hidden="true"><svg class="w-10 md:w-12" style="color:var(${mqCols[i]})" viewBox="0 0 120 70" fill="currentColor"><use href="#cloud"/></svg></li>`).join('');
+const mqCopy = mq.cloneNode(true); mqCopy.removeAttribute('id'); mqCopy.setAttribute('aria-hidden','true'); mq.after(mqCopy);
+
+// Categorías
+const cats = [['Bebé','Suavidad desde sus primeros días. Ternura nivel nube de algodón.','blue','1522771930-78848d9293e8','Bebé con un pelele de peluche con orejitas de oso'],['Niña','Para saltar charcos con mucho estilo.','pink','1518831959646-742c3a14ebf7','Niña con chaqueta blanca de lunares entre flores'],['Niño','A prueba de carreras, rodillas y barro.','sage','1519238263530-99bdd11df2ea','Niño con cárdigan azul marino, pajarita y pantalón corto']];
+document.getElementById('cats').innerHTML = cats.map(([n,t,c,id,alt],i) => `
+  <a href="#coleccion" class="reveal group block shrink-0 w-[78%] sm:w-[60%] md:w-auto" style="--i:${i}">
+    <div class="zoom arch"><div class="ph aspect-[3/4]" style="background:${bg(c)}">${img(id,alt,'(min-width:768px) 33vw, 78vw')}</div></div>
+    <h3 class="text-3xl mt-5 mb-1">${n}<svg class="cat-cloud inline w-9 ml-2 -mt-1" style="color:var(${pal[c][1]})" viewBox="0 0 120 70" fill="currentColor" aria-hidden="true"><use href="#cloud"/></svg></h3>
+    <p class="opacity-75 mb-2">${t}</p>
+    <span class="link">Ver colección <span class="arrow">→</span></span>
+  </a>`).join('');
+
+// Productos
+const dots = { blue:'#A9C4D3', pink:'#EBC7C5', yellow:'#F2D995', sage:'#C6D2BE' };
+const badgeBg = { 'Nuevo':'var(--blue-light)', 'Últimas unidades':'var(--yellow-light)', 'Bestseller':'var(--sage-light)' };
+const prods = [
+  ['Conjunto Nube','29,90 €','Nuevo',['blue','pink','yellow'],'blue','1514090458221-65bb69cf63e6','Bebé con camisa de cuadros y tirantes'],
+  ['Vestido Luna','34,90 €','',['pink','sage'],'pink','1476234251651-f353703a034d','Dos niñas con vestido leyendo un libro al atardecer'],
+  ['Pelele Estrella','24,90 €','Bestseller',['yellow','blue'],'yellow','1617331140180-e8262094733a','Bebé sonriente con un pelele gris'],
+  ['Jersey Cúmulo','27,90 €','Últimas unidades',['sage','pink'],'sage','1503919005314-30d93d07d823','Niño con chaqueta marrón y gorra dando de comer a un ciervo'],
+  ['Conjunto Brisa','32,90 €','',['blue','sage'],'blue','1471286174890-9c112ffca5b4','Niño con polo rojo junto al mar'],
+  ['Vestido Amapola','36,90 €','Nuevo',['pink','yellow'],'pink','1560506840-ec148e82a604','Vestidos de niña amarillos de lunares colgados en una percha'],
+  ['Pelele Algodón','22,90 €','',['sage','blue'],'sage','1546015720-b8b30df5aa27','Bebé bostezando con un gorrito gris junto a un osito'],
+  ['Gorrito Llovizna','14,90 €','Nuevo',['yellow','pink','blue'],'yellow','1604917621956-10dfa7cce2e7','Bebé con un gorrito de punto con orejas de conejo']
+];
+const card = (p, i, cls='') => `
+  <article class="reveal card group ${cls}" style="--i:${i % 4}">
+    <div class="zoom relative"><div class="ph aspect-[4/5]" style="background:${bg(p[4],150)}">${img(p[5],p[6])}</div>
+      ${p[2] ? `<span class="absolute z-10 top-3 left-3 rounded-full px-3 py-1 text-xs font-semibold text-[#3D3A36]" style="background:${badgeBg[p[2]]}">${p[2]}</span>` : ''}
+    </div>
+    <h3 class="font-sans font-semibold text-base mt-4">${p[0]}</h3>
+    <p class="text-sm opacity-80 mt-0.5">${p[1]}</p>
+    <div class="flex gap-1.5 mt-2" aria-label="Colores disponibles">${p[3].map((c,j) => `<i class="dot w-3.5 h-3.5 rounded-full border border-line" style="background:${dots[c]}; --j:${j}"></i>`).join('')}</div>
+  </article>`;
+document.getElementById('grid').innerHTML = prods.slice(0,4).map((p,i) => card(p,i)).join('');
+const fav = document.getElementById('fav');
+fav.innerHTML = [prods[1],prods[4],prods[2],prods[6],prods[3],prods[7]].map((p,i) => card(p,i,'shrink-0 w-[62%] sm:w-[40%] md:w-[26%]')).join('');
+
+// Instagram
+const igs = [['blue','1607453998774-d533f65dac99','Tres hermanos riendo juntos'],['pink','1621452773781-0f992fd1f5cb','Niña y niño contándose un secreto'],['yellow','1519457431-44ccd64a579b','Niña posando contra una pared azul'],['sage','1555252333-9f8e92e65df9','Piececitos de bebé sobre una manta blanca'],['pink','1503944583220-79d8926ad5e2','Dos niños sonriendo en el jardín'],['blue','1503454537195-1dcabb73ffb9','Niña con un lazo amarillo y la cara pintada']];
+const igIcon = '<svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="22" height="22" rx="6"/><circle cx="14" cy="14" r="5"/><circle cx="20.5" cy="7.5" r="1" fill="currentColor"/></svg>';
+document.getElementById('ig').innerHTML = igs.map(([c,id,alt],i) => `<a href="https://www.instagram.com/nuvolets.paiporta" target="_blank" rel="noopener" aria-label="Ver publicación en Instagram" class="reveal soft zoom ig block relative" style="--i:${i % 6}"><div class="ph aspect-square !rounded-[38%]" style="background:${bg(c,140)}">${img(id,alt,'(min-width:1024px) 16vw, (min-width:768px) 33vw, 50vw')}</div><span class="ig-ov">${igIcon}</span></a>`).join('');
+
+document.querySelectorAll('.ph img').forEach(i => {
+  const on = () => i.classList.add('ok');
+  if (i.complete && i.naturalWidth) on(); else i.addEventListener('load', on, { once: true });
+});
+
+// Nuvi, la nube
+const says = ['¡Hola! Soy Nuvi ☁️ Toca mi barriguita.','Pronóstico de hoy: abrazos con probabilidad alta.','Psst… los favoritos están más abajo.','Prometo no llover sobre tu ropa nueva.','Soy una nube, pero me encantaría tener un pelele.'];
+let k = 0;
+const nuvi = document.getElementById('nuvi'), say = document.getElementById('nuviSay'), body = document.getElementById('nuviBody');
+const replay = (el, c) => { el.classList.remove(c); void el.offsetWidth; el.classList.add(c); };
+nuvi.addEventListener('click', () => {
+  k = (k + 1) % says.length; say.textContent = says[k];
+  replay(say, 'pop'); replay(body, 'squish');
+  if (rm) return;
+  for (let i = 0; i < 3; i++) {
+    const h = document.createElement('span');
+    h.className = 'heart'; h.textContent = '♥'; h.setAttribute('aria-hidden', 'true');
+    h.style.setProperty('--dx', `${(i - 1) * 26}px`); h.style.animationDelay = `${i * 110}ms`;
+    nuvi.appendChild(h); h.addEventListener('animationend', () => h.remove());
+  }
+});
+
+// Menú móvil
+const mb = document.getElementById('menuBtn'), mn = document.getElementById('menu');
+const setMenu = o => { mn.classList.toggle('hidden', !o); mb.setAttribute('aria-expanded', o); mb.setAttribute('aria-label', o ? 'Cerrar menú' : 'Abrir menú'); };
+mb.addEventListener('click', () => setMenu(mn.classList.contains('hidden')));
+mn.addEventListener('click', e => { if (e.target.tagName === 'A') setMenu(false); });
+
+const arrows = document.querySelectorAll('.carr-btn');
+const step = () => { const a = fav.querySelector('article'); return a ? a.offsetWidth + parseFloat(getComputedStyle(fav).columnGap || 0) : 300; };
+arrows.forEach(b => b.addEventListener('click', () => fav.scrollBy({ left: +b.dataset.dir * step(), behavior: rm ? 'auto' : 'smooth' })));
+const edges = () => { arrows[0].disabled = fav.scrollLeft < 4; arrows[1].disabled = fav.scrollLeft + fav.clientWidth >= fav.scrollWidth - 4; };
+fav.addEventListener('scroll', edges, { passive: true }); edges();
+
+// Newsletter (demo: no envía datos)
+const nl = document.getElementById('nl'), email = document.getElementById('email'), msg = document.getElementById('nlMsg'), ok = document.getElementById('nlOk');
+nl.addEventListener('submit', e => {
+  e.preventDefault();
+  const v = email.value.trim();
+  if (!/^\S+@\S+\.\S+$/.test(v)) {
+    email.setAttribute('aria-invalid', 'true'); replay(email, 'shake'); email.focus();
+    msg.textContent = 'Escribe un email válido, por ejemplo nombre@correo.com.';
+    return;
+  }
+  email.removeAttribute('aria-invalid');
+  nl.classList.add('gone');
+  setTimeout(() => { nl.classList.add('hidden'); ok.classList.remove('hidden'); ok.classList.add('flex'); msg.textContent = '¡Bienvenido a las nubes! Pronto te escribiremos con cositas bonitas.'; }, rm ? 0 : 380);
+});
+
+// Aparición suave al hacer scroll
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+const hdr = document.getElementById('hdr'), hero = document.getElementById('hero');
+const clouds = [...document.querySelectorAll('[data-depth]')], pars = [...document.querySelectorAll('.par img')];
+let mx = 0, my = 0, ticking = false;
+const frame = () => {
+  ticking = false;
+  const y = scrollY, vh = innerHeight;
+  hdr.classList.toggle('scrolled', y > 8);
+  if (rm) return;
+  if (y < vh * 1.2) clouds.forEach(c => { const d = +c.dataset.depth; c.style.transform = `translate3d(${(mx * d * 40).toFixed(1)}px,${(y * d * .5 + my * d * 24).toFixed(1)}px,0)`; });
+  pars.forEach(i => {
+    const r = i.parentElement.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > vh) return;
+    const p = (r.top + r.height / 2 - vh / 2) / vh;
+    i.style.setProperty('--py', `${(p * -36).toFixed(1)}px`);
+  });
+};
+const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+addEventListener('scroll', request, { passive: true });
+addEventListener('resize', request);
+if (!rm && matchMedia('(pointer: fine)').matches) {
+  hero.addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; request(); });
+  hero.addEventListener('pointerleave', () => { mx = 0; my = 0; request(); });
+}
+frame();
+</script>
+</body>
+</html>

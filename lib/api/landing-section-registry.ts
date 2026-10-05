@@ -1,4 +1,6 @@
 import "server-only";
+import { upsertLandingNuvolets } from "@/data/nuvolets";
+import { nuvoletsContentSchema } from "@/lib/schemas/nuvolets";
 
 import {
   upsertLandingBranding,
@@ -82,6 +84,13 @@ type SectionHandler = {
 };
 
 export const SECTION_REGISTRY: Record<string, SectionHandler> = {
+  nuvolets: {
+    parse: (body, meta) => {
+      if (meta.template !== "nuvolets") throw new Error("Invalid template section");
+      return nuvoletsContentSchema.parse(body);
+    },
+    persist: (landingId, parsed) => upsertLandingNuvolets(landingId, parsed as import("@/lib/schemas/nuvolets").NuvoletsContent),
+  },
   hero: {
     parse: (body, meta) => ({
       eyebrow:

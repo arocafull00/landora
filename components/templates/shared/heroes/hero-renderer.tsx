@@ -1,3 +1,4 @@
+import { NuvoletsHeroVariant } from "@/components/templates/nuvolets/nuvolets-hero-variant";
 import type { HeroVariantId } from "@/lib/dashboard-data";
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
 import { VelarHeroVariant } from "@/components/templates/shared/heroes/velar-hero-variant";
@@ -18,6 +19,7 @@ import { ImmersiveHeroVariant } from "@/components/templates/shared/heroes/immer
 import { FuturisticHeroVariant } from "@/components/templates/shared/heroes/futuristic-hero-variant";
 
 const HERO_COMPONENTS = {
+  nuvolets: NuvoletsHeroVariant,
   velar: VelarHeroVariant,
   studio: StudioHeroVariant,
   portfolio: PortfolioHeroVariant,

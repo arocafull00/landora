@@ -9,6 +9,7 @@ import { FloristeriaEditorSection } from "@/components/dashboard/sections/floris
 import { OficioProEditorSection } from "@/components/dashboard/sections/oficio-pro-editor-section";
 import { CoffeeShopEditorSection } from "@/components/dashboard/sections/coffee-shop-editor-section";
 import { SignalEditorSection } from "@/components/dashboard/sections/signal-editor-section";
+import { NuvoletsEditorSection } from "@/components/dashboard/nuvolets/page.client";
 import { VelarEditorSection } from "@/components/dashboard/sections/velar-editor-section";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { PortfolioAboutPageEditor } from "@/components/dashboard/portfolio-about-page-editor";
@@ -68,6 +69,8 @@ export function EditorSection() {
       );
     }
   }
+
+  if (activeLanding.template === "nuvolets") return <NuvoletsEditorSection />;
 
   if (activeLanding.template === "studio") {
     return <StudioEditorSection />;

@@ -8,6 +8,7 @@ import type {
   TemplateId,
 } from "@/lib/dashboard-data";
 import { usePreviewBridge } from "@/components/dashboard/hooks/use-preview-bridge";
+import { NuvoletsTemplate } from "@/components/templates/nuvolets/nuvolets-template";
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
@@ -35,6 +36,7 @@ import { findSignalCaseBySlug } from "@/lib/signal-cases";
 import { getPreviewLandingPath } from "@/lib/public-site-url";
 
 const TEMPLATE_COMPONENTS = {
+  nuvolets: NuvoletsTemplate,
   velar: VelarTemplate,
   studio: StudioTemplate,
   portfolio: PortfolioTemplate,

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { nuvoletsLandingContentSchema } from "@/lib/schemas/nuvolets";
 import {
   galleryVariantSchema,
   heroVariantSchema,
@@ -23,7 +24,8 @@ export const publishedLandingContentSchema = z
   .refine(
     (value) => JSON.stringify(value).length <= 1_000_000,
     "Published landing content too large",
-  );
+  )
+  .refine((value) => value.nuvolets === undefined || nuvoletsLandingContentSchema.safeParse(value).success, "Invalid Nuvolets content");
 
 export const publishedLandingSeoSchema = z.strictObject({
   title: z.string().trim().max(200),
@@ -51,13 +53,14 @@ export const publishLandingVersionSchema = z.strictObject({
     "coffee-shop",
     "signal",
     "pallet-ross",
+    "nuvolets",
   ]),
   name: z.string().trim().min(1).max(120),
   slug: z.string().trim().min(1).max(120),
   content: publishedLandingContentSchema,
   seo: publishedLandingSeoSchema,
   sectionSelections: publishedLandingSectionSelectionsSchema,
-});
+}).refine((value) => value.template !== "nuvolets" || value.content.nuvolets !== undefined, "Missing Nuvolets content");
 
 export const restoreLandingVersionSchema = z.strictObject({
   landingId: z.uuid(),

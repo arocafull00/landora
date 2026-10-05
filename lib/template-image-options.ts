@@ -1,3 +1,4 @@
+import { NUVOLETS_HERO_IMAGE, NUVOLETS_DEFAULT_CONFIG } from "@/lib/nuvolets-defaults";
 import type { TemplateId } from "@/lib/dashboard-data";
 import { VELAR_IMAGE_OPTIONS } from "@/lib/velar-assets";
 import { STUDIO_IMAGE_OPTIONS } from "@/lib/studio-assets";
@@ -15,6 +16,7 @@ const PALLET_ROSS_IMAGE_OPTIONS = PALLET_ROSS_CARD_IMAGES.map((value, index) => 
 }));
 
 const TEMPLATE_IMAGE_OPTIONS: Record<TemplateId, readonly { value: string; label: string }[]> = {
+  nuvolets: [{ value: NUVOLETS_HERO_IMAGE, label: "Hero" }, ...NUVOLETS_DEFAULT_CONFIG.products.map((p) => ({ value: p.image, label: p.name }))],
   velar: VELAR_IMAGE_OPTIONS,
   studio: STUDIO_IMAGE_OPTIONS,
   portfolio: PORTFOLIO_IMAGE_OPTIONS,

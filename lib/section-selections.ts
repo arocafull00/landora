@@ -12,6 +12,7 @@ const GALLERY_VARIANT_IDS = [
 ] as const satisfies readonly GalleryVariantId[];
 
 const HERO_VARIANT_IDS = [
+  "nuvolets",
   "velar",
   "studio",
   "portfolio",

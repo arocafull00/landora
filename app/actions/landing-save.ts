@@ -19,6 +19,7 @@ import {
   type LandingSaveChanges,
 } from "@/lib/landing-save-payload";
 import { logger } from "@/lib/logger";
+import { nuvoletsHeroSchema } from "@/lib/schemas/nuvolets";
 import {
   saveLandingSchema,
   type SaveLandingInput,
@@ -116,6 +117,14 @@ export async function saveLandingAction(
   if (!landing) return { error: "No tienes acceso a esta web" };
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) return { error: "No autorizado" };
+
+  if (landing.template === "nuvolets" && parsed.data.mode === "publish" && parsed.data.publication.content.nuvolets === undefined) {
+    return { error: "Revisa la configuración de Nuvolets antes de publicar" };
+  }
+
+  if (landing.template === "nuvolets" && parsed.data.mode === "draft" && parsed.data.changes.sections?.hero && !nuvoletsHeroSchema.safeParse(parsed.data.changes.sections.hero).success) {
+    return { error: "Revisa los campos de la portada de Nuvolets" };
+  }
 
   const appearance =
     parsed.data.mode === "publish"

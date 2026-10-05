@@ -44,6 +44,7 @@ export type PaletteOption = {
 };
 
 export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption[]> = {
+  nuvolets: [{ id: "default", label: "Original", description: "Azul nube, rosa, amarillo y salvia.", colorScheme: "light" }, { id: "rose", label: "Rosa", description: "Rosa como acento principal.", colorScheme: "light" }, { id: "sage", label: "Salvia", description: "Verde suave como acento principal.", colorScheme: "light" }],
   velar: [
     { id: "default", label: "Original", description: "Verde mineral y arena.", colorScheme: "light" },
     { id: "terracotta", label: "Terracota", description: "Arcilla cálida y crema.", colorScheme: "light" },

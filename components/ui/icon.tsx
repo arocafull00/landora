@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import {
   Bell,
+  Mail,
   Check,
   ChevronRight,
   CircleHelp,
@@ -34,6 +35,7 @@ import {
 import type { IconName } from "@/lib/dashboard-data";
 
 const icons: Record<IconName, LucideIcon> = {
+  mail: Mail,
   web: Globe,
   folder: Folder,
   settings: Settings,

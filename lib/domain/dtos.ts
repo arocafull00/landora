@@ -1,5 +1,7 @@
 import type { TemplateId } from "@/lib/dashboard-data";
 
+export type EmailSubscriptionDto = { email: string; createdAt: string };
+
 export type SubscriptionStatus =
   | "active"
   | "trialing"

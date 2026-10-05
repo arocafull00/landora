@@ -15,8 +15,10 @@ import {
   type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
+import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
 
 export const templateEnum = pgEnum("template", [
+  "nuvolets",
   "velar",
   "studio",
   "portfolio",
@@ -718,7 +720,27 @@ export const bookingSettingsRelations = relations(bookingSettings, ({ one }) => 
   tenant: one(users, { fields: [bookingSettings.tenantId], references: [users.id] }),
 }));
 
+export const landingNuvolets = pgTable("landing_nuvolets", {
+  landingId: uuid("landing_id").primaryKey().references(() => landingPages.id, { onDelete: "cascade" }),
+  content: jsonb("content").$type<NuvoletsContent>().notNull(),
+});
+
+export const emailSubscriptions = pgTable("email-subscriptions", {
+  email: text("email").notNull(),
+  landingId: uuid("landing_id").notNull().references(() => landingPages.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  unique("email_subscriptions_landing_email_unique").on(table.landingId, table.email),
+  index("email_subscriptions_landing_date_idx").on(table.landingId, table.createdAt),
+  check("email_subscriptions_normalized", sql`${table.email} = lower(trim(${table.email})) AND length(${table.email}) BETWEEN 3 AND 254`),
+]);
+
+export const landingNuvoletsRelations = relations(landingNuvolets, ({ one }) => ({
+  landing: one(landingPages, { fields: [landingNuvolets.landingId], references: [landingPages.id] }),
+}));
+
 export const landingPagesRelations = relations(landingPages, ({ one, many }) => ({
+  nuvolets: one(landingNuvolets, { fields: [landingPages.id], references: [landingNuvolets.landingId] }),
   publishedVersion: one(landingPageVersions, {
     fields: [landingPages.publishedVersionId],
     references: [landingPageVersions.id],

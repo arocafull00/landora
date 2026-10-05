@@ -22,6 +22,7 @@ export type HeroVariantDefinition = {
 };
 
 const HERO_VARIANTS: Record<HeroVariantId, HeroVariantDefinition> = {
+  nuvolets: { id: "nuvolets", label: "Nuvolets", description: "Portada orgánica de moda infantil.", thumbnail: "https://images.unsplash.com/photo-1484665754804-74b091211472?auto=format&fit=crop&w=600&q=72", navTone: "dark", specificFields: [] },
   velar: {
     id: "velar",
     label: "Velar",

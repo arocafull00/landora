@@ -1,9 +1,11 @@
+import { NUVOLETS_SECTION_HEADINGS } from "@/lib/nuvolets-defaults";
 import type { LandingContent, SectionHeading, TemplateId } from "@/lib/dashboard-data";
 
 export const SECTION_HEADING_DEFAULTS: Record<
   TemplateId,
   Record<string, SectionHeading>
 > = {
+  nuvolets: NUVOLETS_SECTION_HEADINGS,
   velar: {
     inquire: {
       title: "Contacto:",
@@ -226,6 +228,7 @@ export const SECTION_HEADING_DEFAULTS: Record<
 };
 
 export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
+  nuvolets: [],
   velar: [],
   studio: [],
   portfolio: [],
