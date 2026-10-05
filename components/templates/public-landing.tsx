@@ -10,6 +10,9 @@ import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
 import { getPublicCatalogPresentation } from "@/data/catalog-presentation";
 import { applyCatalogPresentation } from "@/lib/catalog-presentation";
 import { syncCompanyContent } from "@/lib/company-details";
+import { getPublicSubscriptionSettings } from "@/data/subscription-settings";
+import { applySubscriptionSettings, SUBSCRIPTION_PRIVACY_PATH } from "@/lib/email-subscriptions/settings";
+import { getPublicLandingPath } from "@/lib/public-site-url";
 
 async function renderPublicTemplate(
   template: PublishedLanding["template"],
@@ -61,13 +64,17 @@ export async function PublicLanding({
 }: {
   landing: PublishedLanding;
 }) {
-  const [tenant, copyrightYear, renderedAt, catalog] = await Promise.all([
+  const [tenant, copyrightYear, renderedAt, catalog, subscriptionSettings] = await Promise.all([
     resolveTenantBySlug(landing.slug),
     getCopyrightYear(),
     getPublicRenderTime(),
     getPublicCatalogPresentation(landing.id, landing.userId),
+    landing.template === "nuvolets" ? getPublicSubscriptionSettings(landing.id) : null,
   ]);
-  const content = syncCompanyContent(applyCatalogPresentation(landing.content, catalog));
+  const baseContent = syncCompanyContent(applyCatalogPresentation(landing.content, catalog));
+  const content = subscriptionSettings
+    ? applySubscriptionSettings(baseContent, subscriptionSettings, getPublicLandingPath(SUBSCRIPTION_PRIVACY_PATH))
+    : baseContent;
   const template = await renderPublicTemplate(landing.template, {
     bookingEnabled: tenant?.enabled ?? false,
     content,

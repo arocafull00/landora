@@ -4,9 +4,10 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
 import { createEmailSubscription, deleteEmailSubscription, getEmailSubscriptionsForExport } from "@/data/email-subscriptions";
+import { getSubscriptionSettings } from "@/data/subscription-settings";
 import { assertLandingAccess } from "@/lib/api/landing-auth";
 import { deleteSubscriptionSchema, emailSubscriptionSchema, exportSubscriptionsSchema } from "@/lib/schemas/email-subscriptions";
-import { nuvoletsContentSchema } from "@/lib/schemas/nuvolets";
+import { isSubscriptionConfigured } from "@/lib/email-subscriptions/settings";
 import { checkNewsletterRateLimit } from "@/lib/email-subscriptions/rate-limit";
 import { verifyNewsletterToken } from "@/lib/email-subscriptions/turnstile";
 import { SUBSCRIPTIONS_COPY as copy } from "@/lib/email-subscriptions/copy";
@@ -18,8 +19,8 @@ export async function subscribeEmailAction(input: unknown): Promise<{ success: t
   try {
     const landing = await getPublishedLandingBySlug(parsed.data.slug);
     if (!landing || landing.template !== "nuvolets" || landing.content.hiddenSections?.includes("newsletter")) return { error: copy.unavailable };
-    const config = nuvoletsContentSchema.parse(landing.content.nuvolets);
-    if (!config.newsletter.enabled) return { error: copy.unavailable };
+    const settings = await getSubscriptionSettings(landing.id);
+    if (!settings.enabled || !isSubscriptionConfigured(settings)) return { error: copy.unavailable };
     const requestHeaders = await headers();
     const hostname = (requestHeaders.get("host") ?? "").split(":")[0].toLowerCase();
     const ip = requestHeaders.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";

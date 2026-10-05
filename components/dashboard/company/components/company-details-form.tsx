@@ -15,7 +15,7 @@ export function CompanyDetailsForm({ form, submit, busy }: {
 }) {
   const { errors } = form.formState;
   return (
-    <form onSubmit={submit} noValidate className="rounded-xl border border-border bg-surface p-5 md:p-6">
+    <form onSubmit={submit} noValidate>
       <fieldset disabled={busy} className="space-y-6">
         <section className="space-y-5" aria-labelledby="company-contact-title">
           <h2 id="company-contact-title" className="text-lg font-semibold text-ink">{COMPANY_COPY.contact}</h2>

@@ -5,6 +5,9 @@ import { resolveSectionSelections } from "@/lib/section-selections";
 import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
 import { LandingPreviewFrame } from "@/components/dashboard/landing-preview-frame";
 import { getCatalogPresentation } from "@/data/catalog-presentation";
+import { getSubscriptionSettings } from "@/data/subscription-settings";
+import { SUBSCRIPTION_PRIVACY_PATH } from "@/lib/email-subscriptions/settings";
+import { getPreviewLandingPath } from "@/lib/public-site-url";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -22,9 +25,10 @@ export default async function LandingPreviewPage({
     landing.template,
     landing.sectionSelections ?? [],
   );
-  const [tenant, catalog] = await Promise.all([
+  const [tenant, catalog, subscriptionSettings] = await Promise.all([
     resolveTenantBySlug(landing.slug),
     getCatalogPresentation(landing.id, landing.userId, true),
+    landing.template === "nuvolets" ? getSubscriptionSettings(landing.id) : null,
   ]);
 
   return (
@@ -36,6 +40,7 @@ export default async function LandingPreviewPage({
       previewLandingId={landing.id}
       bookingEnabled={tenant?.enabled ?? false}
       catalog={catalog}
+      subscription={subscriptionSettings ? { settings: subscriptionSettings, privacyUrl: getPreviewLandingPath(landing.id, SUBSCRIPTION_PRIVACY_PATH) } : undefined}
     />
   );
 }

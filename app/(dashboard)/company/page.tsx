@@ -4,11 +4,11 @@ import { COMPANY_COPY } from "@/components/dashboard/company/company-copy";
 
 export default function CompanyPage() {
   return (
-    <div className="flex min-w-0 flex-1 flex-col">
+    <div className="flex min-w-0 flex-1 flex-col bg-surface-container-lowest">
       <DashboardPageHeader title={COMPANY_COPY.title} description={COMPANY_COPY.description} />
       <a href="#company-main" className="sr-only focus:not-sr-only focus:p-4">{COMPANY_COPY.skip}</a>
-      <main id="company-main" className="flex-1 overflow-auto p-unit-lg">
-        <div className="mx-auto max-w-3xl"><CompanyDetails /></div>
+      <main id="company-main" className="flex-1 overflow-auto px-6 py-6 lg:px-8 lg:py-8">
+        <div className="max-w-3xl"><CompanyDetails /></div>
       </main>
     </div>
   );

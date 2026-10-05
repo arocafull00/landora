@@ -379,7 +379,7 @@ const NUVOLETS_SECTIONS: TemplateSectionDef[] = [
   { anchor: "favoritos", label: "Favoritos", editorTabId: "Favoritos" },
   { anchor: "tienda", label: "Tienda", editorTabId: "Tienda" },
   { anchor: "instagram", label: "Instagram", editorTabId: "Instagram" },
-  { anchor: "newsletter", label: "Newsletter", editorTabId: "Newsletter" },
+  { anchor: "newsletter", label: "Suscripciones", editorTabId: "Suscripciones" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", required: true },
 ];
 

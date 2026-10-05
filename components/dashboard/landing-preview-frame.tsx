@@ -23,6 +23,8 @@ import { findSignalCaseBySlug } from "@/lib/signal-cases";
 import { getPreviewLandingPath } from "@/lib/public-site-url";
 import { applyCatalogPresentation, type CatalogPresentation } from "@/lib/catalog-presentation";
 import { syncCompanyContent } from "@/lib/company-details";
+import { applySubscriptionSettings } from "@/lib/email-subscriptions/settings";
+import type { SubscriptionSettings } from "@/lib/schemas/subscription-settings";
 
 const NuvoletsTemplate = dynamic(
   () => import("@/components/templates/nuvolets/nuvolets-template").then((module) => module.NuvoletsTemplate),
@@ -91,6 +93,7 @@ export function LandingPreviewFrame({
   initialCaseSlug,
   bookingEnabled = false,
   catalog,
+  subscription,
 }: {
   initialContent: LandingContent;
   initialSectionSelections: LandingSectionSelections;
@@ -102,11 +105,15 @@ export function LandingPreviewFrame({
   initialCaseSlug?: string;
   bookingEnabled: boolean;
   catalog?: CatalogPresentation;
+  subscription?: { settings: SubscriptionSettings; privacyUrl: string };
 }) {
   const previewBridge = usePreviewBridge();
   const livePreview = previewBridge?.livePreview;
   const sourceContent = livePreview?.content ?? initialContent;
-  const content = useMemo(() => syncCompanyContent(catalog ? applyCatalogPresentation(sourceContent, catalog) : sourceContent), [sourceContent, catalog]);
+  const content = useMemo(() => {
+    const synced = syncCompanyContent(catalog ? applyCatalogPresentation(sourceContent, catalog) : sourceContent);
+    return subscription ? applySubscriptionSettings(synced, subscription.settings, subscription.privacyUrl) : synced;
+  }, [sourceContent, catalog, subscription]);
   const activeTemplate = livePreview?.template ?? template;
   const sectionSelections =
     livePreview?.sectionSelections ?? initialSectionSelections;

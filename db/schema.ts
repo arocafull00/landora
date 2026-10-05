@@ -787,6 +787,14 @@ export const landingNuvolets = pgTable("landing_nuvolets", {
   content: jsonb("content").$type<NuvoletsContent>().notNull(),
 });
 
+export const landingSubscriptionSettings = pgTable("landing_subscription_settings", {
+  landingId: uuid("landing_id").primaryKey().references(() => landingPages.id, { onDelete: "cascade" }),
+  settings: jsonb("settings").$type<import("@/lib/schemas/subscription-settings").SubscriptionSettings>().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  check("landing_subscription_settings_object", sql`jsonb_typeof(${table.settings}) = 'object'`),
+]);
+
 export const emailSubscriptions = pgTable("email-subscriptions", {
   email: text("email").notNull(),
   landingId: uuid("landing_id").notNull().references(() => landingPages.id, { onDelete: "cascade" }),

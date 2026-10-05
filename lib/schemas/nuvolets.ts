@@ -68,9 +68,6 @@ export const nuvoletsContentSchema = z.strictObject({
   if (value.favorites.productIds.some((productId) => !value.products.some((product) => product.id === productId))) {
     ctx.addIssue({ code: "custom", path: ["favorites", "productIds"], message: "Producto no encontrado" });
   }
-  if (value.newsletter.enabled && (!value.newsletter.consentText.trim() || !/^https?:\/\//.test(value.newsletter.privacyUrl))) {
-    ctx.addIssue({ code: "custom", path: ["newsletter", "privacyUrl"], message: "Configura el consentimiento y el enlace de privacidad antes de activar la newsletter" });
-  }
 });
 
 export type NuvoletsContent = z.infer<typeof nuvoletsContentSchema>;
