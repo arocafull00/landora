@@ -1,7 +1,7 @@
 "use client";
 
 import { NUVOLETS_COPY as copy } from "@/lib/nuvolets-copy";
-import { Menu, X } from "lucide-react";
+import { MapPin, Menu, X } from "lucide-react";
 import type { NavLink } from "@/lib/dashboard-data";
 import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
 import { AssetImage } from "@/components/ui/asset-image";
@@ -24,7 +24,7 @@ export function NuvoletsNav({ brand, logo, links, config, topOffset }: { brand: 
         </a>
         <div className="flex items-center gap-6 text-sm font-medium md:flex-1 md:justify-end">
           <NuvoletsLink href={instagramHref} className="nuvolets-nav-link hidden md:inline">{copy.instagram}</NuvoletsLink>
-          <NuvoletsLink href={storeHref} className="nuvolets-button px-4! py-2! text-sm!">{config.store.ctaLabel}</NuvoletsLink>
+          <NuvoletsLink href={storeHref} className="nuvolets-button gap-2 px-4! py-2! text-sm!"><MapPin aria-hidden size={18} className="shrink-0" />{config.store.ctaLabel}</NuvoletsLink>
         </div>
       </div>
       <nav id="nuvolets-menu" aria-label={copy.mobile} hidden={!open} className="nuvolets-menu flex flex-col gap-4 border-t border-nuvolets-border px-5 py-4 text-base md:hidden">

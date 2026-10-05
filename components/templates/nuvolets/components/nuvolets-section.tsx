@@ -1,3 +1,4 @@
+import { Instagram } from "lucide-react";
 import { NUVOLETS_COPY as copy } from "@/lib/nuvolets-copy";
 import type { HeroVariantId, LandingContent } from "@/lib/dashboard-data";
 import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
@@ -22,7 +23,7 @@ export function NuvoletsSection({ anchor, content, config, slug, preview, heroVa
       {anchor === "historia" ? <NuvoletsEditorial config={config.story} /> : null}
       {anchor === "favoritos" ? <NuvoletsFavorites config={config.favorites} products={config.favorites.productIds.flatMap((id) => { const product = config.products.find((item) => item.id === id); return product ? [product] : []; })} /> : null}
       {anchor === "tienda" ? <NuvoletsStore config={config.store} /> : null}
-      {anchor === "instagram" ? <section className="mx-auto max-w-7xl px-5 pb-20 md:px-8 md:pb-28"><div className="nuvolets-reveal mb-10 text-center"><h2 className="nuvolets-title mb-3 text-site-title">{config.instagram.title}</h2><p className="text-site-content opacity-75">{config.instagram.text}</p></div><div className="mb-10 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-6">{config.instagram.images.map((item, index) => <NuvoletsInstagramCard key={item.id} item={item} index={index} />)}</div><div className="text-center"><NuvoletsLink href={config.instagram.url} className="nuvolets-button nuvolets-button-ghost">{config.instagram.buttonLabel}</NuvoletsLink></div></section> : null}
+      {anchor === "instagram" ? <section className="mx-auto max-w-7xl px-5 pb-20 md:px-8 md:pb-28"><div className="nuvolets-reveal mb-10 text-center"><h2 className="nuvolets-title mb-3 text-site-title">{config.instagram.title}</h2><p className="text-site-content opacity-75">{config.instagram.text}</p></div><div className="mb-10 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-6">{config.instagram.images.map((item, index) => <NuvoletsInstagramCard key={item.id} item={item} index={index} />)}</div><div className="text-center"><NuvoletsLink href={config.instagram.url} className="nuvolets-button nuvolets-button-ghost gap-2"><Instagram aria-hidden size={18} className="shrink-0" />{config.instagram.buttonLabel}</NuvoletsLink></div></section> : null}
       {anchor === "newsletter" ? <NuvoletsNewsletter config={config.newsletter} slug={slug ?? ""} preview={preview} /> : null}
     </div>
   );

@@ -1,4 +1,5 @@
 "use client";
+import type { CSSProperties } from "react";
 import { Cloud, ImageIcon } from "lucide-react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { AssetImage } from "@/components/ui/asset-image";
@@ -14,14 +15,14 @@ export function ProductGallery({ images, title, activeIndex, badge, onSelect }: 
   const { image, ratio, handleImageLoad } = useProductGallery(images, activeIndex);
   return (
     <div className="min-w-0 self-start">
-      <div className="relative overflow-hidden rounded-2xl bg-tone-1 p-1.5 sm:p-2">
+      <div className="relative mx-auto w-full max-w-[calc(35rem*var(--product-image-ratio)+0.75rem)] overflow-hidden rounded-2xl bg-tone-1 p-1.5 sm:max-w-[calc(35rem*var(--product-image-ratio)+1rem)] sm:p-2" style={{ "--product-image-ratio": ratio } as CSSProperties}>
         {badge ? (
           <Badge className="absolute left-4 top-4 z-10 bg-surface/95 px-3 py-1.5 text-xs font-semibold text-ink backdrop-blur-sm">
             <Cloud aria-hidden />
             {badge}
           </Badge>
         ) : null}
-        <AspectRatio ratio={ratio} className="relative overflow-hidden rounded-xl bg-tone-1">
+        <AspectRatio ratio={ratio} className="relative max-h-[35rem] overflow-hidden rounded-xl bg-tone-1">
           {image ? <AssetImage src={image.url} alt={image.alt || title} fill priority sizes="(min-width:1280px) 640px, (min-width:1024px) 55vw, 100vw" onLoad={handleImageLoad} className="object-contain" /> : (
             <div className="flex h-full flex-col items-center justify-center gap-3 text-ink-secondary">
               <ImageIcon aria-hidden className="size-8" />

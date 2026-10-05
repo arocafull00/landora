@@ -1,3 +1,4 @@
+import { Cloud, ShoppingBag } from "lucide-react";
 import type { HeroVariantProps } from "@/components/templates/shared/heroes/hero-variant-types";
 import { AssetImage } from "@/components/ui/asset-image";
 import { NuvoletsCloud } from "./components/nuvolets-cloud";
@@ -23,8 +24,8 @@ export function NuvoletsHeroVariant({ content, heroRef, primaryCtaHref, secondar
           <p data-editor-id="hero:subtitle" className="nuvolets-intro mb-9 max-w-md whitespace-pre-line text-site-subtitle leading-relaxed opacity-85 [--d:.7s]">{content.hero.subtitle}</p>
           {content.hero.description ? <p className="nuvolets-intro mb-6 text-site-content [--d:.7s]">{content.hero.description}</p> : null}
           <div className="nuvolets-intro flex flex-wrap gap-3 [--d:.85s]">
-            <NuvoletsLink href={primaryCtaHref} className="nuvolets-button w-full sm:w-auto">{content.hero.ctaLabel}</NuvoletsLink>
-            {config?.heroDetails.secondaryLabel ? <NuvoletsLink href={secondaryCtaHref} className="nuvolets-button nuvolets-button-ghost w-full sm:w-auto">{config.heroDetails.secondaryLabel}</NuvoletsLink> : null}
+            <NuvoletsLink href={primaryCtaHref} className="nuvolets-button w-full gap-2 sm:w-auto"><ShoppingBag aria-hidden size={18} className="shrink-0" />{content.hero.ctaLabel}</NuvoletsLink>
+            {config?.heroDetails.secondaryLabel ? <NuvoletsLink href={secondaryCtaHref} className="nuvolets-button nuvolets-button-ghost w-full gap-2 sm:w-auto"><Cloud aria-hidden size={18} className="shrink-0" />{config.heroDetails.secondaryLabel}</NuvoletsLink> : null}
           </div>
         </div>
         <div className="relative order-1 md:order-2">

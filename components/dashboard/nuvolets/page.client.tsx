@@ -10,8 +10,6 @@ import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-pane
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
 import { NuvoletsSettingsForm } from "./components/nuvolets-settings-form";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { useNuvoletsEditor } from "./hooks/use-nuvolets-editor";
 
 const AppearanceEditorPanel = dynamic(
@@ -22,10 +20,9 @@ const AppearanceEditorPanel = dynamic(
 );
 
 export function NuvoletsEditorSection() {
-  const { landing, config, tab, update, isAdmin, productsModuleEnabled } = useNuvoletsEditor();
+  const { landing, config, tab, update, isAdmin } = useNuvoletsEditor();
   if (!landing || !config) return null;
   return <EditorLayout form={<>
-    {productsModuleEnabled ? <Button asChild variant="outline"><Link href="/products">Gestionar productos</Link></Button> : null}
     {tab === "Hero" ? <HeroEditorPanel landing={landing} /> : null}
     {tab === "Diseño" ? <AppearanceEditorPanel landing={landing} /> : null}
     {tab === "Navegación" ? <NavEditorPanel activeLanding={landing} /> : null}

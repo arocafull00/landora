@@ -1,3 +1,4 @@
+import { Store } from "lucide-react";
 import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
 import { AssetImage } from "@/components/ui/asset-image";
 import { NuvoletsLink } from "./nuvolets-link";
@@ -12,7 +13,7 @@ export function NuvoletsEditorial({ config }: { config: NuvoletsContent["story"]
           <h2 className="nuvolets-title mb-6 whitespace-pre-line text-site-title-lg leading-[1.05]">{config.title}</h2>
           <p className="mb-8 max-w-md whitespace-pre-line text-site-subtitle leading-relaxed opacity-85">{config.text}</p>
           {config.secondaryText ? <p className="mb-8 max-w-md whitespace-pre-line text-site-content leading-relaxed opacity-85">{config.secondaryText}</p> : null}
-          <NuvoletsLink href={config.ctaHref} className="nuvolets-button">{config.ctaLabel}</NuvoletsLink>
+          <NuvoletsLink href={config.ctaHref} className="nuvolets-button gap-2"><Store aria-hidden size={18} className="shrink-0" />{config.ctaLabel}</NuvoletsLink>
         </div>
       </div>
     </div>
