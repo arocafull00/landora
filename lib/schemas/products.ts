@@ -52,10 +52,12 @@ export const productSaveSchema = z.strictObject({ landingId: z.uuid(), productId
 export const productCommandSchema = z.strictObject({ landingId: z.uuid(), productId: z.uuid(), version: z.number().int().min(1), command: z.enum(["duplicate", "archive", "restore", "unpublish", "publish"]) });
 export const productBatchCommandSchema = z.strictObject({
   landingId: z.uuid(),
-  items: z.array(z.strictObject({ productId: z.uuid(), version: z.number().int().min(1) })).min(1).max(50),
+  productIds: z.array(z.uuid()).min(1).max(50),
   command: z.enum(["publish", "archive"]),
 });
 export const productsAccessSchema = z.strictObject({ userId: z.uuid(), enabled: z.boolean() });
+export const productCategoryFormSchema = z.strictObject({ name: label.min(1, "Introduce el nombre de la categoría") });
+export const productCategorySaveSchema = productCategoryFormSchema.extend({ landingId: z.uuid(), previousName: label.min(1).nullable() });
 export const catalogSaveSchema = z.strictObject({ landingId: z.uuid(), version: z.number().int().min(0), config: catalogConfigSchema });
 export const catalogQuerySchema = z.strictObject({
   q: z.string().trim().max(160).default(""), category: label.default(""), brand: label.default(""), size: label.default(""),

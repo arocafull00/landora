@@ -30,12 +30,12 @@ export function useProductCommand(landingId: string) {
     }
     run(() => commandProductAction({ landingId, productId: product.id, version: product.version, command }));
   };
-  const batchCommand = (products: ProductDto[], command: "publish" | "archive") => startTransition(async () => {
+  const batchCommand = (productIds: string[], command: "publish" | "archive") => startTransition(async () => {
     try {
       const result = await batchCommandProductsAction({
         landingId,
         command,
-        items: products.map((item) => ({ productId: item.id, version: item.version })),
+        productIds,
       });
       if ("error" in result) { toast.error(result.error); return; }
       if (result.skipped) toast.warning(`${result.updated} actualizados, ${result.skipped} omitidos`);

@@ -5,10 +5,6 @@ import type { ProductDto } from "@/lib/domain/dtos";
 
 export function useProductsSelection(products: ProductDto[]) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(() => new Set());
-  const selectedProducts = useMemo(
-    () => products.filter((product) => selectedIds.has(product.id)),
-    [products, selectedIds]
-  );
   const pageIds = useMemo(() => products.map((product) => product.id), [products]);
   const selectedOnPageCount = useMemo(
     () => pageIds.filter((id) => selectedIds.has(id)).length,
@@ -38,7 +34,6 @@ export function useProductsSelection(products: ProductDto[]) {
   const clear = useCallback(() => setSelectedIds(new Set()), []);
   return {
     selectedIds,
-    selectedProducts,
     selectedCount: selectedIds.size,
     allSelected,
     indeterminate,

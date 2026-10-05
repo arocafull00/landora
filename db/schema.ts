@@ -478,6 +478,15 @@ export const landingWorkHistory = pgTable("landing_work_history", {
   index("landing_work_history_landing_id_sort_idx").on(table.landingId, table.sortOrder),
 ]);
 
+export const storeProductCategories = pgTable("store_product_categories", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id").notNull().references(() => landingPages.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+}, (table) => [
+  uniqueIndex("store_product_categories_name_unique").on(table.landingId, sql`lower(trim(${table.name}))`),
+  check("store_product_categories_name_check", sql`${table.name} = trim(${table.name}) AND length(${table.name}) BETWEEN 1 AND 160`),
+]);
+
 export const storeProducts = pgTable("store_products", {
   id: uuid("id").primaryKey().defaultRandom(),
   landingId: uuid("landing_id").notNull().references(() => landingPages.id, { onDelete: "cascade" }),

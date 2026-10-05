@@ -7,8 +7,8 @@ import { requireProductsAccess } from "@/lib/require-products-access";
 import { getUserByInternalId } from "@/data/users";
 import { getLandingsByUserId, getLandingPageByIdAndUserId } from "@/data/landing-pages";
 import { setProductsAccess } from "@/data/product-access";
-import { saveProduct, commandProduct, batchCommandProducts, saveCatalogConfig, importNuvoletsProducts } from "@/data/products";
-import { productSaveSchema, productCommandSchema, productBatchCommandSchema, catalogSaveSchema, productsAccessSchema } from "@/lib/schemas/products";
+import { saveProduct, commandProduct, batchCommandProducts, saveCatalogConfig, importNuvoletsProducts, saveProductCategory } from "@/data/products";
+import { productSaveSchema, productCommandSchema, productBatchCommandSchema, catalogSaveSchema, productsAccessSchema, productCategorySaveSchema } from "@/lib/schemas/products";
 import { resourceIdSchema } from "@/lib/schemas/api";
 import { revalidateProductRoutes } from "@/lib/products-revalidation";
 import { toLandingContent } from "@/lib/landing-mapper";
@@ -35,14 +35,33 @@ export async function batchCommandProductsAction(input: unknown): Promise<Result
   const parsed = productBatchCommandSchema.safeParse(input);
   if (!parsed.success) return { error: "Operación no válida" };
   try {
-    const { landingId, items, command } = parsed.data;
+    const { landingId, productIds, command } = parsed.data;
     const access = await requireProductsAccess(landingId);
     if (!access) return { error: ERRORS.denied };
-    const result = await batchCommandProducts(landingId, access.userId, items, command);
+    const result = await batchCommandProducts(landingId, access.userId, productIds, command);
     if (result.status !== "saved") return { error: ERRORS.denied };
     revalidateProductRoutes(access.landing);
     return { success: true, updated: result.updated, skipped: result.skipped };
   } catch (error) { logger.captureException(error, { action: "product-batch-command", landingId: parsed.data.landingId }); return { error: "No se pudo actualizar el catálogo" }; }
+}
+
+export async function saveProductCategoryAction(input: unknown): Promise<Result> {
+  const parsed = productCategorySaveSchema.safeParse(input);
+  if (!parsed.success) return { error: "Nombre de categoría no válido" };
+  try {
+    const { landingId, previousName, name } = parsed.data;
+    const access = await requireProductsAccess(landingId);
+    if (!access) return { error: ERRORS.denied };
+    const result = await saveProductCategory(landingId, access.userId, previousName, name);
+    if (result.status === "duplicate") return { error: "Ya existe una categoría con ese nombre" };
+    if (result.status === "not_found") return { error: "La categoría ha cambiado. Recarga antes de editarla" };
+    if (result.status !== "saved") return { error: ERRORS[result.status] };
+    revalidateProductRoutes(access.landing);
+    return { success: true };
+  } catch (error) {
+    logger.captureException(error, { action: "save-product-category", landingId: parsed.data.landingId });
+    return { error: "No se pudo guardar la categoría" };
+  }
 }
 
 export async function commandProductAction(input: unknown): Promise<Result> {

@@ -2,7 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { and, asc, desc, eq, inArray, ne, or, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { storeProducts, storeProductVariants, storeCatalogConfig } from "@/db/schema";
+import { storeProducts, storeProductVariants, storeCatalogConfig, storeProductCategories } from "@/db/schema";
 import type { CatalogConfigDto, ProductDto, ProductPageDto } from "@/lib/domain/dtos";
 import { PRODUCT_PAGE_SIZE, parseLegacyPrice, productSlug, toPublicProduct } from "@/lib/products";
 import { productSchema, type CatalogConfigValues, type CatalogQuery, type ProductValues } from "@/lib/schemas/products";
@@ -81,13 +81,14 @@ export const getProductPage = cache(async (landingId: string, query: CatalogQuer
     const price = sql`(select min(coalesce(v.price_cents, ${storeProducts.priceCents})) from store_product_variants v where v.product_id = ${storeProducts.id})`;
     const [{ total }] = await db.select({ total: sql<number>`count(*)::int` }).from(storeProducts).where(filters);
     const page = Math.min(query.page, Math.max(1, Math.ceil(total / PRODUCT_PAGE_SIZE)));
-    const [rows, facets, sizes] = await Promise.all([
+    const [rows, facets, sizes, categories] = await Promise.all([
       db.select().from(storeProducts).where(filters).orderBy(query.sort === "price-asc" ? asc(price) : query.sort === "price-desc" ? desc(price) : desc(storeProducts.createdAt), asc(storeProducts.id)).limit(PRODUCT_PAGE_SIZE).offset((page - 1) * PRODUCT_PAGE_SIZE),
       db.selectDistinct({ category: storeProducts.category, brand: storeProducts.brand }).from(storeProducts).where(scope),
       db.selectDistinct({ size: storeProductVariants.size }).from(storeProductVariants).innerJoin(storeProducts, eq(storeProductVariants.productId, storeProducts.id)).where(scope),
+      publicOnly || preview ? Promise.resolve([]) : db.select({ name: storeProductCategories.name }).from(storeProductCategories).where(eq(storeProductCategories.landingId, landingId)).orderBy(asc(storeProductCategories.name)),
     ]);
     const variants = rows.length ? await db.select().from(storeProductVariants).where(inArray(storeProductVariants.productId, rows.map((row) => row.id))).orderBy(asc(storeProductVariants.sortOrder)) : [];
-    return { products: rows.map((row) => dto(row, variants.filter((variant) => variant.productId === row.id))), total, page, categories: Array.from(new Set(facets.flatMap((f) => f.category ? [f.category] : []))).sort(), brands: Array.from(new Set(facets.flatMap((f) => f.brand ? [f.brand] : []))).sort(), sizes: sizes.flatMap((f) => f.size ? [f.size] : []).sort() };
+    return { products: rows.map((row) => dto(row, variants.filter((variant) => variant.productId === row.id))), total, page, categories: Array.from(new Set([...categories.map((category) => category.name), ...facets.flatMap((f) => f.category ? [f.category] : [])])).sort(), brands: Array.from(new Set(facets.flatMap((f) => f.brand ? [f.brand] : []))).sort(), sizes: sizes.flatMap((f) => f.size ? [f.size] : []).sort() };
   } catch (error) { throw new Error("Failed to fetch product page", { cause: error }); }
 });
 
@@ -103,16 +104,45 @@ export async function saveProduct(landingId: string, userId: string, productId: 
       }
       const id = productId ?? crypto.randomUUID();
       if (!productId) await tx.insert(storeProducts).values({ ...fields, id, landingId });
+      if (fields.category) {
+        await tx.insert(storeProductCategories).values({ landingId, name: fields.category }).onConflictDoNothing();
+        const [category] = await tx.select({ name: storeProductCategories.name }).from(storeProductCategories).where(and(eq(storeProductCategories.landingId, landingId), sql`lower(${storeProductCategories.name}) = lower(${fields.category})`));
+        if (category.name !== fields.category) await tx.update(storeProducts).set({ category: category.name }).where(eq(storeProducts.id, id));
+      }
       await tx.insert(storeProductVariants).values(variants.map((variant, sortOrder) => ({ ...variant, productId: id, landingId, sortOrder, sku: variant.sku.trim() || null })));
       return { status: "saved", productId: id };
     });
   } catch (error) { const known = knownError(error); if (known) return known; throw new Error("Failed to save product", { cause: error }); }
 }
 
+export async function saveProductCategory(landingId: string, userId: string, previousName: string | null, name: string): Promise<WriteResult> {
+  try {
+    return await db.transaction(async (tx): Promise<WriteResult> => {
+      if (!await lockAccess(tx, landingId, userId)) return { status: "denied" };
+      if (previousName === null) {
+        await tx.insert(storeProductCategories).values({ landingId, name });
+        return { status: "saved" };
+      }
+      const rows = await tx.update(storeProductCategories).set({ name }).where(and(eq(storeProductCategories.landingId, landingId), eq(storeProductCategories.name, previousName))).returning({ id: storeProductCategories.id });
+      if (!rows.length) return { status: "not_found" };
+      if (name !== previousName) {
+        await tx.update(storeProducts).set({ category: name, version: sql`${storeProducts.version} + 1`, updatedAt: new Date() }).where(and(eq(storeProducts.landingId, landingId), eq(storeProducts.category, previousName)));
+      }
+      return { status: "saved" };
+    });
+  } catch (error) {
+    const known = knownError(error);
+    if (known) return known;
+    throw new Error("Failed to save product category", { cause: error });
+  }
+}
+
 async function applyProductStatus(tx: Transaction, row: ProductRow, version: number, command: StatusCommand): Promise<WriteResult> {
-  if (row.version !== version) return { status: "conflict" };
   const status = command === "archive" ? "archived" : command === "publish" ? "published" : "draft";
+  if (row.status === status) return { status: "saved", productId: row.id };
+  if (row.version !== version) return { status: "conflict" };
   if (status === "published") {
+    await tx.update(storeProductVariants).set({ stock: 0 }).where(and(eq(storeProductVariants.productId, row.id), sql`${storeProductVariants.stock} IS NULL`));
     const variants = await tx.select().from(storeProductVariants).where(eq(storeProductVariants.productId, row.id));
     const product = dto(row, variants);
     const { id, landingId: parentId, version: revision, createdAt, updatedAt, ...values } = product;
@@ -143,16 +173,16 @@ export async function commandProduct(landingId: string, userId: string, productI
   } catch (error) { const known = knownError(error); if (known) return known; throw new Error("Failed to change product", { cause: error }); }
 }
 
-export async function batchCommandProducts(landingId: string, userId: string, items: { productId: string; version: number }[], command: "publish" | "archive"): Promise<BatchWriteResult> {
+export async function batchCommandProducts(landingId: string, userId: string, productIds: string[], command: "publish" | "archive"): Promise<BatchWriteResult> {
   try {
     return await db.transaction(async (tx): Promise<BatchWriteResult> => {
       if (!await lockAccess(tx, landingId, userId)) return { status: "denied" };
       let updated = 0;
       let skipped = 0;
-      for (const item of items) {
-        const [row] = await tx.select().from(storeProducts).where(and(eq(storeProducts.id, item.productId), eq(storeProducts.landingId, landingId))).for("update");
+      for (const productId of productIds) {
+        const [row] = await tx.select().from(storeProducts).where(and(eq(storeProducts.id, productId), eq(storeProducts.landingId, landingId))).for("update");
         if (!row) { skipped += 1; continue; }
-        const result = await applyProductStatus(tx, row, item.version, command);
+        const result = await applyProductStatus(tx, row, row.version, command);
         if (result.status === "saved") { updated += 1; continue; }
         skipped += 1;
       }
@@ -186,7 +216,7 @@ export async function importNuvoletsProducts(landingId: string, userId: string, 
         return { id, landingId, title: product.name, slug: `${productSlug(product.name)}-${id.slice(0, 8)}`, priceCents: parseLegacyPrice(product.price), images: product.image ? [{ url: product.image, alt: product.alt }] : [], legacyId: product.id, legacyAppearance: { badge: product.badge, tone: product.tone, colors: product.colors }, featured: favorites.has(product.id), favoriteOrder: favorites.get(product.id) ?? 0, sortOrder };
       });
       const rows = await tx.insert(storeProducts).values(products).onConflictDoNothing({ target: [storeProducts.landingId, storeProducts.legacyId] }).returning({ id: storeProducts.id });
-      if (rows.length) await tx.insert(storeProductVariants).values(rows.map((row) => ({ id: crypto.randomUUID(), landingId, productId: row.id })));
+      if (rows.length) await tx.insert(storeProductVariants).values(rows.map((row) => ({ id: crypto.randomUUID(), landingId, productId: row.id, stock: 0 })));
       return { status: "saved" };
     });
   } catch (error) { throw new Error("Failed to import Nuvolets products", { cause: error }); }

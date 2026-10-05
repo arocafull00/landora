@@ -14,6 +14,7 @@ import { useProductCommand } from "./hooks/use-product-command";
 import { useProductsDrawer } from "./hooks/use-products-drawer";
 import { useProductsNavigation } from "./hooks/use-products-navigation";
 import { useProductsSelection } from "./hooks/use-products-selection";
+import { ProductCategoriesClient } from "./product-categories.client";
 
 export function ProductsListClient({
   landingId,
@@ -42,17 +43,19 @@ export function ProductsListClient({
   const formSessionKey =
     drawer.mode === "edit" ? `${drawer.product.id}:${drawer.product.version}` : drawer.mode === "new" ? "new" : "idle";
   const handleBatchPublish = () => {
-    batchCommand(selection.selectedProducts, "publish");
+    batchCommand(Array.from(selection.selectedIds), "publish");
     selection.clear();
   };
   const handleBatchArchive = () => {
-    batchCommand(selection.selectedProducts, "archive");
+    batchCommand(Array.from(selection.selectedIds), "archive");
     selection.clear();
   };
 
   return (
     <>
-      <ProductsHeader total={total} onNew={openNew} />
+      <ProductsHeader total={total} onNew={openNew}>
+        <ProductCategoriesClient landingId={landingId} categories={categories} />
+      </ProductsHeader>
       <div className="border-b border-line">
         <ProductsStatusTabs status={query.status} onStatusChange={navigation.setStatus} />
       </div>
