@@ -3,8 +3,11 @@
 import { Settings, User } from "lucide-react";
 import { PalletRossLogo } from "@/components/templates/pallet-ross/components/pallet-ross-logo";
 import { PALLET_ROSS_COPY } from "@/components/templates/pallet-ross/pallet-ross-copy";
+import type { NavLink } from "@/lib/dashboard-data";
+import { PalletRossNavTextButton } from "./pallet-ross-nav-text-button";
+import { PalletRossNavIconButton } from "./pallet-ross-nav-icon-button";
 
-export function PalletRossNav({ topOffset = 0 }: { topOffset?: number }) {
+export function PalletRossNav({ topOffset = 0, catalogLink }: { topOffset?: number; catalogLink?: NavLink }) {
   const { nav, brand } = PALLET_ROSS_COPY;
 
   return (
@@ -26,7 +29,7 @@ export function PalletRossNav({ topOffset = 0 }: { topOffset?: number }) {
       </div>
 
       <nav className="hidden items-center md:flex">
-        <NavTextButton label={nav.getStarted} />
+        <PalletRossNavTextButton label={nav.getStarted} />
         <button
           type="button"
           className="flex cursor-pointer items-center border-none bg-transparent font-heading text-[var(--site-text)] text-site-content"
@@ -39,51 +42,21 @@ export function PalletRossNav({ topOffset = 0 }: { topOffset?: number }) {
           />
           {nav.createStrategy}
         </button>
-        <NavTextButton label={nav.pricing} />
-        <NavTextButton label={nav.contact} />
-        <NavTextButton label={nav.solution} />
-        <NavTextButton label={nav.ecommerce} />
+        <PalletRossNavTextButton label={nav.pricing} />
+        <PalletRossNavTextButton label={nav.contact} />
+        <PalletRossNavTextButton label={nav.solution} />
+        <PalletRossNavTextButton label={nav.ecommerce} />
       </nav>
 
       <div className="flex items-center">
-        <IconButton label="User account">
+        {catalogLink ? <a href={catalogLink.href} className="px-3 py-2 text-site-content text-on-surface">{catalogLink.label}</a> : null}
+        <PalletRossNavIconButton label="User account">
           <User size={20} color="var(--site-text)" />
-        </IconButton>
-        <IconButton label="Settings">
+        </PalletRossNavIconButton>
+        <PalletRossNavIconButton label="Settings">
           <Settings size={20} color="var(--site-text)" />
-        </IconButton>
+        </PalletRossNavIconButton>
       </div>
     </header>
-  );
-}
-
-function NavTextButton({ label }: { label: string }) {
-  return (
-    <button
-      type="button"
-      className="cursor-pointer border-none bg-transparent font-heading text-[var(--site-text)] text-site-content"
-      style={{ padding: "8px 14px" }}
-    >
-      {label}
-    </button>
-  );
-}
-
-function IconButton({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      className="cursor-pointer border-none bg-transparent"
-      style={{ padding: 8 }}
-    >
-      {children}
-    </button>
   );
 }

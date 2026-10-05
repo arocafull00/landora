@@ -38,6 +38,7 @@ export const nuvoletsProductFormSchema = z.strictObject({
 });
 const nuvoletsProductSchema = nuvoletsProductFormSchema.extend({
   id,
+  href: url.optional(),
   badge: z.enum(["", "Nuevo", "Últimas unidades", "Bestseller"]).optional(),
   tone: tone.optional(),
   colors: z.array(tone).max(12).optional(),

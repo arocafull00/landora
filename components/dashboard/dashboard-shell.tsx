@@ -7,8 +7,8 @@ import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { DashboardSidebarToggle } from "@/components/dashboard/dashboard-sidebar-toggle";
 import { DashboardChromeProvider } from "@/components/dashboard/dashboard-chrome-provider";
 
 export function DashboardShell({
@@ -17,6 +17,7 @@ export function DashboardShell({
   landing,
   bookingEnabled,
   bookingModuleEnabled,
+  productsModuleEnabled,
   children,
 }: {
   isAdmin: boolean;
@@ -24,6 +25,7 @@ export function DashboardShell({
   landing: Landing;
   bookingEnabled: boolean;
   bookingModuleEnabled: boolean;
+  productsModuleEnabled: boolean;
   children: ReactNode;
 }) {
   return (
@@ -38,6 +40,7 @@ export function DashboardShell({
         impersonating={impersonating}
         bookingEnabled={bookingEnabled}
         bookingModuleEnabled={bookingModuleEnabled}
+        productsModuleEnabled={productsModuleEnabled}
       >
         <SidebarProvider
           className="dashboard-app h-dvh overflow-hidden bg-surface-bg text-on-background"
@@ -51,10 +54,11 @@ export function DashboardShell({
             impersonating={impersonating}
             showAccountActions={!isAdmin}
             bookingModuleEnabled={bookingModuleEnabled}
+            productsModuleEnabled={productsModuleEnabled}
           />
           <SidebarInset className="flex h-dvh min-w-0 flex-col overflow-hidden bg-surface-bg">
             <div className="flex items-center gap-2 border-b border-outline-variant px-unit-md py-2 md:hidden">
-              <SidebarTrigger />
+              <DashboardSidebarToggle />
             </div>
             <div className="flex min-h-0 flex-1 overflow-hidden">
               {children}

@@ -33,13 +33,14 @@ export function DashboardAccountActions({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
+          aria-label={`${DASHBOARD_ACCOUNT_COPY.account}: ${displayName}`}
           className={cn(
-            "flex w-full items-center gap-3 rounded-lg bg-surface-container-low px-2 py-2 text-left transition-colors hover:bg-surface-container",
+            "flex w-full items-center gap-3 rounded-lg bg-surface-container-low px-2 py-2 text-left transition-colors hover:bg-surface-container group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:p-0",
             className
           )}
         >
           <DashboardAccountAvatar imageUrl={user.imageUrl} />
-          <span className="min-w-0 flex-1">
+          <span className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
             <span className="block truncate font-body text-body-sm font-semibold text-on-surface">
               {displayName}
             </span>
@@ -51,13 +52,13 @@ export function DashboardAccountActions({
           </span>
           <ChevronsUpDown
             aria-hidden
-            className="size-4 shrink-0 text-on-surface-variant"
+            className="size-4 shrink-0 text-on-surface-variant group-data-[collapsible=icon]:hidden"
           />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="w-[var(--radix-dropdown-menu-trigger-width)] border-outline-variant bg-surface-container p-1"
+        className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-56 border-outline-variant bg-surface-container p-1"
         side="top"
         sideOffset={8}
       >

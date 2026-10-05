@@ -43,6 +43,7 @@ import { toLandingContent } from "@/lib/landing-mapper";
 import { resolveSectionSelections } from "@/lib/section-selections";
 import { publishedLandingContentSchema } from "@/lib/schemas/landing-publication";
 import { warmPublicLanding } from "@/lib/warm-public-landing";
+import { revalidateProductRoutes } from "@/lib/products-revalidation";
 
 type ActionResult = { success: true } | { error: string };
 
@@ -260,6 +261,11 @@ async function updateUserById(
 
   try {
     await updateUserFields(parsed.data, update);
+    if (update.suspended !== undefined) {
+      const landings = await getLandingsByUserId(parsed.data);
+      for (const landing of landings) revalidateProductRoutes(landing);
+      revalidatePath("/", "layout");
+    }
   } catch {
     return { error: "Error al actualizar el usuario" };
   }

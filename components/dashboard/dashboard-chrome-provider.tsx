@@ -11,11 +11,12 @@ export function DashboardChromeProvider({
   impersonating,
   bookingEnabled,
   bookingModuleEnabled,
+  productsModuleEnabled,
   children,
 }: DashboardChrome & { children: ReactNode }) {
   const value = useMemo(
-    () => ({ isAdmin, impersonating, bookingEnabled, bookingModuleEnabled }),
-    [isAdmin, impersonating, bookingEnabled, bookingModuleEnabled],
+    () => ({ isAdmin, impersonating, bookingEnabled, bookingModuleEnabled, productsModuleEnabled }),
+    [isAdmin, impersonating, bookingEnabled, bookingModuleEnabled, productsModuleEnabled],
   );
 
   return (

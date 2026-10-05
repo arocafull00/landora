@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useEffectEvent, useLayoutEffect } from "react";
+import { useEffect, useEffectEvent, useLayoutEffect, useMemo } from "react";
 import type {
   LandingContent,
   LandingSectionSelections,
@@ -34,6 +34,7 @@ import { RistoranteMenuPage } from "@/components/templates/ristorante/ristorante
 import { resolveGalleryItems } from "@/lib/gallery-content";
 import { findSignalCaseBySlug } from "@/lib/signal-cases";
 import { getPreviewLandingPath } from "@/lib/public-site-url";
+import { applyCatalogPresentation, type CatalogPresentation } from "@/lib/catalog-presentation";
 
 const TEMPLATE_COMPONENTS = {
   nuvolets: NuvoletsTemplate,
@@ -58,6 +59,7 @@ export function LandingPreviewFrame({
   previewProjectKey,
   initialCaseSlug,
   bookingEnabled = false,
+  catalog,
 }: {
   initialContent: LandingContent;
   initialSectionSelections: LandingSectionSelections;
@@ -68,10 +70,12 @@ export function LandingPreviewFrame({
   previewProjectKey?: string;
   initialCaseSlug?: string;
   bookingEnabled: boolean;
+  catalog?: CatalogPresentation;
 }) {
   const previewBridge = usePreviewBridge();
   const livePreview = previewBridge?.livePreview;
-  const content = livePreview?.content ?? initialContent;
+  const sourceContent = livePreview?.content ?? initialContent;
+  const content = useMemo(() => catalog ? applyCatalogPresentation(sourceContent, catalog) : sourceContent, [sourceContent, catalog]);
   const activeTemplate = livePreview?.template ?? template;
   const sectionSelections =
     livePreview?.sectionSelections ?? initialSectionSelections;

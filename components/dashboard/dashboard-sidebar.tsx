@@ -15,21 +15,24 @@ export function DashboardSidebar({
   impersonating,
   showAccountActions,
   bookingModuleEnabled,
+  productsModuleEnabled,
 }: {
   impersonating: boolean;
   showAccountActions: boolean;
   bookingModuleEnabled: boolean;
+  productsModuleEnabled: boolean;
 }) {
   const pathname = usePathname();
   const settingsActive = pathname.startsWith("/settings");
-  const navSections = bookingModuleEnabled
+  const sections = bookingModuleEnabled
     ? dashboardNavSections
     : dashboardNavSections.filter((section) => section.id !== "gestion");
+  const navSections = sections.map((section) => ({ ...section, items: section.items.filter((item) => item.id !== "products" || productsModuleEnabled) }));
 
   return (
     <Sidebar collapsible="icon" className={impersonating ? "pt-10" : undefined}>
       <DashboardSidebarHeader />
-      <SidebarContent>
+      <SidebarContent id="dashboard-sidebar-navigation">
         {navSections.map((section) => (
           <DashboardSidebarNavSection
             key={section.id}

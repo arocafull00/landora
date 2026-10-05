@@ -12,10 +12,12 @@ import {
   unique,
   uniqueIndex,
   check,
+  foreignKey,
   type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
+import type { ProductCharacteristic, ProductImage } from "@/lib/domain/dtos";
 
 export const templateEnum = pgEnum("template", [
   "nuvolets",
@@ -60,7 +62,7 @@ export type SubscriptionStatus = typeof subscriptionStatusEnum.enumValues[number
 export type DomainCheckStatus = typeof domainCheckStatusEnum.enumValues[number];
 export type SubscriptionPlan = "free" | "starter" | "pro";
 export type AccessType = "subscription" | "manual";
-export type AddonType = "bookings";
+export type AddonType = "bookings" | "products";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -475,6 +477,54 @@ export const landingWorkHistory = pgTable("landing_work_history", {
 }, (table) => [
   index("landing_work_history_landing_id_sort_idx").on(table.landingId, table.sortOrder),
 ]);
+
+export const storeProducts = pgTable("store_products", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id").notNull().references(() => landingPages.id, { onDelete: "cascade" }),
+  title: text("title").notNull(), subtitle: text("subtitle").notNull().default(""), slug: text("slug").notNull(),
+  description: text("description").notNull().default(""), category: text("category").notNull().default(""), brand: text("brand").notNull().default(""),
+  tags: jsonb("tags").$type<string[]>().notNull().default([]), featured: boolean("featured").notNull().default(false),
+  images: jsonb("images").$type<ProductImage[]>().notNull().default([]),
+  priceCents: integer("price_cents"), previousPriceCents: integer("previous_price_cents"),
+  material: text("material").notNull().default(""), composition: text("composition").notNull().default(""), dimensions: text("dimensions").notNull().default(""), weight: text("weight").notNull().default(""),
+  characteristics: jsonb("characteristics").$type<ProductCharacteristic[]>().notNull().default([]),
+  status: text("status").$type<"draft" | "published" | "archived">().notNull().default("draft"),
+  legacyId: text("legacy_id"), legacyAppearance: jsonb("legacy_appearance").$type<Pick<NuvoletsContent["products"][number], "badge" | "tone" | "colors">>(),
+  sortOrder: integer("sort_order").notNull().default(0), favoriteOrder: integer("favorite_order").notNull().default(0), version: integer("version").notNull().default(1),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(), updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  unique("store_products_landing_slug_unique").on(table.landingId, table.slug),
+  unique("store_products_id_landing_unique").on(table.id, table.landingId),
+  unique("store_products_legacy_unique").on(table.landingId, table.legacyId),
+  index("store_products_landing_status_idx").on(table.landingId, table.status),
+  check("store_products_status_check", sql`${table.status} IN ('draft', 'published', 'archived')`),
+  check("store_products_price_check", sql`${table.priceCents} IS NULL OR ${table.priceCents} >= 0`),
+  check("store_products_previous_price_check", sql`${table.previousPriceCents} IS NULL OR (${table.priceCents} IS NOT NULL AND ${table.previousPriceCents} > ${table.priceCents})`),
+  check("store_products_published_check", sql`${table.status} <> 'published' OR (${table.priceCents} IS NOT NULL AND jsonb_array_length(${table.images}) > 0)`),
+]);
+
+export const storeProductVariants = pgTable("store_product_variants", {
+  id: uuid("id").primaryKey(), productId: uuid("product_id").notNull().references(() => storeProducts.id, { onDelete: "cascade" }),
+  landingId: uuid("landing_id").notNull().references(() => landingPages.id, { onDelete: "cascade" }),
+  size: text("size").notNull().default(""), color: text("color").notNull().default(""), sku: text("sku"),
+  stock: integer("stock"), priceCents: integer("price_cents"), previousPriceCents: integer("previous_price_cents"),
+  sortOrder: integer("sort_order").notNull().default(0),
+}, (table) => [
+  foreignKey({ name: "store_product_variants_product_landing_fk", columns: [table.productId, table.landingId], foreignColumns: [storeProducts.id, storeProducts.landingId] }).onDelete("cascade"),
+  uniqueIndex("store_product_variants_combination_unique").on(table.productId, sql`lower(trim(${table.size}))`, sql`lower(trim(${table.color}))`),
+  uniqueIndex("store_product_variants_sku_unique").on(table.landingId, sql`upper(trim(${table.sku}))`).where(sql`${table.sku} IS NOT NULL`),
+  index("store_product_variants_product_idx").on(table.productId),
+  check("store_product_variants_stock_check", sql`${table.stock} IS NULL OR ${table.stock} >= 0`),
+  check("store_product_variants_price_check", sql`${table.priceCents} IS NULL OR ${table.priceCents} >= 0`),
+  check("store_product_variants_previous_price_check", sql`${table.previousPriceCents} IS NULL OR ${table.previousPriceCents} >= 0`),
+]);
+
+export const storeCatalogConfig = pgTable("store_catalog_config", {
+  landingId: uuid("landing_id").primaryKey().references(() => landingPages.id, { onDelete: "cascade" }),
+  enabled: boolean("enabled").notNull().default(false), adopted: boolean("adopted").notNull().default(false),
+  title: text("title").notNull().default("Productos"), description: text("description").notNull().default(""), whatsappPhone: text("whatsapp_phone").notNull().default(""),
+  version: integer("version").notNull().default(1),
+});
 
 export const blogPosts = pgTable("blog_posts", {
   id: uuid("id").primaryKey().defaultRandom(),

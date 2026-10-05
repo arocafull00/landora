@@ -44,6 +44,7 @@ function revalidateAssetConsumers() {
   revalidatePath("/assets");
   revalidatePath("/editor");
   revalidatePath("/blog");
+  revalidatePath("/products", "layout");
 }
 
 export async function prepareAssetUploadAction(): Promise<UploadSignatureResult> {

@@ -95,7 +95,7 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     demoContent: NUVOLETS_DEFAULT_CONTENT,
     editorTabs: [{ id: "Hero", label: "Hero" }, NAV_EDITOR_TAB, DESIGN_EDITOR_TAB,
       { id: "Franja", label: "Franja" }, { id: "Categorías", label: "Categorías" },
-      { id: "Colección", label: "Colección" }, { id: "Productos", label: "Productos" },
+      { id: "Colección", label: "Colección" },
       { id: "Historia", label: "Historia" }, { id: "Favoritos", label: "Favoritos" },
       { id: "Tienda", label: "Tienda" }, { id: "Instagram", label: "Instagram" },
       { id: "Newsletter", label: "Newsletter" }, { id: "Mascota", label: "Mascota" },

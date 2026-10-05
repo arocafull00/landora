@@ -27,6 +27,7 @@ const isInternalProxyRoute = createRouteMatcher([
 const isSentryTunnelRoute = createRouteMatcher(["/monitoring(.*)"]);
 const isSentryExampleApiRoute = createRouteMatcher(["/api/sentry-example-api"]);
 const isDashboardShellRoute = createRouteMatcher([
+  "/products(.*)",
   "/editor(.*)",
   "/assets(.*)",
   "/domain(.*)",
@@ -39,6 +40,7 @@ const isDashboardShellRoute = createRouteMatcher([
   "/booking-upgrade(.*)",
 ]);
 const isProtectedRoute = createRouteMatcher([
+  "/products(.*)",
   "/editor(.*)",
   "/assets(.*)",
   "/domain(.*)",
@@ -54,7 +56,7 @@ const isProtectedRoute = createRouteMatcher([
   "/api(.*)",
 ]);
 const PUBLIC_LANDING_PATH =
-  /^\/(?:$|about\/?$|book\/?$|carta\/?$|blog(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$|casos\/[^/]+\/?$|sitemap\.xml$|robots\.txt$)$/;
+  /^\/(?:$|about\/?$|book\/?$|carta\/?$|blog(?:\/[^/]+)?\/?$|productos(?:\/[^/]+)?\/?$|proyectos\/[^/]+\/?$|casos\/[^/]+\/?$|sitemap\.xml$|robots\.txt$)$/;
 const PROXY_CONTEXT_TIMEOUT_MS = 5_000;
 const LANDING_ROUTE_TTL_MS = 60_000;
 

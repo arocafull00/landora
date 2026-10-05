@@ -9,6 +9,7 @@ import { AppInteractionProviders } from "@/components/shared/app-interaction-pro
 import { getBookingSettings } from "@/data/booking-settings";
 import { getLandingPageByUserId } from "@/data/landing-pages";
 import { getUserAddon } from "@/data/user-addons";
+import { hasProductsAccess } from "@/data/product-access";
 import { getUserByInternalId } from "@/data/users";
 import { getEffectiveClientId, isImpersonating } from "@/lib/auth";
 import { isAdmin } from "@/lib/is-admin";
@@ -29,7 +30,7 @@ export async function DashboardLayoutContent({
   const clientId = await getEffectiveClientId();
   if (!clientId) redirect(userId ? "/account-pending" : "/sign-in");
 
-  const [user, dbLanding, impersonating, admin, bookingSettings, bookingsAddon] =
+  const [user, dbLanding, impersonating, admin, bookingSettings, bookingsAddon, productsModuleEnabled] =
     await Promise.all([
       getUserByInternalId(clientId),
       getLandingPageByUserId(clientId),
@@ -37,6 +38,7 @@ export async function DashboardLayoutContent({
       isAdmin(),
       getBookingSettings(clientId),
       getUserAddon(clientId, "bookings"),
+      hasProductsAccess(clientId),
     ]);
 
   if (!admin && !hasDashboardAccess(user)) {
@@ -85,6 +87,7 @@ export async function DashboardLayoutContent({
         <DashboardShell
           bookingEnabled={bookingSettings.enabled && bookingModuleEnabled}
           bookingModuleEnabled={bookingModuleEnabled}
+          productsModuleEnabled={productsModuleEnabled}
           impersonating={impersonating}
           isAdmin={admin}
           landing={landing}

@@ -4,6 +4,7 @@ import { toLandingContent } from "@/lib/landing-mapper";
 import { resolveSectionSelections } from "@/lib/section-selections";
 import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
 import { LandingPreviewFrame } from "@/components/dashboard/landing-preview-frame";
+import { getCatalogPresentation } from "@/data/catalog-presentation";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -22,6 +23,7 @@ export default async function LandingPreviewPage({
     landing.sectionSelections ?? [],
   );
   const tenant = await resolveTenantBySlug(landing.slug);
+  const catalog = await getCatalogPresentation(landing.id, landing.userId, true);
 
   return (
     <LandingPreviewFrame
@@ -31,6 +33,7 @@ export default async function LandingPreviewPage({
       slug={landing.slug}
       previewLandingId={landing.id}
       bookingEnabled={tenant?.enabled ?? false}
+      catalog={catalog}
     />
   );
 }

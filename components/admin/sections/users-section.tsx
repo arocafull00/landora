@@ -41,10 +41,12 @@ export function UsersSection({
   users,
   landingPages,
   bookingManualAccess,
+  productsManualAccess,
 }: {
   users: User[];
   landingPages: LandingPage[];
   bookingManualAccess: UserAddonManualAccess[];
+  productsManualAccess: UserAddonManualAccess[];
 }) {
   const [showForm, setShowForm] = useState(false);
   const [showImportForm, setShowImportForm] = useState(false);
@@ -52,8 +54,8 @@ export function UsersSection({
   const [page, setPage] = useState(1);
 
   const usersWithLandings = useMemo(
-    () => joinUsersWithLandings(users, landingPages, bookingManualAccess),
-    [bookingManualAccess, landingPages, users],
+    () => joinUsersWithLandings(users, landingPages, bookingManualAccess, productsManualAccess),
+    [bookingManualAccess, productsManualAccess, landingPages, users],
   );
 
   const stats = useMemo(

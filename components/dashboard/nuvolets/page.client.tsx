@@ -9,13 +9,15 @@ import { SectionsEditorPanel } from "@/components/dashboard/sections-editor-pane
 import { FooterEditorPanel } from "@/components/dashboard/footer-editor-panel";
 import { AdminEditorPanel } from "@/components/dashboard/admin-editor-panel";
 import { NuvoletsSettingsForm } from "./components/nuvolets-settings-form";
-import { NuvoletsProductForm } from "./components/nuvolets-product-form";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { useNuvoletsEditor } from "./hooks/use-nuvolets-editor";
 
 export function NuvoletsEditorSection() {
-  const { landing, config, tab, update, addProduct, isAdmin } = useNuvoletsEditor();
+  const { landing, config, tab, update, isAdmin, productsModuleEnabled } = useNuvoletsEditor();
   if (!landing || !config) return null;
   return <EditorLayout form={<>
+    {productsModuleEnabled ? <Button asChild variant="outline"><Link href="/products">Gestionar productos</Link></Button> : null}
     {tab === "Hero" ? <HeroEditorPanel landing={landing} /> : null}
     {tab === "Diseño" ? <AppearanceEditorPanel landing={landing} /> : null}
     {tab === "Navegación" ? <NavEditorPanel activeLanding={landing} /> : null}
@@ -23,6 +25,6 @@ export function NuvoletsEditorSection() {
     {tab === "Secciones" ? <SectionsEditorPanel activeLanding={landing} /> : null}
     {tab === "Footer" ? <FooterEditorPanel activeLanding={landing} /> : null}
     {tab === "Admin" && isAdmin ? <AdminEditorPanel activeLanding={landing} /> : null}
-    {tab === "Productos" ? <NuvoletsProductForm products={config.products} onAdd={addProduct} /> : <NuvoletsSettingsForm key={`${landing.id}:${tab}`} config={config} tab={tab} onChange={update} />}
+    <NuvoletsSettingsForm key={`${landing.id}:${tab}`} config={config} tab={tab} onChange={update} />
   </>} />;
 }

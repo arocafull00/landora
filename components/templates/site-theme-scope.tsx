@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { LandingAppearance, TemplateId } from "@/lib/dashboard-data";
 import {
   resolveLandingAppearance,
@@ -11,11 +11,13 @@ export function SiteThemeScope({
   children,
   className,
   template,
+  style,
 }: {
   appearance: LandingAppearance;
   children: ReactNode;
   className?: string;
   template: TemplateId;
+  style?: CSSProperties;
 }) {
   const resolved = resolveLandingAppearance(template, appearance);
   const colorScheme = resolvePaletteColorScheme(template, resolved.paletteId);
@@ -33,6 +35,7 @@ export function SiteThemeScope({
       data-template={template}
       data-title-text-size={resolved.titleTextSize}
       data-typography={resolved.typographyId}
+      style={style}
     >
       {children}
     </div>

@@ -13,6 +13,7 @@ import { getPublicLandingUrl } from "@/lib/public-site-url";
 export type AdminUserWithLanding = User & {
   landing: LandingPage | null;
   bookingManualAccess: boolean;
+  productsManualAccess: boolean;
 };
 
 export type AdminUserDisplayStatus = "active" | "trial" | "expired" | "cancelled" | "suspended";
@@ -37,6 +38,7 @@ export function joinUsersWithLandings(
   users: User[],
   landingPages: LandingPage[],
   bookingManualAccess: UserAddonManualAccess[],
+  productsManualAccess: UserAddonManualAccess[],
 ): AdminUserWithLanding[] {
   const bookingAccessByUserId = new Map(
     bookingManualAccess.map((access) => [access.userId, access.manualAccess]),
@@ -46,6 +48,7 @@ export function joinUsersWithLandings(
     ...user,
     landing: landingPages.find((landing) => landing.userId === user.id) ?? null,
     bookingManualAccess: bookingAccessByUserId.get(user.id) ?? false,
+    productsManualAccess: productsManualAccess.find((access) => access.userId === user.id)?.manualAccess ?? false,
   }));
 }
 

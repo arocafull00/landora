@@ -7,6 +7,7 @@ export type DashboardChrome = {
   impersonating: boolean;
   bookingEnabled: boolean;
   bookingModuleEnabled: boolean;
+  productsModuleEnabled: boolean;
 };
 
 export const DashboardChromeContext = createContext<DashboardChrome>({
@@ -14,6 +15,7 @@ export const DashboardChromeContext = createContext<DashboardChrome>({
   impersonating: false,
   bookingEnabled: false,
   bookingModuleEnabled: false,
+  productsModuleEnabled: false,
 });
 
 export function useDashboardChrome() {

@@ -34,7 +34,7 @@ export function PalletRossTemplateClient({
   return (
     <div className="relative bg-[var(--site-surface)]">
       <BackgroundBlobs />
-      <PalletRossNav topOffset={topOffset} />
+      <PalletRossNav topOffset={topOffset} catalogLink={content.nav.find((link) => link.id === "store-catalog")} />
       <ScrollIndicator />
 
       <ScrollCardsOverlay

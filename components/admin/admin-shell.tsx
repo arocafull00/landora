@@ -24,11 +24,13 @@ export function AdminShell({
   users,
   landingPages,
   bookingManualAccess,
+  productsManualAccess,
   initialView = "users",
 }: {
   users: User[];
   landingPages: LandingPage[];
   bookingManualAccess: UserAddonManualAccess[];
+  productsManualAccess: UserAddonManualAccess[];
   initialView?: AdminView;
 }) {
   const [activeView, setActiveView] = useState<AdminView>(initialView);
@@ -53,6 +55,7 @@ export function AdminShell({
           {activeView === "users" ? (
             <UsersSection
               bookingManualAccess={bookingManualAccess}
+              productsManualAccess={productsManualAccess}
               users={users}
               landingPages={landingPages}
             />

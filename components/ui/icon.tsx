@@ -21,6 +21,7 @@ import {
   Link,
   MoreHorizontal,
   Palette,
+  Package,
   Plus,
   Rocket,
   Save,
@@ -35,6 +36,7 @@ import {
 import type { IconName } from "@/lib/dashboard-data";
 
 const icons: Record<IconName, LucideIcon> = {
+  package: Package,
   mail: Mail,
   web: Globe,
   folder: Folder,

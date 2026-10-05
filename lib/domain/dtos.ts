@@ -2,6 +2,28 @@ import type { TemplateId } from "@/lib/dashboard-data";
 
 export type EmailSubscriptionDto = { email: string; createdAt: string };
 
+export type ProductImage = { url: string; alt: string };
+export type ProductCharacteristic = { name: string; value: string };
+export type ProductVariantDto = {
+  id: string; size: string; color: string; sku: string; stock: number | null;
+  priceCents: number | null; previousPriceCents: number | null;
+};
+export type ProductDto = {
+  id: string; landingId: string; version: number; title: string; subtitle: string; slug: string;
+  description: string; category: string; brand: string; tags: string[]; featured: boolean;
+  images: ProductImage[]; priceCents: number | null; previousPriceCents: number | null;
+  material: string; composition: string; dimensions: string; weight: string;
+  characteristics: ProductCharacteristic[]; variants: ProductVariantDto[];
+  status: "draft" | "published" | "archived"; createdAt: string; updatedAt: string;
+};
+export type PublicProductDto = Omit<ProductDto, "landingId" | "version" | "status" | "variants"> & {
+  variants: (Omit<ProductVariantDto, "stock" | "sku"> & { available: boolean })[];
+};
+export type CatalogConfigDto = {
+  enabled: boolean; adopted: boolean; title: string; description: string; whatsappPhone: string; version: number;
+};
+export type ProductPageDto<T> = { products: T[]; total: number; page: number; categories: string[]; brands: string[]; sizes: string[] };
+
 export type SubscriptionStatus =
   | "active"
   | "trialing"

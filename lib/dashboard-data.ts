@@ -9,6 +9,7 @@ export type DashboardView =
   | "assets"
   | "domain"
   | "blog"
+  | "products"
   | "analytics"
   | "bookings"
   | "services"
@@ -415,6 +416,7 @@ export type Asset = {
 };
 
 export type IconName =
+  | "package"
   | "mail"
   | "web"
   | "folder"
@@ -469,6 +471,7 @@ export const dashboardNavSections: DashboardNavSection[] = [
       { id: "editor", label: "Editor", icon: "document" },
       { id: "assets", label: "Imágenes", icon: "image" },
       { id: "blog", label: "Blog", icon: "document" },
+      { id: "products", label: "Productos", icon: "package" },
       { id: "email-subscriptions", label: "Suscripciones", icon: "mail" },
     ],
   },

@@ -27,12 +27,14 @@ import { EditUserNameDialog } from "@/components/admin/edit-user-name-dialog";
 import { DeleteUserDialog } from "@/components/admin/delete-user-dialog";
 import { ManualAccessDialog } from "@/components/admin/manual-access-dialog";
 import { CreateUserLandingDialog } from "@/components/admin/create-user-landing-dialog";
+import { ProductsAccessDialog } from "@/components/admin/products-access-dialog";
 
 export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
   const [showDelete, setShowDelete] = useState(false);
   const [showEditName, setShowEditName] = useState(false);
   const [showManualAccess, setShowManualAccess] = useState(false);
   const [showCreateLanding, setShowCreateLanding] = useState(false);
+  const [showProductsAccess, setShowProductsAccess] = useState(false);
   const [isPending, startTransition] = useTransition();
   const landingUrl = getLandingPublicUrl(user.landing);
   const hasLanding = Boolean(user.landing);
@@ -178,6 +180,7 @@ export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
               Suspender cuenta
             </DropdownMenuItem>
           )}
+          <DropdownMenuItem onSelect={() => setShowProductsAccess(true)}>Acceso a Productos</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             disabled={isPending}
@@ -219,6 +222,7 @@ export function UserActionsMenu({ user }: { user: AdminUserWithLanding }) {
         open={showDelete}
         userId={user.id}
       />
+      {showProductsAccess ? <ProductsAccessDialog userId={user.id} enabled={user.productsManualAccess} open={showProductsAccess} onOpenChange={setShowProductsAccess} /> : null}
     </>
   );
 }

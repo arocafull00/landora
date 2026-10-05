@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
 @theme inline {
+  --color-canvas: var(--canvas);
+  --color-ink: var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-muted: var(--ink-muted);
+  --color-primary-hover: var(--site-primary-hover, var(--primary-container));
   --color-nuvolets-background: var(--nuvolets-background);
   --color-nuvolets-surface: var(--nuvolets-surface);
   --color-nuvolets-text: var(--nuvolets-text);
@@ -19,6 +24,10 @@
 }
 
 :root {
+  --canvas: var(--surface-bg);
+  --ink: var(--on-surface);
+  --ink-secondary: var(--on-surface-variant);
+  --ink-muted: var(--on-surface-variant);
   --nuvolets-background: #faf7f1;
   --nuvolets-surface: #fffdf9;
   --nuvolets-text: #3d3a36;
@@ -319,6 +328,10 @@ html[data-dashboard] [data-slot="sidebar-menu-button"][data-active="true"] svg {
 }
 
 [data-site-theme] {
+  --canvas: var(--site-surface);
+  --ink: var(--site-text);
+  --ink-secondary: var(--site-text-muted);
+  --ink-muted: var(--site-text-muted);
   --site-accent-bright: var(--site-accent);
   --site-accent-soft: var(--site-accent);
   --site-surface-muted: var(--site-surface-alt);
