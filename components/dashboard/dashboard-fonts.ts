@@ -1,4 +1,5 @@
-import { IBM_Plex_Sans, Inter, JetBrains_Mono } from "next/font/google";
+import { IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 
 const dashboardHeadline = IBM_Plex_Sans({
   variable: "--font-source-headline",
@@ -6,10 +7,12 @@ const dashboardHeadline = IBM_Plex_Sans({
   weight: ["500", "600", "700"],
 });
 
-const inter = Inter({
+const inter = localFont({
+  src: "./fonts/inter-variable.woff2",
   variable: "--font-source-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: "100 900",
+  style: "normal",
+  display: "swap",
 });
 
 const dashboardLabel = JetBrains_Mono({
