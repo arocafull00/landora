@@ -1,6 +1,6 @@
 import { EditorSection } from "@/components/dashboard/sections/editor-section";
 import { EditorCatalogProvider } from "@/components/dashboard/editor/editor-catalog-context";
-import { getEditorProductSlug } from "@/data/editor-pages";
+import { getEditorProductSlug, getEditorProductCategories } from "@/data/editor-pages";
 import { hasProductsAccess } from "@/data/product-access";
 import { getAssetsByUserId } from "@/data/assets";
 import { getBlogConfig } from "@/data/blog";
@@ -18,10 +18,11 @@ export default async function EditorPage() {
   ]);
   if (!landing) return null;
 
-  const [rows, config, productSlug] = await Promise.all([
+  const [rows, config, productSlug, categories] = await Promise.all([
     getAssetsByUserId(userId),
     getBlogConfig(landing.id),
     productsEnabled ? getEditorProductSlug(landing.id) : null,
+    productsEnabled && landing.template === "nuvolets" ? getEditorProductCategories(landing.id) : [],
   ]);
 
   return (
@@ -32,7 +33,7 @@ export default async function EditorPage() {
           description: config?.description ?? "",
         }}
       >
-        <EditorCatalogProvider enabled={productsEnabled} productSlug={productSlug}>
+        <EditorCatalogProvider enabled={productsEnabled} productSlug={productSlug} categories={categories}>
           <EditorSection />
         </EditorCatalogProvider>
       </BlogStoreProvider>

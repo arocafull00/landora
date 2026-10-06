@@ -7,7 +7,7 @@ import { nuvoletsContentSchema, type NuvoletsContent } from "@/lib/schemas/nuvol
 import { NUVOLETS_EDITOR_COPY } from "../nuvolets-copy";
 
 export function useNuvoletsSettings(config: NuvoletsContent, onChange: (value: NuvoletsContent) => void) {
-  const form = useForm<NuvoletsContent>({ defaultValues: config, resolver: zodResolver(nuvoletsContentSchema) });
+  const form = useForm<NuvoletsContent>({ defaultValues: { ...config, categories: config.categories.map((item) => ({ ...item, category: item.category ?? item.title.trim().slice(0, 160) })) }, resolver: zodResolver(nuvoletsContentSchema) });
   const sync = () => onChange(form.getValues());
   const submit = form.handleSubmit((value) => { onChange(value); toast.success(NUVOLETS_EDITOR_COPY.applied); }, () => toast.error(NUVOLETS_EDITOR_COPY.invalid));
   return { form, sync, submit };

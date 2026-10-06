@@ -21,6 +21,7 @@ export type PublicProductDto = Omit<ProductDto, "landingId" | "version" | "statu
 export type CatalogConfigDto = {
   enabled: boolean; adopted: boolean; title: string; description: string; version: number;
 };
+export type ProductTaxonomyField = "category" | "brand";
 export type ProductPageDto<T> = { products: T[]; total: number; page: number; categories: string[]; brands: string[]; sizes: string[] };
 
 export type SubscriptionStatus =

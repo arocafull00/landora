@@ -13,7 +13,7 @@ import { useProductCommand } from "./hooks/use-product-command";
 import { useProductsDrawer } from "./hooks/use-products-drawer";
 import { useProductsNavigation } from "./hooks/use-products-navigation";
 import { useProductsSelection } from "./hooks/use-products-selection";
-import { ProductCategoriesClient } from "./product-categories.client";
+import { ProductTaxonomyClient } from "./product-taxonomy.client";
 
 export function ProductsListClient({
   landingId,
@@ -53,7 +53,8 @@ export function ProductsListClient({
   return (
     <>
       <ProductsHeader total={total} onNew={openNew}>
-        <ProductCategoriesClient landingId={landingId} categories={categories} />
+        <ProductTaxonomyClient landingId={landingId} field="category" entries={categories} />
+        <ProductTaxonomyClient landingId={landingId} field="brand" entries={brands} />
       </ProductsHeader>
       <ProductsToolbar
         key={`${query.q}:${query.sort}`}

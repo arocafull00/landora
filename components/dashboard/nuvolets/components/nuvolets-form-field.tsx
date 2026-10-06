@@ -6,9 +6,11 @@ import { ImageField } from "@/components/dashboard/image-field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { NUVOLETS_TONES, type NuvoletsField } from "../nuvolets-copy";
+import { NuvoletsCategoryField } from "./nuvolets-category-field";
 
 export function NuvoletsFormField({ definition, form, sync, layout = "stack" }: { definition: NuvoletsField; form: UseFormReturn<NuvoletsContent>; sync: () => void; layout?: "stack" | "inline" }) {
   const { name, label, type } = definition;
+  if (type === "category") return <NuvoletsCategoryField definition={definition} form={form} sync={sync} />;
   const error = form.getFieldState(name, form.formState).error?.message;
   const inputClass =
     layout === "inline"

@@ -1,10 +1,11 @@
 import type { FieldArrayPath, Path } from "react-hook-form";
 import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
 
-export type NuvoletsField = { name: Path<NuvoletsContent>; label: string; type?: "textarea" | "image" | "boolean" | "tone" | "color" };
+export type NuvoletsField = { name: Path<NuvoletsContent>; label: string; type?: "textarea" | "image" | "boolean" | "tone" | "color" | "category" };
 export type NuvoletsList = { name: FieldArrayPath<NuvoletsContent>; label: string; fields: { name: string; label: string; type?: NuvoletsField["type"] }[] };
 export const NUVOLETS_EDITOR_COPY = { add: "Añadir", remove: "Eliminar", up: "Subir", down: "Bajar", validate: "Validar cambios", applied: "Cambios aplicados. Usa Guardar o Publicar para conservarlos.", invalid: "Revisa los campos de la plantilla", addProduct: "Añadir producto", productsTitle: "Productos", productsDescription: "Añade productos al catálogo informativo. La configuración avanzada llegará más adelante.", name: "Nombre", price: "Precio visible (opcional)", image: "Imagen", alt: "Texto alternativo", added: "Producto añadido. Guarda o publica los cambios.", maximum: "El catálogo admite hasta 200 productos", empty: "Todavía no hay productos", preview: "Las suscripciones están desactivadas en la vista previa", privacy: "Política de privacidad" };
 export const NUVOLETS_TONES = [{ value: "blue", label: "Azul" }, { value: "pink", label: "Rosa" }, { value: "yellow", label: "Amarillo" }, { value: "sage", label: "Salvia" }];
+export const NUVOLETS_CATEGORY_COPY = { all: "Todas las categorías", label: "Categoría del catálogo" } as const;
 
 const imageFields = [{ name: "image", label: "Imagen", type: "image" }, { name: "alt", label: "Texto alternativo" }] as const;
 const textFields = [{ name: "title", label: "Título" }, { name: "text", label: "Texto", type: "textarea" }] as const;
@@ -15,7 +16,7 @@ const fields = (prefix: string, items: readonly { name: string; label: string; t
 export const NUVOLETS_EDITOR_FIELDS: Record<string, { fields: NuvoletsField[]; lists: NuvoletsList[] }> = {
   Hero: { fields: fields("heroDetails", [{ name: "alt", label: "Texto alternativo del hero" }, { name: "primaryHref", label: "Enlace principal" }, { name: "secondaryLabel", label: "Botón secundario" }, { name: "secondaryHref", label: "Enlace secundario" }]), lists: [] },
   Franja: { fields: [], lists: [{ name: "marquee", label: "Mensajes de la franja", fields: messages }] },
-  Categorías: { fields: [], lists: [{ name: "categories", label: "Categorías", fields: [{ name: "title", label: "Nombre" }, { name: "description", label: "Descripción", type: "textarea" }, ...imageFields, { name: "href", label: "Enlace" }, { name: "tone", label: "Color", type: "tone" }] }] },
+  Categorías: { fields: [], lists: [{ name: "categories", label: "Categorías", fields: [{ name: "title", label: "Nombre" }, { name: "description", label: "Descripción", type: "textarea" }, ...imageFields, { name: "category", label: NUVOLETS_CATEGORY_COPY.label, type: "category" }, { name: "tone", label: "Color", type: "tone" }] }] },
   Colección: { fields: fields("collection", [{ name: "title", label: "Título" }, { name: "subtitle", label: "Descripción", type: "textarea" }, { name: "note", label: "Texto de contacto", type: "textarea" }, { name: "linkLabel", label: "Texto del enlace" }, { name: "href", label: "Enlace" }]), lists: [] },
   Historia: { fields: fields("story", [...textFields, { name: "secondaryText", label: "Texto secundario", type: "textarea" }, ...imageFields, { name: "ctaLabel", label: "Botón" }, { name: "ctaHref", label: "Enlace del botón" }]), lists: [] },
   Favoritos: { fields: fields("favorites", [{ name: "title", label: "Título" }, { name: "subtitle", label: "Descripción", type: "textarea" }]), lists: [] },

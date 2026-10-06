@@ -7,8 +7,8 @@ import { requireProductsAccess } from "@/lib/require-products-access";
 import { getUserByInternalId } from "@/data/users";
 import { getLandingsByUserId, getLandingPageByIdAndUserId } from "@/data/landing-pages";
 import { setProductsAccess } from "@/data/product-access";
-import { saveProduct, commandProduct, batchCommandProducts, saveCatalogConfig, importNuvoletsProducts, saveProductCategory } from "@/data/products";
-import { productSaveSchema, productCommandSchema, productBatchCommandSchema, catalogSaveSchema, productsAccessSchema, productCategorySaveSchema } from "@/lib/schemas/products";
+import { saveProduct, commandProduct, batchCommandProducts, saveCatalogConfig, importNuvoletsProducts, saveProductTaxonomy, deleteProductTaxonomy } from "@/data/products";
+import { productSaveSchema, productCommandSchema, productBatchCommandSchema, catalogSaveSchema, productsAccessSchema, productTaxonomySaveSchema, productTaxonomyDeleteSchema } from "@/lib/schemas/products";
 import { resourceIdSchema } from "@/lib/schemas/api";
 import { revalidateProductRoutes } from "@/lib/products-revalidation";
 import { toLandingContent } from "@/lib/landing-mapper";
@@ -47,22 +47,40 @@ export async function batchCommandProductsAction(input: unknown): Promise<Result
   } catch (error) { logger.captureException(error, { action: "product-batch-command", landingId: parsed.data.landingId }); return { error: "No se pudo actualizar el catálogo" }; }
 }
 
-export async function saveProductCategoryAction(input: unknown): Promise<Result> {
-  const parsed = productCategorySaveSchema.safeParse(input);
-  if (!parsed.success) return { error: "Nombre de categoría no válido" };
+export async function saveProductTaxonomyAction(input: unknown): Promise<Result> {
+  const parsed = productTaxonomySaveSchema.safeParse(input);
+  if (!parsed.success) return { error: "Nombre de categoría o marca no válido" };
   try {
-    const { landingId, previousName, name } = parsed.data;
+    const { landingId, field, previousName, name } = parsed.data;
     const access = await requireProductsAccess(landingId);
     if (!access) return { error: ERRORS.denied };
-    const result = await saveProductCategory(landingId, access.userId, previousName, name);
-    if (result.status === "duplicate") return { error: "Ya existe una categoría con ese nombre" };
-    if (result.status === "not_found") return { error: "La categoría ha cambiado. Recarga antes de editarla" };
+    const result = await saveProductTaxonomy(landingId, access.userId, field, previousName, name);
+    if (result.status === "duplicate") return { error: field === "category" ? "Ya existe una categoría con ese nombre" : "Ya existe una marca con ese nombre" };
+    if (result.status === "not_found") return { error: "La categoría o marca ha cambiado. Recarga antes de editarla" };
     if (result.status !== "saved") return { error: ERRORS[result.status] };
     revalidateProductRoutes(access.landing);
     return { success: true };
   } catch (error) {
-    logger.captureException(error, { action: "save-product-category", landingId: parsed.data.landingId });
-    return { error: "No se pudo guardar la categoría" };
+    logger.captureException(error, { action: "save-product-taxonomy", landingId: parsed.data.landingId, field: parsed.data.field });
+    return { error: "No se pudo guardar la categoría o marca" };
+  }
+}
+
+export async function deleteProductTaxonomyAction(input: unknown): Promise<Result> {
+  const parsed = productTaxonomyDeleteSchema.safeParse(input);
+  if (!parsed.success) return { error: "Categoría o marca no válida" };
+  try {
+    const { landingId, field, name } = parsed.data;
+    const access = await requireProductsAccess(landingId);
+    if (!access) return { error: ERRORS.denied };
+    const result = await deleteProductTaxonomy(landingId, access.userId, field, name);
+    if (result.status === "not_found") return { error: "La categoría o marca ha cambiado. Recarga antes de eliminarla" };
+    if (result.status !== "saved") return { error: ERRORS[result.status] };
+    revalidateProductRoutes(access.landing);
+    return { success: true };
+  } catch (error) {
+    logger.captureException(error, { action: "delete-product-taxonomy", landingId: parsed.data.landingId, field: parsed.data.field });
+    return { error: "No se pudo eliminar la categoría o marca" };
   }
 }
 

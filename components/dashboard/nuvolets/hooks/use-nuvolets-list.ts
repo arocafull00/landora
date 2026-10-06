@@ -7,7 +7,7 @@ import type { NuvoletsList } from "../nuvolets-copy";
 export function useNuvoletsList(definition: NuvoletsList, form: UseFormReturn<NuvoletsContent>, sync: () => void) {
   const array = useFieldArray({ control: form.control, name: definition.name });
   const add = () => {
-    const value = { id: crypto.randomUUID(), ...Object.fromEntries(definition.fields.map((field) => [field.name, field.type === "tone" ? "blue" : ""])) };
+    const value = { id: crypto.randomUUID(), ...(definition.name === "categories" ? { href: "" } : {}), ...Object.fromEntries(definition.fields.map((field) => [field.name, field.type === "tone" ? "blue" : ""])) };
     array.append(value as FieldArray<NuvoletsContent, FieldArrayPath<NuvoletsContent>>);
     sync();
   };

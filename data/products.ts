@@ -2,8 +2,8 @@ import "server-only";
 import { cache } from "react";
 import { and, asc, desc, eq, inArray, ne, or, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { storeProducts, storeProductVariants, storeCatalogConfig, storeProductCategories } from "@/db/schema";
-import type { CatalogConfigDto, ProductDto, ProductPageDto } from "@/lib/domain/dtos";
+import { storeProducts, storeProductVariants, storeCatalogConfig, storeProductCategories, storeProductBrands } from "@/db/schema";
+import type { CatalogConfigDto, ProductDto, ProductPageDto, ProductTaxonomyField } from "@/lib/domain/dtos";
 import { PRODUCT_PAGE_SIZE, parseLegacyPrice, productSlug, toPublicProduct } from "@/lib/products";
 import { productSchema, type CatalogConfigValues, type CatalogQuery, type ProductValues } from "@/lib/schemas/products";
 import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
@@ -90,22 +90,28 @@ export const getProductPage = cache(async (landingId: string, query: CatalogQuer
     );
     const [{ total }] = await db.select({ total: sql<number>`count(*)::int` }).from(storeProducts).where(filters);
     const page = Math.min(query.page, Math.max(1, Math.ceil(total / PRODUCT_PAGE_SIZE)));
-    const [rows, facets, sizes, categories] = await Promise.all([
+    const [rows, facets, sizes, categories, brands] = await Promise.all([
       db.select().from(storeProducts).where(filters).orderBy(query.sort === "price-asc" ? asc(price) : query.sort === "price-desc" ? desc(price) : desc(storeProducts.createdAt), asc(storeProducts.id)).limit(PRODUCT_PAGE_SIZE).offset((page - 1) * PRODUCT_PAGE_SIZE),
       db.selectDistinct({ category, brand }).from(storeProducts).where(scope),
       publicOnly ? db.selectDistinct({ size: storeProductVariants.size }).from(storeProductVariants).innerJoin(storeProducts, eq(storeProductVariants.productId, storeProducts.id)).where(scope) : db.execute<{ size: string }>(sql`select distinct v.size from ${storeProducts} cross join lateral ${variantSource} where ${scope}`),
       publicOnly || preview ? Promise.resolve([]) : db.select({ name: storeProductCategories.name }).from(storeProductCategories).where(eq(storeProductCategories.landingId, landingId)).orderBy(asc(storeProductCategories.name)),
+      publicOnly || preview ? Promise.resolve([]) : db.select({ name: storeProductBrands.name }).from(storeProductBrands).where(eq(storeProductBrands.landingId, landingId)).orderBy(asc(storeProductBrands.name)),
     ]);
     const variants = rows.length ? await db.select().from(storeProductVariants).where(inArray(storeProductVariants.productId, rows.map((row) => row.id))).orderBy(asc(storeProductVariants.sortOrder)) : [];
-    return { products: rows.map((row) => dto(row, variants.filter((variant) => variant.productId === row.id), !publicOnly)), total, page, categories: Array.from(new Set([...categories.map((category) => category.name), ...facets.flatMap((f) => f.category ? [f.category] : [])])).sort(), brands: Array.from(new Set(facets.flatMap((f) => f.brand ? [f.brand] : []))).sort(), sizes: sizes.flatMap((f) => f.size ? [f.size] : []).sort() };
+    return { products: rows.map((row) => dto(row, variants.filter((variant) => variant.productId === row.id), !publicOnly)), total, page, categories: Array.from(new Set([...categories.map((category) => category.name), ...facets.flatMap((f) => f.category ? [f.category] : [])])).sort(), brands: Array.from(new Set([...brands.map((brand) => brand.name), ...facets.flatMap((f) => f.brand ? [f.brand] : [])])).sort(), sizes: sizes.flatMap((f) => f.size ? [f.size] : []).sort() };
   } catch (error) { throw new Error("Failed to fetch product page", { cause: error }); }
 });
 
-async function normalizeProductCategory(tx: Transaction, landingId: string, product: ProductValues): Promise<ProductValues> {
-  if (!product.category) return product;
-  await tx.insert(storeProductCategories).values({ landingId, name: product.category }).onConflictDoNothing();
-  const [category] = await tx.select({ name: storeProductCategories.name }).from(storeProductCategories).where(and(eq(storeProductCategories.landingId, landingId), sql`lower(${storeProductCategories.name}) = lower(${product.category})`));
-  return { ...product, category: category.name };
+async function normalizeProductTaxonomy(tx: Transaction, landingId: string, product: ProductValues): Promise<ProductValues> {
+  const content = { ...product };
+  for (const field of ["category", "brand"] as const) {
+    if (!content[field]) continue;
+    const table = field === "category" ? storeProductCategories : storeProductBrands;
+    await tx.insert(table).values({ landingId, name: content[field] }).onConflictDoNothing();
+    const [entry] = await tx.select({ name: table.name }).from(table).where(and(eq(table.landingId, landingId), sql`lower(${table.name}) = lower(${content[field]})`));
+    content[field] = entry.name;
+  }
+  return content;
 }
 
 async function writeProductVariants(tx: Transaction, landingId: string, productId: string, variants: ProductValues["variants"]) {
@@ -120,7 +126,7 @@ export async function saveProduct(landingId: string, userId: string, productId: 
       const [current] = productId ? await tx.select().from(storeProducts).where(and(eq(storeProducts.id, productId), eq(storeProducts.landingId, landingId))).for("update") : [];
       if (productId && !current) return { status: "not_found" };
       if (current && current.version !== version) return { status: "conflict" };
-      const content = await normalizeProductCategory(tx, landingId, product);
+      const content = await normalizeProductTaxonomy(tx, landingId, product);
       if (current?.status === "published" && content.status === "draft") {
         const [row] = await tx.update(storeProducts).set({ draftContent: content, version: version + 1, updatedAt: new Date() }).where(eq(storeProducts.id, current.id)).returning();
         return { status: "saved", product: { id: row.id, version: row.version, status: row.status, hasPendingChanges: true } };
@@ -137,30 +143,48 @@ export async function saveProduct(landingId: string, userId: string, productId: 
   } catch (error) { const known = knownError(error); if (known) return known; throw new Error("Failed to save product", { cause: error }); }
 }
 
-export async function saveProductCategory(landingId: string, userId: string, previousName: string | null, name: string): Promise<WriteResult> {
+async function updateProductTaxonomy(tx: Transaction, landingId: string, field: ProductTaxonomyField, previousName: string, name: string) {
+  if (name === previousName) return;
+  const column = storeProducts[field];
+  await tx.update(storeProducts).set({
+    [field]: sql`case when ${column} = ${previousName} then ${name} else ${column} end`,
+    draftContent: sql`case when ${storeProducts.draftContent}->>${field} = ${previousName} then jsonb_set(${storeProducts.draftContent}, ARRAY[${field}]::text[], to_jsonb(${name}::text)) else ${storeProducts.draftContent} end`,
+    version: sql`${storeProducts.version} + 1`, updatedAt: new Date(),
+  }).where(and(eq(storeProducts.landingId, landingId), or(eq(column, previousName), sql`${storeProducts.draftContent}->>${field} = ${previousName}`)));
+}
+
+export async function saveProductTaxonomy(landingId: string, userId: string, field: ProductTaxonomyField, previousName: string | null, name: string): Promise<WriteResult> {
   try {
     return await db.transaction(async (tx): Promise<WriteResult> => {
       if (!await lockAccess(tx, landingId, userId)) return { status: "denied" };
+      const table = field === "category" ? storeProductCategories : storeProductBrands;
       if (previousName === null) {
-        await tx.insert(storeProductCategories).values({ landingId, name });
+        await tx.insert(table).values({ landingId, name });
         return { status: "saved" };
       }
-      const rows = await tx.update(storeProductCategories).set({ name }).where(and(eq(storeProductCategories.landingId, landingId), eq(storeProductCategories.name, previousName))).returning({ id: storeProductCategories.id });
+      const rows = await tx.update(table).set({ name }).where(and(eq(table.landingId, landingId), eq(table.name, previousName))).returning({ id: table.id });
       if (!rows.length) return { status: "not_found" };
-      if (name !== previousName) {
-        await tx.update(storeProducts).set({
-          category: sql`case when ${storeProducts.category} = ${previousName} then ${name} else ${storeProducts.category} end`,
-          draftContent: sql`case when ${storeProducts.draftContent}->>'category' = ${previousName} then jsonb_set(${storeProducts.draftContent}, '{category}', to_jsonb(${name}::text)) else ${storeProducts.draftContent} end`,
-          version: sql`${storeProducts.version} + 1`, updatedAt: new Date(),
-        }).where(and(eq(storeProducts.landingId, landingId), or(eq(storeProducts.category, previousName), sql`${storeProducts.draftContent}->>'category' = ${previousName}`)));
-      }
+      await updateProductTaxonomy(tx, landingId, field, previousName, name);
       return { status: "saved" };
     });
   } catch (error) {
     const known = knownError(error);
     if (known) return known;
-    throw new Error("Failed to save product category", { cause: error });
+    throw new Error("Failed to save product taxonomy", { cause: error });
   }
+}
+
+export async function deleteProductTaxonomy(landingId: string, userId: string, field: ProductTaxonomyField, name: string): Promise<WriteResult> {
+  try {
+    return await db.transaction(async (tx): Promise<WriteResult> => {
+      if (!await lockAccess(tx, landingId, userId)) return { status: "denied" };
+      const table = field === "category" ? storeProductCategories : storeProductBrands;
+      const rows = await tx.delete(table).where(and(eq(table.landingId, landingId), eq(table.name, name))).returning({ id: table.id });
+      if (!rows.length) return { status: "not_found" };
+      await updateProductTaxonomy(tx, landingId, field, name, "");
+      return { status: "saved" };
+    });
+  } catch (error) { throw new Error("Failed to delete product taxonomy", { cause: error }); }
 }
 
 async function applyProductStatus(tx: Transaction, row: ProductRow, version: number, command: StatusCommand): Promise<WriteResult> {
@@ -174,7 +198,7 @@ async function applyProductStatus(tx: Transaction, row: ProductRow, version: num
     void id; void parentId; void revision; void hasPendingChanges; void createdAt; void updatedAt;
     const parsed = productSchema.safeParse({ ...values, status, variants: values.variants.map((variant) => ({ ...variant, stock: variant.stock ?? 0 })) });
     if (!parsed.success) return { status: "invalid" };
-    const { variants: publishedVariants, ...fields } = await normalizeProductCategory(tx, row.landingId, parsed.data);
+    const { variants: publishedVariants, ...fields } = await normalizeProductTaxonomy(tx, row.landingId, parsed.data);
     await tx.update(storeProducts).set({ ...fields, draftContent: null, version: version + 1, updatedAt: new Date() }).where(eq(storeProducts.id, row.id));
     await writeProductVariants(tx, row.landingId, row.id, publishedVariants);
     return { status: "saved", productId: row.id };

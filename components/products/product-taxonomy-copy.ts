@@ -1,0 +1,26 @@
+export const PRODUCT_TAXONOMY_COPY = {
+  category: {
+    title: "Categorías",
+    description: "Gestiona las categorías de tus productos. Al renombrarlas, se actualizan los productos que las utilizan.",
+    empty: "Todavía no hay categorías. Crea la primera para organizar tus productos.",
+    new: "Nueva categoría", edit: "Editar categoría", name: "Nombre de la categoría", placeholder: "Por ejemplo, Conjuntos",
+    create: "Crear categoría", save: "Guardar cambios", saving: "Guardando…", cancel: "Cancelar edición",
+    created: "Categoría creada", updated: "Categoría actualizada", invalid: "Revisa el nombre de la categoría", error: "No se pudo guardar la categoría",
+    editLabel: (name: string) => `Editar categoría ${name}`,
+    deleteLabel: (name: string) => `Eliminar categoría ${name}`,
+    deleteTitle: "Eliminar categoría", deleteDescription: (name: string) => `¿Eliminar «${name}»? Los productos que la utilizan se conservarán y quedarán sin categoría, incluidos sus borradores.`,
+    delete: "Eliminar categoría", deleting: "Eliminando…", cancelDelete: "Cancelar", deleted: "Categoría eliminada", deleteError: "No se pudo eliminar la categoría",
+  },
+  brand: {
+    title: "Marcas",
+    description: "Gestiona las marcas de tus productos. Al renombrarlas, se actualizan los productos que las utilizan.",
+    empty: "Todavía no hay marcas. Crea la primera para organizar tus productos.",
+    new: "Nueva marca", edit: "Editar marca", name: "Nombre de la marca", placeholder: "Por ejemplo, Nuvolets",
+    create: "Crear marca", save: "Guardar cambios", saving: "Guardando…", cancel: "Cancelar edición",
+    created: "Marca creada", updated: "Marca actualizada", invalid: "Revisa el nombre de la marca", error: "No se pudo guardar la marca",
+    editLabel: (name: string) => `Editar marca ${name}`,
+    deleteLabel: (name: string) => `Eliminar marca ${name}`,
+    deleteTitle: "Eliminar marca", deleteDescription: (name: string) => `¿Eliminar «${name}»? Los productos que la utilizan se conservarán y quedarán sin marca, incluidos sus borradores.`,
+    delete: "Eliminar marca", deleting: "Eliminando…", cancelDelete: "Cancelar", deleted: "Marca eliminada", deleteError: "No se pudo eliminar la marca",
+  },
+} as const;

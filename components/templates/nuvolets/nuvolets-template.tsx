@@ -7,6 +7,7 @@ import { NuvoletsSection } from "./components/nuvolets-section";
 import { NuvoletsFooter } from "./components/nuvolets-footer";
 import { NuvoletsMotion } from "./components/nuvolets-motion";
 import { syncCompanyContent } from "@/lib/company-details";
+import { getPreviewLandingPath } from "@/lib/public-site-url";
 
 export function NuvoletsTemplate({ content, copyrightYear, slug, previewLandingId, topOffset = 0, sectionSelections }: {
   content: LandingContent;
@@ -21,6 +22,7 @@ export function NuvoletsTemplate({ content, copyrightYear, slug, previewLandingI
   const config = syncCompanyContent(content).nuvolets;
   if (!config) return null;
   const hidden = new Set(content.hiddenSections);
+  const catalogHref = previewLandingId ? getPreviewLandingPath(previewLandingId, "/productos") : "/productos";
   const sections = getOrderedTemplateSections("nuvolets", content.sectionOrder).filter((section) => section.anchor !== "contacto" && !hidden.has(section.anchor));
   const customColors = config.colors.enabled ? Object.fromEntries(Object.entries(config.colors).filter(([key]) => key !== "enabled").map(([key, value]) => [`--nuvolets-${key}`, value])) : undefined;
   return (
@@ -28,7 +30,7 @@ export function NuvoletsTemplate({ content, copyrightYear, slug, previewLandingI
       <a href="#nuvolets-main" className="sr-only focus:not-sr-only focus:block focus:p-4">{copy.skip}</a>
       <NuvoletsNav brand={content.brand} logo={content.brandLogoType === "image" ? content.brandLogoImage : ""} links={getVisibleNav(content.nav, content.hiddenSections, "nuvolets")} config={config} topOffset={topOffset} />
       <main id="nuvolets-main">
-        {sections.map((section) => <NuvoletsSection key={section.anchor} anchor={section.anchor} content={content} config={config} slug={slug} preview={!!previewLandingId || !slug} heroVariant={sectionSelections?.hero ?? "nuvolets"} />)}
+        {sections.map((section) => <NuvoletsSection key={section.anchor} anchor={section.anchor} content={content} config={config} slug={slug} preview={!!previewLandingId || !slug} catalogHref={catalogHref} heroVariant={sectionSelections?.hero ?? "nuvolets"} />)}
       </main>
       <NuvoletsFooter brand={content.brand} config={config.footer} contact={content.contact} copyrightYear={copyrightYear} hidden={content.hiddenSections ?? []} />
       <NuvoletsMotion enabled={config.effects.motion} />

@@ -28,9 +28,9 @@ export const NUVOLETS_DEFAULT_CONFIG: NuvoletsContent = {
   heroDetails: { alt: "Peque riendo mientras su madre la levanta en brazos", primaryHref: "#coleccion", secondaryLabel: "Descubrir Nuvolets", secondaryHref: "#tienda" },
   marquee: ["Ropita de 0 a 10 años", "Más blandita que una nube", "Tienda en Paiporta", "Hecho con cariño", "Pronóstico: 100% monadas"].map((text, i) => ({ id: `message-${i}`, text })),
   categories: [
-    { id: "bebe", title: "Bebé", description: "Suavidad desde sus primeros días. Ternura nivel nube de algodón.", image: photo("1522771930-78848d9293e8"), alt: "Bebé con un pelele de peluche", href: "#coleccion", tone: "blue" },
-    { id: "nina", title: "Niña", description: "Para saltar charcos con mucho estilo.", image: photo("1518831959646-742c3a14ebf7"), alt: "Niña con chaqueta blanca entre flores", href: "#coleccion", tone: "pink" },
-    { id: "nino", title: "Niño", description: "A prueba de carreras, rodillas y barro.", image: photo("1519238263530-99bdd11df2ea"), alt: "Niño con cárdigan azul marino", href: "#coleccion", tone: "sage" },
+    { id: "bebe", title: "Bebé", description: "Suavidad desde sus primeros días. Ternura nivel nube de algodón.", image: photo("1522771930-78848d9293e8"), alt: "Bebé con un pelele de peluche", href: "#coleccion", category: "Bebé", tone: "blue" },
+    { id: "nina", title: "Niña", description: "Para saltar charcos con mucho estilo.", image: photo("1518831959646-742c3a14ebf7"), alt: "Niña con chaqueta blanca entre flores", href: "#coleccion", category: "Niña", tone: "pink" },
+    { id: "nino", title: "Niño", description: "A prueba de carreras, rodillas y barro.", image: photo("1519238263530-99bdd11df2ea"), alt: "Niño con cárdigan azul marino", href: "#coleccion", category: "Niño", tone: "sage" },
   ],
   products: [
     ["Conjunto Nube", "29,90 €", "1514090458221-65bb69cf63e6", "Bebé con camisa de cuadros y tirantes"],

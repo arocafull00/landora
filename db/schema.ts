@@ -488,6 +488,15 @@ export const storeProductCategories = pgTable("store_product_categories", {
   check("store_product_categories_name_check", sql`${table.name} = trim(${table.name}) AND length(${table.name}) BETWEEN 1 AND 160`),
 ]);
 
+export const storeProductBrands = pgTable("store_product_brands", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  landingId: uuid("landing_id").notNull().references(() => landingPages.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+}, (table) => [
+  uniqueIndex("store_product_brands_name_unique").on(table.landingId, sql`lower(trim(${table.name}))`),
+  check("store_product_brands_name_check", sql`${table.name} = trim(${table.name}) AND length(${table.name}) BETWEEN 1 AND 160`),
+]);
+
 export const storeProducts = pgTable("store_products", {
   id: uuid("id").primaryKey().defaultRandom(),
   landingId: uuid("landing_id").notNull().references(() => landingPages.id, { onDelete: "cascade" }),

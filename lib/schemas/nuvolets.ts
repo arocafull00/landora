@@ -47,7 +47,7 @@ const nuvoletsProductSchema = nuvoletsProductFormSchema.extend({
 export const nuvoletsContentSchema = z.strictObject({
   heroDetails: z.strictObject({ alt: label, primaryHref: url, secondaryLabel: label, secondaryHref: url }),
   marquee: z.array(message).max(30),
-  categories: z.array(z.strictObject({ id, title: label, description: text, image, alt: label, href: url, tone })).max(30),
+  categories: z.array(z.strictObject({ id, title: label, description: text, image, alt: label, href: url, category: z.string().trim().max(160).optional(), tone })).max(30),
   products: z.array(nuvoletsProductSchema).max(200),
   collection: z.strictObject({ title: label, subtitle: text, note: text, linkLabel: label, href: url }),
   story: z.strictObject({ title: label, text, secondaryText: text, image, alt: label, ctaLabel: label, ctaHref: url }),
