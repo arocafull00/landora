@@ -6,12 +6,11 @@ import { usePublicProduct } from "../hooks/use-public-product";
 import { useCatalogReturn } from "../hooks/use-catalog-navigation";
 import { ProductGallery } from "./product-gallery";
 import { ProductHeading } from "./product-heading";
-import { ProductPrice } from "./product-price";
-import { VariantPicker } from "./variant-picker";
+import { ProductSummary } from "./product-summary";
 import { ProductActions } from "./product-actions";
 import { ProductNotes } from "./product-notes";
 
-const COPY = { back: "Volver al catálogo", preview: "Vista previa del producto", featured: "Destacado" } as const;
+const COPY = { back: "Volver al catálogo", preview: "Vista previa del producto", featured: "Destacado", notice: "La disponibilidad puede cambiar. Consúltanos antes de venir si buscas una talla o color concreto." } as const;
 
 export function ProductDetail({ product, phone, publicUrl, catalogHref, preview, hasStore }: { product: PublicProductDto; phone: string; publicUrl: string; catalogHref: string; preview: boolean; hasStore: boolean }) {
   const view = usePublicProduct(product, phone, publicUrl);
@@ -26,13 +25,13 @@ export function ProductDetail({ product, phone, publicUrl, catalogHref, preview,
         {preview ? <p className="mt-3 text-sm text-warning">{COPY.preview}</p> : null}
       </div>
       <section className="px-5 pb-20 pt-6 md:px-8 lg:pb-28 lg:pt-10">
-        <div className="mx-auto grid max-w-7xl items-start gap-8 lg:grid-cols-[1.15fr_.85fr] lg:gap-12 xl:gap-16">
+        <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.15fr_.85fr] lg:gap-12 xl:gap-16">
           <ProductGallery images={product.images} title={product.title} activeIndex={view.imageIndex} badge={product.featured ? COPY.featured : null} onSelect={view.setImageIndex} />
-          <div className="min-w-0 lg:py-2">
+          <div className="mx-auto w-full min-w-0 max-w-2xl lg:py-2">
             <ProductHeading eyebrow={view.eyebrow} titleLead={view.titleLead} titleAccent={view.titleAccent} subtitle={product.subtitle} tags={view.tags} />
-            <ProductPrice price={view.price} previousPrice={view.previousPrice} discounted={view.discounted} available={view.available} />
-            <VariantPicker variants={product.variants} variantId={view.variantId} size={view.size} color={view.color} onSelect={view.setVariantId} />
+            <ProductSummary price={view.price} previousPrice={view.previousPrice} discounted={view.discounted} available={view.available} variants={product.variants} variantId={view.variantId} size={view.size} color={view.color} onSelect={view.setVariantId} />
             <ProductActions whatsappHref={view.whatsappHref} hasStore={hasStore} />
+            <p className="mt-4 text-pretty text-sm leading-6 text-ink-secondary">{COPY.notice}</p>
             <ProductNotes description={product.description} characteristics={view.characteristics} />
           </div>
         </div>

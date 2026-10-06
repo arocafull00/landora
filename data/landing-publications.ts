@@ -3,8 +3,10 @@ import "server-only";
 import { and, desc, eq, max, or, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
-import { landingPages, landingPageVersions } from "@/db/schema";
+import { landingCta, landingPages, landingPageVersions } from "@/db/schema";
 import type { TemplateId } from "@/lib/dashboard-data";
+import { updateCompanyContact } from "@/lib/company-details";
+import { parseSocialLinks } from "@/lib/footer-content";
 import {
   getNextLandingVersion,
   normalizePublishedSlug,
@@ -152,6 +154,12 @@ export async function restoreLandingPageVersion(input: {
 }
 
 function toPublishedLanding(row: {
+  company: {
+    phone: string;
+    email: string;
+    address: string;
+    socialLinks: { platform: string; url: string }[];
+  } | null;
   landing: {
     id: string;
     userId: string;
@@ -168,6 +176,7 @@ function toPublishedLanding(row: {
     sectionSelectionsJson: Record<string, unknown>;
   };
 }): PublishedLanding {
+  const content = parsePublishedLandingContent(row.version.contentJson);
   return {
     id: row.landing.id,
     userId: row.landing.userId,
@@ -177,7 +186,12 @@ function toPublishedLanding(row: {
     template: row.version.template,
     name: row.version.name,
     slug: normalizePublishedSlug(row.version.slug),
-    content: parsePublishedLandingContent(row.version.contentJson),
+    content: row.company
+      ? updateCompanyContact(content, {
+          ...row.company,
+          socialLinks: parseSocialLinks(row.company.socialLinks),
+        })
+      : content,
     seo: parsePublishedLandingSeo(row.version.seoJson),
     sectionSelections: parsePublishedLandingSectionSelections(
       row.version.sectionSelectionsJson,
@@ -187,6 +201,12 @@ function toPublishedLanding(row: {
 
 function publishedLandingSelection() {
   return {
+    company: {
+      phone: landingCta.phone,
+      email: landingCta.email,
+      address: landingCta.address,
+      socialLinks: landingCta.socialLinks,
+    },
     landing: {
       id: landingPages.id,
       userId: landingPages.userId,
@@ -274,28 +294,33 @@ export async function getPublishedLandingBySlug(
   cacheLife("max");
   cacheTag("public-landings", `landing-slug:${normalizedSlug}`);
 
-  const [row] = await db
-    .select(publishedLandingSelection())
-    .from(landingPages)
-    .innerJoin(
-      landingPageVersions,
-      eq(landingPages.publishedVersionId, landingPageVersions.id),
-    )
-    .where(
-      and(
-        eq(landingPages.published, true),
-        or(
-          eq(landingPageVersions.slug, normalizedSlug),
-          eq(landingPageVersions.slug, `/${normalizedSlug}`),
+  try {
+    const [row] = await db
+      .select(publishedLandingSelection())
+      .from(landingPages)
+      .innerJoin(
+        landingPageVersions,
+        eq(landingPages.publishedVersionId, landingPageVersions.id),
+      )
+      .leftJoin(landingCta, eq(landingCta.landingId, landingPages.id))
+      .where(
+        and(
+          eq(landingPages.published, true),
+          or(
+            eq(landingPageVersions.slug, normalizedSlug),
+            eq(landingPageVersions.slug, `/${normalizedSlug}`),
+          ),
         ),
-      ),
-    )
-    .limit(1);
+      )
+      .limit(1);
 
-  if (!row) return null;
+    if (!row) return null;
 
-  cacheTag(`landing:${row.landing.id}`);
-  return toPublishedLanding(row);
+    cacheTag(`landing:${row.landing.id}`);
+    return toPublishedLanding(row);
+  } catch (error) {
+    throw new Error("Failed to fetch published landing by slug", { cause: error });
+  }
 }
 
 export async function getPublishedLandingSlugs(): Promise<string[]> {
@@ -330,22 +355,27 @@ export async function getPublishedLandingById(
   cacheLife("max");
   cacheTag("public-landings", `landing:${landingId}`);
 
-  const [row] = await db
-    .select(publishedLandingSelection())
-    .from(landingPages)
-    .innerJoin(
-      landingPageVersions,
-      eq(landingPages.publishedVersionId, landingPageVersions.id),
-    )
-    .where(
-      and(
-        eq(landingPages.id, landingId),
-        eq(landingPages.published, true),
-      ),
-    )
-    .limit(1);
+  try {
+    const [row] = await db
+      .select(publishedLandingSelection())
+      .from(landingPages)
+      .innerJoin(
+        landingPageVersions,
+        eq(landingPages.publishedVersionId, landingPageVersions.id),
+      )
+      .leftJoin(landingCta, eq(landingCta.landingId, landingPages.id))
+      .where(
+        and(
+          eq(landingPages.id, landingId),
+          eq(landingPages.published, true),
+        ),
+      )
+      .limit(1);
 
-  return row ? toPublishedLanding(row) : null;
+    return row ? toPublishedLanding(row) : null;
+  } catch (error) {
+    throw new Error("Failed to fetch published landing by ID", { cause: error });
+  }
 }
 
 export async function getPublishedLandingByCustomDomain(
@@ -357,26 +387,31 @@ export async function getPublishedLandingByCustomDomain(
   cacheLife("max");
   cacheTag("public-landings", `landing-domain:${normalizedHost}`);
 
-  const [row] = await db
-    .select(publishedLandingSelection())
-    .from(landingPages)
-    .innerJoin(
-      landingPageVersions,
-      eq(landingPages.publishedVersionId, landingPageVersions.id),
-    )
-    .where(
-      and(
-        eq(landingPages.customDomain, normalizedHost),
-        eq(landingPages.published, true),
-      ),
-    )
-    .orderBy(desc(landingPageVersions.version))
-    .limit(1);
+  try {
+    const [row] = await db
+      .select(publishedLandingSelection())
+      .from(landingPages)
+      .innerJoin(
+        landingPageVersions,
+        eq(landingPages.publishedVersionId, landingPageVersions.id),
+      )
+      .leftJoin(landingCta, eq(landingCta.landingId, landingPages.id))
+      .where(
+        and(
+          eq(landingPages.customDomain, normalizedHost),
+          eq(landingPages.published, true),
+        ),
+      )
+      .orderBy(desc(landingPageVersions.version))
+      .limit(1);
 
-  if (!row) return null;
+    if (!row) return null;
 
-  cacheTag(`landing:${row.landing.id}`);
-  return toPublishedLanding(row);
+    cacheTag(`landing:${row.landing.id}`);
+    return toPublishedLanding(row);
+  } catch (error) {
+    throw new Error("Failed to fetch published landing by domain", { cause: error });
+  }
 }
 
 export async function getPublishedLandingForSitemap(slug: string) {

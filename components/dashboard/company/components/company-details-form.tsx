@@ -31,7 +31,7 @@ export function CompanyDetailsForm({ form, submit, busy }: {
           </div>
         </section>
         <Separator />
-        <p className="text-sm text-ink-secondary">{COMPANY_COPY.draft}</p>
+        <p className="text-sm text-ink-secondary">{COMPANY_COPY.saveHelp}</p>
         <div className="flex flex-wrap gap-3">
           <Button type="submit" disabled={busy}><Save aria-hidden className="size-4" />{busy ? COMPANY_COPY.saving : COMPANY_COPY.save}</Button>
           <Button variant="outline" asChild><Link href="/editor">{COMPANY_COPY.editor}</Link></Button>

@@ -82,7 +82,7 @@ function getPublishedChanges(
 }
 
 function revalidateDraftRoutes(landingId: string) {
-  revalidatePath(`/preview/${landingId}`);
+  revalidatePath(`/preview/${landingId}`, "layout");
   revalidatePath(`/preview/${landingId}/carta`);
   revalidatePath(
     `/preview/${landingId}/proyectos/[projectKey]`,
@@ -93,7 +93,7 @@ function revalidateDraftRoutes(landingId: string) {
 
 function revalidatePublishedRoutes(landingId: string, slugValue: string) {
   const slug = slugValue.replace(/^\//, "");
-  revalidatePath(`/${slug}`);
+  revalidatePath(`/${slug}`, "layout");
   revalidatePath(`/${slug}/blog`);
   revalidatePath(`/${slug}/about`);
   revalidatePath(`/${slug}/carta`);
@@ -237,15 +237,20 @@ export async function saveLandingAction(
       if (publication.status === "not_found") {
         return { error: "No tienes acceso a esta web" };
       }
+    }
 
-      revalidatePublishedRoutes(landing.id, snapshot.meta.slug);
-      after(() =>
-        warmPublicLanding({
+    if (parsed.data.mode === "publish" || changes.sections?.cta) {
+      const slug = parsed.data.mode === "publish"
+        ? parsed.data.publication.meta.slug
+        : landing.slug;
+      revalidatePublishedRoutes(landing.id, slug);
+      if (parsed.data.mode === "publish" || landing.published) {
+        after(() => warmPublicLanding({
           id: landing.id,
-          slug: snapshot.meta.slug,
+          slug,
           customDomain: landing.customDomain,
-        }),
-      );
+        }));
+      }
     }
 
     revalidateDraftRoutes(landing.id);

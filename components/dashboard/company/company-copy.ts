@@ -10,7 +10,7 @@ export const COMPANY_COPY = {
   save: "Guardar datos",
   saving: "Guardando…",
   invalid: "Revisa los datos de la empresa",
-  draft: "Los datos se guardan en el borrador. Publica desde el editor para actualizar tu web pública.",
+  saveHelp: "Al guardar, los datos se actualizan en el editor, la vista previa y tu web pública.",
   editor: "Ir al editor",
   link: "Editar datos de la empresa",
   skip: "Saltar al contenido",
