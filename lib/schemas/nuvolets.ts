@@ -45,6 +45,7 @@ const nuvoletsProductSchema = nuvoletsProductFormSchema.extend({
 });
 
 export const nuvoletsContentSchema = z.strictObject({
+  navigation: z.strictObject({ instagramLabel: label, instagramHref: url, directionsLabel: label, directionsHref: url }).optional(),
   heroDetails: z.strictObject({ alt: label, primaryHref: url, secondaryLabel: label, secondaryHref: url }),
   marquee: z.array(message).max(30),
   categories: z.array(z.strictObject({ id, title: label, description: text, image, alt: label, href: url, category: z.string().trim().max(160).optional(), tone })).max(30),

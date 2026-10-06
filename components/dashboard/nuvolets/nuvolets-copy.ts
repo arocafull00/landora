@@ -14,6 +14,7 @@ const messages = [{ name: "text", label: "" }];
 const fields = (prefix: string, items: readonly { name: string; label: string; type?: NuvoletsField["type"] }[]): NuvoletsField[] => items.map((item) => ({ ...item, name: `${prefix}.${item.name}` as Path<NuvoletsContent> }));
 
 export const NUVOLETS_EDITOR_FIELDS: Record<string, { fields: NuvoletsField[]; lists: NuvoletsList[] }> = {
+  Navegación: { fields: fields("navigation", [{ name: "instagramLabel", label: "Texto del enlace de Instagram" }, { name: "instagramHref", label: "Destino de Instagram (vacío: Instagram de la empresa)" }, { name: "directionsLabel", label: "Texto del botón de la navbar" }, { name: "directionsHref", label: "Destino del botón (vacío: Maps de la empresa)" }]), lists: [] },
   Hero: { fields: fields("heroDetails", [{ name: "alt", label: "Texto alternativo del hero" }, { name: "primaryHref", label: "Enlace principal" }, { name: "secondaryLabel", label: "Botón secundario" }, { name: "secondaryHref", label: "Enlace secundario" }]), lists: [] },
   Franja: { fields: [], lists: [{ name: "marquee", label: "Mensajes de la franja", fields: messages }] },
   Categorías: { fields: [], lists: [{ name: "categories", label: "Categorías", fields: [{ name: "title", label: "Nombre" }, { name: "description", label: "Descripción", type: "textarea" }, ...imageFields, { name: "category", label: NUVOLETS_CATEGORY_COPY.label, type: "category" }, { name: "tone", label: "Color", type: "tone" }] }] },

@@ -19,7 +19,13 @@ function getSocialPlatform(href: string): SocialPlatform | undefined {
 }
 
 export function getCompanyMapsHref(address: string) {
-  return address.trim() ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address.trim())}` : "";
+  const destination = address.trim();
+  if (!destination) return "";
+  if (URL.canParse(destination)) {
+    const url = new URL(destination);
+    if (url.protocol === "https:" || url.protocol === "http:") return destination;
+  }
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(destination)}`;
 }
 
 export function getCompanyHref(href: string, contact: ContactContent) {
@@ -67,16 +73,17 @@ export function syncCompanyContent(content: LandingContent): LandingContent {
   const mapsUrl = getCompanyMapsHref(contact.address);
   const config = content.nuvolets;
   if (!config) return { ...content, nav, mapsUrl };
-  const mapLink = <T extends { href: string }>(item: T): T => ({ ...item, href: resolve(item.href) });
+  const resolveStoreLink = (href: string) => href === "#tienda" ? mapsUrl : resolve(href);
+  const mapLink = <T extends { href: string }>(item: T): T => ({ ...item, href: resolveStoreLink(item.href) });
   return {
     ...content, nav, mapsUrl,
     nuvolets: {
       ...config,
-      heroDetails: { ...config.heroDetails, primaryHref: resolve(config.heroDetails.primaryHref), secondaryHref: resolve(config.heroDetails.secondaryHref) },
+      heroDetails: { ...config.heroDetails, primaryHref: resolveStoreLink(config.heroDetails.primaryHref), secondaryHref: resolveStoreLink(config.heroDetails.secondaryHref) },
       categories: config.categories.map(mapLink),
       products: config.products.map((item) => ({ ...item, ...(item.href ? { href: resolve(item.href) } : {}) })),
       collection: { ...config.collection, href: resolve(config.collection.href) },
-      story: { ...config.story, ctaHref: resolve(config.story.ctaHref) },
+      story: { ...config.story, ctaHref: resolveStoreLink(config.story.ctaHref) },
       store: { ...config.store, mapsUrl, secondaryHref: resolve(config.store.secondaryHref) },
       instagram: { ...config.instagram, url: getSocialUrl(contact, "instagram"), images: config.instagram.images.map((item) => ({ ...item, href: getSocialUrl(contact, "instagram") })) },
       footer: {

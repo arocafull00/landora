@@ -5,6 +5,9 @@ import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
 import { ImageField } from "@/components/dashboard/image-field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { NUVOLETS_TONES, type NuvoletsField } from "../nuvolets-copy";
 import { NuvoletsCategoryField } from "./nuvolets-category-field";
 
@@ -47,10 +50,10 @@ export function NuvoletsFormField({ definition, form, sync, layout = "stack" }: 
   }
 
   return (
-    <label className="block space-y-2 text-ink-secondary">
-      <span>{label}</span>
-      {type === "textarea" ? <textarea {...form.register(name)} className={inputClass} rows={4} maxLength={2000} /> : <input {...form.register(name)} type={type === "color" ? "color" : "text"} className={inputClass} maxLength={2048} />}
+    <div className="space-y-2 text-ink-secondary">
+      <Label htmlFor={name}>{label}</Label>
+      {type === "textarea" ? <Textarea id={name} {...form.register(name)} className={inputClass} rows={4} maxLength={2000} /> : <Input id={name} {...form.register(name)} type={type === "color" ? "color" : "text"} className={inputClass} maxLength={2048} />}
       {error ? <span className="block text-sm text-danger">{error}</span> : null}
-    </label>
+    </div>
   );
 }

@@ -19,7 +19,8 @@ export function NuvoletsTemplate({ content, copyrightYear, slug, previewLandingI
   bookingEnabled?: boolean;
   sectionSelections?: LandingSectionSelections;
 }) {
-  const config = syncCompanyContent(content).nuvolets;
+  const companyContent = syncCompanyContent(content);
+  const config = companyContent.nuvolets;
   if (!config) return null;
   const hidden = new Set(content.hiddenSections);
   const catalogHref = previewLandingId ? getPreviewLandingPath(previewLandingId, "/productos") : "/productos";
@@ -28,7 +29,7 @@ export function NuvoletsTemplate({ content, copyrightYear, slug, previewLandingI
   return (
     <div className="nuvolets bg-nuvolets-background text-nuvolets-text" data-motion={config.effects.motion} data-custom-colors={config.colors.enabled} style={customColors as CSSProperties}>
       <a href="#nuvolets-main" className="sr-only focus:not-sr-only focus:block focus:p-4">{copy.skip}</a>
-      <NuvoletsNav brand={content.brand} logo={content.brandLogoType === "image" ? content.brandLogoImage : ""} links={getVisibleNav(content.nav, content.hiddenSections, "nuvolets")} config={config} topOffset={topOffset} />
+      <NuvoletsNav brand={content.brand} logo={content.brandLogoType === "image" ? content.brandLogoImage : ""} links={getVisibleNav(companyContent.nav, content.hiddenSections, "nuvolets")} config={config} topOffset={topOffset} />
       <main id="nuvolets-main">
         {sections.map((section) => <NuvoletsSection key={section.anchor} anchor={section.anchor} content={content} config={config} slug={slug} preview={!!previewLandingId || !slug} catalogHref={catalogHref} heroVariant={sectionSelections?.hero ?? "nuvolets"} />)}
       </main>
