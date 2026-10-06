@@ -1,6 +1,8 @@
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getPublicCatalog, getPreviewCatalog } from "@/lib/catalog-context";
 import { getProductPage, getProductBySlug } from "@/data/products";
+import { getPublicProductBySlug } from "@/data/public-products";
 import { catalogQuerySchema, catalogRouteSchema, previewCatalogQuerySchema } from "@/lib/schemas/products";
 import { toPublicProduct } from "@/lib/products";
 import { getPreviewLandingPath, getPublicLandingUrl } from "@/lib/public-site-url";
@@ -8,11 +10,9 @@ import { CatalogShell } from "./catalog-shell";
 import { CatalogList } from "./catalog-list";
 import { ProductDetail } from "./product-detail";
 import { StoreVisit } from "./store-visit";
-import { RelatedProducts } from "./related-products";
+import { RelatedProductsContent } from "./related-products-content";
 import { getCatalogStore } from "@/lib/catalog-presentation";
 import { CatalogStoreCta } from "./catalog-store-cta";
-
-const RELATED_LIMIT = 3;
 
 export async function CatalogRoute({ identifier, preview, productSlug, searchParams }: { identifier: string; preview: boolean; productSlug: string | null; searchParams: Record<string, string | string[] | undefined> }) {
   if (productSlug && !catalogRouteSchema.shape.productSlug.safeParse(productSlug).success) notFound();
@@ -24,14 +24,14 @@ export async function CatalogRoute({ identifier, preview, productSlug, searchPar
   const store = getCatalogStore(landing.content);
   let body;
   if (productSlug) {
-    const product = await getProductBySlug(landing.id, productSlug, preview);
+    const product = preview ? await getProductBySlug(landing.id, productSlug, true) : await getPublicProductBySlug(landing.id, productSlug);
     if (!product) notFound();
-    const relatedPage = await getProductPage(landing.id, { ...catalogQuerySchema.parse({}), category: product.category }, !preview, preview);
-    const related = relatedPage.products.filter((item) => item.id !== product.id).slice(0, RELATED_LIMIT).map(toPublicProduct);
     body = <>
       <ProductDetail product={product} phone={landing.content.contact.phone} publicUrl={getPublicLandingUrl(landing, `/productos/${product.slug}`)} catalogHref={catalogHref} preview={preview} hasStore={store !== null} />
       {store ? <StoreVisit store={store} /> : null}
-      <RelatedProducts products={related} basePath={catalogHref} />
+      <Suspense fallback={null}>
+        <RelatedProductsContent landingId={landing.id} productId={product.id} category={product.category} preview={preview} basePath={catalogHref} />
+      </Suspense>
     </>;
   } else {
     const parsed = (preview ? previewCatalogQuerySchema : catalogQuerySchema).safeParse(searchParams);

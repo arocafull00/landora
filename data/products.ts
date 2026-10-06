@@ -69,6 +69,20 @@ export const getProductBySlug = cache(async (landingId: string, slug: string, pr
   } catch (error) { throw new Error("Failed to fetch product slug", { cause: error }); }
 });
 
+export const getRelatedProducts = cache(async (landingId: string, productId: string, category: string, preview: boolean) => {
+  try {
+    const categoryColumn = preview ? sql<string>`coalesce(${storeProducts.draftContent}->>'category', ${storeProducts.category})` : sql<string>`${storeProducts.category}`;
+    const rows = await db.select().from(storeProducts).where(and(
+      eq(storeProducts.landingId, landingId),
+      ne(storeProducts.id, productId),
+      preview ? ne(storeProducts.status, "archived") : eq(storeProducts.status, "published"),
+      category ? eq(categoryColumn, category) : undefined,
+    )).orderBy(desc(storeProducts.createdAt), asc(storeProducts.id)).limit(3);
+    const variants = rows.length ? await db.select().from(storeProductVariants).where(inArray(storeProductVariants.productId, rows.map((row) => row.id))).orderBy(asc(storeProductVariants.sortOrder)) : [];
+    return rows.map((row) => toPublicProduct(dto(row, variants.filter((variant) => variant.productId === row.id), preview)));
+  } catch (error) { throw new Error("Failed to fetch related products", { cause: error }); }
+});
+
 export const getProductPage = cache(async (landingId: string, query: CatalogQuery, publicOnly: boolean, preview = false): Promise<ProductPageDto<ProductDto>> => {
   try {
     const scope = and(eq(storeProducts.landingId, landingId), publicOnly ? eq(storeProducts.status, "published") : preview ? ne(storeProducts.status, "archived") : undefined);

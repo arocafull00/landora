@@ -5,6 +5,7 @@ import { getPreviewLanding } from "@/lib/api/landing-auth";
 import { requireProductsAccess } from "@/lib/require-products-access";
 import { hasProductsAccess } from "@/data/product-access";
 import { getCatalogConfig } from "@/data/products";
+import { getPublicCatalogConfig } from "@/data/public-products";
 import { toLandingContent } from "@/lib/landing-mapper";
 import { catalogRouteSchema } from "@/lib/schemas/products";
 import { resourceIdSchema } from "@/lib/schemas/api";
@@ -12,9 +13,9 @@ import { resourceIdSchema } from "@/lib/schemas/api";
 export const getPublicCatalog = cache(async (slug: string) => {
   if (!catalogRouteSchema.safeParse({ slug }).success) return null;
   const landing = await getPublishedLandingBySlug(slug);
-  if (!landing || !await hasProductsAccess(landing.userId)) return null;
-  const config = await getCatalogConfig(landing.id);
-  return config.enabled ? { landing, config } : null;
+  if (!landing) return null;
+  const [access, config] = await Promise.all([hasProductsAccess(landing.userId), getPublicCatalogConfig(landing.id)]);
+  return access && config.enabled ? { landing, config } : null;
 });
 
 export const getPreviewCatalog = cache(async (id: string) => {
