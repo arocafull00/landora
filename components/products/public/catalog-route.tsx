@@ -8,9 +8,9 @@ import { toPublicProduct } from "@/lib/products";
 import { getPreviewLandingPath, getPublicLandingUrl } from "@/lib/public-site-url";
 import { CatalogShell } from "./catalog-shell";
 import { CatalogList } from "./catalog-list";
-import { ProductDetail } from "./product-detail";
-import { StoreVisit } from "./store-visit";
-import { RelatedProductsContent } from "./related-products-content";
+import { ProductDetailContent } from "./product-detail-content";
+import { ProductDetailLoading } from "./product-detail-loading";
+import { ProductSecondaryContent } from "./product-secondary-content";
 import { getCatalogStore } from "@/lib/catalog-presentation";
 import { CatalogStoreCta } from "./catalog-store-cta";
 
@@ -24,13 +24,13 @@ export async function CatalogRoute({ identifier, preview, productSlug, searchPar
   const store = getCatalogStore(landing.content);
   let body;
   if (productSlug) {
-    const product = preview ? await getProductBySlug(landing.id, productSlug, true) : await getPublicProductBySlug(landing.id, productSlug);
-    if (!product) notFound();
+    const productPromise = preview ? getProductBySlug(landing.id, productSlug, true) : getPublicProductBySlug(landing.id, productSlug);
     body = <>
-      <ProductDetail product={product} phone={landing.content.contact.phone} publicUrl={getPublicLandingUrl(landing, `/productos/${product.slug}`)} catalogHref={catalogHref} preview={preview} hasStore={store !== null} />
-      {store ? <StoreVisit store={store} /> : null}
+      <Suspense fallback={<ProductDetailLoading withHeader={false} />}>
+        <ProductDetailContent productPromise={productPromise} phone={landing.content.contact.phone} siteUrl={getPublicLandingUrl(landing)} catalogHref={catalogHref} preview={preview} hasStore={store !== null} />
+      </Suspense>
       <Suspense fallback={null}>
-        <RelatedProductsContent landingId={landing.id} productId={product.id} category={product.category} preview={preview} basePath={catalogHref} />
+        <ProductSecondaryContent productPromise={productPromise} landingId={landing.id} store={store} preview={preview} catalogHref={catalogHref} />
       </Suspense>
     </>;
   } else {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import type { PublicProductDto } from "@/lib/domain/dtos";
 import { usePublicProduct } from "../hooks/use-public-product";
+import { useCatalogReturn } from "../hooks/use-catalog-navigation";
 import { ProductGallery } from "./product-gallery";
 import { ProductHeading } from "./product-heading";
 import { ProductPrice } from "./product-price";
@@ -14,10 +15,11 @@ const COPY = { back: "Volver al catálogo", preview: "Vista previa del producto"
 
 export function ProductDetail({ product, phone, publicUrl, catalogHref, preview, hasStore }: { product: PublicProductDto; phone: string; publicUrl: string; catalogHref: string; preview: boolean; hasStore: boolean }) {
   const view = usePublicProduct(product, phone, publicUrl);
+  const returnToCatalog = useCatalogReturn(catalogHref);
   return (
     <>
       <div className="mx-auto max-w-7xl px-5 pt-8 md:px-8">
-        <Link href={catalogHref} className="inline-flex items-center gap-2 rounded-sm text-sm text-ink-secondary transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none">
+        <Link href={catalogHref} onNavigate={returnToCatalog} prefetch={true} className="inline-flex items-center gap-2 rounded-sm text-sm text-ink-secondary transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none">
           <ArrowLeft aria-hidden className="size-4" />
           {COPY.back}
         </Link>
