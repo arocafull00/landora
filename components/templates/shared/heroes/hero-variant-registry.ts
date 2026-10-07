@@ -6,7 +6,6 @@ import type {
 import { VELAR_ASSETS } from "@/lib/velar-assets";
 import { STUDIO_ASSETS } from "@/lib/studio-assets";
 import { PORTFOLIO_ASSETS } from "@/lib/portfolio-assets";
-import { RISTORANTE_ASSETS } from "@/lib/ristorante-assets";
 import { FLORISTERIA_ASSETS } from "@/lib/floristeria-assets";
 import { OFICIO_PRO_ASSETS } from "@/lib/oficio-pro-assets";
 import { COFFEE_SHOP_ASSETS } from "@/lib/coffee-shop-assets";
@@ -22,6 +21,7 @@ export type HeroVariantDefinition = {
 };
 
 const HERO_VARIANTS: Record<HeroVariantId, HeroVariantDefinition> = {
+  ristorante: { id: "ristorante", label: "Ristorante", description: "Cocina italiana, tipografía monumental y pizza orgánica.", thumbnail: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=72", navTone: "dark", specificFields: [] },
   nuvolets: { id: "nuvolets", label: "Nuvolets", description: "Portada orgánica de moda infantil.", thumbnail: "https://images.unsplash.com/photo-1484665754804-74b091211472?auto=format&fit=crop&w=600&q=72", navTone: "dark", specificFields: [] },
   velar: {
     id: "velar",
@@ -46,14 +46,6 @@ const HERO_VARIANTS: Record<HeroVariantId, HeroVariantDefinition> = {
     thumbnail: PORTFOLIO_ASSETS.hero,
     navTone: "light",
     specificFields: ["houseImage"],
-  },
-  ristorante: {
-    id: "ristorante",
-    label: "Ristorante",
-    description: "Imagen inmersiva con composición elegante y asimétrica.",
-    thumbnail: RISTORANTE_ASSETS.hero,
-    navTone: "light",
-    specificFields: [],
   },
   floristeria: {
     id: "floristeria",
@@ -139,7 +131,7 @@ const HERO_VARIANTS: Record<HeroVariantId, HeroVariantDefinition> = {
     id: "immersive",
     label: "Inmersivo",
     description: "Imagen cinematográfica, atmósfera oscura y gesto premium.",
-    thumbnail: RISTORANTE_ASSETS.hero,
+    thumbnail: VELAR_ASSETS.toll1,
     navTone: "light",
     specificFields: [],
   },

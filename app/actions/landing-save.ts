@@ -20,6 +20,7 @@ import {
 } from "@/lib/landing-save-payload";
 import { logger } from "@/lib/logger";
 import { nuvoletsHeroSchema } from "@/lib/schemas/nuvolets";
+import { ristoranteEditableSectionsSchema } from "@/lib/schemas/ristorante-editor";
 import {
   saveLandingSchema,
   type SaveLandingInput,
@@ -83,7 +84,6 @@ function getPublishedChanges(
 
 function revalidateDraftRoutes(landingId: string) {
   revalidatePath(`/preview/${landingId}`, "layout");
-  revalidatePath(`/preview/${landingId}/carta`);
   revalidatePath(
     `/preview/${landingId}/proyectos/[projectKey]`,
     "page",
@@ -96,7 +96,6 @@ function revalidatePublishedRoutes(landingId: string, slugValue: string) {
   revalidatePath(`/${slug}`, "layout");
   revalidatePath(`/${slug}/blog`);
   revalidatePath(`/${slug}/about`);
-  revalidatePath(`/${slug}/carta`);
   revalidatePath(`/${slug}/book`);
   revalidatePath(`/${slug}/proyectos/[projectSlug]`, "page");
   updateTag(`landing:${landingId}`);
@@ -115,6 +114,14 @@ export async function saveLandingAction(
 
   const landing = await assertLandingAccess(parsed.data.landingId);
   if (!landing) return { error: "No tienes acceso a esta web" };
+  if (landing.template === "ristorante") {
+    const sections = parsed.data.mode === "publish"
+      ? getLandingSectionPayloads(parsed.data.publication.content as LandingContent, landing.template)
+      : parsed.data.changes.sections ?? {};
+    if (!ristoranteEditableSectionsSchema.safeParse(sections).success) {
+      return { error: "Revisa los campos de Ristorante antes de guardar" };
+    }
+  }
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) return { error: "No autorizado" };
 

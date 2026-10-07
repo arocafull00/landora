@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { EditorTabsBar } from "@/components/dashboard/editor-tabs-bar";
 import { useDashboardChrome } from "@/components/dashboard/dashboard-chrome-context";
 import { getVisibleEditorTabs } from "@/lib/template-registry";
@@ -16,9 +16,6 @@ export function EditorLayoutTabs() {
   const isAdmin = useDashboardStore((state) => state.isAdmin);
   const landings = useDashboardStore((state) => state.landings);
   const setActiveEditorTab = useDashboardStore((state) => state.setActiveEditorTab);
-  const setActivePageTarget = useDashboardStore(
-    (state) => state.setActivePageTarget,
-  );
 
   const activeLanding =
     landings.find((landing) => landing.id === activeLandingId) ?? landings[0];
@@ -26,7 +23,7 @@ export function EditorLayoutTabs() {
   const hiddenSections = activeLanding?.content.hiddenSections ?? EMPTY_HIDDEN_SECTIONS;
   const template = activeLanding?.template;
 
-  const templateTabs = useMemo(
+  const tabs = useMemo(
     () =>
       template
         ? getVisibleEditorTabs(
@@ -38,28 +35,9 @@ export function EditorLayoutTabs() {
         : [],
     [template, hiddenSections, isAdmin, bookingModuleEnabled],
   );
-  const tabs = useMemo(() => {
-    if (template !== "ristorante" || activePageTarget.type !== "carta") {
-      return templateTabs;
-    }
-
-    return templateTabs.filter((tab) => tab.id === "Carta");
-  }, [activePageTarget.type, template, templateTabs]);
-  const previousPageType = useRef(activePageTarget.type);
 
   useEffect(() => {
-    const previousType = previousPageType.current;
-    previousPageType.current = activePageTarget.type;
-
     if (tabs.length === 0) return;
-    if (
-      template === "ristorante" &&
-      previousType === "carta" &&
-      activePageTarget.type === "home"
-    ) {
-      setActiveEditorTab("Hero");
-      return;
-    }
     if (tabs.some((tab) => tab.id === activeEditorTab)) return;
     setActiveEditorTab(tabs[0].id);
   }, [
@@ -70,27 +48,14 @@ export function EditorLayoutTabs() {
     template,
   ]);
 
-  const showTabs =
-    activePageTarget.type === "home" || activePageTarget.type === "carta";
+  const showTabs = activePageTarget.type === "home";
 
   if (!template || !showTabs) return null;
-
-  const handleTabChange = (tab: string) => {
-    setActiveEditorTab(tab);
-    if (template !== "ristorante") return;
-    if (tab === "Carta") {
-      setActivePageTarget({ type: "carta" });
-      return;
-    }
-    if (activePageTarget.type === "carta") {
-      setActivePageTarget({ type: "home" });
-    }
-  };
 
   return (
     <EditorTabsBar
       activeTab={activeEditorTab}
-      onTabChange={handleTabChange}
+      onTabChange={setActiveEditorTab}
       tabs={tabs}
     />
   );

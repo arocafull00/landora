@@ -20,7 +20,6 @@ export function getEditorPages(landing: Landing, catalogEnabled: boolean, produc
       pages.push({ id: project.id, label: project.title || EDITOR_COPY.project, target: { type: "project", projectId: project.id } });
     }
   }
-  if (landing.template === "ristorante") pages.push({ id: "carta", label: "Carta", target: { type: "carta" } });
   if (catalogEnabled) {
     pages.push({ id: "catalog", label: EDITOR_COPY.catalog, target: { type: "catalog" } });
     pages.push({ id: "product", label: EDITOR_COPY.productDetail,
@@ -47,7 +46,6 @@ export function getEditorStructure(landing: Landing, page: EditorPageTarget, isA
   const tabMap = new Map(tabs.map((tab) => [tab.id, tab]));
   const sections = getOrderedTemplateSections(landing.template, landing.content.sectionOrder).filter((section) => {
     if (section.anchor === "reservas" && !bookingEnabled) return false;
-    if (page.type === "carta") return section.editorTabId === "Carta";
     return !section.separatePage;
   });
   const hidden = new Set(landing.content.hiddenSections ?? []);
@@ -76,7 +74,6 @@ export function getEditorStructure(landing: Landing, page: EditorPageTarget, isA
 
 export function getValidEditorTab(landing: Landing, target: EditorPageTarget, current: string, isAdmin: boolean, bookingEnabled: boolean) {
   if (target.type === "about" || target.type === "project" || target.type === "catalog" || target.type === "product") return "page-content";
-  if (target.type === "carta") return "Carta";
   const tabs = getVisibleEditorTabs(landing.template, landing.content.hiddenSections, isAdmin, bookingEnabled);
   return tabs.some((tab) => tab.id === current) ? current : tabs[0]?.id ?? getTemplate(landing.template)?.editorTabs[0]?.id ?? "Hero";
 }

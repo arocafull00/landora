@@ -18,6 +18,10 @@ async function renderPublicTemplate(
   template: PublishedLanding["template"],
   props: PublicTemplateRenderProps,
 ) {
+  if (template === "ristorante") {
+    const { RistoranteTemplate } = await import("@/components/templates/ristorante/ristorante-template");
+    return <RistoranteTemplate {...props} />;
+  }
   if (template === "nuvolets") {
     const { NuvoletsTemplate } = await import("@/components/templates/nuvolets/nuvolets-template");
     return <NuvoletsTemplate {...props} />;
@@ -29,10 +33,6 @@ async function renderPublicTemplate(
   if (template === "portfolio") {
     const { PortfolioTemplate } = await import("@/components/templates/portfolio/portfolio-template");
     return <PortfolioTemplate {...props} />;
-  }
-  if (template === "ristorante") {
-    const { RistoranteTemplate } = await import("@/components/templates/ristorante/ristorante-template");
-    return <RistoranteTemplate {...props} />;
   }
   if (template === "floristeria") {
     const { FloristeriaTemplate } = await import("@/components/templates/floristeria/floristeria-template");

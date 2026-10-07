@@ -9,7 +9,6 @@ import type {
 import {
   syncBlogNavHrefs,
   syncPortfolioAboutNavHrefs,
-  syncRistoranteCartaNavHrefs,
 } from "@/lib/template-sections";
 
 export const LANDING_SECTION_KEYS = [
@@ -90,9 +89,7 @@ export function getLandingSectionPayloads(
   const navItems = syncBlogNavHrefs(
     template === "portfolio"
       ? syncPortfolioAboutNavHrefs(content.nav)
-      : template === "ristorante"
-        ? syncRistoranteCartaNavHrefs(content.nav)
-        : content.nav,
+      : content.nav,
   );
 
   return {

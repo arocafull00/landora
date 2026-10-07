@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#F4F0E6" />
+  <title>L'Italiano — Pizzeria & Cucina</title>
+  <meta name="description" content="L'Italiano. Pizza, pasta, antipasti y dolci hechos para compartir." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One+SC&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#F4F0E6',
+            cream2: '#EEE8DC',
+            olive: '#21301B',
+            tomato: '#D9554D',
+            orange: '#E9A95B',
+            mustard: '#D4B34C'
+          },
+          fontFamily: {
+            display: ['Bowlby One SC', 'sans-serif'],
+            sans: ['DM Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root { --cream:#F4F0E6; --olive:#21301B; --tomato:#D9554D; }
+    body { background:var(--cream); color:var(--olive); overflow-x:hidden; }
+    ::selection { background:#D9554D; color:#F4F0E6; }
+    .hero-title { font-size:clamp(4.6rem, 14.2vw, 13rem); line-height:.76; letter-spacing:-.06em; }
+    .display-tight { letter-spacing:-.045em; }
+    .no-scrollbar::-webkit-scrollbar { display:none; }
+    .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+    .paper-noise {
+      background-image: radial-gradient(rgba(33,48,27,.08) .55px, transparent .55px);
+      background-size: 6px 6px;
+    }
+    .marquee-track { width:max-content; animation:marquee 28s linear infinite; }
+    .marquee-track.reverse { animation-direction:reverse; animation-duration:34s; }
+    @keyframes marquee { to { transform:translateX(-50%); } }
+    .hero-word { animation:heroWord 1.05s cubic-bezier(.16,1,.3,1) both; }
+    .hero-pizza { animation:heroPizza 1.15s .08s cubic-bezier(.16,1,.3,1) both; }
+    .reveal-chip { animation:chipIn .75s cubic-bezier(.16,1,.3,1) both; }
+    .reveal-chip:nth-child(2){animation-delay:.12s}.reveal-chip:nth-child(3){animation-delay:.24s}
+    @keyframes heroWord { from { opacity:0; transform:scale(.92); } to { opacity:1; transform:scale(1); } }
+    @keyframes heroPizza { from { opacity:0; transform:translateY(80px) rotate(-5deg) scale(.85); } to { opacity:1; transform:translateY(0) rotate(0) scale(1); } }
+    @keyframes chipIn { from { opacity:0; transform:scale(.7) rotate(-10deg); } to { opacity:1; transform:scale(1) rotate(0); } }
+    .organic { border-radius: 48% 52% 57% 43% / 46% 45% 55% 54%; }
+    .food-card { transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
+    .food-card img { transition:transform .35s cubic-bezier(.2,.8,.2,1); }
+    .food-card:hover { transform:translateY(-6px); box-shadow:0 22px 55px rgba(33,48,27,.08); }
+    .food-card:hover img { transform:scale(1.08) rotate(2deg); }
+    .menu-item { transition:opacity .25s ease, transform .25s ease; }
+    .menu-item.hiding { opacity:0; transform:translateY(14px) scale(.96); }
+    .menu-item.hidden-item { display:none; }
+    .filter-btn.active { background:#21301B; color:#F4F0E6; }
+    .nav-scrolled { background:rgba(244,240,230,.88); backdrop-filter:blur(14px); border-bottom:1px solid rgba(33,48,27,.12); }
+    .reveal-on-scroll { opacity:0; transform:translateY(34px); transition:opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1); }
+    .reveal-on-scroll.visible { opacity:1; transform:none; }
+    .spin-slow { animation:spinSlow 18s linear infinite; }
+    @keyframes spinSlow { to { transform:rotate(360deg); } }
+    .wiggle { animation:wiggle 5.5s ease-in-out infinite alternate; }
+    @keyframes wiggle { from { transform:rotate(-3deg); } to { transform:rotate(3deg); } }
+    .stamp-text { font-size:10px; letter-spacing:.24em; }
+    .outline-word { color:transparent; -webkit-text-stroke:1.5px #F4F0E6; text-stroke:1.5px #F4F0E6; }
+    @media (max-width: 768px) {
+      .hero-title { font-size:clamp(4rem, 21vw, 8rem); }
+      .hero-pizza-wrap { width:78vw; max-width:430px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased">
+
+  <nav id="navbar" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
+    <div class="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-4 md:px-8 lg:px-12">
+      <a href="#inicio" class="font-display text-xl tracking-[-.04em] md:text-2xl">L'ITALIANO</a>
+      <div class="hidden items-center gap-7 text-[12px] font-bold tracking-[.16em] md:flex">
+        <a class="hover:text-tomato transition" href="#carta">CARTA</a>
+        <a class="hover:text-tomato transition" href="#nosotros">NOSOTROS</a>
+        <a class="hover:text-tomato transition" href="#galeria">GALERÍA</a>
+        <a class="hover:text-tomato transition" href="#contacto">CONTACTO</a>
+      </div>
+      <a href="#contacto" class="rounded-full bg-tomato px-5 py-3 text-[12px] font-bold tracking-[.12em] text-cream transition hover:-translate-y-0.5 hover:bg-olive">RESERVAR</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="inicio" class="relative min-h-[90svh] overflow-hidden bg-cream paper-noise pt-28">
+      <div class="pointer-events-none absolute left-[6%] top-[18%] hidden h-20 w-20 rounded-full border-2 border-olive/40 lg:block"></div>
+      <div class="pointer-events-none absolute right-[6%] top-[18%] rotate-12 bg-mustard px-4 py-2 text-[11px] font-black tracking-[.15em] text-olive shadow-[5px_5px_0_#21301B] reveal-chip">DAL 1987</div>
+      <div class="pointer-events-none absolute bottom-[13%] left-[5%] hidden -rotate-6 rounded-full border-2 border-tomato bg-cream px-4 py-2 text-[10px] font-black tracking-[.15em] text-tomato md:block reveal-chip">BUON APPETITO!</div>
+
+      <div class="relative mx-auto flex min-h-[76svh] max-w-[1600px] flex-col justify-between px-5 pb-12 md:px-8 lg:px-12">
+        <div class="relative z-10">
+          <h1 class="hero-title hero-word font-display text-olive">L'ITALIANO</h1>
+        </div>
+
+        <div class="hero-pizza-wrap hero-pizza absolute left-1/2 top-[48%] z-20 w-[58vw] max-w-[760px] -translate-x-1/2 -translate-y-1/2" data-parallax="18">
+          <div class="organic relative aspect-square overflow-hidden border-[10px] border-cream shadow-[0_30px_80px_rgba(33,48,27,.22)] md:border-[14px]">
+            <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1400&q=90" alt="Pizza italiana recién horneada" />
+          </div>
+          <div class="absolute -right-5 top-12 grid h-24 w-24 place-items-center rounded-full bg-tomato text-center text-cream shadow-[6px_6px_0_#21301B] md:h-32 md:w-32">
+            <div class="spin-slow absolute inset-2 rounded-full border border-dashed border-cream/80"></div>
+            <span class="relative font-display text-xs leading-tight md:text-sm">FATTA<br>A MANO</span>
+          </div>
+        </div>
+
+        <div class="relative z-30 mt-auto grid items-end gap-8 md:grid-cols-2">
+          <div class="max-w-sm">
+            <p class="text-lg font-medium leading-snug md:text-2xl">Auténtica cocina italiana<br>hecha para compartir.</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="#carta" class="rounded-full bg-olive px-6 py-3.5 text-xs font-black tracking-[.12em] text-cream transition hover:-translate-y-1 hover:bg-tomato">VER LA CARTA ↓</a>
+              <a href="#contacto" class="rounded-full border-2 border-olive px-6 py-3 text-xs font-black tracking-[.12em] transition hover:-translate-y-1 hover:bg-cream2">RESERVAR MESA</a>
+            </div>
+          </div>
+          <div class="justify-self-end text-right">
+            <p class="mb-2 text-xs font-bold uppercase tracking-[.24em] text-olive/60">Cucina · Famiglia · Amore</p>
+            <svg class="ml-auto h-12 w-28 text-tomato" viewBox="0 0 120 48" fill="none" aria-hidden="true">
+              <path d="M4 18C28 6 59 9 83 26" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+              <path d="M78 16L86 27L73 31" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="overflow-hidden bg-olive py-4 text-cream md:py-5" aria-label="Especialidades">
+      <div class="marquee-track flex items-center whitespace-nowrap font-display text-2xl md:text-4xl">
+        <span>PIZZA <b class="text-tomato">·</b> PASTA <b class="text-orange">·</b> ANTIPASTI <b class="text-tomato">·</b> DOLCI <b class="text-orange">·</b> L'ITALIANO <b class="text-tomato">·</b>&nbsp;</span>
+        <span aria-hidden="true">PIZZA <b class="text-tomato">·</b> PASTA <b class="text-orange">·</b> ANTIPASTI <b class="text-tomato">·</b> DOLCI <b class="text-orange">·</b> L'ITALIANO <b class="text-tomato">·</b>&nbsp;</span>
+      </div>
+    </section>
+
+    <section id="carta" class="relative bg-cream py-16 md:py-24">
+      <div class="mx-auto max-w-[1600px] px-5 md:px-8 lg:px-12">
+        <div class="grid items-end gap-7 lg:grid-cols-[1fr_.65fr]">
+          <div>
+            <p class="mb-3 text-xs font-black uppercase tracking-[.22em] text-tomato">La nostra carta</p>
+            <h2 class="display-tight font-display text-[clamp(3.5rem,8vw,8.5rem)] leading-[.84]">NUESTRA<br>CARTA</h2>
+          </div>
+          <p class="max-w-xl pb-2 text-base leading-relaxed text-olive/70 md:text-lg">Recetas italianas sin demasiadas ceremonias: buen producto, masa trabajada cada día y platos que piden una mesa llena.</p>
+        </div>
+      </div>
+
+      <div class="sticky top-[72px] z-40 mt-10 border-y border-olive/15 bg-cream/95 backdrop-blur md:top-[76px]">
+        <div class="no-scrollbar mx-auto flex max-w-[1600px] gap-2 overflow-x-auto px-5 py-3 md:px-8 lg:px-12">
+          <button class="filter-btn active shrink-0 rounded-full border-2 border-olive px-5 py-2.5 text-xs font-black tracking-[.12em] transition" data-filter="all">TODOS</button>
+          <button class="filter-btn shrink-0 rounded-full border-2 border-olive px-5 py-2.5 text-xs font-black tracking-[.12em] transition" data-filter="pizza">PIZZAS</button>
+          <button class="filter-btn shrink-0 rounded-full border-2 border-olive px-5 py-2.5 text-xs font-black tracking-[.12em] transition" data-filter="pasta">PASTA</button>
+          <button class="filter-btn shrink-0 rounded-full border-2 border-olive px-5 py-2.5 text-xs font-black tracking-[.12em] transition" data-filter="entrante">ENTRANTES</button>
+          <button class="filter-btn shrink-0 rounded-full border-2 border-olive px-5 py-2.5 text-xs font-black tracking-[.12em] transition" data-filter="postre">POSTRES</button>
+        </div>
+      </div>
+
+      <div id="menu-grid" class="mx-auto mt-10 grid max-w-[1600px] grid-cols-1 gap-x-5 gap-y-8 px-5 sm:grid-cols-2 md:px-8 lg:grid-cols-3 lg:px-12 xl:grid-cols-4">
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="pizza">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-orange/20"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=85" alt="Pizza Margherita"></div>
+          <div class="absolute right-3 top-3 rotate-6 rounded-full bg-mustard px-3 py-1 text-[10px] font-black">ICONICA</div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">MARGHERITA</h3><span class="font-black">12,50 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Tomate · fior di latte · albahaca · AOVE</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="pizza">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-tomato/10"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=900&q=85" alt="Pizza Diavola"></div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">DIAVOLA</h3><span class="font-black">14,50 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Tomate · mozzarella · salame piccante · guindilla</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="pizza">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-mustard/20"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&q=85" alt="Pizza Burrata"></div>
+          <div class="absolute right-3 top-3 -rotate-6 rounded-full bg-tomato px-3 py-1 text-[10px] font-black text-cream">FAVORITA</div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">BURRATA</h3><span class="font-black">16,00 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Tomate · burrata · cherry · pesto · parmesano</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="pizza">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-orange/20"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1566843972142-a7fcb70de55a?auto=format&fit=crop&w=900&q=85" alt="Pizza Prosciutto"></div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">PROSCIUTTO</h3><span class="font-black">15,50 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Mozzarella · prosciutto · rúcula · parmigiano</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="pasta">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-orange/20"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=900&q=85" alt="Pasta Carbonara"></div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">CARBONARA</h3><span class="font-black">14,00 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Guanciale · pecorino · yema · pimienta negra</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="pasta">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-mustard/20"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=85" alt="Pasta al pesto"></div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">PESTO</h3><span class="font-black">13,50 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Albahaca · piñones · parmesano · ajo · AOVE</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="pasta">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-tomato/10"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=900&q=85" alt="Pasta alla vodka"></div>
+          <div class="absolute right-3 top-3 rotate-4 rounded-full bg-olive px-3 py-1 text-[10px] font-black text-cream">NEW</div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">RIGATONI</h3><span class="font-black">14,50 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Tomate · crema · parmigiano · chile</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="entrante">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-orange/20"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85" alt="Antipasti italiano"></div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">ANTIPASTO</h3><span class="font-black">15,00 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Mortadella · prosciutto · quesos · focaccia</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="entrante">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-tomato/10"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?auto=format&fit=crop&w=900&q=85" alt="Bruschetta con tomate"></div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">BRUSCHETTA</h3><span class="font-black">8,50 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Pan tostado · tomate · ajo · albahaca · AOVE</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="postre">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-mustard/20"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=85" alt="Tiramisú italiano"></div>
+          <div class="absolute right-3 top-3 -rotate-4 rounded-full bg-mustard px-3 py-1 text-[10px] font-black">CASERO</div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">TIRAMISÙ</h3><span class="font-black">7,00 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Mascarpone · café · cacao · savoiardi</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="postre">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-orange/20"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=900&q=85" alt="Panna cotta"></div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">PANNA COTTA</h3><span class="font-black">6,50 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Vainilla · frutos rojos · limón</p></div>
+        </article>
+
+        <article class="menu-item food-card group relative border border-olive/25 bg-cream2 p-4 pt-0" data-category="postre">
+          <div class="relative -mt-2 aspect-[1.12/1] overflow-hidden organic bg-tomato/10"><img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=85" alt="Cannoli italiano"></div>
+          <div class="pt-5"><div class="flex items-start justify-between gap-4"><h3 class="font-display text-2xl">CANNOLI</h3><span class="font-black">6,00 €</span></div><p class="mt-2 text-sm leading-relaxed text-olive/65">Ricotta dulce · pistacho · naranja</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="relative overflow-hidden bg-cream2 py-20 md:py-32">
+      <div class="mx-auto grid max-w-[1600px] items-center gap-12 px-5 md:px-8 lg:grid-cols-2 lg:px-12">
+        <div class="relative min-h-[420px] md:min-h-[560px]">
+          <div class="absolute left-[2%] top-[6%] h-[72%] w-[76%] -rotate-3 overflow-hidden border-[10px] border-cream shadow-[14px_14px_0_#21301B] md:border-[14px]" data-parallax="10">
+            <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1579684947550-22e945225d9a?auto=format&fit=crop&w=1200&q=88" alt="Pizza para compartir">
+          </div>
+          <div class="absolute bottom-0 right-[2%] grid h-36 w-36 rotate-6 place-items-center rounded-full bg-tomato text-center font-display text-lg text-cream shadow-[7px_7px_0_#21301B] md:h-48 md:w-48">INSIEME<br>È MEGLIO</div>
+        </div>
+        <div class="reveal-on-scroll">
+          <p class="mb-5 text-xs font-black uppercase tracking-[.22em] text-tomato">A tavola!</p>
+          <h2 class="display-tight font-display text-[clamp(3.4rem,7vw,7.7rem)] leading-[.88]">UNA PIZZA<br>SE DISFRUTA<br><span class="text-tomato">MEJOR</span><br>COMPARTIDA</h2>
+          <p class="mt-8 max-w-lg text-lg leading-relaxed text-olive/70">Aquí no contamos porciones. Ponemos platos en medio, servimos otra ronda y dejamos que la conversación haga el resto.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="relative overflow-hidden bg-tomato py-20 text-cream md:py-28">
+      <div class="mx-auto grid max-w-[1600px] items-center gap-10 px-5 md:px-8 lg:grid-cols-[.72fr_1.28fr] lg:px-12">
+        <div class="relative z-20 reveal-on-scroll">
+          <p class="mb-4 text-xs font-black uppercase tracking-[.22em] text-olive">Solo este mes</p>
+          <h2 class="font-display text-[clamp(3.6rem,7vw,8rem)] leading-[.83] tracking-[-.05em]">LA PIZZA<br>DEL MES</h2>
+          <div class="mt-7 inline-block -rotate-2 bg-cream px-5 py-3 text-olive shadow-[6px_6px_0_#21301B]"><span class="font-display text-3xl">HIGOS</span></div>
+          <div class="mt-7 grid max-w-sm grid-cols-2 gap-2 text-sm font-bold">
+            <span>↗ Higos</span><span>↗ Burrata</span><span>↗ Jamón serrano</span><span>↗ Pistachos</span>
+          </div>
+        </div>
+        <div class="relative min-h-[460px] md:min-h-[620px]">
+          <div id="month-pizza" class="wiggle absolute left-1/2 top-1/2 aspect-square w-[88%] max-w-[710px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full border-[14px] border-cream shadow-[18px_18px_0_#21301B]">
+            <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=1400&q=90" alt="Pizza especial del mes">
+          </div>
+          <span class="absolute left-[5%] top-[10%] -rotate-6 bg-mustard px-3 py-2 text-xs font-black text-olive">DOLCE + SALATO</span>
+          <span class="absolute bottom-[13%] right-[1%] rotate-6 rounded-full border-2 border-cream px-4 py-2 text-xs font-black">EDIZIONE LIMITATA</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="overflow-hidden bg-olive py-8 text-cream md:py-12">
+      <div class="marquee-track flex items-center whitespace-nowrap font-display text-[clamp(3rem,7vw,8rem)] leading-none">
+        <span>PIZZA <i class="not-italic text-tomato">PASTA</i> DOLCI <span class="outline-word">AMORE</span> L'ITALIANO&nbsp;&nbsp;</span>
+        <span aria-hidden="true">PIZZA <i class="not-italic text-tomato">PASTA</i> DOLCI <span class="outline-word">AMORE</span> L'ITALIANO&nbsp;&nbsp;</span>
+      </div>
+      <div class="marquee-track reverse mt-5 flex items-center whitespace-nowrap font-display text-[clamp(2.4rem,5vw,6rem)] leading-none opacity-80">
+        <span><span class="text-orange">BUON APPETITO</span> · FAMIGLIA · POMODORO · BASILICO · FORNO ·&nbsp;</span>
+        <span aria-hidden="true"><span class="text-orange">BUON APPETITO</span> · FAMIGLIA · POMODORO · BASILICO · FORNO ·&nbsp;</span>
+      </div>
+    </section>
+
+    <section id="nosotros" class="relative overflow-hidden bg-cream py-20 md:py-32">
+      <div class="mx-auto max-w-[1600px] px-5 md:px-8 lg:px-12">
+        <div class="mb-12 grid gap-8 lg:grid-cols-[1fr_.75fr] lg:items-end">
+          <h2 class="display-tight font-display text-[clamp(3.6rem,8vw,8rem)] leading-[.86]">UN PEQUEÑO<br>RINCÓN<br><span class="text-tomato">DE ITALIA</span></h2>
+          <p class="max-w-xl text-lg leading-relaxed text-olive/70">Una sala viva, una cocina abierta y ese punto de caos bonito que aparece cuando la mesa está llena. Ven con hambre.</p>
+        </div>
+
+        <div id="galeria" class="relative min-h-[760px] md:min-h-[940px]">
+          <div class="absolute left-0 top-4 h-[52%] w-[75%] overflow-hidden border-[10px] border-cream2 shadow-[12px_12px_0_#21301B] md:w-[62%] md:border-[14px]" data-parallax="7">
+            <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1500&q=88" alt="Interior cálido de restaurante">
+          </div>
+          <div class="absolute right-0 top-[32%] h-[42%] w-[58%] rotate-3 overflow-hidden border-[10px] border-cream shadow-[10px_10px_0_#D9554D] md:w-[46%] md:border-[14px]" data-parallax="-6">
+            <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1200&q=88" alt="Mesa de restaurante italiano">
+          </div>
+          <div class="absolute bottom-[4%] left-[8%] h-44 w-44 overflow-hidden rounded-full border-[8px] border-cream shadow-[8px_8px_0_#E9A95B] md:h-64 md:w-64" data-parallax="11">
+            <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=88" alt="Detalle de restaurante">
+          </div>
+          <div class="absolute bottom-[9%] right-[5%] -rotate-6 border-2 border-olive bg-mustard px-5 py-4 font-display text-xl shadow-[6px_6px_0_#21301B] md:text-3xl">CIAO BELLA!</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="bg-cream2 py-20 md:py-28">
+      <div class="mx-auto grid max-w-[1600px] gap-12 px-5 md:px-8 lg:grid-cols-[1fr_.9fr] lg:px-12">
+        <div>
+          <p class="mb-4 text-xs font-black uppercase tracking-[.22em] text-tomato">Prenota</p>
+          <h2 class="display-tight font-display text-[clamp(3.4rem,7vw,7.5rem)] leading-[.86]">TU MESA<br>TE ESPERA</h2>
+        </div>
+        <div class="border-t-2 border-olive pt-7 lg:mt-4">
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div><p class="text-xs font-black tracking-[.16em]">HORARIO</p><p class="mt-2 text-lg">Mar–Dom · 13:00–00:00</p></div>
+            <div><p class="text-xs font-black tracking-[.16em]">RESERVAS</p><p class="mt-2 text-lg">+34 600 000 000</p></div>
+            <div><p class="text-xs font-black tracking-[.16em]">DIRECCIÓN</p><p class="mt-2 text-lg">Carrer d'Italia, 12 · Valencia</p></div>
+            <div><p class="text-xs font-black tracking-[.16em]">INSTAGRAM</p><p class="mt-2 text-lg">@litaliano.pizzeria</p></div>
+          </div>
+          <a href="tel:+34600000000" class="mt-9 inline-flex rounded-full bg-tomato px-7 py-4 text-xs font-black tracking-[.14em] text-cream transition hover:-translate-y-1 hover:bg-olive">RESERVAR MESA ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-olive px-5 py-8 text-cream md:px-8 lg:px-12">
+    <div class="mx-auto flex max-w-[1600px] flex-col gap-4 border-t border-cream/20 pt-7 md:flex-row md:items-end md:justify-between">
+      <div><div class="font-display text-3xl">L'ITALIANO</div><p class="mt-2 text-sm text-cream/60">Pizza · Pasta · Famiglia · Amore</p></div>
+      <p class="text-xs tracking-[.12em] text-cream/50">© 2026 L'ITALIANO · FATTO CON AMORE</p>
+    </div>
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    const onScroll = () => navbar.classList.toggle('nav-scrolled', window.scrollY > 20);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Menu filtering
+    const filterButtons = [...document.querySelectorAll('.filter-btn')];
+    const menuItems = [...document.querySelectorAll('.menu-item')];
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        menuItems.forEach(item => item.classList.add('hiding'));
+        setTimeout(() => {
+          menuItems.forEach(item => {
+            const matches = filter === 'all' || item.dataset.category === filter;
+            item.classList.toggle('hidden-item', !matches);
+          });
+          requestAnimationFrame(() => menuItems.forEach(item => {
+            if (!item.classList.contains('hidden-item')) item.classList.remove('hiding');
+          }));
+        }, 180);
+      });
+    });
+
+    // Small cursor parallax in hero
+    const hero = document.getElementById('inicio');
+    const heroPizza = document.querySelector('.hero-pizza');
+    if (hero && heroPizza && matchMedia('(pointer:fine)').matches) {
+      hero.addEventListener('mousemove', (e) => {
+        const r = hero.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5;
+        const y = (e.clientY - r.top) / r.height - .5;
+        heroPizza.style.marginLeft = `${x * 12}px`;
+        heroPizza.style.marginTop = `${y * 10}px`;
+      });
+      hero.addEventListener('mouseleave', () => { heroPizza.style.marginLeft='0'; heroPizza.style.marginTop='0'; });
+    }
+
+    // Scroll reveals
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('visible'));
+    }, { threshold: .14 });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+    // Subtle scroll parallax
+    const parallaxItems = [...document.querySelectorAll('[data-parallax]')];
+    let ticking = false;
+    function updateParallax() {
+      parallaxItems.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const speed = Number(el.dataset.parallax || 6);
+        const center = rect.top + rect.height / 2 - innerHeight / 2;
+        el.style.translate = `0 ${center / innerHeight * speed}px`;
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(updateParallax); ticking = true; }
+    }, { passive:true });
+    updateParallax();
+  </script>
+</body>
+</html>

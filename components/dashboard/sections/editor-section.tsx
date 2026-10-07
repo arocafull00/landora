@@ -4,7 +4,6 @@ import { useDashboardStore } from "@/stores/dashboard-store";
 import { useShallow } from "zustand/react/shallow";
 import { StudioEditorSection } from "@/components/dashboard/sections/studio-editor-section";
 import { PortfolioEditorSection } from "@/components/dashboard/sections/portfolio-editor-section";
-import { RistoranteEditorSection } from "@/components/dashboard/sections/ristorante-editor-section";
 import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
 import { OficioProEditorSection } from "@/components/dashboard/sections/oficio-pro-editor-section";
 import { CoffeeShopEditorSection } from "@/components/dashboard/sections/coffee-shop-editor-section";
@@ -15,6 +14,7 @@ import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { PortfolioAboutPageEditor } from "@/components/dashboard/portfolio-about-page-editor";
 import { PortfolioProjectPageEditor } from "@/components/dashboard/portfolio-project-page-editor";
 import { CatalogPageEditor } from "@/components/dashboard/editor/components/catalog-page-editor";
+import { RistoranteEditorSection } from "@/components/dashboard/ristorante/page.client";
 
 export function EditorSection() {
   const { activeLandingId, activePageTarget, landings } = useDashboardStore(
@@ -76,6 +76,7 @@ export function EditorSection() {
   }
 
   if (activeLanding.template === "nuvolets") return <NuvoletsEditorSection />;
+  if (activeLanding.template === "ristorante") return <RistoranteEditorSection />;
 
   if (activeLanding.template === "studio") {
     return <StudioEditorSection />;
@@ -83,10 +84,6 @@ export function EditorSection() {
 
   if (activeLanding.template === "portfolio") {
     return <PortfolioEditorSection />;
-  }
-
-  if (activeLanding.template === "ristorante") {
-    return <RistoranteEditorSection />;
   }
 
   if (activeLanding.template === "floristeria") {

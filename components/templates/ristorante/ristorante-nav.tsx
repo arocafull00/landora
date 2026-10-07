@@ -1,69 +1,20 @@
-import type { RefObject } from "react";
-import type {
-  BrandLogoType,
-  EditorPageTarget,
-  NavLink,
-} from "@/lib/dashboard-data";
-import type { HeroNavTone } from "@/components/templates/shared/heroes/hero-variant-types";
-import { NativeTemplateNav } from "@/components/templates/native-template-nav";
+import type { LandingContent } from "@/lib/dashboard-data";
+import { getVisibleNav } from "@/lib/template-sections";
+import { AssetImage } from "@/components/ui/asset-image";
+import { RistoranteButton } from "@/components/templates/ristorante/ristorante-button";
+import { RistoranteNavItem } from "@/components/templates/ristorante/ristorante-nav-item";
 
-export function RistoranteNav({
-  activePage = "home",
-  brand,
-  brandLogoImage,
-  brandLogoType,
-  cartaHref,
-  cartaPageTarget,
-  navLinks,
-  ctaLabel,
-  ctaHref,
-  homeHref = "#hero",
-  homePageTarget,
-  topOffset = 0,
-}: {
-  activePage?: "home" | "carta";
-  brand: string;
-  brandLogoImage: string;
-  brandLogoType: BrandLogoType;
-  cartaHref?: string;
-  cartaPageTarget?: EditorPageTarget;
-  navLinks: NavLink[];
-  ctaLabel: string;
-  ctaHref: string;
-  heroNavTone: HeroNavTone;
-  homeHref?: string;
-  homePageTarget?: EditorPageTarget;
-  topOffset?: number;
-  scrollRootRef?: RefObject<HTMLElement | null>;
-}) {
-  const resolvedLinks =
-    activePage === "home"
-      ? [
-          ...navLinks,
-          ...(cartaHref
-            ? [
-                {
-                  href: cartaHref,
-                  id: "carta-page",
-                  label: "Carta",
-                  pageTarget: cartaPageTarget,
-                },
-              ]
-            : []),
-        ]
-      : [{ href: homeHref, id: "home-page", label: "Inicio", pageTarget: homePageTarget }];
-
+export function RistoranteNav({ content, topOffset, ctaHref }: { content: LandingContent; topOffset: number; ctaHref: string }) {
+  const links = getVisibleNav(content.nav, content.hiddenSections, "ristorante").filter((item) => !(content.hiddenSections?.includes("nosotros") && item.href === "#galeria"));
   return (
-    <NativeTemplateNav
-      brand={brand}
-      brandLogoImage={brandLogoImage}
-      brandLogoType={brandLogoType}
-      ctaHref={ctaHref}
-      ctaLabel={ctaLabel || "Reservar mesa"}
-      homeHref={homeHref}
-      homePageTarget={homePageTarget}
-      navLinks={resolvedLinks}
-      topOffset={topOffset}
-    />
+    <nav className="ristorante-nav fixed inset-x-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300" style={{ top: topOffset }}>
+      <div className="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-4 md:px-8 lg:px-12">
+        <a href="#inicio" className="font-ristorante-display text-xl tracking-[-.04em] md:text-2xl">
+          {content.brandLogoType === "image" && content.brandLogoImage ? <span className="relative block h-9 w-32"><AssetImage src={content.brandLogoImage} alt={content.brand} fill sizes="128px" className="object-contain" /></span> : content.brand}
+        </a>
+        <div className="hidden items-center gap-7 text-[12px] font-bold tracking-[.16em] md:flex">{links.map((item) => <RistoranteNavItem key={item.id} item={item} />)}</div>
+        <RistoranteButton href={ctaHref} className="px-5 py-3 font-bold hover:-translate-y-0.5">{content.hero.ctaLabel}</RistoranteButton>
+      </div>
+    </nav>
   );
 }

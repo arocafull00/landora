@@ -3,12 +3,12 @@ import type { TemplateId } from "@/lib/dashboard-data";
 import { VELAR_IMAGE_OPTIONS } from "@/lib/velar-assets";
 import { STUDIO_IMAGE_OPTIONS } from "@/lib/studio-assets";
 import { PORTFOLIO_IMAGE_OPTIONS } from "@/lib/portfolio-assets";
-import { RISTORANTE_IMAGE_OPTIONS } from "@/lib/ristorante-assets";
 import { FLORISTERIA_IMAGE_OPTIONS } from "@/lib/floristeria-assets";
 import { OFICIO_PRO_IMAGE_OPTIONS } from "@/lib/oficio-pro-assets";
 import { COFFEE_SHOP_IMAGE_OPTIONS } from "@/lib/coffee-shop-assets";
 import { SIGNAL_IMAGE_OPTIONS } from "@/lib/signal-assets";
 import { PALLET_ROSS_CARD_IMAGES } from "@/lib/pallet-ross-assets";
+import { RISTORANTE_IMAGE_OPTIONS } from "@/lib/ristorante-content";
 
 const PALLET_ROSS_IMAGE_OPTIONS = PALLET_ROSS_CARD_IMAGES.map((value, index) => ({
   value,
@@ -16,11 +16,11 @@ const PALLET_ROSS_IMAGE_OPTIONS = PALLET_ROSS_CARD_IMAGES.map((value, index) => 
 }));
 
 const TEMPLATE_IMAGE_OPTIONS: Record<TemplateId, readonly { value: string; label: string }[]> = {
+  ristorante: RISTORANTE_IMAGE_OPTIONS,
   nuvolets: [{ value: NUVOLETS_HERO_IMAGE, label: "Hero" }, ...NUVOLETS_DEFAULT_CONFIG.products.map((p) => ({ value: p.image, label: p.name }))],
   velar: VELAR_IMAGE_OPTIONS,
   studio: STUDIO_IMAGE_OPTIONS,
   portfolio: PORTFOLIO_IMAGE_OPTIONS,
-  ristorante: RISTORANTE_IMAGE_OPTIONS,
   floristeria: FLORISTERIA_IMAGE_OPTIONS,
   "oficio-pro": OFICIO_PRO_IMAGE_OPTIONS,
   "coffee-shop": COFFEE_SHOP_IMAGE_OPTIONS,

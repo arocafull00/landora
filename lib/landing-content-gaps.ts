@@ -65,21 +65,6 @@ const PORTFOLIO_SECTIONS: LandingSectionKey[] = [
   "faq",
 ];
 
-const RISTORANTE_SECTIONS: LandingSectionKey[] = [
-  "hero",
-  "branding",
-  "story",
-  "stats",
-  "gallery",
-  "nav",
-  "workflow",
-  "testimonials",
-  "cta",
-  "team",
-  "serviceMenu",
-  "faq",
-];
-
 const FLORISTERIA_SECTIONS: LandingSectionKey[] = [
   "hero",
   "branding",
@@ -172,9 +157,9 @@ const SIGNAL_GAP_SECTIONS: LandingSectionKey[] = [
 
 function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
   if (template === "nuvolets") return ["nuvolets", "hero", "branding", "nav", "cta"];
+  if (template === "ristorante") return ["hero", "branding", "nav", "cta", "serviceMenu", "gallery", "story", "workflow", "benefits"];
   if (template === "studio") return STUDIO_SECTIONS;
   if (template === "portfolio") return PORTFOLIO_SECTIONS;
-  if (template === "ristorante") return RISTORANTE_SECTIONS;
   if (template === "floristeria") return FLORISTERIA_SECTIONS;
   if (template === "oficio-pro") return OFICIO_PRO_SECTIONS;
   if (template === "coffee-shop") return COFFEE_SHOP_SECTIONS;

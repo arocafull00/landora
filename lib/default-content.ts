@@ -6,10 +6,10 @@ import { VELAR_ASSETS } from "@/lib/velar-assets";
 import { VELAR_INSTAGRAM_URL, VELAR_MAPS_URL } from "@/lib/velar-links";
 import { STUDIO_ASSETS } from "@/lib/studio-assets";
 import { PORTFOLIO_ASSETS } from "@/lib/portfolio-assets";
-import { RISTORANTE_ASSETS } from "@/lib/ristorante-assets";
 import { FLORISTERIA_ASSETS, FLORISTERIA_HERO_FAN_DEFAULT_IMAGES } from "@/lib/floristeria-assets";
 import { OFICIO_PRO_ASSETS } from "@/lib/oficio-pro-assets";
 import { COFFEE_SHOP_ASSETS } from "@/lib/coffee-shop-assets";
+import { RISTORANTE_DEFAULT_CONTENT } from "@/lib/ristorante-content";
 import { PALLET_ROSS_ASSETS } from "@/lib/pallet-ross-assets";
 import { SIGNAL_ASSETS } from "@/lib/signal-assets";
 import { DEFAULT_LANDING_APPEARANCE } from "@/lib/site-appearance";
@@ -488,128 +488,6 @@ export const PORTFOLIO_DEFAULT_CONTENT: TemplateContentMap["portfolio"] = {
     { id: "faq-3", question: "¿Trabajas con clientes internacionales?", answer: "Sí, trabajo con clientes de toda Europa y Latinoamérica. Las reuniones se hacen por videollamada y la comunicación es fluida independientemente de la zona horaria." },
     { id: "faq-4", question: "¿Qué incluye la entrega final?", answer: "Archivos fuente editables, guía de marca en PDF, assets optimizados para web y print, y una sesión de handoff para tu equipo de desarrollo." },
     { id: "faq-5", question: "¿Ofreces soporte post-entrega?", answer: "Sí, incluyo 30 días de soporte gratuito después de la entrega para resolver dudas y hacer ajustes menores sin coste adicional." },
-  ],
-};
-
-export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
-  appearance: DEFAULT_LANDING_APPEARANCE,
-  enabledPages: [],
-  brand: "Osteria da Luca.",
-  brandLogoType: "text",
-  brandLogoImage: "",
-  hero: {
-    eyebrow: "COCINA ITALIANA AUTÉNTICA",
-    title: "Osteria da Luca",
-    subtitle: "Tradición, pasión y los mejores ingredientes del Mediterráneo.",
-    description: "Restaurante italiano en el corazón de Madrid desde 2008.",
-    image: RISTORANTE_ASSETS.hero,
-    ctaLabel: "Reservar mesa",
-  },
-  nav: [
-    { id: "nav-carta", label: "Carta", href: "/carta" },
-    { id: "nav-galeria", label: "Galería", href: "#galeria" },
-    { id: "nav-equipo", label: "Equipo", href: "#equipo" },
-    { id: "nav-horarios", label: "Horarios", href: "#horarios" },
-    { id: "nav-contacto", label: "Reservar", href: "#reservas" },
-  ],
-  sectionHeadings: SECTION_HEADING_DEFAULTS.ristorante,
-  contact: {
-    phone: "+34 912 34 56 78",
-    email: "reservas@osteriadaluca.es",
-    address: "Calle de la Paz 12, Madrid",
-    ctaLabel: "Reservar por WhatsApp",
-    copyrightSuffix: DEFAULT_COPYRIGHT_SUFFIX,
-    socialLinks: [],
-  },
-  stats: [
-    { id: "years", value: "17", label: "Años de tradición" },
-    { id: "dishes", value: "80", label: "Platos en carta" },
-    { id: "reviews", value: "4.8", label: "Valoración media" },
-  ],
-  testimonials: [
-    {
-      id: "review-1",
-      author: "Ana García",
-      date: "2025-03-20",
-      rating: 5,
-      comment: "La mejor pasta que he probado en Madrid. El ambiente es acogedor y el servicio impecable. La carbonara es espectacular, como en Roma.",
-      verified: true,
-    },
-    {
-      id: "review-2",
-      author: "Roberto Martínez",
-      date: "2025-02-28",
-      rating: 5,
-      comment: "Llevamos años viniendo y nunca decepciona. Los ravioli de trufa son una obra de arte. El personal te hace sentir como en casa.",
-      verified: true,
-    },
-    {
-      id: "review-3",
-      author: "Carmen López",
-      date: "2025-01-15",
-      rating: 5,
-      comment: "Celebramos nuestro aniversario aquí y fue perfecto. La carta de vinos es excelente y el tiramisú el mejor que he probado fuera de Italia.",
-      verified: true,
-    },
-  ],
-  about: {
-    statement: "Desde 2008 traemos los sabores auténticos de Italia a Madrid. Cada plato se prepara con ingredientes frescos importados directamente de nuestras regiones: la pasta hecha a mano cada mañana, el aceite de oliva de Puglia y los quesos de Emilia-Romagna.",
-  },
-  gallery: [
-    { id: "g1", image: RISTORANTE_ASSETS.gallery1, title: "Viernes por la noche", description: "El comedor cobra vida alrededor de cada mesa." },
-    { id: "g2", image: RISTORANTE_ASSETS.gallery2, title: "El equipo de cocina", description: "Cada servicio empieza mucho antes de abrir las puertas." },
-    { id: "g3", image: RISTORANTE_ASSETS.gallery3, title: "Producto de temporada", description: "Ingredientes escogidos por su origen, sabor y momento." },
-    { id: "g4", image: RISTORANTE_ASSETS.gallery4, title: "El plato que nos representa", description: "Receta propia, producto local y elaboración diaria." },
-    { id: "g5", image: RISTORANTE_ASSETS.gallery5, title: "Celebraciones en casa", description: "Un espacio preparado para compartir cada ocasión." },
-    { id: "g6", image: RISTORANTE_ASSETS.gallery6, title: "Una mesa para quedarse", description: "Sobremesas largas y una hospitalidad que se recuerda." },
-    { id: "g7", image: RISTORANTE_ASSETS.gallery7, title: "El último bocado", description: "El cierre dulce de una experiencia pensada al detalle." },
-  ],
-  team: [
-    {
-      id: "chef-1",
-      name: "Luca Bianchi",
-      role: "Chef ejecutivo",
-      bio: "Nacido en Bolonia, formado en las cocinas de Massimo Bottura. 25 años de experiencia en cocina italiana de autor.",
-      image: RISTORANTE_ASSETS.chef1,
-    },
-    {
-      id: "chef-2",
-      name: "Marco Rossi",
-      role: "Chef de pasta",
-      bio: "Especialista en pasta fresca artesanal. Cada mañana prepara a mano la pasta del día siguiendo recetas familiares.",
-      image: RISTORANTE_ASSETS.chef2,
-    },
-    {
-      id: "chef-3",
-      name: "Sofia Conti",
-      role: "Chef de postres",
-      bio: "Repostera formada en Milán. Sus tiramisú y panna cotta son legendarios entre nuestros clientes habituales.",
-      image: RISTORANTE_ASSETS.chef3,
-    },
-  ],
-  serviceMenu: [
-    { id: "sm-1", category: "Antipasti", name: "Burrata pugliese", description: "Con tomate cherry, albahaca fresca y aceite de oliva virgen", price: "14€", image: RISTORANTE_ASSETS.dish1 },
-    { id: "sm-2", category: "Antipasti", name: "Carpaccio di manzo", description: "Ternera con rúcula, parmesano y reducción de balsámico", price: "16€", image: RISTORANTE_ASSETS.dish2 },
-    { id: "sm-3", category: "Antipasti", name: "Vitello tonnato", description: "Ternera con salsa de atún, alcaparras y anchoas", price: "15€", image: RISTORANTE_ASSETS.dish3 },
-    { id: "sm-4", category: "Pasta", name: "Tagliatelle al ragù", description: "Pasta fresca con ragú bolognese cocinado 6 horas", price: "18€", image: RISTORANTE_ASSETS.dish4 },
-    { id: "sm-5", category: "Pasta", name: "Cacio e pepe", description: "Tonnarelli con pecorino romano y pimienta negra", price: "16€", image: RISTORANTE_ASSETS.dish5 },
-    { id: "sm-6", category: "Pasta", name: "Ravioli di tartufo", description: "Rellenos de ricotta y trufa negra con mantequilla de salvia", price: "24€", image: RISTORANTE_ASSETS.dish6 },
-    { id: "sm-7", category: "Secondi", name: "Ossobuco alla milanese", description: "Jarrete de ternera estofado con gremolata y risotto", price: "28€", image: RISTORANTE_ASSETS.dish4 },
-    { id: "sm-8", category: "Secondi", name: "Branzino al forno", description: "Lubina al horno con patatas, aceitunas y tomate cherry", price: "26€", image: RISTORANTE_ASSETS.dish5 },
-    { id: "sm-9", category: "Dolci", name: "Tiramisù della casa", description: "Receta tradicional con mascarpone y café espresso", price: "9€", image: RISTORANTE_ASSETS.dish6 },
-    { id: "sm-10", category: "Dolci", name: "Panna cotta", description: "Con coulis de frutos rojos de temporada", price: "8€", image: RISTORANTE_ASSETS.dish3 },
-  ],
-  workflow: [
-    { id: "h-1", number: "Lun-Jue", title: "13:00 - 16:00 / 20:00 - 23:30", description: "Comida y cena" },
-    { id: "h-2", number: "Vie-Sáb", title: "13:00 - 16:30 / 20:00 - 00:30", description: "Horario ampliado" },
-    { id: "h-3", number: "Domingo", title: "13:00 - 16:30", description: "Solo comida" },
-  ],
-  faq: [
-    { id: "faq-1", question: "¿Es necesario reservar?", answer: "Recomendamos reservar, especialmente fines de semana y festivos. Puedes hacerlo por teléfono, WhatsApp o a través de nuestra web." },
-    { id: "faq-2", question: "¿Tenéis opciones para celíacos?", answer: "Sí, ofrecemos pasta sin gluten bajo petición. Informa al camarero al llegar y adaptaremos los platos que sea posible." },
-    { id: "faq-3", question: "¿Hacéis eventos privados?", answer: "Sí, disponemos de un salón privado con capacidad para 30 personas. Contacta con nosotros para menús personalizados y disponibilidad." },
-    { id: "faq-4", question: "¿Tenéis terraza?", answer: "Sí, contamos con una terraza interior con capacidad para 24 personas, disponible de abril a octubre." },
-    { id: "faq-5", question: "¿Hay parking cerca?", answer: "El parking público más cercano está a 100 metros en la Plaza Mayor. También hay zona SER en las calles adyacentes." },
   ],
 };
 
@@ -1119,10 +997,10 @@ const DEFAULT_CONTENT: Record<TemplateId, TemplateContentMap[TemplateId]> = {
   velar: VELAR_DEFAULT_CONTENT,
   studio: STUDIO_DEFAULT_CONTENT,
   portfolio: PORTFOLIO_DEFAULT_CONTENT,
-  ristorante: RISTORANTE_DEFAULT_CONTENT,
   floristeria: FLORISTERIA_DEFAULT_CONTENT,
   "oficio-pro": OFICIO_PRO_DEFAULT_CONTENT,
   "coffee-shop": COFFEE_SHOP_DEFAULT_CONTENT,
+  ristorante: RISTORANTE_DEFAULT_CONTENT,
   signal: SIGNAL_DEFAULT_CONTENT,
   "pallet-ross": PALLET_ROSS_DEFAULT_CONTENT,
 };

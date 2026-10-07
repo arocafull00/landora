@@ -20,10 +20,6 @@ export function getPreviewPageHref(
     return `${baseHref}/about`;
   }
 
-  if (target.type === "carta") {
-    return `${baseHref}/carta`;
-  }
-
   if (target.type === "project") {
     return `${baseHref}/proyectos/${encodeURIComponent(target.projectId)}`;
   }
@@ -50,10 +46,6 @@ export function isEditablePreviewPageTarget(
 ) {
   if (target.type === "home") return true;
   if (target.type === "catalog" || target.type === "product") return true;
-
-  if (target.type === "carta") {
-    return preview.template === "ristorante";
-  }
 
   if (preview.template !== "portfolio") return false;
 
@@ -107,11 +99,6 @@ export function resolvePreviewPageTarget(
 
   if (segments.length === 3 && segments[2] === "about") {
     const target = { type: "about" } as const;
-    return isEditablePreviewPageTarget(target, preview) ? target : null;
-  }
-
-  if (segments.length === 3 && segments[2] === "carta") {
-    const target = { type: "carta" } as const;
     return isEditablePreviewPageTarget(target, preview) ? target : null;
   }
 

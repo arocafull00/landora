@@ -43,9 +43,12 @@ import type {
   LandingWorkHistoryItem,
   LandingSectionSelection,
 } from "@/db/schema";
+import type { TemplateId } from "@/lib/dashboard-data";
+import { isValidTemplateId } from "@/lib/template-registry";
 import { getDefaultSectionSelections } from "@/lib/section-selections";
 
-export type LandingWithSections = LandingPage & {
+export type LandingWithSections = Omit<LandingPage, "template"> & {
+  template: TemplateId;
   nuvolets: { content: import("@/lib/schemas/nuvolets").NuvoletsContent } | null;
   sectionSelections: LandingSectionSelection[];
   seo: LandingSeo | null;
@@ -71,8 +74,9 @@ export type LandingWithSections = LandingPage & {
 
 export type LandingPageMeta = Pick<
   LandingPage,
-  "id" | "userId" | "name" | "slug" | "template" | "published" | "customDomain" | "updatedAt"
+  "id" | "userId" | "name" | "slug" | "published" | "customDomain" | "updatedAt"
 > & {
+  template: TemplateId;
   seo: Pick<
     LandingSeo,
     "title" | "description" | "favicon" | "socialImage"
@@ -90,6 +94,13 @@ export type LandingPageMeta = Pick<
     | "ctaLabel"
   > | null;
 };
+
+function withSupportedTemplate<T extends { template: string }>(
+  landing: T | undefined,
+): (Omit<T, "template"> & { template: TemplateId }) | undefined {
+  if (!landing || !isValidTemplateId(landing.template)) return undefined;
+  return { ...landing, template: landing.template };
+}
 
 function buildMetaWith() {
   return {
@@ -127,7 +138,7 @@ function buildWith() {
 
 export const getLandingPageByUserId = cache(async (userId: string) => {
   try {
-    return (await db.query.landingPages.findFirst({
+    return withSupportedTemplate(await db.query.landingPages.findFirst({
       where: eq(landingPages.userId, userId),
       with: buildWith(),
     })) as LandingWithSections | undefined;
@@ -139,7 +150,7 @@ export const getLandingPageByUserId = cache(async (userId: string) => {
 export const getLandingPageByIdAndUserId = cache(
   async (id: string, userId: string) => {
     try {
-      return (await db.query.landingPages.findFirst({
+      return withSupportedTemplate(await db.query.landingPages.findFirst({
         where: and(eq(landingPages.id, id), eq(landingPages.userId, userId)),
         with: buildWith(),
       })) as LandingWithSections | undefined;
@@ -151,7 +162,7 @@ export const getLandingPageByIdAndUserId = cache(
 
 export const getLandingPageBySlug = cache(async (slug: string) => {
   try {
-    return (await db.query.landingPages.findFirst({
+    return withSupportedTemplate(await db.query.landingPages.findFirst({
       where: and(
         or(eq(landingPages.slug, slug), eq(landingPages.slug, `/${slug}`)),
         eq(landingPages.published, true)
@@ -165,7 +176,7 @@ export const getLandingPageBySlug = cache(async (slug: string) => {
 
 export const getLandingPageById = cache(async (id: string) => {
   try {
-    return (await db.query.landingPages.findFirst({
+    return withSupportedTemplate(await db.query.landingPages.findFirst({
       where: eq(landingPages.id, id),
       with: buildWith(),
     })) as LandingWithSections | undefined;
@@ -177,7 +188,7 @@ export const getLandingPageById = cache(async (id: string) => {
 export const getLandingPageMetaByIdAndUserId = cache(
   async (id: string, userId: string) => {
     try {
-      return (await db.query.landingPages.findFirst({
+      return withSupportedTemplate(await db.query.landingPages.findFirst({
         where: and(eq(landingPages.id, id), eq(landingPages.userId, userId)),
         with: buildMetaWith(),
       })) as LandingPageMeta | undefined;
@@ -189,7 +200,7 @@ export const getLandingPageMetaByIdAndUserId = cache(
 
 export const getLandingPageMetaById = cache(async (id: string) => {
   try {
-    return (await db.query.landingPages.findFirst({
+    return withSupportedTemplate(await db.query.landingPages.findFirst({
       where: eq(landingPages.id, id),
       with: buildMetaWith(),
     })) as LandingPageMeta | undefined;
@@ -200,7 +211,7 @@ export const getLandingPageMetaById = cache(async (id: string) => {
 
 export const getLandingPageMetaBySlug = cache(async (slug: string) => {
   try {
-    return (await db.query.landingPages.findFirst({
+    return withSupportedTemplate(await db.query.landingPages.findFirst({
       where: and(
         or(eq(landingPages.slug, slug), eq(landingPages.slug, `/${slug}`)),
         eq(landingPages.published, true)
@@ -227,7 +238,7 @@ export async function insertLandingPage(data: {
   userId: string;
   name: string;
   slug: string;
-  template: LandingPage["template"];
+  template: TemplateId;
 }) {
   try {
     return await db.transaction(async (tx) => {

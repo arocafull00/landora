@@ -14,7 +14,7 @@ export function CinematicGalleryVariant({
 
   const fallback =
     SECTION_HEADING_DEFAULTS[templateId]?.galeria ??
-    SECTION_HEADING_DEFAULTS.ristorante.galeria;
+    SECTION_HEADING_DEFAULTS.floristeria.galeria;
   const heading = getSectionHeading(content, "galeria", fallback);
 
   return (

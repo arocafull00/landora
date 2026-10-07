@@ -1,136 +1,29 @@
-import { Phone, Mail, MapPin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { LandingContent } from "@/lib/dashboard-data";
-import { RistoranteButton } from "@/components/templates/ristorante/ristorante-button";
-import { FooterCopyright } from "@/components/templates/shared/footer-copyright";
-import { FooterSocialLinks } from "@/components/templates/shared/footer-social-links";
 import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { Separator } from "@/components/ui/separator";
+import { RistoranteButton } from "@/components/templates/ristorante/ristorante-button";
+import { RISTORANTE_COPY } from "@/components/templates/ristorante/ristorante-copy";
 
-function getWhatsAppLink(phone: string) {
-  const digits = phone.replace(/\D/g, "");
-  return `https://wa.me/${digits}?text=${encodeURIComponent("Hola, me gustaría reservar una mesa.")}`;
-}
-
-export function RistoranteContactSection({
-  content,
-  copyrightYear,
-}: {
-  content: LandingContent;
-  copyrightYear: number;
-}) {
-  const whatsappLink = getWhatsAppLink(content.contact.phone);
-  const heading = getSectionHeading(
-    content,
-    "contacto",
-    SECTION_HEADING_DEFAULTS.ristorante.contacto,
-  );
-
+export function RistoranteContactSection({ content }: { content: LandingContent }) {
+  const heading = getSectionHeading(content, "contacto", SECTION_HEADING_DEFAULTS.ristorante.contacto);
+  const instagram = content.contact.socialLinks?.find((link) => link.platform === "instagram" && link.url);
+  const instagramHandle = instagram ? `@${new URL(instagram.url).pathname.split("/").filter(Boolean)[0] ?? ""}` : "";
+  const phoneHref = `tel:${content.contact.phone.replace(/[^+\d]/g, "")}`;
   return (
-    <footer
-      id="contacto"
-      className="scroll-mt-24 bg-(--ristorante-secondary) px-6 py-[clamp(80px,12vw,140px)] md:px-10 lg:px-16"
-    >
-      <div className="mx-auto max-w-6xl">
-        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
-          <div data-aos="fade-right">
-            <h2
-              className="mb-6 text-balance font-normal leading-none text-(--ristorante-foreground) text-site-title"
-              style={{ fontFamily: "var(--font-ristorante-display)", letterSpacing: "-0.03em" }}
-            >
-              {heading.title}
-            </h2>
-            {heading.subtitle ? (
-              <p
-                className="mb-10 max-w-lg text-pretty leading-relaxed text-[var(--ristorante-foreground)]/80 text-site-subtitle"
-                style={{ fontFamily: "var(--font-ristorante-body)", fontWeight: 300 }}
-              >
-                {heading.subtitle}
-              </p>
-            ) : null}
-            <RistoranteButton
-              href={whatsappLink}
-              size="lg"
-              variant="accent"
-              data-analytics-event="whatsapp_click lead_generated"
-            >
-              {content.contact.ctaLabel ?? "Reservar por WhatsApp"}
-            </RistoranteButton>
+    <section id="contacto" className="bg-ristorante-paper py-20 md:py-28">
+      <div className="mx-auto grid max-w-[1600px] gap-12 px-5 md:px-8 lg:grid-cols-[1fr_.9fr] lg:px-12">
+        <div><p className="mb-4 text-xs font-black uppercase tracking-[.22em] text-ristorante-tomato">{RISTORANTE_COPY.contactEyebrow}</p><h2 className="ristorante-tight whitespace-pre-line font-ristorante-display text-[clamp(3.4rem,7vw,7.5rem)] leading-[.86]">{heading.title}</h2></div>
+        <div className="lg:mt-4"><Separator className="h-0.5 bg-ristorante-olive" /><div className="pt-7">
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div><p className="text-xs font-black tracking-[.16em]">{RISTORANTE_COPY.hours}</p><p className="mt-2 text-lg">{content.workflow?.[0]?.title}</p></div>
+            <div><p className="text-xs font-black tracking-[.16em]">{RISTORANTE_COPY.bookings}</p><a href={phoneHref} className="mt-2 block text-lg">{content.contact.phone}</a></div>
+            <div><p className="text-xs font-black tracking-[.16em]">{RISTORANTE_COPY.address}</p><p className="mt-2 text-lg">{content.contact.address}</p></div>
+            {instagram ? <div><p className="text-xs font-black tracking-[.16em]">{RISTORANTE_COPY.instagram}</p><a href={instagram.url} className="mt-2 block text-lg" target="_blank" rel="noreferrer">{instagramHandle}</a></div> : null}
           </div>
-
-          <div className="flex flex-col justify-end gap-8 border-t border-[var(--ristorante-foreground)]/15 pt-10 lg:border-t-0 lg:pt-0" data-aos="fade-left" data-aos-delay="100">
-            {content.contact.phone ? (
-              <div className="flex items-start gap-3">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ristorante-accent)]" />
-                <div>
-                  <p
-                    className="font-medium text-[var(--ristorante-foreground)]/75 text-site-content"
-                    style={{ fontFamily: "var(--font-ristorante-body)" }}
-                  >
-                    Teléfono
-                  </p>
-                  <a
-                    className="text-[var(--ristorante-foreground)]/90 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] text-site-content"
-                    href={`tel:${content.contact.phone.replace(/\s/g, "")}`}
-                    data-analytics-event="phone_click"
-                  >
-                    {content.contact.phone}
-                  </a>
-                </div>
-              </div>
-            ) : null}
-            {content.contact.email ? (
-              <div className="flex items-start gap-3">
-                <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ristorante-accent)]" />
-                <div>
-                  <p
-                    className="font-medium text-[var(--ristorante-foreground)]/75 text-site-content"
-                    style={{ fontFamily: "var(--font-ristorante-body)" }}
-                  >
-                    Email
-                  </p>
-                  <a
-                    className="text-[var(--ristorante-foreground)]/90 transition-colors hover:text-[var(--ristorante-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ristorante-accent)] text-site-content"
-                    href={`mailto:${content.contact.email}`}
-                  >
-                    {content.contact.email}
-                  </a>
-                </div>
-              </div>
-            ) : null}
-            {content.contact.address ? (
-              <div className="flex items-start gap-3">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[var(--ristorante-accent)]" />
-                <div>
-                  <p
-                    className="font-medium text-[var(--ristorante-foreground)]/75 text-site-content"
-                    style={{ fontFamily: "var(--font-ristorante-body)" }}
-                  >
-                    Dirección
-                  </p>
-                  <p
-                    className="text-[var(--ristorante-foreground)]/90 text-site-content"
-                    style={{ fontFamily: "var(--font-ristorante-body)" }}
-                  >
-                    {content.contact.address}
-                  </p>
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </div>
-
-        <div className="mt-16 space-y-6 border-t border-[var(--ristorante-foreground)]/15 pt-8 text-center">
-          <FooterSocialLinks
-            contact={content.contact}
-            linkClassName="text-[var(--ristorante-foreground)]/40 transition-colors hover:text-[var(--ristorante-foreground)]"
-          />
-          <FooterCopyright
-            brand={content.brand}
-            className="text-[var(--ristorante-foreground)]/30 text-site-content"
-            contact={content.contact}
-            year={copyrightYear}
-          />
-        </div>
+          {content.contact.phone ? <RistoranteButton href={phoneHref} className="mt-9 px-7 py-4 tracking-[.14em]">{content.contact.ctaLabel}<ArrowUpRight aria-hidden="true" /></RistoranteButton> : null}
+        </div></div>
       </div>
-    </footer>
+    </section>
   );
 }

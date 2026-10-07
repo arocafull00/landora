@@ -4,8 +4,9 @@ import type {
   LandingContent,
   LandingSectionSelections,
 } from "@/lib/dashboard-data";
-import { NUVOLETS_DEFAULT_CONTENT, STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, RISTORANTE_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT, SIGNAL_DEFAULT_CONTENT, PALLET_ROSS_DEFAULT_CONTENT } from "@/lib/default-content";
+import { NUVOLETS_DEFAULT_CONTENT, STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT, SIGNAL_DEFAULT_CONTENT, PALLET_ROSS_DEFAULT_CONTENT } from "@/lib/default-content";
 import { getTemplateSections } from "@/lib/template-sections";
+import { RISTORANTE_DEFAULT_CONTENT } from "@/lib/ristorante-content";
 
 export type EditorTabGroup = "section" | "config";
 
@@ -90,6 +91,26 @@ export type TemplateDefinition<T extends TemplateId = TemplateId> = {
 };
 
 const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
+  ristorante: {
+    id: "ristorante",
+    label: "Ristorante",
+    description: "Cocina italiana con carta filtrable, fotografía orgánica y tipografía monumental.",
+    demoContent: RISTORANTE_DEFAULT_CONTENT,
+    editorTabs: [
+      { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
+      { id: "Carta", label: "Carta" },
+      { id: "Compartir", label: "Compartir" },
+      { id: "Especial", label: "Pizza del mes" },
+      { id: "Galeria", label: "Nosotros y galería" },
+      { id: "Horarios", label: "Horarios" },
+      FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
+      SECTIONS_EDITOR_TAB,
+    ],
+    getComponent: () => import("@/components/templates/ristorante/ristorante-template"),
+  },
   nuvolets: {
     id: "nuvolets", label: "Nuvolets", description: "Landing de moda infantil con catálogo informativo, tienda física y suscripciones.",
     demoContent: NUVOLETS_DEFAULT_CONTENT,
@@ -175,30 +196,6 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
       SECTIONS_EDITOR_TAB,
     ],
     getComponent: () => import("@/components/templates/portfolio/portfolio-template"),
-  },
-  ristorante: {
-    id: "ristorante",
-    label: "Ristorante",
-    description:
-      "Landing para restaurantes: carta con precios, galería, equipo, horarios y reservas.",
-    demoContent: RISTORANTE_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Carta", label: "Carta" },
-      { id: "Galeria", label: "Galería" },
-      { id: "Equipo", label: "Equipo" },
-      { id: "Horarios", label: "Horarios" },
-      { id: "FAQ", label: "FAQ" },
-      OFFERS_EDITOR_TAB,
-      RESERVAS_EDITOR_TAB,
-      BLOG_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/ristorante/ristorante-template"),
   },
   floristeria: {
     id: "floristeria",
@@ -309,7 +306,6 @@ const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
 
 const RETIRED_TEMPLATE_IDS = new Set<TemplateId>([
   "studio",
-  "ristorante",
   "coffee-shop",
 ]);
 

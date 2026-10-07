@@ -1,4 +1,5 @@
 import {
+  Bowlby_One_SC,
   DM_Serif_Display,
   Manrope,
   Cormorant_Garamond,
@@ -11,6 +12,13 @@ import {
   Source_Sans_3,
   Syne,
 } from "next/font/google";
+
+const bowlby = Bowlby_One_SC({
+  variable: "--font-source-bowlby",
+  subsets: ["latin"],
+  weight: "400",
+  preload: false,
+});
 
 const syne = Syne({
   variable: "--font-source-syne",
@@ -79,6 +87,7 @@ const nuvoletsDisplay = DM_Serif_Display({ variable: "--font-source-dm-serif", s
 const nuvoletsBody = Manrope({ variable: "--font-source-manrope", subsets: ["latin"], weight: ["400", "500", "600"], preload: false });
 
 export const siteFontVariables = [
+  bowlby.variable,
   nuvoletsDisplay.variable,
   nuvoletsBody.variable,
   syne.variable,

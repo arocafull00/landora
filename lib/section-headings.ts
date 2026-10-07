@@ -5,6 +5,13 @@ export const SECTION_HEADING_DEFAULTS: Record<
   TemplateId,
   Record<string, SectionHeading>
 > = {
+  ristorante: {
+    carta: { title: "NUESTRA\nCARTA", subtitle: "Recetas italianas sin demasiadas ceremonias: buen producto, masa trabajada cada día y platos que piden una mesa llena." },
+    compartir: { title: "UNA PIZZA\nSE DISFRUTA\nMEJOR\nCOMPARTIDA", subtitle: "" },
+    especial: { title: "LA PIZZA\nDEL MES", subtitle: "" },
+    nosotros: { title: "UN PEQUEÑO\nRINCÓN\nDE ITALIA", subtitle: "Una sala viva, una cocina abierta y ese punto de caos bonito que aparece cuando la mesa está llena. Ven con hambre." },
+    contacto: { title: "TU MESA\nTE ESPERA", subtitle: "" },
+  },
   nuvolets: NUVOLETS_SECTION_HEADINGS,
   velar: {
     inquire: {
@@ -90,32 +97,6 @@ export const SECTION_HEADING_DEFAULTS: Record<
     reservas: {
       title: "Reserva una consulta",
       subtitle: "Elige servicio, profesional y horario.",
-    },
-  },
-  ristorante: {
-    carta: {
-      title: "Nuestra carta",
-      subtitle: "Platos elaborados con ingredientes frescos importados de Italia",
-    },
-    galeria: {
-      title: "Nuestro espacio",
-      subtitle: "",
-    },
-    equipo: {
-      title: "Nuestro equipo",
-      subtitle: "",
-    },
-    horarios: {
-      title: "Horarios",
-      subtitle: "",
-    },
-    contacto: {
-      title: "Reserva tu mesa",
-      subtitle: "Reserva tu próxima visita y disfruta de la auténtica cocina italiana.",
-    },
-    reservas: {
-      title: "Reserva tu mesa",
-      subtitle: "Elige fecha y hora para tu visita.",
     },
   },
   floristeria: {
@@ -228,11 +209,11 @@ export const SECTION_HEADING_DEFAULTS: Record<
 };
 
 export const NAV_ONLY_HEADING_ANCHORS: Record<TemplateId, string[]> = {
+  ristorante: [],
   nuvolets: [],
   velar: [],
   studio: [],
   portfolio: [],
-  ristorante: [],
   floristeria: [],
   "oficio-pro": [],
   "coffee-shop": [],

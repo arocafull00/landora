@@ -6,7 +6,6 @@ const GALLERY_SECTION_ITEM_COUNT = 7;
 
 const GALLERY_SECTION_TEMPLATES = new Set<TemplateId>([
   "studio",
-  "ristorante",
   "floristeria",
   "coffee-shop",
 ]);

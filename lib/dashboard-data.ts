@@ -21,7 +21,6 @@ export type SitePageId = "home" | "about";
 export type EditorPageTarget =
   | { type: "home" }
   | { type: "about" }
-  | { type: "carta" }
   | { type: "catalog" }
   | { type: "product"; productSlug: string }
   | { type: "project"; projectId: string };
@@ -115,7 +114,7 @@ export type PortfolioExtensions = {
   faq: FaqItem[];
 };
 
-export type RistoranteExtensions = {
+export type CoffeeShopExtensions = {
   about: { statement: string };
   serviceMenu: ServiceMenuItem[];
   gallery: GalleryItem[];
@@ -138,12 +137,18 @@ export type TemplateContentMap = {
   velar: BaseContent & VelarExtensions;
   studio: BaseContent & StudioExtensions;
   portfolio: BaseContent & PortfolioExtensions;
-  ristorante: BaseContent & RistoranteExtensions;
   floristeria: BaseContent & FloristeriaExtensions;
   "oficio-pro": BaseContent & StudioExtensions;
-  "coffee-shop": BaseContent & RistoranteExtensions;
+  "coffee-shop": BaseContent & CoffeeShopExtensions;
   signal: BaseContent & StudioExtensions;
   "pallet-ross": BaseContent & StudioExtensions;
+  ristorante: BaseContent & {
+    story: StoryContent;
+    gallery: GalleryItem[];
+    serviceMenu: ServiceMenuItem[];
+    benefits: BenefitItem[];
+    workflow: WorkflowStep[];
+  };
 };
 
 export type TemplateId = keyof TemplateContentMap;
@@ -153,10 +158,10 @@ export type HeroVariantId =
   | "velar"
   | "studio"
   | "portfolio"
-  | "ristorante"
   | "floristeria"
   | "oficio-pro"
   | "coffee-shop"
+  | "ristorante"
   | "signal"
   | "lumen"
   | "offset"
@@ -181,7 +186,7 @@ export type LandingContent = BaseContent &
   Partial<VelarExtensions> &
   Partial<StudioExtensions> &
   Partial<PortfolioExtensions> &
-  Partial<RistoranteExtensions> &
+  Partial<CoffeeShopExtensions> &
   Partial<FloristeriaExtensions>;
 
 export type Landing = {

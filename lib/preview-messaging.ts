@@ -24,7 +24,6 @@ const PREVIEW_TEXT_SIZE_UPDATE = "landora:preview-text-size-update";
 const editorPageTargetSchema = z.discriminatedUnion("type", [
   z.strictObject({ type: z.literal("home") }),
   z.strictObject({ type: z.literal("about") }),
-  z.strictObject({ type: z.literal("carta") }),
   z.strictObject({ type: z.literal("catalog") }),
   z.strictObject({ type: z.literal("product"), productSlug: z.string().min(1).max(160).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/) }),
   z.strictObject({

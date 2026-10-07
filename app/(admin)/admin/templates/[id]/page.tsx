@@ -5,13 +5,13 @@ import { NuvoletsTemplate } from "@/components/templates/nuvolets/nuvolets-templ
 import { VelarTemplate } from "@/components/templates/velar/velar-template";
 import { StudioTemplate } from "@/components/templates/studio/studio-template";
 import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
-import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
 import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
 import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
 import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
 import { SignalTemplate } from "@/components/templates/signal/signal-template";
 import { PalletRossTemplate } from "@/components/templates/pallet-ross/pallet-ross-template";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
+import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
 import {
   TemplateDemoBar,
   TEMPLATE_DEMO_BAR_HEIGHT,
@@ -21,11 +21,11 @@ import { getPublicRenderTime } from "@/lib/public-render-time";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
 
 const TEMPLATE_COMPONENTS = {
+  ristorante: RistoranteTemplate,
   nuvolets: NuvoletsTemplate,
   velar: VelarTemplate,
   studio: StudioTemplate,
   portfolio: PortfolioTemplate,
-  ristorante: RistoranteTemplate,
   floristeria: FloristeriaTemplate,
   "oficio-pro": OficioProTemplate,
   "coffee-shop": CoffeeShopTemplate,

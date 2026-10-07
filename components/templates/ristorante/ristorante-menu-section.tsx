@@ -1,60 +1,17 @@
-"use client";
+import type { LandingContent } from "@/lib/dashboard-data";
+import { getSectionHeading, SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { RistoranteMenuGrid } from "@/components/templates/ristorante/ristorante-menu-grid";
+import { RISTORANTE_COPY } from "@/components/templates/ristorante/ristorante-copy";
 
-import type { ServiceMenuItem } from "@/lib/dashboard-data";
-import { RistoranteMenuCategorySection } from "@/components/templates/ristorante/menu-page/ristorante-menu-category-section";
-import { RistoranteMenuEmptyState } from "@/components/templates/ristorante/menu-page/ristorante-menu-empty-state";
-import { RistoranteMenuToolbar } from "@/components/templates/ristorante/menu-page/ristorante-menu-toolbar";
-import { useRistoranteMenu } from "@/components/templates/ristorante/menu-page/hooks/use-ristorante-menu";
-
-export function RistoranteMenuSection({ items }: { items: ServiceMenuItem[] }) {
-  const {
-    activeCategory,
-    categories,
-    hasResults,
-    search,
-    setActiveCategory,
-    setSearch,
-    visibleGroups,
-  } = useRistoranteMenu(items);
-
-  if (items.length === 0) return null;
-
+export function RistoranteMenuSection({ content }: { content: LandingContent }) {
+  const heading = getSectionHeading(content, "carta", SECTION_HEADING_DEFAULTS.ristorante.carta);
   return (
-    <section
-      className="relative scroll-mt-24 px-3 pb-24 pt-5 sm:px-6 sm:pb-28 lg:px-10"
-      id="carta"
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-24 top-28 h-72 w-72 rounded-full bg-[var(--ristorante-accent)]/10 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 top-[38rem] h-80 w-80 rounded-full bg-[var(--ristorante-primary)]/10 blur-3xl"
-      />
-
-      <div className="relative mx-auto max-w-[1240px]" data-aos="fade-up">
-        <RistoranteMenuToolbar
-          activeCategory={activeCategory}
-          categories={categories}
-          onCategoryChange={setActiveCategory}
-          onSearchChange={setSearch}
-          search={search}
-        />
-
-        <div className="space-y-16 pt-16 sm:space-y-20 sm:pt-20" data-aos="fade-up" data-aos-delay="100">
-          {hasResults ? (
-            visibleGroups.map((group) => (
-              <RistoranteMenuCategorySection
-                group={group}
-                key={group.category}
-              />
-            ))
-          ) : (
-            <RistoranteMenuEmptyState />
-          )}
-        </div>
-      </div>
+    <section id="carta" className="relative bg-ristorante-cream py-16 md:py-24">
+      <div className="mx-auto max-w-[1600px] px-5 md:px-8 lg:px-12"><div className="grid items-end gap-7 lg:grid-cols-[1fr_.65fr]">
+        <div><p className="mb-3 text-xs font-black uppercase tracking-[.22em] text-ristorante-tomato">{RISTORANTE_COPY.menuEyebrow}</p><h2 className="ristorante-tight whitespace-pre-line font-ristorante-display text-[clamp(3.5rem,8vw,8.5rem)] leading-[.84]">{heading.title}</h2></div>
+        <p className="max-w-xl pb-2 text-base leading-relaxed text-ristorante-olive/70 md:text-lg">{heading.subtitle}</p>
+      </div></div>
+      <RistoranteMenuGrid items={content.serviceMenu ?? []} />
     </section>
   );
 }

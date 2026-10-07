@@ -89,28 +89,6 @@ function getAboutNavTarget(): NavScrollTarget {
   };
 }
 
-export function getCartaNavHref(): string {
-  return "/carta";
-}
-
-export function isRistoranteCartaNavHref(href: string): boolean {
-  return /^\/(?:[^/]+\/)?carta\/?$/.test(href.trim()) || href.trim() === "#carta";
-}
-
-export function remapRistoranteCartaNavHref(href: string): string {
-  if (!isRistoranteCartaNavHref(href)) return href;
-  return getCartaNavHref();
-}
-
-export function syncRistoranteCartaNavHrefs(nav: NavLink[]): NavLink[] {
-  const cartaHref = getCartaNavHref();
-  return nav.map((item) => {
-    if (!isRistoranteCartaNavHref(item.href)) return item;
-    if (item.href === cartaHref) return item;
-    return { ...item, href: cartaHref };
-  });
-}
-
 export function getNavScrollTargets(
   templateId: TemplateId,
   landingSlug?: string,
@@ -184,15 +162,6 @@ const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = 
     reviews: "testimonios",
     contact: "contacto",
   },
-  ristorante: {
-    home: "hero",
-    menu: "carta",
-    gallery: "galeria",
-    team: "equipo",
-    hours: "horarios",
-    reviews: "testimonios",
-    contact: "contacto",
-  },
   floristeria: {
     home: "hero",
     services: "servicios",
@@ -232,11 +201,7 @@ const LEGACY_NAV_ALIASES: Partial<Record<TemplateId, Record<string, string>>> = 
 
 export function normalizeNavHref(templateId: TemplateId, href: string): string {
   if (!href.startsWith("#")) {
-    const remapped = remapBlogNavHref(href);
-    if (templateId === "ristorante") {
-      return remapRistoranteCartaNavHref(remapped);
-    }
-    return remapped;
+    return remapBlogNavHref(href);
   }
 
   const sections = getTemplateSections(templateId);
@@ -296,26 +261,6 @@ const PORTFOLIO_SECTIONS: TemplateSectionDef[] = [
   { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
   { anchor: "skills", label: "Cómo trabajo", editorTabId: "Cómo trabajo", navHref: "#skills", contentKeys: ["benefits"] },
-  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
-  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const RISTORANTE_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
-  {
-    anchor: "carta",
-    label: "Carta",
-    editorTabId: "Carta",
-    navHref: "/carta",
-    separatePage: true,
-    contentKeys: ["serviceMenu"],
-  },
-  { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
-  { anchor: "equipo", label: "Equipo", editorTabId: "Equipo", navHref: "#equipo", contentKeys: ["team"] },
-  { anchor: "horarios", label: "Horarios", editorTabId: "Horarios", navHref: "#horarios", contentKeys: ["workflow"] },
-  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
   { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
   { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
   { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
@@ -384,11 +329,20 @@ const NUVOLETS_SECTIONS: TemplateSectionDef[] = [
 ];
 
 const TEMPLATE_SECTIONS: Record<TemplateId, TemplateSectionDef[]> = {
+  ristorante: [
+    { anchor: "hero", label: "Hero", navHref: "#inicio", editorTabId: "Hero", required: true },
+    { anchor: "franja", label: "Especialidades" },
+    { anchor: "carta", label: "Carta", navHref: "#carta", editorTabId: "Carta", contentKeys: ["serviceMenu"] },
+    { anchor: "compartir", label: "Compartir", editorTabId: "Compartir", contentKeys: ["story"] },
+    { anchor: "especial", label: "Pizza del mes", editorTabId: "Especial", contentKeys: ["benefits"] },
+    { anchor: "marquee", label: "Rótulos en movimiento" },
+    { anchor: "nosotros", label: "Nosotros y galería", navHref: "#nosotros", editorTabId: "Galeria", contentKeys: ["gallery"] },
+    { anchor: "contacto", label: "Contacto y pie", editorTabId: "Footer", navHref: "#contacto", required: true },
+  ],
   nuvolets: NUVOLETS_SECTIONS,
   velar: VELAR_SECTIONS,
   studio: STUDIO_SECTIONS,
   portfolio: PORTFOLIO_SECTIONS,
-  ristorante: RISTORANTE_SECTIONS,
   floristeria: FLORISTERIA_SECTIONS,
   "oficio-pro": OFICIO_PRO_SECTIONS,
   "coffee-shop": COFFEE_SHOP_SECTIONS,

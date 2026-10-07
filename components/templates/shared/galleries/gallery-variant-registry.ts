@@ -1,5 +1,5 @@
 import type { GalleryVariantId } from "@/lib/dashboard-data";
-import { RISTORANTE_ASSETS } from "@/lib/ristorante-assets";
+import { VELAR_ASSETS } from "@/lib/velar-assets";
 
 export type GalleryVariantDefinition = {
   id: GalleryVariantId;
@@ -16,19 +16,19 @@ const GALLERY_VARIANTS: Record<
     id: "grid",
     label: "Mosaico",
     description: "Retícula dinámica que combina imágenes grandes y pequeñas.",
-    thumbnail: RISTORANTE_ASSETS.gallery1,
+    thumbnail: VELAR_ASSETS.toll1,
   },
   polaroid: {
     id: "polaroid",
     label: "Polaroid",
     description: "Álbum informal para contar momentos, personas y detalles.",
-    thumbnail: RISTORANTE_ASSETS.gallery2,
+    thumbnail: VELAR_ASSETS.toll2,
   },
   cinematic: {
     id: "cinematic",
     label: "Cinemática",
     description: "Recorrido horizontal inmersivo con textos sobre la imagen.",
-    thumbnail: RISTORANTE_ASSETS.gallery3,
+    thumbnail: VELAR_ASSETS.toll3,
   },
 };
 

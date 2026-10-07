@@ -1,117 +1,39 @@
-import type {
-  LandingContent,
-  LandingSectionSelections,
-} from "@/lib/dashboard-data";
-import { getHeroCtaTargets } from "@/lib/hero-cta-targets";
-import {
-  getOrderedVisibleBodySections,
-  getVisibleNav,
-  isRistoranteCartaNavHref,
-  normalizeNavHref,
-} from "@/lib/template-sections";
-import {
-  getPreviewLandingPath,
-  getPublicLandingPath,
-} from "@/lib/public-site-url";
-import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
-import { getHeroVariant } from "@/components/templates/shared/heroes/hero-variant-registry";
+import type { LandingContent, LandingSectionSelections } from "@/lib/dashboard-data";
+import { getOrderedVisibleBodySections } from "@/lib/template-sections";
+import { RistoranteMotion } from "@/components/templates/ristorante/ristorante-motion";
 import { RistoranteNav } from "@/components/templates/ristorante/ristorante-nav";
-import { RistoranteContactSection } from "@/components/templates/ristorante/ristorante-contact-section";
+import { RistoranteHero } from "@/components/templates/ristorante/ristorante-hero";
 import { RistoranteBodySection } from "@/components/templates/ristorante/ristorante-body-section";
-import { ActiveOffersRenderer } from "@/components/shared/active-offers-renderer";
-import { TemplateAos } from "@/components/templates/shared/template-aos";
+import { RistoranteContactSection } from "@/components/templates/ristorante/ristorante-contact-section";
+import { RistoranteFooter } from "@/components/templates/ristorante/ristorante-footer";
+import { RISTORANTE_COPY } from "@/components/templates/ristorante/ristorante-copy";
+import { HeroRenderer } from "@/components/templates/shared/heroes/hero-renderer";
+import { getBookingCtaHref } from "@/lib/booking/cta-href";
+import "@/components/templates/ristorante/ristorante.css";
 
-export function RistoranteTemplate({
-  content,
-  copyrightYear,
-  renderedAt,
-  topOffset = 0,
-  slug,
-  previewLandingId,
-  bookingEnabled = false,
-  sectionSelections,
-}: {
+export function RistoranteTemplate({ content, copyrightYear, topOffset = 0, sectionSelections, bookingEnabled = false, slug = "", previewLandingId }: {
   content: LandingContent;
   copyrightYear: number;
   renderedAt: Date;
   topOffset?: number;
+  sectionSelections?: LandingSectionSelections;
+  bookingEnabled?: boolean;
   slug?: string;
   previewLandingId?: string;
-  bookingEnabled?: boolean;
-  sectionSelections?: LandingSectionSelections;
 }) {
-  const heroVariantId = sectionSelections?.hero ?? "ristorante";
-  const galleryVariantId = sectionSelections?.gallery ?? "grid";
-  const heroNavTone =
-    getHeroVariant(heroVariantId)?.navTone ??
-    getHeroVariant("ristorante").navTone;
-  const publicBaseHref = getPublicLandingPath();
-  const previewBaseHref = previewLandingId
-    ? getPreviewLandingPath(previewLandingId)
-    : undefined;
-  const homeHref = previewBaseHref ?? publicBaseHref;
-  const cartaHref = previewLandingId
-    ? getPreviewLandingPath(previewLandingId, "/carta")
-    : getPublicLandingPath("/carta");
-  const { primaryCtaHref, secondaryCtaHref } = getHeroCtaTargets({
-    bookingEnabled,
-    content,
-    previewLandingId,
-    slug: slug ?? "",
-    template: "ristorante",
-  });
-  const navLinks = getVisibleNav(
-    content.nav,
-    content.hiddenSections,
-    "ristorante",
-  ).map((link) => {
-    const href = normalizeNavHref("ristorante", link.href);
-    if (isRistoranteCartaNavHref(href)) {
-      return { ...link, href: cartaHref };
-    }
-    return { ...link, href };
-  });
-
+  const primaryCtaHref = getBookingCtaHref(bookingEnabled, slug, "#contacto", previewLandingId);
+  const secondaryCtaHref = content.hiddenSections?.includes("carta") ? "#contacto" : "#carta";
+  const heroProps = { content, primaryCtaHref, secondaryCtaHref };
   return (
-    <TemplateAos
-        className="relative bg-[var(--site-surface)]"
-        style={{ overflowX: "clip" }}
-    >
-
-        <RistoranteNav
-          brand={content.brand || "Osteria da Luca."}
-          brandLogoImage={content.brandLogoImage ?? ""}
-          brandLogoType={content.brandLogoType ?? "text"}
-          cartaHref={cartaHref}
-          cartaPageTarget={previewLandingId ? { type: "carta" } : undefined}
-          ctaHref={primaryCtaHref}
-          ctaLabel={content.hero.ctaLabel ?? ""}
-          heroNavTone={heroNavTone}
-          homeHref={homeHref}
-          homePageTarget={previewLandingId ? { type: "home" } : undefined}
-          navLinks={navLinks}
-          topOffset={topOffset}
-        />
-
-        <HeroRenderer
-          content={content}
-          primaryCtaHref={primaryCtaHref}
-          secondaryCtaHref={secondaryCtaHref}
-          variantId={heroVariantId}
-        />
-
-        <ActiveOffersRenderer content={content} renderedAt={renderedAt} />
-
-        {getOrderedVisibleBodySections("ristorante", content).map((section) => (
-          <RistoranteBodySection
-            anchor={section.anchor}
-            content={content}
-            galleryVariantId={galleryVariantId}
-            key={section.anchor}
-          />
-        ))}
-
-        <RistoranteContactSection content={content} copyrightYear={copyrightYear} />
-    </TemplateAos>
+    <RistoranteMotion topOffset={topOffset}>
+      <a href="#ristorante-main" className="ristorante-skip fixed left-4 top-4 z-50 -translate-y-40 rounded-full bg-ristorante-olive px-5 py-3 text-ristorante-cream focus:translate-y-0">{RISTORANTE_COPY.skip}</a>
+      <RistoranteNav content={content} topOffset={topOffset} ctaHref={primaryCtaHref} />
+      <main id="ristorante-main" tabIndex={-1}>
+        {!sectionSelections || sectionSelections.hero === "ristorante" ? <RistoranteHero {...heroProps} /> : <HeroRenderer {...heroProps} variantId={sectionSelections.hero} />}
+        {getOrderedVisibleBodySections("ristorante", content).map((section) => <RistoranteBodySection key={section.anchor} anchor={section.anchor} content={content} />)}
+        <RistoranteContactSection content={content} />
+      </main>
+      <RistoranteFooter content={content} copyrightYear={copyrightYear} />
+    </RistoranteMotion>
   );
 }

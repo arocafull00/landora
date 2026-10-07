@@ -33,6 +33,7 @@ export const createUserLandingFormSchema = z.strictObject({
     "oficio-pro",
     "signal",
     "pallet-ross",
+    "ristorante",
     "nuvolets",
   ]),
 });

@@ -29,6 +29,9 @@ import type { SubscriptionSettings } from "@/lib/schemas/subscription-settings";
 const NuvoletsTemplate = dynamic(
   () => import("@/components/templates/nuvolets/nuvolets-template").then((module) => module.NuvoletsTemplate),
 );
+const RistoranteTemplate = dynamic(
+  () => import("@/components/templates/ristorante/ristorante-template").then((module) => module.RistoranteTemplate),
+);
 const VelarTemplate = dynamic(
   () => import("@/components/templates/velar/velar-template").then((module) => module.VelarTemplate),
 );
@@ -37,9 +40,6 @@ const StudioTemplate = dynamic(
 );
 const PortfolioTemplate = dynamic(
   () => import("@/components/templates/portfolio/portfolio-template").then((module) => module.PortfolioTemplate),
-);
-const RistoranteTemplate = dynamic(
-  () => import("@/components/templates/ristorante/ristorante-template").then((module) => module.RistoranteTemplate),
 );
 const FloristeriaTemplate = dynamic(
   () => import("@/components/templates/floristeria/floristeria-template").then((module) => module.FloristeriaTemplate),
@@ -65,16 +65,13 @@ const PortfolioAboutPage = dynamic(
 const PortfolioProjectPage = dynamic(
   () => import("@/components/templates/portfolio/portfolio-project-page").then((module) => module.PortfolioProjectPage),
 );
-const RistoranteMenuPage = dynamic(
-  () => import("@/components/templates/ristorante/ristorante-menu-page").then((module) => module.RistoranteMenuPage),
-);
 
 const TEMPLATE_COMPONENTS = {
+  ristorante: RistoranteTemplate,
   nuvolets: NuvoletsTemplate,
   velar: VelarTemplate,
   studio: StudioTemplate,
   portfolio: PortfolioTemplate,
-  ristorante: RistoranteTemplate,
   floristeria: FloristeriaTemplate,
   "oficio-pro": OficioProTemplate,
   "coffee-shop": CoffeeShopTemplate,
@@ -100,7 +97,7 @@ export function LandingPreviewFrame({
   template: TemplateId;
   slug: string;
   previewLandingId: string;
-  sitePage?: SitePageId | "project" | "carta";
+  sitePage?: SitePageId | "project";
   previewProjectKey?: string;
   initialCaseSlug?: string;
   bookingEnabled: boolean;
@@ -227,14 +224,6 @@ export function LandingPreviewFrame({
           content={content}
           copyrightYear={copyrightYear}
           previewLandingId={previewLandingId}
-        />
-      ) : sitePage === "carta" && activeTemplate === "ristorante" ? (
-        <RistoranteMenuPage
-          bookingEnabled={bookingEnabled}
-          content={content}
-          copyrightYear={copyrightYear}
-          previewLandingId={previewLandingId}
-          slug={slug}
         />
       ) : activeTemplate === "portfolio" ? (
         <PortfolioTemplate

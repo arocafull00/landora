@@ -13,7 +13,7 @@ export function getPreviewTargetAttributes(target?: EditorPageTarget) {
 
 export function parsePreviewTarget(element: HTMLElement): EditorPageTarget | null {
   const type = element.dataset.previewPageTarget;
-  if (type === "home" || type === "about" || type === "carta") {
+  if (type === "home" || type === "about") {
     return { type };
   }
   if (type !== "project") return null;

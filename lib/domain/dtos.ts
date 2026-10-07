@@ -1,4 +1,3 @@
-import type { TemplateId } from "@/lib/dashboard-data";
 
 export type EmailSubscriptionDto = { email: string; createdAt: string };
 
@@ -69,7 +68,7 @@ export type LandingPage = {
   userId: string;
   name: string;
   slug: string;
-  template: TemplateId;
+  template: string;
   published: boolean;
   customDomain: string | null;
   domainVerified: boolean;

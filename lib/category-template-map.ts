@@ -21,30 +21,6 @@ const COFFEE_SHOP_CATEGORIES = new Set([
   "Pastry Shop",
 ]);
 
-const RISTORANTE_CATEGORIES = new Set([
-  "Restaurant",
-  "Tapas Restaurant",
-  "Spanish Restaurant",
-  "Persian Restaurant",
-  "Halal Restaurant",
-  "Moroccan Restaurant",
-  "North Indian Restaurant",
-  "Chinese Restaurant",
-  "Bar",
-  "Bar & Grill",
-  "Gastropub",
-  "Brunch Restaurant",
-  "Ice Cream Shop",
-  "Fast Food Restaurant",
-  "Takeout Restaurant",
-  "Food Store",
-  "Cocktail Bar",
-  "Lounge bar",
-  "Wine Bar",
-  "Irish Pub",
-  "Pub",
-]);
-
 const FLORISTERIA_CATEGORIES = new Set(["Florist"]);
 
 const OFICIO_PRO_CATEGORIES = new Set([
@@ -81,8 +57,7 @@ export function resolveTemplateId(category: string | undefined): TemplateId | nu
 
   if (
     STUDIO_CATEGORIES.has(category) ||
-    COFFEE_SHOP_CATEGORIES.has(category) ||
-    RISTORANTE_CATEGORIES.has(category)
+    COFFEE_SHOP_CATEGORIES.has(category)
   ) return null;
   if (FLORISTERIA_CATEGORIES.has(category)) return "floristeria";
   if (OFICIO_PRO_CATEGORIES.has(category)) return "oficio-pro";

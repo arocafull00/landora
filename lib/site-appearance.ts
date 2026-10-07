@@ -44,6 +44,7 @@ export type PaletteOption = {
 };
 
 export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption[]> = {
+  ristorante: [{ id: "default", label: "Original", description: "Crema, verde oliva, tomate, naranja y mostaza.", colorScheme: "light" }],
   nuvolets: [{ id: "default", label: "Original", description: "Azul nube, rosa, amarillo y salvia.", colorScheme: "light" }, { id: "rose", label: "Rosa", description: "Rosa como acento principal.", colorScheme: "light" }, { id: "sage", label: "Salvia", description: "Verde suave como acento principal.", colorScheme: "light" }],
   velar: [
     { id: "default", label: "Original", description: "Verde mineral y arena.", colorScheme: "light" },
@@ -56,16 +57,6 @@ export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption
     { id: "sage", label: "Salvia", description: "Verde sereno y lino.", colorScheme: "light" },
   ],
   portfolio: [
-    { id: "default", label: "Original", description: "Negro tinta y turquesa.", colorScheme: "dark" },
-    { id: "lime", label: "Lima", description: "Carbón y verde eléctrico.", colorScheme: "dark" },
-    { id: "coral", label: "Coral", description: "Grafito y coral vivo.", colorScheme: "dark" },
-    { id: "ivory", label: "Marfil", description: "Marfil cálido y azul cobalto.", colorScheme: "light" },
-    { id: "sand", label: "Arena", description: "Arena suave y terracota.", colorScheme: "light" },
-    { id: "mist", label: "Niebla", description: "Gris niebla y violeta.", colorScheme: "light" },
-    { id: "sky", label: "Cielo", description: "Azul cielo y océano.", colorScheme: "light" },
-    { id: "blush", label: "Rubor", description: "Rosa claro y borgoña.", colorScheme: "light" },
-  ],
-  ristorante: [
     { id: "default", label: "Original", description: "Negro tinta y turquesa.", colorScheme: "dark" },
     { id: "lime", label: "Lima", description: "Carbón y verde eléctrico.", colorScheme: "dark" },
     { id: "coral", label: "Coral", description: "Grafito y coral vivo.", colorScheme: "dark" },

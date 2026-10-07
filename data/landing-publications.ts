@@ -4,6 +4,7 @@ import { and, desc, eq, max, or, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import { landingCta, landingPages, landingPageVersions } from "@/db/schema";
+import { isValidTemplateId } from "@/lib/template-registry";
 import type { TemplateId } from "@/lib/dashboard-data";
 import { updateCompanyContact } from "@/lib/company-details";
 import { parseSocialLinks } from "@/lib/footer-content";
@@ -101,7 +102,7 @@ export async function restoreLandingPageVersion(input: {
       )
       .limit(1);
 
-    if (!targetVersion) return { status: "not_found" };
+    if (!targetVersion || !isValidTemplateId(targetVersion.template)) return { status: "not_found" };
 
     const content = parsePublishedLandingContent(targetVersion.contentJson);
     const seo = parsePublishedLandingSeo(targetVersion.seoJson);
@@ -168,14 +169,15 @@ function toPublishedLanding(row: {
   };
   version: {
     version: number;
-    template: TemplateId;
+    template: string;
     name: string;
     slug: string;
     contentJson: Record<string, unknown>;
     seoJson: Record<string, unknown>;
     sectionSelectionsJson: Record<string, unknown>;
   };
-}): PublishedLanding {
+}): PublishedLanding | null {
+  if (!isValidTemplateId(row.version.template)) return null;
   const content = parsePublishedLandingContent(row.version.contentJson);
   return {
     id: row.landing.id,
@@ -331,7 +333,7 @@ export async function getPublishedLandingSlugs(): Promise<string[]> {
 
   try {
     const rows = await db
-      .select({ slug: landingPageVersions.slug })
+      .select({ slug: landingPageVersions.slug, template: landingPageVersions.template })
       .from(landingPages)
       .innerJoin(
         landingPageVersions,
@@ -339,7 +341,7 @@ export async function getPublishedLandingSlugs(): Promise<string[]> {
       )
       .where(eq(landingPages.published, true));
 
-    return [...new Set(rows.map((row) => normalizePublishedSlug(row.slug)))];
+    return [...new Set(rows.filter((row) => isValidTemplateId(row.template)).map((row) => normalizePublishedSlug(row.slug)))];
   } catch (error) {
     throw new Error("Failed to fetch published landing slugs", {
       cause: error,

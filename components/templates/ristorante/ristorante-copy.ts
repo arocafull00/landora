@@ -1,0 +1,31 @@
+export const RISTORANTE_COPY = {
+  skip: "Saltar al contenido",
+  heroAlt: "Pizza italiana recién horneada",
+  menu: "VER LA CARTA",
+  reserve: "RESERVAR MESA",
+  appetite: "BUON APPETITO!",
+  handmade: "FATTA\nA MANO",
+  menuEyebrow: "La nostra carta",
+  all: "TODOS",
+  specialties: "Especialidades",
+  filters: "Filtrar la carta",
+  sharingEyebrow: "A tavola!",
+  sharingStamp: "INSIEME\nÈ MEGLIO",
+  monthEyebrow: "Solo este mes",
+  monthSweet: "DOLCE + SALATO",
+  monthLimited: "EDIZIONE LIMITATA",
+  galleryStamp: "CIAO BELLA!",
+  contactEyebrow: "Prenota",
+  hours: "HORARIO",
+  bookings: "RESERVAS",
+  address: "DIRECCIÓN",
+  instagram: "INSTAGRAM",
+  footer: "Pizza · Pasta · Famiglia · Amore",
+} as const;
+
+export const RISTORANTE_BADGES: Record<number, { label: string; className: string }> = {
+  0: { label: "ICONICA", className: "rotate-6 bg-ristorante-mustard" },
+  2: { label: "FAVORITA", className: "-rotate-6 bg-ristorante-tomato text-ristorante-cream" },
+  6: { label: "NEW", className: "rotate-4 bg-ristorante-olive text-ristorante-cream" },
+  9: { label: "CASERO", className: "-rotate-4 bg-ristorante-mustard" },
+};

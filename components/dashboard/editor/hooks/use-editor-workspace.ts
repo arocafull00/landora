@@ -37,13 +37,12 @@ export function useEditorWorkspace(scrollTarget?: string) {
   const page = pages.find((entry) => entry.id === getEditorPageId(state.activePageTarget)) ?? pages[0];
   const groups = landing ? getEditorStructure(landing, state.activePageTarget, state.isAdmin, bookingModuleEnabled) : [];
   const title = groups.flatMap((group) => group.items).find((entry) => entry.id === state.activeEditorTab)?.label ?? EDITOR_COPY.pageContent;
-  const resolvedScrollTarget = landing && (state.activePageTarget.type === "home" || state.activePageTarget.type === "carta")
+  const resolvedScrollTarget = landing && state.activePageTarget.type === "home"
     ? scrollTarget ?? getEditorScrollTarget(landing.template, state.activeEditorTab) : undefined;
   const saveLabel = state.saveStatus === "saving" ? EDITOR_COPY.saving
     : state.saveStatus === "error" ? EDITOR_COPY.error
     : landing?.edited === "Unsaved changes" ? EDITOR_COPY.pending : EDITOR_COPY.saved;
   const pathname = state.activePageTarget.type === "about" ? "/about"
-    : state.activePageTarget.type === "carta" ? "/carta"
     : state.activePageTarget.type === "catalog" ? "/productos"
     : state.activePageTarget.type === "product" ? `/productos/${state.activePageTarget.productSlug}`
     : state.activePageTarget.type === "project" && landing

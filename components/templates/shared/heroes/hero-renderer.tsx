@@ -16,9 +16,6 @@ const StudioHeroVariant = dynamic(() =>
 const PortfolioHeroVariant = dynamic(() =>
   import("@/components/templates/shared/heroes/portfolio-hero-variant").then((module) => module.PortfolioHeroVariant),
 );
-const RistoranteHeroVariant = dynamic(() =>
-  import("@/components/templates/shared/heroes/ristorante-hero-variant").then((module) => module.RistoranteHeroVariant),
-);
 const FloristeriaHeroVariant = dynamic(() =>
   import("@/components/templates/shared/heroes/floristeria-hero-variant").then((module) => module.FloristeriaHeroVariant),
 );
@@ -57,11 +54,11 @@ const FuturisticHeroVariant = dynamic(() =>
 );
 
 const HERO_COMPONENTS = {
+  ristorante: dynamic(() => import("@/components/templates/ristorante/ristorante-hero").then((module) => module.RistoranteHero)),
   nuvolets: NuvoletsHeroVariant,
   velar: VelarHeroVariant,
   studio: StudioHeroVariant,
   portfolio: PortfolioHeroVariant,
-  ristorante: RistoranteHeroVariant,
   floristeria: FloristeriaHeroVariant,
   "oficio-pro": OficioProHeroVariant,
   "coffee-shop": CoffeeShopHeroVariant,
