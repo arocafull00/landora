@@ -32,7 +32,6 @@ import {
   SpaceContent,
   StatContent,
   StoryContent,
-  TemplateId,
   TestimonialContent,
   WorkflowStep,
 } from "@/lib/dashboard-data";
@@ -812,8 +811,19 @@ function createDashboardStore(initial?: {
   },
 
   restoreSection: async (landingId, anchor) => {
+    const initialLanding = get().landings.find((item) => item.id === landingId);
+    if (!initialLanding) return;
+
+    let defaults: LandingContent;
+    try {
+      defaults = await getDefaultContent(initialLanding.template);
+    } catch {
+      toast.error("No se pudo restaurar la sección");
+      return;
+    }
+
     const landing = get().landings.find((item) => item.id === landingId);
-    if (!landing) return;
+    if (!landing || landing.template !== initialLanding.template) return;
 
     const section = getSectionByAnchor(landing.template, anchor);
     if (!section || section.required) return;
@@ -821,7 +831,6 @@ function createDashboardStore(initial?: {
     const hiddenSections = (landing.content.hiddenSections ?? []).filter((item) => item !== anchor);
     let nav = landing.content.nav;
     const sectionHref = getSectionScrollHref(section);
-    const defaults = getDefaultContent(landing.template as TemplateId);
     nav = restoreNavItem(nav, defaults.nav, sectionHref);
 
     const nextContent = {

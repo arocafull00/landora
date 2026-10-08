@@ -1,17 +1,8 @@
+import { TemplateRenderer } from "@/components/templates/template-renderer";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getTemplate, isAvailableTemplateId } from "@/lib/template-registry";
-import { NuvoletsTemplate } from "@/components/templates/nuvolets/nuvolets-template";
-import { VelarTemplate } from "@/components/templates/velar/velar-template";
-import { StudioTemplate } from "@/components/templates/studio/studio-template";
-import { PortfolioTemplate } from "@/components/templates/portfolio/portfolio-template";
-import { FloristeriaTemplate } from "@/components/templates/floristeria/floristeria-template";
-import { OficioProTemplate } from "@/components/templates/oficio-pro/oficio-pro-template";
-import { CoffeeShopTemplate } from "@/components/templates/coffee-shop/coffee-shop-template";
-import { SignalTemplate } from "@/components/templates/signal/signal-template";
-import { PalletRossTemplate } from "@/components/templates/pallet-ross/pallet-ross-template";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
-import { RistoranteTemplate } from "@/components/templates/ristorante/ristorante-template";
 import {
   TemplateDemoBar,
   TEMPLATE_DEMO_BAR_HEIGHT,
@@ -19,19 +10,6 @@ import {
 import { getCopyrightYear } from "@/lib/copyright-year";
 import { getPublicRenderTime } from "@/lib/public-render-time";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
-
-const TEMPLATE_COMPONENTS = {
-  ristorante: RistoranteTemplate,
-  nuvolets: NuvoletsTemplate,
-  velar: VelarTemplate,
-  studio: StudioTemplate,
-  portfolio: PortfolioTemplate,
-  floristeria: FloristeriaTemplate,
-  "oficio-pro": OficioProTemplate,
-  "coffee-shop": CoffeeShopTemplate,
-  signal: SignalTemplate,
-  "pallet-ross": PalletRossTemplate,
-} as const;
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -57,15 +35,16 @@ export default async function TemplateDemoPage({
   if (!template) notFound();
 
   const isEmbed = embed === "1";
-  const Component = TEMPLATE_COMPONENTS[id] ?? VelarTemplate;
-  const appearance = resolveLandingAppearance(id, template.demoContent.appearance);
+  const content = { ...await template.loadContent(), rendererVersion: template.rendererVersion };
+  const appearance = resolveLandingAppearance(id, content.appearance);
 
   return (
     <div style={isEmbed ? undefined : { paddingTop: TEMPLATE_DEMO_BAR_HEIGHT }}>
       {!isEmbed && <TemplateDemoBar label={template.label} />}
       <SiteThemeScope appearance={appearance} template={id}>
-        <Component
-          content={template.demoContent}
+        <TemplateRenderer
+          template={id}
+          content={content}
           copyrightYear={copyrightYear}
           renderedAt={renderedAt}
           topOffset={isEmbed ? 0 : TEMPLATE_DEMO_BAR_HEIGHT}

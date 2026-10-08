@@ -1,3 +1,4 @@
+import { availableTemplateIdSchema } from "@/lib/schemas/template";
 import { z } from "zod";
 
 export const createUserSchema = z.object({
@@ -26,16 +27,7 @@ export const createUserLandingFormSchema = z.strictObject({
     .min(1, "El subdominio es requerido")
     .max(100)
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Usa letras minúsculas, números y guiones"),
-  template: z.enum([
-    "velar",
-    "portfolio",
-    "floristeria",
-    "oficio-pro",
-    "signal",
-    "pallet-ross",
-    "ristorante",
-    "nuvolets",
-  ]),
+  template: availableTemplateIdSchema,
 });
 
 export type CreateUserLandingFormValues = z.infer<typeof createUserLandingFormSchema>;

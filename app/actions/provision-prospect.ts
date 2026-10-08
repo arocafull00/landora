@@ -1,5 +1,6 @@
 "use server";
 
+import { availableTemplateIdSchema } from "@/lib/schemas/template";
 import { revalidatePath } from "next/cache";
 import { clerkClient } from "@clerk/nextjs/server";
 import { z } from "zod";
@@ -24,18 +25,9 @@ type PreviewSuccess = {
   requiresTemplateSelection: boolean;
 };
 
-const templateIdSchema = z.enum([
-  "velar",
-  "portfolio",
-  "floristeria",
-  "oficio-pro",
-  "signal",
-  "nuvolets",
-]);
-
 const previewInputSchema = z.object({
   json: z.string().min(1),
-  template: templateIdSchema.optional(),
+  template: availableTemplateIdSchema.optional(),
 });
 
 const provisionUserSchema = z.object({
@@ -49,7 +41,7 @@ const provisionLandingSchema = z.object({
   clerkUserId: z.string().min(1),
   name: z.string().min(1),
   slug: z.string().min(1),
-  template: templateIdSchema,
+  template: availableTemplateIdSchema,
   json: z.string().min(1),
 });
 

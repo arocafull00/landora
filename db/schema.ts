@@ -17,21 +17,9 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations, sql } from "drizzle-orm";
 import type { NuvoletsContent } from "@/lib/schemas/nuvolets";
+import type { TemplateId } from "@/lib/dashboard-data";
 import type { ProductCharacteristic, ProductImage } from "@/lib/domain/dtos";
 import type { ProductValues } from "@/lib/schemas/products";
-
-export const templateEnum = pgEnum("template", [
-  "nuvolets",
-  "velar",
-  "studio",
-  "portfolio",
-  "ristorante",
-  "floristeria",
-  "oficio-pro",
-  "coffee-shop",
-  "signal",
-  "pallet-ross",
-]);
 
 export const subscriptionStatusEnum = pgEnum("subscription_status", [
   "active",
@@ -108,7 +96,7 @@ export const landingPages = pgTable("landing_pages", {
     .references(() => users.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
-  template: templateEnum("template").notNull().default("velar"),
+  template: text("template").$type<TemplateId>().notNull().default("velar"),
   published: boolean("published").notNull().default(false),
   publishedVersionId: uuid("published_version_id").references(
     (): AnyPgColumn => landingPageVersions.id,
@@ -122,6 +110,7 @@ export const landingPages = pgTable("landing_pages", {
 }, (table) => [
   index("landing_pages_user_id_idx").on(table.userId),
   index("landing_pages_published_idx").on(table.published),
+  check("landing_pages_template_format", sql`${table.template} ~ '^[a-z][a-z0-9-]{0,79}$'`),
 ]);
 
 export const landingPageVersions = pgTable(
@@ -132,7 +121,7 @@ export const landingPageVersions = pgTable(
       .notNull()
       .references(() => landingPages.id, { onDelete: "cascade" }),
     version: integer("version").notNull(),
-    template: templateEnum("template").notNull(),
+    template: text("template").$type<TemplateId>().notNull(),
     name: text("name").notNull(),
     slug: text("slug").notNull(),
     contentJson: jsonb("content_json")
@@ -156,6 +145,7 @@ export const landingPageVersions = pgTable(
     ),
     index("landing_page_versions_landing_page_idx").on(table.landingPageId),
     index("landing_page_versions_slug_idx").on(table.slug),
+    check("landing_page_versions_template_format", sql`${table.template} ~ '^[a-z][a-z0-9-]{0,79}$'`),
   ],
 );
 
@@ -209,7 +199,12 @@ export const landingBranding = pgTable("landing_branding", {
   hiddenSections: jsonb("hidden_sections").$type<string[]>().notNull().default([]),
   sectionOrder: jsonb("section_order").$type<string[]>().notNull().default([]),
   enabledPages: jsonb("enabled_pages").$type<string[]>().notNull().default([]),
-});
+  templateData: jsonb("template_data").$type<Record<string, unknown>>().notNull().default({}),
+  schemaVersion: integer("content_schema_version").notNull().default(1),
+}, (table) => [
+  check("landing_branding_template_data_object", sql`jsonb_typeof(${table.templateData}) = 'object'`),
+  check("landing_branding_content_schema_version_positive", sql`${table.schemaVersion} > 0`),
+]);
 
 export const landingHero = pgTable("landing_hero", {
   id: uuid("id").primaryKey().defaultRandom(),

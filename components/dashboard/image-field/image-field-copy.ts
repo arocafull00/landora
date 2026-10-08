@@ -3,6 +3,7 @@ export const IMAGE_FIELD_COPY = {
   changeImage: "Cambiar imagen",
   upload: "Subir imagen",
   uploading: "Subiendo…",
+  loadFailed: "No se pudieron cargar las imágenes de la plantilla",
   uploadAriaLabel: "Subir imagen",
   pickerTitle: "Seleccionar imagen",
   previewAriaLabel: "Abrir selector de imágenes",

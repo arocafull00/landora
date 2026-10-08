@@ -1,0 +1,51 @@
+import type { TemplateDefinition } from "@/lib/templates/types";
+import { ristoranteEditableSectionsSchema } from "@/lib/schemas/ristorante-editor";
+import { NAV_EDITOR_TAB, DESIGN_EDITOR_TAB, FOOTER_EDITOR_TAB, SEO_EDITOR_TAB, SECTIONS_EDITOR_TAB } from "@/lib/templates/editor-tabs";
+
+export const RISTORANTE_TEMPLATE: TemplateDefinition = {
+  id: "ristorante",
+  label: "Ristorante",
+  description: "Cocina italiana con carta filtrable, fotografía orgánica y tipografía monumental.",
+  retired: false,
+  contentVersion: 1,
+  rendererVersion: 1,
+  storageSections: ["hero", "branding", "nav", "cta", "serviceMenu", "gallery", "story", "workflow", "benefits"],
+  validateContent: (content) => ristoranteEditableSectionsSchema.safeParse({ story: content.story, "service-menu": { items: content.serviceMenu }, workflow: { items: content.workflow }, benefits: { items: content.benefits } }).success,
+  validateSections: (sections) => ristoranteEditableSectionsSchema.safeParse(sections).success,
+  capabilities: { newsletter: false, booking: true },
+  sections: [
+    { anchor: "hero", label: "Hero", navHref: "#inicio", editorTabId: "Hero", required: true },
+    { anchor: "franja", label: "Especialidades" },
+    { anchor: "carta", label: "Carta", navHref: "#carta", editorTabId: "Carta", contentKeys: ["serviceMenu"] },
+    { anchor: "compartir", label: "Compartir", editorTabId: "Compartir", contentKeys: ["story"] },
+    { anchor: "especial", label: "Pizza del mes", editorTabId: "Especial", contentKeys: ["benefits"] },
+    { anchor: "marquee", label: "Rótulos en movimiento" },
+    { anchor: "nosotros", label: "Nosotros y galería", navHref: "#nosotros", editorTabId: "Galeria", contentKeys: ["gallery"] },
+    { anchor: "contacto", label: "Contacto y pie", editorTabId: "Footer", navHref: "#contacto", required: true },
+  ],
+  headings: {
+    carta: { title: "NUESTRA\nCARTA", subtitle: "Recetas italianas sin demasiadas ceremonias: buen producto, masa trabajada cada día y platos que piden una mesa llena." },
+    compartir: { title: "UNA PIZZA\nSE DISFRUTA\nMEJOR\nCOMPARTIDA", subtitle: "" },
+    especial: { title: "LA PIZZA\nDEL MES", subtitle: "" },
+    nosotros: { title: "UN PEQUEÑO\nRINCÓN\nDE ITALIA", subtitle: "Una sala viva, una cocina abierta y ese punto de caos bonito que aparece cuando la mesa está llena. Ven con hambre." },
+    contacto: { title: "TU MESA\nTE ESPERA", subtitle: "" },
+  },
+  paletteOptions: [{ id: "default", label: "Original", description: "Crema, verde oliva, tomate, naranja y mostaza.", colorScheme: "light" }],
+  editorTabs: [
+      { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
+      { id: "Carta", label: "Carta" },
+      { id: "Compartir", label: "Compartir" },
+      { id: "Especial", label: "Pizza del mes" },
+      { id: "Galeria", label: "Nosotros y galería" },
+      { id: "Horarios", label: "Horarios" },
+      FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
+      SECTIONS_EDITOR_TAB,
+    ],
+  loadImageOptions: () => import("@/lib/templates/ristorante/image-options").then((module) => module.RISTORANTE_IMAGE_OPTIONS),
+  loadContent: () => import("@/lib/templates/ristorante/content").then((module) => module.RISTORANTE_DEFAULT_CONTENT),
+  loadComponent: () => import("@/components/templates/ristorante/ristorante-template").then((module) => module.RistoranteTemplate),
+  loadEditor: () => import("@/components/dashboard/ristorante/page.client").then((module) => module.RistoranteEditorSection),
+};

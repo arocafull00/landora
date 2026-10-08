@@ -2,6 +2,7 @@
 
 import { useEffect, useEffectEvent, useLayoutEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
+import { TemplatePreview } from "@/components/templates/template-preview";
 import type {
   LandingContent,
   LandingSectionSelections,
@@ -26,38 +27,8 @@ import { syncCompanyContent } from "@/lib/company-details";
 import { applySubscriptionSettings } from "@/lib/email-subscriptions/settings";
 import type { SubscriptionSettings } from "@/lib/schemas/subscription-settings";
 
-const NuvoletsTemplate = dynamic(
-  () => import("@/components/templates/nuvolets/nuvolets-template").then((module) => module.NuvoletsTemplate),
-);
-const RistoranteTemplate = dynamic(
-  () => import("@/components/templates/ristorante/ristorante-template").then((module) => module.RistoranteTemplate),
-);
-const VelarTemplate = dynamic(
-  () => import("@/components/templates/velar/velar-template").then((module) => module.VelarTemplate),
-);
-const StudioTemplate = dynamic(
-  () => import("@/components/templates/studio/studio-template").then((module) => module.StudioTemplate),
-);
-const PortfolioTemplate = dynamic(
-  () => import("@/components/templates/portfolio/portfolio-template").then((module) => module.PortfolioTemplate),
-);
-const FloristeriaTemplate = dynamic(
-  () => import("@/components/templates/floristeria/floristeria-template").then((module) => module.FloristeriaTemplate),
-);
-const OficioProTemplate = dynamic(
-  () => import("@/components/templates/oficio-pro/oficio-pro-template").then((module) => module.OficioProTemplate),
-);
-const CoffeeShopTemplate = dynamic(
-  () => import("@/components/templates/coffee-shop/coffee-shop-template").then((module) => module.CoffeeShopTemplate),
-);
-const SignalTemplate = dynamic(
-  () => import("@/components/templates/signal/signal-template").then((module) => module.SignalTemplate),
-);
 const SignalCasePage = dynamic(
   () => import("@/components/templates/signal/signal-case-page").then((module) => module.SignalCasePage),
-);
-const PalletRossTemplate = dynamic(
-  () => import("@/components/templates/pallet-ross/pallet-ross-template").then((module) => module.PalletRossTemplate),
 );
 const PortfolioAboutPage = dynamic(
   () => import("@/components/templates/portfolio/portfolio-about-page").then((module) => module.PortfolioAboutPage),
@@ -66,18 +37,6 @@ const PortfolioProjectPage = dynamic(
   () => import("@/components/templates/portfolio/portfolio-project-page").then((module) => module.PortfolioProjectPage),
 );
 
-const TEMPLATE_COMPONENTS = {
-  ristorante: RistoranteTemplate,
-  nuvolets: NuvoletsTemplate,
-  velar: VelarTemplate,
-  studio: StudioTemplate,
-  portfolio: PortfolioTemplate,
-  floristeria: FloristeriaTemplate,
-  "oficio-pro": OficioProTemplate,
-  "coffee-shop": CoffeeShopTemplate,
-  signal: SignalTemplate,
-  "pallet-ross": PalletRossTemplate,
-} as const;
 
 export function LandingPreviewFrame({
   initialContent,
@@ -182,7 +141,6 @@ export function LandingPreviewFrame({
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  const Component = TEMPLATE_COMPONENTS[activeTemplate] ?? VelarTemplate;
   const appearance = resolveLandingAppearance(activeTemplate, content.appearance);
   const previewProject =
     sitePage === "project"
@@ -225,19 +183,9 @@ export function LandingPreviewFrame({
           copyrightYear={copyrightYear}
           previewLandingId={previewLandingId}
         />
-      ) : activeTemplate === "portfolio" ? (
-        <PortfolioTemplate
-          key={heroVariantId}
-          bookingEnabled={bookingEnabled}
-          content={content}
-          copyrightYear={copyrightYear}
-          renderedAt={renderedAt}
-          previewLandingId={previewLandingId}
-          sectionSelections={sectionSelections}
-          slug={slug}
-        />
       ) : (
-        <Component
+        <TemplatePreview
+          template={activeTemplate}
           key={heroVariantId}
           bookingEnabled={bookingEnabled}
           content={content}

@@ -1,6 +1,6 @@
 import type { TemplateContentMap } from "@/lib/dashboard-data";
-import { DEFAULT_LANDING_APPEARANCE } from "@/lib/site-appearance";
-import { SECTION_HEADING_DEFAULTS } from "@/lib/section-headings";
+import { DEFAULT_LANDING_APPEARANCE } from "@/lib/templates/appearance-defaults";
+import { RISTORANTE_TEMPLATE } from "@/lib/templates/ristorante/definition";
 
 export const RISTORANTE_IMAGES = {
   hero: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1400&q=90",
@@ -31,7 +31,7 @@ export const RISTORANTE_DEFAULT_CONTENT: TemplateContentMap["ristorante"] = {
     { id: "nav-gallery", label: "GALERÍA", href: "#galeria" },
     { id: "nav-contact", label: "CONTACTO", href: "#contacto" },
   ],
-  sectionHeadings: SECTION_HEADING_DEFAULTS.ristorante,
+  sectionHeadings: RISTORANTE_TEMPLATE.headings,
   contact: {
     phone: "+34 600 000 000",
     email: "",

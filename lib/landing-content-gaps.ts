@@ -1,5 +1,5 @@
 import type { LandingWithSections } from "@/data/landing-pages";
-import type { TemplateId } from "@/lib/dashboard-data";
+import { getRequiredTemplate } from "@/lib/template-registry";
 import { getHiddenContentKeys } from "@/lib/template-sections";
 
 export type LandingSectionKey =
@@ -21,75 +21,6 @@ export type LandingSectionKey =
   | "benefits"
   | "workHistory"
   | "faq";
-
-const VELAR_SECTIONS: LandingSectionKey[] = [
-  "hero",
-  "branding",
-  "story",
-  "stats",
-  "gallery",
-  "nav",
-  "spaces",
-  "services",
-  "workflow",
-  "testimonials",
-  "cta",
-];
-
-const STUDIO_SECTIONS: LandingSectionKey[] = [
-  "hero",
-  "branding",
-  "story",
-  "stats",
-  "gallery",
-  "nav",
-  "testimonials",
-  "cta",
-  "team",
-  "serviceMenu",
-  "benefits",
-  "faq",
-];
-
-const PORTFOLIO_SECTIONS: LandingSectionKey[] = [
-  "hero",
-  "branding",
-  "story",
-  "gallery",
-  "nav",
-  "testimonials",
-  "cta",
-  "serviceMenu",
-  "benefits",
-  "workHistory",
-  "faq",
-];
-
-const FLORISTERIA_SECTIONS: LandingSectionKey[] = [
-  "hero",
-  "branding",
-  "story",
-  "stats",
-  "gallery",
-  "nav",
-  "testimonials",
-  "cta",
-  "serviceMenu",
-  "benefits",
-  "faq",
-];
-
-const OFICIO_PRO_SECTIONS: LandingSectionKey[] = [
-  "hero",
-  "branding",
-  "story",
-  "stats",
-  "gallery",
-  "nav",
-  "testimonials",
-  "cta",
-  "serviceMenu",
-];
 
 function isHeroEmpty(landing: LandingWithSections) {
   return !landing.hero?.title && !landing.hero?.image;
@@ -130,51 +61,13 @@ function isSectionEmpty(landing: LandingWithSections, section: LandingSectionKey
   return false;
 }
 
-const COFFEE_SHOP_SECTIONS: LandingSectionKey[] = [
-  "hero",
-  "branding",
-  "story",
-  "stats",
-  "gallery",
-  "nav",
-  "workflow",
-  "testimonials",
-  "cta",
-  "serviceMenu",
-  "faq",
-];
-
-const SIGNAL_GAP_SECTIONS: LandingSectionKey[] = [
-  "hero",
-  "branding",
-  "nav",
-  "testimonials",
-  "cta",
-  "serviceMenu",
-  "benefits",
-  "faq",
-];
-
-function getTemplateSectionKeys(template: TemplateId): LandingSectionKey[] {
-  if (template === "nuvolets") return ["nuvolets", "hero", "branding", "nav", "cta"];
-  if (template === "ristorante") return ["hero", "branding", "nav", "cta", "serviceMenu", "gallery", "story", "workflow", "benefits"];
-  if (template === "studio") return STUDIO_SECTIONS;
-  if (template === "portfolio") return PORTFOLIO_SECTIONS;
-  if (template === "floristeria") return FLORISTERIA_SECTIONS;
-  if (template === "oficio-pro") return OFICIO_PRO_SECTIONS;
-  if (template === "coffee-shop") return COFFEE_SHOP_SECTIONS;
-  if (template === "signal") return SIGNAL_GAP_SECTIONS;
-  if (template === "pallet-ross") return STUDIO_SECTIONS;
-  return VELAR_SECTIONS;
-}
-
 export function getMissingLandingSections(landing: LandingWithSections) {
   if (landing.template === "nuvolets" && landing.nuvolets) return [];
   const hiddenKeys = new Set(
     getHiddenContentKeys(landing.branding?.hiddenSections ?? [], landing.template),
   );
 
-  return getTemplateSectionKeys(landing.template).filter((section) => {
+  return getRequiredTemplate(landing.template).storageSections.filter((section) => {
     if (hiddenKeys.has(section)) return false;
     return isSectionEmpty(landing, section);
   });

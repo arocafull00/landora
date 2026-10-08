@@ -1,10 +1,11 @@
+import { getTemplateContentSchema } from "@/lib/templates/content";
 import type {
   HeroBannerOffer,
   LandingContent,
+  TemplateId,
   PromotionCardsOffer,
 } from "@/lib/dashboard-data";
 import {
-  publishedLandingContentSchema,
   publishedLandingSectionSelectionsSchema,
   publishedLandingSeoSchema,
 } from "@/lib/schemas/landing-publication";
@@ -26,8 +27,8 @@ function parseOptionalDate(value: unknown) {
   return Number.isNaN(parsed.getTime()) ? undefined : parsed;
 }
 
-export function parsePublishedLandingContent(value: unknown): LandingContent {
-  const content = publishedLandingContentSchema.parse(value) as LandingContent;
+export function parsePublishedLandingContent(value: unknown, template: TemplateId): LandingContent {
+  const content = getTemplateContentSchema(template).parse(value);
 
   return {
     ...content,

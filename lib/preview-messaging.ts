@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { nuvoletsLandingContentSchema } from "@/lib/schemas/nuvolets";
+import { templateIdSchema } from "@/lib/schemas/template";
+import { getRequiredTemplate } from "@/lib/template-registry";
+import { getTemplateRendererVersionSchema } from "@/lib/templates/renderer";
+import { heroVariantSchema, galleryVariantSchema } from "@/lib/schemas/landing-save";
 import type {
   EditorPageTarget,
   LandingContent,
@@ -74,6 +77,18 @@ export type PreviewContentMessage = {
   template: TemplateId;
 };
 
+const previewContentMessageSchema = z.strictObject({
+  type: z.literal(PREVIEW_CONTENT_UPDATE),
+  template: templateIdSchema,
+  content: z.record(z.string().min(1).max(80), z.unknown())
+    .refine((value) => JSON.stringify(value).length <= 1_000_000, "Preview content too large"),
+  sectionSelections: z.strictObject({ hero: heroVariantSchema, gallery: galleryVariantSchema }),
+}).refine((message) => {
+  if (!getTemplateRendererVersionSchema(message.template).safeParse(message.content.rendererVersion ?? 1).success) return false;
+  const validate = getRequiredTemplate(message.template).validateContent;
+  return !validate || validate(message.content);
+}, "Invalid template preview content");
+
 export type PreviewScrollToMessage = {
   type: typeof PREVIEW_SCROLL_TO;
   sectionId: string;
@@ -143,14 +158,7 @@ export function isPreviewTextSizeMessage(
 }
 
 export function isPreviewContentMessage(data: unknown): data is PreviewContentMessage {
-  if (!data || typeof data !== "object") return false;
-  const message = data as PreviewContentMessage;
-  if (message.type !== PREVIEW_CONTENT_UPDATE) return false;
-  if (!message.content || typeof message.content !== "object") return false;
-  if (!message.sectionSelections || typeof message.sectionSelections !== "object") return false;
-  if (typeof message.template !== "string") return false;
-  if (message.template === "nuvolets" && !nuvoletsLandingContentSchema.safeParse(message.content).success) return false;
-  return true;
+  return previewContentMessageSchema.safeParse(data).success;
 }
 
 export function isPreviewScrollToMessage(data: unknown): data is PreviewScrollToMessage {
@@ -179,7 +187,7 @@ export function buildPreviewContentPayload(
   const appearance = resolveLandingAppearance(template, content.appearance);
 
   return {
-    content: { ...content, appearance },
+    content: { ...content, appearance, rendererVersion: getRequiredTemplate(template).rendererVersion },
     sectionSelections,
     template,
   };

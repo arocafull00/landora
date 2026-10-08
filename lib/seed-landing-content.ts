@@ -175,7 +175,7 @@ async function applySectionDefaults(
 }
 
 export async function seedLandingSections(landingId: string, templateId: TemplateId = "velar") {
-  const content = getDefaultContent(templateId) as LandingContent;
+  const content = (await getDefaultContent(templateId)) as LandingContent;
 
   await applySectionDefaults(landingId, FULL_SECTION_KEYS, content, {
     templateId,
@@ -189,7 +189,7 @@ async function seedMissingLandingSections(landingId: string, landing: LandingWit
   const missing = getMissingLandingSections(landing);
   if (missing.length === 0) return;
 
-  const content = getDefaultContent(landing.template) as LandingContent;
+  const content = (await getDefaultContent(landing.template)) as LandingContent;
 
   await applySectionDefaults(landingId, missing, content, {
     templateId: landing.template,

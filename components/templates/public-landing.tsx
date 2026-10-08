@@ -3,7 +3,8 @@ import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { WhatsappFloatButton } from "@/components/shared/whatsapp-float-button";
 import type { PublishedLanding } from "@/data/landing-publications";
 import { resolveTenantBySlug } from "@/lib/booking/resolve-tenant";
-import type { PublicTemplateRenderProps } from "@/lib/public-render-contracts";
+import { TemplateRenderer } from "@/components/templates/template-renderer";
+import { templateSupports } from "@/lib/template-registry";
 import { getCopyrightYear } from "@/lib/copyright-year";
 import { getPublicRenderTime } from "@/lib/public-render-time";
 import { VELAR_WHATSAPP_MESSAGE } from "@/lib/velar-links";
@@ -14,75 +15,22 @@ import { getPublicSubscriptionSettings } from "@/data/subscription-settings";
 import { applySubscriptionSettings, SUBSCRIPTION_PRIVACY_PATH } from "@/lib/email-subscriptions/settings";
 import { getPublicLandingPath } from "@/lib/public-site-url";
 
-async function renderPublicTemplate(
-  template: PublishedLanding["template"],
-  props: PublicTemplateRenderProps,
-) {
-  if (template === "ristorante") {
-    const { RistoranteTemplate } = await import("@/components/templates/ristorante/ristorante-template");
-    return <RistoranteTemplate {...props} />;
-  }
-  if (template === "nuvolets") {
-    const { NuvoletsTemplate } = await import("@/components/templates/nuvolets/nuvolets-template");
-    return <NuvoletsTemplate {...props} />;
-  }
-  if (template === "studio") {
-    const { StudioTemplate } = await import("@/components/templates/studio/studio-template");
-    return <StudioTemplate {...props} />;
-  }
-  if (template === "portfolio") {
-    const { PortfolioTemplate } = await import("@/components/templates/portfolio/portfolio-template");
-    return <PortfolioTemplate {...props} />;
-  }
-  if (template === "floristeria") {
-    const { FloristeriaTemplate } = await import("@/components/templates/floristeria/floristeria-template");
-    return <FloristeriaTemplate {...props} />;
-  }
-  if (template === "oficio-pro") {
-    const { OficioProTemplate } = await import("@/components/templates/oficio-pro/oficio-pro-template");
-    return <OficioProTemplate {...props} />;
-  }
-  if (template === "coffee-shop") {
-    const { CoffeeShopTemplate } = await import("@/components/templates/coffee-shop/coffee-shop-template");
-    return <CoffeeShopTemplate {...props} />;
-  }
-  if (template === "signal") {
-    const { SignalTemplate } = await import("@/components/templates/signal/signal-template");
-    return <SignalTemplate {...props} />;
-  }
-  if (template === "pallet-ross") {
-    const { PalletRossTemplate } = await import("@/components/templates/pallet-ross/pallet-ross-template");
-    return <PalletRossTemplate {...props} />;
-  }
-
-  const { VelarTemplate } = await import("@/components/templates/velar/velar-template");
-  return <VelarTemplate {...props} />;
-}
-
 export async function PublicLanding({
   landing,
 }: {
   landing: PublishedLanding;
 }) {
   const [tenant, copyrightYear, renderedAt, catalog, subscriptionSettings] = await Promise.all([
-    resolveTenantBySlug(landing.slug),
+    templateSupports(landing.template, "booking") ? resolveTenantBySlug(landing.slug) : null,
     getCopyrightYear(),
     getPublicRenderTime(),
     getPublicCatalogPresentation(landing.id, landing.userId),
-    landing.template === "nuvolets" ? getPublicSubscriptionSettings(landing.id) : null,
+    templateSupports(landing.template, "newsletter") ? getPublicSubscriptionSettings(landing.id) : null,
   ]);
   const baseContent = syncCompanyContent(applyCatalogPresentation(landing.content, catalog));
   const content = subscriptionSettings
     ? applySubscriptionSettings(baseContent, subscriptionSettings, getPublicLandingPath(SUBSCRIPTION_PRIVACY_PATH))
     : baseContent;
-  const template = await renderPublicTemplate(landing.template, {
-    bookingEnabled: tenant?.enabled ?? false,
-    content,
-    copyrightYear,
-    renderedAt,
-    sectionSelections: landing.sectionSelections,
-    slug: landing.slug,
-  });
 
   return (
     <>
@@ -91,7 +39,15 @@ export async function PublicLanding({
         appearance={landing.content.appearance}
         template={landing.template}
       >
-        {template}
+        <TemplateRenderer
+          template={landing.template}
+          bookingEnabled={tenant?.enabled ?? false}
+          content={content}
+          copyrightYear={copyrightYear}
+          renderedAt={renderedAt}
+          sectionSelections={landing.sectionSelections}
+          slug={landing.slug}
+        />
         {landing.content.contact.whatsappEnabled ? (
           <WhatsappFloatButton
             message={

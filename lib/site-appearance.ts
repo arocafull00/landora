@@ -1,3 +1,6 @@
+import { DEFAULT_LANDING_APPEARANCE } from "@/lib/templates/appearance-defaults";
+import { getRegisteredTemplates } from "@/lib/template-registry";
+import type { PaletteOption } from "@/lib/templates/types";
 import type { LandingAppearance, TemplateId, TextSizePreset } from "@/lib/dashboard-data";
 
 export const TYPOGRAPHY_OPTIONS = [
@@ -36,60 +39,9 @@ export type SitePalette = {
 
 export type PaletteColorScheme = "light" | "dark";
 
-export type PaletteOption = {
-  id: string;
-  label: string;
-  description: string;
-  colorScheme: PaletteColorScheme;
-};
-
-export const TEMPLATE_PALETTE_OPTIONS: Record<TemplateId, readonly PaletteOption[]> = {
-  ristorante: [{ id: "default", label: "Original", description: "Crema, verde oliva, tomate, naranja y mostaza.", colorScheme: "light" }],
-  nuvolets: [{ id: "default", label: "Original", description: "Azul nube, rosa, amarillo y salvia.", colorScheme: "light" }, { id: "rose", label: "Rosa", description: "Rosa como acento principal.", colorScheme: "light" }, { id: "sage", label: "Salvia", description: "Verde suave como acento principal.", colorScheme: "light" }],
-  velar: [
-    { id: "default", label: "Original", description: "Verde mineral y arena.", colorScheme: "light" },
-    { id: "terracotta", label: "Terracota", description: "Arcilla cálida y crema.", colorScheme: "light" },
-    { id: "slate", label: "Pizarra", description: "Azul grisáceo y piedra.", colorScheme: "light" },
-  ],
-  studio: [
-    { id: "default", label: "Original", description: "Bronce suave y marfil.", colorScheme: "light" },
-    { id: "smoked-rose", label: "Rosa humo", description: "Rosa profundo y porcelana.", colorScheme: "light" },
-    { id: "sage", label: "Salvia", description: "Verde sereno y lino.", colorScheme: "light" },
-  ],
-  portfolio: [
-    { id: "default", label: "Original", description: "Negro tinta y turquesa.", colorScheme: "dark" },
-    { id: "lime", label: "Lima", description: "Carbón y verde eléctrico.", colorScheme: "dark" },
-    { id: "coral", label: "Coral", description: "Grafito y coral vivo.", colorScheme: "dark" },
-    { id: "ivory", label: "Marfil", description: "Marfil cálido y azul cobalto.", colorScheme: "light" },
-    { id: "sand", label: "Arena", description: "Arena suave y terracota.", colorScheme: "light" },
-    { id: "mist", label: "Niebla", description: "Gris niebla y violeta.", colorScheme: "light" },
-    { id: "sky", label: "Cielo", description: "Azul cielo y océano.", colorScheme: "light" },
-    { id: "blush", label: "Rubor", description: "Rosa claro y borgoña.", colorScheme: "light" },
-  ],
-  floristeria: [
-    { id: "default", label: "Original", description: "Verde hoja y blanco cálido.", colorScheme: "light" },
-    { id: "clay", label: "Arcilla", description: "Terracota, salvia y crema.", colorScheme: "light" },
-    { id: "lavender", label: "Lavanda", description: "Ciruela suave y lavanda.", colorScheme: "light" },
-  ],
-  "oficio-pro": [
-    { id: "default", label: "Original", description: "Azul técnico y ámbar.", colorScheme: "light" },
-    { id: "industrial", label: "Industrial", description: "Azul acero y naranja.", colorScheme: "light" },
-    { id: "graphite", label: "Grafito", description: "Carbón y amarillo señal.", colorScheme: "light" },
-  ],
-  "coffee-shop": [
-    { id: "default", label: "Original", description: "Café tostado y cobre.", colorScheme: "light" },
-    { id: "coffee-green", label: "Verde café", description: "Verde bosque y crema.", colorScheme: "light" },
-    { id: "burgundy", label: "Borgoña", description: "Borgoña y rosa tostado.", colorScheme: "light" },
-  ],
-  signal: [
-    { id: "default", label: "Original", description: "Tinta, papel cálido y señal lima.", colorScheme: "light" },
-    { id: "graphite", label: "Grafito", description: "Carbón y ámbar técnico.", colorScheme: "light" },
-    { id: "noir", label: "Noir", description: "Negro profundo y blanco frío.", colorScheme: "light" },
-  ],
-  "pallet-ross": [
-    { id: "default", label: "Original", description: "Off-white, teal y rojo editorial.", colorScheme: "light" },
-  ],
-};
+export const TEMPLATE_PALETTE_OPTIONS = Object.fromEntries(
+  getRegisteredTemplates().map((template) => [template.id, template.paletteOptions]),
+) as Record<TemplateId, readonly PaletteOption[]>;
 
 export const TEXT_SIZE_PRESET_OPTIONS = [
   { id: "xsmall", label: "Muy pequeño" },
@@ -98,16 +50,6 @@ export const TEXT_SIZE_PRESET_OPTIONS = [
   { id: "large", label: "Grande" },
   { id: "xlarge", label: "Muy grande" },
 ] as const satisfies ReadonlyArray<{ id: TextSizePreset; label: string }>;
-
-export const DEFAULT_LANDING_APPEARANCE: LandingAppearance = {
-  paletteId: "default",
-  typographyId: "default",
-  buttonTextSize: "default",
-  chipTextSize: "default",
-  titleTextSize: "default",
-  subtitleTextSize: "default",
-  contentTextSize: "default",
-};
 
 export function isValidTextSizePreset(value: string): value is TextSizePreset {
   return TEXT_SIZE_PRESET_OPTIONS.some((option) => option.id === value);

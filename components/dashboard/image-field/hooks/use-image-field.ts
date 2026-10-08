@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import type { TemplateId } from "@/lib/dashboard-data";
 import { isLottieAsset } from "@/lib/background-assets";
 import { getTemplateImageOptions } from "@/lib/template-image-options";
@@ -36,8 +37,20 @@ export function useImageField({
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<{ templateId: TemplateId; options: readonly ImageFieldOption[] } | null>(null);
   const assets = useAssetsStore((state) => state.rows);
   const prepend = useAssetsStore((state) => state.prepend);
+
+  useEffect(() => {
+    if (!open || !templateId) return;
+    let active = true;
+    getTemplateImageOptions(templateId).then((options) => {
+      if (active) setLoadedImages({ templateId, options });
+    }).catch(() => {
+      if (active) toast.error(IMAGE_FIELD_COPY.loadFailed);
+    });
+    return () => { active = false; };
+  }, [open, templateId]);
 
   const assetOptions: ImageFieldOption[] = [];
   for (const asset of assets) {
@@ -49,7 +62,7 @@ export function useImageField({
     });
   }
 
-  const templateImages = templateId ? getTemplateImageOptions(templateId) : [];
+  const templateImages = loadedImages?.templateId === templateId ? loadedImages?.options ?? [] : [];
   const presetOptions = presets ? [...presets] : [];
   const allOptions = [...presetOptions, ...templateImages, ...assetOptions];
   const activeAsset = assets.find((asset) => asset.url === value);

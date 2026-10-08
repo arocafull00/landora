@@ -1,5 +1,6 @@
 "use server";
 
+import { templateSupports } from "@/lib/template-registry";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { getPublishedLandingBySlug } from "@/data/landing-publications";
@@ -18,7 +19,7 @@ export async function subscribeEmailAction(input: unknown): Promise<{ success: t
   if (!parsed.success || parsed.data.honeypot) return { error: copy.invalid };
   try {
     const landing = await getPublishedLandingBySlug(parsed.data.slug);
-    if (!landing || landing.template !== "nuvolets" || landing.content.hiddenSections?.includes("newsletter")) return { error: copy.unavailable };
+    if (!landing || !templateSupports(landing.template, "newsletter") || landing.content.hiddenSections?.includes("newsletter")) return { error: copy.unavailable };
     const settings = await getSubscriptionSettings(landing.id);
     if (!settings.enabled || !isSubscriptionConfigured(settings)) return { error: copy.unavailable };
     const requestHeaders = await headers();

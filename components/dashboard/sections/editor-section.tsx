@@ -2,19 +2,11 @@
 
 import { useDashboardStore } from "@/stores/dashboard-store";
 import { useShallow } from "zustand/react/shallow";
-import { StudioEditorSection } from "@/components/dashboard/sections/studio-editor-section";
-import { PortfolioEditorSection } from "@/components/dashboard/sections/portfolio-editor-section";
-import { FloristeriaEditorSection } from "@/components/dashboard/sections/floristeria-editor-section";
-import { OficioProEditorSection } from "@/components/dashboard/sections/oficio-pro-editor-section";
-import { CoffeeShopEditorSection } from "@/components/dashboard/sections/coffee-shop-editor-section";
-import { SignalEditorSection } from "@/components/dashboard/sections/signal-editor-section";
-import { NuvoletsEditorSection } from "@/components/dashboard/nuvolets/page.client";
-import { VelarEditorSection } from "@/components/dashboard/sections/velar-editor-section";
+import { TemplateEditor } from "@/components/dashboard/editor/components/template-editor";
 import { EditorLayout } from "@/components/dashboard/editor-layout";
 import { PortfolioAboutPageEditor } from "@/components/dashboard/portfolio-about-page-editor";
 import { PortfolioProjectPageEditor } from "@/components/dashboard/portfolio-project-page-editor";
 import { CatalogPageEditor } from "@/components/dashboard/editor/components/catalog-page-editor";
-import { RistoranteEditorSection } from "@/components/dashboard/ristorante/page.client";
 
 export function EditorSection() {
   const { activeLandingId, activePageTarget, landings } = useDashboardStore(
@@ -75,32 +67,5 @@ export function EditorSection() {
     }
   }
 
-  if (activeLanding.template === "nuvolets") return <NuvoletsEditorSection />;
-  if (activeLanding.template === "ristorante") return <RistoranteEditorSection />;
-
-  if (activeLanding.template === "studio") {
-    return <StudioEditorSection />;
-  }
-
-  if (activeLanding.template === "portfolio") {
-    return <PortfolioEditorSection />;
-  }
-
-  if (activeLanding.template === "floristeria") {
-    return <FloristeriaEditorSection />;
-  }
-
-  if (activeLanding.template === "oficio-pro") {
-    return <OficioProEditorSection />;
-  }
-
-  if (activeLanding.template === "coffee-shop") {
-    return <CoffeeShopEditorSection />;
-  }
-
-  if (activeLanding.template === "signal") {
-    return <SignalEditorSection />;
-  }
-
-  return <VelarEditorSection />;
+  return <TemplateEditor template={activeLanding.template} landingId={activeLanding.id} />;
 }

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import * as schema from "../db/schema";
-import { VELAR_DEFAULT_CONTENT } from "../lib/default-content";
+import { VELAR_DEFAULT_CONTENT } from "../lib/templates/velar/content";
 
 type Db = typeof db;
 

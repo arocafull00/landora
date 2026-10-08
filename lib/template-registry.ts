@@ -1,313 +1,29 @@
-import type {
-  TemplateId,
-  TemplateContentMap,
-  LandingContent,
-  LandingSectionSelections,
-} from "@/lib/dashboard-data";
-import { NUVOLETS_DEFAULT_CONTENT, STUDIO_DEFAULT_CONTENT, VELAR_DEFAULT_CONTENT, PORTFOLIO_DEFAULT_CONTENT, FLORISTERIA_DEFAULT_CONTENT, OFICIO_PRO_DEFAULT_CONTENT, COFFEE_SHOP_DEFAULT_CONTENT, SIGNAL_DEFAULT_CONTENT, PALLET_ROSS_DEFAULT_CONTENT } from "@/lib/default-content";
-import { getTemplateSections } from "@/lib/template-sections";
-import { RISTORANTE_DEFAULT_CONTENT } from "@/lib/ristorante-content";
-
-export type EditorTabGroup = "section" | "config";
-
-export type EditorTab = {
-  id: string;
-  label: string;
-  group?: EditorTabGroup;
-};
-
-const SECTIONS_EDITOR_TAB: EditorTab = {
-  id: "Secciones",
-  label: "Secciones",
-  group: "config",
-};
-
-export const NAV_EDITOR_TAB: EditorTab = {
-  id: "Navegación",
-  label: "Navegación",
-  group: "config",
-};
-
-const DESIGN_EDITOR_TAB: EditorTab = {
-  id: "Diseño",
-  label: "Diseño",
-  group: "config",
-};
-
-const ADMIN_EDITOR_TAB: EditorTab = {
-  id: "Admin",
-  label: "Admin",
-  group: "config",
-};
-
-const FOOTER_EDITOR_TAB: EditorTab = {
-  id: "Footer",
-  label: "Pie de página",
-};
-
-const BLOG_EDITOR_TAB: EditorTab = {
-  id: "Blog",
-  label: "Blog",
-};
-
-const CONTACT_EDITOR_TAB: EditorTab = {
-  id: "Contacto",
-  label: "Contacto",
-};
-
-const OFFERS_EDITOR_TAB: EditorTab = {
-  id: "Ofertas",
-  label: "Ofertas",
-};
-
-const RESERVAS_EDITOR_TAB: EditorTab = {
-  id: "Reservas",
-  label: "Reservas",
-};
-
-const SEO_EDITOR_TAB: EditorTab = {
-  id: "SEO",
-  label: "SEO",
-  group: "config",
-};
-
-export type TemplateComponent = React.ComponentType<{
-  bookingEnabled?: boolean;
-  content: LandingContent;
-  copyrightYear: number;
-  renderedAt: Date;
-  sectionSelections?: LandingSectionSelections;
-  slug?: string;
-  topOffset?: number;
-}>;
-
-export type TemplateDefinition<T extends TemplateId = TemplateId> = {
-  id: T;
-  label: string;
-  description: string;
-  demoContent: TemplateContentMap[T];
-  editorTabs: EditorTab[];
-  getComponent: () => Promise<Record<string, TemplateComponent>>;
-};
+import type { TemplateId } from "@/lib/dashboard-data";
+import type { EditorTab, TemplateDefinition } from "@/lib/templates/types";
+import { ADMIN_EDITOR_TAB, RESERVAS_EDITOR_TAB } from "@/lib/templates/editor-tabs";
+import { RISTORANTE_TEMPLATE } from "@/lib/templates/ristorante/definition";
+import { NUVOLETS_TEMPLATE } from "@/lib/templates/nuvolets/definition";
+import { VELAR_TEMPLATE } from "@/lib/templates/velar/definition";
+import { STUDIO_TEMPLATE } from "@/lib/templates/studio/definition";
+import { PORTFOLIO_TEMPLATE } from "@/lib/templates/portfolio/definition";
+import { FLORISTERIA_TEMPLATE } from "@/lib/templates/floristeria/definition";
+import { OFICIO_PRO_TEMPLATE } from "@/lib/templates/oficio-pro/definition";
+import { COFFEE_SHOP_TEMPLATE } from "@/lib/templates/coffee-shop/definition";
+import { SIGNAL_TEMPLATE } from "@/lib/templates/signal/definition";
+import { PALLET_ROSS_TEMPLATE } from "@/lib/templates/pallet-ross/definition";
 
 const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
-  ristorante: {
-    id: "ristorante",
-    label: "Ristorante",
-    description: "Cocina italiana con carta filtrable, fotografía orgánica y tipografía monumental.",
-    demoContent: RISTORANTE_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Carta", label: "Carta" },
-      { id: "Compartir", label: "Compartir" },
-      { id: "Especial", label: "Pizza del mes" },
-      { id: "Galeria", label: "Nosotros y galería" },
-      { id: "Horarios", label: "Horarios" },
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/ristorante/ristorante-template"),
-  },
-  nuvolets: {
-    id: "nuvolets", label: "Nuvolets", description: "Landing de moda infantil con catálogo informativo, tienda física y suscripciones.",
-    demoContent: NUVOLETS_DEFAULT_CONTENT,
-    editorTabs: [{ id: "Hero", label: "Hero" }, NAV_EDITOR_TAB, DESIGN_EDITOR_TAB,
-      { id: "Franja", label: "Franja" }, { id: "Categorías", label: "Categorías" },
-      { id: "Colección", label: "Colección" },
-      { id: "Historia", label: "Historia" }, { id: "Favoritos", label: "Favoritos" },
-      { id: "Tienda", label: "Tienda" }, { id: "Instagram", label: "Instagram" },
-      { id: "Suscripciones", label: "Suscripciones" }, { id: "Mascota", label: "Mascota" },
-      FOOTER_EDITOR_TAB, SEO_EDITOR_TAB, SECTIONS_EDITOR_TAB],
-    getComponent: () => import("@/components/templates/nuvolets/nuvolets-template"),
-  },
-  velar: {
-    id: "velar",
-    label: "Velar",
-    description:
-      "Landing para espacios de eventos: hero, estadísticas, salas, servicios, workflow y testimonios.",
-    demoContent: VELAR_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Historia", label: "Historia" },
-      { id: "Galería", label: "Galería" },
-      { id: "Espacios", label: "Espacios" },
-      { id: "Servicios", label: "Servicios" },
-      { id: "Proceso", label: "Proceso" },
-      { id: "Testimonios", label: "Testimonios" },
-      OFFERS_EDITOR_TAB,
-      RESERVAS_EDITOR_TAB,
-      CONTACT_EDITOR_TAB,
-      BLOG_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/velar/velar-template"),
-  },
-  studio: {
-    id: "studio",
-    label: "Studio",
-    description:
-      "Landing para peluquerías y salones: servicios con precios, equipo, galería, FAQ y reservas.",
-    demoContent: STUDIO_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Historia", label: "Historia" },
-      { id: "Servicios", label: "Servicios" },
-      { id: "Equipo", label: "Equipo" },
-      { id: "Galeria", label: "Galería" },
-      { id: "FAQ", label: "FAQ" },
-      OFFERS_EDITOR_TAB,
-      RESERVAS_EDITOR_TAB,
-      BLOG_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/studio/studio-template"),
-  },
-  portfolio: {
-    id: "portfolio",
-    label: "Portfolio",
-    description:
-      "Landing para profesionales creativos: proyectos, servicios, testimonios y contacto.",
-    demoContent: PORTFOLIO_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Experiencia", label: "Experiencia" },
-      { id: "Proyectos", label: "Proyectos" },
-      { id: "Cómo trabajo", label: "Cómo trabajo" },
-      { id: "Servicios", label: "Servicios" },
-      { id: "FAQ", label: "FAQ" },
-      OFFERS_EDITOR_TAB,
-      RESERVAS_EDITOR_TAB,
-      BLOG_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/portfolio/portfolio-template"),
-  },
-  floristeria: {
-    id: "floristeria",
-    label: "Floristería",
-    description:
-      "Landing para floristerías: servicios florales, galería y pedidos.",
-    demoContent: FLORISTERIA_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Historia", label: "Historia" },
-      { id: "Servicios", label: "Servicios" },
-      { id: "Galeria", label: "Galería" },
-      { id: "FAQ", label: "FAQ" },
-      OFFERS_EDITOR_TAB,
-      RESERVAS_EDITOR_TAB,
-      BLOG_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/floristeria/floristeria-template"),
-  },
-  "oficio-pro": {
-    id: "oficio-pro",
-    label: "Oficio Pro",
-    description:
-      "Landing para fontaneros, electricistas y servicios técnicos: urgencias, instalaciones, reseñas y contacto.",
-    demoContent: OFICIO_PRO_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Servicios", label: "Servicios" },
-      { id: "Instalaciones", label: "Instalaciones" },
-      { id: "Testimonios", label: "Testimonios" },
-      { id: "Experiencia", label: "Experiencia" },
-      OFFERS_EDITOR_TAB,
-      RESERVAS_EDITOR_TAB,
-      BLOG_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/oficio-pro/oficio-pro-template"),
-  },
-  "coffee-shop": {
-    id: "coffee-shop",
-    label: "Coffee Shop",
-    description:
-      "Landing para cafeterías y panaderías: carta de café, galería, horarios y reservas.",
-    demoContent: COFFEE_SHOP_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Carta", label: "Carta" },
-      { id: "Galeria", label: "Galería" },
-      { id: "Horarios", label: "Horarios" },
-      { id: "FAQ", label: "FAQ" },
-      OFFERS_EDITOR_TAB,
-      RESERVAS_EDITOR_TAB,
-      BLOG_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/coffee-shop/coffee-shop-template"),
-  },
-  signal: {
-    id: "signal",
-    label: "Signal",
-    description:
-      "Landing editorial de Adrián Rocafull: software a medida, automatización e inteligencia artificial para resolver problemas reales.",
-    demoContent: SIGNAL_DEFAULT_CONTENT,
-    editorTabs: [
-      { id: "Hero", label: "Hero" },
-      NAV_EDITOR_TAB,
-      DESIGN_EDITOR_TAB,
-      { id: "Capacidades", label: "Casos" },
-      { id: "Índice", label: "Método" },
-      { id: "CTA", label: "Cierre" },
-      OFFERS_EDITOR_TAB,
-      RESERVAS_EDITOR_TAB,
-      BLOG_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/signal/signal-template"),
-  },
-  "pallet-ross": {
-    id: "pallet-ross",
-    label: "Pallet Ross",
-    description:
-      "Landing scroll-driven para marketplace de arte: animación de cards, e-commerce y banner de clase.",
-    demoContent: PALLET_ROSS_DEFAULT_CONTENT,
-    editorTabs: [
-      CONTACT_EDITOR_TAB,
-      FOOTER_EDITOR_TAB,
-      SEO_EDITOR_TAB,
-      SECTIONS_EDITOR_TAB,
-    ],
-    getComponent: () => import("@/components/templates/pallet-ross/pallet-ross-template"),
-  },
+  "ristorante": RISTORANTE_TEMPLATE,
+  "nuvolets": NUVOLETS_TEMPLATE,
+  "velar": VELAR_TEMPLATE,
+  "studio": STUDIO_TEMPLATE,
+  "portfolio": PORTFOLIO_TEMPLATE,
+  "floristeria": FLORISTERIA_TEMPLATE,
+  "oficio-pro": OFICIO_PRO_TEMPLATE,
+  "coffee-shop": COFFEE_SHOP_TEMPLATE,
+  "signal": SIGNAL_TEMPLATE,
+  "pallet-ross": PALLET_ROSS_TEMPLATE,
 };
-
-const RETIRED_TEMPLATE_IDS = new Set<TemplateId>([
-  "studio",
-  "coffee-shop",
-]);
 
 export function getAllTemplates() {
   return Object.values(TEMPLATE_REGISTRY).filter(
@@ -332,14 +48,14 @@ export function getVisibleEditorTabs(
   const hidden = new Set(hiddenSections ?? []);
   const hiddenTabIds = new Set<string>();
 
-  for (const section of getTemplateSections(templateId)) {
+  for (const section of template.sections) {
     if (!hidden.has(section.anchor) || !section.editorTabId) continue;
     hiddenTabIds.add(section.editorTabId);
   }
 
   const tabs = template.editorTabs.filter((tab) => {
     if (hiddenTabIds.has(tab.id)) return false;
-    if (tab.id === RESERVAS_EDITOR_TAB.id && !bookingModuleEnabled) return false;
+    if (tab.id === RESERVAS_EDITOR_TAB.id && (!bookingModuleEnabled || !template.capabilities.booking)) return false;
     return true;
   });
   if (!isAdmin) return tabs;
@@ -348,9 +64,23 @@ export function getVisibleEditorTabs(
 }
 
 export function isValidTemplateId(id: string): id is TemplateId {
-  return id in TEMPLATE_REGISTRY;
+  return Object.hasOwn(TEMPLATE_REGISTRY, id);
 }
 
 export function isAvailableTemplateId(id: string): id is TemplateId {
-  return isValidTemplateId(id) && !RETIRED_TEMPLATE_IDS.has(id);
+  return isValidTemplateId(id) && !TEMPLATE_REGISTRY[id].retired;
+}
+
+export function getRegisteredTemplates(): TemplateDefinition[] {
+  return Object.values(TEMPLATE_REGISTRY);
+}
+
+export function getRequiredTemplate(id: TemplateId): TemplateDefinition {
+  const template = getTemplate(id);
+  if (!template) throw new Error("Unknown template");
+  return template;
+}
+
+export function templateSupports(id: TemplateId, capability: keyof TemplateDefinition["capabilities"]) {
+  return getRequiredTemplate(id).capabilities[capability];
 }

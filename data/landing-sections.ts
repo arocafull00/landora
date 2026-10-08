@@ -95,6 +95,8 @@ export async function upsertLandingBranding(
   landingId: string,
   data: {
     brand: string;
+    templateData?: Record<string, unknown>;
+    schemaVersion?: number;
     brandLogoType?: "text" | "image";
     brandLogoImage?: string;
     paletteId?: string;
@@ -113,6 +115,8 @@ export async function upsertLandingBranding(
   try {
     const set: {
       brand: string;
+      templateData?: Record<string, unknown>;
+      schemaVersion?: number;
       brandLogoType?: "text" | "image";
       brandLogoImage?: string;
       paletteId?: string;
@@ -131,6 +135,12 @@ export async function upsertLandingBranding(
     };
     if (data.brandLogoType !== undefined) {
       set.brandLogoType = data.brandLogoType;
+    }
+    if (data.templateData !== undefined) {
+      set.templateData = data.templateData;
+    }
+    if (data.schemaVersion !== undefined) {
+      set.schemaVersion = data.schemaVersion;
     }
     if (data.brandLogoImage !== undefined) {
       set.brandLogoImage = data.brandLogoImage;
@@ -173,6 +183,8 @@ export async function upsertLandingBranding(
       .values({
         landingId,
         brand: data.brand,
+        templateData: data.templateData ?? {},
+        schemaVersion: data.schemaVersion ?? 1,
         brandLogoType: data.brandLogoType ?? "text",
         brandLogoImage: data.brandLogoImage ?? "",
         paletteId: data.paletteId ?? "default",

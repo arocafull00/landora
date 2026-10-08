@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@/components/ui/icon";
-import type { TemplateDefinition } from "@/lib/template-registry";
+import type { TemplateDefinition } from "@/lib/templates/types";
 
 export function TemplateCard({
   template,

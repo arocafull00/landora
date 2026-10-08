@@ -1,3 +1,4 @@
+import { getRequiredTemplate } from "@/lib/template-registry";
 import type {
   GalleryVariantId,
   HeroVariantId,
@@ -97,6 +98,8 @@ export function getLandingSectionPayloads(
     hero: { ...content.hero },
     cta: { ...content.contact },
     branding: {
+      templateData: content.templateData ?? {},
+      schemaVersion: content.schemaVersion ?? getRequiredTemplate(template).contentVersion,
       brand: content.brand,
       brandLogoType: content.brandLogoType ?? "text",
       brandLogoImage: content.brandLogoImage ?? "",
@@ -143,7 +146,11 @@ export function getLandingPublicationSnapshot(
       favicon: landing.seoFavicon,
       socialImage: landing.seoSocialImage,
     },
-    content: landing.content,
+    content: {
+      ...landing.content,
+      schemaVersion: getRequiredTemplate(landing.template).contentVersion,
+      rendererVersion: getRequiredTemplate(landing.template).rendererVersion,
+    },
     appearance: landing.content.appearance,
     galleryVariant: landing.sectionSelections.gallery,
     heroVariant: landing.sectionSelections.hero,

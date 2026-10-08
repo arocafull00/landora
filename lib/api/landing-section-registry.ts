@@ -1,4 +1,5 @@
 import "server-only";
+import { z } from "zod";
 import { upsertLandingNuvolets } from "@/data/nuvolets";
 import { nuvoletsContentSchema } from "@/lib/schemas/nuvolets";
 
@@ -29,6 +30,8 @@ import type { OfferCardRow } from "@/lib/domain/dtos";
 import { portfolioAboutPageSchema } from "@/lib/schemas/portfolio-about";
 import { portfolioGallerySchema } from "@/lib/schemas/portfolio-project";
 import { normalizeEnabledPages } from "@/lib/site-pages";
+import { getTemplateDataSchema } from "@/lib/templates/template-data";
+import { getRequiredTemplate } from "@/lib/template-registry";
 
 function parseExpiresAt(value: unknown) {
   if (value instanceof Date) return value;
@@ -130,7 +133,7 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
       ),
   },
   branding: {
-    parse: (body) => {
+    parse: (body, meta) => {
       const sectionHeadings =
         body.sectionHeadings &&
         typeof body.sectionHeadings === "object" &&
@@ -156,6 +159,8 @@ export const SECTION_REGISTRY: Record<string, SectionHandler> = {
 
       return {
         brand: typeof body.brand === "string" ? body.brand : "",
+        templateData: body.templateData === undefined ? undefined : getTemplateDataSchema(meta.template).parse(body.templateData),
+        schemaVersion: body.schemaVersion === undefined ? undefined : z.literal(getRequiredTemplate(meta.template).contentVersion).parse(body.schemaVersion),
         brandLogoType,
         brandLogoImage,
         sectionHeadings,

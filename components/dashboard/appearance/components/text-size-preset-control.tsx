@@ -2,9 +2,9 @@
 
 import type { TextSizePreset, TemplateId } from "@/lib/dashboard-data";
 import {
-  DEFAULT_LANDING_APPEARANCE,
   TEXT_SIZE_PRESET_OPTIONS,
 } from "@/lib/site-appearance";
+import { DEFAULT_LANDING_APPEARANCE } from "@/lib/templates/appearance-defaults";
 import { SiteThemeScope } from "@/components/templates/site-theme-scope";
 import { Slider } from "@/components/ui/slider";
 

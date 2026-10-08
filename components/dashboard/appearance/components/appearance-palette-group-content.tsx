@@ -1,7 +1,7 @@
 "use client";
 
 import type { Landing } from "@/lib/dashboard-data";
-import type { PaletteOption } from "@/lib/site-appearance";
+import type { PaletteOption } from "@/lib/templates/types";
 import { APPEARANCE_EDITOR_COPY } from "@/components/dashboard/appearance/appearance-editor-copy";
 import { PaletteOptionCard } from "@/components/dashboard/appearance/components/palette-option-card";
 import { RadioGroup } from "@/components/ui/radio-group";

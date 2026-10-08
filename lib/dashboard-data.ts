@@ -50,6 +50,9 @@ export type LandingAppearance = {
 };
 
 export type BaseContent = {
+  schemaVersion?: number;
+  rendererVersion?: number;
+  templateData?: Record<string, unknown>;
   appearance: LandingAppearance;
   brand: string;
   brandLogoType: BrandLogoType;

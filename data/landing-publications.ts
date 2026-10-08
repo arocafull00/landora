@@ -104,7 +104,7 @@ export async function restoreLandingPageVersion(input: {
 
     if (!targetVersion || !isValidTemplateId(targetVersion.template)) return { status: "not_found" };
 
-    const content = parsePublishedLandingContent(targetVersion.contentJson);
+    const content = parsePublishedLandingContent(targetVersion.contentJson, targetVersion.template);
     const seo = parsePublishedLandingSeo(targetVersion.seoJson);
     const sectionSelections = parsePublishedLandingSectionSelections(
       targetVersion.sectionSelectionsJson,
@@ -178,7 +178,7 @@ function toPublishedLanding(row: {
   };
 }): PublishedLanding | null {
   if (!isValidTemplateId(row.version.template)) return null;
-  const content = parsePublishedLandingContent(row.version.contentJson);
+  const content = parsePublishedLandingContent(row.version.contentJson, row.version.template);
   return {
     id: row.landing.id,
     userId: row.landing.userId,

@@ -1,3 +1,4 @@
+import { templateSupports } from "@/lib/template-registry";
 import type { Metadata } from "next";
 import { getPreviewLanding } from "@/lib/api/landing-auth";
 import { toLandingContent } from "@/lib/landing-mapper";
@@ -28,7 +29,7 @@ export default async function LandingPreviewPage({
   const [tenant, catalog, subscriptionSettings] = await Promise.all([
     resolveTenantBySlug(landing.slug),
     getCatalogPresentation(landing.id, landing.userId, true),
-    landing.template === "nuvolets" ? getSubscriptionSettings(landing.id) : null,
+    templateSupports(landing.template, "newsletter") ? getSubscriptionSettings(landing.id) : null,
   ]);
 
   return (

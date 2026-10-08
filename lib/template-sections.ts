@@ -1,16 +1,8 @@
+import { getRequiredTemplate } from "@/lib/template-registry";
+import type { TemplateSectionDef } from "@/lib/templates/types";
 import type { LandingContent, NavLink, TemplateId } from "@/lib/dashboard-data";
 import type { LandingSectionKey } from "@/lib/landing-content-gaps";
 import { isSitePageEnabled } from "@/lib/site-pages";
-
-export type TemplateSectionDef = {
-  anchor: string;
-  label: string;
-  editorTabId?: string;
-  navHref?: string;
-  required?: boolean;
-  separatePage?: boolean;
-  contentKeys?: LandingSectionKey[];
-};
 
 export type NavScrollTarget = {
   anchor: string;
@@ -229,129 +221,8 @@ export function resolveSectionId(templateId: TemplateId, sectionIdOrHref: string
   return normalizeNavHref(templateId, href).slice(1);
 }
 
-const VELAR_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", editorTabId: "Historia", navHref: "#historia", contentKeys: ["story", "stats"] },
-  { anchor: "listings", label: "Galería", editorTabId: "Galería", navHref: "#galeria", contentKeys: ["gallery"] },
-  { anchor: "residences", label: "Espacios", editorTabId: "Espacios", navHref: "#espacios", contentKeys: ["spaces"] },
-  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["services"] },
-  { anchor: "proceso", label: "Proceso", editorTabId: "Proceso", navHref: "#proceso", contentKeys: ["workflow"] },
-  { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
-  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "inquire", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const STUDIO_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", editorTabId: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
-  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
-  { anchor: "equipo", label: "Equipo", editorTabId: "Equipo", navHref: "#equipo", contentKeys: ["team"] },
-  { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
-  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
-  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
-  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const PORTFOLIO_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story"] },
-  { anchor: "experiencia", label: "Experiencia", editorTabId: "Experiencia", navHref: "#experiencia", contentKeys: ["workHistory"] },
-  { anchor: "proyectos", label: "Proyectos", editorTabId: "Proyectos", navHref: "#proyectos", contentKeys: ["gallery"] },
-  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
-  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
-  { anchor: "skills", label: "Cómo trabajo", editorTabId: "Cómo trabajo", navHref: "#skills", contentKeys: ["benefits"] },
-  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
-  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const FLORISTERIA_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", editorTabId: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
-  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios", contentKeys: ["serviceMenu"] },
-  { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
-  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
-  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
-  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const OFICIO_PRO_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "servicios", label: "Servicios", editorTabId: "Servicios", navHref: "#servicios" },
-  { anchor: "instalaciones", label: "Instalaciones", editorTabId: "Instalaciones", navHref: "#instalaciones" },
-  { anchor: "testimonios", label: "Testimonios", editorTabId: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
-  { anchor: "experiencia", label: "Experiencia", editorTabId: "Experiencia", navHref: "#experiencia", contentKeys: ["stats", "story"] },
-  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const COFFEE_SHOP_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
-  { anchor: "carta", label: "Carta", editorTabId: "Carta", navHref: "#carta", contentKeys: ["serviceMenu"] },
-  { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
-  { anchor: "horarios", label: "Horarios", editorTabId: "Horarios", navHref: "#horarios", contentKeys: ["workflow"] },
-  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
-  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
-  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const PALLET_ROSS_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", required: true },
-  { anchor: "ecommerce", label: "E-Commerce", navHref: "#ecommerce" },
-  { anchor: "class", label: "Class", navHref: "#class" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const SIGNAL_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "capacidades", label: "Casos", editorTabId: "Capacidades", navHref: "#capacidades", contentKeys: ["serviceMenu"] },
-  { anchor: "indice", label: "Método", editorTabId: "Índice", navHref: "#indice", contentKeys: ["benefits"] },
-  { anchor: "cta", label: "Sobre mí", editorTabId: "CTA", navHref: "#cta" },
-  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
-];
-
-const NUVOLETS_SECTIONS: TemplateSectionDef[] = [
-  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
-  { anchor: "franja", label: "Franja", editorTabId: "Franja" },
-  { anchor: "categorias", label: "Categorías", editorTabId: "Categorías" },
-  { anchor: "coleccion", label: "Colección", editorTabId: "Colección" },
-  { anchor: "historia", label: "Historia", editorTabId: "Historia" },
-  { anchor: "favoritos", label: "Favoritos", editorTabId: "Favoritos" },
-  { anchor: "tienda", label: "Tienda", editorTabId: "Tienda" },
-  { anchor: "instagram", label: "Instagram", editorTabId: "Instagram" },
-  { anchor: "newsletter", label: "Suscripciones", editorTabId: "Suscripciones" },
-  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", required: true },
-];
-
-const TEMPLATE_SECTIONS: Record<TemplateId, TemplateSectionDef[]> = {
-  ristorante: [
-    { anchor: "hero", label: "Hero", navHref: "#inicio", editorTabId: "Hero", required: true },
-    { anchor: "franja", label: "Especialidades" },
-    { anchor: "carta", label: "Carta", navHref: "#carta", editorTabId: "Carta", contentKeys: ["serviceMenu"] },
-    { anchor: "compartir", label: "Compartir", editorTabId: "Compartir", contentKeys: ["story"] },
-    { anchor: "especial", label: "Pizza del mes", editorTabId: "Especial", contentKeys: ["benefits"] },
-    { anchor: "marquee", label: "Rótulos en movimiento" },
-    { anchor: "nosotros", label: "Nosotros y galería", navHref: "#nosotros", editorTabId: "Galeria", contentKeys: ["gallery"] },
-    { anchor: "contacto", label: "Contacto y pie", editorTabId: "Footer", navHref: "#contacto", required: true },
-  ],
-  nuvolets: NUVOLETS_SECTIONS,
-  velar: VELAR_SECTIONS,
-  studio: STUDIO_SECTIONS,
-  portfolio: PORTFOLIO_SECTIONS,
-  floristeria: FLORISTERIA_SECTIONS,
-  "oficio-pro": OFICIO_PRO_SECTIONS,
-  "coffee-shop": COFFEE_SHOP_SECTIONS,
-  signal: SIGNAL_SECTIONS,
-  "pallet-ross": PALLET_ROSS_SECTIONS,
-};
-
 export function getTemplateSections(templateId: TemplateId): TemplateSectionDef[] {
-  return TEMPLATE_SECTIONS[templateId] ?? [];
+  return getRequiredTemplate(templateId).sections;
 }
 
 function splitTemplateSections(sections: TemplateSectionDef[]) {

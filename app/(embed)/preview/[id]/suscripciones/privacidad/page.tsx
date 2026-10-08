@@ -1,3 +1,4 @@
+import { templateSupports } from "@/lib/template-registry";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SubscriptionSetupNotice } from "@/components/dashboard/email-subscriptions/components/subscription-setup-notice";
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 export default async function SubscriptionPrivacyPreviewPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const landing = await getPreviewLanding(id);
-  if (landing.template !== "nuvolets") notFound();
+  if (!templateSupports(landing.template, "newsletter")) notFound();
   const content = toLandingContent(landing);
   const settings = await getSubscriptionSettings(landing.id);
   return (

@@ -1,17 +1,20 @@
 import type { GalleryItem, TemplateId } from "@/lib/dashboard-data";
-import { getDefaultContent } from "@/lib/default-content";
+import { SIGNAL_DEFAULT_CONTENT } from "@/lib/templates/signal/content";
+import { STUDIO_DEFAULT_CONTENT } from "@/lib/templates/studio/content";
+import { FLORISTERIA_DEFAULT_CONTENT } from "@/lib/templates/floristeria/content";
+import { COFFEE_SHOP_DEFAULT_CONTENT } from "@/lib/templates/coffee-shop/content";
 import { enrichSignalGallery } from "@/lib/signal-case-defaults";
 
 const GALLERY_SECTION_ITEM_COUNT = 7;
 
-const GALLERY_SECTION_TEMPLATES = new Set<TemplateId>([
-  "studio",
-  "floristeria",
-  "coffee-shop",
-]);
+const LEGACY_GALLERY_DEFAULTS: Partial<Record<TemplateId, GalleryItem[]>> = {
+  studio: STUDIO_DEFAULT_CONTENT.gallery,
+  floristeria: FLORISTERIA_DEFAULT_CONTENT.gallery,
+  "coffee-shop": COFFEE_SHOP_DEFAULT_CONTENT.gallery,
+};
 
 function usesFixedGallerySection(templateId: TemplateId) {
-  return GALLERY_SECTION_TEMPLATES.has(templateId);
+  return Object.hasOwn(LEGACY_GALLERY_DEFAULTS, templateId);
 }
 
 export function isLegacySignalGallery(gallery: GalleryItem[]) {
@@ -36,7 +39,7 @@ export function isLegacySignalGallery(gallery: GalleryItem[]) {
 
 export function resolveGalleryItems(templateId: TemplateId, gallery: GalleryItem[]) {
   if (templateId === "signal" && isLegacySignalGallery(gallery)) {
-    return enrichSignalGallery(getDefaultContent("signal").gallery ?? []);
+    return enrichSignalGallery(SIGNAL_DEFAULT_CONTENT.gallery ?? []);
   }
 
   if (templateId === "signal") {
@@ -49,7 +52,7 @@ export function resolveGalleryItems(templateId: TemplateId, gallery: GalleryItem
     return gallery.slice(0, GALLERY_SECTION_ITEM_COUNT);
   }
 
-  const defaults = getDefaultContent(templateId).gallery ?? [];
+  const defaults = LEGACY_GALLERY_DEFAULTS[templateId] ?? [];
   const resolved = [...gallery];
 
   for (let index = gallery.length; index < GALLERY_SECTION_ITEM_COUNT; index++) {

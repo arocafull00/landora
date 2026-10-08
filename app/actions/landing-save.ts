@@ -18,9 +18,9 @@ import {
   hasLandingSaveChanges,
   type LandingSaveChanges,
 } from "@/lib/landing-save-payload";
+import { getRequiredTemplate } from "@/lib/template-registry";
+import { getTemplateContentSchema } from "@/lib/templates/content";
 import { logger } from "@/lib/logger";
-import { nuvoletsHeroSchema } from "@/lib/schemas/nuvolets";
-import { ristoranteEditableSectionsSchema } from "@/lib/schemas/ristorante-editor";
 import {
   saveLandingSchema,
   type SaveLandingInput,
@@ -114,13 +114,15 @@ export async function saveLandingAction(
 
   const landing = await assertLandingAccess(parsed.data.landingId);
   if (!landing) return { error: "No tienes acceso a esta web" };
-  if (landing.template === "ristorante") {
-    const sections = parsed.data.mode === "publish"
-      ? getLandingSectionPayloads(parsed.data.publication.content as LandingContent, landing.template)
-      : parsed.data.changes.sections ?? {};
-    if (!ristoranteEditableSectionsSchema.safeParse(sections).success) {
-      return { error: "Revisa los campos de Ristorante antes de guardar" };
-    }
+  const template = getRequiredTemplate(landing.template);
+  if (parsed.data.mode === "publish" && !getTemplateContentSchema(landing.template).safeParse(parsed.data.publication.content).success) {
+    return { error: "Revisa el contenido de la web antes de publicar" };
+  }
+  const sections = parsed.data.mode === "publish"
+    ? getLandingSectionPayloads(parsed.data.publication.content as LandingContent, landing.template)
+    : parsed.data.changes.sections ?? {};
+  if (template.validateSections && !template.validateSections(sections)) {
+    return { error: "Revisa los campos de la web antes de guardar" };
   }
   const { userId: clerkUserId } = await auth();
   if (!clerkUserId) return { error: "No autorizado" };

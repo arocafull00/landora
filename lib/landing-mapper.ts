@@ -9,6 +9,8 @@ import { getLegacyCompanySocialLinks } from "@/lib/company-details";
 import type { User } from "@/lib/domain/dtos";
 import { resolveSectionSelections } from "@/lib/section-selections";
 import { resolveLandingAppearance } from "@/lib/site-appearance";
+import { getRequiredTemplate } from "@/lib/template-registry";
+import { migrateTemplateContent } from "@/lib/templates/content";
 import { normalizeEnabledPages } from "@/lib/site-pages";
 import {
   syncBlogNavHrefs,
@@ -68,8 +70,11 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
         }
       : undefined;
 
-  return {
+  const content: LandingContent = {
     ...(nuvolets ? { nuvolets } : {}),
+    templateData: row.branding?.templateData ?? {},
+    schemaVersion: row.branding?.schemaVersion ?? 1,
+    rendererVersion: getRequiredTemplate(row.template).rendererVersion,
     appearance: resolveLandingAppearance(row.template, {
       paletteId: row.branding?.paletteId,
       typographyId: row.branding?.typographyId,
@@ -256,6 +261,7 @@ export function toLandingContent(row: LandingWithSections): LandingContent {
       } satisfies HeroBannerOffer;
     }),
   };
+  return migrateTemplateContent(row.template, content) as LandingContent;
 }
 
 export function toLandingView(row: LandingWithSections, user: User | undefined): Landing {

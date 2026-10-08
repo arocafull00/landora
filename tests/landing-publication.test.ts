@@ -8,7 +8,7 @@ import {
 
 const requiredContent = {
   hero: {},
-  contact: {},
+  contact: { phone: "", email: "", address: "" },
   brand: "Landora",
   nav: [],
   stats: [],
@@ -27,7 +27,7 @@ test("normalizes a public slug", () => {
 });
 
 test("rejects incomplete published content", () => {
-  assert.throws(() => parsePublishedLandingContent({ hero: {} }));
+  assert.throws(() => parsePublishedLandingContent({ hero: {} }, "velar"));
 });
 
 test("restores offer expiration dates from JSON", () => {
@@ -43,7 +43,7 @@ test("restores offer expiration dates from JSON", () => {
         expiresAt: "2026-08-01T10:00:00.000Z",
       },
     ],
-  });
+  }, "velar");
 
   assert.ok(content.offers?.[0]?.expiresAt instanceof Date);
 });

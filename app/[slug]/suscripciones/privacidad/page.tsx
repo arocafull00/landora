@@ -1,3 +1,4 @@
+import { templateSupports } from "@/lib/template-registry";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SubscriptionPrivacyPageContent } from "@/components/templates/nuvolets/subscription-privacy-page-content";
@@ -14,7 +15,7 @@ type SubscriptionPrivacyRouteProps = {
 export async function generateMetadata({ params }: SubscriptionPrivacyRouteProps): Promise<Metadata> {
   const { slug } = await params;
   const landing = await getPublishedLandingBySlug(slug);
-  if (!landing || landing.template !== "nuvolets") return {};
+  if (!landing || !templateSupports(landing.template, "newsletter")) return {};
   const settings = await getPublicSubscriptionSettings(landing.id);
   if (!isSubscriptionConfigured(settings)) return {};
   return createPublishedSiteMetadata({

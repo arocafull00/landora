@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { EditorTab } from "@/lib/template-registry";
+import type { EditorTab } from "@/lib/templates/types";
 
 function TabTrigger({ tab }: { tab: EditorTab }) {
   return (

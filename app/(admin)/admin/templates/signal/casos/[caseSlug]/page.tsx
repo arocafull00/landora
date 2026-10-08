@@ -21,7 +21,7 @@ export default async function SignalDemoCasePage({
   const template = getTemplate("signal");
   if (!template) notFound();
 
-  const content = template.demoContent;
+  const content = await template.loadContent();
   const gallery = resolveGalleryItems("signal", content.gallery ?? []);
   const signalCase = findSignalCaseBySlug(gallery, caseSlug);
   if (!signalCase) notFound();

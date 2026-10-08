@@ -1,0 +1,86 @@
+import type { TemplateDefinition } from "@/lib/templates/types";
+import { NAV_EDITOR_TAB, DESIGN_EDITOR_TAB, OFFERS_EDITOR_TAB, RESERVAS_EDITOR_TAB, BLOG_EDITOR_TAB, FOOTER_EDITOR_TAB, SEO_EDITOR_TAB, SECTIONS_EDITOR_TAB } from "@/lib/templates/editor-tabs";
+
+export const COFFEE_SHOP_TEMPLATE: TemplateDefinition = {
+  id: "coffee-shop",
+  label: "Coffee Shop",
+  description: "Landing para cafeterías y panaderías: carta de café, galería, horarios y reservas.",
+  retired: true,
+  contentVersion: 1,
+  rendererVersion: 1,
+  storageSections: [
+  "hero",
+  "branding",
+  "story",
+  "stats",
+  "gallery",
+  "nav",
+  "workflow",
+  "testimonials",
+  "cta",
+  "serviceMenu",
+  "faq",
+],
+  capabilities: { newsletter: false, booking: true },
+  sections: [
+  { anchor: "hero", label: "Hero", editorTabId: "Hero", required: true },
+  { anchor: "story", label: "Historia", navHref: "#story", contentKeys: ["story", "stats"] },
+  { anchor: "carta", label: "Carta", editorTabId: "Carta", navHref: "#carta", contentKeys: ["serviceMenu"] },
+  { anchor: "galeria", label: "Galería", editorTabId: "Galeria", navHref: "#galeria", contentKeys: ["gallery"] },
+  { anchor: "horarios", label: "Horarios", editorTabId: "Horarios", navHref: "#horarios", contentKeys: ["workflow"] },
+  { anchor: "testimonios", label: "Testimonios", navHref: "#testimonios", contentKeys: ["testimonials"] },
+  { anchor: "faq", label: "FAQ", editorTabId: "FAQ", navHref: "#faq", contentKeys: ["faq"] },
+  { anchor: "reservas", label: "Reservas", editorTabId: "Reservas", navHref: "#reservas" },
+  { anchor: "contacto", label: "Pie de página", editorTabId: "Footer", navHref: "#contacto", required: true },
+],
+  headings: {
+    carta: {
+      title: "Nuestra carta",
+      subtitle: "Café de origen, repostería artesanal y bebidas de temporada",
+    },
+    galeria: {
+      title: "El espacio",
+      subtitle: "",
+    },
+    horarios: {
+      title: "Horarios",
+      subtitle: "",
+    },
+    faq: {
+      title: "Preguntas frecuentes",
+      subtitle: "Todo lo que necesitas saber antes de tu visita.",
+    },
+    contacto: {
+      title: "Visítanos",
+      subtitle: "Pasa por la cafetería o escríbenos para reservar mesa o pedir para llevar.",
+    },
+    reservas: {
+      title: "Reserva tu mesa",
+      subtitle: "Elige fecha y hora para tu visita.",
+    },
+  },
+  paletteOptions: [
+    { id: "default", label: "Original", description: "Café tostado y cobre.", colorScheme: "light" },
+    { id: "coffee-green", label: "Verde café", description: "Verde bosque y crema.", colorScheme: "light" },
+    { id: "burgundy", label: "Borgoña", description: "Borgoña y rosa tostado.", colorScheme: "light" },
+  ],
+  editorTabs: [
+      { id: "Hero", label: "Hero" },
+      NAV_EDITOR_TAB,
+      DESIGN_EDITOR_TAB,
+      { id: "Carta", label: "Carta" },
+      { id: "Galeria", label: "Galería" },
+      { id: "Horarios", label: "Horarios" },
+      { id: "FAQ", label: "FAQ" },
+      OFFERS_EDITOR_TAB,
+      RESERVAS_EDITOR_TAB,
+      BLOG_EDITOR_TAB,
+      FOOTER_EDITOR_TAB,
+      SEO_EDITOR_TAB,
+      SECTIONS_EDITOR_TAB,
+    ],
+  loadImageOptions: () => import("@/lib/templates/coffee-shop/image-options").then((module) => module.COFFEE_SHOP_IMAGE_OPTIONS),
+  loadContent: () => import("@/lib/templates/coffee-shop/content").then((module) => module.COFFEE_SHOP_DEFAULT_CONTENT),
+  loadComponent: () => import("@/components/templates/coffee-shop/coffee-shop-template").then((module) => module.CoffeeShopTemplate),
+  loadEditor: () => import("@/components/dashboard/sections/coffee-shop-editor-section").then((module) => module.CoffeeShopEditorSection),
+};

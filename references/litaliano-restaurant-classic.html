@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="L'Italiano — restaurante italiano de inspiración clásica, cocina artesanal y hospitalidad mediterránea." />
-  <title>L'Italiano — Ristorante & Pizzeria · Unsplash</title>
+  <meta name="description" content="L'Italiano — Ristorante & Pizzeria. Cocina italiana, hospitalidad mediterránea y una mesa hecha para quedarse." />
+  <title>L'Italiano — Ristorante & Pizzeria</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -12,21 +12,18 @@
       theme: {
         extend: {
           colors: {
-            cream: '#F3E9D6',
-            sand: '#E8DCC5',
-            brick: '#8E2E1F',
-            sage: '#A7A06A',
-            brown: '#4A2E21',
-            line: '#CBB89B',
-            copper: '#C48B5A'
+            crema: '#F5E8CB',
+            crema2: '#EEDDB8',
+            rosso: '#8D281D',
+            oliva: '#AAA269',
+            marrone: '#4A2C20',
+            linea: '#C7AA7E',
+            vino: '#752117'
           },
           fontFamily: {
-            display: ['"Cormorant Garamond"', 'serif'],
+            serif: ['"Cormorant Garamond"', 'serif'],
             sans: ['Inter', 'sans-serif'],
-            script: ['"Italiana"', 'serif']
-          },
-          boxShadow: {
-            soft: '0 24px 70px rgba(74, 46, 33, .10)'
+            script: ['"Caveat"', 'cursive']
           }
         }
       }
@@ -35,533 +32,434 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=Italiana&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    html { background: #F3E9D6; }
-    body { color: #4A2E21; }
-    ::selection { background: #8E2E1F; color: #F3E9D6; }
+    body { background:#8D281D; color:#4A2C20; }
+    ::selection { background:#8D281D; color:#F5E8CB; }
 
-    .noise {
-      background-image:
-        radial-gradient(rgba(74,46,33,.055) .7px, transparent .7px);
-      background-size: 6px 6px;
+    .paper {
+      background:
+        radial-gradient(circle at 20% 30%, rgba(74,44,32,.04) 0 .7px, transparent .8px) 0 0/7px 7px,
+        #F5E8CB;
+    }
+
+    .img-wrap img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transition:transform .9s cubic-bezier(.2,.7,.2,1);
+    }
+
+    .img-wrap:hover img { transform:scale(1.025); }
+
+    .tab[aria-selected="true"] {
+      background:#8D281D;
+      color:#F5E8CB;
+      border-color:#8D281D;
+    }
+
+    .menu-item { animation:fadeIn .28s ease both; }
+    @keyframes fadeIn {
+      from { opacity:0; transform:translateY(6px); }
+      to { opacity:1; transform:translateY(0); }
     }
 
     .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity .85s ease, transform .85s ease;
+      opacity:0;
+      transform:translateY(20px);
+      transition:opacity .7s ease, transform .7s ease;
     }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .image-zoom img {
-      transition: transform 1.1s cubic-bezier(.2,.7,.2,1);
-    }
-
-    .image-zoom:hover img {
-      transform: scale(1.035);
-    }
-
-    .nav-link {
-      position: relative;
-    }
-
-    .nav-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 100%;
-      bottom: -4px;
-      height: 1px;
-      background: currentColor;
-      transition: right .25s ease;
-    }
-
-    .nav-link:hover::after { right: 0; }
-
-    .menu-tab[aria-selected="true"] {
-      background: #8E2E1F;
-      color: #F3E9D6;
-      border-color: #8E2E1F;
-    }
-
-    .menu-item {
-      animation: menuIn .35s ease both;
-    }
-
-    @keyframes menuIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .reveal.visible { opacity:1; transform:none; }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-        animation: none !important;
-      }
-      .reveal { opacity: 1; transform: none; }
+      *, *::before, *::after { transition:none !important; animation:none !important; }
+      .reveal { opacity:1; transform:none; }
     }
   </style>
 </head>
 
-<body class="bg-cream font-sans antialiased overflow-x-hidden">
-  <!-- TOP INFORMATION BAR -->
-  <div class="border-b border-line/80 bg-sand/65">
-    <div class="mx-auto flex max-w-[1500px] items-center justify-between gap-5 px-5 py-2.5 text-[10px] font-medium uppercase tracking-[0.18em] sm:px-8 lg:px-12">
-      <span class="hidden sm:inline">Valencia · España</span>
-      <span>Martes — Domingo · 13:00 — 23:30</span>
-      <a href="#prenota" class="nav-link whitespace-nowrap">Reservas · Prenota</a>
-    </div>
-  </div>
+<body class="font-sans antialiased">
+  <div class="mx-auto max-w-[1520px] px-3 py-3 sm:px-6 sm:py-6 lg:px-10 lg:py-9">
+    <div class="paper overflow-hidden border border-[#7A2118]">
 
-  <!-- NAVIGATION -->
-  <header class="sticky top-0 z-50 border-b border-line/70 bg-cream/95 backdrop-blur-md">
-    <nav class="mx-auto flex h-[76px] max-w-[1500px] items-center justify-between px-5 sm:px-8 lg:px-12" aria-label="Navegación principal">
-      <a href="#home" class="font-display text-2xl font-semibold tracking-[0.08em] sm:text-3xl">
-        L'ITALIANO
-      </a>
+      <!-- HEADER -->
+      <header class="border-b border-linea">
+        <div class="grid min-h-[72px] grid-cols-1 divide-y divide-linea lg:grid-cols-[170px_1fr_250px_150px] lg:divide-x lg:divide-y-0">
+          <a href="#home" class="flex items-center px-5 py-4 font-serif text-2xl font-semibold tracking-[.06em] lg:px-7">
+            L'ITALIANO
+          </a>
 
-      <div class="hidden items-center gap-7 text-[11px] font-semibold uppercase tracking-[0.17em] lg:flex">
-        <a href="#home" class="nav-link">Home</a>
-        <a href="#carta" class="nav-link">Carta</a>
-        <a href="#ristorante" class="nav-link">Ristorante</a>
-        <a href="#galleria" class="nav-link">Galleria</a>
-        <a href="#contatto" class="nav-link">Contatto</a>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <a href="#prenota" class="hidden rounded-full border border-brick px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-brick transition hover:bg-brick hover:text-cream sm:inline-flex">
-          Prenota ora
-        </a>
-        <button id="menuButton" class="grid h-10 w-10 place-items-center rounded-full border border-line lg:hidden" aria-expanded="false" aria-controls="mobileMenu" aria-label="Abrir menú">
-          <span class="flex w-4 flex-col gap-1.5">
-            <span class="h-px w-full bg-brown"></span>
-            <span class="h-px w-full bg-brown"></span>
-          </span>
-        </button>
-      </div>
-    </nav>
-
-    <div id="mobileMenu" class="hidden border-t border-line bg-cream px-5 py-5 lg:hidden">
-      <div class="flex flex-col gap-4 text-sm uppercase tracking-[0.16em]">
-        <a href="#home">Home</a>
-        <a href="#carta">Carta</a>
-        <a href="#ristorante">Ristorante</a>
-        <a href="#galleria">Galleria</a>
-        <a href="#contatto">Contatto</a>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <!-- HERO -->
-    <section id="home" class="noise relative overflow-hidden border-b border-line">
-      <div class="mx-auto grid max-w-[1500px] gap-8 px-5 py-10 sm:px-8 sm:py-14 lg:grid-cols-12 lg:px-12 lg:py-16">
-        <div class="reveal relative lg:col-span-7">
-          <div class="image-zoom relative min-h-[470px] overflow-hidden rounded-[2px] shadow-soft sm:min-h-[610px]">
-            <img
-              src="https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 58vw, 94vw" fetchpriority="high" decoding="async"
-              alt="Interior cálido de un restaurante"
-              class="absolute inset-0 h-full w-full object-cover"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-brown/40 via-transparent to-transparent"></div>
-            <div class="absolute bottom-6 left-6 right-6 flex items-end justify-between text-cream sm:bottom-8 sm:left-8 sm:right-8">
-              <p class="max-w-[250px] text-xs leading-relaxed tracking-wide">
-                Un luogo dove il tempo rallenta e la tavola riunisce.
-              </p>
-              <span class="hidden font-display text-xl italic sm:inline">Valencia</span>
+          <div class="flex items-center justify-between gap-5 px-5 py-3 lg:px-7">
+            <div>
+              <p class="text-[10px] uppercase tracking-[.16em]">Via del Sole, 27</p>
+              <p class="mt-1 text-[10px] uppercase tracking-[.16em]">Valencia, España →</p>
             </div>
+            <span class="hidden font-serif text-xl italic text-rosso sm:inline">Ristorante & Pizzeria</span>
           </div>
 
-          <div class="absolute -bottom-5 -right-3 hidden w-[38%] border-8 border-cream bg-cream md:block lg:-right-14 lg:bottom-10">
-            <div class="image-zoom aspect-[4/5] overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 24vw, 45vw" decoding="async"
-                alt="Mesa preparada para una cena italiana"
-                class="h-full w-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-col justify-center lg:col-span-5 lg:pl-10 xl:pl-16">
-          <div class="reveal">
-            <p class="mb-5 text-[10px] font-semibold uppercase tracking-[0.28em] text-brick">
-              Ristorante · Pizzeria · Cucina italiana
-            </p>
-            <h1 class="font-display text-[clamp(4rem,8vw,7.7rem)] font-medium leading-[.78] tracking-[-0.05em]">
-              L'Italiano
-            </h1>
-            <p class="mt-3 font-display text-3xl italic leading-tight text-brick sm:text-4xl">
-              un piccolo angolo d'Italia
-            </p>
-
-            <div class="my-8 h-px w-full bg-line"></div>
-
-            <p class="max-w-lg text-sm leading-7 text-brown/75 sm:text-base">
-              Una experiencia italiana cálida y auténtica: cocina hecha con calma,
-              mesas que invitan a quedarse y los sabores de siempre servidos con cuidado.
-            </p>
-
-            <div class="mt-8 flex flex-wrap gap-3">
-              <a href="#carta" class="rounded-full bg-brick px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-cream transition hover:bg-brown">
-                Ver la carta
-              </a>
-              <a href="#prenota" class="rounded-full border border-line px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.15em] transition hover:border-brown">
-                Reservar mesa
-              </a>
-            </div>
-
-            <p class="mt-10 font-display text-2xl italic text-sage sm:text-3xl">
-              “La famiglia è il cuore di tutto”
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- QUICK MENU -->
-    <section id="carta" class="border-b border-line bg-[#F7EFDF]">
-      <div class="mx-auto max-w-[1500px] px-5 py-16 sm:px-8 sm:py-20 lg:px-12">
-        <div class="reveal grid gap-8 lg:grid-cols-12">
-          <div class="lg:col-span-4">
-            <p class="text-[10px] font-semibold uppercase tracking-[0.26em] text-brick">La nostra carta</p>
-            <h2 class="mt-3 max-w-md font-display text-5xl leading-[.95] sm:text-6xl">Scopri il nostro menu</h2>
-            <p class="mt-5 max-w-sm text-sm leading-6 text-brown/70">
-              Recetas italianas reconocibles, producto cuidado y una carta pensada para compartir sin prisas.
-            </p>
+          <div class="hidden items-center justify-center px-5 text-center text-[9px] uppercase leading-5 tracking-[.08em] lg:flex">
+            Mar — Jue: 13:00 — 23:00<br>
+            Vie — Dom: 12:00 — 00:00
           </div>
 
-          <div class="lg:col-span-8">
-            <div class="mb-8 flex gap-2 overflow-x-auto pb-2" role="tablist" aria-label="Categorías del menú">
-              <button class="menu-tab shrink-0 rounded-full border border-line px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] transition" data-category="pizze" aria-selected="true">Pizze</button>
-              <button class="menu-tab shrink-0 rounded-full border border-line px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] transition" data-category="pasta" aria-selected="false">Pasta</button>
-              <button class="menu-tab shrink-0 rounded-full border border-line px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] transition" data-category="entranti" aria-selected="false">Entranti</button>
-              <button class="menu-tab shrink-0 rounded-full border border-line px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.16em] transition" data-category="postres" aria-selected="false">Postres</button>
-            </div>
-
-            <div class="grid gap-x-12 lg:grid-cols-2" id="menuList"></div>
-
-            <div class="mt-8 flex items-center justify-between border-t border-line pt-5">
-              <p class="text-xs italic text-brown/60">Pregunta por platos fuera de carta y sugerencias del día.</p>
-              <a href="#" class="nav-link hidden text-[10px] font-semibold uppercase tracking-[0.18em] sm:inline">Carta completa</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RESTAURANT STORY -->
-    <section id="ristorante" class="relative overflow-hidden py-20 sm:py-28">
-      <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-        <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-          <div class="reveal order-2 lg:order-1 lg:col-span-5">
-            <p class="text-[10px] font-semibold uppercase tracking-[0.26em] text-brick">Il ristorante</p>
-            <h2 class="mt-4 font-display text-5xl leading-[.96] sm:text-6xl lg:text-7xl">
-              La famiglia è<br><span class="italic text-brick">il cuore di tutto</span>
-            </h2>
-            <div class="mt-7 max-w-lg space-y-4 text-sm leading-7 text-brown/75">
-              <p>
-                L'Italiano nace de una idea sencilla: que entrar a comer se sienta como llegar a una casa italiana en la que siempre hay sitio para uno más.
-              </p>
-              <p>
-                Tradición, conversación, mesas compartidas y una hospitalidad sin artificios. El restaurante no es solo el escenario: forma parte de la experiencia.
-              </p>
-            </div>
-            <a href="#galleria" class="mt-8 inline-block border-b border-brown pb-1 text-[10px] font-semibold uppercase tracking-[0.2em]">
-              Conoce nuestro espacio
+          <div class="hidden items-center justify-center lg:flex">
+            <a href="#prenota" class="rounded-full border border-rosso px-5 py-2.5 text-[10px] font-medium uppercase tracking-[.08em] transition hover:bg-rosso hover:text-crema">
+              Reserva
             </a>
           </div>
-
-          <div class="reveal relative order-1 min-h-[590px] lg:order-2 lg:col-span-7">
-            <div class="image-zoom absolute left-0 top-0 h-[72%] w-[76%] overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async"
-                alt="Sala de restaurante con ambiente acogedor"
-                class="h-full w-full object-cover"
-              />
-            </div>
-            <div class="image-zoom absolute bottom-0 right-0 h-[49%] w-[47%] border-[10px] border-cream overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async"
-                alt="Vino servido en una mesa"
-                class="h-full w-full object-cover"
-              />
-            </div>
-            <div class="absolute bottom-10 left-4 bg-cream/95 px-5 py-4 shadow-soft sm:left-8">
-              <span class="font-display text-2xl italic">Ospitalità italiana</span>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
 
-    <!-- CUISINE -->
-    <section class="border-y border-line bg-sand/70 py-20 sm:py-28">
-      <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-        <div class="grid gap-10 lg:grid-cols-12">
-          <div class="reveal lg:col-span-4">
-            <p class="text-[10px] font-semibold uppercase tracking-[0.26em] text-brick">La cucina</p>
-            <h2 class="mt-4 font-display text-5xl leading-[.94] sm:text-6xl">
-              Tradizione italiana,<br><span class="italic">fatta con cura</span>
-            </h2>
+        <nav class="flex gap-0 overflow-x-auto border-t border-linea text-[9px] font-medium uppercase tracking-[.12em]" aria-label="Navegación">
+          <a href="#carta" class="min-w-[120px] flex-1 border-r border-linea px-4 py-3 text-center hover:bg-crema2">Carta</a>
+          <a href="#pasta" class="min-w-[120px] flex-1 border-r border-linea px-4 py-3 text-center hover:bg-crema2">Pasta</a>
+          <a href="#pizza" class="min-w-[120px] flex-1 border-r border-linea px-4 py-3 text-center hover:bg-crema2">Pizza</a>
+          <a href="#storia" class="min-w-[120px] flex-1 border-r border-linea px-4 py-3 text-center hover:bg-crema2">Ristorante</a>
+          <a href="#prenota" class="min-w-[120px] flex-1 px-4 py-3 text-center hover:bg-crema2">Prenota</a>
+        </nav>
+      </header>
+
+      <!-- HERO: editorial composition based on the reference -->
+      <section id="home" class="grid lg:grid-cols-[61%_39%]">
+        <!-- Left large image -->
+        <div class="relative min-h-[500px] overflow-hidden border-b border-linea lg:min-h-[610px] lg:border-b-0 lg:border-r">
+          <div class="img-wrap absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1665395514985-167a320fec3c?auto=format&fit=crop&w=1200&q=72"
+              srcset="
+                https://images.unsplash.com/photo-1665395514985-167a320fec3c?auto=format&fit=crop&w=600&q=72 600w,
+                https://images.unsplash.com/photo-1665395514985-167a320fec3c?auto=format&fit=crop&w=900&q=72 900w,
+                https://images.unsplash.com/photo-1665395514985-167a320fec3c?auto=format&fit=crop&w=1400&q=72 1400w
+              "
+              sizes="(min-width:1024px) 58vw, 100vw"
+              alt="Terraza de restaurante italiano con mesas y flores"
+              fetchpriority="high"
+              decoding="async"
+            >
           </div>
 
-          <div class="reveal lg:col-span-3 lg:pt-16">
-            <p class="text-sm leading-7 text-brown/75">
-              Masa, salsa, pasta, aceite, hierbas y tiempo. La cocina parte de ingredientes honestos y de recetas que no necesitan disfrazarse para funcionar.
+          <div class="absolute inset-0 bg-gradient-to-t from-marrone/25 via-transparent to-transparent"></div>
+
+          <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-crema drop-shadow-md">
+            <p class="font-script text-[clamp(5rem,11vw,10rem)] font-semibold leading-none">
+              L'Italiano
             </p>
-            <dl class="mt-9 space-y-5 border-t border-line pt-6">
-              <div class="flex justify-between gap-4 text-xs uppercase tracking-[0.15em]">
-                <dt class="text-brown/50">01</dt><dd>Fatto a mano</dd>
-              </div>
-              <div class="flex justify-between gap-4 text-xs uppercase tracking-[0.15em]">
-                <dt class="text-brown/50">02</dt><dd>Prodotto di stagione</dd>
-              </div>
-              <div class="flex justify-between gap-4 text-xs uppercase tracking-[0.15em]">
-                <dt class="text-brown/50">03</dt><dd>Ricette italiane</dd>
-              </div>
-            </dl>
+            <p class="mt-1 text-[10px] font-medium uppercase tracking-[.28em]">
+              cucina · famiglia · ospitalità
+            </p>
+          </div>
+        </div>
+
+        <!-- Right olive story panel -->
+        <div class="grid bg-oliva lg:grid-rows-[260px_1fr]">
+          <div class="grid border-b border-marrone/20 sm:grid-cols-[42%_58%] lg:grid-cols-[42%_58%]">
+            <div class="img-wrap min-h-[240px] overflow-hidden border-b border-marrone/20 sm:border-b-0 sm:border-r">
+              <img
+                src="https://images.unsplash.com/photo-1705402423251-9972794331af?auto=format&fit=crop&w=900&q=72"
+                srcset="
+                  https://images.unsplash.com/photo-1705402423251-9972794331af?auto=format&fit=crop&w=500&q=72 500w,
+                  https://images.unsplash.com/photo-1705402423251-9972794331af?auto=format&fit=crop&w=900&q=72 900w
+                "
+                sizes="(min-width:1024px) 16vw, 42vw"
+                alt="Mesa de restaurante preparada para compartir"
+                decoding="async"
+              >
+            </div>
+
+            <div class="flex flex-col justify-center px-6 py-8 sm:px-7">
+              <p class="font-script text-4xl leading-[.95] text-crema sm:text-5xl">
+                La famiglia è il cuore di tutto
+              </p>
+              <p class="mt-5 text-[11px] leading-5 text-crema/85">
+                Nacimos alrededor de una mesa. Recetas sencillas, producto honesto y esa forma italiana de recibir a la gente como si ya fuese de casa.
+              </p>
+              <a href="#storia" class="mt-5 w-fit rounded-full border border-crema/80 px-4 py-2 text-[9px] uppercase tracking-[.12em] text-crema">
+                Nuestra historia
+              </a>
+            </div>
           </div>
 
-          <div class="reveal lg:col-span-5">
-            <div class="image-zoom aspect-[4/5] overflow-hidden">
+          <div class="grid grid-cols-2">
+            <div class="img-wrap min-h-[350px] overflow-hidden border-r border-marrone/20">
               <img
-                src="https://images.unsplash.com/photo-1552056776-9b5657118ca4?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1552056776-9b5657118ca4?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1552056776-9b5657118ca4?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1552056776-9b5657118ca4?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1552056776-9b5657118ca4?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async"
-                alt="Pasta italiana preparada con ingredientes frescos"
-                class="h-full w-full object-cover"
-              />
+                src="https://images.unsplash.com/photo-1760049869567-e4ae462306f5?auto=format&fit=crop&w=900&q=72"
+                srcset="
+                  https://images.unsplash.com/photo-1760049869567-e4ae462306f5?auto=format&fit=crop&w=500&q=72 500w,
+                  https://images.unsplash.com/photo-1760049869567-e4ae462306f5?auto=format&fit=crop&w=900&q=72 900w
+                "
+                sizes="(min-width:1024px) 20vw, 50vw"
+                alt="Chef trabajando en cocina"
+                loading="lazy"
+                decoding="async"
+              >
+            </div>
+
+            <div class="img-wrap min-h-[350px] overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1761095596755-99ba58997720?auto=format&fit=crop&w=900&q=72"
+                srcset="
+                  https://images.unsplash.com/photo-1761095596755-99ba58997720?auto=format&fit=crop&w=500&q=72 500w,
+                  https://images.unsplash.com/photo-1761095596755-99ba58997720?auto=format&fit=crop&w=900&q=72 900w
+                "
+                sizes="(min-width:1024px) 20vw, 50vw"
+                alt="Plato servido en un restaurante"
+                loading="lazy"
+                decoding="async"
+              >
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- EDITORIAL GALLERY -->
-    <section id="galleria" class="py-20 sm:py-28">
-      <div class="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
-        <div class="reveal mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <p class="text-[10px] font-semibold uppercase tracking-[0.26em] text-brick">Galleria</p>
-            <h2 class="mt-3 font-display text-5xl sm:text-6xl">Una storia da vivere</h2>
+      <!-- TYPOGRAPHIC STRIP -->
+      <section class="overflow-hidden border-y border-linea bg-crema">
+        <div class="flex min-w-max items-center gap-8 py-5 font-serif text-2xl uppercase tracking-[.04em] text-rosso sm:text-3xl lg:text-4xl">
+          <span class="pl-6">Il cuore d'Italia a tavola</span>
+          <span class="text-3xl">✺</span>
+          <span>Il cuore d'Italia a tavola</span>
+          <span class="text-3xl">✺</span>
+          <span>Il cuore d'Italia a tavola</span>
+          <span class="pr-6 text-3xl">✺</span>
+        </div>
+      </section>
+
+      <!-- MENU, immediately after hero -->
+      <section id="carta" class="border-b border-linea">
+        <div class="grid lg:grid-cols-[34%_66%]">
+          <aside class="border-b border-linea bg-crema2 px-6 py-12 lg:border-b-0 lg:border-r lg:px-10 lg:py-16">
+            <p class="text-[9px] uppercase tracking-[.18em] text-rosso">La nostra carta</p>
+            <h2 class="mt-4 font-serif text-5xl leading-[.9] sm:text-6xl">
+              Mangiare bene,<br><span class="italic">stare meglio.</span>
+            </h2>
+            <p class="mt-6 max-w-sm text-xs leading-6 text-marrone/70">
+              Una carta breve y reconocible. Cocina italiana sin convertir cada plato en un anuncio con botón de compra, porque todavía somos una especie civilizada.
+            </p>
+          </aside>
+
+          <div class="px-6 py-12 lg:px-10 lg:py-16">
+            <div class="flex gap-2 overflow-x-auto pb-2" role="tablist" aria-label="Categorías de la carta">
+              <button class="tab shrink-0 rounded-full border border-linea px-5 py-2.5 text-[9px] font-semibold uppercase tracking-[.14em]" data-category="pizze" aria-selected="true">Pizze</button>
+              <button class="tab shrink-0 rounded-full border border-linea px-5 py-2.5 text-[9px] font-semibold uppercase tracking-[.14em]" data-category="pasta" aria-selected="false">Pasta</button>
+              <button class="tab shrink-0 rounded-full border border-linea px-5 py-2.5 text-[9px] font-semibold uppercase tracking-[.14em]" data-category="entranti" aria-selected="false">Entranti</button>
+              <button class="tab shrink-0 rounded-full border border-linea px-5 py-2.5 text-[9px] font-semibold uppercase tracking-[.14em]" data-category="postres" aria-selected="false">Postres</button>
+            </div>
+
+            <div id="menuList" class="mt-7 grid gap-x-10 lg:grid-cols-2"></div>
           </div>
-          <p class="max-w-sm text-sm leading-6 text-brown/65">
-            Detalles, sobremesas, manos trabajando y esa luz que hace que uno se quede “cinco minutos más”.
-          </p>
+        </div>
+      </section>
+
+      <!-- EDITORIAL STORY BLOCK, not a gallery -->
+      <section id="storia" class="grid border-b border-linea lg:grid-cols-[38%_27%_35%]">
+        <div class="img-wrap min-h-[620px] overflow-hidden border-b border-linea lg:border-b-0 lg:border-r">
+          <img
+            src="https://images.unsplash.com/photo-1571055728060-3c49cb85d0ab?auto=format&fit=crop&w=1200&q=72"
+            srcset="
+              https://images.unsplash.com/photo-1571055728060-3c49cb85d0ab?auto=format&fit=crop&w=600&q=72 600w,
+              https://images.unsplash.com/photo-1571055728060-3c49cb85d0ab?auto=format&fit=crop&w=900&q=72 900w,
+              https://images.unsplash.com/photo-1571055728060-3c49cb85d0ab?auto=format&fit=crop&w=1400&q=72 1400w
+            "
+            sizes="(min-width:1024px) 38vw, 100vw"
+            alt="Interior de restaurante con mesas preparadas"
+            loading="lazy"
+            decoding="async"
+          >
         </div>
 
-        <div class="grid auto-rows-[150px] grid-cols-2 gap-3 sm:auto-rows-[200px] sm:grid-cols-4 lg:auto-rows-[240px]">
-          <figure class="reveal image-zoom col-span-2 row-span-2 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async" alt="Interior de restaurante" class="h-full w-full object-cover">
-          </figure>
+        <div class="divide-y divide-linea border-b border-linea lg:border-b-0 lg:border-r">
+          <article class="px-7 py-10">
+            <p class="text-[9px] uppercase tracking-[.16em]">/cucina</p>
+            <h3 class="mt-2 font-script text-3xl text-rosso">Cucina</h3>
+            <p class="mt-4 text-[11px] leading-5 text-marrone/70">
+              Una cocina actual basada en recetas italianas, producto de temporada y elaboraciones hechas con calma.
+            </p>
+          </article>
 
-          <div class="reveal flex items-center justify-center border border-line bg-sand/55 p-6 text-center">
-            <span class="font-display text-3xl italic text-brick">Atmosfera</span>
-          </div>
+          <article class="px-7 py-10">
+            <p class="text-[9px] uppercase tracking-[.16em]">/spazio</p>
+            <h3 class="mt-2 font-script text-3xl text-rosso">Spazio</h3>
+            <p class="mt-4 text-[11px] leading-5 text-marrone/70">
+              Un lugar cálido, íntimo y sin rigidez. Mesas para cenas largas, familias y sobremesas todavía más largas.
+            </p>
+          </article>
 
-          <figure class="reveal image-zoom row-span-2 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1716237387859-1ef02b430b91?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1716237387859-1ef02b430b91?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1716237387859-1ef02b430b91?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1716237387859-1ef02b430b91?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1716237387859-1ef02b430b91?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async" alt="Pizza italiana al horno" class="h-full w-full object-cover">
-          </figure>
-
-          <figure class="reveal image-zoom overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1776993298442-cf6a9372a986?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async" alt="Restaurante con ambiente nocturno" class="h-full w-full object-cover">
-          </figure>
-
-          <figure class="reveal image-zoom row-span-2 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1642603436366-c72d8a48a22d?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async" alt="Vino italiano" class="h-full w-full object-cover">
-          </figure>
-
-          <div class="reveal flex items-center justify-center bg-brick p-6 text-center text-cream">
-            <span class="font-display text-3xl italic">Sapori</span>
-          </div>
-
-          <figure class="reveal image-zoom col-span-2 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1555072956-7758afb20e8f?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1555072956-7758afb20e8f?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1555072956-7758afb20e8f?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1555072956-7758afb20e8f?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1555072956-7758afb20e8f?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async" alt="Mesa de restaurante preparada" class="h-full w-full object-cover">
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- REVIEWS -->
-    <section class="border-y border-line bg-[#EFE2CC] py-16 sm:py-20">
-      <div class="mx-auto grid max-w-[1200px] gap-8 px-5 text-center sm:px-8 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
-        <div class="reveal">
-          <p class="text-[10px] font-semibold uppercase tracking-[0.24em] text-brick">I nostri ospiti</p>
-          <div class="mt-3 tracking-[.2em] text-brick">★★★★★</div>
+          <article class="px-7 py-10">
+            <p class="text-[9px] uppercase tracking-[.16em]">/anima</p>
+            <h3 class="mt-2 font-script text-3xl text-rosso">Anima</h3>
+            <p class="mt-4 text-[11px] leading-5 text-marrone/70">
+              Hospitalidad directa, tradición y esa mezcla de ruido, comida y conversación que convierte una cena en recuerdo.
+            </p>
+          </article>
         </div>
 
-        <div class="hidden h-24 w-px bg-line lg:block"></div>
+        <div class="grid bg-oliva">
+          <div class="grid grid-cols-2 border-b border-marrone/20">
+            <div class="img-wrap min-h-[300px] overflow-hidden border-r border-marrone/20">
+              <img
+                src="https://images.unsplash.com/photo-1496568738682-da9d7fa2f12d?auto=format&fit=crop&w=800&q=72"
+                srcset="
+                  https://images.unsplash.com/photo-1496568738682-da9d7fa2f12d?auto=format&fit=crop&w=500&q=72 500w,
+                  https://images.unsplash.com/photo-1496568738682-da9d7fa2f12d?auto=format&fit=crop&w=800&q=72 800w
+                "
+                sizes="(min-width:1024px) 17vw, 50vw"
+                alt="Chef preparando un plato"
+                loading="lazy"
+                decoding="async"
+              >
+            </div>
+            <div class="img-wrap min-h-[300px] overflow-hidden">
+              <img
+                src="https://images.unsplash.com/photo-1766232314942-ed2824cdb907?auto=format&fit=crop&w=800&q=72"
+                srcset="
+                  https://images.unsplash.com/photo-1766232314942-ed2824cdb907?auto=format&fit=crop&w=500&q=72 500w,
+                  https://images.unsplash.com/photo-1766232314942-ed2824cdb907?auto=format&fit=crop&w=800&q=72 800w
+                "
+                sizes="(min-width:1024px) 17vw, 50vw"
+                alt="Equipo trabajando en cocina"
+                loading="lazy"
+                decoding="async"
+              >
+            </div>
+          </div>
 
-        <blockquote class="reveal font-display text-3xl italic leading-tight sm:text-4xl">
-          “Un lugar al que vuelves por la comida y acabas recordando por cómo te hizo sentir.”
+          <div class="flex flex-col justify-center px-8 py-10">
+            <p class="font-serif text-3xl leading-tight text-crema">
+              Tradizione italiana,<br><span class="italic">fatta con cura.</span>
+            </p>
+            <p class="mt-5 text-[11px] leading-5 text-crema/80">
+              La cocina es parte de la historia, no un escaparate separado. Pasta, pizza y platos de temporada conviven con el espacio, el servicio y la sobremesa.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TRUST -->
+      <section class="border-b border-linea bg-crema2 px-6 py-14 text-center sm:px-10">
+        <p class="text-[9px] uppercase tracking-[.18em] text-rosso">I nostri ospiti · ★★★★★</p>
+        <blockquote class="mx-auto mt-5 max-w-3xl font-serif text-3xl italic leading-tight sm:text-4xl">
+          “Un sitio al que vuelves por la comida y acabas recordando por la mesa, la gente y el ambiente.”
         </blockquote>
-      </div>
-    </section>
+      </section>
 
-    <!-- RESERVATION -->
-    <section id="prenota" class="relative min-h-[620px] overflow-hidden">
-      <img
-        src="https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=900&q=72" srcset="https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=600&q=72 600w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=900&q=72 900w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=1400&q=72 1400w, https://images.unsplash.com/photo-1748812499015-b061a6047fbf?auto=format&fit=crop&w=1800&q=72 1800w" sizes="(min-width:1024px) 45vw, 92vw" loading="lazy" decoding="async"
-        alt="Mesa elegante preparada para una cena"
-        class="absolute inset-0 h-full w-full object-cover"
-      />
-      <div class="absolute inset-0 bg-brown/55"></div>
-
-      <div class="relative mx-auto flex min-h-[620px] max-w-[1500px] items-center px-5 py-20 sm:px-8 lg:px-12">
-        <div class="reveal max-w-2xl text-cream">
-          <p class="text-[10px] font-semibold uppercase tracking-[0.27em]">Prenotazioni</p>
-          <h2 class="mt-4 font-display text-6xl leading-[.9] sm:text-7xl lg:text-8xl">
-            Ti aspettiamo<br><span class="italic">a tavola</span>
+      <!-- RESERVATION -->
+      <section id="prenota" class="grid lg:grid-cols-[48%_52%]">
+        <div class="flex flex-col justify-center bg-rosso px-7 py-16 text-crema sm:px-12 lg:py-20">
+          <p class="text-[9px] uppercase tracking-[.2em]">Prenotazioni</p>
+          <h2 class="mt-5 font-serif text-6xl leading-[.86] sm:text-7xl">
+            Ti aspettiamo<br><span class="italic">a tavola.</span>
           </h2>
-          <p class="mt-6 max-w-lg text-sm leading-7 text-cream/80 sm:text-base">
-            Reserva tu mesa y disfruta de una comida italiana sin prisas, en un espacio pensado para compartir.
+          <p class="mt-6 max-w-md text-xs leading-6 text-crema/80">
+            Reserva tu mesa y ven con tiempo. La idea no es comer deprisa, sobrevivir al postre y desaparecer.
           </p>
           <div class="mt-8 flex flex-wrap gap-3">
-            <a href="tel:+34000000000" class="rounded-full bg-cream px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-brown transition hover:bg-sand">
-              Prenota ora
-            </a>
-            <a href="#contatto" class="rounded-full border border-cream/60 px-6 py-3.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-cream transition hover:bg-cream hover:text-brown">
-              Dove siamo
-            </a>
+            <a href="tel:+34000000000" class="rounded-full bg-crema px-6 py-3 text-[9px] font-semibold uppercase tracking-[.14em] text-rosso">Prenota ora</a>
+            <a href="#" class="rounded-full border border-crema/60 px-6 py-3 text-[9px] font-semibold uppercase tracking-[.14em]">Dove siamo</a>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
 
-  <!-- FOOTER -->
-  <footer id="contatto" class="bg-brown text-cream">
-    <div class="mx-auto max-w-[1500px] px-5 py-14 sm:px-8 lg:px-12">
-      <div class="grid gap-10 border-b border-cream/20 pb-12 md:grid-cols-2 lg:grid-cols-4">
-        <div class="lg:col-span-1">
-          <p class="font-display text-4xl">L'ITALIANO</p>
-          <p class="mt-3 font-display text-xl italic text-sand">Ristorante & Pizzeria</p>
+        <div class="img-wrap min-h-[480px] overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1691359391966-9c9f859634d5?auto=format&fit=crop&w=1200&q=72"
+            srcset="
+              https://images.unsplash.com/photo-1691359391966-9c9f859634d5?auto=format&fit=crop&w=600&q=72 600w,
+              https://images.unsplash.com/photo-1691359391966-9c9f859634d5?auto=format&fit=crop&w=900&q=72 900w,
+              https://images.unsplash.com/photo-1691359391966-9c9f859634d5?auto=format&fit=crop&w=1400&q=72 1400w
+            "
+            sizes="(min-width:1024px) 52vw, 100vw"
+            alt="Mesa preparada en un restaurante italiano"
+            loading="lazy"
+            decoding="async"
+          >
         </div>
+      </section>
 
-        <div>
-          <p class="text-[10px] uppercase tracking-[0.2em] text-sand/70">Dove siamo</p>
-          <p class="mt-4 text-sm leading-6">Valencia<br>España</p>
-        </div>
-
-        <div>
-          <p class="text-[10px] uppercase tracking-[0.2em] text-sand/70">Orari</p>
-          <p class="mt-4 text-sm leading-6">Martes — Domingo<br>13:00 — 23:30</p>
-        </div>
-
-        <div>
-          <p class="text-[10px] uppercase tracking-[0.2em] text-sand/70">Seguici</p>
-          <div class="mt-4 flex gap-5 text-sm">
-            <a href="#" class="nav-link">Instagram</a>
-            <a href="#" class="nav-link">Facebook</a>
+      <!-- FOOTER -->
+      <footer class="border-t border-linea bg-marrone px-6 py-9 text-crema sm:px-10">
+        <div class="flex flex-col justify-between gap-7 md:flex-row md:items-end">
+          <div>
+            <p class="font-serif text-3xl">L'ITALIANO</p>
+            <p class="mt-2 text-[9px] uppercase tracking-[.16em] text-crema/60">Ristorante · Pizzeria · Valencia</p>
           </div>
-        </div>
-      </div>
 
-      <div class="flex flex-col justify-between gap-4 pt-7 text-[10px] uppercase tracking-[0.16em] text-sand/65 sm:flex-row">
-        <span>© 2026 L'Italiano</span>
-        <span class="font-display text-base normal-case tracking-normal text-cream">A presto</span>
-      </div>
+          <div class="flex flex-wrap gap-x-7 gap-y-2 text-[9px] uppercase tracking-[.14em]">
+            <a href="#carta">Carta</a>
+            <a href="#storia">Ristorante</a>
+            <a href="#prenota">Prenota</a>
+            <a href="#">Instagram</a>
+          </div>
+
+          <p class="font-script text-3xl">A presto</p>
+        </div>
+      </footer>
     </div>
-  </footer>
+  </div>
 
   <script>
     const menu = {
       pizze: [
-        { name: "Margherita", desc: "Pomodoro San Marzano, mozzarella fior di latte, basilico.", price: "12,50 €" },
-        { name: "Diavola", desc: "Pomodoro, fior di latte, salame piccante, peperoncino.", price: "14,50 €" },
-        { name: "Prosciutto e funghi", desc: "Pomodoro, mozzarella, prosciutto cotto, funghi.", price: "15,00 €" },
-        { name: "Burrata", desc: "Pomodoro, burrata, pomodorini, rucola e olio d'oliva.", price: "16,50 €" },
-        { name: "Quattro formaggi", desc: "Mozzarella, gorgonzola, taleggio e parmigiano.", price: "15,50 €" },
-        { name: "Ortolana", desc: "Verdure di stagione, mozzarella e pesto leggero.", price: "14,50 €" }
+        { name: "Margherita", desc: "San Marzano, fior di latte, basilico.", price: "12,50 €" },
+        { name: "Diavola", desc: "Pomodoro, fior di latte, salame piccante.", price: "14,50 €" },
+        { name: "Burrata", desc: "Pomodoro, burrata, pomodorini e rucola.", price: "16,50 €" },
+        { name: "Quattro formaggi", desc: "Mozzarella, gorgonzola, taleggio, parmigiano.", price: "15,50 €" }
       ],
       pasta: [
-        { name: "Tagliatelle al ragù", desc: "Ragù cotto lentamente, parmigiano e pasta fresca.", price: "16,50 €" },
-        { name: "Carbonara", desc: "Guanciale, pecorino romano, uovo e pepe nero.", price: "15,50 €" },
-        { name: "Cacio e pepe", desc: "Pecorino romano, pepe nero e acqua di cottura.", price: "14,50 €" },
-        { name: "Pappardelle ai funghi", desc: "Funghi di stagione, burro, salvia e parmigiano.", price: "17,00 €" }
+        { name: "Tagliatelle al ragù", desc: "Ragù lento, parmigiano, pasta fresca.", price: "16,50 €" },
+        { name: "Carbonara", desc: "Guanciale, pecorino romano, uovo, pepe.", price: "15,50 €" },
+        { name: "Cacio e pepe", desc: "Pecorino romano e pepe nero.", price: "14,50 €" },
+        { name: "Pappardelle ai funghi", desc: "Funghi, burro, salvia e parmigiano.", price: "17,00 €" }
       ],
       entranti: [
-        { name: "Burrata pugliese", desc: "Burrata, pomodoro, basilico e olio extra vergine.", price: "11,50 €" },
-        { name: "Vitello tonnato", desc: "Vitello, salsa tonnata, capperi e limone.", price: "13,50 €" },
-        { name: "Focaccia della casa", desc: "Rosmarino, sale marino e olio extra vergine.", price: "6,50 €" },
-        { name: "Parmigiana", desc: "Melanzane, pomodoro, mozzarella e parmigiano.", price: "12,00 €" }
+        { name: "Burrata pugliese", desc: "Burrata, pomodoro, basilico, olio EVO.", price: "11,50 €" },
+        { name: "Vitello tonnato", desc: "Vitello, salsa tonnata, capperi.", price: "13,50 €" },
+        { name: "Focaccia", desc: "Rosmarino, sale marino, olio EVO.", price: "6,50 €" },
+        { name: "Parmigiana", desc: "Melanzane, pomodoro, mozzarella, parmigiano.", price: "12,00 €" }
       ],
       postres: [
-        { name: "Tiramisù", desc: "Mascarpone, caffè, cacao amaro e savoiardi.", price: "7,00 €" },
-        { name: "Panna cotta", desc: "Vainilla, frutos rojos y toque cítrico.", price: "6,50 €" },
-        { name: "Cannolo siciliano", desc: "Ricotta dolce, pistacchio e cioccolato.", price: "7,50 €" },
-        { name: "Affogato", desc: "Gelato alla vaniglia y espresso italiano.", price: "5,50 €" }
+        { name: "Tiramisù", desc: "Mascarpone, espresso, cacao, savoiardi.", price: "7,00 €" },
+        { name: "Panna cotta", desc: "Vaniglia, frutti rossi.", price: "6,50 €" },
+        { name: "Cannolo", desc: "Ricotta, pistacchio, cioccolato.", price: "7,50 €" },
+        { name: "Affogato", desc: "Gelato alla vaniglia ed espresso.", price: "5,50 €" }
       ]
     };
 
-    const menuList = document.getElementById("menuList");
-    const tabs = [...document.querySelectorAll(".menu-tab")];
+    const menuList = document.getElementById('menuList');
+    const tabs = [...document.querySelectorAll('.tab')];
 
     function renderMenu(category) {
       menuList.innerHTML = menu[category].map((item, index) => `
-        <article class="menu-item border-t border-line py-5" style="animation-delay:${index * 35}ms">
-          <div class="flex items-start justify-between gap-5">
+        <article class="menu-item border-t border-linea py-5" style="animation-delay:${index * 30}ms">
+          <div class="flex justify-between gap-5">
             <div>
-              <h3 class="font-display text-2xl font-semibold">${item.name}</h3>
-              <p class="mt-1.5 max-w-md text-xs leading-5 text-brown/65">${item.desc}</p>
+              <h3 class="font-serif text-2xl font-semibold">${item.name}</h3>
+              <p class="mt-1 text-[11px] leading-5 text-marrone/65">${item.desc}</p>
             </div>
-            <span class="whitespace-nowrap pt-1 font-display text-lg">${item.price}</span>
+            <span class="whitespace-nowrap pt-1 font-serif text-lg">${item.price}</span>
           </div>
         </article>
-      `).join("");
+      `).join('');
     }
 
     tabs.forEach(tab => {
-      tab.addEventListener("click", () => {
-        tabs.forEach(t => t.setAttribute("aria-selected", "false"));
-        tab.setAttribute("aria-selected", "true");
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+        tab.setAttribute('aria-selected', 'true');
         renderMenu(tab.dataset.category);
       });
     });
 
-    renderMenu("pizze");
+    renderMenu('pizze');
 
-    const menuButton = document.getElementById("menuButton");
-    const mobileMenu = document.getElementById("mobileMenu");
-
-    menuButton.addEventListener("click", () => {
-      const isOpen = !mobileMenu.classList.contains("hidden");
-      mobileMenu.classList.toggle("hidden");
-      menuButton.setAttribute("aria-expanded", String(!isOpen));
-    });
-
-    mobileMenu.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => {
-        mobileMenu.classList.add("hidden");
-        menuButton.setAttribute("aria-expanded", "false");
-      });
-    });
-
-    const revealObserver = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          revealObserver.unobserve(entry.target);
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.13 });
+    }, { threshold: .12 });
 
-    document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
-
-    // Gentle image parallax on larger screens.
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches && window.innerWidth > 900) {
-      const heroImage = document.querySelector("#home .image-zoom img");
-      window.addEventListener("scroll", () => {
-        const offset = Math.min(window.scrollY * 0.035, 18);
-        if (heroImage) heroImage.style.transform = `translateY(${offset}px) scale(1.04)`;
-      }, { passive: true });
-    }
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>

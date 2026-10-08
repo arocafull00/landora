@@ -51,6 +51,8 @@ export function mapDefaultBranding(
 ) {
   return {
     brand: content.brand,
+    templateData: content.templateData ?? {},
+    schemaVersion: content.schemaVersion ?? 1,
     brandLogoType: content.brandLogoType,
     brandLogoImage: content.brandLogoImage,
     paletteId: content.appearance.paletteId,
