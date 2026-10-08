@@ -131,10 +131,6 @@ export async function saveLandingAction(
     return { error: "Revisa la configuración de Nuvolets antes de publicar" };
   }
 
-  if (landing.template === "nuvolets" && parsed.data.mode === "draft" && parsed.data.changes.sections?.hero && !nuvoletsHeroSchema.safeParse(parsed.data.changes.sections.hero).success) {
-    return { error: "Revisa los campos de la portada de Nuvolets" };
-  }
-
   const appearance =
     parsed.data.mode === "publish"
       ? parsed.data.publication.appearance

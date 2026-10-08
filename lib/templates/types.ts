@@ -46,7 +46,7 @@ export type TemplateDefinition = {
   contentVersion: number;
   rendererVersion: number;
   previousRenderers?: Record<number, () => Promise<ComponentType<TemplateRenderProps>>>;
-  templateDataSchema?: ZodType<Record<string, unknown>>;
+  templateDataSchema?: ZodType<Record<string, unknown>, Record<string, unknown>>;
   contentMigrations?: Record<number, (content: Record<string, unknown>) => Record<string, unknown>>;
   validateContent?: (content: Record<string, unknown>) => boolean;
   validateSections?: (sections: Record<string, Record<string, unknown>>) => boolean;

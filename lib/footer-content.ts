@@ -27,13 +27,21 @@ function isSocialPlatform(value: string): value is SocialPlatform {
   return SOCIAL_PLATFORMS.includes(value as SocialPlatform);
 }
 
+export function normalizeSocialUrl(value: string): string {
+  const url = value.trim();
+  if (/^(?:www\.)?(?:instagram\.com|facebook\.com|fb\.com|linkedin\.com|tiktok\.com|youtube\.com|youtu\.be|x\.com|twitter\.com)(?:[/?#]|$)/i.test(url)) {
+    return `https://${url}`;
+  }
+  return url;
+}
+
 export function parseSocialLinks(value: unknown): SocialLink[] {
   if (!Array.isArray(value)) return [];
 
   return value.flatMap((item) => {
     if (!item || typeof item !== "object") return [];
     const platform = "platform" in item && typeof item.platform === "string" ? item.platform : "";
-    const url = "url" in item && typeof item.url === "string" ? item.url.trim() : "";
+    const url = "url" in item && typeof item.url === "string" ? normalizeSocialUrl(item.url) : "";
     if (!isSocialPlatform(platform) || !url) return [];
     return [{ platform, url }];
   });

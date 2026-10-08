@@ -1,10 +1,11 @@
 import { z } from "zod";
+import { normalizeSocialUrl } from "@/lib/footer-content";
 
 export const socialPlatformSchema = z.enum(["instagram", "facebook", "linkedin", "tiktok", "youtube", "x"]);
-const socialUrlSchema = z.string().trim().max(2048).refine(
+const socialUrlSchema = z.string().trim().transform(normalizeSocialUrl).pipe(z.string().max(2048).refine(
   (value) => !value || z.url({ protocol: /^https?$/ }).safeParse(value).success,
   "Introduce una URL completa, por ejemplo https://www.instagram.com/tuempresa",
-);
+));
 const phoneSchema = z.string().trim().max(100).refine(
   (value) => !value || (/^\+?[\d\s().-]+$/.test(value) && /^\d{7,15}$/.test(value.replace(/\D/g, ""))),
   "Introduce un teléfono válido con prefijo internacional",
