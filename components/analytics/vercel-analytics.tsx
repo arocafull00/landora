@@ -5,7 +5,14 @@ import { Analytics } from "@vercel/analytics/react";
 export function VercelAnalytics() {
   return (
     <Analytics
-      beforeSend={(event) => (document.prerendering ? null : event)}
+      beforeSend={(event) => {
+        if (document.prerendering) return null;
+        const url = new URL(event.url);
+        return {
+          ...event,
+          url: `${url.origin}/${url.hostname}${url.pathname}${url.search}${url.hash}`,
+        };
+      }}
     />
   );
 }
